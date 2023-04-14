@@ -12,7 +12,6 @@
 #include "Vector4.h"
 #include <Easing.h>
 #include"ParticleManager.h"
-#include"recovery.h"
 #include <FbxModel.h>
 #include <FbxAnimation.h>
 
@@ -204,8 +203,6 @@ private:
 	const int satgeSize = 200;
 
 	std::unique_ptr<ParticleManager> ParticleMan;
-
-	std::unique_ptr<Recovery> recovery;
 
 	const int maxHP = 100;
 
