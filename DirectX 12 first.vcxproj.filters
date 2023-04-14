@@ -379,9 +379,6 @@
     <ClInclude Include="Engine\3D\FbxModel.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Boss.h">
-      <Filter>ユーザーヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="EasingData.h">
       <Filter>ユーザーヘッダー ファイル</Filter>
     </ClInclude>
@@ -530,9 +527,6 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Boss.cpp">
-      <Filter>ユーザーソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="EasingData.cpp">
       <Filter>ユーザーソース ファイル</Filter>
