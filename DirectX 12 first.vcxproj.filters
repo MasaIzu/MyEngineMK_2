@@ -379,9 +379,6 @@
     <ClInclude Include="Engine\3D\FbxModel.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Boss.h">
-      <Filter>ユーザーヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="EasingData.h">
       <Filter>ユーザーヘッダー ファイル</Filter>
     </ClInclude>
@@ -396,12 +393,6 @@
     </ClInclude>
     <ClInclude Include="PostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniFish.h">
-      <Filter>ユーザーヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="recovery.h">
-      <Filter>ユーザーヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\FbxAnimation.h">
       <Filter>Engine\ヘッダー\3D</Filter>
@@ -537,9 +528,6 @@
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Boss.cpp">
-      <Filter>ユーザーソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="EasingData.cpp">
       <Filter>ユーザーソース ファイル</Filter>
     </ClCompile>
@@ -554,12 +542,6 @@
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniFish.cpp">
-      <Filter>ユーザーソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="recovery.cpp">
-      <Filter>ユーザーソース ファイル\Player</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxAnimation.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>

@@ -67,8 +67,6 @@ void Player::Initialize(Model* model, float WindowWidth, float WindowHeight) {
 
 	ParticleMan->Initialize();
 
-	recovery = std::make_unique<Recovery>();
-	recovery->Initialize();
 
 	//体力の画像読み込み
 	healthSprite = Sprite::Create(TextureManager::Load("mario.jpg"));
@@ -109,8 +107,6 @@ void Player::Update(const ViewProjection& viewProjection) {
 	playerAttackTransform_.TransferMatrix();
 
 	collider->Update(worldTransform_.matWorld_);
-	recovery->Update();
-
 
 	if (frem < MaxFrem) {
 		frem += 0.013f;
@@ -276,24 +272,7 @@ void Player::Move() {
 			worldTransform_.translation_ += allMove;
 		}
 	}
-	//回復と当たっているかの処理
-	{
-		float AR;
-		float BR;
-
-		AR = pow((worldTransform_.translation_.x + allMove.x) - recovery->GetWorldPosition().x, 2) + pow((0 + worldTransform_.translation_.z + allMove.z) - recovery->GetWorldPosition().z, 2);
-		BR = pow((worldTransform_.scale_.x - recovery->GetScale().x), 2);
-
-		if (AR <= BR && recovery->GetActive())
-		{
-			HP += 50;
-			if (HP > maxHP)
-			{
-				HP = maxHP;
-			}
-			recovery->Collision();
-		}
-	}
+	
 
 	if (input_->MouseInputing(2)) {
 		oldWorldTransform_.translation_ = worldTransform_.look;
@@ -465,7 +444,6 @@ void Player::Draw(ViewProjection viewProjection_) {
 		}
 	}
 
-	recovery->Draw(viewProjection_);
 }
 
 void Player::PlayerFbxDraw(ViewProjection viewProjection_) {
