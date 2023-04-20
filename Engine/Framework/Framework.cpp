@@ -140,7 +140,7 @@ void Framework::Run()
 		directXCore_->PreDraw();
 
 		Draw();
-
+		PostEffect::Draw(directXCore_->GetCommandList());
 
 		//ImGui•`‰æ
 		imGui->Draw();

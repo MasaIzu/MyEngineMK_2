@@ -28,7 +28,9 @@ float4 main(VSOutput input) : SV_TARGET
 
 	color+= tex.Sample(smp, input.uv);
 
-	return float4(color);
+	float4 texcolor = tex.Sample(smp, input.uv);
+
+	return float4(texcolor.rgb, 1);
 }
 
 //Texture2D<float4> tex : register(t0);  	// 0番スロットに設定されたテクスチャ

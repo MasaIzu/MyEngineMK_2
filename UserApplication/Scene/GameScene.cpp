@@ -40,6 +40,9 @@ void GameScene::Initialize() {
 	fbxModel->Initialize();
 	anim = std::make_unique<FbxAnimation>();
 	anim->Load("Player");
+
+	model_.reset(Model::CreateFromOBJ("UFO", true));
+
 }
 
 void GameScene::Update() {
@@ -67,10 +70,15 @@ void GameScene::PostEffectDraw()
 
 	Model::PreDraw(commandList);
 
-	
+	//model_->Draw(worldTransform_, viewProjection_);
 
 	Model::PostDraw();
 
+	FbxModel::PreDraw(commandList);
+
+	fbxModel->Draw(worldTransform_, viewProjection_);
+
+	FbxModel::PostDraw();
 
 	PostEffect::PostDrawScene();
 }
@@ -96,7 +104,7 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	
+	//model_->Draw(worldTransform_, viewProjection_);
 
 
 	//3Dオブジェクト描画後処理
@@ -106,7 +114,7 @@ void GameScene::Draw() {
 
 	FbxModel::PreDraw(commandList);
 
-	fbxModel->Draw(worldTransform_, viewProjection_);
+	//fbxModel->Draw(worldTransform_, viewProjection_);
 
 	FbxModel::PostDraw();
 
@@ -115,7 +123,6 @@ void GameScene::Draw() {
 
 #pragma region ポストエフェクトの描画
 
-	
 
 #pragma endregion
 
