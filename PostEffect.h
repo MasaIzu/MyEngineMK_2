@@ -1,9 +1,28 @@
 #pragma once
-#include "Sprite.h"
 #include"DirectXCore.h"
+#include "Vector3.h"
+#include "Vector2.h"
+#include "Vector4.h"
+#include "Matrix4.h"
 class PostEffect
 {
 public:
+
+    /// <summary>
+    /// 頂点データ構造体
+    /// </summary>
+    struct VertexPosUv {
+        Vector3 pos; // xyz座標
+        Vector2 uv;  // uv座標
+    };
+
+    /// <summary>
+    /// 定数バッファ用データ構造体
+    /// </summary>
+    struct ConstBufferData {
+        Vector4 color; // 色 (RGBA)
+        Matrix4 mat;   // ３Ｄ変換行列
+    };
 
     static void Initialize(DirectXCore* dxCore);
 
@@ -35,9 +54,9 @@ private://静的メンバ変数
 
     static ID3D12GraphicsCommandList* commandList;
 
-    static Sprite::VertexPosUv vertices[4];
+    static VertexPosUv vertices[4];
 
-    static Sprite::VertexPosUv* vertMap;
+    static VertexPosUv* vertMap;
 
     static Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff;	//頂点バッファ
 
