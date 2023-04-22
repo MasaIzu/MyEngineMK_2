@@ -31,9 +31,9 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,100 };
+	worldTransform_.translation_ = { 0,-120,100 };
 	worldTransform_.rotation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 0.1f,0.1f,0.1f };
+	worldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 	worldTransform_.TransferMatrix();
 
 	fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
