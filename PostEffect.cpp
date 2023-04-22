@@ -31,6 +31,11 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> PostEffect::descHeapDSV;
 Microsoft::WRL::ComPtr<ID3D12PipelineState> PostEffect::pipelineState;
 Microsoft::WRL::ComPtr<ID3D12RootSignature> PostEffect::rootSignature;
 
+// 定数バッファ
+Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::constDataBuff_;
+// マッピング済みアドレス
+PostEffect::SendDataToGPU* PostEffect::dataMap = nullptr;
+
 const float PostEffect::clearColor[4] = {0.25f,0.5f,0.1f,0};
 
 void PostEffect::Initialize(DirectXCore* dxCore)
@@ -188,6 +193,27 @@ void PostEffect::Initialize(DirectXCore* dxCore)
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
 	CreatGraphicsPipelineState();
+
+
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	// リソース設定
+	CD3DX12_RESOURCE_DESC resourceDesc =
+		CD3DX12_RESOURCE_DESC::Buffer((sizeof(SendDataToGPU) + 0xff) & ~0xff);
+
+	// 定数バッファの生成
+	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
+		&heapProps, // アップロード可能
+		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		IID_PPV_ARGS(&constDataBuff_));
+	assert(SUCCEEDED(result));
+
+	//定数バッファのマッピング
+	result = constDataBuff_->Map(0, nullptr, (void**)&dataMap);
+	assert(SUCCEEDED(result));
+
+	//定数として10を入れておく(ぼかし度)
+	dataMap->kernelSize = 10;
 }
 
 void PostEffect::Finalize()
@@ -295,7 +321,7 @@ void PostEffect::CreatGraphicsPipelineState()
 	descRangeSRV0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV1;
-	descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); // t0 レジスタ
+	descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); // t1 レジスタ
 	// ルートパラメータ
 	CD3DX12_ROOT_PARAMETER rootparams[3] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
@@ -441,6 +467,8 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	commandList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 1,
 		device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
+	commandList->SetGraphicsRootConstantBufferView(0, constDataBuff_->GetGPUVirtualAddress());
+
 	//描画コマンド
 	commandList->DrawInstanced(_countof(vertices), 1, 0, 0);//すべての頂点を使って描画
 }
@@ -453,4 +481,10 @@ void PostEffect::PostDrawScene()
 
 		commandList->ResourceBarrier(1, &RESOURCE_BARRIER);
 	}
+}
+
+void PostEffect::SetKernelSize(int range) {
+
+	dataMap->kernelSize = range;
+
 }

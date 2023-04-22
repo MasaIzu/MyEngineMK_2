@@ -8,3 +8,8 @@ struct VSOutput
 	// uv’l
 	float2 uv :TEXCOORD;
 };
+
+cbuffer GPUData:register(b0)//‘—‚ç‚ê‚Ä‚«‚½î•ñ
+{
+	int KernelSize;
+}

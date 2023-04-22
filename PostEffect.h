@@ -24,6 +24,11 @@ public:
         Matrix4 mat;   // ３Ｄ変換行列
     };
 
+    //ポストエフェクトに関するGPUに送りたいものまとめ
+    struct SendDataToGPU {
+        int kernelSize;
+    };
+
     static void Initialize(DirectXCore* dxCore);
 
     static void Finalize();
@@ -46,6 +51,8 @@ public:
     /// </summary>
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
+
+    static void SetKernelSize(int range);
 
 private://静的メンバ変数
     static const float clearColor[4];
@@ -74,5 +81,10 @@ private://静的メンバ変数
 
     static Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
     static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
+private:
+    // 定数バッファ
+    static Microsoft::WRL::ComPtr<ID3D12Resource> constDataBuff_;
+    // マッピング済みアドレス
+    static SendDataToGPU* dataMap;
 };
 

@@ -60,6 +60,11 @@ void GameScene::Update() {
 
 	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
+
+	ImGui::Begin("averageBlur");
+	ImGui::SliderInt("range", &range, 0, 20);
+	ImGui::SetCursorPos(ImVec2(0, 20));
+	ImGui::End();
 }
 
 void GameScene::PostEffectDraw()
@@ -67,6 +72,7 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
+	PostEffect::SetKernelSize(range);
 
 	Model::PreDraw(commandList);
 

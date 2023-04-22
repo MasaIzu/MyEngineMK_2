@@ -83,7 +83,8 @@ private: // メンバ変数
 	std::unique_ptr<FbxAnimation>anim;
 
 
-
+	//ぼかし強度
+	int range = 0;
 
 
 	//当たり判定
