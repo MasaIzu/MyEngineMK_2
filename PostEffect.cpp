@@ -213,7 +213,11 @@ void PostEffect::Initialize(DirectXCore* dxCore)
 	assert(SUCCEEDED(result));
 
 	//’è”‚Æ‚µ‚Ä10‚ð“ü‚ê‚Ä‚¨‚­(‚Ú‚©‚µ“x)
+	dataMap->shadeNumber = 1;
 	dataMap->kernelSize = 10;
+	dataMap->center = { 0.5f,0.5f };
+	dataMap->intensity = 0.1f;
+	dataMap->samples = 1;
 }
 
 void PostEffect::Finalize()
@@ -483,8 +487,20 @@ void PostEffect::PostDrawScene()
 	}
 }
 
+void PostEffect::SetShadeNumber(int SetShadeNumber)
+{
+	dataMap->shadeNumber = SetShadeNumber;
+}
+
 void PostEffect::SetKernelSize(int range) {
 
 	dataMap->kernelSize = range;
 
+}
+
+void PostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
+{
+	dataMap->center = center;
+	dataMap->intensity = intensity;
+	dataMap->samples = sample;
 }

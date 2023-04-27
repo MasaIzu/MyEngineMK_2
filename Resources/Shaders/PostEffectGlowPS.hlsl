@@ -31,41 +31,59 @@ float4 main(VSOutput input) : SV_TARGET
 
 	//float4 texcolor = tex.Sample(smp, input.uv);
 
-	float4 colortex0 = tex0.Sample(smp, input.uv);
-	float4 colortex1 = tex1.Sample(smp, input.uv);
+	if (shadeNumber == 0) {
+		float4 colortex0 = tex0.Sample(smp, input.uv);
+		float4 colortex1 = tex1.Sample(smp, input.uv);
 
-	//掛ける強度
-	int kernelSize = KernelSize;
+		//掛ける強度
+		int kernelSize = KernelSize;
 
-	// 平均値を計算するための総和
-	float4 sum = float4(0, 0, 0, 0);
+		// 平均値を計算するための総和
+		float4 sum = float4(0, 0, 0, 0);
 
-	// カーネルサイズの範囲内でピクセルをイテレート
-	for (int y = -kernelSize; y <= kernelSize; ++y)
-	{
-		for (int x = -kernelSize; x <= kernelSize; ++x)
+		// カーネルサイズの範囲内でピクセルをイテレート
+		for (int y = -kernelSize; y <= kernelSize; ++y)
 		{
-			float2 offset = float2(x, y) * float2(offsetU, offsetV);
-			float4 colortex0 = tex0.Sample(smp, input.uv + offset);
-			sum += colortex0;
+			for (int x = -kernelSize; x <= kernelSize; ++x)
+			{
+				float2 offset = float2(x, y) * float2(offsetU, offsetV);
+				float4 colortex0 = tex0.Sample(smp, input.uv + offset);
+				sum += colortex0;
+			}
 		}
+
+		// 総和をカーネルサイズで割ることで平均値を計算
+		float kernelArea = (2 * kernelSize + 1) * (2 * kernelSize + 1);
+		float4 averageColor = sum / kernelArea;
+
+		float4 color = averageColor;
+
+		//fmodってなに？ってなったから出す
+		//x - y * floor(x / y);floorは浮動小数点値の端数を切り捨てて整数値に変換
+		//uvは Xpix/画面横幅,Ypix/画面縦
+		if (fmod(input.uv.y, 0.1f) < 0.05f) {
+
+			color = colortex1;
+		}
+		return float4(color.rgb, 1);
 	}
+	else if (shadeNumber == 1) {
+		float2 uv = input.uv;
+		float2 direction = uv - center;
+		float2 step = direction / float(samples);
 
-	// 総和をカーネルサイズで割ることで平均値を計算
-	float kernelArea = (2 * kernelSize + 1) * (2 * kernelSize + 1);
-	float4 averageColor = sum / kernelArea;
+		float4 result = float4(0.0, 0.0, 0.0, 0.0);
+		for (int i = 0; i < samples; ++i)
+		{
+			float weight = (float(samples) - float(i)) / float(samples);
+			float2 sampleUV = uv - step * float(i) * intensity;
+			result += tex0.Sample(smp, sampleUV) * weight;
+		}
 
-	float4 color = averageColor;
-
-	//fmodってなに？ってなったから出す
-	//x - y * floor(x / y);floorは浮動小数点値の端数を切り捨てて整数値に変換
-	//uvは Xpix/画面横幅,Ypix/画面縦
-	if (fmod(input.uv.y, 0.1f) < 0.05f) {
-
-		color = colortex1;
+		result /= float(samples);
+		return result;
 	}
-
-	return float4(color.rgb, 1);
+	return float4(1,1,1,1);
 }
 
 //Texture2D<float4> tex : register(t0);  	// 0番スロットに設定されたテクスチャ

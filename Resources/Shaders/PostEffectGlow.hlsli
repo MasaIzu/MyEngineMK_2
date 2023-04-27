@@ -11,5 +11,9 @@ struct VSOutput
 
 cbuffer GPUData:register(b0)//‘—‚ç‚ê‚Ä‚«‚½î•ñ
 {
+	int shadeNumber;
 	int KernelSize;
+	float2 center;
+	float intensity;
+	int samples;
 }

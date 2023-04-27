@@ -60,11 +60,26 @@ void GameScene::Update() {
 
 	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
+	if (shadeNumber == 0) {
+		ImGui::Begin("averageBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
 
-	ImGui::Begin("averageBlur");
-	ImGui::SliderInt("range", &range, 0, 20);
-	ImGui::SetCursorPos(ImVec2(0, 20));
-	ImGui::End();
+		ImGui::SliderInt("range", &range, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+	else if (shadeNumber == 1) {
+		ImGui::Begin("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
+
+		ImGui::SliderFloat("centerX", &center.x, 0, 1);
+		ImGui::SliderFloat("centerY", &center.y, 0, 1);
+		ImGui::SliderFloat("intensity", &intensity, 0, 1);
+		ImGui::SliderInt("samples", &samples, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+
 }
 
 void GameScene::PostEffectDraw()
@@ -72,7 +87,9 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
+	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
+	PostEffect::SetRadialBlur(center, intensity, samples);
 
 	Model::PreDraw(commandList);
 

@@ -26,7 +26,11 @@ public:
 
     //ポストエフェクトに関するGPUに送りたいものまとめ
     struct SendDataToGPU {
+        int shadeNumber;
         int kernelSize;
+        Vector2 center;
+        float intensity;
+        int samples;
     };
 
     static void Initialize(DirectXCore* dxCore);
@@ -52,7 +56,11 @@ public:
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
 
+    static void SetShadeNumber(int SetShadeNumber);
+
     static void SetKernelSize(int range);
+
+    static void SetRadialBlur(Vector2 senter, float intensity, int sample);
 
 private://静的メンバ変数
     static const float clearColor[4];
