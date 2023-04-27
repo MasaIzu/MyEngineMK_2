@@ -72,15 +72,17 @@ float4 main(VSOutput input) : SV_TARGET
 		float2 direction = uv - center;
 		float2 step = direction / float(samples);
 
-		float4 result = float4(0.0, 0.0, 0.0, 0.0);
-		for (int i = 0; i < samples; ++i)
+		float4 result = tex0.Sample(smp, uv);
+		float totalWeight = 1.0;
+		for (int i = 1; i < samples; ++i)
 		{
 			float weight = (float(samples) - float(i)) / float(samples);
 			float2 sampleUV = uv - step * float(i) * intensity;
 			result += tex0.Sample(smp, sampleUV) * weight;
+			totalWeight += weight;
 		}
 
-		result /= float(samples);
+		result /= totalWeight;
 		return result;
 	}
 	return float4(1,1,1,1);
