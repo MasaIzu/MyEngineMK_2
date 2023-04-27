@@ -127,6 +127,12 @@
     <Filter Include="ユーザーヘッダー ファイル\Skydome">
       <UniqueIdentifier>{9cbfaac7-0ca9-439d-8308-4e966b74e7e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ソース ファイル\ModelFailLoad">
+      <UniqueIdentifier>{fde0fc64-28c2-4938-bd5a-33b005eeb62f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ヘッダー\ModelFailLoad">
+      <UniqueIdentifier>{e216140d-d93d-41f9-9aa4-e6c6b74918a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -400,6 +406,9 @@
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
+    <ClInclude Include="LevelLoader.h">
+      <Filter>Engine\ヘッダー\ModelFailLoad</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -548,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Engine\ソース ファイル\ModelFailLoad</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

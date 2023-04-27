@@ -19,8 +19,10 @@
 #include "BoxCollision.h"
 #include "GameCamera.h"
 #include <CollisionManager.h>
+#include "LevelLoader.h"
 
 #include"FbxAnimation.h"
+#include <map>
 
 
 /// <summary>
@@ -82,6 +84,11 @@ private: // メンバ変数
 	std::unique_ptr<FbxModel>fbxModel;
 	std::unique_ptr<FbxAnimation>anim;
 
+	LevelData* levelData = nullptr;
+
+	std::map<std::string, Model*> models;
+	std::vector<Model*> objects;
+	std::vector<WorldTransform> ModelTrans;
 
 	//ぼかし強度
 	int range = 0;

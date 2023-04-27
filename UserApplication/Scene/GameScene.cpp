@@ -43,6 +43,40 @@ void GameScene::Initialize() {
 
 	model_.reset(Model::CreateFromOBJ("UFO", true));
 
+	models.insert(std::make_pair("UFO", model_.get()));
+
+	// レベルデータの読み込み
+	levelData = LevelLoader::LoadFile("obj");
+
+	// レベルデータからオブジェクトを生成、配置
+	for (auto& objectData : levelData->objects) {
+		// ファイル名から登録済みモデルを検索
+		Model* model = nullptr;
+		decltype(models)::iterator it = models.find(objectData.fileName);
+		if (it != models.end()) {
+			model = it->second;
+		}
+
+		// モデルを指定して3Dオブジェクトを生成
+		Model* newObject = Model::CreateFromOBJ("UFO", true);
+
+		// 座標
+		WorldTransform Trans;
+		Trans.Initialize();
+		Trans.translation_ = objectData.translation;
+
+		// 回転角
+		Trans.SetRot(objectData.rotation);
+
+		// 座標
+		Trans.scale_ = objectData.scaling;
+
+		// 配列に登録
+		ModelTrans.push_back(Trans);
+		objects.push_back(newObject);
+	}
+
+
 }
 
 void GameScene::Update() {
@@ -65,6 +99,11 @@ void GameScene::Update() {
 	ImGui::SliderInt("range", &range, 0, 20);
 	ImGui::SetCursorPos(ImVec2(0, 20));
 	ImGui::End();
+
+	for (auto& modelTrans : ModelTrans) {
+		modelTrans.TransferMatrix();
+	}
+
 }
 
 void GameScene::PostEffectDraw()
@@ -76,13 +115,13 @@ void GameScene::PostEffectDraw()
 
 	Model::PreDraw(commandList);
 
-	//model_->Draw(worldTransform_, viewProjection_);
+
 
 	Model::PostDraw();
 
 	FbxModel::PreDraw(commandList);
 
-	fbxModel->Draw(worldTransform_, viewProjection_);
+	//fbxModel->Draw(worldTransform_, viewProjection_);
 
 	FbxModel::PostDraw();
 
@@ -111,7 +150,13 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	//model_->Draw(worldTransform_, viewProjection_);
+	int i = 0;
+	for (auto& object : objects) {
 
+		object->Draw(ModelTrans[i], viewProjection_);
+
+		i++;
+	}
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
