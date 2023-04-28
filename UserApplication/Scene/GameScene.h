@@ -19,7 +19,7 @@
 #include "BoxCollision.h"
 #include "GameCamera.h"
 #include <CollisionManager.h>
-#include "LevelLoader.h"
+#include "MakeLevelEditor.h"
 
 #include"FbxAnimation.h"
 #include <map>
@@ -84,7 +84,7 @@ private: // メンバ変数
 	std::unique_ptr<FbxModel>fbxModel;
 	std::unique_ptr<FbxAnimation>anim;
 
-	LevelData* levelData = nullptr;
+	std::unique_ptr<MakeLevelEditor> levelData = nullptr;
 
 	std::map<std::string, Model*> models;
 	std::vector<Model*> objects;

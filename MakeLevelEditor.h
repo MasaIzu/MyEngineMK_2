@@ -3,6 +3,11 @@
 #include <string>
 #include <vector>
 #include "Vector3.h"
+#include <Model.h>
+#include "WorldTransform.h"
+#include <map>
+
+
 // レベルデータ
 struct LevelData {
 
@@ -21,8 +26,8 @@ struct LevelData {
 	std::vector<ObjectData> objects;
 };
 
-// レベルデータのローダー
-class LevelLoader {
+// レベルデータの生成
+class MakeLevelEditor {
 
 public:// 定数
 	// デフォルトの読み込みディレクトリ
@@ -36,6 +41,21 @@ public:// メンバ関数
 	/// レベルデータファイルの読み込み
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
-	static LevelData* LoadFile(const std::string& fileName);
+	LevelData* LoadFile(const std::string& fileName);
+
+	void Initialize(const std::string& fileName);
+
+	void Update();
+
+	void Draw(const ViewProjection& viewProjection);
+
+private:
+	std::unique_ptr<LevelData> levelData;
+
+
+	std::map<std::string, Model*> models;
+	std::vector<Model*> objects;
+	std::vector<WorldTransform> ModelTrans;
+
 };
 

@@ -1,13 +1,13 @@
-﻿#include "LevelLoader.h"
+﻿#include "MakeLevelEditor.h"
 
 #include "json.hpp"
 #include <fstream>
 #include <cassert>
 
-const std::string LevelLoader::kDefaultBaseDirectory = "Resources/levels/";
-const std::string LevelLoader::kExtension = ".json";
+const std::string MakeLevelEditor::kDefaultBaseDirectory = "Resources/levels/";
+const std::string MakeLevelEditor::kExtension = ".json";
 
-LevelData* LevelLoader::LoadFile(const std::string& fileName) {
+LevelData* MakeLevelEditor::LoadFile(const std::string& fileName) {
     // 連結してフルパスを得る
     const std::string fullpath = kDefaultBaseDirectory + fileName + kExtension;
 
@@ -85,4 +85,62 @@ LevelData* LevelLoader::LoadFile(const std::string& fileName) {
 	}
 
 	return levelData;
+}
+
+
+void MakeLevelEditor::Initialize(const std::string& fileName)
+{
+
+	levelData.reset(LoadFile(fileName));
+
+	// レベルデータからオブジェクトを生成、配置
+	for (auto& objectData : levelData->objects) {
+		// ファイル名から登録済みモデルを検索
+		Model* model = nullptr;
+		decltype(models)::iterator it = models.find(objectData.fileName);
+		if (it != models.end()) {
+			model = it->second;
+		}
+
+		// モデルを指定して3Dオブジェクトを生成
+		Model* newObject = Model::CreateFromOBJ("UFO", true);
+
+		// 座標
+		WorldTransform Trans;
+		Trans.Initialize();
+		Trans.translation_ = objectData.translation;
+
+		// 回転角
+		Trans.SetRot(objectData.rotation);
+
+		// 座標
+		Trans.scale_ = objectData.scaling;
+
+		// 配列に登録
+		ModelTrans.push_back(Trans);
+		objects.push_back(newObject);
+	}
+
+}
+
+void MakeLevelEditor::Update()
+{
+
+	for (auto& modelTrans : ModelTrans) {
+		modelTrans.TransferMatrix();
+	}
+
+}
+
+void MakeLevelEditor::Draw(const ViewProjection& viewProjection)
+{
+
+	int i = 0;
+	for (auto& object : objects) {
+
+		object->Draw(ModelTrans[i], viewProjection);
+
+		i++;
+	}
+
 }

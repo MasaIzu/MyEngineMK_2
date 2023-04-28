@@ -406,7 +406,7 @@
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="LevelLoader.h">
+    <ClInclude Include="MakeLevelEditor.h">
       <Filter>Engine\ヘッダー\ModelFailLoad</Filter>
     </ClInclude>
   </ItemGroup>
@@ -558,7 +558,7 @@
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="LevelLoader.cpp">
+    <ClCompile Include="MakeLevelEditor.cpp">
       <Filter>Engine\ソース ファイル\ModelFailLoad</Filter>
     </ClCompile>
   </ItemGroup>
