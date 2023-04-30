@@ -1,9 +1,37 @@
 #pragma once
-#include "Sprite.h"
 #include"DirectXCore.h"
+#include "Vector3.h"
+#include "Vector2.h"
+#include "Vector4.h"
+#include "Matrix4.h"
 class PostEffect
 {
 public:
+
+    /// <summary>
+    /// 頂点データ構造体
+    /// </summary>
+    struct VertexPosUv {
+        Vector3 pos; // xyz座標
+        Vector2 uv;  // uv座標
+    };
+
+    /// <summary>
+    /// 定数バッファ用データ構造体
+    /// </summary>
+    struct ConstBufferData {
+        Vector4 color; // 色 (RGBA)
+        Matrix4 mat;   // ３Ｄ変換行列
+    };
+
+    //ポストエフェクトに関するGPUに送りたいものまとめ
+    struct SendDataToGPU {
+        int shadeNumber;
+        int kernelSize;
+        Vector2 center;
+        float intensity;
+        int samples;
+    };
 
     static void Initialize(DirectXCore* dxCore);
 
@@ -28,6 +56,12 @@ public:
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
 
+    static void SetShadeNumber(int SetShadeNumber);
+
+    static void SetKernelSize(int range);
+
+    static void SetRadialBlur(Vector2 senter, float intensity, int sample);
+
 private://静的メンバ変数
     static const float clearColor[4];
 
@@ -35,15 +69,15 @@ private://静的メンバ変数
 
     static ID3D12GraphicsCommandList* commandList;
 
-    static Sprite::VertexPosUv vertices[4];
+    static VertexPosUv vertices[4];
 
-    static Sprite::VertexPosUv* vertMap;
+    static VertexPosUv* vertMap;
 
     static Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff;	//頂点バッファ
 
     //頂点バッファビューの作成
     static D3D12_VERTEX_BUFFER_VIEW vbView;
-    static Microsoft::WRL::ComPtr<ID3D12Resource> texBuff;
+    static Microsoft::WRL::ComPtr<ID3D12Resource> texBuff[2];
 
     static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV;
     //深度バッファ
@@ -55,5 +89,10 @@ private://静的メンバ変数
 
     static Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
     static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
+private:
+    // 定数バッファ
+    static Microsoft::WRL::ComPtr<ID3D12Resource> constDataBuff_;
+    // マッピング済みアドレス
+    static SendDataToGPU* dataMap;
 };
 

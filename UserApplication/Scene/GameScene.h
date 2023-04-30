@@ -82,9 +82,15 @@ private: // メンバ変数
 	std::unique_ptr<FbxModel>fbxModel;
 	std::unique_ptr<FbxAnimation>anim;
 
+	int shadeNumber = 0;
+
+	//ぼかし強度
+	int range = 10;
 
 
-
+	Vector2 center = {0.5f,0.5f};
+	float intensity = 0.1f;
+	int samples = 5;
 
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;

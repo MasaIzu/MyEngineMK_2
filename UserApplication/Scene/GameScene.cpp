@@ -31,15 +31,18 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,100 };
+	worldTransform_.translation_ = { 0,-120,100 };
 	worldTransform_.rotation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 0.1f,0.1f,0.1f };
+	worldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 	worldTransform_.TransferMatrix();
 
 	fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
 	fbxModel->Initialize();
 	anim = std::make_unique<FbxAnimation>();
 	anim->Load("Player");
+
+	model_.reset(Model::CreateFromOBJ("UFO", true));
+
 }
 
 void GameScene::Update() {
@@ -57,6 +60,26 @@ void GameScene::Update() {
 
 	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
+	if (shadeNumber == 0) {
+		ImGui::Begin("averageBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
+
+		ImGui::SliderInt("range", &range, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+	else if (shadeNumber == 1) {
+		ImGui::Begin("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
+
+		ImGui::SliderFloat("centerX", &center.x, 0, 1);
+		ImGui::SliderFloat("centerY", &center.y, 0, 1);
+		ImGui::SliderFloat("intensity", &intensity, 0, 1);
+		ImGui::SliderInt("samples", &samples, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+
 }
 
 void GameScene::PostEffectDraw()
@@ -64,13 +87,21 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
+	PostEffect::SetShadeNumber(shadeNumber);
+	PostEffect::SetKernelSize(range);
+	PostEffect::SetRadialBlur(center, intensity, samples);
 
 	Model::PreDraw(commandList);
 
-	
+	//model_->Draw(worldTransform_, viewProjection_);
 
 	Model::PostDraw();
 
+	FbxModel::PreDraw(commandList);
+
+	fbxModel->Draw(worldTransform_, viewProjection_);
+
+	FbxModel::PostDraw();
 
 	PostEffect::PostDrawScene();
 }
@@ -96,7 +127,7 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	
+	//model_->Draw(worldTransform_, viewProjection_);
 
 
 	//3Dオブジェクト描画後処理
@@ -106,7 +137,7 @@ void GameScene::Draw() {
 
 	FbxModel::PreDraw(commandList);
 
-	fbxModel->Draw(worldTransform_, viewProjection_);
+	//fbxModel->Draw(worldTransform_, viewProjection_);
 
 	FbxModel::PostDraw();
 
@@ -115,7 +146,6 @@ void GameScene::Draw() {
 
 #pragma region ポストエフェクトの描画
 
-	
 
 #pragma endregion
 

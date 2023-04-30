@@ -370,3 +370,4 @@ FodyWeavers.xsd
 /Resources/3dGameKyaraRun/KyaraTex1.png
 /Resources/3dRowPori/RowPoriTex.png
 
+/Engine/assimp/x64-windows/lib/assimp-vc143-mtd.dll
