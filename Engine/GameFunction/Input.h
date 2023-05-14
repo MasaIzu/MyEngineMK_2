@@ -48,7 +48,7 @@ public: // メンバ関数
 	const Vector2 GetMousePos()const;
 
 	// マウスの位置
-	const Vector3 GetMouseMove();
+	const Vector3 GetMouseWheelMove();
 
 	void Destroy();
 

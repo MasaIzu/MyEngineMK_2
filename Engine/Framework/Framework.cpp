@@ -135,7 +135,7 @@ void Framework::Run()
 			break;
 		}
 
-		PostEffectDraw();
+		//PostEffectDraw();
 		// •`‰æŠJŽn
 		directXCore_->PreDraw();
 

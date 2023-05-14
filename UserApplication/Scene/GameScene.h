@@ -19,6 +19,7 @@
 #include "BoxCollision.h"
 #include "GameCamera.h"
 #include <CollisionManager.h>
+#include "DebugCamera.h"
 
 #include"FbxAnimation.h"
 
@@ -83,7 +84,7 @@ private: // メンバ変数
 	std::unique_ptr<FbxAnimation>anim;
 
 
-
+	std::unique_ptr<DebugCamera>debugCamera;
 
 
 	//当たり判定

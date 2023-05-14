@@ -21,6 +21,12 @@ private:
 
 public:
 
+	struct MouseMove {
+		LONG lX;
+		LONG lY;
+		LONG lZ;
+	};
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -59,10 +65,11 @@ public:
 	const Vector2 GetMousePos()const;
 
 	/// <summary>
-	/// マウスの位置
+	/// マウス移動量を取得
 	/// </summary>
-	/// <returns>マウスの位置</returns>
+	/// <returns>マウス移動量を取得</returns>
 	const Vector3 GetMouseMove();
+
 
 	char PADDING[4];
 };

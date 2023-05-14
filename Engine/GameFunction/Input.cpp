@@ -141,7 +141,7 @@ const Vector2 Input::GetMousePos()const
 	return mouse->GetMousePos();
 }
 
-const Vector3 Input::GetMouseMove()
+const Vector3 Input::GetMouseWheelMove()
 {
 	return mouse->GetMouseMove();
 }

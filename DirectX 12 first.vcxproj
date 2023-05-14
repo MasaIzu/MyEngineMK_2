@@ -305,6 +305,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="EasingData.h" />
     <ClInclude Include="Engine\3D\Light.h" />
@@ -364,6 +365,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EasingData.cpp" />
     <ClCompile Include="Engine\3D\Light.cpp" />

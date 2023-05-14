@@ -31,15 +31,21 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,100 };
+	worldTransform_.translation_ = { 0,0,10 };
 	worldTransform_.rotation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 0.1f,0.1f,0.1f };
+	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransform_.TransferMatrix();
 
-	fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
+
+	model_.reset(Model::CreateFromOBJ("UFO"));
+
+	debugCamera = std::make_unique<DebugCamera>();
+	debugCamera->Initialize(&viewProjection_);
+
+	/*fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
 	fbxModel->Initialize();
 	anim = std::make_unique<FbxAnimation>();
-	anim->Load("Player");
+	anim->Load("Player");*/
 }
 
 void GameScene::Update() {
@@ -55,7 +61,20 @@ void GameScene::Update() {
 
 	frem += 0.01;
 
-	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
+	/*fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));*/
+
+
+
+
+	debugCamera->Update();
+
+	ImGui::Begin("Phase");
+
+	ImGui::Text("eyeX:%f",viewProjection_.eye.x);
+	ImGui::Text("eyeY:%f", viewProjection_.eye.y);
+	ImGui::Text("eyeZ:%f", viewProjection_.eye.z);
+
+	ImGui::End();
 
 }
 
@@ -96,7 +115,7 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	
+	model_->Draw(worldTransform_, viewProjection_);
 
 
 	//3Dオブジェクト描画後処理
@@ -106,7 +125,7 @@ void GameScene::Draw() {
 
 	FbxModel::PreDraw(commandList);
 
-	fbxModel->Draw(worldTransform_, viewProjection_);
+	/*fbxModel->Draw(worldTransform_, viewProjection_);*/
 
 	FbxModel::PostDraw();
 
