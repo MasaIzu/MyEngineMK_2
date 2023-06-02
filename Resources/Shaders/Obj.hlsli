@@ -65,10 +65,16 @@ struct CircleShadow
 cbuffer LightGroup : register(b3)
 {
 	float3 ambientColor;
+	float3 diffuseColor;
+	float3 specularColor;
+	float3 rimLightColor;
+	float minThreshold;
+	float maxThreshold;
+	float rimLightPow;
 	DirLight dirLights[DIRLIGHT_NUM];
-	PointLight pointLights[POINTLIGHT_NUM];
+	/*PointLight pointLights[POINTLIGHT_NUM];
 	SpotLight spotLights[SPOTLIGHT_NUM];
-	CircleShadow circleShadows[CIRCLESHADOW_NUM];
+	CircleShadow circleShadows[CIRCLESHADOW_NUM];*/
 }
 
 cbuffer PolygonExplosion: register(b4)

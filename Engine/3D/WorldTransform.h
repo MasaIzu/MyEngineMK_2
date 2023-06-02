@@ -9,7 +9,7 @@
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4 matWorld;           // ローカル → ワールド変換行列
-	float alpha=1;       // アルファ
+	float alpha = 1;       // アルファ
 };
 
 /// <summary>
@@ -37,6 +37,8 @@ struct WorldTransform {
 	Vector3 lookBack = { 0,0,0 };
 	Vector3 lookRight = { 0,0,0 };
 	Vector3 lookLeft = { 0,0,0 };
+	Vector3 lookUp = { 0,0,0 };
+	Vector3 lookDown = { 0,0,0 };
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 
@@ -63,16 +65,26 @@ struct WorldTransform {
 	void TransferMatrix();
 
 	void SetRot(const Vector3& rot);
-
+	void SetLookRot(const Vector3& rot);
 	void SetMatRot(const Matrix4& mat);
+	void SetLookMatRot(const Matrix4& mat);
 
 	void MoveRot(const Vector3& move);
 
 	void SetQuater(const Quaternion& quater);
 
 	void MoveQuater(const Quaternion& move);
-	
+
 	Quaternion& GetQuaternion();
-	
-	Vector3 GetLook(Matrix4 matRot,Vector3 at);
+
+	Vector3 GetLook(Matrix4 matRot, Vector3 at);
+
+private:
+
+	//任意軸のローカル回転
+	Quaternion quaterni = { 0,0,0,0 };
+	Matrix4 worldLookMatRot;
+
+	int IsLookOnlyMatRot = false;
+
 };

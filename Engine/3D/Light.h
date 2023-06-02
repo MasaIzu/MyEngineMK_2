@@ -43,7 +43,19 @@ public: // サブクラス
 	{
 		// 環境光の色
 		Vector3 ambientColor;
-		float pad1;
+		// 環境光の色
+		Vector3 diffuseColor;
+		// 環境光の色
+		Vector3 specularColor;
+		// 環境光の色
+		Vector3 rimrightColor;
+
+		float minThreshold = 0;
+		float maxThreshold = 1;
+
+
+		float rimLightPow = 10.0f;
+
 		// 平行光源用
 		ConstBufferLightData dirLights[kDirLightNum];
 		
@@ -67,7 +79,8 @@ public: // メンバ関数
 	// 定数バッファ転送
 	void TransferConstBuffer();
 
-	
+	void SetLightColor(Vector3 ambient,Vector3 diffuse,Vector3 specular, Vector3 rimrightColor);
+	void SetLighPower(float minThreshold_, float maxThreshold_, float rimLightPow_);
 
 private: // メンバ変数
 	// 定数バッファ
@@ -77,7 +90,14 @@ private: // メンバ変数
 
 	// 環境光の色
 	Vector3 ambientColor_ = { 1,1,1 };
+	Vector3 diffuseColor_ = { 1,1,1 };
+	Vector3 specularColor_ = { 1,1,1 };
+	Vector3 rimrightColor_ = { 1,1,1 };
 
+	float minThreshold = 0;
+	float maxThreshold = 1;
+
+	float rimLightPow = 10.0f;
 
 	// ライト方向（単位ベクトル）
 	Vector4 lightdir = { 1,0,0,0 };

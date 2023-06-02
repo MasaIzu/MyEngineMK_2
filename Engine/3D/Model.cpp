@@ -573,7 +573,7 @@ void Model::LoadTextures() {
 		// テクスチャなし
 		else {
 			// マテリアルにテクスチャ読み込み
-			material->LoadTexture("white1x1.png");
+			material->LoadTexture("");
 			textureIndex++;
 		}
 	}
@@ -616,4 +616,14 @@ void Model::Draw(
 			sCommandList_, 2, 3,
 			textureHadle);
 	}
+}
+
+void Model::SetLightColor(Vector3 ambient, Vector3 diffuse, Vector3 specular, Vector3 rimrightColor)
+{
+	lightGroup->SetLightColor(ambient, diffuse, specular, rimrightColor);
+}
+
+void Model::SetLighPower(float minThreshold_, float maxThreshold_, float rimLightPow_)
+{
+	lightGroup->SetLighPower(minThreshold_, maxThreshold_, rimLightPow_);
 }

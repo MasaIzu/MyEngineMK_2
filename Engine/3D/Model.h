@@ -101,6 +101,9 @@ public: // ƒƒ“ƒoŠÖ”
 
 	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
 
+	void SetLightColor(Vector3 ambient, Vector3 diffuse, Vector3 specular,Vector3 rimrightColor);
+
+	void SetLighPower(float minThreshold_, float maxThreshold_, float rimLightPow_);
 
 private: // ƒƒ“ƒo•Ï”
 	// –¼‘O

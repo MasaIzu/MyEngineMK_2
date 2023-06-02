@@ -34,6 +34,12 @@ private:
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
+	// ƒ}ƒEƒX‚Ì“ü—Í‚ðŽæ“¾
+	Vector3 mouseMove;
+
+	float scaleX = 0.0f;
+	float scaleY = 0.0f;
+
 	bool isAction = false;
 	float angleX = 0;
 	float angleY = 0;

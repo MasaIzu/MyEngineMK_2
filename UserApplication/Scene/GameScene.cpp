@@ -31,13 +31,13 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,10 };
+	worldTransform_.translation_ = { 0,0,0 };
 	worldTransform_.rotation_ = { 0,0,0 };
 	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransform_.TransferMatrix();
 
 
-	model_.reset(Model::CreateFromOBJ("UFO"));
+	model_.reset(Model::CreateFromOBJ("sphere"));
 
 	debugCamera = std::make_unique<DebugCamera>();
 	debugCamera->Initialize(&viewProjection_);
@@ -68,14 +68,19 @@ void GameScene::Update() {
 
 	debugCamera->Update();
 
-	ImGui::Begin("Phase");
+	ImGui::Begin("Light");
+	ImGui::ColorEdit3("ambientColor", &ambientColor.x);
+	ImGui::ColorEdit3("diffuseColor", &diffuseColor.x);
+	ImGui::ColorEdit3("specularColor", &specularColor.x);
+	ImGui::ColorEdit3("rimColor", &rimColor.x);
 
-	ImGui::Text("eyeX:%f",viewProjection_.eye.x);
-	ImGui::Text("eyeY:%f", viewProjection_.eye.y);
-	ImGui::Text("eyeZ:%f", viewProjection_.eye.z);
-
+	ImGui::SliderFloat("minThreshold", &minThreshold, 0.0f, 1.0f);
+	ImGui::SliderFloat("maxThreshold", &maxThreshold, 0.0f, 1.0f);
+	ImGui::SliderFloat("rimLightPow", &rimLightPow, 0.0f, 10.0f);
 	ImGui::End();
 
+	model_->SetLightColor(ambientColor, diffuseColor, specularColor, rimColor);
+	model_->SetLighPower(minThreshold, maxThreshold, rimLightPow);
 }
 
 void GameScene::PostEffectDraw()

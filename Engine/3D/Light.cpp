@@ -51,6 +51,9 @@ void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList_, UINT rootParameterInd
 void LightGroup::TransferConstBuffer() {
 	// ŠÂ‹«Œõ
 	constMap_->ambientColor = ambientColor_;
+	constMap_->diffuseColor = diffuseColor_;
+	constMap_->specularColor = specularColor_;
+	constMap_->rimrightColor = rimrightColor_;
 	// •½sŒõŒ¹
 
 	constMap_->dirLights[0].lightv = -Vector4( 0.0f, -1.0f, 0.0f, 0 );
@@ -63,5 +66,26 @@ void LightGroup::TransferConstBuffer() {
 	constMap_->dirLights[2].lightcolor = Vector3(1.0f, 1.0f, 1.0f);
 
 
+}
+
+void LightGroup::SetLightColor(Vector3 ambient, Vector3 diffuse, Vector3 specular,Vector3 rimrightColor)
+{
+	ambientColor_ = ambient;
+	diffuseColor_ = diffuse;
+	specularColor_ = specular;
+	rimrightColor_ = rimrightColor;
+
+	TransferConstBuffer();
+}
+
+void LightGroup::SetLighPower(float minThreshold_, float maxThreshold_, float rimLightPow_)
+{
+	minThreshold = minThreshold_;
+	maxThreshold = maxThreshold_;
+	rimLightPow = rimLightPow_;
+
+	constMap_->minThreshold = minThreshold;
+	constMap_->maxThreshold = maxThreshold;
+	constMap_->rimLightPow = rimLightPow;
 }
 

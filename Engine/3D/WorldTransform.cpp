@@ -42,7 +42,7 @@ void WorldTransform::TransferMatrix() {
 
 	//スケール、回転、平行移動行列の計算
 	matScale = MyMath::Scale(scale_);
-	
+
 	//オイラー角で回転しているなら回転用のマトリックスを初期化
 	if (isEuler) {
 		matRot = MyMath::Initialize();
@@ -57,11 +57,25 @@ void WorldTransform::TransferMatrix() {
 	matWorld_ *= matScale;//ワールド行列にスケーリングを反映
 	matWorld_ *= matRot;//ワールド行列に回転を反映
 	matWorld_ *= matTrans;//ワールド行列に平行移動を反映
-	
-	look = GetLook(matRot, Vector3(-1,0,0));
-	lookBack = GetLook(matRot, Vector3(1, 0, 0));
-	lookRight = GetLook(matRot, Vector3(0, 0, 1));
-	lookLeft = GetLook(matRot, Vector3(0, 0, -1));
+
+	if (IsLookOnlyMatRot = false) {
+		look = GetLook(matRot, Vector3(-1, 0, 0));
+		lookBack = GetLook(matRot, Vector3(1, 0, 0));
+		lookRight = GetLook(matRot, Vector3(0, 0, 1));
+		lookLeft = GetLook(matRot, Vector3(0, 0, -1));
+
+		lookUp = GetLook(matRot, Vector3(0, 1, 0));
+		lookDown = GetLook(matRot, Vector3(0, -1, 0));
+	}
+	else {
+		look = GetLook(worldLookMatRot, Vector3(-1, 0, 0));
+		lookBack = GetLook(worldLookMatRot, Vector3(1, 0, 0));
+		lookRight = GetLook(worldLookMatRot, Vector3(0, 0, 1));
+		lookLeft = GetLook(worldLookMatRot, Vector3(0, 0, -1));
+
+		lookUp = GetLook(worldLookMatRot, Vector3(0, 1, 0));
+		lookDown = GetLook(worldLookMatRot, Vector3(0, -1, 0));
+	}
 
 	//親オブジェクトがあれば
 	if (parent_) {
@@ -117,7 +131,7 @@ Quaternion& WorldTransform::GetQuaternion()
 	return quaternion;
 }
 
-Vector3 WorldTransform::GetLook(Matrix4 matRot,Vector3 at)
+Vector3 WorldTransform::GetLook(Matrix4 matRot, Vector3 at)
 {
 	Vector3 Pos = MyMath::GetWorldTransform(matWorld_);
 	Vector3 look_ = MyMath::MatVector(matRot, at);
@@ -125,3 +139,15 @@ Vector3 WorldTransform::GetLook(Matrix4 matRot,Vector3 at)
 	return Pos + look_;
 }
 
+void WorldTransform::SetLookRot(const Vector3& rot)
+{
+	//quaterni.SeTEuler(rot);
+
+	//worldLookMatRot = quaterni.Rotate();
+}
+
+void WorldTransform::SetLookMatRot(const Matrix4& mat)
+{
+	IsLookOnlyMatRot = true;
+	worldLookMatRot = mat;
+}

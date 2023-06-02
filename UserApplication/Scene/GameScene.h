@@ -87,6 +87,15 @@ private: // メンバ変数
 	std::unique_ptr<DebugCamera>debugCamera;
 
 
+	Vector3 ambientColor;
+	Vector3 diffuseColor;
+	Vector3 specularColor;
+	Vector3 rimColor;
+
+	float minThreshold = 0.0f;
+	float maxThreshold = 1.0f;
+	float rimLightPow = 10.0f;
+
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 	//シーンマネージャー
