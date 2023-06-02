@@ -36,12 +36,15 @@ void GameScene::Initialize() {
 	worldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 	worldTransform_.TransferMatrix();
 
+	//fbxModel = std::make_unique<FbxModel>();
+	//fbxLoad = FbxLoader::GetInstance();
+
 	fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
 	fbxModel->Initialize();
 	anim = std::make_unique<FbxAnimation>();
 	anim->Load("Player");
 
-	model_.reset(Model::CreateFromOBJ("UFO", true));
+	//model_.reset(Model::CreateFromOBJ("UFO", true));
 
 }
 
@@ -59,26 +62,6 @@ void GameScene::Update() {
 	frem += 0.01;
 
 	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
-
-	if (shadeNumber == 0) {
-		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
-
-		ImGui::SliderInt("range", &range, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 1) {
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
-
-		ImGui::SliderFloat("centerX", &center.x, 0, 1);
-		ImGui::SliderFloat("centerY", &center.y, 0, 1);
-		ImGui::SliderFloat("intensity", &intensity, 0, 1);
-		ImGui::SliderInt("samples", &samples, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
 
 }
 

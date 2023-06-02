@@ -14,7 +14,15 @@ FbxAnimation::FbxAnimation()
 
 FbxAnimation::~FbxAnimation()
 {
-	
+	if (mScene == nullptr) {
+
+	}
+	else {
+		for (int i = 0; i < mScene->mNumAnimations; i++) {
+			delete modelAnimation[i];
+		}
+		delete mScene;
+	}
 }
 
 void FbxAnimation::Load(const std::string& failPath)

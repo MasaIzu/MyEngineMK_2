@@ -21,7 +21,7 @@
 #include <CollisionManager.h>
 
 #include"FbxAnimation.h"
-
+#include "FbxLoader.h"
 
 /// <summary>
 /// ゲームシーン
@@ -81,6 +81,7 @@ private: // メンバ変数
 	float frem = 0;
 	std::unique_ptr<FbxModel>fbxModel;
 	std::unique_ptr<FbxAnimation>anim;
+	FbxLoader* fbxLoad = nullptr;
 
 	int shadeNumber = 0;
 
