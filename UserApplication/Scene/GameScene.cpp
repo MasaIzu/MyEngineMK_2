@@ -45,6 +45,7 @@ void GameScene::Initialize() {
 	anim->Load("Player");
 
 	//model_.reset(Model::CreateFromOBJ("UFO", true));
+
 }
 
 void GameScene::Update() {
