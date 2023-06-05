@@ -227,6 +227,9 @@
     <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="ParticleComputeShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Sound\Audio.h">
@@ -379,9 +382,6 @@
     <ClInclude Include="Engine\3D\FbxModel.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="EasingData.h">
-      <Filter>ユーザーヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameCamera.h">
       <Filter>ユーザーヘッダー ファイル</Filter>
     </ClInclude>
@@ -402,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="PostEffectManager.h">
       <Filter>Engine\ヘッダー\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeParticle.h">
+      <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -531,9 +534,6 @@
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="EasingData.cpp">
-      <Filter>ユーザーソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameCamera.cpp">
       <Filter>ユーザーソース ファイル</Filter>
     </ClCompile>
@@ -554,6 +554,9 @@
     </ClCompile>
     <ClCompile Include="PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeParticle.cpp">
+      <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

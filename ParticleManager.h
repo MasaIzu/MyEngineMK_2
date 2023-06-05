@@ -53,37 +53,15 @@ public: // サブクラス
 		In,
 	};
 
-	//パーティクル一粒
-	struct Particle
-	{
-		Type type;
-		//曲線を描くか？
-		bool isBezier=false;
-		//座標
-		Vector3 position = {};
-
-		Vector3 startPosition;
-
-		Vector3 controlPosition;
-
-		Vector3 endPosition;
-		// 現在フレーム
-		int frame = 0;
-		//終了フレーム
-		int numFrame = 0;
-
-		float scale = 1.0f;
-
-		float startScale = 1.0f;
-
-		float endScale = 0.0f;
-
-		Vector4 color = {};
-
-		Vector4 startColor = {};
-
-		Vector4 endColor = {};
-
+	// パーティクルの定義
+	struct Particle {
+		Vector3 position;
+		Vector3 velocity;
+		int Frame; // このパーティクルが生まれたフレーム
+		int MaxFrame;//このパーティクルの寿命
+		bool alive; // このパーティクルが生きているかどうか
+		float scale = 1;
+		Vector4 color = { 1,1,1,1 };
 	};
 
 
@@ -120,12 +98,19 @@ private: // 静的メンバ変数
 	static ID3D12GraphicsCommandList* cmdList;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
+	// コンピュートシェーダー用ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> rootSignature;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
+	// コンピュートシェーダー用パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> pipelineState;
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView;
+
+	ComPtr<ID3D12Resource> m_cacheVertexBuffer;
+	D3D12_VERTEX_BUFFER_VIEW m_cacheVertexBufferView;
 
 private:// 静的メンバ関数
 
@@ -153,22 +138,13 @@ public: // メンバ関数
 
 	size_t GetParticlesListSize() {return Particles.size() ; }
 
-	/// <summary>
-	/// イージングパーティクル（out)
-	/// </summary>
-	/// <param name="life">寿命(イージングなんでスピードにも関係する)</param>
-	/// <param name="isBezier">ベジェ曲線にする？</param>
-	/// <param name="startPosition">初期座標</param>
-	/// <param name="controlPosition">制御点座標</param>
-	/// <param name="endPosition">最終座標</param>
-	/// <param name="startScale">初期サイズ</param>
-	/// <param name="endScale">最終サイズ</param>
-	/// <param name="startColor">初期色</param>
-	/// <param name="endColor">最終色</param>
-	void Add(Type type, int life,bool isBezier, Vector3 startPosition,Vector3 controlPosition,Vector3 endPosition, float startScale, float endScale, Vector4 startColor, Vector4 endColor);
+	
+	void Add(Vector3 position,Vector3 velocity,int MaxFrame,bool alive);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
+
+
 	//// 色
 	//Vector4 color = { 1,1,1,1 };
 	//// ローカルスケール
@@ -183,7 +159,9 @@ private: // メンバ変数
 	//ParticleManager* parent = nullptr;
 
 	//パーティクル配列
-	std::list<Particle>Particles;
+	std::vector<Particle>Particles;
 
 	UINT textureHandle_ = 0;
+
+	uint32_t numParticles = 1000;
 };

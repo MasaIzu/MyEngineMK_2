@@ -98,7 +98,7 @@ void DirectXCore::PreDraw() {
 	// 全画面クリア
 	ClearRenderTarget();
 	// 深度バッファクリア
-	//ClearDepthBuffer();
+	ClearDepthBuffer();
 
 	// ビューポートの設定
 	CD3DX12_VIEWPORT viewport =

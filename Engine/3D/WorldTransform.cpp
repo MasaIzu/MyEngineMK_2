@@ -139,3 +139,8 @@ Vector3 WorldTransform::GetLook(Matrix4 matRot,Vector3 at)
 	return Pos + look_;
 }
 
+void WorldTransform::SetLookMatRot(const Matrix4& mat)
+{
+	IsLookOnlyMatRot = true;
+	worldLookMatRot = mat;
+}
