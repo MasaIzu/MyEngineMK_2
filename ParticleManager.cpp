@@ -63,8 +63,6 @@ void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetPipelineState(pipelinestate.Get());
 	// ルートシグネチャの設定
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
-	// ルートシグネチャの設定
-	cmdList->SetComputeRootSignature(rootSignature.Get());
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
@@ -296,40 +294,56 @@ void ParticleManager::InitializeGraphicsPipeline()
 void ParticleManager::InitializeVerticeBuff()
 {
 
-	D3D12_RESOURCE_DESC desc = {};
-	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Alignment = 0;
-	desc.Width = numParticles * sizeof(Particle);
-	desc.Height = 1;
-	desc.DepthOrArraySize = 1;
-	desc.MipLevels = 1;
-	desc.Format = DXGI_FORMAT_UNKNOWN;
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-	desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;  // このフラグが重要
+	HRESULT result;
 
-	D3D12_HEAP_PROPERTIES heapProp = {};
-	heapProp.Type = D3D12_HEAP_TYPE_DEFAULT;
-	heapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapProp.CreationNodeMask = 1;
-	heapProp.VisibleNodeMask = 1;
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
+
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	// リソース設定
+	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
 
 	// 頂点バッファ生成
-	device->CreateCommittedResource(
-		&heapProp,
-		D3D12_HEAP_FLAG_NONE,
-		&desc,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
-		IID_PPV_ARGS(&vertBuff)
-	);
+	result = device->CreateCommittedResource(
+		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		IID_PPV_ARGS(&vertBuff));
+	assert(SUCCEEDED(result));
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = numParticles * sizeof(Particle);
-	vbView.StrideInBytes = sizeof(Particle);
+	vbView.SizeInBytes = sizeVB;
+	vbView.StrideInBytes = sizeof(VertexPos);
+
+
+	D3D12_RESOURCE_DESC descStatus = {};
+	descStatus.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	descStatus.Alignment = 0;
+	descStatus.Width = numParticles * sizeof(Particle);
+	descStatus.Height = 1;
+	descStatus.DepthOrArraySize = 1;
+	descStatus.MipLevels = 1;
+	descStatus.Format = DXGI_FORMAT_UNKNOWN;
+	descStatus.SampleDesc.Count = 1;
+	descStatus.SampleDesc.Quality = 0;
+	descStatus.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	descStatus.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;  // このフラグが重要
+
+	D3D12_HEAP_PROPERTIES heapPropStatus = {};
+	heapPropStatus.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapPropStatus.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapPropStatus.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapPropStatus.CreationNodeMask = 1;
+	heapPropStatus.VisibleNodeMask = 1;
+
+	// 頂点バッファ生成
+	device->CreateCommittedResource(
+		&heapPropStatus,
+		D3D12_HEAP_FLAG_NONE,
+		&descStatus,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&vertPaticleStatus)
+	);
 
 }
 
@@ -370,7 +384,7 @@ void ParticleManager::Initialize()
 	uavDesc.Buffer.StructureByteStride = sizeof(Particle);
 
 	device->CreateUnorderedAccessView(
-		vertBuff.Get(),
+		vertPaticleStatus.Get(),
 		nullptr,
 		&uavDesc,
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
@@ -380,15 +394,15 @@ void ParticleManager::Initialize()
 void ParticleManager::Update()
 {
 
-	for (auto& p : Particles) {
-		if (p.alive && p.Frame > p.MaxFrame) {
-			p.alive = false; // パーティクルを死に状態に設定
-		}
-	}
+	//for (auto& p : Particles) {
+	//	if (p.alive && p.Frame > p.MaxFrame) {
+	//		p.alive = false; // パーティクルを死に状態に設定
+	//	}
+	//}
 
-	// 死んでいるパーティクルを削除
-	Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
-		[](const Particle& p) { return !p.alive; }), Particles.end());
+	//// 死んでいるパーティクルを削除
+	//Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
+	//	[](const Particle& p) { return !p.alive; }), Particles.end());
 
 }
 
@@ -408,41 +422,6 @@ void ParticleManager::Draw(ViewProjection view)
 	assert(device);
 	assert(ParticleManager::cmdList);
 
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(Particle));
-
-	ComPtr<ID3D12Resource> uploadBuffer;
-	device->CreateCommittedResource(
-		&heapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&resourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&uploadBuffer));
-
-	// パーティクルデータをアップロードバッファにマップ・コピー
-	Particle* mappedData = nullptr;
-	uploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
-	std::copy(Particles.begin(), Particles.end(), mappedData);
-	uploadBuffer->Unmap(0, nullptr);
-
-	// アップロードバッファからGPUのバッファへコピー
-	cmdList->CopyResource(vertBuff.Get(), uploadBuffer.Get());
-
-	// アップロードバッファの解放
-	uploadBuffer.Reset();
-
-
-	// Set the particle buffer as a UAV.
-	cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
-
-	// コンピュートシェーダーを実行
-	cmdList->Dispatch(Particles.size() / 256, 1, 1);
-
-
 
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
@@ -459,19 +438,34 @@ void ParticleManager::Draw(ViewProjection view)
 	cmdList->DrawInstanced(Particles.size(), 1, 0, 0);
 }
 
+void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+
+	// パイプラインステートの設定
+	cmdList->SetPipelineState(pipelineState.Get());
+	// ルートシグネチャの設定
+	cmdList->SetComputeRootSignature(rootSignature.Get());
+	// Set the particle buffer as a UAV.
+	cmdList->SetComputeRootUnorderedAccessView(0, vertPaticleStatus->GetGPUVirtualAddress());
+
+	// コンピュートシェーダーを実行
+	cmdList->Dispatch(Particles.size() / 256, 1, 1);
+
+}
+
 void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
 {
-	//追加した要素の参照
-	Particle p;
-	//値のセットt
-	p.position = position;
-	p.velocity = velocity;
-	p.Frame = 0;
-	p.MaxFrame = MaxFrame;
-	p.alive = 1;
-	p.scale = 1;
-	p.color = { 1,1,1,1 };
+	////追加した要素の参照
+	//Particle p;
+	////値のセットt
+	//p.position = position;
+	//p.velocity = velocity;
+	//p.Frame = 0;
+	//p.MaxFrame = MaxFrame;
+	//p.alive = 1;
+	//p.scale = 1;
+	//p.color = { 1,1,1,1 };
 
-	Particles.push_back(p);
+	//Particles.push_back(p);
 }
 

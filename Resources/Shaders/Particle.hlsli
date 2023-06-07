@@ -12,7 +12,7 @@ struct VSOutput
 	//float3 normal :NORMAL; // 法線ベクトル
 	//float2 uv  :TEXCOORD; // uv値
 	float scale : TEXCOORD;
-	float4 color:COLOR;
+	float4 color : COLOR;
 };
 
 //ジオメトリシェーダからピクセルシェーダーへの出力

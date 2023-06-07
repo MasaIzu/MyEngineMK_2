@@ -131,6 +131,7 @@ void GameScene::Draw() {
 
 	FbxModel::PostDraw();
 
+	ParticleMan->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	
 	ParticleMan->Draw(viewProjection_);

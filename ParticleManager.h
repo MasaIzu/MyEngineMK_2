@@ -106,11 +106,12 @@ private: // 静的メンバ変数
 	static ComPtr<ID3D12PipelineState> pipelineState;
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
+	// 頂点バッファ
+	ComPtr<ID3D12Resource> vertPaticleStatus;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView;
 
 	ComPtr<ID3D12Resource> m_cacheVertexBuffer;
-	D3D12_VERTEX_BUFFER_VIEW m_cacheVertexBufferView;
 
 private:// 静的メンバ関数
 
@@ -128,6 +129,8 @@ public: // メンバ関数
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
+
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
 	/// 描画
