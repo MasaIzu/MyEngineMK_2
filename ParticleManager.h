@@ -139,7 +139,7 @@ public: // メンバ関数
 	size_t GetParticlesListSize() {return Particles.size() ; }
 
 	
-	void Add(Vector3 position,Vector3 velocity,int MaxFrame,bool alive);
+	void Add(Vector3 position,Vector3 velocity,int MaxFrame);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ

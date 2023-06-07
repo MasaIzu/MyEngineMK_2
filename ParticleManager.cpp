@@ -63,6 +63,8 @@ void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetPipelineState(pipelinestate.Get());
 	// ルートシグネチャの設定
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	// ルートシグネチャの設定
+	cmdList->SetComputeRootSignature(rootSignature.Get());
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
@@ -294,24 +296,39 @@ void ParticleManager::InitializeGraphicsPipeline()
 void ParticleManager::InitializeVerticeBuff()
 {
 
-	HRESULT result;
+	D3D12_RESOURCE_DESC desc = {};
+	desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	desc.Alignment = 0;
+	desc.Width = numParticles * sizeof(Particle);
+	desc.Height = 1;
+	desc.DepthOrArraySize = 1;
+	desc.MipLevels = 1;
+	desc.Format = DXGI_FORMAT_UNKNOWN;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;  // このフラグが重要
 
-	UINT sizeVB = static_cast<UINT>(sizeof(Particle)) * 1024;
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
+	D3D12_HEAP_PROPERTIES heapProp = {};
+	heapProp.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProp.CreationNodeMask = 1;
+	heapProp.VisibleNodeMask = 1;
 
 	// 頂点バッファ生成
-	result = device->CreateCommittedResource(
-		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertBuff));
-	assert(SUCCEEDED(result));
+	device->CreateCommittedResource(
+		&heapProp,
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&vertBuff)
+	);
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeVB;
+	vbView.SizeInBytes = numParticles * sizeof(Particle);
 	vbView.StrideInBytes = sizeof(Particle);
 
 }
@@ -372,12 +389,30 @@ void ParticleManager::Update()
 	// 死んでいるパーティクルを削除
 	Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
 		[](const Particle& p) { return !p.alive; }), Particles.end());
-	
+
+}
+
+void ParticleManager::Draw(ViewProjection view)
+{
+	HRESULT result;
+	// 定数バッファへデータ転送
+	ConstBufferData* constMap = nullptr;
+	result = constBuff->Map(0, nullptr, (void**)&constMap);
+	//constMap->color = color;
+	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constMap->mat = view.matView * view.matProjection;	// 行列の合成
+	constMap->matBillboard = view.matBillboard;
+	constBuff->Unmap(0, nullptr);
+
+	// nullptrチェック
+	assert(device);
+	assert(ParticleManager::cmdList);
+
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
 	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(Particles.size() * sizeof(Particle));
+		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(Particle));
 
 	ComPtr<ID3D12Resource> uploadBuffer;
 	device->CreateCommittedResource(
@@ -400,29 +435,13 @@ void ParticleManager::Update()
 	// アップロードバッファの解放
 	uploadBuffer.Reset();
 
+
 	// Set the particle buffer as a UAV.
 	cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
 
 	// コンピュートシェーダーを実行
 	cmdList->Dispatch(Particles.size() / 256, 1, 1);
 
-}
-
-void ParticleManager::Draw(ViewProjection view)
-{
-	HRESULT result;
-	// 定数バッファへデータ転送
-	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
-	constMap->mat = view.matView * view.matProjection;	// 行列の合成
-	constMap->matBillboard = view.matBillboard;
-	constBuff->Unmap(0, nullptr);
-
-	// nullptrチェック
-	assert(device);
-	assert(ParticleManager::cmdList);
 
 
 	// 頂点バッファの設定
@@ -440,7 +459,7 @@ void ParticleManager::Draw(ViewProjection view)
 	cmdList->DrawInstanced(Particles.size(), 1, 0, 0);
 }
 
-void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame, bool alive)
+void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
 {
 	//追加した要素の参照
 	Particle p;
@@ -449,7 +468,7 @@ void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame, bool 
 	p.velocity = velocity;
 	p.Frame = 0;
 	p.MaxFrame = MaxFrame;
-	p.alive = alive;
+	p.alive = 1;
 	p.scale = 1;
 	p.color = { 1,1,1,1 };
 

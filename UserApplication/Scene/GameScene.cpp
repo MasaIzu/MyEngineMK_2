@@ -46,6 +46,10 @@ void GameScene::Initialize() {
 
 	//model_.reset(Model::CreateFromOBJ("UFO", true));
 
+	ParticleMan = std::make_unique<ParticleManager>();
+	ParticleMan->Initialize();
+	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
+
 }
 
 void GameScene::Update() {
@@ -63,6 +67,9 @@ void GameScene::Update() {
 
 	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
+	ParticleMan->Add(Vector3(0, 0, 0), Vector3(0, 1, 0), 60);
+
+	ParticleMan->Update();
 }
 
 void GameScene::PostEffectDraw()
@@ -82,7 +89,7 @@ void GameScene::PostEffectDraw()
 
 	FbxModel::PreDraw(commandList);
 
-	fbxModel->Draw(worldTransform_, viewProjection_);
+	//fbxModel->Draw(worldTransform_, viewProjection_);
 
 	FbxModel::PostDraw();
 
@@ -124,11 +131,12 @@ void GameScene::Draw() {
 
 	FbxModel::PostDraw();
 
+	ParticleManager::PreDraw(commandList);
+	
+	ParticleMan->Draw(viewProjection_);
+	
 
-#pragma endregion
-
-#pragma region ポストエフェクトの描画
-
+	ParticleManager::PostDraw();
 
 #pragma endregion
 

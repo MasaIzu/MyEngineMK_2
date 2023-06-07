@@ -16,7 +16,6 @@
 #include "FbxModel.h"
 #include<memory>
 #include<vector>
-#include "BoxCollision.h"
 #include "GameCamera.h"
 #include <CollisionManager.h>
 
@@ -92,6 +91,8 @@ private: // メンバ変数
 	Vector2 center = {0.5f,0.5f};
 	float intensity = 0.1f;
 	int samples = 5;
+
+	std::unique_ptr<ParticleManager> ParticleMan;
 
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
