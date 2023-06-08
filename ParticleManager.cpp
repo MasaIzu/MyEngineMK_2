@@ -384,7 +384,7 @@ void ParticleManager::Initialize()
 	uavDesc.Buffer.StructureByteStride = sizeof(Particle);
 
 	device->CreateUnorderedAccessView(
-		vertPaticleStatus.Get(),
+		vertBuff.Get(),
 		nullptr,
 		&uavDesc,
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
@@ -441,6 +441,33 @@ void ParticleManager::Draw(ViewProjection view)
 void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	// リソース設定
+	CD3DX12_RESOURCE_DESC resourceDesc =
+		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(Particle));
+
+	ComPtr<ID3D12Resource> uploadBuffer;
+	device->CreateCommittedResource(
+		&heapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&uploadBuffer));
+
+	// パーティクルデータをアップロードバッファにマップ・コピー
+	Particle* mappedData = nullptr;
+	uploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
+	std::copy(Particles.begin(), Particles.end(), mappedData);
+	uploadBuffer->Unmap(0, nullptr);
+
+	// アップロードバッファからGPUのバッファへコピー
+	cmdList->CopyResource(vertPaticleStatus.Get(), uploadBuffer.Get());
+
+	// アップロードバッファの解放
+	uploadBuffer.Reset();
+
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelineState.Get());
 	// ルートシグネチャの設定
@@ -450,6 +477,12 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	// コンピュートシェーダーを実行
 	cmdList->Dispatch(Particles.size() / 256, 1, 1);
+
+	// パーティクルデータをアップロードバッファにマップ・コピー
+	VertexPos* vertexMappedData = nullptr;
+	vertBuff->Map(0, nullptr, reinterpret_cast<void**>(&vertexMappedData));
+	std::copy(Particles.begin(), Particles.end(), vertexMappedData);
+	vertBuff->Unmap(0, nullptr);
 
 }
 
