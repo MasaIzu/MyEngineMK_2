@@ -298,27 +298,10 @@ void ParticleManager::InitializeVerticeBuff()
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
 
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
-
-	// 頂点バッファ生成
-	result = device->CreateCommittedResource(
-		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertBuff));
-	assert(SUCCEEDED(result));
-
-	// 頂点バッファビューの作成
-	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeVB;
-	vbView.StrideInBytes = sizeof(VertexPos);
-
-
 	D3D12_RESOURCE_DESC descStatus = {};
 	descStatus.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	descStatus.Alignment = 0;
-	descStatus.Width = numParticles * sizeof(Particle);
+	descStatus.Width = numParticles * sizeof(VertexPos);
 	descStatus.Height = 1;
 	descStatus.DepthOrArraySize = 1;
 	descStatus.MipLevels = 1;
@@ -336,20 +319,22 @@ void ParticleManager::InitializeVerticeBuff()
 	heapPropStatus.VisibleNodeMask = 1;
 
 	// 頂点バッファ生成
-	device->CreateCommittedResource(
-		&heapPropStatus,
-		D3D12_HEAP_FLAG_NONE,
-		&descStatus,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
-		IID_PPV_ARGS(&vertPaticleStatus)
-	);
+	result = device->CreateCommittedResource(
+		&heapPropStatus, D3D12_HEAP_FLAG_NONE, &descStatus, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		IID_PPV_ARGS(&vertBuff));
+	assert(SUCCEEDED(result));
+
+	// 頂点バッファビューの作成
+	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+	vbView.SizeInBytes = sizeVB;
+	vbView.StrideInBytes = sizeof(VertexPos);
 
 }
 
 void ParticleManager::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
+
 void ParticleManager::Initialize()
 {
 	HRESULT result;
@@ -381,7 +366,7 @@ void ParticleManager::Initialize()
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	uavDesc.Buffer.NumElements = numParticles;
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
-	uavDesc.Buffer.StructureByteStride = sizeof(Particle);
+	uavDesc.Buffer.StructureByteStride = sizeof(VertexPos);
 
 	device->CreateUnorderedAccessView(
 		vertBuff.Get(),
@@ -439,66 +424,33 @@ void ParticleManager::Draw(ViewProjection view)
 }
 
 void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
-{
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(Particle));
-
-	ComPtr<ID3D12Resource> uploadBuffer;
-	device->CreateCommittedResource(
-		&heapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&resourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&uploadBuffer));
-
-	// パーティクルデータをアップロードバッファにマップ・コピー
-	Particle* mappedData = nullptr;
-	uploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
-	std::copy(Particles.begin(), Particles.end(), mappedData);
-	uploadBuffer->Unmap(0, nullptr);
-
-	// アップロードバッファからGPUのバッファへコピー
-	cmdList->CopyResource(vertPaticleStatus.Get(), uploadBuffer.Get());
-
-	// アップロードバッファの解放
-	uploadBuffer.Reset();
+{  
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelineState.Get());
 	// ルートシグネチャの設定
 	cmdList->SetComputeRootSignature(rootSignature.Get());
 	// Set the particle buffer as a UAV.
-	cmdList->SetComputeRootUnorderedAccessView(0, vertPaticleStatus->GetGPUVirtualAddress());
+	cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
 
 	// コンピュートシェーダーを実行
 	cmdList->Dispatch(Particles.size() / 256, 1, 1);
-
-	// パーティクルデータをアップロードバッファにマップ・コピー
-	VertexPos* vertexMappedData = nullptr;
-	vertBuff->Map(0, nullptr, reinterpret_cast<void**>(&vertexMappedData));
-	std::copy(Particles.begin(), Particles.end(), vertexMappedData);
-	vertBuff->Unmap(0, nullptr);
 
 }
 
 void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
 {
-	////追加した要素の参照
-	//Particle p;
-	////値のセットt
-	//p.position = position;
-	//p.velocity = velocity;
-	//p.Frame = 0;
-	//p.MaxFrame = MaxFrame;
-	//p.alive = 1;
-	//p.scale = 1;
-	//p.color = { 1,1,1,1 };
+	//追加した要素の参照
+	VertexPos p;
+	//値のセットt
+	p.position = position;
+	p.velocity = velocity;
+	p.Frame = 0;
+	p.MaxFrame = MaxFrame;
+	p.alive = 1;
+	p.scale = 1;
+	p.color = { 1,1,1,1 };
 
-	//Particles.push_back(p);
+	Particles.push_back(p);
 }
 

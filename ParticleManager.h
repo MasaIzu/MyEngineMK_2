@@ -33,9 +33,13 @@ public: // サブクラス
 	// 頂点データ構造体
 	struct VertexPos
 	{
-		Vector3 pos; // xyz座標
-		float scale;
-		Vector4 color;
+		Vector3 position;
+		Vector3 velocity;
+		int Frame; // このパーティクルが生まれたフレーム
+		int MaxFrame;//このパーティクルの寿命
+		bool alive; // このパーティクルが生きているかどうか
+		float scale = 1;
+		Vector4 color = { 1,1,1,1 };
 	};
 
 	// 定数バッファ用データ構造体
@@ -53,16 +57,17 @@ public: // サブクラス
 		In,
 	};
 
-	// パーティクルの定義
-	struct Particle {
-		Vector3 position;
-		Vector3 velocity;
-		int Frame; // このパーティクルが生まれたフレーム
-		int MaxFrame;//このパーティクルの寿命
-		bool alive; // このパーティクルが生きているかどうか
-		float scale = 1;
-		Vector4 color = { 1,1,1,1 };
-	};
+	//// パーティクルの定義
+	//struct Particle {
+	//	Vector3 position;
+	//	Vector3 velocity;
+	//	int Frame; // このパーティクルが生まれたフレーム
+	//	int MaxFrame;//このパーティクルの寿命
+	//	bool alive; // このパーティクルが生きているかどうか
+	//	float scale = 1;
+	//	int a = 0;
+	//	Vector4 color = { 1,1,1,1 };
+	//};
 
 
 public: // 静的メンバ関数
@@ -162,7 +167,7 @@ private: // メンバ変数
 	//ParticleManager* parent = nullptr;
 
 	//パーティクル配列
-	std::vector<Particle>Particles;
+	std::vector<VertexPos>Particles;
 
 	UINT textureHandle_ = 0;
 

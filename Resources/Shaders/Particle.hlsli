@@ -8,11 +8,13 @@ cbuffer cbuff0 : register(b0)
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
 struct VSOutput
 {
-	float4 pos : POSITION; // システム用頂点座標
-	//float3 normal :NORMAL; // 法線ベクトル
-	//float2 uv  :TEXCOORD; // uv値
-	float scale : TEXCOORD;
-	float4 color : COLOR;
+    float4 position : Position;
+    float4 velocity : Velocity;
+    int Frame : Frame; // このパーティクルが生まれたフレーム
+    int MaxFrame : MaxFrame; //このパーティクルの寿命
+    bool alive : Alive; // このパーティクルが生きているかどうか
+    float scale : Scale;
+    float4 color : Color;
 };
 
 //ジオメトリシェーダからピクセルシェーダーへの出力

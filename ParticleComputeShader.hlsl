@@ -1,12 +1,12 @@
 struct Particle
 {
-    float3 position;
-    float3 velocity;
-    int Frame; // このパーティクルが生まれたフレーム
-    int MaxFrame; //このパーティクルの寿命
-    bool alive; // このパーティクルが生きているかどうか
-    float scale;
-    float4 color;
+    float3 position : Position;
+    float3 velocity : Velocity;
+    int Frame : Frame; // このパーティクルが生まれたフレーム
+    int MaxFrame : MaxFrame; //このパーティクルの寿命
+    bool alive : Alive; // このパーティクルが生きているかどうか
+    float scale : Scale;
+    float4 color : Color;
 };
 
 RWStructuredBuffer<Particle> particles;
