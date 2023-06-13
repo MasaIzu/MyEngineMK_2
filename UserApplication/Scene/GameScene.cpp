@@ -62,7 +62,7 @@ void GameScene::Update() {
 
 	if (shadeNumber == 0) {
 		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 2);
 
 		ImGui::SliderInt("range", &range, 0, 20);
 		ImGui::SetCursorPos(ImVec2(0, 20));
@@ -70,7 +70,7 @@ void GameScene::Update() {
 	}
 	else if (shadeNumber == 1) {
 		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 1);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 2);
 
 		ImGui::SliderFloat("centerX", &center.x, 0, 1);
 		ImGui::SliderFloat("centerY", &center.y, 0, 1);
@@ -79,6 +79,14 @@ void GameScene::Update() {
 		ImGui::SetCursorPos(ImVec2(0, 20));
 		ImGui::End();
 	}
+	else if (shadeNumber == 2) {
+		ImGui::Begin("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 2);
+
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+
 
 }
 

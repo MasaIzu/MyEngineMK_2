@@ -5,6 +5,12 @@ Texture2D<float4> tex0 : register(t0);  	// 0番スロットに設定されたテクスチャ
 Texture2D<float4> tex1 : register(t1);  	// 1番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      	// 0番スロットに設定されたサンプラー
 
+float Gaussian(float2 drawUV, float2 pickUV, float sigma)
+{
+    float d = distance(drawUV, pickUV);
+    return exp(-(d * d) / (2 * sigma * sigma));
+}
+
 float4 main(VSOutput input) : SV_TARGET
 {
 
@@ -85,29 +91,38 @@ float4 main(VSOutput input) : SV_TARGET
 		result /= totalWeight;
 		return result;
 	}
+    else if (shadeNumber == 2)
+    {
+		
+        float4 colortex0 = tex0.Sample(smp, input.uv);
+        float grayScale = colortex0.r * 0.299 + colortex0.g * 0.587 + colortex0.b * 0.114;
+        float extract = smoothstep(0.6, 0.9, grayScale);
+        float4 HighLumi = colortex0 * extract;
+		
+        float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.001;//Bloomはブラーを大げさに
+        float4 col = float4(0, 0, 0, 0);
+		
+        for (float py = -_Sigma * 2; py <= _Sigma * 2; py += _StepWidth)//xyで2の幅で色を取得
+        {
+            for (float px = -_Sigma * 2; px <= _Sigma * 2; px += _StepWidth)
+            {
+                float2 pickUV = input.uv + float2(px, py);
+                float weight = Gaussian(input.uv, pickUV, _Sigma);
+                col += tex0.Sample(smp, pickUV) * weight;
+				
+                //float4 colortex0 = tex0.Sample(smp, input.uv);
+                float grayScale = col.r * 0.299 + col.g * 0.587 + col.b * 0.114;
+                float extract = smoothstep(0.6, 0.9, grayScale);
+                float4 HighLumi = col * extract;
+				
+                totalWeight += weight;
+            }
+        }
+        HighLumi.rgb = HighLumi.rgb / totalWeight;
+		
+        return col;
+    }
+	
+	
 	return float4(1,1,1,1);
 }
-
-//Texture2D<float4> tex : register(t0);  	// 0番スロットに設定されたテクスチャ
-//smpState smp : register(s0);      	// 0番スロットに設定されたサンプラー
-//
-//float3 sampleMain(float2 uv) {
-//    return tex.Sample(smp, uv).rgb;
-//}
-//
-//float3 sampleBox(float2 uv, float delta) {
-//    float4 _MainTex_TexelSize = float4(0, 1, 0, 0);
-//
-//    float4 offset = _MainTex_TexelSize.xyxy * float2(-delta, delta).xxyy;
-//    float3 sum = sampleMain(uv + offset.xy) + sampleMain(uv + offset.zy) + sampleMain(uv + offset.xw) + sampleMain(uv + offset.zw);
-//    return sum * 0.25;
-//}
-//
-//float4 main(VSOutput input) : SV_TARGET
-//{
-//    float _Intensity = 1;
-//
-//       float4 col = tex.Sample(smp, input.uv);
-//                col.rgb += sampleBox(input.uv, 0.5) * _Intensity;
-//                return col;
-//}
