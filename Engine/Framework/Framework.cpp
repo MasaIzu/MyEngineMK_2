@@ -139,7 +139,7 @@ void Framework::Run()
 		// •`‰æŠJŽn
 		directXCore_->PreDraw();
 
-		PostEffect::Draw(directXCore_->GetCommandList());
+		//PostEffect::Draw(directXCore_->GetCommandList());
 		Draw();
 
 		//ImGui•`‰æ

@@ -39,10 +39,10 @@ void GameScene::Initialize() {
 	//fbxModel = std::make_unique<FbxModel>();
 	//fbxLoad = FbxLoader::GetInstance();
 
-	fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
-	fbxModel->Initialize();
-	anim = std::make_unique<FbxAnimation>();
-	anim->Load("Player");
+	//fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
+	//fbxModel->Initialize();
+	//anim = std::make_unique<FbxAnimation>();
+	//anim->Load("Player");
 
 	//model_.reset(Model::CreateFromOBJ("UFO", true));
 
@@ -65,7 +65,7 @@ void GameScene::Update() {
 
 	frem += 0.01;
 
-	fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
+	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
 	ParticleMan->Add(Vector3(0, 0, 0), Vector3(0, 0.1f, 0), 60);
 

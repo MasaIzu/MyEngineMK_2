@@ -298,29 +298,23 @@ void ParticleManager::InitializeVerticeBuff()
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
 
-	D3D12_RESOURCE_DESC descStatus = {};
-	descStatus.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	descStatus.Alignment = 0;
-	descStatus.Width = numParticles * sizeof(VertexPos);
-	descStatus.Height = 1;
-	descStatus.DepthOrArraySize = 1;
-	descStatus.MipLevels = 1;
-	descStatus.Format = DXGI_FORMAT_UNKNOWN;
-	descStatus.SampleDesc.Count = 1;
-	descStatus.SampleDesc.Quality = 0;
-	descStatus.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	descStatus.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;  // このフラグが重要
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	heapProps.CreationNodeMask = 1;
+	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+	heapProps.Type = D3D12_HEAP_TYPE_CUSTOM;
+	heapProps.VisibleNodeMask = 1;
 
-	D3D12_HEAP_PROPERTIES heapPropStatus = {};
-	heapPropStatus.Type = D3D12_HEAP_TYPE_DEFAULT;
-	heapPropStatus.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	heapPropStatus.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-	heapPropStatus.CreationNodeMask = 1;
-	heapPropStatus.VisibleNodeMask = 1;
+
+	// リソース設定
+	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
 
 	// 頂点バッファ生成
 	result = device->CreateCommittedResource(
-		&heapPropStatus, D3D12_HEAP_FLAG_NONE, &descStatus, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COMMON, nullptr,
 		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 
@@ -374,6 +368,24 @@ void ParticleManager::Initialize()
 		&uavDesc,
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
+
+
+	// ヒーププロパティ
+	CD3DX12_HEAP_PROPERTIES UploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	// リソース設定
+	CD3DX12_RESOURCE_DESC UploadResourceDesc =
+		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(VertexPos));
+
+	// アップロードバッファの作成
+	device->CreateCommittedResource(
+		&UploadHeapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&UploadResourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&uploadBuffer)
+	);
+
 }
 
 void ParticleManager::Update()
@@ -420,11 +432,22 @@ void ParticleManager::Draw(ViewProjection view)
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList, 1, textureHandle_);
 	// 描画コマンド
 	//cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
-	cmdList->DrawInstanced(Particles.size(), 1, 0, 0);
+	cmdList->DrawInstanced(static_cast<UINT>(Particles.size()), 1, 0, 0);
+
+	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	cmdList->ResourceBarrier(1, &transitionBarrier);
 }
 
 void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {  
+
+	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
+	cmdList->ResourceBarrier(1, &transitionBarrier);
+
+	// パーティクルデータをアップロードバッファにコピー
+	vertBuff->Map(0, nullptr, &mappedData);
+	memcpy(mappedData, Particles.data(), Particles.size() * sizeof(VertexPos));
+	vertBuff->Unmap(0, nullptr);
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelineState.Get());
@@ -434,8 +457,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
 
 	// コンピュートシェーダーを実行
-	cmdList->Dispatch(Particles.size() / 256, 1, 1);
-
+	cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
 }
 
 void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)

@@ -35,9 +35,9 @@ public: // サブクラス
 	{
 		Vector3 position;
 		Vector3 velocity;
-		int Frame; // このパーティクルが生まれたフレーム
-		int MaxFrame;//このパーティクルの寿命
-		bool alive; // このパーティクルが生きているかどうか
+		int Frame = 0; // このパーティクルが生まれたフレーム
+		int MaxFrame = 0;//このパーティクルの寿命
+		bool alive = 0; // このパーティクルが生きているかどうか
 		float scale = 1;
 		Vector4 color = { 1,1,1,1 };
 	};
@@ -115,7 +115,8 @@ private: // 静的メンバ変数
 	ComPtr<ID3D12Resource> vertPaticleStatus;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView;
-
+	// アップロードバッファの作成
+	ComPtr<ID3D12Resource> uploadBuffer;
 	ComPtr<ID3D12Resource> m_cacheVertexBuffer;
 
 private:// 静的メンバ関数
@@ -171,5 +172,7 @@ private: // メンバ変数
 
 	UINT textureHandle_ = 0;
 
-	uint32_t numParticles = 1000;
+	uint32_t numParticles = 1024;
+	// パーティクルデータをアップロードバッファにコピー
+	void* mappedData = nullptr;
 };
