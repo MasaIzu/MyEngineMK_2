@@ -67,11 +67,11 @@ float4 main(VSOutput input) : SV_TARGET
 		//fmodってなに？ってなったから出す
 		//x - y * floor(x / y);floorは浮動小数点値の端数を切り捨てて整数値に変換
 		//uvは Xpix/画面横幅,Ypix/画面縦
-		if (fmod(input.uv.y, 0.1f) < 0.05f) {
+		//if (fmod(input.uv.y, 0.1f) < 0.05f) {
 
-			color = colortex1;
-		}
-		return float4(color.rgb, 1);
+		//	color = colortex1;
+		//}
+		return color;
 	}
 	else if (shadeNumber == 1) {
 		float2 uv = input.uv;
@@ -89,8 +89,8 @@ float4 main(VSOutput input) : SV_TARGET
 		}
 
 		result /= totalWeight;
-		return result;
-	}
+        return float4(result.rgb, 1);
+    }
     else if (shadeNumber == 2)
     {
 		
@@ -102,23 +102,18 @@ float4 main(VSOutput input) : SV_TARGET
         float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.001;//Bloomはブラーを大げさに
         float4 col = float4(0, 0, 0, 0);
 		
-        for (float py = -_Sigma * 2; py <= _Sigma * 2; py += _StepWidth)//xyで2の幅で色を取得
+        for (float py = -_Sigma * 3; py <= _Sigma * 3; py += _StepWidth)//xyで2の幅で色を取得
         {
-            for (float px = -_Sigma * 2; px <= _Sigma * 2; px += _StepWidth)
+            for (float px = -_Sigma * 3; px <= _Sigma * 3; px += _StepWidth)
             {
                 float2 pickUV = input.uv + float2(px, py);
                 float weight = Gaussian(input.uv, pickUV, _Sigma);
                 col += tex0.Sample(smp, pickUV) * weight;
 				
-                //float4 colortex0 = tex0.Sample(smp, input.uv);
-                float grayScale = col.r * 0.299 + col.g * 0.587 + col.b * 0.114;
-                float extract = smoothstep(0.6, 0.9, grayScale);
-                float4 HighLumi = col * extract;
-				
                 totalWeight += weight;
             }
         }
-        HighLumi.rgb = HighLumi.rgb / totalWeight;
+        col /= totalWeight;
 		
         return col;
     }
