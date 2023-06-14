@@ -67,7 +67,7 @@ void GameScene::Update() {
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
-	ParticleMan->Add(Vector3(0, 0, 0), Vector3(0, 0.1f, 0), 60);
+	ParticleMan->Add(Vector3(0, 10, 0), Vector3(0, 0.1f, 0), 60);
 
 	ParticleMan->Update();
 }

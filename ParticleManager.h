@@ -34,12 +34,12 @@ public: // サブクラス
 	struct VertexPos
 	{
 		Vector3 position;
+		float scale = 1;
+		Vector4 color = { 1,1,1,1 };
 		Vector3 velocity;
 		int Frame = 0; // このパーティクルが生まれたフレーム
 		int MaxFrame = 0;//このパーティクルの寿命
 		bool alive = 0; // このパーティクルが生きているかどうか
-		float scale = 1;
-		Vector4 color = { 1,1,1,1 };
 	};
 
 	// 定数バッファ用データ構造体

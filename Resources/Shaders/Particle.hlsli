@@ -9,12 +9,12 @@ cbuffer cbuff0 : register(b0)
 struct VSOutput
 {
     float4 position : Position;
+    float scale : Scale;
+    float4 color : Color;
     float4 velocity : Velocity;
     int Frame : Frame; // このパーティクルが生まれたフレーム
     int MaxFrame : MaxFrame; //このパーティクルの寿命
     bool alive : Alive; // このパーティクルが生きているかどうか
-    float scale : Scale;
-    float4 color : Color;
 };
 
 //ジオメトリシェーダからピクセルシェーダーへの出力

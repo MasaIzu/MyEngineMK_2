@@ -458,6 +458,12 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	// コンピュートシェーダーを実行
 	cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
+
+	VertexPos* outPutDeta = nullptr;
+	vertBuff->Map(0, nullptr, (void**)&outPutDeta);
+	memcpy(Particles.data(), outPutDeta, Particles.size() * sizeof(VertexPos));
+	vertBuff->Unmap(0, nullptr);
+
 }
 
 void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
