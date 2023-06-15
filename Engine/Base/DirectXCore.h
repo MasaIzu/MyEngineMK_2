@@ -45,6 +45,8 @@ public://ƒƒ“ƒoŠÖ”
 
 	ID3D12Resource* GetbackBuffers() { return depthBuffer.Get(); }
 
+	ID3D12CommandQueue* GetCommandQueue() { return commandQueue.Get(); }
+
 private://ƒƒ“ƒo•Ï”
 
 	// Direct3DŠÖ˜A

@@ -33,6 +33,10 @@ public:
 	//終了チェック
 	virtual bool isPlayMyGame();
 
+	//コンピュートシェーダーで計算した後のコピー処理
+	virtual void CopyData() = 0;
+
+
 public://デストラクタ
 	virtual ~Framework() = default;
 

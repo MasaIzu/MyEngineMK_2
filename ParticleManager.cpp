@@ -459,26 +459,33 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	// コンピュートシェーダーを実行
 	cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
 
+}
+
+void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
+{
+	if (numParticles > Particles.size()) {
+		//追加した要素の参照
+		VertexPos p;
+		//値のセットt
+		p.position = position;
+		p.velocity = velocity;
+		p.Frame = 0;
+		p.MaxFrame = MaxFrame;
+		p.alive = 1;
+		p.scale = 1;
+		p.color = { 1,1,1,1 };
+
+		Particles.push_back(p);
+	}
+}
+
+void ParticleManager::CopyData()
+{
+
 	VertexPos* outPutDeta = nullptr;
 	vertBuff->Map(0, nullptr, (void**)&outPutDeta);
 	memcpy(Particles.data(), outPutDeta, Particles.size() * sizeof(VertexPos));
 	vertBuff->Unmap(0, nullptr);
 
-}
-
-void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
-{
-	//追加した要素の参照
-	VertexPos p;
-	//値のセットt
-	p.position = position;
-	p.velocity = velocity;
-	p.Frame = 0;
-	p.MaxFrame = MaxFrame;
-	p.alive = 1;
-	p.scale = 1;
-	p.color = { 1,1,1,1 };
-
-	Particles.push_back(p);
 }
 

@@ -34,3 +34,8 @@ void MainGame::Draw()
 	// ƒQ[ƒ€ƒV[ƒ“‚Ì•`‰æ
 	sceneManager_->Draw();
 }
+
+void MainGame::CopyData()
+{
+	sceneManager_->CopyData();
+}

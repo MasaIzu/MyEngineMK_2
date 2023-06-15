@@ -47,6 +47,11 @@ void SceneManager::Finalize()
 	delete SceneManager_;
 }
 
+void SceneManager::CopyData()
+{
+	scene_->CopyData();
+}
+
 void SceneManager::SetSceneFactory(AbstractSceneFactory* sceneFactory)
 {
 	sceneFactory_ = sceneFactory;

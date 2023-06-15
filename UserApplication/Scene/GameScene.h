@@ -58,7 +58,8 @@ public: // メンバ関数
 	// 終了処理
 	void Finalize() override;
 
-
+	//コピー処理
+	void CopyData() override;
 
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;

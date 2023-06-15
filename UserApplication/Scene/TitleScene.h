@@ -36,6 +36,10 @@ public: // メンバ関数
 	/// </summary>
 	void Finalize() override;
 
+	//コピー処理
+	void CopyData() override;
+
+
 private:
 	Input* input = nullptr;
 	SceneManager* sceneManager_ = nullptr;

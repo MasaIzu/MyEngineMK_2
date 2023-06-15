@@ -145,10 +145,16 @@ public: // メンバ関数
 
 	void SetTextureHandle(uint32_t textureHandle);
 
-	size_t GetParticlesListSize() {return Particles.size() ; }
+	size_t GetParticlesListSize() { return Particles.size(); }
 
 	
 	void Add(Vector3 position,Vector3 velocity,int MaxFrame);
+
+	//コンピュートシェーダー掛けた後のコピー処理
+	void CopyData();
+
+	
+
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
@@ -172,7 +178,11 @@ private: // メンバ変数
 
 	UINT textureHandle_ = 0;
 
-	uint32_t numParticles = 1024;
+	uint32_t numParticles = 16384;
 	// パーティクルデータをアップロードバッファにコピー
 	void* mappedData = nullptr;
+
+	// Create a fence.
+	ComPtr<ID3D12Fence> fence;
+	uint64_t fenceValue = 0;
 };

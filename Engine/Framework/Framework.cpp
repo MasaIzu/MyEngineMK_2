@@ -150,6 +150,8 @@ void Framework::Run()
 		// •`‰æI—¹
 		directXCore_->PostDraw();
 
+		CopyData();
+
 		//FPSŒÅ’è
 		fps->FpsControlEnd();
 

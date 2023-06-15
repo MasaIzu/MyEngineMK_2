@@ -28,6 +28,7 @@ void GameScene::Initialize() {
 	sceneManager_ = SceneManager::GetInstance();
 
 	viewProjection_.Initialize();
+	viewProjection_.eye = { 0,0,-500 };
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
@@ -55,19 +56,22 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 
-	/*ImGui::Begin("Phase");
+	ImGui::Begin("Phase");
 
-	ImGui::Text("minifishesX:%f", MyMath::GetWorldTransform(minifishes[0].GetWorldTransform().matWorld_).x);
-	ImGui::Text("minifishesY:%f", MyMath::GetWorldTransform(minifishes[0].GetWorldTransform().matWorld_).y);
-	ImGui::Text("minifishesZ:%f", MyMath::GetWorldTransform(minifishes[0].GetWorldTransform().matWorld_).z);
+	ImGui::Text("minifishesX:%d", ParticleMan->GetParticlesListSize());
 
-	ImGui::End();*/
+	ImGui::End();
 
 	frem += 0.01;
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
-	ParticleMan->Add(Vector3(0, 10, 0), Vector3(0, 0.1f, 0), 60);
+	if (input_->TriggerKey(DIK_0)) {
+
+	}
+	for (int i = 0; i < 1000; i++) {
+		ParticleMan->Add(Vector3(0, -200, 0), Vector3(0, 0.1f, 0), 60);
+	}
 
 	ParticleMan->Update();
 }
@@ -150,5 +154,12 @@ void GameScene::Draw() {
 
 void GameScene::Finalize()
 {
+}
+
+void GameScene::CopyData()
+{
+
+	ParticleMan->CopyData();
+
 }
 

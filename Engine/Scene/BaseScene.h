@@ -23,6 +23,8 @@ public:
 	//•`‰æ
 	virtual void Finalize() = 0;
 
+	virtual void CopyData() = 0;
+
 public://ƒƒ“ƒoŠÖ”
 
 	virtual ~BaseScene() = default;
