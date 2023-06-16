@@ -4,6 +4,8 @@
 
 
 WinApp* WinApp::WinApp_ = nullptr;
+const float WinApp::window_width = 1280;
+const float WinApp::window_height = 720;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -39,6 +41,13 @@ WinApp* WinApp::GetInstance() {
 void WinApp::Destroy()
 {
 	delete WinApp_;
+}
+
+Vector2 WinApp::GetWindowSize() const
+{
+	Vector2 WinSize = { window_width, window_height };
+
+	return WinSize;
 }
 
 void WinApp::MakeWindow(std::wstring title) {

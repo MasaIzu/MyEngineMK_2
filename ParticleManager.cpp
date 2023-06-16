@@ -391,15 +391,9 @@ void ParticleManager::Initialize()
 void ParticleManager::Update()
 {
 
-	//for (auto& p : Particles) {
-	//	if (p.alive && p.Frame > p.MaxFrame) {
-	//		p.alive = false; // パーティクルを死に状態に設定
-	//	}
-	//}
-
-	//// 死んでいるパーティクルを削除
-	//Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
-	//	[](const Particle& p) { return !p.alive; }), Particles.end());
+	// 死んでいるパーティクルを削除
+	Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
+		[](const VertexPos& p) { return !p.alive; }), Particles.end());
 
 }
 
@@ -441,27 +435,31 @@ void ParticleManager::Draw(ViewProjection view)
 void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {  
 
-	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
-	cmdList->ResourceBarrier(1, &transitionBarrier);
+	if (Particles.size()) {
 
-	// パーティクルデータをアップロードバッファにコピー
-	vertBuff->Map(0, nullptr, &mappedData);
-	memcpy(mappedData, Particles.data(), Particles.size() * sizeof(VertexPos));
-	vertBuff->Unmap(0, nullptr);
+		CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
+		cmdList->ResourceBarrier(1, &transitionBarrier);
 
-	// パイプラインステートの設定
-	cmdList->SetPipelineState(pipelineState.Get());
-	// ルートシグネチャの設定
-	cmdList->SetComputeRootSignature(rootSignature.Get());
-	// Set the particle buffer as a UAV.
-	cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
+		// パーティクルデータをアップロードバッファにコピー
+		vertBuff->Map(0, nullptr, &mappedData);
+		memcpy(mappedData, Particles.data(), Particles.size() * sizeof(VertexPos));
+		vertBuff->Unmap(0, nullptr);
 
-	// コンピュートシェーダーを実行
-	cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
+		// パイプラインステートの設定
+		cmdList->SetPipelineState(pipelineState.Get());
+		// ルートシグネチャの設定
+		cmdList->SetComputeRootSignature(rootSignature.Get());
+		// Set the particle buffer as a UAV.
+		cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
+
+		// コンピュートシェーダーを実行
+		cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
+
+	}
 
 }
 
-void ParticleManager::Add(Vector3 position, Vector3 velocity,int MaxFrame)
+void ParticleManager::Add(Vector3& position, Vector3& velocity,uint32_t& MaxFrame)
 {
 	if (numParticles > Particles.size()) {
 		//追加した要素の参照

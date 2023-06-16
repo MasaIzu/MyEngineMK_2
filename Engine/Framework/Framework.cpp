@@ -11,7 +11,7 @@ void Framework::Initialize()
 
 	// DirectX‰Šú‰»ˆ—
 	directXCore_ = DirectXCore::GetInstance();
-	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->window_width, winApp_->window_height);
+	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->GetWindowSize().x, winApp_->window_height);
 
 #pragma region ”Ä—p‹@”\‰Šú‰»
 	// “ü—Í‚Ì‰Šú‰»

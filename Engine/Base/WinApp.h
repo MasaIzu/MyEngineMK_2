@@ -2,13 +2,11 @@
 #include<Windows.h>
 #include <cstdint>
 #include <string>
+#include "Vector2.h"
 
 class WinApp
 {
 public:
-	// ウィンドウサイズ
-	static const int window_width = 1280; // 横幅
-	static const int window_height = 720; // 縦幅
 
 public: // 静的メンバ関数
 
@@ -28,7 +26,7 @@ public://メンバ関数
 	void Destroy();
 
 	HINSTANCE GetHInstance() const { return w.hInstance; }
-
+	Vector2 GetWindowSize() const;
 
 public://GetterSetter
 
@@ -45,6 +43,10 @@ private://メンバ変数
 
 private:
 	static WinApp* WinApp_;
+
+	// ウィンドウサイズ
+	static const float window_width; // 横幅
+	static const float window_height; // 縦幅
 
 };
 

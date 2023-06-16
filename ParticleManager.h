@@ -37,8 +37,8 @@ public: // サブクラス
 		float scale = 1;
 		Vector4 color = { 1,1,1,1 };
 		Vector3 velocity;
-		int Frame = 0; // このパーティクルが生まれたフレーム
-		int MaxFrame = 0;//このパーティクルの寿命
+		uint32_t Frame = 0; // このパーティクルが生まれたフレーム
+		uint32_t MaxFrame = 0;//このパーティクルの寿命
 		bool alive = 0; // このパーティクルが生きているかどうか
 	};
 
@@ -148,7 +148,7 @@ public: // メンバ関数
 	size_t GetParticlesListSize() { return Particles.size(); }
 
 	
-	void Add(Vector3 position,Vector3 velocity,int MaxFrame);
+	void Add(Vector3& position,Vector3& velocity, uint32_t& MaxFrame);
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
@@ -178,7 +178,7 @@ private: // メンバ変数
 
 	UINT textureHandle_ = 0;
 
-	uint32_t numParticles = 16384;
+	uint32_t numParticles = 1000000;
 	// パーティクルデータをアップロードバッファにコピー
 	void* mappedData = nullptr;
 

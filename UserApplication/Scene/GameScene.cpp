@@ -8,7 +8,7 @@
 #include <CollisionAttribute.h>
 #include "Collision.h"
 #include"PostEffect.h"
-
+#include"WinApp.h"
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
@@ -28,7 +28,7 @@ void GameScene::Initialize() {
 	sceneManager_ = SceneManager::GetInstance();
 
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 0,0,-500 };
+	viewProjection_.eye = { 0,0,-100 };
 	viewProjection_.UpdateMatrix();
 
 	worldTransform_.Initialize();
@@ -51,6 +51,8 @@ void GameScene::Initialize() {
 	ParticleMan->Initialize();
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
+	gameCamera = std::make_unique
+		<GameCamera>(viewProjection_, WinApp::GetInstance()->window_width, WinApp::GetInstance()->window_height);
 }
 
 void GameScene::Update() {
@@ -58,7 +60,7 @@ void GameScene::Update() {
 
 	ImGui::Begin("Phase");
 
-	ImGui::Text("minifishesX:%d", ParticleMan->GetParticlesListSize());
+	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
 	ImGui::End();
 
@@ -66,14 +68,17 @@ void GameScene::Update() {
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
-	if (input_->TriggerKey(DIK_0)) {
-
+	if (input_->PushKey(DIK_0)) {
+		for (int i = 0; i < 1000; i++) {
+			ParticleMan->Add(Pos, Verocty, MaxFream);
+		}
 	}
-	for (int i = 0; i < 1000; i++) {
-		ParticleMan->Add(Vector3(0, -200, 0), Vector3(0, 0.1f, 0), 60);
-	}
+	
 
 	ParticleMan->Update();
+
+	gameCamera->SetCameraPosition(Vector3(0,0,-50));
+	gameCamera->Update();
 }
 
 void GameScene::PostEffectDraw()

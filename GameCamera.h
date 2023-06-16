@@ -3,7 +3,6 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include <Input.h>
-#include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Easing.h"
 
@@ -11,28 +10,28 @@ class GameCamera {
 
 public:
 
-	GameCamera(int window_width, int window_height);
+	GameCamera(ViewProjection* viewPro,float& window_width, float& window_height);
 
 	~GameCamera();
 
 	void Initialize();
+	void InitializeCameraPosition();
 
-	void Update(ViewProjection* viewProjection_);
+	void Update();
 
-	void PlaySceneCamera(ViewProjection* viewProjection_);
-	void PlayerLockOnCamera(ViewProjection* viewProjection_);
+	void PlaySceneCamera();
 
 	void MultiplyMatrix(Matrix4& matrix);
 
 	void Collision();
 
-private:
-	// カメラの位置を計算する関数
-	Vector3 calculateCameraPosition(ViewProjection* viewProjection_,float distance, float angle);
-	// カメラが向く位置を計算する関数
-	Vector3 calculateLookAtPosition(Vector3 target, Vector3 camera);
+	void Reset();
 
-	void CameraAngle(float x, float z);
+	void MousePositionReset();
+
+private:
+
+	void CameraAngle(float& x, float& z);
 
 public://ゲッターセッター
 
@@ -43,7 +42,7 @@ public://ゲッターセッター
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
 	// カメラの垂直方向の角度を計算する関数
-	float getPitch(ViewProjection* viewProjection_) {
+	float getPitch() {
 		return -atan2(playerPos_.y - viewProjection_->eye.y, playerCameraDistance);
 	}
 	float GetCameraAngle() { return angle; }
@@ -55,16 +54,13 @@ public://ゲッターセッター
 		return playerYaw;
 	}
 
-	void GetEnemyPos(Vector3 EnemyPos) { EnemyPos_ = EnemyPos; }
 	void SetCameraPosition(Vector3 pos) { playerPos_ = pos; }
 	void SetSpaceInput(bool isSpaceInput) { spaceInput = isSpaceInput; }
-	void SetPlayerMoveMent(Vector3 playerMoveMent) { PlayerMoveMent = playerMoveMent; }
 private:
 
 	Easing* easing_;
 
 	// カメラ注視点までの距離
-	float distance_ = 10;
 	Vector2 mousePos = { 0.0f,0.0f };
 	Vector2 oldMousePos = { 0.0f,0.0f };
 	Input* input_ = nullptr;
@@ -72,12 +68,6 @@ private:
 	// 回転行列
 	Matrix4 matRot;
 	Vector3 rot;
-	float fTheta = 4.57f;//カメラ横方向角度
-	float fDelta = 0.43f;//カメラ縦方向角度
-
-	float mousepoint_a;//マウス位置
-	float mousepoint_b;//マウス位置
-	bool dirty = false;
 
 	bool spaceInput = false;
 
@@ -85,7 +75,6 @@ private:
 	float scaleX_ = 1.0f;
 	float scaleY_ = 1.0f;
 
-	Vector3 vTargetEye;
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
@@ -98,9 +87,6 @@ private:
 	int winHeight = 0;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
-	WorldTransform worldTransform_;
-	WorldTransform EnemyWorld_;
-	Vector3 EnemyPos_;
 
 	float angleAroundPlayer; // プレイヤーの周りを回転する角度
 	Matrix4 CameraRot;
@@ -154,5 +140,18 @@ private:
 	Vector3 higth = { 0,10,0 };
 
 	float Fov = 45.0f;
+
+	float CameraDistanceMinus = 0.0f;
+
+	float CameraMouseMoved = 0.0f;
+
+	float OldMouseMoved = 0.0f;
+
+	Vector2 MovementMous;
+
+	bool cameraDown = false;
+	bool cameraUp = false;
+
+	ViewProjection* viewProjection_;
 
 };

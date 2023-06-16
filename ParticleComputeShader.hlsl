@@ -21,5 +21,11 @@ void main(uint3 id : SV_DispatchThreadID)
 
     p.position += p.velocity;
 
+    if (p.Frame > p.MaxFrame)
+    {
+        p.alive = false;
+    }
+    
+    
     particles[id.x] = p;
 }

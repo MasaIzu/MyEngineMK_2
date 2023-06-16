@@ -15,7 +15,7 @@ public://メンバ関数
 	// シングルトンインスタンスの取得
 	static DirectXCore* GetInstance();
 
-	void DirectXCoreInitialize(HWND hwnd, int window_width, int window_height);
+	void DirectXCoreInitialize(HWND hwnd, float& window_width, float& window_height);
 
 
 	/// <summary>
@@ -61,8 +61,8 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 
-	int backBufferWidth_ = 0;
-	int backBufferHeight_ = 0;
+	float backBufferWidth_ = 0;
+	float backBufferHeight_ = 0;
 
 	//フェンスの生成
 	Microsoft::WRL::ComPtr <ID3D12Fence> fence;

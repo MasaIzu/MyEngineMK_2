@@ -219,7 +219,7 @@ void Sprite::StaticInitialize(
 	// ŽË‰es—ñŒvŽZ
 	Matrix4Projection_ =
 		MyMath::Matrix4Orthographic(
-			0.0f, (float)WinApp::window_width, (float)WinApp::window_height, 0.0f, 0.0f, 1.0f);
+			0.0f, WinApp::GetInstance()->window_width, WinApp::GetInstance()->window_height, 0.0f, 0.0f, 1.0f);
 }
 
 void Sprite::StaticFinalize()

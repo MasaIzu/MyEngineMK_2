@@ -49,7 +49,7 @@ void DirectXCore::Destroy(){
 	delete DirectXCore_;
 }
 
-void DirectXCore::DirectXCoreInitialize(HWND hwnd, int window_width, int window_height) {
+void DirectXCore::DirectXCoreInitialize(HWND hwnd, float& window_width, float& window_height) {
 
 	backBufferWidth_ = window_width;
 	backBufferHeight_ = window_height;

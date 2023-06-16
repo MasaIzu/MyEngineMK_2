@@ -99,4 +99,11 @@ private: // メンバ変数
 	CollisionManager* collisionManager = nullptr;
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
+
+	Vector3 Pos = { 0, -20, 0 };
+	Vector3 Verocty = { 0, 0.1f, 0 };
+	uint32_t MaxFream = 300;
+
+	std::unique_ptr<GameCamera> gameCamera;
+
 };
