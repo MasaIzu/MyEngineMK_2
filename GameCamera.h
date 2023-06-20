@@ -72,8 +72,8 @@ private:
 	bool spaceInput = false;
 
 	// スケーリング
-	float scaleX_ = 1.0f;
-	float scaleY_ = 1.0f;
+	uint32_t scaleX_ = 1.0f;
+	uint32_t scaleY_ = 1.0f;
 
 	Vector3 vUp;
 	Vector3 playerPos_;
