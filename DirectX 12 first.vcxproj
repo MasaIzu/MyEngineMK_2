@@ -128,6 +128,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\BackGround;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

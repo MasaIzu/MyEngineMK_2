@@ -33,7 +33,7 @@ public:
         int samples;
     };
 
-    static void Initialize(DirectXCore* dxCore);
+    static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
     static void Finalize();
     

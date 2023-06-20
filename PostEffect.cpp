@@ -38,7 +38,7 @@ PostEffect::SendDataToGPU* PostEffect::dataMap = nullptr;
 
 const float PostEffect::clearColor[4] = {0.25f,0.5f,0.1f,0};
 
-void PostEffect::Initialize(DirectXCore* dxCore)
+void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
 {
 	HRESULT result;
 
@@ -46,8 +46,8 @@ void PostEffect::Initialize(DirectXCore* dxCore)
 
 	D3D12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		WinApp::window_width,
-		(UINT)WinApp::window_height,
+		static_cast<UINT>(WinWidth),
+		static_cast<UINT>(WinHeight),
 		1,0,1,0,D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	{
 
@@ -412,8 +412,8 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 	CD3DX12_RECT scissorRects[2];
 
 	for (int i = 0; i < 2; i++) {
-		viewPorts[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::GetInstance()->window_width, WinApp::GetInstance()->window_height);
-		scissorRects[i] = CD3DX12_RECT(0, 0, WinApp::GetInstance()->window_width, WinApp::GetInstance()->window_height);
+		viewPorts[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<LONG>(WinApp::GetInstance()->window_width), static_cast<LONG>(WinApp::GetInstance()->window_height));
+		scissorRects[i] = CD3DX12_RECT(0, 0, static_cast<LONG>(WinApp::GetInstance()->window_width), static_cast<LONG>(WinApp::GetInstance()->window_height));
 	}
 
 	//ビューポートの設定

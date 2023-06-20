@@ -8,6 +8,10 @@ class WinApp
 {
 public:
 
+	// ウィンドウサイズ
+	static const uint32_t window_width; // 横幅
+	static const uint32_t window_height; // 縦幅
+
 public: // 静的メンバ関数
 
 	// シングルトンインスタンスの取得
@@ -43,10 +47,6 @@ private://メンバ変数
 
 private:
 	static WinApp* WinApp_;
-
-	// ウィンドウサイズ
-	static const float window_width; // 横幅
-	static const float window_height; // 縦幅
 
 };
 

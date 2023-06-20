@@ -27,9 +27,9 @@ void GameScene::Initialize() {
 
 	sceneManager_ = SceneManager::GetInstance();
 
-	viewProjection_.Initialize();
-	viewProjection_.eye = { 0,0,-100 };
-	viewProjection_.UpdateMatrix();
+	viewProjection_->Initialize();
+	viewProjection_->eye = { 0,0,-100 };
+	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0,-120,100 };
@@ -51,8 +51,8 @@ void GameScene::Initialize() {
 	ParticleMan->Initialize();
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
-	gameCamera = std::make_unique
-		<GameCamera>(viewProjection_, WinApp::GetInstance()->window_width, WinApp::GetInstance()->window_height);
+	gameCamera = std::make_unique<GameCamera>();
+	gameCamera->Initialize(viewProjection_, WinApp::window_width, WinApp::window_height);
 }
 
 void GameScene::Update() {
@@ -64,7 +64,7 @@ void GameScene::Update() {
 
 	ImGui::End();
 
-	frem += 0.01;
+	frem += 0.01f;
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
@@ -77,8 +77,8 @@ void GameScene::Update() {
 
 	ParticleMan->Update();
 
-	gameCamera->SetCameraPosition(Vector3(0,0,-50));
-	gameCamera->Update();
+	/*gameCamera->SetCameraPosition(Vector3(0,0,-50));
+	gameCamera->Update();*/
 }
 
 void GameScene::PostEffectDraw()
@@ -143,7 +143,7 @@ void GameScene::Draw() {
 	ParticleMan->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	
-	ParticleMan->Draw(viewProjection_);
+	ParticleMan->Draw(*viewProjection_);
 	
 
 	ParticleManager::PostDraw();

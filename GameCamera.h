@@ -10,11 +10,11 @@ class GameCamera {
 
 public:
 
-	GameCamera(ViewProjection* viewPro,float& window_width, float& window_height);
+	GameCamera();
 
 	~GameCamera();
 
-	void Initialize();
+	void Initialize(ViewProjection* viewPro, const uint32_t& window_width, const uint32_t& window_height);
 	void InitializeCameraPosition();
 
 	void Update();
@@ -83,12 +83,12 @@ private:
 
 	int cameraType = 0;
 
-	int winWidth = 0;
-	int winHeight = 0;
+	uint32_t winWidth = 0.0f;
+	uint32_t winHeight = 0.0f;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
-	float angleAroundPlayer; // プレイヤーの周りを回転する角度
+	float angleAroundPlayer = 0; // プレイヤーの周りを回転する角度
 	Matrix4 CameraRot;
 
 
@@ -152,6 +152,6 @@ private:
 	bool cameraDown = false;
 	bool cameraUp = false;
 
-	ViewProjection* viewProjection_;
+	ViewProjection* viewProjection_ = nullptr;
 
 };

@@ -4,7 +4,7 @@ constexpr float PI = 3.1415926535897931f;
 
 float AngleNormalize(float x)
 {
-	return  static_cast<int>((x > 0.0f ? x : 360.0f + x)) % 360;
+	return  static_cast<float>(static_cast<int>((x > 0.0f ? x : 360.0f + x)) % 360);
 }
 
 Quaternion::Quaternion(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)

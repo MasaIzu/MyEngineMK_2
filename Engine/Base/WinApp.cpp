@@ -4,8 +4,8 @@
 
 
 WinApp* WinApp::WinApp_ = nullptr;
-const float WinApp::window_width = 1280;
-const float WinApp::window_height = 720;
+const uint32_t WinApp::window_width = 1280;
+const uint32_t WinApp::window_height = 720;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

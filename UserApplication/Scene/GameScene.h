@@ -68,7 +68,7 @@ private: // メンバ変数
 
 
 	//ビュープロジェクション
-	ViewProjection viewProjection_;
+	ViewProjection* viewProjection_;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//テクスチャハンドル

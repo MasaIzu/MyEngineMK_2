@@ -11,7 +11,7 @@ void Framework::Initialize()
 
 	// DirectX‰Šú‰»ˆ—
 	directXCore_ = DirectXCore::GetInstance();
-	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->GetWindowSize().x, winApp_->window_height);
+	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->GetWindowSize().x, winApp_->GetWindowSize().y);
 
 #pragma region ”Ä—p‹@”\‰Šú‰»
 	// “ü—Í‚Ì‰Šú‰»
@@ -44,7 +44,7 @@ void Framework::Initialize()
 
 	ParticleManager::StaticInitialize(DirectXCore::GetInstance()->GetDevice());
 
-	PostEffect::Initialize(DirectXCore::GetInstance());
+	PostEffect::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
 
 #pragma endregion
 
