@@ -51,7 +51,7 @@ void GameCamera::Initialize(ViewProjection* viewPro, const uint32_t& window_widt
 
 void GameCamera::InitializeCameraPosition()
 {
-	Vector2 windowWH = Vector2(static_cast<float>(winWidth / 2), static_cast<float>(winHeight / 2));
+	windowWH = Vector2((static_cast<float>(winWidth) / 2), (static_cast<float>(winHeight) / 2));
 
 	mouseMoved = Vector2(0, 0);
 	CameraRot = MyMath::MakeIdentity();
@@ -151,7 +151,6 @@ void GameCamera::PlaySceneCamera() {
 	//カメラの移動の速さ
 	const float cameraSpeed = 0.0005f;
 
-	Vector2 windowWH = Vector2(winWidth / 2, winHeight / 2);
 	POINT mousePosition;
 	//マウス座標(スクリーン座標)を取得する
 	GetCursorPos(&mousePosition);
@@ -377,7 +376,6 @@ void GameCamera::Reset()
 void GameCamera::MousePositionReset()
 {
 
-	Vector2 windowWH = Vector2(winWidth / 2, winHeight / 2);
 	POINT mousePosition;
 	//マウス座標(スクリーン座標)を取得する
 	GetCursorPos(&mousePosition);

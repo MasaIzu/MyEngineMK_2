@@ -224,10 +224,10 @@ Vector4 MyMath::Vec4Mat4Mul(const Vector4& vec, const Matrix4& mat)
 Matrix4 MyMath::setViewportMat(WinApp* window, const Vector3& v) {
 	//’PˆÊs—ñ‚ÌÝ’è
 	Matrix4 matViewport = Initialize();
-	matViewport.m[0][0] = window->window_width / 2;
-	matViewport.m[1][1] = -window->window_height / 2;
-	matViewport.m[3][0] = (window->window_width / 2) + v.x;
-	matViewport.m[3][1] = (window->window_height / 2) + v.y;
+	matViewport.m[0][0] = static_cast<float>(window->window_width) / 2;
+	matViewport.m[1][1] = -static_cast<float>(window->window_height) / 2;
+	matViewport.m[3][0] = static_cast<float>((window->window_width) / 2) + v.x;
+	matViewport.m[3][1] = static_cast<float>((window->window_height) / 2) + v.y;
 	return matViewport;
 }
 
@@ -455,16 +455,16 @@ Matrix4 MyMath::LookAtLH(Vector3 eye, Vector3 target, Vector3 up) {
 
 Matrix4 MyMath::PerspectiveFovLH(float fovAngleY, float aspectRatio, float nearZ, float farZ) {
 
-	float h = 1 / tan(fovAngleY * 0.5);
-	float w = h / aspectRatio;
-	float a = farZ / (farZ - nearZ);
-	float b = (-nearZ * farZ) / (farZ - nearZ);
+	double h = 1 / tan(fovAngleY * 0.5);
+	double w = h / aspectRatio;
+	double a = farZ / (farZ - nearZ);
+	double b = (-nearZ * farZ) / (farZ - nearZ);
 
 	Matrix4 perspectiveFovLH = {
-		w,		 0,		 0,		 0,
-		0,		 h,		 0,		 0,
-		0,		 0,		 a,		 1,
-		0,		 0,		 b,		 0
+		static_cast<float>(w),		 0,		 0,		 0,
+		0,		 static_cast<float>(h),		 0,		 0,
+		0,		 0,		 static_cast<float>(a),		 1,
+		0,		 0,		 static_cast<float>(b),		 0
 	};
 
 

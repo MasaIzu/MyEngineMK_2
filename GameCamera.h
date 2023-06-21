@@ -60,6 +60,8 @@ private:
 
 	Easing* easing_;
 
+	Vector2 windowWH;
+
 	// ƒJƒƒ‰’‹“_‚Ü‚Å‚Ì‹——£
 	Vector2 mousePos = { 0.0f,0.0f };
 	Vector2 oldMousePos = { 0.0f,0.0f };
@@ -83,8 +85,8 @@ private:
 
 	int cameraType = 0;
 
-	float winWidth = 0.0f;
-	float winHeight = 0.0f;
+	uint32_t winWidth = 0;
+	uint32_t winHeight = 0;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
