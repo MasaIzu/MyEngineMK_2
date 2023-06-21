@@ -109,7 +109,7 @@ void Player::Update(const ViewProjection& viewProjection) {
 	collider->Update(worldTransform_.matWorld_);
 
 	if (frem < MaxFrem) {
-		frem += 0.013f;
+		frem += 0.005f;
 	}
 	else {
 		frem = MinimumFrem;
