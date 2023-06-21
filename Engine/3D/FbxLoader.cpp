@@ -117,7 +117,7 @@ void FbxLoader::ParseSkin(FbxModel* model, aiMesh* fbxMesh) {
 		return;
 	}
 
-	for (int i = 0; i < fbxMesh->mNumBones; i++) {
+	for (unsigned int i = 0; i < fbxMesh->mNumBones; i++) {
 
 
 		auto& meshBone = fbxMesh->mBones[i];
@@ -142,7 +142,7 @@ void FbxLoader::ParseSkin(FbxModel* model, aiMesh* fbxMesh) {
 		model->meshes_.back()->vecBones.push_back(bone);
 		//model->meshes_.back()->bones[bone.name] = &model->meshes_.back()->vecBones.back();
 
-		for (int j = 0; j < meshBone->mNumWeights; j++) {
+		for (unsigned int j = 0; j < meshBone->mNumWeights; j++) {
 			int vertIndex = meshBone->mWeights[j].mVertexId;
 
 			float weight = (float)meshBone->mWeights[j].mWeight;
@@ -219,7 +219,7 @@ void FbxLoader::ParseNodeRecursive(FbxModel* model, aiNode* fbxNode, Node* paren
 	}
 
 	// 子ノードに対して再帰呼び出し
-	for (int i = 0; i < fbxNode->mNumChildren; i++) {
+	for (unsigned int i = 0; i < fbxNode->mNumChildren; i++) {
 		ParseNodeRecursive(model, fbxNode->mChildren[i], &node);
 	}
 }

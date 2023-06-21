@@ -9,7 +9,6 @@ void SoundManager::Initialize()
 //音声データの読み込み
 SoundData SoundManager::SoundLoadWave(const char* filename) {
 
-	HRESULT result;
 
 	//-------①ファイルオープン-------//
 

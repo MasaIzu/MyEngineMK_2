@@ -412,8 +412,8 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 	CD3DX12_RECT scissorRects[2];
 
 	for (int i = 0; i < 2; i++) {
-		viewPorts[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<LONG>(WinApp::GetInstance()->window_width), static_cast<LONG>(WinApp::GetInstance()->window_height));
-		scissorRects[i] = CD3DX12_RECT(0, 0, static_cast<LONG>(WinApp::GetInstance()->window_width), static_cast<LONG>(WinApp::GetInstance()->window_height));
+		viewPorts[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<FLOAT>(WinApp::GetInstance()->window_width), static_cast<FLOAT>(WinApp::GetInstance()->window_height));
+		scissorRects[i] = CD3DX12_RECT(0, 0, static_cast<FLOAT>(WinApp::GetInstance()->window_width), static_cast<FLOAT>(WinApp::GetInstance()->window_height));
 	}
 
 	//ビューポートの設定

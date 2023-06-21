@@ -72,8 +72,8 @@ private:
 	bool spaceInput = false;
 
 	// スケーリング
-	uint32_t scaleX_ = 1.0f;
-	uint32_t scaleY_ = 1.0f;
+	float scaleX_ = 1.0f;
+	float scaleY_ = 1.0f;
 
 	Vector3 vUp;
 	Vector3 playerPos_;
@@ -83,8 +83,8 @@ private:
 
 	int cameraType = 0;
 
-	uint32_t winWidth = 0.0f;
-	uint32_t winHeight = 0.0f;
+	float winWidth = 0.0f;
+	float winHeight = 0.0f;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
