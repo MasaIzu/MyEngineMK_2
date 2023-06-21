@@ -397,7 +397,7 @@ void ParticleManager::Update()
 
 }
 
-void ParticleManager::Draw(ViewProjection view)
+void ParticleManager::Draw(const ViewProjection& view)
 {
 	HRESULT result;
 	// 定数バッファへデータ転送
@@ -405,7 +405,9 @@ void ParticleManager::Draw(ViewProjection view)
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	//constMap->color = color;
 	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
-	constMap->mat = view.matView * view.matProjection;	// 行列の合成
+	Matrix4 constMatToSend = view.matView;
+	constMatToSend *= view.matProjection;
+	constMap->mat = constMatToSend;	// 行列の合成
 	constMap->matBillboard = view.matBillboard;
 	constBuff->Unmap(0, nullptr);
 

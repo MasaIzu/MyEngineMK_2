@@ -141,7 +141,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ViewProjection view);
+	void Draw(const ViewProjection& view);
 
 	void SetTextureHandle(uint32_t textureHandle);
 

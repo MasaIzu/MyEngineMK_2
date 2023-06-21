@@ -1,4 +1,4 @@
-#include "GameScene.h"
+﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
 #include <random>
@@ -27,6 +27,7 @@ void GameScene::Initialize() {
 
 	sceneManager_ = SceneManager::GetInstance();
 
+	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
 	viewProjection_->eye = { 0,0,-100 };
 	viewProjection_->UpdateMatrix();
@@ -52,7 +53,7 @@ void GameScene::Initialize() {
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
 	gameCamera = std::make_unique<GameCamera>();
-	gameCamera->Initialize(viewProjection_, WinApp::window_width, WinApp::window_height);
+	gameCamera->Initialize(viewProjection_.get(), WinApp::window_width, WinApp::window_height);
 }
 
 void GameScene::Update() {
@@ -143,7 +144,7 @@ void GameScene::Draw() {
 	ParticleMan->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	
-	ParticleMan->Draw(*viewProjection_);
+	ParticleMan->Draw(*viewProjection_.get());
 	
 
 	ParticleManager::PostDraw();

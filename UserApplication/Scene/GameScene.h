@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "DirectXCore.h"
 #include "Input.h"
@@ -68,7 +68,7 @@ private: // メンバ変数
 
 
 	//ビュープロジェクション
-	ViewProjection* viewProjection_;
+	std::unique_ptr<ViewProjection> viewProjection_;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//テクスチャハンドル

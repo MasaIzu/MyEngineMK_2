@@ -1,4 +1,4 @@
-#include "GameCamera.h"
+﻿#include "GameCamera.h"
 #include <windef.h>
 #include "WinApp.h"
 #include "MyMath.h"
@@ -21,6 +21,8 @@ GameCamera::~GameCamera()
 
 void GameCamera::Initialize(ViewProjection* viewPro, const uint32_t& window_width, const uint32_t& window_height) {
 
+	viewProjection_ = viewPro;
+
 	winWidth = window_width;
 	winHeight = window_height;
 
@@ -42,8 +44,6 @@ void GameCamera::Initialize(ViewProjection* viewPro, const uint32_t& window_widt
 	matRotNew.rotateY(-angleY);
 
 	MultiplyMatrix(matRotNew);
-
-	viewProjection_ = viewPro;
 
 	cameraPos = { 5.0f,5.0f,5.0f };
 
