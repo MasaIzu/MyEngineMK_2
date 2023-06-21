@@ -22,6 +22,8 @@
 #include"FbxAnimation.h"
 #include "FbxLoader.h"
 
+#include "Ground.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -100,10 +102,12 @@ private: // メンバ変数
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 
-	Vector3 Pos = { 0, -20, 0 };
+	Vector3 Pos = { 0, 0, -5 };
 	Vector3 Verocty = { 0, 0.1f, 0 };
 	uint32_t MaxFream = 300;
 
 	std::unique_ptr<GameCamera> gameCamera;
+
+	std::unique_ptr<Ground> ground;
 
 };

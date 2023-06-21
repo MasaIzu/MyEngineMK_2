@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
-	viewProjection_->eye = { 0,0,-100 };
+	viewProjection_->eye = { 0,0,0 };
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
@@ -52,8 +52,11 @@ void GameScene::Initialize() {
 	ParticleMan->Initialize();
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
-	gameCamera = std::make_unique<GameCamera>();
-	gameCamera->Initialize(viewProjection_.get(), WinApp::window_width, WinApp::window_height);
+	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
+	gameCamera->InitializeCameraPosition();
+
+	ground = std::make_unique<Ground>();
+	ground->Initialze();
 }
 
 void GameScene::Update() {
@@ -65,7 +68,7 @@ void GameScene::Update() {
 
 	ImGui::End();
 
-	frem += 0.01f;
+	frem += 0.001f;
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
@@ -78,8 +81,15 @@ void GameScene::Update() {
 
 	ParticleMan->Update();
 
-	/*gameCamera->SetCameraPosition(Vector3(0,0,-50));
-	gameCamera->Update();*/
+	gameCamera->SetCameraPosition(Vector3(0,0,0));
+	gameCamera->Update(viewProjection_.get());
+
+
+	viewProjection_->target = gameCamera->GetTarget();
+	//viewProjection_.target = boss.fishParent.pos.translation_;
+	viewProjection_->eye = gameCamera->GetEye();
+	viewProjection_->fovAngleY = gameCamera->GetFovAngle();
+	viewProjection_->UpdateMatrix();
 }
 
 void GameScene::PostEffectDraw()
@@ -129,6 +139,7 @@ void GameScene::Draw() {
 
 	//model_->Draw(worldTransform_, viewProjection_);
 
+	ground->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include <Input.h>
+#include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Easing.h"
 
@@ -10,16 +11,16 @@ class GameCamera {
 
 public:
 
-	GameCamera();
+	GameCamera(int window_width, int window_height);
 
 	~GameCamera();
 
-	void Initialize(ViewProjection* viewPro, const uint32_t& window_width, const uint32_t& window_height);
+	void Initialize();
 	void InitializeCameraPosition();
 
-	void Update();
+	void Update(ViewProjection* viewProjection_);
 
-	void PlaySceneCamera();
+	void PlaySceneCamera(ViewProjection* viewProjection_);
 
 	void MultiplyMatrix(Matrix4& matrix);
 
@@ -31,7 +32,7 @@ public:
 
 private:
 
-	void CameraAngle(float& x, float& z);
+	void CameraAngle(const float& x, const float& z);
 
 public://ゲッターセッター
 
@@ -41,10 +42,7 @@ public://ゲッターセッター
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
-	// カメラの垂直方向の角度を計算する関数
-	float getPitch() {
-		return -atan2(playerPos_.y - viewProjection_->eye.y, playerCameraDistance);
-	}
+
 	float GetCameraAngle() { return angle; }
 	// カメラの水平方向の角度を計算する関数
 	float getYaw(Vector3 position, Vector3 lookAt) {
@@ -55,14 +53,13 @@ public://ゲッターセッター
 	}
 
 	void SetCameraPosition(Vector3 pos) { playerPos_ = pos; }
-	void SetSpaceInput(bool isSpaceInput) { spaceInput = isSpaceInput; }
+	void SetPlayerMoveMent(Vector3 playerMoveMent) { PlayerMoveMent = playerMoveMent; }
 private:
 
 	Easing* easing_;
 
-	Vector2 windowWH;
-
 	// カメラ注視点までの距離
+	float distance_ = 10;
 	Vector2 mousePos = { 0.0f,0.0f };
 	Vector2 oldMousePos = { 0.0f,0.0f };
 	Input* input_ = nullptr;
@@ -71,12 +68,11 @@ private:
 	Matrix4 matRot;
 	Vector3 rot;
 
-	bool spaceInput = false;
-
 	// スケーリング
 	float scaleX_ = 1.0f;
 	float scaleY_ = 1.0f;
 
+	Vector3 vTargetEye;
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
@@ -85,12 +81,12 @@ private:
 
 	int cameraType = 0;
 
-	uint32_t winWidth = 0;
-	uint32_t winHeight = 0;
+	int winWidth = 0;
+	int winHeight = 0;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
-	float angleAroundPlayer = 0; // プレイヤーの周りを回転する角度
+	float angleAroundPlayer; // プレイヤーの周りを回転する角度
 	Matrix4 CameraRot;
 
 
@@ -154,6 +150,7 @@ private:
 	bool cameraDown = false;
 	bool cameraUp = false;
 
-	ViewProjection* viewProjection_ = nullptr;
+	Vector2 windowWH;
+
 
 };
