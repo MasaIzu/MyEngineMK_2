@@ -24,20 +24,18 @@
 
 #include "Ground.h"
 
+#include "Player.h"
+
+
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene : public BaseScene {
 
 public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
-	GameScene();
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
+	GameScene();
 	~GameScene();
 
 	/// <summary>
@@ -50,8 +48,6 @@ public: // メンバ関数
 	/// </summary>
 	void Update() override;
 
-	void PostEffectDraw() override;
-
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -63,20 +59,20 @@ public: // メンバ関数
 	//コピー処理
 	void CopyData() override;
 
+	//ポストエフェクトを掛けるやつ
+	void PostEffectDraw() override;
+
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
 
-	//ビュープロジェクション
-	std::unique_ptr<ViewProjection> viewProjection_;
-	//ワールド変換データ
-	WorldTransform worldTransform_;
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
-	// 3Dモデル
-	std::unique_ptr<Model> model_;
+	
+	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<Model> model_;// 3Dモデル
+	WorldTransform worldTransform_;//ワールド変換データ
+	uint32_t textureHandle_ = 0;//テクスチャハンドル
 
 
 	//FBX関係
@@ -110,4 +106,5 @@ private: // メンバ変数
 
 	std::unique_ptr<Ground> ground;
 
+	std::unique_ptr<Player> player_;
 };

@@ -42,16 +42,9 @@ public://ゲッターセッター
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
 
 	float GetCameraAngle() { return angle; }
-	// カメラの水平方向の角度を計算する関数
-	float getYaw(Vector3 position, Vector3 lookAt) {
-		Vector3 direction = lookAt - position;
-		direction.norm();
-		float playerYaw = atan2(direction.x, direction.z);
-		return playerYaw;
-	}
 
-	void SetCameraPosition(Vector3 pos) { playerPos_ = pos; }
-	void SetPlayerMoveMent(Vector3 playerMoveMent) { PlayerMoveMent = playerMoveMent; }
+	void SetCameraPosition(const Vector3& pos) { playerPos_ = pos; }
+	void SetPlayerMoveMent(Vector3& playerMoveMent) { PlayerMoveMent = playerMoveMent; }
 private:
 
 	Easing* easing_;

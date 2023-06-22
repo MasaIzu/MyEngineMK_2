@@ -57,6 +57,10 @@ void GameScene::Initialize() {
 
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+
 }
 
 void GameScene::Update() {
@@ -81,7 +85,9 @@ void GameScene::Update() {
 
 	ParticleMan->Update();
 
-	gameCamera->SetCameraPosition(Vector3(0,0,0));
+	player_->Update();
+
+	gameCamera->SetCameraPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
 }
@@ -134,6 +140,8 @@ void GameScene::Draw() {
 	//model_->Draw(worldTransform_, viewProjection_);
 
 	ground->Draw(*viewProjection_.get());
+
+	player_->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
