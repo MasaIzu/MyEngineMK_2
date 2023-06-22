@@ -216,8 +216,6 @@ void GameCamera::PlaySceneCamera() {
 		else {
 		}
 	}
-
-
 	if (cameraUp == true) {
 
 		if (mouseMoved.x < -0.10f) {
