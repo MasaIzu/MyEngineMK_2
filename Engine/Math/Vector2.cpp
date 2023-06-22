@@ -46,6 +46,20 @@ Vector2& Vector2::operator-=(const Vector2& v)
 	return *this;
 }
 
+Vector2& Vector2::operator+=(const Uint32Vector2& v)
+{
+	this->x += static_cast<float>(v.x);
+	this->y += static_cast<float>(v.y);
+	return *this;
+}
+
+Vector2& Vector2::operator-=(const Uint32Vector2& v)
+{
+	this->x -= static_cast<float>(v.x);
+	this->y -= static_cast<float>(v.y);
+	return *this;
+}
+
 Vector2& Vector2::operator*=(float s)
 {
 	this->x *= s;
@@ -77,6 +91,27 @@ const Vector2 operator-(const Vector2& v1, const Vector2& v2)
 	Vector2 temp2 = v2;
 	temp.x = temp.x - temp2.x;
 	temp.y = temp.y - temp2.y;
+
+	return temp;
+}
+
+
+const Vector2 operator-(const Vector2& v1, const Uint32Vector2& v2)
+{
+	Vector2 temp = v1;
+	Uint32Vector2 temp2 = v2;
+	temp.x = temp.x - static_cast<float>(temp2.x);
+	temp.y = temp.y - static_cast<float>(temp2.y);
+
+	return temp;
+}
+
+const Vector2 operator+(const Vector2& v1, const Uint32Vector2& v2)
+{
+	Vector2 temp = v1;
+	Uint32Vector2 temp2 = v2;
+	temp.x = temp.x + static_cast<float>(temp2.x);
+	temp.y = temp.y + static_cast<float>(temp2.y);
 
 	return temp;
 }

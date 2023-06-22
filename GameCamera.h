@@ -2,6 +2,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Uint32Vec2.h"
 #include <Input.h>
 #include "WorldTransform.h"
 #include "ViewProjection.h"
@@ -11,16 +12,16 @@ class GameCamera {
 
 public:
 
-	GameCamera(int window_width, int window_height);
+	GameCamera(uint32_t window_width, uint32_t window_height);
 
 	~GameCamera();
 
-	void Initialize();
+	void Initialize(ViewProjection* viewProjection_);
 	void InitializeCameraPosition();
 
-	void Update(ViewProjection* viewProjection_);
+	void Update();
 
-	void PlaySceneCamera(ViewProjection* viewProjection_);
+	void PlaySceneCamera();
 
 	void MultiplyMatrix(Matrix4& matrix);
 
@@ -36,9 +37,6 @@ private:
 
 public://ゲッターセッター
 
-	Vector3 GetEye();
-	Vector3 GetUp() { return vUp; }
-	Vector3 GetTarget() { return target; }
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
@@ -79,10 +77,10 @@ private:
 
 	bool cameraMode = false;
 
-	int cameraType = 0;
+	uint32_t cameraType = 0;
 
-	int winWidth = 0;
-	int winHeight = 0;
+	uint32_t winWidth = 0;
+	uint32_t winHeight = 0;
 	Vector2 MouseMove;
 	Vector2 mouseMoved;
 
@@ -92,22 +90,22 @@ private:
 
 	float playerCameraDistance = 5.5f;
 
-	int cameraTime = 0;
-	int MaxCameraTime = 0;
+	uint32_t cameraTime = 0;
+	uint32_t MaxCameraTime = 0;
 
 
 	//カメラモード(tekito-)
-	int cameraMode_ = 0;
+	uint32_t cameraMode_ = 0;
 	//カメラ距離関係
 	const float  MAX_CAMERA_DISTANCE = 20.0f;
 	const float  MIN_CAMERA_DISTANCE = 7.0f;
 	float cameraDistance_ = 20.0f;
 	const float MAX_CHANGE_TIMER = 30;
-	int cameraModeChangeCountTimer = 30;
+	uint32_t cameraModeChangeCountTimer = 30;
 	float cameraHeight_ = 6;
 
 	bool isShake = false;
-	int shakeTime = 0;
+	uint32_t shakeTime = 0;
 
 	float angle = 0.0f;
 
@@ -150,7 +148,9 @@ private:
 	bool cameraDown = false;
 	bool cameraUp = false;
 
-	Vector2 windowWH;
+	Uint32Vector2 windowWH;
 
+
+	ViewProjection* viewProjection = nullptr;
 
 };

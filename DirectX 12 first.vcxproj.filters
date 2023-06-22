@@ -406,6 +406,9 @@
     <ClInclude Include="ComputeParticle.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Math\Uint32Vec2.h">
+      <Filter>Engine\ヘッダー\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -557,6 +560,9 @@
     </ClCompile>
     <ClCompile Include="ComputeParticle.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
+      <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

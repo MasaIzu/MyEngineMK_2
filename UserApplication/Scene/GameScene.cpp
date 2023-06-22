@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
-	gameCamera->InitializeCameraPosition();
+	gameCamera->Initialize(viewProjection_.get());
 
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
@@ -82,14 +82,8 @@ void GameScene::Update() {
 	ParticleMan->Update();
 
 	gameCamera->SetCameraPosition(Vector3(0,0,0));
-	gameCamera->Update(viewProjection_.get());
+	gameCamera->Update();
 
-
-	viewProjection_->target = gameCamera->GetTarget();
-	//viewProjection_.target = boss.fishParent.pos.translation_;
-	viewProjection_->eye = gameCamera->GetEye();
-	viewProjection_->fovAngleY = gameCamera->GetFovAngle();
-	viewProjection_->UpdateMatrix();
 }
 
 void GameScene::PostEffectDraw()
