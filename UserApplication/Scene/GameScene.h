@@ -100,7 +100,7 @@ private: // メンバ変数
 
 	Vector3 Pos = { 0, 0, -5 };
 	Vector3 Verocty = { 0, 0.1f, 0 };
-	uint32_t MaxFream = 300;
+	uint32_t MaxFream = 800;
 
 	std::unique_ptr<GameCamera> gameCamera;
 
