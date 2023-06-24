@@ -7,7 +7,6 @@
 #include<assimp/scene.h>
 #include "Quaternion.h"
 
-
 //•Ö—˜Œn‚Ü‚Æ‚ß
 namespace MyMath {
 
@@ -60,5 +59,10 @@ namespace MyMath {
 	Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
 
 	float GetAngle(float angle);
+
+	float GetRadAngle(float angle);
+
+	void MatrixText(Matrix4& mat);
+
 
 };

@@ -16,8 +16,8 @@ public:
 
 	~GameCamera();
 
-	void Initialize(ViewProjection* viewProjection_);
-	void InitializeCameraPosition();
+	void Initialize(ViewProjection* viewProjection_,const float& cameraAngle);
+	void InitializeCameraPosition(const float& cameraAngle);
 
 	void Update();
 
@@ -75,7 +75,7 @@ private:
 	uint32_t winWidth = 0;
 	uint32_t winHeight = 0;
 	Vector2 MouseMove;
-	Vector2 mouseMoved;
+	Vector2 mouseMoved{ 0,MyMath::PI };
 
 	float angleAroundPlayer; // プレイヤーの周りを回転する角度
 	Matrix4 CameraRot;
@@ -136,7 +136,7 @@ private:
 
 	float OldMouseMoved = 0.0f;
 
-	Vector2 MovementMous;
+	Vector2 Mous_UP_DOWN;
 
 	bool cameraDown = false;
 	bool cameraUp = false;
@@ -145,5 +145,5 @@ private:
 
 
 	ViewProjection* viewProjection = nullptr;
-
+	uint32_t HowMachMovePointer = 0;
 };

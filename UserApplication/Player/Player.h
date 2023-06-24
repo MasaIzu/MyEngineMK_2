@@ -17,6 +17,12 @@ public:
 	void Initialize();
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
+	
+private:
+	//プレーヤーの移動
+	void Move();
+	//プレーヤーの移動の値更新
+	void WorldTransUpdate();
 
 public:
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }

@@ -1,6 +1,6 @@
 #include "MyMath.h"
 #include <cmath>
-
+#include"ImGuiManager.h"
 
 Matrix4 MyMath::Initialize() {
 	Matrix4 matInitialize{
@@ -601,4 +601,22 @@ Vector4 MyMath::QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& 
 float MyMath::GetAngle(float angle)
 {
 	return angle * (PI / 180);
+}
+
+float MyMath::GetRadAngle(float angle)
+{
+	return angle * (180 / PI);
+}
+
+void MyMath::MatrixText(Matrix4& mat)
+{
+
+	for (int i = 0; i < 4; i++) {
+		float M[4] = {};
+		for (int j = 0; j < 4; j++) {
+			M[j] = mat.m[i][j];
+		}
+		ImGui::Text("mat%d:%f,%f,%f,%f", i, M[0], M[1], M[2], M[3]);
+	}
+
 }

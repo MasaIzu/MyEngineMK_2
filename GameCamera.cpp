@@ -42,20 +42,19 @@ GameCamera::~GameCamera()
 	delete easing_;
 }
 
-void GameCamera::Initialize(ViewProjection* viewProjection_) {
+void GameCamera::Initialize(ViewProjection* viewProjection_, const float& cameraAngle) {
 
-	//mouseMoved = Vector2(0.15f, 0);
 
 	viewProjection = viewProjection_;
 
-	InitializeCameraPosition();
+	InitializeCameraPosition(cameraAngle);
 }
 
-void GameCamera::InitializeCameraPosition()
+void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 {
 	windowWH = Uint32Vector2(winWidth / 2, winHeight / 2);
 
-	mouseMoved = Vector2(0, 0);
+	mouseMoved = Vector2(0, cameraAngle);
 	CameraRot = MyMath::MakeIdentity();
 
 
@@ -90,7 +89,7 @@ void GameCamera::InitializeCameraPosition()
 	//cameraPos += PlayerMoveMent;
 	Vector3 dVec = vTargetEye - cameraPos;
 	dVec *= cameraDelay;
-	cameraPos += dVec * cameraSpeed_;
+	cameraPos += viewProjection->eye;
 	Vector3 player_camera = cameraPos - target;
 	player_camera.normalize();
 	cameraPos = target + (player_camera * cameraDis);
@@ -116,7 +115,19 @@ void GameCamera::Update() {
 		}*/
 		PlaySceneCamera();
 
-		ImGui::Text("isShake : %d", isShake);
+		ImGui::Begin("camera");
+		ImGui::Text("eye:%f", viewProjection->eye.x);
+		ImGui::Text("eye:%f", viewProjection->eye.y);
+		ImGui::Text("eye:%f", viewProjection->eye.z);
+
+		ImGui::Text("mouseMoved:%f", mouseMoved.x);
+		ImGui::Text("mouseMoved:%f", mouseMoved.y);
+		ImGui::Text("Angle:%f", MyMath::GetRadAngle(mouseMoved.y));
+		MyMath::MatrixText(CameraRot);
+
+		ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
+
+		ImGui::End();
 	}
 	else {
 		ImGui::Begin("camera");
@@ -177,15 +188,15 @@ void GameCamera::PlaySceneCamera() {
 	//マウスの移動量を取得
 	MouseMove = Vector2(0, 0);
 	MouseMove = (Vector2(static_cast<float>(mousePosition.y), static_cast<float>(mousePosition.x)) - Uint32Vector2(windowWH.y, windowWH.x));//座標軸で回転している関係でこうなる(XとYが入れ替え)
-
-	MovementMous = Vector2(MouseMove.x, MouseMove.y) / 500;
+	Mous_UP_DOWN = Vector2(MouseMove.x, MouseMove.y) / 500;
 	mouseMoved += Vector2(MouseMove.x, MouseMove.y) / 500;
-
-	if (MovementMous.x > 0) {
+	HowMachMovePointer += static_cast<uint32_t>(MouseMove.y);
+	//どっち向きに移動したのか
+	if (Mous_UP_DOWN.x > 0) {
 		cameraUp = true;
 		cameraDown = false;
 	}
-	else if (MovementMous.x < 0) {
+	else if (Mous_UP_DOWN.x < 0) {
 		cameraUp = false;
 		cameraDown = true;
 	}
@@ -199,9 +210,9 @@ void GameCamera::PlaySceneCamera() {
 		if (mouseMoved.x < -0.10f + CameraMouseMoved) {
 			mouseMoved.x = -0.10f + CameraMouseMoved;
 			if (cameraDis - 10.0f > CameraDistanceMinus) {
-				CameraDistanceMinus -= MovementMous.x * 40;
+				CameraDistanceMinus -= Mous_UP_DOWN.x * 40;
 				if (CameraMouseMoved > -0.2f) {
-					CameraMouseMoved += MovementMous.x;
+					CameraMouseMoved += Mous_UP_DOWN.x;
 				}
 				if (cameraDis - 10.0f < CameraDistanceMinus) {
 					CameraDistanceMinus = cameraDis - 10.0f;
@@ -223,9 +234,9 @@ void GameCamera::PlaySceneCamera() {
 		}
 
 		if (CameraDistanceMinus > 0) {
-			CameraDistanceMinus -= MovementMous.x * 60;
+			CameraDistanceMinus -= Mous_UP_DOWN.x * 60;
 			if (CameraMouseMoved < 0.0f) {
-				CameraMouseMoved += MovementMous.x / 2;
+				CameraMouseMoved += Mous_UP_DOWN.x / 2;
 			}
 			if (CameraDistanceMinus < 0) {
 				CameraDistanceMinus = 0;
@@ -314,7 +325,7 @@ void GameCamera::Reset()
 	winWidth = 0;
 	winHeight = 0;
 	MouseMove = { 0,0 };
-	mouseMoved = { 0,0 };
+	mouseMoved = { 0,MyMath::PI };
 
 	angleAroundPlayer = 0; // プレイヤーの周りを回転する角度
 

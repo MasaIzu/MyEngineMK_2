@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
-	viewProjection_->eye = { 0,0,0 };
+	viewProjection_->eye = { 0,0,-50 };
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
-	gameCamera->Initialize(viewProjection_.get());
+	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f));
 
 	ground = std::make_unique<Ground>();
 	ground->Initialze();

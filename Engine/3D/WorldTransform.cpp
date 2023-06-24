@@ -59,19 +59,19 @@ void WorldTransform::TransferMatrix() {
 	matWorld_ *= matTrans;//ワールド行列に平行移動を反映
 
 	if (IsLookOnlyMatRot == false) {
-		look = GetLook(matRot, Vector3(-1, 0, 0));
-		lookBack = GetLook(matRot, Vector3(1, 0, 0));
-		lookRight = GetLook(matRot, Vector3(0, 0, 1));
-		lookLeft = GetLook(matRot, Vector3(0, 0, -1));
+		look = GetLook(matRot, Vector3(0, 0, 1));
+		lookBack = GetLook(matRot, Vector3(0, 0, -1));
+		lookRight = GetLook(matRot, Vector3(1, 0, 0));
+		lookLeft = GetLook(matRot, Vector3(-1, 0, 0));
 
 		lookUp = GetLook(matRot, Vector3(0, 1, 0));
 		lookDown = GetLook(matRot, Vector3(0, -1, 0));
 	}
 	else {
-		look = GetLook(worldLookMatRot, Vector3(-1, 0, 0));
-		lookBack = GetLook(worldLookMatRot, Vector3(1, 0, 0));
-		lookRight = GetLook(worldLookMatRot, Vector3(0, 0, 1));
-		lookLeft = GetLook(worldLookMatRot, Vector3(0, 0, -1));
+		look = GetLook(worldLookMatRot, Vector3(0, 0, 1));
+		lookBack = GetLook(worldLookMatRot, Vector3(0, 0, -1));
+		lookRight = GetLook(worldLookMatRot, Vector3(1, 0, 0));
+		lookLeft = GetLook(worldLookMatRot, Vector3(-1, 0, 0));
 
 		lookUp = GetLook(worldLookMatRot, Vector3(0, 1, 0));
 		lookDown = GetLook(worldLookMatRot, Vector3(0, -1, 0));
