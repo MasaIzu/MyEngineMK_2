@@ -12,6 +12,24 @@ struct ConstBufferDataWorldTransform {
 	float alpha=1;       // アルファ
 };
 
+struct WorldTarnsLook {
+
+	//その物体の向いている方向
+	Vector3 look = { 0,0,0 };
+	Vector3 lookBack = { 0,0,0 };
+	Vector3 lookRight = { 0,0,0 };
+	Vector3 lookLeft = { 0,0,0 };
+
+	Vector3 lookUp = { 0,0,0 };
+	Vector3 lookDown = { 0,0,0 };
+
+	Vector3 look_lookRight = { 0,0,0 };
+	Vector3 look_lookLeft = { 0,0,0 };
+	Vector3 lookBack_lookRight = { 0,0,0 };
+	Vector3 lookBack_lookLeft = { 0,0,0 };
+
+};
+
 /// <summary>
 /// ワールド変換データ
 /// </summary>
@@ -33,12 +51,8 @@ struct WorldTransform {
 	//アルファ値
 	float alpha = 1;
 	//その物体の向いている方向
-	Vector3 look = { 0,0,0 };
-	Vector3 lookBack = { 0,0,0 };
-	Vector3 lookRight = { 0,0,0 };
-	Vector3 lookLeft = { 0,0,0 };
-	Vector3 lookUp = { 0,0,0 };
-	Vector3 lookDown = { 0,0,0 };
+	WorldTarnsLook LookVelocity;
+
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 
@@ -49,21 +63,13 @@ struct WorldTransform {
 
 	bool IsLookOnlyMatRot = false;
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
+	//初期化
 	void Initialize();
-	/// <summary>
-	/// 定数バッファ生成
-	/// </summary>
+	//定数バッファ生成
 	void CreateConstBuffer();
-	/// <summary>
-	/// マッピングする
-	/// </summary>
+	//マッピングする
 	void Map();
-	/// <summary>
-	/// 行列を転送する
-	/// </summary>
+	//行列を転送する
 	void TransferMatrix();
 
 	void SetRot(const Vector3& rot);

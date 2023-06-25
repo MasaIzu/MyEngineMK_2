@@ -41,7 +41,7 @@ public://ゲッターセッター
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
 
-	float GetCameraAngle() { return angle; }
+	float GetCameraAngle()const { return mouseMoved.y - MyMath::PI; }
 
 	void SetCameraPosition(const Vector3& pos) { playerPos_ = pos; }
 	void SetPlayerMoveMent(Vector3& playerMoveMent) { PlayerMoveMent = playerMoveMent; }

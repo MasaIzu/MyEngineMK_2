@@ -85,6 +85,7 @@ void GameScene::Update() {
 
 	ParticleMan->Update();
 
+	player_->SetCameraRot(gameCamera->GetCameraAngle());
 	player_->Update();
 
 	gameCamera->SetCameraPosition(player_->GetPlayerPos());

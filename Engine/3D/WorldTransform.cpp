@@ -59,22 +59,33 @@ void WorldTransform::TransferMatrix() {
 	matWorld_ *= matTrans;//ワールド行列に平行移動を反映
 
 	if (IsLookOnlyMatRot == false) {
-		look = GetLook(matRot, Vector3(0, 0, 1));
-		lookBack = GetLook(matRot, Vector3(0, 0, -1));
-		lookRight = GetLook(matRot, Vector3(1, 0, 0));
-		lookLeft = GetLook(matRot, Vector3(-1, 0, 0));
+		LookVelocity.look = GetLook(matRot, Vector3(0, 0, 1));
+		LookVelocity.lookBack = GetLook(matRot, Vector3(0, 0, -1));
+		LookVelocity.lookRight = GetLook(matRot, Vector3(1, 0, 0));
+		LookVelocity.lookLeft = GetLook(matRot, Vector3(-1, 0, 0));
 
-		lookUp = GetLook(matRot, Vector3(0, 1, 0));
-		lookDown = GetLook(matRot, Vector3(0, -1, 0));
+		LookVelocity.lookUp = GetLook(matRot, Vector3(0, 1, 0));
+		LookVelocity.lookDown = GetLook(matRot, Vector3(0, -1, 0));
+
+		LookVelocity.look_lookRight = GetLook(matRot, Vector3(0.5f, 0, 0.5f));
+		LookVelocity.look_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, 0.5f));
+		LookVelocity.lookBack_lookRight = GetLook(matRot, Vector3(0.5f, 0, -0.5f));
+		LookVelocity.lookBack_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, -0.5f));
+
 	}
 	else {
-		look = GetLook(worldLookMatRot, Vector3(0, 0, 1));
-		lookBack = GetLook(worldLookMatRot, Vector3(0, 0, -1));
-		lookRight = GetLook(worldLookMatRot, Vector3(1, 0, 0));
-		lookLeft = GetLook(worldLookMatRot, Vector3(-1, 0, 0));
+		LookVelocity.look = GetLook(worldLookMatRot, Vector3(0, 0, 1));
+		LookVelocity.lookBack = GetLook(worldLookMatRot, Vector3(0, 0, -1));
+		LookVelocity.lookRight = GetLook(worldLookMatRot, Vector3(1, 0, 0));
+		LookVelocity.lookLeft = GetLook(worldLookMatRot, Vector3(-1, 0, 0));
 
-		lookUp = GetLook(worldLookMatRot, Vector3(0, 1, 0));
-		lookDown = GetLook(worldLookMatRot, Vector3(0, -1, 0));
+		LookVelocity.lookUp = GetLook(worldLookMatRot, Vector3(0, 1, 0));
+		LookVelocity.lookDown = GetLook(worldLookMatRot, Vector3(0, -1, 0));
+
+		LookVelocity.look_lookRight = GetLook(matRot, Vector3(0.5f, 0, 0.5f));
+		LookVelocity.look_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, 0.5f));
+		LookVelocity.lookBack_lookRight = GetLook(matRot, Vector3(0.5f, 0, -0.5f));
+		LookVelocity.lookBack_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, -0.5f));
 	}
 
 	//親オブジェクトがあれば
@@ -136,7 +147,7 @@ Vector3 WorldTransform::GetLook(Matrix4 matRot,Vector3 at)
 	Vector3 Pos = MyMath::GetWorldTransform(matWorld_);
 	Vector3 look_ = MyMath::MatVector(matRot, at);
 
-	return Pos + look_;
+	return look_;
 }
 
 void WorldTransform::SetLookMatRot(const Matrix4& mat)
