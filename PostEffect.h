@@ -31,6 +31,8 @@ public:
         Vector2 center;
         float intensity;
         int samples;
+        float _AngleDeg;
+        float _AngleDeg2;
     };
 
     static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
@@ -61,6 +63,10 @@ public:
     static void SetKernelSize(int range);
 
     static void SetRadialBlur(Vector2 senter, float intensity, int sample);
+
+    static void SetAngle(float angle1,float angle2);
+
+
 
 private://Ã“Iƒƒ“ƒo•Ï”
     static const float clearColor[4];

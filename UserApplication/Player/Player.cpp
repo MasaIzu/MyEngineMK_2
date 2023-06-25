@@ -20,6 +20,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
+	playerWorldTrans.translation_ = { 0,10.0f,0 };
 }
 
 void Player::Update()

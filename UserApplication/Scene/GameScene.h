@@ -91,6 +91,9 @@ private: // メンバ変数
 	float intensity = 0.1f;
 	int samples = 5;
 
+	float angle = 45.0f;
+	float angle2 = 135.0f;
+
 	std::unique_ptr<ParticleManager> ParticleMan;
 
 	//当たり判定

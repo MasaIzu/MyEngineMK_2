@@ -199,6 +199,7 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 	dataMap->center = { 0.5f,0.5f };
 	dataMap->intensity = 0.1f;
 	dataMap->samples = 1;
+	dataMap->_AngleDeg = 45.0f;
 }
 
 void PostEffect::Finalize()
@@ -484,4 +485,10 @@ void PostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
 	dataMap->center = center;
 	dataMap->intensity = intensity;
 	dataMap->samples = sample;
+}
+
+void PostEffect::SetAngle(float angle,float angle2)
+{
+	dataMap->_AngleDeg = angle;
+	dataMap->_AngleDeg2 = angle2;
 }
