@@ -5,6 +5,12 @@ Texture2D<float4> tex0 : register(t0);  	// 0番スロットに設定されたテクスチャ
 Texture2D<float4> tex1 : register(t1);  	// 1番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      	// 0番スロットに設定されたサンプラー
 
+float Gaussian(float2 drawUV, float2 pickUV, float sigma)
+{
+    float d = distance(drawUV, pickUV);
+    return exp(-(d * d) / (2 * sigma * sigma));
+}
+
 float4 main(VSOutput input) : SV_TARGET
 {
 
@@ -61,10 +67,10 @@ float4 main(VSOutput input) : SV_TARGET
 		//fmodってなに？ってなったから出す
 		//x - y * floor(x / y);floorは浮動小数点値の端数を切り捨てて整数値に変換
 		//uvは Xpix/画面横幅,Ypix/画面縦
-		if (fmod(input.uv.y, 0.1f) < 0.05f) {
+		//if (fmod(input.uv.y, 0.1f) < 0.05f) {
 
-			color = colortex1;
-		}
+		//	color = colortex1;
+		//}
 		return float4(color.rgb, 1);
 	}
 	else if (shadeNumber == 1) {
@@ -90,7 +96,7 @@ float4 main(VSOutput input) : SV_TARGET
 		
         float4 AddAllColor = tex0.Sample(smp, input.uv);
 		
-        float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.002; //Bloomはブラーを大げさに
+        float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.001; //Bloomはブラーを大げさに
         float4 col = float4(0, 0, 0, 0);
 		
         for (float py = -_Sigma * 3; py <= _Sigma * 3; py += _StepWidth)//xyで2の幅で色を取得
@@ -116,7 +122,70 @@ float4 main(VSOutput input) : SV_TARGET
 		
         return AddAllColor;
     }
-	
+    else if (shadeNumber == 3)
+    {
+        float4 AddAllColor = tex0.Sample(smp, input.uv);
+		
+        float totalWeight = 0;
+        float totalWeight2 = 0;
+        float4 color = float4(0, 0, 0, 0);
+        float4 color2 = float4(0, 0, 0, 0);
+        float2 pickUV = float2(0, 0);
+        float pickRange = 0.06;
+        float angleRad = _AngleDeg * 3.14159 / 180;
+        float angleRad2 = _AngleDeg2 * 3.14159 / 180;
+    
+        float2 screen = float2(1280, 720);
+			
+		//ドット作るやつ
+        //float2 st = input.uv / 1280 * 20;
+        //st = frac(st * screen);
+        //float l = distance(st, float2(0.5f, 0.5f));
+        //float4 dot = float4(1, 1, 1, 1) * 1 - step(0.1, l);
+		
+        for (float i = -pickRange; i <= pickRange; i += 0.005)
+        {
+            float x = cos(angleRad) * i;
+            float y = sin(angleRad) * i;
+            pickUV = input.uv + float2(x, y);
+			
+            float4 colortex0 = tex0.Sample(smp, pickUV);
+            float grayScale = colortex0.r * 0.299 + colortex0.g * 0.587 + colortex0.b * 0.114;
+            float extract = smoothstep(0.6, 0.9, grayScale);
+            float4 HighLumi = colortex0 * extract;
+			
+            float weight = Gaussian(input.uv, pickUV, pickRange);
+			
+            color += HighLumi * weight;
+			
+			
+            totalWeight += weight;
+        }
+        for (float j = -pickRange; j <= pickRange; j += 0.005)
+        {
+            float x = cos(angleRad2) * j;
+            float y = sin(angleRad2) * j;
+            pickUV = input.uv + float2(x, y);
+			
+            float4 colortex0 = tex0.Sample(smp, pickUV);
+            float grayScale = colortex0.r * 0.299 + colortex0.g * 0.587 + colortex0.b * 0.114;
+            float extract = smoothstep(0.6, 0.9, grayScale);
+            float4 HighLumi = colortex0 * extract;
+			
+            float weight = Gaussian(input.uv, pickUV, pickRange);
+            color2 += HighLumi * weight;
+			
+			
+            totalWeight2 += weight;
+        }
+		
+        color /= totalWeight;
+        color2 /= totalWeight2;
+		
+        AddAllColor += (color + color2);
+		
+        return AddAllColor;
+    }
 	
 	return float4(1,1,1,1);
 }

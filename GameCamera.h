@@ -16,7 +16,7 @@ public:
 
 	~GameCamera();
 
-	void Initialize(ViewProjection* viewProjection_,const float& cameraAngle);
+	void Initialize(ViewProjection* viewProjection_,const float& cameraAngle, const Vector3& pos);
 	void InitializeCameraPosition(const float& cameraAngle);
 
 	void Update();
@@ -143,6 +143,7 @@ private:
 
 	Uint32Vector2 windowWH;
 
+	Vector3 cameraHigh = { 0,4,0 };
 
 	ViewProjection* viewProjection = nullptr;
 	uint32_t HowMachMovePointer = 0;

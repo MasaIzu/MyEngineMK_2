@@ -52,14 +52,14 @@ void GameScene::Initialize() {
 	ParticleMan->Initialize();
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
-	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f));
+	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f), player_->GetPlayerPos());
 
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
-
-	player_ = std::make_unique<Player>();
-	player_->Initialize();
 
 }
 
@@ -76,10 +76,46 @@ void GameScene::Update() {
 
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
+	if (shadeNumber == 0) {
+		ImGui::Begin("averageBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+
+		ImGui::SliderInt("range", &range, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+	else if (shadeNumber == 1) {
+		ImGui::Begin("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+
+		ImGui::SliderFloat("centerX", &center.x, 0, 1);
+		ImGui::SliderFloat("centerY", &center.y, 0, 1);
+		ImGui::SliderFloat("intensity", &intensity, 0, 1);
+		ImGui::SliderInt("samples", &samples, 0, 20);
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+	else if (shadeNumber == 2) {
+		ImGui::Begin("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+	else if (shadeNumber == 3) {
+		ImGui::Begin("CloseFilta");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+		ImGui::SliderFloat("angle", &angle, 0.0f, 180.0f);
+		ImGui::SliderFloat("angle2", &angle2, 0.0f, 180.0f);
+
+		ImGui::SetCursorPos(ImVec2(0, 20));
+		ImGui::End();
+	}
+
 	if (input_->PushKey(DIK_0)) {
-		for (int i = 0; i < 1000; i++) {
+		//for (int i = 0; i < 1000; i++) {
 			ParticleMan->Add(Pos, Verocty, MaxFream);
-		}
+		//}
 	}
 	
 
@@ -98,21 +134,33 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
+
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetRadialBlur(center, intensity, samples);
+	PostEffect::SetAngle(angle, angle2);
 
 	Model::PreDraw(commandList);
 
-	//model_->Draw(worldTransform_, viewProjection_);
+	ground->Draw(*viewProjection_.get());
+
+	player_->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 
+	//FBXモデル
 	FbxModel::PreDraw(commandList);
-
 	//fbxModel->Draw(worldTransform_, viewProjection_);
-
 	FbxModel::PostDraw();
+
+	////パーティクル
+	ParticleMan->CSUpdate(commandList);
+	ParticleManager::PreDraw(commandList);
+
+	ParticleMan->Draw(*viewProjection_.get());
+
+
+	ParticleManager::PostDraw();
 
 	PostEffect::PostDrawScene();
 }
@@ -140,9 +188,9 @@ void GameScene::Draw() {
 
 	//model_->Draw(worldTransform_, viewProjection_);
 
-	ground->Draw(*viewProjection_.get());
+	//ground->Draw(*viewProjection_.get());
 
-	player_->Draw(*viewProjection_.get());
+	//player_->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -155,13 +203,13 @@ void GameScene::Draw() {
 
 	FbxModel::PostDraw();
 
-	ParticleMan->CSUpdate(commandList);
-	ParticleManager::PreDraw(commandList);
-	
-	ParticleMan->Draw(*viewProjection_.get());
-	
+	//ParticleMan->CSUpdate(commandList);
+	//ParticleManager::PreDraw(commandList);
+	//
+	//ParticleMan->Draw(*viewProjection_.get());
+	//
 
-	ParticleManager::PostDraw();
+	//ParticleManager::PostDraw();
 
 #pragma endregion
 

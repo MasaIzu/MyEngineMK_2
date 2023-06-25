@@ -16,4 +16,6 @@ cbuffer GPUData:register(b0)//‘—‚ç‚ê‚Ä‚«‚½î•ñ
 	float2 center;
 	float intensity;
 	int samples;
+    float _AngleDeg;
+    float _AngleDeg2;
 }

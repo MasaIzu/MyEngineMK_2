@@ -42,11 +42,11 @@ GameCamera::~GameCamera()
 	delete easing_;
 }
 
-void GameCamera::Initialize(ViewProjection* viewProjection_, const float& cameraAngle) {
+void GameCamera::Initialize(ViewProjection* viewProjection_, const float& cameraAngle, const Vector3& pos) {
 
 
 	viewProjection = viewProjection_;
-
+	playerPos_ = pos;
 	InitializeCameraPosition(cameraAngle);
 }
 
@@ -71,7 +71,7 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	uint32_t yPos_absolute = windowWH.y + windowInfo.rcWindow.top + 31; //ウィンドウのタイトルバーの分（31px）をプラス
 	SetCursorPos(xPos_absolute, yPos_absolute);//移動させる
 
-	target = playerPos_ + Vector3(0, 14, 0);
+	target = playerPos_ + cameraHigh;
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, playerCameraDistance);
@@ -113,7 +113,10 @@ void GameCamera::Update() {
 		else {
 			PlaySceneCamera(viewProjection_);
 		}*/
-		PlaySceneCamera();
+		if (input_->MouseInputing(1)) {
+			PlaySceneCamera();
+		}
+		
 
 		ImGui::Begin("camera");
 		ImGui::Text("eye:%f", viewProjection->eye.x);
@@ -261,7 +264,7 @@ void GameCamera::PlaySceneCamera() {
 	rot = rotation;
 	CameraRot = cameraRot;
 
-	target = playerPos_ + Vector3(0, 14, 0);
+	target = playerPos_ + cameraHigh;
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, playerCameraDistance);
