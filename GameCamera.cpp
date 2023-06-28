@@ -98,14 +98,14 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 
 void GameCamera::Update() {
 
-	/*if (input_->TriggerKey(DIK_F1)) {
+	if (input_->TriggerKey(DIK_F1)) {
 		if (cameraMode == false) {
 			cameraMode = true;
 		}
 		else {
 			cameraMode = false;
 		}
-	}*/
+	}
 	if (cameraMode == false) {
 		/*if (input_->PushKey(DIK_LSHIFT)) {
 			PlayerLockOnCamera(viewProjection_);
@@ -113,10 +113,10 @@ void GameCamera::Update() {
 		else {
 			PlaySceneCamera(viewProjection_);
 		}*/
-		if (input_->MouseInputing(1)) {
-			PlaySceneCamera();
-		}
-		
+
+		PlaySceneCamera();
+
+
 
 		ImGui::Begin("camera");
 		ImGui::Text("eye:%f", viewProjection->eye.x);

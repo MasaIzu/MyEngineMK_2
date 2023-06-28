@@ -124,10 +124,10 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 	SetScale({100,100});*/
 
 	VertexPosUv vertices_[4] = {
-		{{-0.75f,-0.75f,0.0f},{0.0f,1.0f}},
-		{{-0.75f,+0.75f,0.0f},{0.0f,0.0f}},
-		{{+0.75f,-0.75f,0.0f},{1.0f,1.0f}},
-		{{+0.75f,+0.75f,0.0f},{1.0f,0.0f}},
+		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},
+		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},
+		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},
+		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},
 	};
 	for (int i = 0; i < 4; i++)
 	{

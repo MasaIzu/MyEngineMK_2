@@ -61,7 +61,7 @@ void GameScene::Initialize() {
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
 
-	tutorialEnemy = std::make_unique<TutorialEnemy>();
+	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0,0,0));
 	tutorialEnemy->Initialize();
 
 }

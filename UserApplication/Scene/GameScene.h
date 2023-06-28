@@ -84,7 +84,7 @@ private: // メンバ変数
 	int shadeNumber = 0;
 
 	//ぼかし強度
-	int range = 10;
+	int range = 0;
 
 
 	Vector2 center = {0.5f,0.5f};

@@ -5,7 +5,7 @@ void Ground::Initialze()
 	groundModel.reset(Model::CreateFromOBJ("Ground", true));
 
 	groundTrans.Initialize();
-	groundTrans.scale_ = { 30,0,30 };
+	groundTrans.scale_ = { 100,0,100 };
 	groundTrans.TransferMatrix();
 
 }
