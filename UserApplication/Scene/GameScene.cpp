@@ -61,6 +61,9 @@ void GameScene::Initialize() {
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
 
+	tutorialEnemy = std::make_unique<TutorialEnemy>();
+	tutorialEnemy->Initialize();
+
 }
 
 void GameScene::Update() {
@@ -145,6 +148,8 @@ void GameScene::PostEffectDraw()
 	ground->Draw(*viewProjection_.get());
 
 	player_->Draw(*viewProjection_.get());
+
+	tutorialEnemy->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 

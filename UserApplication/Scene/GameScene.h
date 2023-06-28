@@ -25,7 +25,7 @@
 #include "Ground.h"
 
 #include "Player.h"
-
+#include "TutorialEnemy.h"
 
 
 /// <summary>
@@ -110,4 +110,6 @@ private: // メンバ変数
 	std::unique_ptr<Ground> ground;
 
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<TutorialEnemy> tutorialEnemy;
 };

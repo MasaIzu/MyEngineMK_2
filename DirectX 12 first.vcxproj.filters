@@ -409,6 +409,9 @@
     <ClInclude Include="Engine\Math\Uint32Vec2.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialEnemy.h">
+      <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -563,6 +566,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialEnemy.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
