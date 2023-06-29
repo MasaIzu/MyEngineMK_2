@@ -39,7 +39,7 @@ Vector3 Vector3::norm()const
 
 float Vector3::dot(const Vector3& v) const
 {
-	return x * v.x + y * v.y + z * v.x + x * v.z;
+	return x * v.x + y * v.y + z * v.z;
 }
 
 Vector3 Vector3::cross(const Vector3& v) const

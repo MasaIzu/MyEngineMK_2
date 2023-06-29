@@ -598,7 +598,7 @@ Vector4 MyMath::QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& 
 	return slrapKari;
 }
 
-float MyMath::GetAngle(float angle)
+float MyMath::GetAngle(const float& angle)
 {
 	return angle * (PI / 180);
 }

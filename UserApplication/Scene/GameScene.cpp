@@ -130,6 +130,8 @@ void GameScene::Update() {
 	gameCamera->SetCameraPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
+	tutorialEnemy->Update();
+
 }
 
 void GameScene::PostEffectDraw()
