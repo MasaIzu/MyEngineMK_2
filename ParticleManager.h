@@ -50,6 +50,12 @@ public: // サブクラス
 		Matrix4 matBillboard;//ビルボード行列
 	};
 
+	struct ConstantBufferCS
+	{
+		UINT param[4];
+		float paramf[4];
+	};
+
 	enum class Type
 	{
 		Normal,

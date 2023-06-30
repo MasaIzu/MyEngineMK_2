@@ -14,6 +14,7 @@ RWStructuredBuffer<Particle> particles;
 [numthreads(256, 1, 1)]
 void main(uint3 id : SV_DispatchThreadID)
 {
+    
     Particle p = particles[id.x];
 
     // Update particle life.

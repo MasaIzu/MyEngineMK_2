@@ -265,7 +265,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 		L"ParticleComputeShader.hlsl",
 		nullptr, nullptr,
 		"main", "cs_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
 		0,
 		&csBlob,
 		nullptr);

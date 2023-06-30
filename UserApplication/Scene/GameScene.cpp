@@ -116,9 +116,9 @@ void GameScene::Update() {
 	}
 
 	if (input_->PushKey(DIK_0)) {
-		//for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			ParticleMan->Add(Pos, Verocty, MaxFream);
-		//}
+		}
 	}
 	
 
