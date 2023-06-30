@@ -21,6 +21,10 @@ void Player::Initialize()
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
 	playerWorldTrans.translation_ = { 0,10.0f,0 };
+
+	playerBullet = std::make_unique<PlayerBullet>();
+	playerBullet->Initialize();
+
 }
 
 void Player::Update()
@@ -31,11 +35,14 @@ void Player::Update()
 	Move();
 	//ˆÚ“®‚Ì’lXV
 	WorldTransUpdate();
+
+	playerBullet->Update();
 }
 
 void Player::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(playerWorldTrans, viewProjection_);
+	playerBullet->Draw(viewProjection_);
 }
 
 void Player::Move()

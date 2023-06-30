@@ -362,6 +362,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="Engine\3D\FbxModel.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="PostEffectManager.h" />
     <ClInclude Include="TutorialEnemy.h" />
@@ -424,6 +425,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     </ClCompile>
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="PostEffectManager.cpp" />
     <ClCompile Include="TutorialEnemy.cpp" />

@@ -170,7 +170,7 @@ const Vector3 MyMath::SubVec(Vector3 v, Vector3 v2) {
 	return V3;
 }
 
-Vector3 MyMath::GetWorldTransform(Matrix4 matrix4) {
+Vector3 MyMath::GetWorldTransform(const Matrix4& matrix4) {
 	Vector3 worldVector = { 0,0,0 };
 
 	worldVector.x = matrix4.m[3][0];

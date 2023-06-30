@@ -6,7 +6,7 @@
 #include "affin.h"
 #include <memory>
 #include "ViewProjection.h"
-
+#include "PlayerBullet.h"
 
 class Player {
 
@@ -36,6 +36,7 @@ private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
+	std::unique_ptr<PlayerBullet> playerBullet;
 
 private://プレイヤークラス変数
 	float playerSpeed = 1.0f;

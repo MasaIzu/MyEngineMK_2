@@ -412,6 +412,9 @@
     <ClInclude Include="TutorialEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ユーザーヘッダー ファイル\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -569,6 +572,9 @@
     </ClCompile>
     <ClCompile Include="TutorialEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ユーザーソース ファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@ namespace MyMath {
 
 	const Vector3 SubVec(Vector3 v, Vector3 v2);
 
-	Vector3 GetWorldTransform(Matrix4 matrix4);
+	Vector3 GetWorldTransform(const Matrix4& matrix4);
 	const Vector3 AddVector3(const Vector3 v1, const Vector3 v2);
 	Vector3 DivVecMat(const Vector3& vector3, const Matrix4& matrix4);
 
