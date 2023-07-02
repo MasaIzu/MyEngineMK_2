@@ -9,6 +9,8 @@ PlayerBullet::PlayerBullet()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		isBulletAlive[i] = 0;
 		BulletLifeTime[i] = 120;
+		BulletRadius[i] = 0.4f;
+		BulletCollider[i] = nullptr;
 	}
 }
 
@@ -22,7 +24,7 @@ void PlayerBullet::Initialize()
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		playerBulletWorldTrans[i].Initialize();
-		playerBulletWorldTrans[i].scale_ = { 0.4f,0.4f,0.4f };
+		playerBulletWorldTrans[i].scale_ = { BulletRadius[i],BulletRadius[i],BulletRadius[i] };
 		playerBulletWorldTrans[i].TransferMatrix();
 
 		isBulletAlive[i] = 0;
@@ -31,7 +33,7 @@ void PlayerBullet::Initialize()
 
 	for (int i = 0; i < AllBulletCount; i++) {
 		// コリジョンマネージャに追加
-		BulletCollider[i] = new SphereCollider(Vector4(0, BulletRadius, 0, 0), BulletRadius);
+		BulletCollider[i] = new SphereCollider(Vector4(0, BulletRadius[i], 0, 0), BulletRadius[i]);
 		CollisionManager::GetInstance()->AddCollider(BulletCollider[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	}
@@ -61,7 +63,7 @@ void PlayerBullet::Update()
 
 
 	for (int i = 0; i < AllBulletCount; i++) {
-		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_);
+		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 }
@@ -95,6 +97,7 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos,const Vecto
 			playerBulletWorldTrans[i].translation_ = MakeBulletPos;
 			BulletVector[i] = BulletVec;
 			BulletLifeTime[i] = 120;
+			BulletRadius[i] = 0.4f;
 			return i;
 		}
 	}
@@ -103,7 +106,9 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos,const Vecto
 
 void PlayerBullet::InputingBulletMove(const uint32_t& bulletNum, const Vector3& BulletVec)
 {
+	BulletRadius[bulletNum] += 0.1f;
 	BulletVector[bulletNum] = BulletVec;
+	playerBulletWorldTrans[bulletNum].scale_ = Vector3(BulletRadius[bulletNum], BulletRadius[bulletNum], BulletRadius[bulletNum]);
 }
 
 void PlayerBullet::WorldTransUpdate()

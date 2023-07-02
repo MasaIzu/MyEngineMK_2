@@ -7,7 +7,7 @@ void Framework::Initialize()
 
 	// ゲームウィンドウの作成
 	winApp_ = WinApp::GetInstance();
-	winApp_->MakeWindow(L"Maverick");
+	winApp_->MakeWindow(L"Shooting Star");
 
 	// DirectX初期化処理
 	directXCore_ = DirectXCore::GetInstance();
@@ -143,7 +143,7 @@ void Framework::Run()
 		Draw();
 
 		//ImGui描画
-		imGui->Draw();
+		//imGui->Draw();
 
 		
 

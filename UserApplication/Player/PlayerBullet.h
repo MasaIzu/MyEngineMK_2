@@ -61,7 +61,7 @@ private://プレイヤークラス変数
 	uint32_t BulletLifeTime[AllBulletCount];
 
 	float playerBulletSpeed = 3.0f;
-	float BulletRadius = 0.4f;
+	float BulletRadius[AllBulletCount];
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向
