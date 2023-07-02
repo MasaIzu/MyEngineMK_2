@@ -12,7 +12,7 @@
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
-	
+
 }
 
 void GameScene::Initialize() {
@@ -56,14 +56,16 @@ void GameScene::Initialize() {
 	player_->Initialize();
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
-	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f), player_->GetPlayerPos());
+	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
 
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
 
-	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0,0,0));
+	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
 	tutorialEnemy->Initialize();
 
+
+	collisionManager = CollisionManager::GetInstance();
 }
 
 void GameScene::Update() {
@@ -116,11 +118,9 @@ void GameScene::Update() {
 	}
 
 	if (input_->PushKey(DIK_0)) {
-		for (int i = 0; i < 1000; i++) {
-			ParticleMan->Add(Pos, Verocty, MaxFream);
-		}
+		ParticleMan->Add(Pos, Verocty, MaxFream);
 	}
-	
+
 
 	ParticleMan->Update();
 
@@ -132,6 +132,8 @@ void GameScene::Update() {
 
 	tutorialEnemy->Update();
 
+	//全ての衝突をチェック
+	collisionManager->CheckAllCollisions();
 }
 
 void GameScene::PostEffectDraw()
@@ -149,10 +151,11 @@ void GameScene::PostEffectDraw()
 
 	ground->Draw(*viewProjection_.get());
 
+	Model::PostDraw();
+
+	Model::PreDraw(commandList);
 	player_->Draw(*viewProjection_.get());
-
 	tutorialEnemy->Draw(*viewProjection_.get());
-
 	Model::PostDraw();
 
 	//FBXモデル
@@ -163,10 +166,7 @@ void GameScene::PostEffectDraw()
 	////パーティクル
 	ParticleMan->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
-
 	ParticleMan->Draw(*viewProjection_.get());
-
-
 	ParticleManager::PostDraw();
 
 	PostEffect::PostDrawScene();
@@ -181,12 +181,15 @@ void GameScene::Draw() {
 
 	// 深度バッファクリア
 	dxCommon_->ClearDepthBuffer();
+
+	player_->DrawSprite(*viewProjection_.get());
+
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
 	ParticleManager::PreDraw(commandList);
 
-	
+
 
 	ParticleManager::PostDraw();
 
@@ -222,7 +225,7 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 
-	
+
 
 #pragma endregion
 }

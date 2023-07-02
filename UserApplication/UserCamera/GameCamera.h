@@ -27,8 +27,6 @@ public:
 
 	void Collision();
 
-	void Reset();
-
 	void MousePositionReset();
 
 private:
@@ -40,8 +38,7 @@ public://ゲッターセッター
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
-
-	float GetCameraAngle()const { return mouseMoved.y - MyMath::PI; }
+	Vector2 GetCameraAngle()const { return Vector2(mouseMoved.y - MyMath::PI, mouseMoved.x); }
 
 	void SetCameraPosition(const Vector3& pos) { playerPos_ = pos; }
 	void SetPlayerMoveMent(Vector3& playerMoveMent) { PlayerMoveMent = playerMoveMent; }
@@ -147,4 +144,6 @@ private:
 
 	ViewProjection* viewProjection = nullptr;
 	uint32_t HowMachMovePointer = 0;
+
+	float kand = 200.0f;
 };

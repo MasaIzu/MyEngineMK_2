@@ -1,6 +1,9 @@
 #include "TutorialEnemy.h"
 #include <imgui.h>
 #include <random>
+#include <CollisionManager.h>
+#include <SphereCollider.h>
+#include <CollisionAttribute.h>
 
 TutorialEnemy::TutorialEnemy(const Vector3& BonePos_)
 {
@@ -27,10 +30,23 @@ void TutorialEnemy::Initialize()
 	DebugWorldTrans.scale_ = { TerritoryRadius,TerritoryRadius,TerritoryRadius };
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
+
+	TutorialEnemyCollider = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+	CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider);
+	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+
+	collisionManager = CollisionManager::GetInstance();
+
 }
 
 void TutorialEnemy::Update()
 {
+
+	if (isAlive == false) {
+		isAlive = true;
+		enemyWorldTrans.translation_ = BonePos;
+	}
+
 	if (isPlayerFound) {
 		PlayerFoundMove();
 	}
@@ -60,12 +76,25 @@ void TutorialEnemy::Update()
 
 
 	WorldTransUpdate();
+
+
+	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
+	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+
+	if (collisionManager->GetIsAttackHit()) {
+		PlayerBulletHit();
+	}
 }
 
 void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(enemyWorldTrans, viewProjection_);
 	modelDebug_->Draw(DebugWorldTrans, viewProjection_);
+}
+
+void TutorialEnemy::PlayerBulletHit()
+{
+	isAlive = false;
 }
 
 void TutorialEnemy::PlayerFoundMove()

@@ -127,6 +127,12 @@
     <Filter Include="ユーザーヘッダー ファイル\Skydome">
       <UniqueIdentifier>{9cbfaac7-0ca9-439d-8308-4e966b74e7e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ユーザーソース ファイル\UserCamera">
+      <UniqueIdentifier>{1b6cda0c-96fb-452f-a1d8-54c1c88f1826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ユーザーヘッダー ファイル\UserCamera">
+      <UniqueIdentifier>{a570b1d3-3326-4228-beca-ef786e914a3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -145,9 +151,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\SpriteShaderHeader.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="test.hlsli">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\Particle.hlsli">
@@ -197,12 +200,6 @@
     <FxCompile Include="Resources\Shaders\SpriteVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="testPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="testVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\ObjGS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -227,7 +224,7 @@
     <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="ParticleComputeShader.hlsl">
+    <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
@@ -382,16 +379,13 @@
     <ClInclude Include="Engine\3D\FbxModel.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>ユーザーヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Easing.h">
+    <ClInclude Include="Engine\Math\Easing.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleManager.h">
+    <ClInclude Include="Engine\3D\ParticleManager.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="PostEffect.h">
+    <ClInclude Include="Engine\2D\PostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\FbxAnimation.h">
@@ -400,20 +394,23 @@
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="PostEffectManager.h">
+    <ClInclude Include="Engine\2D\PostEffectManager.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeParticle.h">
+    <ClInclude Include="Engine\3D\ComputeParticle.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Uint32Vec2.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialEnemy.h">
+    <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
+    <ClInclude Include="UserApplication\Player\PlayerBullet.h">
       <Filter>ユーザーヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
+      <Filter>ユーザーヘッダー ファイル\UserCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -543,16 +540,13 @@
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>ユーザーソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Easing.cpp">
+    <ClCompile Include="Engine\Math\Easing.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleManager.cpp">
+    <ClCompile Include="Engine\3D\ParticleManager.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="PostEffect.cpp">
+    <ClCompile Include="Engine\2D\PostEffect.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxAnimation.cpp">
@@ -561,20 +555,23 @@
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="PostEffectManager.cpp">
+    <ClCompile Include="Engine\2D\PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
-    <ClCompile Include="ComputeParticle.cpp">
+    <ClCompile Include="Engine\3D\ComputeParticle.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialEnemy.cpp">
+    <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
+    <ClCompile Include="UserApplication\Player\PlayerBullet.cpp">
       <Filter>ユーザーソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
+      <Filter>ユーザーソース ファイル\UserCamera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

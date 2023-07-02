@@ -262,7 +262,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"ParticleComputeShader.hlsl",
+		L"Resources/Shaders/ParticleComputeShader.hlsl",
 		nullptr, nullptr,
 		"main", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,

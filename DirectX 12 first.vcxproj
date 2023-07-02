@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)External\assimp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)External\assimp;$(ProjectDir)UserApplication\UserCamera</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -175,10 +175,9 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <None Include="Resources\Shaders\Sprite.hlsli" />
     <None Include="Resources\Shaders\SpriteShaderHeader.hlsli" />
     <None Include="Resources\Shaders\Terrain.hlsli" />
-    <None Include="test.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ParticleComputeShader.hlsl">
+    <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
@@ -310,24 +309,10 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="testPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="testVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComputeParticle.h" />
-    <ClInclude Include="Easing.h" />
+    <ClInclude Include="Engine\3D\ComputeParticle.h" />
+    <ClInclude Include="Engine\Math\Easing.h" />
     <ClInclude Include="Engine\3D\Light.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\Model.h" />
@@ -360,12 +345,12 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="Engine\3D\FbxAnimation.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
     <ClInclude Include="Engine\3D\FbxModel.h" />
-    <ClInclude Include="ParticleManager.h" />
-    <ClInclude Include="GameCamera.h" />
-    <ClInclude Include="PlayerBullet.h" />
-    <ClInclude Include="PostEffect.h" />
-    <ClInclude Include="PostEffectManager.h" />
-    <ClInclude Include="TutorialEnemy.h" />
+    <ClInclude Include="Engine\3D\ParticleManager.h" />
+    <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
+    <ClInclude Include="UserApplication\Player\PlayerBullet.h" />
+    <ClInclude Include="Engine\2D\PostEffect.h" />
+    <ClInclude Include="Engine\2D\PostEffectManager.h" />
+    <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h" />
     <ClInclude Include="UserApplication\Enemy\Enemy.h" />
     <ClInclude Include="Engine\Framework\Framework.h" />
     <ClInclude Include="Engine\GameFunction\Input.h" />
@@ -389,8 +374,8 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComputeParticle.cpp" />
-    <ClCompile Include="Easing.cpp" />
+    <ClCompile Include="Engine\3D\ComputeParticle.cpp" />
+    <ClCompile Include="Engine\Math\Easing.cpp" />
     <ClCompile Include="Engine\3D\Light.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\Model.cpp" />
@@ -423,12 +408,12 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Neither</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Neither</FavorSizeOrSpeed>
     </ClCompile>
-    <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="ParticleManager.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
-    <ClCompile Include="PostEffect.cpp" />
-    <ClCompile Include="PostEffectManager.cpp" />
-    <ClCompile Include="TutorialEnemy.cpp" />
+    <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
+    <ClCompile Include="Engine\3D\ParticleManager.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerBullet.cpp" />
+    <ClCompile Include="Engine\2D\PostEffect.cpp" />
+    <ClCompile Include="Engine\2D\PostEffectManager.cpp" />
+    <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp" />
     <ClCompile Include="UserApplication\Enemy\Enemy.cpp" />
     <ClCompile Include="Engine\Framework\Framework.cpp" />
     <ClCompile Include="Engine\GameFunction\Input.cpp" />

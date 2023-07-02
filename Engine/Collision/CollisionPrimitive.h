@@ -4,7 +4,7 @@
 ///当たり判定プリミティブ
 /// </summary>
 
-
+#include <stdint.h>
 #include"Vector4.h"
 
 struct Sphere {
@@ -12,6 +12,10 @@ struct Sphere {
 
 	float radius = 1.0f;
 
+	uint32_t coolTime = 0;
+	uint32_t firstCoolTime = 0;
+
+	bool isChangeCoolTime = false;
 };
 
 struct Plane {

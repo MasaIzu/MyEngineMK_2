@@ -3,6 +3,8 @@
 #include <WorldTransform.h>
 #include <Model.h>
 #include <Input.h>
+#include <BaseCollider.h>
+#include <CollisionManager.h>
 
 class TutorialEnemy {
 
@@ -15,6 +17,9 @@ public://基本関数
 	void Draw(ViewProjection& viewProjection_);
 
 private:
+	//プレイヤーの弾が当たった時の処理
+	void PlayerBulletHit();
+
 	//敵を見つけた時の動きと見つけてない時の動き
 	void PlayerFoundMove();
 	void PlayerNotFoundMove();
@@ -33,6 +38,11 @@ private://クラス変数
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform enemyWorldTrans;
 	WorldTransform DebugWorldTrans;
+
+	//当たり判定
+	BaseCollider* TutorialEnemyCollider = nullptr;
+	CollisionManager* collisionManager = nullptr;
+
 private:
 	enum class NotFoundPhase {
 		Walk,//歩く
@@ -52,7 +62,8 @@ private:
 	FoundPhase FoundPhase_ = FoundPhase::Walk;
 
 private:
-	bool isPlayerFound = 0;
+	bool isPlayerFound = false;
+	bool isAlive = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -64,6 +75,7 @@ private:
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius2 = 0.0f;
+	float EnemyRadius = 1.0f;
 
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;

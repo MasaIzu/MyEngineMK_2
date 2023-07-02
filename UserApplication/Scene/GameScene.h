@@ -101,7 +101,7 @@ private: // メンバ変数
 	//シーンマネージャー
 	SceneManager* sceneManager_ = nullptr;
 
-	Vector3 Pos = { 0, 0, -5 };
+	Vector3 Pos = { 0, 0, -25 };
 	Vector3 Verocty = { 0, 0.1f, 0 };
 	uint32_t MaxFream = 800;
 

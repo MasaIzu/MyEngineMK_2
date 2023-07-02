@@ -7,6 +7,7 @@
 #include <memory>
 #include "ViewProjection.h"
 #include "PlayerBullet.h"
+#include <Sprite.h>
 
 class Player {
 
@@ -17,7 +18,8 @@ public://基本関数
 	void Initialize();
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
-	
+	void DrawSprite(ViewProjection& viewProjection_);
+
 private:
 	//プレーヤーの移動
 	void Move();
@@ -27,7 +29,7 @@ private:
 	void WorldTransUpdate();
 
 public://GetterSetter
-	void SetCameraRot(const float& CameraRot) { cameraRot = CameraRot; }
+	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
 
 public:
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
@@ -36,14 +38,18 @@ private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
+	WorldTransform playerWorldTransForBullet;
 	std::unique_ptr<PlayerBullet> playerBullet;
-
-private://プレイヤークラス変数
-	float playerSpeed = 1.0f;
-	Vector3 playerMoveMent;//移動量
-
+	// 照準スプライト
+	std::unique_ptr<Sprite> AttackSprite;
 
 private://別クラスから値をもらう
-	float cameraRot;
+	Vector2 cameraRot;
+
+private://プレイヤークラス変数
+	uint32_t bulletNumber = 0;
+	float playerSpeed = 1.0f;
+	float diagonalPlayerSpeed = 1.3f;
+	Vector3 playerMoveMent;//移動量
 
 };

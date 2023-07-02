@@ -125,7 +125,8 @@ void GameCamera::Update() {
 
 		ImGui::Text("mouseMoved:%f", mouseMoved.x);
 		ImGui::Text("mouseMoved:%f", mouseMoved.y);
-		ImGui::Text("Angle:%f", MyMath::GetRadAngle(mouseMoved.y));
+		ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
+		ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
 		MyMath::MatrixText(CameraRot);
 
 		ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
@@ -146,7 +147,7 @@ void GameCamera::Update() {
 	}
 
 	viewProjection->target = target;
-	viewProjection->eye = cameraPos;
+	viewProjection->eye = vTargetEye;
 	viewProjection->UpdateMatrix();
 }
 
@@ -191,8 +192,8 @@ void GameCamera::PlaySceneCamera() {
 	//マウスの移動量を取得
 	MouseMove = Vector2(0, 0);
 	MouseMove = (Vector2(static_cast<float>(mousePosition.y), static_cast<float>(mousePosition.x)) - Uint32Vector2(windowWH.y, windowWH.x));//座標軸で回転している関係でこうなる(XとYが入れ替え)
-	Mous_UP_DOWN = Vector2(MouseMove.x, MouseMove.y) / 500;
-	mouseMoved += Vector2(MouseMove.x, MouseMove.y) / 500;
+	Mous_UP_DOWN = Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
+	mouseMoved += Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
 	HowMachMovePointer += static_cast<uint32_t>(MouseMove.y);
 	//どっち向きに移動したのか
 	if (Mous_UP_DOWN.x > 0) {
@@ -209,50 +210,57 @@ void GameCamera::PlaySceneCamera() {
 	}
 
 	//カメラ制限
-	if (cameraDown == true) {
-		if (mouseMoved.x < -0.10f + CameraMouseMoved) {
-			mouseMoved.x = -0.10f + CameraMouseMoved;
-			if (cameraDis - 10.0f > CameraDistanceMinus) {
-				CameraDistanceMinus -= Mous_UP_DOWN.x * 40;
-				if (CameraMouseMoved > -0.2f) {
-					CameraMouseMoved += Mous_UP_DOWN.x;
-				}
-				if (cameraDis - 10.0f < CameraDistanceMinus) {
-					CameraDistanceMinus = cameraDis - 10.0f;
-					CameraMouseMoved = -0.2f;
-				}
-
-			}
-			else {
-				CameraMouseMoved = -0.2f;
-			}
-		}
-		else {
-		}
+	if (mouseMoved.x < -0.80f) {
+		mouseMoved.x = -0.80f;
 	}
-	if (cameraUp == true) {
-
-		if (mouseMoved.x < -0.10f) {
-			mouseMoved.x = -0.10f + CameraMouseMoved;
-		}
-
-		if (CameraDistanceMinus > 0) {
-			CameraDistanceMinus -= Mous_UP_DOWN.x * 60;
-			if (CameraMouseMoved < 0.0f) {
-				CameraMouseMoved += Mous_UP_DOWN.x / 2;
-			}
-			if (CameraDistanceMinus < 0) {
-				CameraDistanceMinus = 0;
-			}
-		}
-		else {
-			CameraMouseMoved = 0;
-		}
-
-		if (mouseMoved.x > 1.30f) {
-			mouseMoved.x = 1.30f;
-		}
+	else if (mouseMoved.x > 1.30f) {
+		mouseMoved.x = 1.30f;
 	}
+	
+	//if (cameraDown == true) {
+	//	if (mouseMoved.x < -0.10f + CameraMouseMoved) {
+	//		mouseMoved.x = -0.10f + CameraMouseMoved;
+	//		if (cameraDis - 10.0f > CameraDistanceMinus) {
+	//			CameraDistanceMinus -= Mous_UP_DOWN.x * 40;
+	//			if (CameraMouseMoved > -0.2f) {
+	//				CameraMouseMoved += Mous_UP_DOWN.x;
+	//			}
+	//			if (cameraDis - 10.0f < CameraDistanceMinus) {
+	//				CameraDistanceMinus = cameraDis - 10.0f;
+	//				CameraMouseMoved = -0.2f;
+	//			}
+
+	//		}
+	//		else {
+	//			CameraMouseMoved = -0.2f;
+	//		}
+	//	}
+	//	else {
+	//	}
+	//}
+	//if (cameraUp == true) {
+
+	//	if (mouseMoved.x < -0.10f) {
+	//		mouseMoved.x = -0.10f + CameraMouseMoved;
+	//	}
+
+	//	if (CameraDistanceMinus > 0) {
+	//		CameraDistanceMinus -= Mous_UP_DOWN.x * 60;
+	//		if (CameraMouseMoved < 0.0f) {
+	//			CameraMouseMoved += Mous_UP_DOWN.x / 2;
+	//		}
+	//		if (CameraDistanceMinus < 0) {
+	//			CameraDistanceMinus = 0;
+	//		}
+	//	}
+	//	else {
+	//		CameraMouseMoved = 0;
+	//	}
+
+	//	if (mouseMoved.x > 1.30f) {
+	//		mouseMoved.x = 1.30f;
+	//	}
+	//}
 
 
 	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
@@ -279,22 +287,22 @@ void GameCamera::PlaySceneCamera() {
 	CameraAngle(vTargetEye.z - target.z, vTargetEye.x - target.x);
 
 
-	//遅延カメラ
-	//距離
-	cameraPos += PlayerMoveMent;
-	Vector3 dVec = vTargetEye - cameraPos;
-	dVec *= cameraDelay;
-	cameraPos += dVec * cameraSpeed_;
-	Vector3 player_camera = cameraPos - target;
-	player_camera.normalize();
+	////遅延カメラ
+	////距離
+	//cameraPos += PlayerMoveMent;
+	//Vector3 dVec = vTargetEye - cameraPos;
+	//dVec *= cameraDelay;
+	//cameraPos += dVec * cameraSpeed_;
+	//Vector3 player_camera = cameraPos - target;
+	//player_camera.normalize();
 
-	float DISTANCE = cameraDis - CameraDistanceMinus;
+	//float DISTANCE = cameraDis - CameraDistanceMinus;
 
-	player_camera.x = player_camera.x * DISTANCE;
-	player_camera.y = player_camera.y * (cameraDis - CameraDistanceMinus / 2);
-	player_camera.z = player_camera.z * DISTANCE;
+	//player_camera.x = player_camera.x * DISTANCE;
+	//player_camera.y = player_camera.y * (cameraDis - CameraDistanceMinus / 2);
+	//player_camera.z = player_camera.z * DISTANCE;
 
-	cameraPos = target + (player_camera);
+	//cameraPos = target + (player_camera);
 
 
 }
@@ -303,88 +311,6 @@ void GameCamera::Collision()
 {
 	isShake = true;
 	shakeTime = 10;
-}
-
-void GameCamera::Reset()
-{
-	// カメラ注視点までの距離
-	distance_ = 10;
-	mousePos = { 0.0f,0.0f };
-	oldMousePos = { 0.0f,0.0f };
-
-	// スケーリング
-	scaleX_ = 1.0f;
-	scaleY_ = 1.0f;
-
-	vTargetEye = { 0,0,0 };
-	vUp = { 0,0,0 };
-	playerPos_ = { 0,0,0 };
-	target = { 0,0,0 };
-
-	cameraMode = false;
-
-	cameraType = 0;
-
-	winWidth = 0;
-	winHeight = 0;
-	MouseMove = { 0,0 };
-	mouseMoved = { 0,MyMath::PI };
-
-	angleAroundPlayer = 0; // プレイヤーの周りを回転する角度
-
-
-	float playerCameraDistance = 5.5f;
-
-	int cameraTime = 0;
-	int MaxCameraTime = 0;
-
-
-	//カメラモード(tekito-)
-	int cameraMode_ = 0;
-	//カメラ距離関係
-	cameraDistance_ = 20.0f;
-	cameraModeChangeCountTimer = 30;
-	cameraHeight_ = 6;
-
-	isShake = false;
-	shakeTime = 0;
-
-	angle = 0.0f;
-
-	// カメラの速度
-	cameraSpeed_ = 3;
-
-	// カメラが追跡する際の遅延量
-	cameraDelay = 0.1f;
-
-	cameraDis = 45.0f;
-
-	LatePlayerPos = { 0,0,0 };
-	playerCameraDelay = 0.1f;
-	playerCameraSpeed_ = 3;
-
-	TargetCameraDelay = 0.05f;
-	TargetCameraSpeed_ = 1.0;
-
-	higth = { 0,10,0 };
-
-	Fov = 45.0f;
-	float angleX = 0;
-	float angleY = 0;
-
-	MaxCameraTime = 400;
-	cameraTime = MaxCameraTime;
-	oldMousePos = mousePos;
-	mousePos = input_->GetMousePos();
-
-	// 追加回転分の回転行列を生成
-	Matrix4 matRotNew;
-	matRotNew.rotateX(-angleX);
-	matRotNew.rotateY(-angleY);
-
-	MultiplyMatrix(matRotNew);
-
-	cameraPos = { 5,5,5 };
 }
 
 void GameCamera::MousePositionReset()
