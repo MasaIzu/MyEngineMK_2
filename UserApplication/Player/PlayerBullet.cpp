@@ -8,7 +8,7 @@ PlayerBullet::PlayerBullet()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		isBulletAlive[i] = 0;
-		BulletLifeTime[i] = 120;
+		BulletLifeTime[i] = MaxBulletLifeTime;
 		BulletRadius[i] = 0.4f;
 		BulletCollider[i] = nullptr;
 	}
@@ -31,11 +31,11 @@ void PlayerBullet::Initialize()
 	}
 
 
-	for (int i = 0; i < AllBulletCount; i++) {
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		// コリジョンマネージャに追加
 		BulletCollider[i] = new SphereCollider(Vector4(0, BulletRadius[i], 0, 0), BulletRadius[i]);
 		CollisionManager::GetInstance()->AddCollider(BulletCollider[i]);
-		BulletCollider[i]->SetAttribute(COLLISION_ATTR_NOTATTACK);
+		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -46,8 +46,8 @@ void PlayerBullet::Update()
 	BulletAliveTimerUpdate();
 	//時間が切れているかどうか
 	CheckBulletAlive();
-	//生きていたら動く
-	BulletMove();
+	//生きていたらアプデ
+	BulletUpdate();
 
 	ImGui::Begin("PlayerBullet");
 
@@ -62,7 +62,7 @@ void PlayerBullet::Update()
 
 
 
-	for (int i = 0; i < AllBulletCount; i++) {
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
@@ -77,7 +77,7 @@ void PlayerBullet::Draw(ViewProjection& viewProjection_)
 	}
 }
 
-void PlayerBullet::BulletMove()
+void PlayerBullet::BulletUpdate()
 {
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
@@ -86,29 +86,66 @@ void PlayerBullet::BulletMove()
 		}
 	}
 
+	if (isExpanding) {
+		if (BulletRadius[BulletNum_] < playerBulletMaxRadius) {
+			BulletRadius[BulletNum_] += 0.1f;
+			playerBulletMoveMent[BulletNum_] = Vector3(0, 0, 0);
+			playerBulletWorldTrans[BulletNum_].scale_ = Vector3(BulletRadius[BulletNum_], BulletRadius[BulletNum_], BulletRadius[BulletNum_]);
+		}
+		else {
+			isExpanding = false;
+		}
+	}
+
 	WorldTransUpdate();
 }
 
 uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos,const Vector3& BulletVec)
 {
-	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		if (isBulletAlive[i] == false) {
-			isBulletAlive[i] = true;
-			playerBulletWorldTrans[i].translation_ = MakeBulletPos;
-			BulletVector[i] = BulletVec;
-			BulletLifeTime[i] = 120;
-			BulletRadius[i] = 0.4f;
-			return i;
+	if (BulletCoolTime <= 0) {
+		for (uint32_t i = 0; i < AllBulletCount; i++) {
+			if (isBulletAlive[i] == false) {
+				isBulletAlive[i] = true;
+				playerBulletWorldTrans[i].translation_ = MakeBulletPos;
+				BulletVector[i] = BulletVec;
+				BulletLifeTime[i] = MaxBulletLifeTime;
+				BulletRadius[i] = 0.4f;
+				playerBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
+				BulletCoolTime = MaxBulletCoolTime;
+				return i;
+			}
 		}
 	}
 	return 0;
 }
 
-void PlayerBullet::InputingBulletMove(const uint32_t& bulletNum, const Vector3& BulletVec)
+void PlayerBullet::BulletControl(const uint32_t& BulletNum, const Vector3& BulletVec)
 {
-	BulletRadius[bulletNum] += 0.1f;
-	BulletVector[bulletNum] = BulletVec;
-	playerBulletWorldTrans[bulletNum].scale_ = Vector3(BulletRadius[bulletNum], BulletRadius[bulletNum], BulletRadius[bulletNum]);
+	BulletVector[BulletNum] = BulletVec;
+}
+
+void PlayerBullet::MakeExpandingStunBullet()
+{
+	if (isExpanding == false) {
+		for (uint32_t i = 0; i < AllBulletCount; i++) {
+			if (isBulletAlive[i] == false) {
+				isBulletAlive[i] = true;
+				BulletLifeTime[i] = MaxBulletLifeTime;
+				BulletRadius[i] = 0.4f;
+				isExpanding = true;
+				BulletNum_ = i;
+				break;
+			}
+		}
+	}
+}
+
+void PlayerBullet::UpdateWhileExpanding(const Vector3& MakeBulletPos, const Vector3& BulletVec)
+{
+	if (isExpanding) {
+		playerBulletWorldTrans[BulletNum_].translation_ = MakeBulletPos;
+		BulletVector[BulletNum_] = BulletVec;
+	}
 }
 
 void PlayerBullet::WorldTransUpdate()
@@ -127,6 +164,9 @@ void PlayerBullet::BulletAliveTimerUpdate()
 				BulletLifeTime[i]--;
 			}
 		}
+	}
+	if (BulletCoolTime > 0) {
+		BulletCoolTime--;
 	}
 }
 
