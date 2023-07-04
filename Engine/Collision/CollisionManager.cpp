@@ -45,9 +45,14 @@ void CollisionManager::CheckAllCollisions()
 						isEnemyHit = true;
 					}
 				}
-				else if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ATTACK ||
-					colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS) {
-					if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter)) {
+				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS) {
+					if (Collision::CheckSphere2SphereSpeedVer(*SphereA, *SphereB, &inter)) {
+						HitWorldPos = colA->GetWorldPos();
+						isAttackHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ATTACK) {
+					if (Collision::CheckSphere2SphereSpeedVer(*SphereA, *SphereB, &inter)) {
 						HitWorldPos = colA->GetWorldPos();
 						isAttackHit = true;
 					}

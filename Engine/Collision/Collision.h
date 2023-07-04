@@ -26,6 +26,7 @@ public:
 	/// <param name="reject">排斥ベクトル（出力用）</param>
 	/// <returns></returns>
 	static bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, Vector4* inter = nullptr, Vector4* reject = nullptr);
+	static bool CheckSphere2SphereSpeedVer(const Sphere& sphereA, const Sphere& sphereB, Vector4* inter = nullptr, Vector4* reject = nullptr, const float* SphereSpeed = nullptr);
 
 	/// <summary>
 	/// 球と平面の当たり判定

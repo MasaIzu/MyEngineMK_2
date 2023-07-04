@@ -108,6 +108,41 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 	return false;
 }
 
+bool Collision::CheckSphere2SphereSpeedVer(const Sphere& sphereA, const Sphere& sphereB, Vector4* inter, Vector4* reject, const float* SphereSpeed)
+{
+
+
+	// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
+	Vector4 tmp;
+	tmp = sphereA.center - sphereB.center;
+	float dist = tmp.Vector3Dot(tmp);
+	float radius2 = sphereA.radius + sphereB.radius;
+	radius2 *= radius2;
+
+
+
+	if (dist <= radius2)
+	{
+		if (inter)
+		{
+			// Aの半径が0の時座標はBの中心　Bの半径が0の時座標はAの中心　となるよう補完
+			float t = sphereB.radius / (sphereA.radius + sphereB.radius);
+			*inter = Vector4Lerp(sphereA.center, sphereB.center, t);
+		}
+		// 押し出すベクトルを計算
+		if (reject)
+		{
+			float rejectLen = sphereA.radius + sphereB.radius - sqrtf(dist);
+			tmp = sphereA.center - sphereB.center;
+			*reject = tmp.Vector3Normal();
+			*reject *= rejectLen;
+		}
+		return true;
+	}
+
+	return false;
+}
+
 // 長方形と点の当たり判定
 bool Collision::CheckRectSphere(Vector3 rectPos, Vector3 rectWidthHeightDepth1, Vector3 rectWidthHeightDepth2, Vector3 sphere, float sphereRadius) {
 	// 長方形の中心点を計算
