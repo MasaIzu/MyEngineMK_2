@@ -2,7 +2,7 @@
 
 #include "BaseCollider.h"
 #include "CollisionPrimitive.h"
-
+#include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
 
@@ -25,6 +25,7 @@ public:
 	/// </summary>
 	void Update(const Matrix4& worldPos) override;
 	void Update(const Matrix4& worldPos, const float& radius) override;
+	void Update(const Matrix4& worldPos, const float& radius,const float& speed,const Vector3& look) override;
 	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime) override;
 	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
 	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime) override;

@@ -39,8 +39,9 @@ void TutorialEnemy::Initialize()
 
 }
 
-void TutorialEnemy::Update()
+void TutorialEnemy::Update(const Vector3& PlayerPos)
 {
+	playerPos = PlayerPos;
 
 	if (isAlive == false) {
 		isAlive = true;
@@ -138,10 +139,10 @@ void TutorialEnemy::PlayerNotFoundMove()
 			//‰~‚ðì‚Á‚Äo‚È‚¢ˆ—‚ðì‚é
 			tmp = BonePos - enemyWorldTrans.translation_;
 			dist = tmp.dot(tmp);
-			radius2 = TerritoryRadius;
-			radius2 *= radius2;
+			radius = TerritoryRadius;
+			radius *= radius;
 
-			if (dist >= radius2) {
+			if (dist >= radius) {
 				StopTime = Random(150, 240);
 				NotFoundPhase_ = NotFoundPhase::Interruption;
 			}
@@ -185,10 +186,18 @@ void TutorialEnemy::PlayerNotFoundMove()
 		}
 
 		break;
+	case TutorialEnemy::NotFoundPhase::FoundPlayer:
+
+
+		break;
+	case TutorialEnemy::NotFoundPhase::Nothing:
+		//‰½‚à‚µ‚È‚¢
+
+		break;
 	default:
 		break;
 	}
-
+	SearchingPlayer();
 }
 
 void TutorialEnemy::PlayerFoundMoveTimer()
@@ -208,6 +217,18 @@ void TutorialEnemy::PlayerNotFoundMoveTimer()
 	}
 	if (StopTime > 0) {
 		StopTime--;
+	}
+}
+
+void TutorialEnemy::SearchingPlayer()
+{
+	//‰~‚ðì‚Á‚Äo‚È‚¢ˆ—‚ðì‚é
+	tmp = BonePos - enemyWorldTrans.translation_;
+	dist = tmp.dot(tmp);
+	radius = SearchingAreaRadius;
+	radius *= radius;
+	if (dist >= radius) {
+		NotFoundPhase_ = NotFoundPhase::FoundPlayer;
 	}
 }
 

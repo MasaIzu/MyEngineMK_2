@@ -83,7 +83,6 @@ Vector4& Vector4::Vector3Normal()
 	return *this;
 }
 
-
 Vector4 Vector4::Vector3Cross(const Vector4& v) const
 {
 	Vector3 v1 = { x,y,z };

@@ -13,7 +13,7 @@ public://基本関数
 	~TutorialEnemy();
 
 	void Initialize();
-	void Update();
+	void Update(const Vector3& PlayerPos);
 	void Draw(ViewProjection& viewProjection_);
 
 private:
@@ -26,6 +26,8 @@ private:
 	//上の関数のタイマー
 	void PlayerFoundMoveTimer();
 	void PlayerNotFoundMoveTimer();
+	//プレイヤーのサーチ関数
+	void SearchingPlayer();
 
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
@@ -49,17 +51,24 @@ private:
 		Stop,//止まる
 		Interruption,//中断
 		ForcedWalking,//強制歩き
+		FoundPlayer,//プレイヤーを見つけた
+		Nothing,//何もしない
 	};
 	//見つけてないときの動きフェーズ
 	NotFoundPhase NotFoundPhase_ = NotFoundPhase::Walk;
 
 	enum class FoundPhase {
+		Intimidation,//威嚇
 		Walk,//歩く
 		Stop,//止まる
 		Attack,//攻撃
+		Nothing,//何もしない
 	};
 	//見つけた時の動きフェーズ
-	FoundPhase FoundPhase_ = FoundPhase::Walk;
+	FoundPhase FoundPhase_ = FoundPhase::Nothing;
+
+private://外から持ってきたものの格納
+	Vector3 playerPos;
 
 private:
 	bool isPlayerFound = false;
@@ -71,10 +80,11 @@ private:
 	uint32_t AttackStopTime = 0;
 
 	float TerritoryRadius = 20.0f;
+	float SearchingAreaRadius = 25.0f;
 	float EnemySpeed = 0.12f;
 	float Rot = 0.0f;
 	float dist = 0.0f;
-	float radius2 = 0.0f;
+	float radius = 0.0f;
 	float EnemyRadius = 1.0f;
 
 	Vector3 enemyMoveMent;

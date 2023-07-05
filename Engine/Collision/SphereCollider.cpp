@@ -24,6 +24,20 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius)
 	Sphere::firstCoolTime = 0;
 }
 
+void SphereCollider::Update(const Matrix4& worldPos, const float& radius,const float& speed, const Vector3& look)
+{
+	// ワールド行列から座標を抽出
+	worldPos_ = worldPos;
+
+	// 球のメンバ変数を更新
+	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
+	Sphere::center = Vector;
+	Sphere::radius = radius;
+	Sphere::Speed = speed;
+	Sphere::look = look;
+	Sphere::firstCoolTime = 0;
+}
+
 void SphereCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime)
 {
 

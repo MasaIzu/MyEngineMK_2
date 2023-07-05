@@ -108,36 +108,41 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 	return false;
 }
 
-bool Collision::CheckSphere2SphereSpeedVer(const Sphere& sphereA, const Sphere& sphereB, Vector4* inter, Vector4* reject, const float* SphereSpeed)
+bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphere& sphereB, const Sphere& checkFastSphere, const uint32_t& whichSpeher)
 {
+	uint32_t HowLoop = static_cast<uint32_t>(checkFastSphere.Speed / (checkFastSphere.radius * 2));
+	
+	if (whichSpeher == 0) {
+		for (uint32_t i = 0; i < HowLoop; i++) {
+			// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒð·
+			Vector4 tmp;
+			Vector4 LookVec = Vector4(checkFastSphere.look.x * i, checkFastSphere.look.y * i, checkFastSphere.look.z * i, 0);
+			tmp = (sphereA.center + (LookVec)) - sphereB.center;
+			float dist = tmp.Vector3Dot(tmp);
+			float radius2 = sphereA.radius + sphereB.radius;
+			radius2 *= radius2;
 
-
-	// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒð·
-	Vector4 tmp;
-	tmp = sphereA.center - sphereB.center;
-	float dist = tmp.Vector3Dot(tmp);
-	float radius2 = sphereA.radius + sphereB.radius;
-	radius2 *= radius2;
-
-
-
-	if (dist <= radius2)
-	{
-		if (inter)
-		{
-			// A‚Ì”¼Œa‚ª0‚ÌŽžÀ•W‚ÍB‚Ì’†S@B‚Ì”¼Œa‚ª0‚ÌŽžÀ•W‚ÍA‚Ì’†S@‚Æ‚È‚é‚æ‚¤•âŠ®
-			float t = sphereB.radius / (sphereA.radius + sphereB.radius);
-			*inter = Vector4Lerp(sphereA.center, sphereB.center, t);
+			if (dist <= radius2)
+			{
+				return true;
+			}
 		}
-		// ‰Ÿ‚µo‚·ƒxƒNƒgƒ‹‚ðŒvŽZ
-		if (reject)
-		{
-			float rejectLen = sphereA.radius + sphereB.radius - sqrtf(dist);
-			tmp = sphereA.center - sphereB.center;
-			*reject = tmp.Vector3Normal();
-			*reject *= rejectLen;
+	}
+	else {
+		for (uint32_t i = 0; i < HowLoop; i++) {
+			// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒð·
+			Vector4 tmp;
+			Vector4 LookVec = Vector4(checkFastSphere.look.x * i, checkFastSphere.look.y * i, checkFastSphere.look.z * i, 0);
+			tmp = sphereA.center - (sphereB.center + (LookVec));
+			float dist = tmp.Vector3Dot(tmp);
+			float radius2 = sphereA.radius + sphereB.radius;
+			radius2 *= radius2;
+
+			if (dist <= radius2)
+			{
+				return true;
+			}
 		}
-		return true;
 	}
 
 	return false;

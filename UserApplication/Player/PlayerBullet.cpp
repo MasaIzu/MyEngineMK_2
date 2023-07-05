@@ -63,7 +63,7 @@ void PlayerBullet::Update()
 
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i]);
+		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed, BulletVector[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 }
