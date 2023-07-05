@@ -47,7 +47,7 @@ public://Setter
 	
 
 private://const関連
-	static const uint32_t AllBulletCount = 50;
+	static const uint32_t AllBulletCount = 30;
 
 private://クラス関連
 	std::unique_ptr<Model> model_;
@@ -67,11 +67,11 @@ private://プレイヤークラス変数
 
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 120;
+	uint32_t MaxBulletLifeTime = 60;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 
-	float playerBulletSpeed = 10.0f;
+	float playerBulletSpeed = 20.0f;
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
 

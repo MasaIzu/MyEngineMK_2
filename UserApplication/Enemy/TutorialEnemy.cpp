@@ -27,7 +27,7 @@ void TutorialEnemy::Initialize()
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
-	DebugWorldTrans.scale_ = { TerritoryRadius,TerritoryRadius,TerritoryRadius };
+	DebugWorldTrans.scale_ = { 1,1,1 };
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 
@@ -70,9 +70,11 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	ImGui::Text("WalkTime:%d", WalkTime);
 	ImGui::Text("StopTime:%d", StopTime);
 
+	ImGui::Text("dist:%f", dist);
+	ImGui::Text("radius:%f", radius);
 	ImGui::Text("BonePos:%f,%f,%f", BonePos.x, BonePos.y, BonePos.z);
-	ImGui::Text("translation_:%f,%f,%f", enemyWorldTrans.translation_.x, enemyWorldTrans.translation_.y, enemyWorldTrans.translation_.z);
-
+	ImGui::Text("translation_:%f,%f,%f", enemyWorldTrans.LookVelocity.look.x, enemyWorldTrans.LookVelocity.look.y, enemyWorldTrans.LookVelocity.look.z);
+	ImGui::Text("dotPlayerAndEnemy:%f", dotPlayerAndEnemy);
 	ImGui::End();
 
 
@@ -85,6 +87,9 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	if (collisionManager->GetIsAttackHit()) {
 		PlayerBulletHit();
 	}
+
+	DebugWorldTrans.translation_ = enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_;
+	DebugWorldTrans.TransferMatrix();
 }
 
 void TutorialEnemy::Draw(ViewProjection& viewProjection_)
@@ -96,33 +101,6 @@ void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 void TutorialEnemy::PlayerBulletHit()
 {
 	isAlive = false;
-}
-
-void TutorialEnemy::PlayerFoundMove()
-{
-	PlayerFoundMoveTimer();
-
-	switch (FoundPhase_)
-	{
-	case TutorialEnemy::FoundPhase::Walk:
-
-
-
-		break;
-	case TutorialEnemy::FoundPhase::Stop:
-
-
-
-		break;
-	case TutorialEnemy::FoundPhase::Attack:
-
-
-
-		break;
-	default:
-		break;
-	}
-
 }
 
 void TutorialEnemy::PlayerNotFoundMove()
@@ -187,8 +165,9 @@ void TutorialEnemy::PlayerNotFoundMove()
 
 		break;
 	case TutorialEnemy::NotFoundPhase::FoundPlayer:
-
-
+		isPlayerFound = true;
+		NotFoundPhase_ = NotFoundPhase::Walk;
+		FoundPhase_ = FoundPhase::Turn;
 		break;
 	case TutorialEnemy::NotFoundPhase::Nothing:
 		//何もしない
@@ -200,13 +179,48 @@ void TutorialEnemy::PlayerNotFoundMove()
 	SearchingPlayer();
 }
 
-void TutorialEnemy::PlayerFoundMoveTimer()
+void TutorialEnemy::PlayerFoundMove()
 {
-	if (AttackWalkTime > 0) {
-		AttackWalkTime--;
-	}
-	if (AttackStopTime > 0) {
-		AttackStopTime--;
+	PlayerFoundMoveTimer();
+	GetPlayerForEnemyAngle();
+	switch (FoundPhase_)
+	{
+	case TutorialEnemy::FoundPhase::Intimidation:
+
+
+		break;
+	case TutorialEnemy::FoundPhase::Walk:
+
+
+		break;
+	case TutorialEnemy::FoundPhase::Stop:
+
+
+		break;
+	case TutorialEnemy::FoundPhase::Attack:
+
+
+		break;
+	case TutorialEnemy::FoundPhase::Turn:
+
+		float HowRot = Rot - dotPlayerAndEnemy;
+
+		if (BackAngle >= dotPlayerAndEnemy) {
+			Rot++;
+			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+		}
+		else{
+			Rot--;
+			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+		}
+
+		break;
+	case TutorialEnemy::FoundPhase::Nothing:
+
+
+		break;
+	default:
+		break;
 	}
 }
 
@@ -220,16 +234,32 @@ void TutorialEnemy::PlayerNotFoundMoveTimer()
 	}
 }
 
+void TutorialEnemy::PlayerFoundMoveTimer()
+{
+	if (AttackWalkTime > 0) {
+		AttackWalkTime--;
+	}
+	if (AttackStopTime > 0) {
+		AttackStopTime--;
+	}
+}
+
 void TutorialEnemy::SearchingPlayer()
 {
-	//円を作って出ない処理を作る
-	tmp = BonePos - enemyWorldTrans.translation_;
+	//円を作ってプレイヤーがいたらフェーズ変えに移行
+	tmp = enemyWorldTrans.translation_ - playerPos;
 	dist = tmp.dot(tmp);
 	radius = SearchingAreaRadius;
 	radius *= radius;
-	if (dist >= radius) {
+	GetPlayerForEnemyAngle();
+	if (dist <= radius) {
 		NotFoundPhase_ = NotFoundPhase::FoundPlayer;
 	}
+}
+
+void TutorialEnemy::GetPlayerForEnemyAngle()
+{
+	dotPlayerAndEnemy = MyMath::Get2VecAngle(playerPos, enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_);
 }
 
 void TutorialEnemy::WorldTransUpdate()

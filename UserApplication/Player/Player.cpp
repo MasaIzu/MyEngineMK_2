@@ -20,7 +20,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,10.0f,0 };
+	playerWorldTrans.translation_ = { 0,10.0f,-50.0f };
 
 	playerWorldTransForBullet.Initialize();
 
@@ -44,10 +44,10 @@ void Player::Update()
 	WorldTransUpdate();
 
 	if (input_->MouseInputTrigger(0)) {
-		//bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
 	}
 	if (input_->MouseInputing(0)) {
-		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		//bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
 		//playerBullet->BulletControl(bulletNumber, playerWorldTransForBullet.LookVelocity.look);
 	}
 	if (input_->MouseInputTrigger(1)) {

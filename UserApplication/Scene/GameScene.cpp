@@ -130,7 +130,7 @@ void GameScene::Update() {
 	gameCamera->SetCameraPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
-	tutorialEnemy->Update();
+	tutorialEnemy->Update(player_->GetPlayerPos());
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();

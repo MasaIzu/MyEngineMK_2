@@ -64,5 +64,6 @@ namespace MyMath {
 
 	void MatrixText(Matrix4& mat);
 
+	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
 
 };

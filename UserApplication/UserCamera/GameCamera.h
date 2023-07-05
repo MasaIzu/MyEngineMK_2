@@ -145,5 +145,5 @@ private:
 	ViewProjection* viewProjection = nullptr;
 	uint32_t HowMachMovePointer = 0;
 
-	float kand = 200.0f;
+	float kand = 400.0f;
 };

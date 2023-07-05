@@ -21,14 +21,15 @@ private:
 	void PlayerBulletHit();
 
 	//敵を見つけた時の動きと見つけてない時の動き
-	void PlayerFoundMove();
 	void PlayerNotFoundMove();
+	void PlayerFoundMove();
 	//上の関数のタイマー
-	void PlayerFoundMoveTimer();
 	void PlayerNotFoundMoveTimer();
+	void PlayerFoundMoveTimer();
 	//プレイヤーのサーチ関数
 	void SearchingPlayer();
-
+	//角度をとる
+	void GetPlayerForEnemyAngle();
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	//ランダム
@@ -62,6 +63,7 @@ private:
 		Walk,//歩く
 		Stop,//止まる
 		Attack,//攻撃
+		Turn,//プレイヤーの方を向く
 		Nothing,//何もしない
 	};
 	//見つけた時の動きフェーズ
@@ -78,6 +80,7 @@ private:
 	uint32_t StopTime = 0;
 	uint32_t AttackWalkTime = 0;
 	uint32_t AttackStopTime = 0;
+	uint32_t TurnTimes = 60;
 
 	float TerritoryRadius = 20.0f;
 	float SearchingAreaRadius = 25.0f;
@@ -86,6 +89,9 @@ private:
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float EnemyRadius = 1.0f;
+	float dotPlayerAndEnemy = 0;
+	float BackAngle = 180.0f;
+	
 
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;
