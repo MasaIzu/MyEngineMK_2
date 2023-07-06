@@ -1,13 +1,23 @@
-﻿﻿#include "LoadLevelEditor.h"
-
+﻿#include "LoadLevelEditor.h"
 #include "json.hpp"
 #include <fstream>
 #include <cassert>
 
-const std::string MakeLevelEditor::kDefaultBaseDirectory = "Resources/levels/";
-const std::string MakeLevelEditor::kExtension = ".json";
+const std::string LoadLevelEditor::kDefaultBaseDirectory = "Resources/levels/";
+const std::string LoadLevelEditor::kExtension = ".json";
 
-LevelData* MakeLevelEditor::LoadFile(const std::string& fileName) {
+LoadLevelEditor::LoadLevelEditor()
+{
+}
+
+LoadLevelEditor::~LoadLevelEditor()
+{
+	for (auto& object : objects) {
+		delete object.model;
+	}
+}
+
+LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 	// 連結してフルパスを得る
 	const std::string fullpath = kDefaultBaseDirectory + fileName + kExtension;
 
@@ -54,9 +64,9 @@ LevelData* MakeLevelEditor::LoadFile(const std::string& fileName) {
 			// 今追加した要素の参照を得る
 			LevelData::ObjectData& objectData = levelData->objects.back();
 
-			if (object.contains("file_name")) {
+			if (object.contains("name")) {
 				// ファイル名
-				objectData.fileName = object["file_name"];
+				objectData.fileName = object["name"];
 			}
 
 			// トランスフォームのパラメータ読み込み
@@ -88,7 +98,7 @@ LevelData* MakeLevelEditor::LoadFile(const std::string& fileName) {
 }
 
 
-void MakeLevelEditor::Initialize(const std::string& fileName)
+void LoadLevelEditor::Initialize(const std::string& fileName)
 {
 
 	levelData.reset(LoadFile(fileName));
@@ -103,41 +113,35 @@ void MakeLevelEditor::Initialize(const std::string& fileName)
 		}
 
 		// モデルを指定して3Dオブジェクトを生成
-		Model* newObject = Model::CreateFromOBJ("UFO", true);
+		Model* newObject = Model::CreateFromOBJ(objectData.fileName, true);
+
 
 		// 座標
 		WorldTransform Trans;
 		Trans.Initialize();
 		Trans.translation_ = objectData.translation;
-
-		// 回転角
-		Trans.SetRot(objectData.rotation);
-
-		// 座標
-		Trans.scale_ = objectData.scaling;
+		Trans.scale_ = objectData.scaling;// 座標
+		Trans.SetRot(objectData.rotation);// 回転角
 
 		// 配列に登録
-		ModelTrans.push_back(Trans);
-		objects.push_back(newObject);
+		ModelData Data;
+		Data.model = newObject;
+		Data.worldTrans = Trans;
+		objects.push_back(Data);
 	}
-
+	Update();
 }
 
-void MakeLevelEditor::Update()
+void LoadLevelEditor::Update()
 {
-
-	for (auto& modelTrans : ModelTrans) {
-		modelTrans.TransferMatrix();
+	for (auto& modelTrans : objects) {
+		modelTrans.worldTrans.TransferMatrix();
 	}
-
 }
 
-void MakeLevelEditor::Draw(const ViewProjection& viewProjection)
+void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
-	int i = 0;
 	for (auto& object : objects) {
-		object->Draw(ModelTrans[i], viewProjection);
-
-		i++;
+		object.model->Draw(object.worldTrans, viewProjection);
 	}
 }

@@ -26,7 +26,7 @@
 
 #include "Player.h"
 #include "TutorialEnemy.h"
-
+#include "LoadLevelEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -112,4 +112,5 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<TutorialEnemy> tutorialEnemy;
+	std::unique_ptr<LoadLevelEditor> levelData;
 };

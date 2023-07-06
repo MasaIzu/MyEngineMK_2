@@ -26,8 +26,13 @@ struct LevelData {
 	std::vector<ObjectData> objects;
 };
 
+struct ModelData {
+	Model* model;
+	WorldTransform worldTrans;
+};
+
 // レベルデータの生成
-class MakeLevelEditor {
+class LoadLevelEditor {
 
 public:// 定数
 	// デフォルトの読み込みディレクトリ
@@ -36,6 +41,9 @@ public:// 定数
 	static const std::string kExtension;
 
 public:// メンバ関数
+
+	LoadLevelEditor();
+	~LoadLevelEditor();
 
 	/// <summary>
 	/// レベルデータファイルの読み込み
@@ -54,7 +62,6 @@ private:
 
 
 	std::map<std::string, Model*> models;
-	std::vector<Model*> objects;
-	std::vector<WorldTransform> ModelTrans;
+	std::vector<ModelData> objects;
 
 };

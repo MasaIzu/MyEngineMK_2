@@ -64,6 +64,8 @@ void GameScene::Initialize() {
 	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
 	tutorialEnemy->Initialize();
 
+	levelData = std::make_unique<LoadLevelEditor>();
+	levelData->Initialize("objTest");
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -148,14 +150,11 @@ void GameScene::PostEffectDraw()
 	PostEffect::SetAngle(angle, angle2);
 
 	Model::PreDraw(commandList);
-
 	ground->Draw(*viewProjection_.get());
-
-	Model::PostDraw();
-
-	Model::PreDraw(commandList);
 	player_->Draw(*viewProjection_.get());
 	tutorialEnemy->Draw(*viewProjection_.get());
+	levelData->Draw(*viewProjection_.get());
+
 	Model::PostDraw();
 
 	//FBXモデル
