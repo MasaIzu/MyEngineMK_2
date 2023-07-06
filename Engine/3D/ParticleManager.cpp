@@ -469,12 +469,32 @@ void ParticleManager::Add(Vector3& position, Vector3& velocity,uint32_t& MaxFram
 		//値のセットt
 		p.position = position;
 		p.velocity = velocity;
+		p.FinalVelocity = { 0,0,0 };
 		p.Frame = 0;
 		p.MaxFrame = MaxFrame;
 		p.alive = 1;
 		p.scale = 1;
 		p.color = { 1,1,1,1 };
+		p.MinusAlpha = 0.0f;
+		Particles.push_back(p);
+	}
+}
 
+void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, const float& scale)
+{
+	if (numParticles > Particles.size()) {
+		//追加した要素の参照
+		VertexPos p;
+		//値のセットt
+		p.position = position;
+		p.velocity = velocity;
+		p.FinalVelocity = velocity / MaxFrame;
+		p.Frame = 0;
+		p.MaxFrame = MaxFrame;
+		p.alive = 1;
+		p.scale = scale;
+		p.color = color;
+		p.MinusAlpha = color.w / MaxFrame;
 		Particles.push_back(p);
 	}
 }

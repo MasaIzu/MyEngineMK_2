@@ -12,9 +12,11 @@ struct VSOutput
     float scale : Scale;
     float4 color : Color;
     float4 velocity : Velocity;
+    float3 FinalVelocity : FinalVelocity;
     int Frame : Frame; // このパーティクルが生まれたフレーム
     int MaxFrame : MaxFrame; //このパーティクルの寿命
     bool alive : Alive; // このパーティクルが生きているかどうか
+    float MinusAlpha : MinusAlpha;
 };
 
 //ジオメトリシェーダからピクセルシェーダーへの出力

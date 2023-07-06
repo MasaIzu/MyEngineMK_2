@@ -4,9 +4,11 @@ struct Particle
     float scale : Scale;
     float4 color : Color;
     float3 velocity : Velocity;
+    float3 FinalVelocity : FinalVelocity;
     int Frame : Frame; // このパーティクルが生まれたフレーム
     int MaxFrame : MaxFrame; //このパーティクルの寿命
     bool alive : Alive; // このパーティクルが生きているかどうか
+    float MinusAlpha : MinusAlpha;
 };
 
 RWStructuredBuffer<Particle> particles;
@@ -19,9 +21,9 @@ void main(uint3 id : SV_DispatchThreadID)
 
     // Update particle life.
     p.Frame += 1;
-
     p.position += p.velocity;
-
+    p.color.a -= p.MinusAlpha;
+    p.velocity -= p.FinalVelocity;
     if (p.Frame > p.MaxFrame)
     {
         p.alive = false;

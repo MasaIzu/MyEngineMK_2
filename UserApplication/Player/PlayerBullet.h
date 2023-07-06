@@ -43,7 +43,9 @@ private:
 	//生きているかどうか
 	void CheckBulletAlive();
 	//パーティクルを出す
-	void MakeParticle(Vector3& pos);
+	void MakeParticle(Vector3& pos, Vector3& BulletVelocity,const float& BulletSpeed);
+	//1フレーム前のポジション
+	void OldPosUpdate();
 
 public://Getter
 	Vector3 GetPlayerBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(playerBulletWorldTrans[bulletCount].matWorld_); }
@@ -77,12 +79,14 @@ private://プレイヤークラス変数
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
+	uint32_t MackPaticleMax = 1;
 
-	float playerBulletSpeed = 20.0f;
+	float playerBulletSpeed = 10.0f;
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
+	float PlayerParticleSpeed = 0.02f;
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向
-
+	Vector3 BulletOldPos[AllBulletCount];//1フレーム前のポジション
 };

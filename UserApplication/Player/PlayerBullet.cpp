@@ -21,7 +21,7 @@ PlayerBullet::~PlayerBullet()
 void PlayerBullet::Initialize()
 {
 
-	model_.reset(Model::CreateFromOBJ("sphere", true));
+	model_.reset(Model::CreateFromOBJ("sphereColor", true));
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		playerBulletWorldTrans[i].Initialize();
 		playerBulletWorldTrans[i].scale_ = { BulletRadius[i],BulletRadius[i],BulletRadius[i] };
@@ -47,6 +47,8 @@ void PlayerBullet::Initialize()
 
 void PlayerBullet::Update()
 {
+	//前回の位置を記録
+	OldPosUpdate();
 	//タイマー更新
 	BulletAliveTimerUpdate();
 	//時間が切れているかどうか
@@ -65,6 +67,9 @@ void PlayerBullet::Update()
 
 
 	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
+
+	//ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
+	ImGui::SliderFloat("PlayerParticleSpeed", &PlayerParticleSpeed, 0, 1);
 	ImGui::End();
 
 
@@ -107,7 +112,9 @@ void PlayerBullet::BulletUpdate()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			playerBulletMoveMent[i] = BulletVector[i] * playerBulletSpeed;
-			MakeParticle(playerBulletWorldTrans[i].translation_);
+			if (isExpanding == false) {
+				MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], playerBulletSpeed);
+			}
 		}
 	}
 
@@ -205,8 +212,30 @@ void PlayerBullet::CheckBulletAlive()
 	}
 }
 
-void PlayerBullet::MakeParticle(Vector3& pos)
+void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
 {
-	Vector3 Verocty(0, 0, 1);
-	ParticleMan->Add(pos, Verocty, ParticleFile);
+	//for (uint32_t i = 0; i < MackPaticleMax; i++) {
+	//	Vector3 Verocty = BulletVelocity;
+	//	Vector3 Rand = MyMath::RandomVec3(0, 20);
+	//	Verocty += Rand * PlayerParticleSpeed;
+	//	Vector4 color = { 0.5f,1.0f,0.3f,1 };
+	//	ParticleMan->Add(pos, Verocty, ParticleFile, color);
+	//}
+	for (float i = 0; i < BulletSpeed; i++) {
+		Vector3 Verocty = BulletVelocity;
+		Vector3 Rand = MyMath::RandomVec3(0, 20);
+		Verocty += Rand * PlayerParticleSpeed;
+		Vector3 AddPos = pos + (BulletVelocity * i);
+		Vector3 colorRand = MyMath::RandomVec3(0, 10);
+		Vector4 color = { colorRand.x,colorRand.y,colorRand.z,1 };
+		float scale = (2.0f / BulletSpeed) * i;
+		ParticleMan->Add(AddPos, Verocty, ParticleFile, color, scale);
+	}
+}
+
+void PlayerBullet::OldPosUpdate()
+{
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
+		BulletOldPos[i] = playerBulletWorldTrans[i].translation_;
+	}
 }

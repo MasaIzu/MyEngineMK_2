@@ -37,9 +37,11 @@ public: // サブクラス
 		float scale = 1;
 		Vector4 color = { 1,1,1,1 };
 		Vector3 velocity;
+		Vector3 FinalVelocity;
 		uint32_t Frame = 0; // このパーティクルが生まれたフレーム
 		uint32_t MaxFrame = 0;//このパーティクルの寿命
 		bool alive = 0; // このパーティクルが生きているかどうか
+		float MinusAlpha = 0.0f;
 	};
 
 	// 定数バッファ用データ構造体
@@ -155,6 +157,7 @@ public: // メンバ関数
 
 	
 	void Add(Vector3& position,Vector3& velocity, uint32_t& MaxFrame);
+	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, const float& scale);
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();

@@ -643,3 +643,35 @@ uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 	std::uniform_int_distribution<> dist(low, high);
 	return dist(gen);
 }
+
+Vector3 MyMath::RandomVec3(const uint32_t& low, const uint32_t& high)
+{
+	uint32_t vecX = Random(low, high);
+	uint32_t vecY = Random(low, high);
+	uint32_t vecZ = Random(low, high);
+
+	Vector3 RandVec = castVec(vecX, vecY, vecZ);
+	RandVec.normalize();
+
+	return RandVec;
+}
+
+Vector3 MyMath::RandomCenterVec3(const uint32_t& low, const uint32_t& high)
+{
+	uint32_t half = (high - low) / 2;
+	uint32_t vecX = Random(low, high);
+	uint32_t vecY = Random(low, high);
+	uint32_t vecZ = Random(low, high);
+
+	Vector3 RandVec = castVec(vecX ,vecY ,vecZ);
+	RandVec = Vector3(RandVec.x - half, RandVec.y - half, RandVec.z - half);
+	RandVec.normalize();
+
+	return RandVec;
+}
+
+Vector3 MyMath::castVec(const uint32_t& x, const uint32_t& y, const uint32_t& z)
+{
+	Vector3 castVec = { static_cast<float>(x) ,static_cast<float>(y) ,static_cast<float>(z) };
+	return castVec;
+}
