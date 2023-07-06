@@ -30,6 +30,8 @@ private:
 	void SearchingPlayer();
 	//角度をとる
 	void GetPlayerForEnemyAngle();
+	//攻撃できる範囲かどうか
+	bool GetIsAttackArea();
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	//ランダム
@@ -63,6 +65,8 @@ private:
 		Walk,//歩く
 		Stop,//止まる
 		Attack,//攻撃
+		Wait,//待つ
+		LoseSightofPlayer,//プレイヤーを見失なった時
 		Turn,//プレイヤーの方を向く
 		Nothing,//何もしない
 	};
@@ -75,6 +79,7 @@ private://外から持ってきたものの格納
 private:
 	bool isPlayerFound = false;
 	bool isAlive = false;
+	bool isAttack = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -83,19 +88,23 @@ private:
 	uint32_t TurnTimes = 60;
 
 	float TerritoryRadius = 20.0f;
+	float AttackAreaRadius = 5.0f;
 	float SearchingAreaRadius = 25.0f;
+	float FoundLookingPlayerRadius = 60.0f;
 	float EnemySpeed = 0.12f;
+	float FoundEnemySpeed = 0.2f;
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float EnemyRadius = 1.0f;
-	float dotPlayerAndEnemy = 0;
+	float EnemyToPlayerAngle = 0;
 	float BackAngle = 180.0f;
+	float HowAboutFarAway = 0.0f;
 	
-
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;
 	Vector3 tmp;
-	
+	Vector3 EnemyToPlayerVec;
+	Vector3 BackBonePos;
 
 };

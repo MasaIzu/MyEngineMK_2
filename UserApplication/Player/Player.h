@@ -48,8 +48,8 @@ private://別クラスから値をもらう
 
 private://プレイヤークラス変数
 	uint32_t bulletNumber = 0;
-	float playerSpeed = 1.0f;
-	float diagonalPlayerSpeed = 1.3f;
+	float playerSpeed = 0.5f;
+	float diagonalPlayerSpeed = 0.6f;
 	Vector3 playerMoveMent;//移動量
 
 };

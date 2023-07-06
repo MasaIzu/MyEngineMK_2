@@ -1,6 +1,7 @@
 #include "MyMath.h"
 #include <cmath>
 #include"ImGuiManager.h"
+#include <random>
 
 Matrix4 MyMath::Initialize() {
 	Matrix4 matInitialize{
@@ -633,4 +634,12 @@ float MyMath::Get2VecAngle(const Vector3& vec1, const Vector3& vec2)
 	angle = floor(angle * 360 / (2 * MyMath::PI));
 
 	return angle;
+}
+
+uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(low, high);
+	return dist(gen);
 }

@@ -120,6 +120,8 @@ float4 main(VSOutput input) : SV_TARGET
 		
         AddAllColor += col;
 		
+        AddAllColor.a = 1.0f;
+		
         return AddAllColor;
     }
     else if (shadeNumber == 3)

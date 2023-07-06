@@ -70,11 +70,11 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	ImGui::Text("WalkTime:%d", WalkTime);
 	ImGui::Text("StopTime:%d", StopTime);
 
-	ImGui::Text("dist:%f", dist);
+	ImGui::Text("BackAngle:%f", BackAngle);
 	ImGui::Text("radius:%f", radius);
-	ImGui::Text("BonePos:%f,%f,%f", BonePos.x, BonePos.y, BonePos.z);
+	ImGui::Text("Rot:%f", Rot);
 	ImGui::Text("translation_:%f,%f,%f", enemyWorldTrans.LookVelocity.look.x, enemyWorldTrans.LookVelocity.look.y, enemyWorldTrans.LookVelocity.look.z);
-	ImGui::Text("dotPlayerAndEnemy:%f", dotPlayerAndEnemy);
+	ImGui::Text("EnemyToPlayerAngle:%f", EnemyToPlayerAngle);
 	ImGui::End();
 
 
@@ -154,7 +154,7 @@ void TutorialEnemy::PlayerNotFoundMove()
 	case TutorialEnemy::NotFoundPhase::ForcedWalking:
 
 		if (WalkTime > 0) {
-			Vector3 BackBonePos = BonePos - enemyWorldTrans.translation_;
+			BackBonePos = BonePos - enemyWorldTrans.translation_;
 			BackBonePos.normalize();
 			enemyWorldTrans.translation_ += BackBonePos * EnemySpeed;
 		}
@@ -183,37 +183,62 @@ void TutorialEnemy::PlayerFoundMove()
 {
 	PlayerFoundMoveTimer();
 	GetPlayerForEnemyAngle();
+	SearchingPlayer();
 	switch (FoundPhase_)
 	{
 	case TutorialEnemy::FoundPhase::Intimidation:
+		Rot = EnemyToPlayerAngle;
+		if (AttackStopTime > 0) {
 
+		}
+		else {
+			if (GetIsAttackArea()) {
+				FoundPhase_ = FoundPhase::Attack;
+			}
+			else {
+				FoundPhase_ = FoundPhase::Walk;
+			}
+		}
 
 		break;
 	case TutorialEnemy::FoundPhase::Walk:
-
-
+		Rot = EnemyToPlayerAngle;
+		if (GetIsAttackArea()) {
+			FoundPhase_ = FoundPhase::Attack;
+		}
+		else {
+			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
+			EnemyToPlayerVec.normalize();
+			enemyWorldTrans.translation_ += EnemyToPlayerVec * FoundEnemySpeed;
+		}
 		break;
 	case TutorialEnemy::FoundPhase::Stop:
 
 
 		break;
 	case TutorialEnemy::FoundPhase::Attack:
+		isAttack = true;
+
+		FoundPhase_ = FoundPhase::Walk;
+
+		break;
+	case TutorialEnemy::FoundPhase::Wait:
 
 
 		break;
+	case TutorialEnemy::FoundPhase::LoseSightofPlayer:
+		isPlayerFound = false;
+		BackBonePos = BonePos - enemyWorldTrans.translation_;
+		HowAboutFarAway = BackBonePos.length();
+		WalkTime = static_cast<uint32_t>(HowAboutFarAway / EnemySpeed);
+
+		NotFoundPhase_ = NotFoundPhase::ForcedWalking;
+		break;
 	case TutorialEnemy::FoundPhase::Turn:
 
-		float HowRot = Rot - dotPlayerAndEnemy;
-
-		if (BackAngle >= dotPlayerAndEnemy) {
-			Rot++;
-			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
-		}
-		else{
-			Rot--;
-			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
-		}
-
+		Rot = EnemyToPlayerAngle;
+		AttackStopTime = Random(10, 20);
+		FoundPhase_ = FoundPhase::Intimidation;
 		break;
 	case TutorialEnemy::FoundPhase::Nothing:
 
@@ -222,6 +247,7 @@ void TutorialEnemy::PlayerFoundMove()
 	default:
 		break;
 	}
+	enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
 }
 
 void TutorialEnemy::PlayerNotFoundMoveTimer()
@@ -246,20 +272,48 @@ void TutorialEnemy::PlayerFoundMoveTimer()
 
 void TutorialEnemy::SearchingPlayer()
 {
-	//円を作ってプレイヤーがいたらフェーズ変えに移行
-	tmp = enemyWorldTrans.translation_ - playerPos;
-	dist = tmp.dot(tmp);
-	radius = SearchingAreaRadius;
-	radius *= radius;
-	GetPlayerForEnemyAngle();
-	if (dist <= radius) {
-		NotFoundPhase_ = NotFoundPhase::FoundPlayer;
+	if (isPlayerFound == false) {
+		//円を作ってプレイヤーがいたらフェーズ変えに移行
+		tmp = enemyWorldTrans.translation_ - playerPos;
+		dist = tmp.dot(tmp);
+		radius = SearchingAreaRadius;
+		radius *= radius;
+		GetPlayerForEnemyAngle();
+		if (dist <= radius) {
+			NotFoundPhase_ = NotFoundPhase::FoundPlayer;
+		}
+	}
+	else {
+		//円を作ってプレイヤーがいたらフェーズ変えに移行
+		tmp = enemyWorldTrans.translation_ - playerPos;
+		dist = tmp.dot(tmp);
+		radius = FoundLookingPlayerRadius;
+		radius *= radius;
+		if (dist <= radius) {
+			
+		}
+		else {
+			FoundPhase_ = FoundPhase::LoseSightofPlayer;
+		}
 	}
 }
 
 void TutorialEnemy::GetPlayerForEnemyAngle()
 {
-	dotPlayerAndEnemy = MyMath::Get2VecAngle(playerPos, enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_);
+	EnemyToPlayerAngle = MyMath::Get2VecAngle(enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_, playerPos);
+}
+
+bool TutorialEnemy::GetIsAttackArea()
+{
+	//円を作ってプレイヤーがいたら攻撃移行
+	tmp = enemyWorldTrans.translation_ - playerPos;
+	dist = tmp.dot(tmp);
+	radius = AttackAreaRadius;
+	radius *= radius;
+	if (dist <= radius) {
+		return true;
+	}
+	return false;
 }
 
 void TutorialEnemy::WorldTransUpdate()
