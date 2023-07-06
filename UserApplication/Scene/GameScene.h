@@ -42,23 +42,18 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize() override;
-
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw() override;
-
 	// 終了処理
 	void Finalize() override;
-
 	//コピー処理
 	void CopyData() override;
-
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
 
@@ -103,7 +98,7 @@ private: // メンバ変数
 
 	Vector3 Pos = { 0, 0, -25 };
 	Vector3 Verocty = { 0, 0.1f, 0 };
-	uint32_t MaxFream = 800;
+	uint32_t MaxFream = 60;
 
 	std::unique_ptr<GameCamera> gameCamera;
 

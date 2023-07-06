@@ -69,6 +69,21 @@ void Player::DrawSprite(ViewProjection& viewProjection_)
 	//AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1));
 }
 
+void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+	playerBullet->CSUpdate(cmdList);
+}
+
+void Player::ParticleDraw(ViewProjection& viewProjection_)
+{
+	playerBullet->ParticleDraw(viewProjection_);
+}
+
+void Player::CopyParticle()
+{
+	playerBullet->CopyParticle();
+}
+
 void Player::Move()
 {
 	playerMoveMent = { 0.0f,0.0f,0.0f };

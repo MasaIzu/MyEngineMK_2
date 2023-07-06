@@ -20,6 +20,11 @@ public://基本関数
 	void Draw(ViewProjection& viewProjection_);
 	void DrawSprite(ViewProjection& viewProjection_);
 
+	//パーティクルを出す用
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void ParticleDraw(ViewProjection& viewProjection_);
+	void CopyParticle();
+
 private:
 	//プレーヤーの移動
 	void Move();

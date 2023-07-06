@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include <BaseCollider.h>
 #include <CollisionManager.h>
+#include "ParticleManager.h"
 
 class PlayerBullet {
 
@@ -18,6 +19,9 @@ public://基本関数
 	void Initialize();
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void ParticleDraw(ViewProjection& viewProjection_);
+	void CopyParticle();
 
 public:
 	//打ち出す球を作る
@@ -38,6 +42,8 @@ private:
 	void BulletAliveTimerUpdate();
 	//生きているかどうか
 	void CheckBulletAlive();
+	//パーティクルを出す
+	void MakeParticle(Vector3& pos);
 
 public://Getter
 	Vector3 GetPlayerBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(playerBulletWorldTrans[bulletCount].matWorld_); }
@@ -56,7 +62,7 @@ private://クラス関連
 	//当たり判定
 	BaseCollider* BulletCollider[AllBulletCount];
 	CollisionManager* collisionManager = nullptr;
-
+	std::unique_ptr<ParticleManager> ParticleMan;
 private://別クラスから値をもらう
 	
 
@@ -70,6 +76,7 @@ private://プレイヤークラス変数
 	uint32_t MaxBulletLifeTime = 60;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
+	uint32_t ParticleFile = 60;
 
 	float playerBulletSpeed = 20.0f;
 	float BulletRadius[AllBulletCount];

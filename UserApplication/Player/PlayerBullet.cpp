@@ -38,6 +38,11 @@ void PlayerBullet::Initialize()
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 	collisionManager = CollisionManager::GetInstance();
+
+	ParticleMan = std::make_unique<ParticleManager>();
+	ParticleMan->Initialize();
+	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
+
 }
 
 void PlayerBullet::Update()
@@ -58,9 +63,13 @@ void PlayerBullet::Update()
 
 	ImGui::Text("BulletVector:%f,%f,%f", BulletVector[0].x, BulletVector[0].y, BulletVector[0].z);
 
+
+	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 	ImGui::End();
 
 
+
+	ParticleMan->Update();
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed, BulletVector[i]);
@@ -77,12 +86,28 @@ void PlayerBullet::Draw(ViewProjection& viewProjection_)
 	}
 }
 
+void PlayerBullet::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+	ParticleMan->CSUpdate(cmdList);
+}
+
+void PlayerBullet::ParticleDraw(ViewProjection& viewProjection_)
+{
+	ParticleMan->Draw(viewProjection_);
+}
+
+void PlayerBullet::CopyParticle()
+{
+	ParticleMan->CopyData();
+}
+
 void PlayerBullet::BulletUpdate()
 {
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			playerBulletMoveMent[i] = BulletVector[i] * playerBulletSpeed;
+			MakeParticle(playerBulletWorldTrans[i].translation_);
 		}
 	}
 
@@ -100,7 +125,7 @@ void PlayerBullet::BulletUpdate()
 	WorldTransUpdate();
 }
 
-uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos,const Vector3& BulletVec)
+uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec)
 {
 	if (BulletCoolTime <= 0) {
 		for (uint32_t i = 0; i < AllBulletCount; i++) {
@@ -178,4 +203,10 @@ void PlayerBullet::CheckBulletAlive()
 			BulletVector[i] = { 0,0,0 };
 		}
 	}
+}
+
+void PlayerBullet::MakeParticle(Vector3& pos)
+{
+	Vector3 Verocty(0, 0, 1);
+	ParticleMan->Add(pos, Verocty, ParticleFile);
 }

@@ -184,7 +184,7 @@ private: // メンバ変数
 
 	UINT textureHandle_ = 0;
 
-	uint32_t numParticles = 1000000;
+	uint32_t numParticles = 50000;
 	// パーティクルデータをアップロードバッファにコピー
 	void* mappedData = nullptr;
 

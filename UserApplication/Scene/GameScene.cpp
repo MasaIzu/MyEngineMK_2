@@ -164,8 +164,10 @@ void GameScene::PostEffectDraw()
 
 	////パーティクル
 	ParticleMan->CSUpdate(commandList);
+	player_->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	ParticleMan->Draw(*viewProjection_.get());
+	player_->ParticleDraw(*viewProjection_.get());
 	ParticleManager::PostDraw();
 
 	PostEffect::PostDrawScene();
@@ -235,8 +237,7 @@ void GameScene::Finalize()
 
 void GameScene::CopyData()
 {
-
 	ParticleMan->CopyData();
-
+	player_->CopyParticle();
 }
 
