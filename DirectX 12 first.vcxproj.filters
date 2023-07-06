@@ -133,6 +133,12 @@
     <Filter Include="ユーザーヘッダー ファイル\UserCamera">
       <UniqueIdentifier>{a570b1d3-3326-4228-beca-ef786e914a3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ソース ファイル\LevelEditor">
+      <UniqueIdentifier>{f0a10a2f-703c-4ea3-81c7-b0ae025950a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ヘッダー\LevelEditor">
+      <UniqueIdentifier>{4d3288b6-a749-455c-b54b-77fc022db4ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -412,6 +418,9 @@
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
       <Filter>ユーザーヘッダー ファイル\UserCamera</Filter>
     </ClInclude>
+    <ClInclude Include="LoadLevelEditor.h">
+      <Filter>Engine\ヘッダー\LevelEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -572,6 +581,9 @@
     </ClCompile>
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
       <Filter>ユーザーソース ファイル\UserCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadLevelEditor.cpp">
+      <Filter>Engine\ソース ファイル\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
