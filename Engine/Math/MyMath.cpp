@@ -651,12 +651,11 @@ Vector3 MyMath::RandomVec3(const uint32_t& low, const uint32_t& high)
 	uint32_t vecZ = Random(low, high);
 
 	Vector3 RandVec = castVec(vecX, vecY, vecZ);
-	RandVec.normalize();
 
 	return RandVec;
 }
 
-Vector3 MyMath::RandomCenterVec3(const uint32_t& low, const uint32_t& high)
+Vector3 MyMath::RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high)
 {
 	uint32_t half = (high - low) / 2;
 	uint32_t vecX = Random(low, high);

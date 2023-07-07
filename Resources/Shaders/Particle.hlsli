@@ -11,6 +11,7 @@ struct VSOutput
     float4 position : Position;
     float scale : Scale;
     float4 color : Color;
+    float4 DownColor : DownColor;
     float4 velocity : Velocity;
     float3 FinalVelocity : FinalVelocity;
     int Frame : Frame; // このパーティクルが生まれたフレーム

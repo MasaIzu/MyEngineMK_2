@@ -194,7 +194,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;//加算
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
-	////加算合成
+	//加算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
 	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
@@ -206,7 +206,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
 	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
 	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
-	//半透明合成
+	////半透明合成
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
@@ -480,7 +480,7 @@ void ParticleManager::Add(Vector3& position, Vector3& velocity,uint32_t& MaxFram
 	}
 }
 
-void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, const float& scale)
+void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale)
 {
 	if (numParticles > Particles.size()) {
 		//追加した要素の参照
@@ -494,6 +494,7 @@ void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFra
 		p.alive = 1;
 		p.scale = scale;
 		p.color = color;
+		p.DownColor = DownColor;
 		p.MinusAlpha = color.w / MaxFrame;
 		Particles.push_back(p);
 	}

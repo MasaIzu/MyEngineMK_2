@@ -36,6 +36,7 @@ public: // サブクラス
 		Vector3 position;
 		float scale = 1;
 		Vector4 color = { 1,1,1,1 };
+		Vector4 DownColor = { 0,0,0,0 };
 		Vector3 velocity;
 		Vector3 FinalVelocity;
 		uint32_t Frame = 0; // このパーティクルが生まれたフレーム
@@ -157,7 +158,7 @@ public: // メンバ関数
 
 	
 	void Add(Vector3& position,Vector3& velocity, uint32_t& MaxFrame);
-	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, const float& scale);
+	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color,Vector4& DownColor, const float& scale);
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();

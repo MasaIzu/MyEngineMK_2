@@ -106,8 +106,8 @@ float4 main(VSOutput input) : SV_TARGET
                 float2 pickUV = input.uv + float2(px, py);
 				
                 float4 colortex0 = tex0.Sample(smp, pickUV);
-                float grayScale = colortex0.r * 0.299 + colortex0.g * 0.587 + colortex0.b * 0.114;
-                float extract = smoothstep(0.6, 0.9, grayScale);
+                float grayScale = colortex0.r * 0.499 + colortex0.g * 0.587 + colortex0.b * 0.414;
+                float extract = step(1.1, grayScale);
                 float4 HighLumi = colortex0 * extract;
 				
                 float weight = Gaussian(input.uv, pickUV, _Sigma);

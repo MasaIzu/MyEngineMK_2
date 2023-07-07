@@ -3,6 +3,7 @@ struct Particle
     float3 position : Position;
     float scale : Scale;
     float4 color : Color;
+    float4 DownColor : DownColor;
     float3 velocity : Velocity;
     float3 FinalVelocity : FinalVelocity;
     int Frame : Frame; // このパーティクルが生まれたフレーム
@@ -24,6 +25,7 @@ void main(uint3 id : SV_DispatchThreadID)
     p.position += p.velocity;
     p.color.a -= p.MinusAlpha;
     p.velocity -= p.FinalVelocity;
+    p.color -= p.DownColor;
     if (p.Frame > p.MaxFrame)
     {
         p.alive = false;

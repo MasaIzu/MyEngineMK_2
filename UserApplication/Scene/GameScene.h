@@ -76,7 +76,7 @@ private: // メンバ変数
 	std::unique_ptr<FbxAnimation>anim;
 	FbxLoader* fbxLoad = nullptr;
 
-	int shadeNumber = 0;
+	int shadeNumber = 2;
 
 	//ぼかし強度
 	int range = 0;

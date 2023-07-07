@@ -143,17 +143,19 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
+	PostEffect::SetShadeNumber(0);
 
+	Draw();
+
+	PostEffect::PostDrawScene();
+
+	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetRadialBlur(center, intensity, samples);
 	PostEffect::SetAngle(angle, angle2);
 
 	Model::PreDraw(commandList);
-	ground->Draw(*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
-	levelData->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 
@@ -169,6 +171,14 @@ void GameScene::PostEffectDraw()
 	ParticleMan->Draw(*viewProjection_.get());
 	player_->ParticleDraw(*viewProjection_.get());
 	ParticleManager::PostDraw();
+
+
+	Model::PreDraw(commandList);
+	player_->Draw(*viewProjection_.get());
+
+	Model::PostDraw();
+
+
 
 	PostEffect::PostDrawScene();
 }
@@ -197,11 +207,10 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	//model_->Draw(worldTransform_, viewProjection_);
-
-	//ground->Draw(*viewProjection_.get());
-
+	ground->Draw(*viewProjection_.get());
 	//player_->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
+	levelData->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

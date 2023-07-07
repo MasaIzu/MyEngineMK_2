@@ -68,6 +68,6 @@ namespace MyMath {
 
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomVec3(const uint32_t& low, const uint32_t& high);
-	Vector3 RandomCenterVec3(const uint32_t& low, const uint32_t& high);
+	Vector3 RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high);
 	Vector3 castVec(const uint32_t& x, const uint32_t& y, const uint32_t& z);
 };
