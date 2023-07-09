@@ -488,7 +488,7 @@ void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFra
 		//値のセットt
 		p.position = position;
 		p.velocity = velocity;
-		p.FinalVelocity = velocity / MaxFrame;
+		p.FinalVelocity = velocity / static_cast<float>(MaxFrame);
 		p.Frame = 0;
 		p.MaxFrame = MaxFrame;
 		p.alive = 1;

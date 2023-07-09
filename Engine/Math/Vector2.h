@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "Uint32Vec2.h"
+#include "Uint32Vector2.h"
 
 class Vector2
 {

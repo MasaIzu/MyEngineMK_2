@@ -6,6 +6,7 @@
 #include <Vector4.h>
 #include<assimp/scene.h>
 #include "Quaternion.h"
+#include "Uint32Vector2.h"
 
 //•Ö—˜Œn‚Ü‚Æ‚ß
 namespace MyMath {
@@ -67,7 +68,7 @@ namespace MyMath {
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
 
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
-	Vector3 RandomVec3(const uint32_t& low, const uint32_t& high);
+	Vector3 RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
 	Vector3 RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high);
 	Vector3 castVec(const uint32_t& x, const uint32_t& y, const uint32_t& z);
 };

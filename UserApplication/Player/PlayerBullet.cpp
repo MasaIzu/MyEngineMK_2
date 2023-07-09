@@ -226,9 +226,9 @@ void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const flo
 		Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
 		Verocty += Rand * PlayerParticleSpeed;
 		Vector3 AddPos = pos + (BulletVelocity * i);
-		Vector3 colorRand = MyMath::RandomVec3(0, 20) / 10;
+		Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5,20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
 		Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
-		Vector4 DownColor = color / MaxBulletLifeTime;
+		Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
 		float scale = (1.0f / BulletSpeed) * i;
 		ParticleMan->Add(AddPos, Verocty, ParticleFile, color, DownColor, scale);
 	}

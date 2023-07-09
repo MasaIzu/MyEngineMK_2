@@ -1,4 +1,4 @@
-#include "Uint32Vec2.h"
+#include "Uint32Vector2.h"
 #include<cmath>  //sprt
 
 Uint32Vector2::Uint32Vector2() :x(0), y(0)

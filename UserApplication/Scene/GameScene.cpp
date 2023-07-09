@@ -84,16 +84,22 @@ void GameScene::Update() {
 	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
 
 	if (shadeNumber == 0) {
+		ImGui::Begin("Not");
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+
+		ImGui::End();
+	}
+	else if (shadeNumber == 1) {
 		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
 		ImGui::SliderInt("range", &range, 0, 20);
 		ImGui::SetCursorPos(ImVec2(0, 20));
 		ImGui::End();
 	}
-	else if (shadeNumber == 1) {
+	else if (shadeNumber == 2) {
 		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
 		ImGui::SliderFloat("centerX", &center.x, 0, 1);
 		ImGui::SliderFloat("centerY", &center.y, 0, 1);
@@ -102,16 +108,16 @@ void GameScene::Update() {
 		ImGui::SetCursorPos(ImVec2(0, 20));
 		ImGui::End();
 	}
-	else if (shadeNumber == 2) {
+	else if (shadeNumber == 3) {
 		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
 		ImGui::SetCursorPos(ImVec2(0, 20));
 		ImGui::End();
 	}
-	else if (shadeNumber == 3) {
+	else if (shadeNumber == 4) {
 		ImGui::Begin("CloseFilta");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 3);
+		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 		ImGui::SliderFloat("angle", &angle, 0.0f, 180.0f);
 		ImGui::SliderFloat("angle2", &angle2, 0.0f, 180.0f);
 
@@ -143,13 +149,6 @@ void GameScene::PostEffectDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	PostEffect::PreDrawScene(commandList);
-	PostEffect::SetShadeNumber(0);
-
-	Draw();
-
-	PostEffect::PostDrawScene();
-
-	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetRadialBlur(center, intensity, samples);
@@ -174,7 +173,6 @@ void GameScene::PostEffectDraw()
 
 
 	Model::PreDraw(commandList);
-	player_->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 
@@ -208,9 +206,9 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	//player_->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
+	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -644,11 +644,11 @@ uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 	return dist(gen);
 }
 
-Vector3 MyMath::RandomVec3(const uint32_t& low, const uint32_t& high)
+Vector3 MyMath::RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh)
 {
-	uint32_t vecX = Random(low, high);
-	uint32_t vecY = Random(low, high);
-	uint32_t vecZ = Random(low, high);
+	uint32_t vecX = Random(RLowAndHigh.x, RLowAndHigh.y);
+	uint32_t vecY = Random(GLowAndHigh.x, GLowAndHigh.y);
+	uint32_t vecZ = Random(BLowAndHigh.x, BLowAndHigh.y);
 
 	Vector3 RandVec = castVec(vecX, vecY, vecZ);
 

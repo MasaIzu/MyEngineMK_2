@@ -1,4 +1,4 @@
-#include "PostEffect.h"
+#include "MixPostEffect.h"
 #include<d3dx12.h>
 #include"WinApp.h"
 #include <cassert>
@@ -6,39 +6,39 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
-ID3D12Device* PostEffect::device_;
+ID3D12Device* MixPostEffect::device_;
 
-ID3D12GraphicsCommandList* PostEffect::commandList;
+ID3D12GraphicsCommandList* MixPostEffect::commandList;
 
-PostEffect::VertexPosUv PostEffect::vertices[4];
+MixPostEffect::VertexPosUv MixPostEffect::vertices[4];
 
-PostEffect::VertexPosUv* PostEffect::vertMap;
+MixPostEffect::VertexPosUv* MixPostEffect::vertMap;
 
-Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::vertBuff;	//頂点バッファ
+Microsoft::WRL::ComPtr<ID3D12Resource> MixPostEffect::vertBuff;	//頂点バッファ
 
 //頂点バッファビューの作成
-D3D12_VERTEX_BUFFER_VIEW PostEffect::vbView{};
-Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::texBuff[2];
+D3D12_VERTEX_BUFFER_VIEW MixPostEffect::vbView{};
+Microsoft::WRL::ComPtr<ID3D12Resource> MixPostEffect::texBuff[2];
 
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> PostEffect::descHeapSRV;
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> MixPostEffect::descHeapSRV;
 //深度バッファ
-Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::depthBuff;
+Microsoft::WRL::ComPtr<ID3D12Resource> MixPostEffect::depthBuff;
 //RTV用のデスクリプタヒープ
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> PostEffect::descHeapRTV;
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> MixPostEffect::descHeapRTV;
 //DSV用のデスクリプタヒープ
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> PostEffect::descHeapDSV;
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> MixPostEffect::descHeapDSV;
 
-Microsoft::WRL::ComPtr<ID3D12PipelineState> PostEffect::pipelineState;
-Microsoft::WRL::ComPtr<ID3D12RootSignature> PostEffect::rootSignature;
+Microsoft::WRL::ComPtr<ID3D12PipelineState> MixPostEffect::pipelineState;
+Microsoft::WRL::ComPtr<ID3D12RootSignature> MixPostEffect::rootSignature;
 
 // 定数バッファ
-Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::constDataBuff_;
+Microsoft::WRL::ComPtr<ID3D12Resource> MixPostEffect::constDataBuff_;
 // マッピング済みアドレス
-PostEffect::SendDataToGPU* PostEffect::dataMap = nullptr;
+MixPostEffect::SendDataToGPU* MixPostEffect::dataMap = nullptr;
 
-const float PostEffect::clearColor[4] = {0.0f,0.0f,0.0f,1.0f};
+const float MixPostEffect::clearColor[4] = { 0.25f,0.5f,0.1f,0 };
 
-void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
+void MixPostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
 {
 	HRESULT result;
 
@@ -48,7 +48,7 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		static_cast<UINT>(WinWidth),
 		static_cast<UINT>(WinHeight),
-		1,0,1,0,D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 	{
 
 		//テクスチャバッファの生成
@@ -77,7 +77,7 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 	srvDescHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	srvDescHeapDesc.NumDescriptors = 2;
 	//SRVデスクリプタヒープ設定
-	result = device_->CreateDescriptorHeap(&srvDescHeapDesc,IID_PPV_ARGS(&descHeapSRV));
+	result = device_->CreateDescriptorHeap(&srvDescHeapDesc, IID_PPV_ARGS(&descHeapSRV));
 	assert(SUCCEEDED(result));
 	//SRV設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -90,8 +90,8 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 		//デスクリプタヒープにSRVを作成
 		device_->CreateShaderResourceView(texBuff[i].Get(),
 			&srvDesc,
-			CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeapSRV->GetCPUDescriptorHandleForHeapStart(),i,
-			device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
+			CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeapSRV->GetCPUDescriptorHandleForHeapStart(), i,
+				device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
 		);
 
 	}
@@ -108,7 +108,7 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 	for (int i = 0; i < 2; i++) {
 		//デスクリプタヒープにRTVを作成
 		device_->CreateRenderTargetView(texBuff[i].Get(), nullptr, CD3DX12_CPU_DESCRIPTOR_HANDLE(
-			descHeapRTV->GetCPUDescriptorHandleForHeapStart(),i,device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
+			descHeapRTV->GetCPUDescriptorHandleForHeapStart(), i, device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV)));
 	}
 
 
@@ -194,15 +194,16 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 	assert(SUCCEEDED(result));
 
 	//定数として10を入れておく(ぼかし度)
-	dataMap->shadeNumber = 1;
+	dataMap->shadeNumber = 0;
 	dataMap->kernelSize = 10;
 	dataMap->center = { 0.5f,0.5f };
 	dataMap->intensity = 0.1f;
 	dataMap->samples = 1;
 	dataMap->_AngleDeg = 45.0f;
+	dataMap->_AngleDeg2 = 135.0f;
 }
 
-void PostEffect::Finalize()
+void MixPostEffect::Finalize()
 {
 
 	vertBuff.Reset();
@@ -218,7 +219,7 @@ void PostEffect::Finalize()
 
 }
 
-void PostEffect::CreatGraphicsPipelineState()
+void MixPostEffect::CreatGraphicsPipelineState()
 {
 	HRESULT result;
 
@@ -349,9 +350,9 @@ void PostEffect::CreatGraphicsPipelineState()
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
 	////加算合成
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
-	blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
+	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
 	////減算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//デストからソースを減算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
@@ -361,9 +362,9 @@ void PostEffect::CreatGraphicsPipelineState()
 	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
 	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
 	//半透明合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
-	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
 	////ブレンドステート
 	//pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask
 	//	= D3D12_COLOR_WRITE_ENABLE_ALL;//RBGAすべてのチャンネルを描画
@@ -383,9 +384,9 @@ void PostEffect::CreatGraphicsPipelineState()
 	assert(SUCCEEDED(result));
 }
 
-void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
+void MixPostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 {
-	commandList=cmdList;
+	commandList = cmdList;
 
 	for (int i = 0; i < 2; i++) {
 		CD3DX12_RESOURCE_BARRIER resouceBar = CD3DX12_RESOURCE_BARRIER::Transition(texBuff[i].Get(),
@@ -429,7 +430,7 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 	commandList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
-void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
+void MixPostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	commandList = cmdList;
 
@@ -438,7 +439,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	commandList->SetGraphicsRootSignature(rootSignature.Get());
 
 	//SRVヒープの設定コマンド
-	ID3D12DescriptorHeap* ppHeaps[] = { descHeapSRV.Get()};
+	ID3D12DescriptorHeap* ppHeaps[] = { descHeapSRV.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	//プリミティブ形状の設定コマンド
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
@@ -447,8 +448,8 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	//画像描画
 	//SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
-	commandList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(),0,
-												device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	commandList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 0,
+		device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
 	commandList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 1,
 		device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
@@ -459,7 +460,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	commandList->DrawInstanced(_countof(vertices), 1, 0, 0);//すべての頂点を使って描画
 }
 
-void PostEffect::PostDrawScene()
+void MixPostEffect::PostDrawScene()
 {
 	for (int i = 0; i < 2; i++) {
 		CD3DX12_RESOURCE_BARRIER RESOURCE_BARRIER = CD3DX12_RESOURCE_BARRIER::Transition(texBuff[i].Get(),
@@ -469,25 +470,25 @@ void PostEffect::PostDrawScene()
 	}
 }
 
-void PostEffect::SetShadeNumber(int SetShadeNumber)
+void MixPostEffect::SetShadeNumber(int SetShadeNumber)
 {
 	dataMap->shadeNumber = SetShadeNumber;
 }
 
-void PostEffect::SetKernelSize(int range) {
+void MixPostEffect::SetKernelSize(int range) {
 
 	dataMap->kernelSize = range;
 
 }
 
-void PostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
+void MixPostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
 {
 	dataMap->center = center;
 	dataMap->intensity = intensity;
 	dataMap->samples = sample;
 }
 
-void PostEffect::SetAngle(float angle,float angle2)
+void MixPostEffect::SetAngle(float angle, float angle2)
 {
 	dataMap->_AngleDeg = angle;
 	dataMap->_AngleDeg2 = angle2;

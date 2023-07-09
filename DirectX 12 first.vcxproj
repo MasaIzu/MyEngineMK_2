@@ -318,7 +318,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="Engine\3D\Model.h" />
     <ClInclude Include="Engine\3D\WorldTransform.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
-    <ClInclude Include="Engine\Math\Uint32Vec2.h" />
+    <ClInclude Include="Engine\Math\Uint32Vector2.h" />
     <ClInclude Include="Engine\Scene\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\BaseScene.h" />
     <ClInclude Include="Engine\Base\DirectXCore.h" />
@@ -347,6 +347,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="Engine\3D\FbxModel.h" />
     <ClInclude Include="Engine\3D\ParticleManager.h" />
     <ClInclude Include="LoadLevelEditor.h" />
+    <ClInclude Include="MixPostEffect.h" />
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
     <ClInclude Include="UserApplication\Player\PlayerBullet.h" />
     <ClInclude Include="Engine\2D\PostEffect.h" />
@@ -410,6 +411,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Neither</FavorSizeOrSpeed>
     </ClCompile>
     <ClCompile Include="LoadLevelEditor.cpp" />
+    <ClCompile Include="MixPostEffect.cpp" />
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
     <ClCompile Include="Engine\3D\ParticleManager.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerBullet.cpp" />

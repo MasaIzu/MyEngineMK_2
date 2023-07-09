@@ -4,7 +4,7 @@
 #include "Vector2.h"
 #include "Vector4.h"
 #include "Matrix4.h"
-class PostEffect
+class MixPostEffect
 {
 public:
 
@@ -38,7 +38,7 @@ public:
     static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
     static void Finalize();
-    
+
     /// <summary>
     /// パイプライン生成
     /// </summary>
@@ -50,7 +50,7 @@ public:
     /// <param name="cmdList">コマンドリスト</param>
     static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-    void Draw(ID3D12GraphicsCommandList* cmdList);
+    static void Draw(ID3D12GraphicsCommandList* cmdList);
 
     /// <summary>
     /// シーン描画後処理
@@ -64,7 +64,7 @@ public:
 
     static void SetRadialBlur(Vector2 senter, float intensity, int sample);
 
-    static void SetAngle(float angle1,float angle2);
+    static void SetAngle(float angle1, float angle2);
 
 
 

@@ -1,6 +1,6 @@
 #include "Framework.h"
 #include"ParticleManager.h"
-#include"PostEffect.h"
+#include "MixPostEffect.h"
 
 void Framework::Initialize()
 {
@@ -44,7 +44,10 @@ void Framework::Initialize()
 
 	ParticleManager::StaticInitialize(DirectXCore::GetInstance()->GetDevice());
 
-	PostEffect::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
+	postEffect = std::make_unique<PostEffect>();
+	postEffect->Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
+
+	MixPostEffect::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
 
 #pragma endregion
 
@@ -81,14 +84,12 @@ void Framework::Update()
 	imGui->End();
 }
 
-
-
 void Framework::Finalize()
 {
 	// ŠeŽí‰ð•ú
 	sceneManager_->Finalize();
 
-	PostEffect::Finalize();
+	postEffect->Finalize();
 
 	ParticleManager::StaticFinalize();
 
@@ -136,12 +137,18 @@ void Framework::Run()
 		}
 
 		PostEffectDraw();
+
+		MixPostEffect::PreDrawScene(directXCore_->GetCommandList());
+
+		Draw();
+		postEffect->Draw(directXCore_->GetCommandList());
+
+		MixPostEffect::PostDrawScene();
+
 		// •`‰æŠJŽn
 		directXCore_->PreDraw();
 
-		Draw();
-		//PostEffect::Draw(directXCore_->GetCommandList());
-		
+		MixPostEffect::Draw(directXCore_->GetCommandList());
 
 		//ImGui•`‰æ
 		imGui->Draw();

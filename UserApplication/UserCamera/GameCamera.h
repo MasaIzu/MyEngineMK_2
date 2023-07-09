@@ -2,7 +2,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Matrix4.h"
-#include "Uint32Vec2.h"
+#include "Uint32Vector2.h"
 #include <Input.h>
 #include "WorldTransform.h"
 #include "ViewProjection.h"

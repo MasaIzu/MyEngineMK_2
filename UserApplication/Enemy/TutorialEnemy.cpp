@@ -27,7 +27,7 @@ void TutorialEnemy::Initialize()
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
-	DebugWorldTrans.scale_ = { 1,1,1 };
+	DebugWorldTrans.scale_ = { FoundLookingPlayerRadius,FoundLookingPlayerRadius,FoundLookingPlayerRadius };
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 
@@ -88,7 +88,7 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		PlayerBulletHit();
 	}
 
-	DebugWorldTrans.translation_ = enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_;
+	DebugWorldTrans.translation_ = enemyWorldTrans.translation_;
 	DebugWorldTrans.TransferMatrix();
 }
 

@@ -9,6 +9,7 @@
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "ParticleManager.h"
+#include "Uint32Vector2.h"
 
 class PlayerBullet {
 

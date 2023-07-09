@@ -17,27 +17,15 @@ float4 main(VSOutput input) : SV_TARGET
 	float offsetU = 1/ 1280.0f;
 	float offsetV = 1 / 720.0f;
 
+    if (shadeNumber == 0)
+    {
+        float4 col = tex0.Sample(smp, input.uv);
+        //col += tex1.Sample(smp, input.uv);
+        col.a = 1;
 
-	/*float4 color = tex.Sample(smp, input.uv + float2(offsetU,0.0f));
-
-	color += tex.Sample(smp, input.uv + float2(-offsetU, 0.0f));
-
-	color += tex.Sample(smp, input.uv + float2(0.0f,offsetV));
-
-	color += tex.Sample(smp, input.uv + float2(0.0f, -offsetV));
-
-	color += tex.Sample(smp, input.uv + float2(offsetU, offsetV));
-	color += tex.Sample(smp, input.uv + float2(-offsetU, offsetV));
-	color += tex.Sample(smp, input.uv + float2(offsetU, -offsetV));
-	color += tex.Sample(smp, input.uv + float2(-offsetU, -offsetV));
-
-	color /= 8.0f;
-
-	color+= tex.Sample(smp, input.uv);*/
-
-	//float4 texcolor = tex.Sample(smp, input.uv);
-
-	if (shadeNumber == 0) {
+        return col;
+    }
+	else if (shadeNumber == 1) {
 		float4 colortex0 = tex0.Sample(smp, input.uv);
 		float4 colortex1 = tex1.Sample(smp, input.uv);
 
@@ -73,7 +61,7 @@ float4 main(VSOutput input) : SV_TARGET
 		//}
 		return float4(color.rgb, 1);
 	}
-	else if (shadeNumber == 1) {
+	else if (shadeNumber == 2) {
 		float2 uv = input.uv;
 		float2 direction = uv - center;
 		float2 step = direction / float(samples);
@@ -91,7 +79,7 @@ float4 main(VSOutput input) : SV_TARGET
 		result /= totalWeight;
 		return result;
 	}
-    else if (shadeNumber == 2)
+    else if (shadeNumber == 3)
     {
 		
         float4 AddAllColor = tex0.Sample(smp, input.uv);
@@ -106,7 +94,7 @@ float4 main(VSOutput input) : SV_TARGET
                 float2 pickUV = input.uv + float2(px, py);
 				
                 float4 colortex0 = tex0.Sample(smp, pickUV);
-                float grayScale = colortex0.r * 0.499 + colortex0.g * 0.587 + colortex0.b * 0.414;
+                float grayScale = colortex0.r + colortex0.g + colortex0.b;
                 float extract = step(1.1, grayScale);
                 float4 HighLumi = colortex0 * extract;
 				
@@ -124,7 +112,7 @@ float4 main(VSOutput input) : SV_TARGET
 		
         return AddAllColor;
     }
-    else if (shadeNumber == 3)
+    else if (shadeNumber == 4)
     {
         float4 AddAllColor = tex0.Sample(smp, input.uv);
 		
@@ -152,8 +140,8 @@ float4 main(VSOutput input) : SV_TARGET
             pickUV = input.uv + float2(x, y);
 			
             float4 colortex0 = tex0.Sample(smp, pickUV);
-            float grayScale = colortex0.r * 0.299 + colortex0.g * 0.587 + colortex0.b * 0.114;
-            float extract = smoothstep(0.6, 0.9, grayScale);
+            float grayScale = colortex0.r + colortex0.g + colortex0.b;
+            float extract = step(0.1, grayScale);
             float4 HighLumi = colortex0 * extract;
 			
             float weight = Gaussian(input.uv, pickUV, pickRange);
