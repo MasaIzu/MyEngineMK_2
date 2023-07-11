@@ -47,7 +47,7 @@ void Player::Update()
 		//bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
 	}
 	if (input_->MouseInputing(0)) {
-		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		PlayerAttack();
 		//playerBullet->BulletControl(bulletNumber, playerWorldTransForBullet.LookVelocity.look);
 	}
 	if (input_->MouseInputTrigger(1)) {
@@ -132,6 +132,36 @@ void Player::PlayerRot()
 	playerWorldTransForBullet.SetRot(Vector3(cameraRot.y, cameraRot.x, 0.0f));
 	//’lXV
 	WorldTransUpdate();
+}
+
+void Player::PlayerAttack()
+{
+	if (AttackPhase_ == AttackPhase::Nothing) {
+		AttackPhase_ = AttackPhase::AttackCombo1;
+	}
+	switch (AttackPhase_)
+	{
+	case Player::AttackPhase::AttackCombo1:
+		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		break;
+	case Player::AttackPhase::AttackCombo2:
+
+		break;
+	case Player::AttackPhase::AttackCombo3:
+
+		break;
+	case Player::AttackPhase::AttackCombo4:
+
+		break;
+	case Player::AttackPhase::AttackUlt:
+
+		break;
+	case Player::AttackPhase::Nothing:
+
+		break;
+	default:
+		break;
+	}
 }
 
 void Player::WorldTransUpdate()

@@ -421,10 +421,10 @@
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
       <Filter>ユーザーヘッダー ファイル\UserCamera</Filter>
     </ClInclude>
-    <ClInclude Include="LoadLevelEditor.h">
+    <ClInclude Include="Engine\LevelEditor\LoadLevelEditor.h">
       <Filter>Engine\ヘッダー\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="MixPostEffect.h">
+    <ClInclude Include="Engine\2D\MixPostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
   </ItemGroup>
@@ -588,10 +588,10 @@
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
       <Filter>ユーザーソース ファイル\UserCamera</Filter>
     </ClCompile>
-    <ClCompile Include="LoadLevelEditor.cpp">
+    <ClCompile Include="Engine\LevelEditor\LoadLevelEditor.cpp">
       <Filter>Engine\ソース ファイル\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="MixPostEffect.cpp">
+    <ClCompile Include="Engine\2D\MixPostEffect.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
   </ItemGroup>

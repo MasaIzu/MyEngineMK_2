@@ -1,0 +1,68 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "UFO",
+            "transform": {
+                "translation": [
+                    -10.184676170349121,
+                    0.0,
+                    3.914170026779175
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "sphere",
+            "transform": {
+                "translation": [
+                    0.0,
+                    10.686360359191895,
+                    9.589155197143555
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "cube",
+            "transform": {
+                "translation": [
+                    7.933162689208984,
+                    -11.80540943145752,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        }
+    ]
+}
