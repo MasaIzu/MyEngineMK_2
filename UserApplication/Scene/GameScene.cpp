@@ -65,7 +65,7 @@ void GameScene::Initialize() {
 	tutorialEnemy->Initialize();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("objTest");
+	levelData->Initialize("Task");
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -206,9 +206,9 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
+	//player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
+	//tutorialEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

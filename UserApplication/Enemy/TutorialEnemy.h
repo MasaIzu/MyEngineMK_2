@@ -48,7 +48,7 @@ private://クラス変数
 	BaseCollider* TutorialEnemyCollider = nullptr;
 	CollisionManager* collisionManager = nullptr;
 
-private:
+private://イーナム
 	enum class NotFoundPhase {
 		Walk,//歩く
 		Stop,//止まる

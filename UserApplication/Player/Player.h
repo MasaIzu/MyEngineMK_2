@@ -30,6 +30,8 @@ private:
 	void Move();
 	//プレイヤーの回転
 	void PlayerRot();
+	//プレーヤーの攻撃
+	void PlayerAttack();
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 
@@ -47,6 +49,18 @@ private://クラス関連
 	std::unique_ptr<PlayerBullet> playerBullet;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
+
+private://イーナムクラス
+	enum class AttackPhase {
+		AttackCombo1,//
+		AttackCombo2,//
+		AttackCombo3,//
+		AttackCombo4,//
+		AttackUlt,//
+		Nothing,//何もしない
+	};
+	//見つけてないときの動きフェーズ
+	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 
 private://別クラスから値をもらう
 	Vector2 cameraRot;
