@@ -139,6 +139,9 @@
     <Filter Include="Engine\ヘッダー\LevelEditor">
       <UniqueIdentifier>{4d3288b6-a749-455c-b54b-77fc022db4ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\PostEffect">
+      <UniqueIdentifier>{dfec28f9-61a5-4acb-ad9a-110be0046960}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -162,11 +165,11 @@
     <None Include="Resources\Shaders\Particle.hlsli">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Resources\Shaders\PostEffectGlow.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\FBX.hlsli">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\PostEffectGlow.hlsli">
+      <Filter>Shaders\PostEffect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -218,12 +221,6 @@
     <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\PostEffectGlowVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -232,6 +229,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
+      <Filter>Shaders\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PostEffectGlowVS.hlsl">
+      <Filter>Shaders\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

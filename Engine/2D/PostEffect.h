@@ -50,7 +50,7 @@ public:
     /// <param name="cmdList">コマンドリスト</param>
     static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-    void Draw(ID3D12GraphicsCommandList* cmdList);
+    static void Draw(ID3D12GraphicsCommandList* cmdList);
 
     /// <summary>
     /// シーン描画後処理

@@ -27,7 +27,7 @@ void TutorialEnemy::Initialize()
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
-	DebugWorldTrans.scale_ = { FoundLookingPlayerRadius,FoundLookingPlayerRadius,FoundLookingPlayerRadius };
+	DebugWorldTrans.scale_ = { SearchingAreaRadius,SearchingAreaRadius,SearchingAreaRadius };
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 

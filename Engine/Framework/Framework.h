@@ -6,7 +6,6 @@
 #include "Input.h"
 #include "FPS.h"
 #include "ImGuiManager.h"
-#include "PostEffect.h"
 #include "SceneManager.h"
 #include "FbxModel.h"
 #include <FbxLoader.h>
@@ -63,7 +62,6 @@ protected:
 	std::unique_ptr <FPS> fps;
 	std::unique_ptr <AbstractSceneFactory> sceneFactory_;
 	std::unique_ptr<FbxModel> fbx;
-	std::unique_ptr<PostEffect> postEffect;
 
 
 	bool isEndRequst = false;

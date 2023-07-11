@@ -1,11 +1,27 @@
 #pragma once
+#include "PostEffect.h"
+#include "MixPostEffect.h"
 
 class PostEffectManager {
 public:
 
-	void Initialize();
+    static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
-	void Draw();
+    /// <summary>
+    /// シーン描画前処理
+    /// </summary>
+    /// <param name="cmdList">コマンドリスト</param>
+    static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
+
+    /// <summary>
+    /// シーン描画後処理
+    /// </summary>
+    /// <param name="cmdList">コマンド処理</param>
+    static void PostDrawScene();
+
+    static void Draw(ID3D12GraphicsCommandList* cmdList);
+
+    static void Finalize();
 
 private:
 
