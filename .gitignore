@@ -369,3 +369,9 @@ FodyWeavers.xsd
 /Resources/3dGameKyaraRun/KyaraTex1.png
 /Resources/3dRowPori/RowPoriTex.png
 
+/assimp-vc143-mtd.dll
+/assimp-vc143-mtd.lib
+/pugixml.dll
+/pugixml.lib
+/zlibd1.dll
+/.gitignore
