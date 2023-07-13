@@ -33,20 +33,9 @@ void GameScene::Initialize() {
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,-120,100 };
-	worldTransform_.rotation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 0.4f,0.4f,0.4f };
+	worldTransform_.translation_ = { 0,10,0 };
+	worldTransform_.scale_ = { 0.01f,0.01f,0.01f };
 	worldTransform_.TransferMatrix();
-
-	//fbxModel = std::make_unique<FbxModel>();
-	//fbxLoad = FbxLoader::GetInstance();
-
-	//fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
-	//fbxModel->Initialize();
-	//anim = std::make_unique<FbxAnimation>();
-	//anim->Load("Player");
-
-	//model_.reset(Model::CreateFromOBJ("UFO", true));
 
 	ParticleMan = std::make_unique<ParticleManager>();
 	ParticleMan->Initialize();
@@ -72,17 +61,16 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-
+	CheckReticle();
 	ImGui::Begin("Phase");
 
 	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
+	ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
+
 	ImGui::End();
 
-	frem += 0.001f;
-
-	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
-
+	
 	if (shadeNumber == 0) {
 		ImGui::Begin("Not");
 		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
@@ -129,7 +117,6 @@ void GameScene::Update() {
 		ParticleMan->Add(Pos, Verocty, MaxFream);
 	}
 
-
 	ParticleMan->Update();
 
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
@@ -158,11 +145,6 @@ void GameScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	//FBXモデル
-	FbxModel::PreDraw(commandList);
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-	FbxModel::PostDraw();
-
 	////パーティクル
 	ParticleMan->CSUpdate(commandList);
 	player_->CSUpdate(commandList);
@@ -179,6 +161,28 @@ void GameScene::PostEffectDraw()
 
 
 	PostEffect::PostDrawScene();
+}
+
+bool GameScene::CheckReticle()
+{
+	Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
+
+	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+
+	return false;
 }
 
 void GameScene::Draw() {
@@ -206,20 +210,13 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	//player_->Draw(*viewProjection_.get());
+	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
-	//tutorialEnemy->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
-
-
-	FbxModel::PreDraw(commandList);
-
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-
-	FbxModel::PostDraw();
 
 	//ParticleMan->CSUpdate(commandList);
 	//ParticleManager::PreDraw(commandList);

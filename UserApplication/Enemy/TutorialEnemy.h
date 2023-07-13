@@ -16,6 +16,7 @@ public://基本関数
 	void Update(const Vector3& PlayerPos);
 	void Draw(ViewProjection& viewProjection_);
 
+	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
 	//プレイヤーの弾が当たった時の処理
 	void PlayerBulletHit();

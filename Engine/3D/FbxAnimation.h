@@ -27,7 +27,6 @@ private:
 
 	static const int32_t MaxAnimation = 20;
 
-	aiAnimation* modelAnimation[MaxAnimation];
 	const aiScene* mScene;
 
 };

@@ -375,3 +375,5 @@ FodyWeavers.xsd
 /pugixml.lib
 /zlibd1.dll
 /.gitignore
+/External/assimp/x64-windows/lib
+/External/assimp/x64-windows-static/lib
