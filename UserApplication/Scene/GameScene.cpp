@@ -33,20 +33,9 @@ void GameScene::Initialize() {
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,-120,100 };
-	worldTransform_.rotation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 0.4f,0.4f,0.4f };
+	worldTransform_.translation_ = { 0,10,0 };
+	worldTransform_.scale_ = { 0.01f,0.01f,0.01f };
 	worldTransform_.TransferMatrix();
-
-	//fbxModel = std::make_unique<FbxModel>();
-	//fbxLoad = FbxLoader::GetInstance();
-
-	//fbxModel.reset(FbxLoader::GetInstance()->LoadModelFromFile("Player"));
-	//fbxModel->Initialize();
-	//anim = std::make_unique<FbxAnimation>();
-	//anim->Load("Player");
-
-	//model_.reset(Model::CreateFromOBJ("UFO", true));
 
 	ParticleMan = std::make_unique<ParticleManager>();
 	ParticleMan->Initialize();
@@ -79,10 +68,7 @@ void GameScene::Update() {
 
 	ImGui::End();
 
-	frem += 0.001f;
-
-	//fbxModel->ModelAnimation(frem, anim->GetAnimation(static_cast<int>(0)));
-
+	
 	if (shadeNumber == 0) {
 		ImGui::Begin("Not");
 		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
@@ -158,11 +144,6 @@ void GameScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	//FBXモデル
-	FbxModel::PreDraw(commandList);
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-	FbxModel::PostDraw();
-
 	////パーティクル
 	ParticleMan->CSUpdate(commandList);
 	player_->CSUpdate(commandList);
@@ -213,13 +194,6 @@ void GameScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
-
-
-	FbxModel::PreDraw(commandList);
-
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-
-	FbxModel::PostDraw();
 
 	//ParticleMan->CSUpdate(commandList);
 	//ParticleManager::PreDraw(commandList);

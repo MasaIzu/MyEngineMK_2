@@ -19,9 +19,6 @@
 #include "GameCamera.h"
 #include <CollisionManager.h>
 
-#include"FbxAnimation.h"
-#include "FbxLoader.h"
-
 #include "Ground.h"
 
 #include "Player.h"
@@ -68,13 +65,6 @@ private: // メンバ変数
 	std::unique_ptr<Model> model_;// 3Dモデル
 	WorldTransform worldTransform_;//ワールド変換データ
 	uint32_t textureHandle_ = 0;//テクスチャハンドル
-
-
-	//FBX関係
-	float frem = 0;
-	std::unique_ptr<FbxModel>fbxModel;
-	std::unique_ptr<FbxAnimation>anim;
-	FbxLoader* fbxLoad = nullptr;
 
 	int shadeNumber = 3;
 

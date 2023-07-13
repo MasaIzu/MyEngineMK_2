@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /Resources/3dGameKyaraRun/KyaraTex1.png
 /Resources/3dRowPori/RowPoriTex.png
 
+/External/assimp/x64-windows/lib
+/External/assimp/x64-windows-static/lib

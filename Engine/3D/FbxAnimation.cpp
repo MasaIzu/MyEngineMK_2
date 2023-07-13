@@ -18,10 +18,9 @@ FbxAnimation::~FbxAnimation()
 
 	}
 	else {
-		for (unsigned int i = 0; i < mScene->mNumAnimations; i++) {
-			delete modelAnimation[i];
-		}
-		delete mScene;
+		// FBXƒV[ƒ“‰ğ•ú
+		aiReleaseImport(mScene);
+
 	}
 }
 
@@ -51,13 +50,9 @@ void FbxAnimation::Load(const std::string& failPath)
 		assert(0);
 	}
 
-	for (unsigned int i = 0; i < mScene->mNumAnimations; i++) {
-		modelAnimation[i] = mScene->mAnimations[i];
-	}
-
 }
 
 aiAnimation* FbxAnimation::GetAnimation(int AnimationNumber)
 {
-	return modelAnimation[AnimationNumber];
+	return mScene->mAnimations[AnimationNumber];
 }
