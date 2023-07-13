@@ -61,10 +61,12 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-
+	CheckReticle();
 	ImGui::Begin("Phase");
 
 	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
+
+	ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
 
 	ImGui::End();
 
@@ -115,7 +117,6 @@ void GameScene::Update() {
 		ParticleMan->Add(Pos, Verocty, MaxFream);
 	}
 
-
 	ParticleMan->Update();
 
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
@@ -162,6 +163,28 @@ void GameScene::PostEffectDraw()
 	PostEffect::PostDrawScene();
 }
 
+bool GameScene::CheckReticle()
+{
+	Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
+
+	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+
+	return false;
+}
+
 void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -187,9 +210,9 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	//player_->Draw(*viewProjection_.get());
+	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
-	//tutorialEnemy->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

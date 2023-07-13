@@ -54,6 +54,8 @@ public: // メンバ関数
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
 
+	bool CheckReticle();
+
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -98,4 +100,6 @@ private: // メンバ変数
 
 	std::unique_ptr<TutorialEnemy> tutorialEnemy;
 	std::unique_ptr<LoadLevelEditor> levelData;
+
+	Vector3 EnemyPos;
 };
