@@ -35,17 +35,20 @@ private:
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 
-public://GetterSetter
+public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
-
-public:
+	void SetCameraDistance(const Vector3& cameradis) { Distance = cameradis; }
+public://Getter
+	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
+	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }
 
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
 	WorldTransform playerWorldTransForBullet;
+	WorldTransform DebugWorldTrans;
 	std::unique_ptr<PlayerBullet> playerBullet;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
@@ -66,6 +69,8 @@ private://別クラスから値をもらう
 	Vector2 cameraRot;
 
 private://プレイヤークラス変数
+	bool isPlayerSetUp = false;
+
 	uint32_t bulletNumber = 0;
 
 	float playerSpeed = 0.5f;
@@ -73,5 +78,6 @@ private://プレイヤークラス変数
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 ReticlePos;
-
+	Vector3 Distance;
+	Vector3 DistanceNolm;
 };

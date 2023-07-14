@@ -74,14 +74,14 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	target = playerPos_ + cameraHigh;
 
 	//ワールド前方ベクトル
-	Vector3 forward(0, 0, playerCameraDistance);
+	Vector3 forward(0, 0, cameraDistance_);
 	//レールカメラの回転を反映
 	forward = MyMath::MatVector(CameraRot, forward);
 
 	forward.normalize();
 
 	//target = pos;
-	vTargetEye = target + (forward * cameraDis);
+	vTargetEye = target + (forward * cameraDistance_);
 
 	cameraPos = vTargetEye;
 
@@ -92,7 +92,7 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	cameraPos += viewProjection->eye;
 	Vector3 player_camera = cameraPos - target;
 	player_camera.normalize();
-	cameraPos = target + (player_camera * cameraDis);
+	cameraPos = target + (player_camera * cameraDistance_);
 
 }
 
@@ -275,14 +275,14 @@ void GameCamera::PlaySceneCamera() {
 	target = playerPos_ + cameraHigh;
 
 	//ワールド前方ベクトル
-	Vector3 forward(0, 0, playerCameraDistance);
+	Vector3 forward(0, 0, cameraDistance_);
 	//レールカメラの回転を反映
 	forward = MyMath::MatVector(CameraRot, forward);
 
 	forward.normalize();
 
 	//target = pos;
-	vTargetEye = target + (forward * cameraDis);
+	vTargetEye = target + (forward * cameraDistance_);
 
 	CameraAngle(vTargetEye.z - target.z, vTargetEye.x - target.x);
 
@@ -349,6 +349,14 @@ void GameCamera::MultiplyMatrix(Matrix4& matrix) {
 	// ベクトルを回転
 	vTargetEye = MyMath::MatVector(matRot, vTargetEye);
 
+}
+
+Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
+{
+	Vector3 eyeToTargetVec = target - vTargetEye;
+	eyeToTargetVec.normalize();
+
+	return eyeToTargetVec * distance + vTargetEye;
 }
 
 

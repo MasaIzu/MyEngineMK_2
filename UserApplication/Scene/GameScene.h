@@ -81,6 +81,8 @@ private: // メンバ変数
 	float angle = 45.0f;
 	float angle2 = 135.0f;
 
+	float cameraSraide = 0.0f;
+
 	std::unique_ptr<ParticleManager> ParticleMan;
 
 	//当たり判定
@@ -100,6 +102,10 @@ private: // メンバ変数
 
 	std::unique_ptr<TutorialEnemy> tutorialEnemy;
 	std::unique_ptr<LoadLevelEditor> levelData;
+
+	float dist;
+	float radius;
+	Vector2 tmp;
 
 	Vector3 EnemyPos;
 };

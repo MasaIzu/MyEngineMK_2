@@ -64,6 +64,10 @@ void GameScene::Update() {
 	CheckReticle();
 	ImGui::Begin("Phase");
 
+	ImGui::Text("dist:%f", dist);
+	ImGui::Text("radius:%f", radius);
+	ImGui::Text("tmp:%f,%f", tmp.x, tmp.y);
+
 	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
 	ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
@@ -120,9 +124,18 @@ void GameScene::Update() {
 	ParticleMan->Update();
 
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
+	player_->SetCameraDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
 	player_->Update();
 
-	gameCamera->SetCameraPosition(player_->GetPlayerPos());
+	if (player_->GetIsPlayerSetUp() == false) {
+		gameCamera->SetCameraPosition(player_->GetPlayerPos());
+	}
+	else {
+		if (cameraSraide < 4) {
+			cameraSraide += 1.0f;
+		}
+		gameCamera->SetCameraPosition(player_->GetPlayerPos() + player_->GetPlayerLook().lookRight * cameraSraide);
+	}
 	gameCamera->Update();
 
 	tutorialEnemy->Update(player_->GetPlayerPos());
@@ -182,6 +195,17 @@ bool GameScene::CheckReticle()
 	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 	this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
 
+	tmp = Vector2(this->EnemyPos.x, this->EnemyPos.y) - Vector2(640, 360);
+	dist = tmp.dot(tmp);
+	radius = 8.0f;
+	radius *= radius;
+	if (dist <= radius) {
+		int a = 0;
+	}
+	else {
+		
+	}
+
 	return false;
 }
 
@@ -195,7 +219,6 @@ void GameScene::Draw() {
 	// 深度バッファクリア
 	dxCommon_->ClearDepthBuffer();
 
-	player_->DrawSprite(*viewProjection_.get());
 
 #pragma endregion
 
@@ -217,6 +240,7 @@ void GameScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
+	player_->DrawSprite(*viewProjection_.get());
 
 	//ParticleMan->CSUpdate(commandList);
 	//ParticleManager::PreDraw(commandList);

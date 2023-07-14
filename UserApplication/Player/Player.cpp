@@ -27,7 +27,9 @@ void Player::Initialize()
 	playerBullet = std::make_unique<PlayerBullet>();
 	playerBullet->Initialize();
 
-	AttackSprite = Sprite::Create(TextureManager::Load("shojun.png"));
+	DebugWorldTrans.Initialize();
+
+	AttackSprite = Sprite::Create(TextureManager::Load("shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
 }
 
@@ -44,17 +46,29 @@ void Player::Update()
 	WorldTransUpdate();
 
 	if (input_->MouseInputTrigger(0)) {
-		//bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		isPlayerSetUp = true;
+		PlayerAttack();
 	}
 	if (input_->MouseInputing(0)) {
-		PlayerAttack();
+		
 		//playerBullet->BulletControl(bulletNumber, playerWorldTransForBullet.LookVelocity.look);
 	}
 	if (input_->MouseInputTrigger(1)) {
-		playerBullet->MakeExpandingStunBullet();
+		
 	}
 
-	playerBullet->UpdateWhileExpanding(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+
+	ImGui::Begin("Player");
+
+	ImGui::Text("Distance:%f,%f,%f", Distance.x, Distance.y, Distance.z);
+
+	ImGui::End();
+
+
+	DebugWorldTrans.translation_ = Distance;
+	DebugWorldTrans.TransferMatrix();
+
+	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerBullet->Update();
 }
 
@@ -62,11 +76,12 @@ void Player::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(playerWorldTrans, viewProjection_);
 	playerBullet->Draw(viewProjection_);
+	model_->Draw(DebugWorldTrans, viewProjection_);
 }
 
 void Player::DrawSprite(ViewProjection& viewProjection_)
 {
-	//AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1));
+	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
@@ -142,7 +157,9 @@ void Player::PlayerAttack()
 	switch (AttackPhase_)
 	{
 	case Player::AttackPhase::AttackCombo1:
-		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), playerWorldTransForBullet.LookVelocity.look);
+		DistanceNolm = Distance - GetPlayerPos();
+		DistanceNolm.normalize();
+		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), DistanceNolm);
 		break;
 	case Player::AttackPhase::AttackCombo2:
 
