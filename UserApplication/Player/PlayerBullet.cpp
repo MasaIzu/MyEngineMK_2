@@ -132,7 +132,7 @@ void PlayerBullet::BulletUpdate()
 	WorldTransUpdate();
 }
 
-uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec)
+uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& Distance)
 {
 	if (BulletCoolTime <= 0) {
 		for (uint32_t i = 0; i < AllBulletCount; i++) {
@@ -142,6 +142,7 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 				BulletVector[i] = BulletVec;
 				BulletLifeTime[i] = MaxBulletLifeTime;
 				BulletRadius[i] = 0.4f;
+				playerBulletSpeed = Distance / static_cast<float>(MaxBulletLifeTime);
 				playerBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
 				return i;

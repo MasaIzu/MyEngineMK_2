@@ -123,7 +123,7 @@ private: // 静的メンバ変数
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertPaticleStatus;
 	// 頂点バッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vbView;
+	D3D12_VERTEX_BUFFER_VIEW vbView = {};
 	// アップロードバッファの作成
 	ComPtr<ID3D12Resource> uploadBuffer;
 	ComPtr<ID3D12Resource> m_cacheVertexBuffer;

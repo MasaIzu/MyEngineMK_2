@@ -158,8 +158,9 @@ void Player::PlayerAttack()
 	{
 	case Player::AttackPhase::AttackCombo1:
 		DistanceNolm = Distance - GetPlayerPos();
+		PlayerToCameraDistance = DistanceNolm.length();
 		DistanceNolm.normalize();
-		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), DistanceNolm);
+		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), DistanceNolm, PlayerToCameraDistance);
 		break;
 	case Player::AttackPhase::AttackCombo2:
 

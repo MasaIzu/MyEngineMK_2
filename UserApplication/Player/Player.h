@@ -73,8 +73,9 @@ private://プレイヤークラス変数
 
 	uint32_t bulletNumber = 0;
 
-	float playerSpeed = 0.5f;
-	float diagonalPlayerSpeed = 0.6f;
+	float playerSpeed = 0.3f;
+	float diagonalPlayerSpeed = 0.4f;
+	float PlayerToCameraDistance = 0.0f;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 ReticlePos;

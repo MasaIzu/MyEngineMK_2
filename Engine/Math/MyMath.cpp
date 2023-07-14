@@ -636,6 +636,13 @@ float MyMath::Get2VecAngle(const Vector3& vec1, const Vector3& vec2)
 	return angle;
 }
 
+float MyMath::Distance2Vec2(const Vector2& vec1, const Vector2& vec2)
+{
+	float x = (vec2.x - vec1.x) * (vec2.x - vec1.x);
+	float y = (vec2.y - vec1.y) * (vec2.y - vec1.y);
+	return sqrtf(x + y);
+}
+
 uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;

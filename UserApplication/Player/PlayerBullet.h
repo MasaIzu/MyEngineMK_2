@@ -26,7 +26,7 @@ public://基本関数
 
 public:
 	//打ち出す球を作る
-	uint32_t MakePlayerBullet(const Vector3& MakeBulletPos,const Vector3& BulletVec);
+	uint32_t MakePlayerBullet(const Vector3& MakeBulletPos,const Vector3& BulletVec,const float& Distance);
 	//弾のコントロール
 	void BulletControl(const uint32_t& BulletNum, const Vector3& BulletVec);
 	//長押しで曲げれるように
@@ -76,7 +76,7 @@ private://プレイヤークラス変数
 
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 60;
+	uint32_t MaxBulletLifeTime = 40;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;

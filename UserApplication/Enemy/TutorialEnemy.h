@@ -18,50 +18,52 @@ public://基本関数
 
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
-	//プレイヤーの弾が当たった時の処理
-	void PlayerBulletHit();
+	//動きについての関数
+	void PlayerBulletHit();//プレイヤーの弾が当たった時の処理
+	void PlayerNotSpottedMove();//敵を見つけてない時の動き
+	void PlayerSpottedMove();//敵を見つけた時の動き
+	void Attack();
 
-	//敵を見つけた時の動きと見つけてない時の動き
-	void PlayerNotFoundMove();
-	void PlayerFoundMove();
-	//上の関数のタイマー
-	void PlayerNotFoundMoveTimer();
-	void PlayerFoundMoveTimer();
-	//プレイヤーのサーチ関数
-	void SearchingPlayer();
-	//角度をとる
-	void GetPlayerForEnemyAngle();
-	//攻撃できる範囲かどうか
-	bool GetIsAttackArea();
-	//プレーヤーの移動の値更新
-	void WorldTransUpdate();
-	//ランダム
-	uint32_t Random(const uint32_t& low, const uint32_t& high);
+	//敵の行動についての関数タイマー
+	void PlayerNotSpottedMoveTimer();//敵を見つけてない時
+	void PlayerSpottedMoveTimer();//敵を見つけた時
+
+	//雑務系関数
+	bool GetIsAttackArea();//攻撃できる範囲かどうか
+	void SearchingPlayer();//プレイヤーのサーチ関数
+	void GetPlayerForEnemyAngle();//角度をとる
+	void WorldTransUpdate();//プレーヤーの移動の値更新
+	uint32_t Random(const uint32_t& low, const uint32_t& high);//ランダム
+
+private://const関連
+	static const uint32_t AttackSphereCount = 3;
 
 private://クラス変数
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform enemyWorldTrans;
+	WorldTransform AttackWorldTrans[AttackSphereCount];
 	WorldTransform DebugWorldTrans;
 
 	//当たり判定
 	BaseCollider* TutorialEnemyCollider = nullptr;
+	BaseCollider* TutorialEnemyAttackSpereCollider[AttackSphereCount];
 	CollisionManager* collisionManager = nullptr;
 
 private://イーナム
-	enum class NotFoundPhase {
+	enum class NotSpottedPhase {
 		Walk,//歩く
 		Stop,//止まる
 		Interruption,//中断
 		ForcedWalking,//強制歩き
-		FoundPlayer,//プレイヤーを見つけた
+		SpottedPlayer,//プレイヤーを見つけた
 		Nothing,//何もしない
 	};
 	//見つけてないときの動きフェーズ
-	NotFoundPhase NotFoundPhase_ = NotFoundPhase::Walk;
+	NotSpottedPhase NotSpottedPhase_ = NotSpottedPhase::Walk;
 
-	enum class FoundPhase {
+	enum class SpottedPhase {
 		Intimidation,//威嚇
 		Walk,//歩く
 		Stop,//止まる
@@ -72,40 +74,57 @@ private://イーナム
 		Nothing,//何もしない
 	};
 	//見つけた時の動きフェーズ
-	FoundPhase FoundPhase_ = FoundPhase::Nothing;
+	SpottedPhase SpottedPhase_ = SpottedPhase::Nothing;
+
+	enum class AttackPhase {
+		NormalAttack,//普通の攻撃
+		RunAttack,//走って攻撃
+		Nothing,//何もしない
+	};
+	//見つけた時の動きフェーズ
+	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 
 private://外から持ってきたものの格納
 	Vector3 playerPos;
 
 private:
-	bool isPlayerFound = false;
-	bool isAlive = false;
-	bool isAttack = false;
+	bool IsPlayerSpotted = false;
+	bool IsAlive = false;
+	bool IsAttack = false;
+	bool IsEnemyHasADestination = false;
+	bool IsNeverSpotted = true;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
 	uint32_t AttackWalkTime = 0;
 	uint32_t AttackStopTime = 0;
 	uint32_t TurnTimes = 60;
+	uint32_t RunAttackTime = 60;
+	uint32_t AttackDelayTime = 0;
+	uint32_t MaxAttackDelayTime = 60;
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
 	float SearchingAreaRadius = 25.0f;
-	float FoundLookingPlayerRadius = 60.0f;
-	float EnemySpeed = 0.12f;
-	float FoundEnemySpeed = 0.2f;
-	float Rot = 0.0f;
-	float dist = 0.0f;
-	float radius = 0.0f;
+	float SpottedLookingPlayerRadius = 60.0f;
+	float EnemySpeed = 0.09f;
+	float SpottedEnemySpeed = 0.1f;
 	float EnemyRadius = 1.0f;
 	float EnemyToPlayerAngle = 0;
 	float BackAngle = 180.0f;
 	float HowAboutFarAway = 0.0f;
-	
+	float RunAttackSpeed = 0.4f;
+	float LittleFar = 5.0f;
+	float Distance = 0.0f;
+	//判定をするよう
+	float Rot = 0.0f;
+	float dist = 0.0f;
+	float radius = 0.0f;
+
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;
 	Vector3 tmp;
 	Vector3 EnemyToPlayerVec;
 	Vector3 BackBonePos;
-
+	Vector3 DestinationPos;
 };

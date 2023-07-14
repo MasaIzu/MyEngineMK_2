@@ -66,7 +66,9 @@ namespace MyMath {
 	void MatrixText(Matrix4& mat);
 
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
+	float Distance2Vec2(const Vector2& vec1, const Vector2& vec2);
 
+	//ƒ‰ƒ“ƒ_ƒ€ŠÖŒW
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
 	Vector3 RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high);

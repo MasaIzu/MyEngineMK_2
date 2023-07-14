@@ -8,6 +8,9 @@
 TutorialEnemy::TutorialEnemy(const Vector3& BonePos_)
 {
 	BonePos = BonePos_;
+	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		TutorialEnemyAttackSpereCollider[i] = nullptr;
+	}
 }
 
 TutorialEnemy::~TutorialEnemy()
@@ -35,6 +38,13 @@ void TutorialEnemy::Initialize()
 	CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider);
 	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 
+	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		AttackWorldTrans[i].Initialize();
+		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		CollisionManager::GetInstance()->AddCollider(TutorialEnemyAttackSpereCollider[i]);
+		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
+	}
+
 	collisionManager = CollisionManager::GetInstance();
 
 }
@@ -43,16 +53,16 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 {
 	playerPos = PlayerPos;
 
-	if (isAlive == false) {
-		isAlive = true;
+	if (IsAlive == false) {
+		IsAlive = true;
 		enemyWorldTrans.translation_ = BonePos;
 	}
 
-	if (isPlayerFound) {
-		PlayerFoundMove();
+	if (IsPlayerSpotted) {
+		PlayerSpottedMove();
 	}
 	else {
-		PlayerNotFoundMove();
+		PlayerNotSpottedMove();
 	}
 
 
@@ -60,15 +70,17 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 
 	ImGui::Begin("NotFoundPhase");
 
-	if (NotFoundPhase_ == NotFoundPhase::Walk) {
+	if (NotSpottedPhase_ == NotSpottedPhase::Walk) {
 		ImGui::Text("Walk");
 	}
-	else if (NotFoundPhase_ == NotFoundPhase::Stop) {
+	else if (NotSpottedPhase_ == NotSpottedPhase::Stop) {
 		ImGui::Text("Stop");
 	}
 
 	ImGui::Text("WalkTime:%d", WalkTime);
 	ImGui::Text("StopTime:%d", StopTime);
+	ImGui::Text("RunAttackTime:%d", RunAttackTime);
+
 
 	ImGui::Text("BackAngle:%f", BackAngle);
 	ImGui::Text("radius:%f", radius);
@@ -83,6 +95,10 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 
 	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
 	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		TutorialEnemyAttackSpereCollider[i]->Update(AttackWorldTrans[i].matWorld_);
+		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
+	}
 
 	if (collisionManager->GetIsAttackHit()) {
 		PlayerBulletHit();
@@ -100,16 +116,16 @@ void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 
 void TutorialEnemy::PlayerBulletHit()
 {
-	isAlive = false;
+	IsAlive = false;
 }
 
-void TutorialEnemy::PlayerNotFoundMove()
+void TutorialEnemy::PlayerNotSpottedMove()
 {
-	PlayerNotFoundMoveTimer();
+	PlayerNotSpottedMoveTimer();
 
-	switch (NotFoundPhase_)
+	switch (NotSpottedPhase_)
 	{
-	case TutorialEnemy::NotFoundPhase::Walk:
+	case TutorialEnemy::NotSpottedPhase::Walk:
 
 		if (WalkTime > 0) {
 			enemyWorldTrans.translation_ += enemyWorldTrans.LookVelocity.look * EnemySpeed;
@@ -122,36 +138,36 @@ void TutorialEnemy::PlayerNotFoundMove()
 
 			if (dist >= radius) {
 				StopTime = Random(150, 240);
-				NotFoundPhase_ = NotFoundPhase::Interruption;
+				NotSpottedPhase_ = NotSpottedPhase::Interruption;
 			}
 
 			enemyWorldTrans.translation_ += enemyMoveMent;
 		}
 		else {
 			StopTime = Random(150, 240);
-			NotFoundPhase_ = NotFoundPhase::Stop;
+			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
 		break;
-	case TutorialEnemy::NotFoundPhase::Stop:
+	case TutorialEnemy::NotSpottedPhase::Stop:
 
 		if (StopTime <= 0) {
 			WalkTime = Random(60, 120);
 			Rot = static_cast<float>(Random(0, 360));
 			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
-			NotFoundPhase_ = NotFoundPhase::Walk;
+			NotSpottedPhase_ = NotSpottedPhase::Walk;
 		}
 
 		break;
-	case TutorialEnemy::NotFoundPhase::Interruption:
+	case TutorialEnemy::NotSpottedPhase::Interruption:
 
 		if (StopTime <= 0) {
 			WalkTime = Random(80, 140);
-			NotFoundPhase_ = NotFoundPhase::ForcedWalking;
+			NotSpottedPhase_ = NotSpottedPhase::ForcedWalking;
 		}
 
 		break;
-	case TutorialEnemy::NotFoundPhase::ForcedWalking:
+	case TutorialEnemy::NotSpottedPhase::ForcedWalking:
 
 		if (WalkTime > 0) {
 			BackBonePos = BonePos - enemyWorldTrans.translation_;
@@ -160,16 +176,16 @@ void TutorialEnemy::PlayerNotFoundMove()
 		}
 		else {
 			StopTime = Random(150, 240);
-			NotFoundPhase_ = NotFoundPhase::Stop;
+			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
 		break;
-	case TutorialEnemy::NotFoundPhase::FoundPlayer:
-		isPlayerFound = true;
-		NotFoundPhase_ = NotFoundPhase::Walk;
-		FoundPhase_ = FoundPhase::Turn;
+	case TutorialEnemy::NotSpottedPhase::SpottedPlayer:
+		IsPlayerSpotted = true;
+		NotSpottedPhase_ = NotSpottedPhase::Walk;
+		SpottedPhase_ = SpottedPhase::Turn;
 		break;
-	case TutorialEnemy::NotFoundPhase::Nothing:
+	case TutorialEnemy::NotSpottedPhase::Nothing:
 		//何もしない
 
 		break;
@@ -179,68 +195,74 @@ void TutorialEnemy::PlayerNotFoundMove()
 	SearchingPlayer();
 }
 
-void TutorialEnemy::PlayerFoundMove()
+void TutorialEnemy::PlayerSpottedMove()
 {
-	PlayerFoundMoveTimer();
 	GetPlayerForEnemyAngle();
+	PlayerSpottedMoveTimer();
 	SearchingPlayer();
-	switch (FoundPhase_)
+	switch (SpottedPhase_)
 	{
-	case TutorialEnemy::FoundPhase::Intimidation:
+	case TutorialEnemy::SpottedPhase::Intimidation:
 		Rot = EnemyToPlayerAngle;
 		if (AttackStopTime > 0) {
 
 		}
 		else {
 			if (GetIsAttackArea()) {
-				FoundPhase_ = FoundPhase::Attack;
+				SpottedPhase_ = SpottedPhase::Attack;
 			}
 			else {
-				FoundPhase_ = FoundPhase::Walk;
+				SpottedPhase_ = SpottedPhase::Walk;
 			}
 		}
 
 		break;
-	case TutorialEnemy::FoundPhase::Walk:
+	case TutorialEnemy::SpottedPhase::Walk:
+		if (IsNeverSpotted == true) {
+			SpottedPhase_ = SpottedPhase::Attack;
+			AttackPhase_ = AttackPhase::RunAttack;
+			IsNeverSpotted = false;
+		}
 		Rot = EnemyToPlayerAngle;
 		if (GetIsAttackArea()) {
-			FoundPhase_ = FoundPhase::Attack;
+			SpottedPhase_ = SpottedPhase::Attack;
+			AttackPhase_ = AttackPhase::NormalAttack;
 		}
 		else {
 			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
 			EnemyToPlayerVec.normalize();
-			enemyWorldTrans.translation_ += EnemyToPlayerVec * FoundEnemySpeed;
+			enemyWorldTrans.translation_ += EnemyToPlayerVec * SpottedEnemySpeed;
 		}
 		break;
-	case TutorialEnemy::FoundPhase::Stop:
+	case TutorialEnemy::SpottedPhase::Stop:
 
 
 		break;
-	case TutorialEnemy::FoundPhase::Attack:
-		isAttack = true;
-
-		FoundPhase_ = FoundPhase::Walk;
-
-		break;
-	case TutorialEnemy::FoundPhase::Wait:
-
+	case TutorialEnemy::SpottedPhase::Attack:
+		IsAttack = true;
+		Attack();
 
 		break;
-	case TutorialEnemy::FoundPhase::LoseSightofPlayer:
-		isPlayerFound = false;
+	case TutorialEnemy::SpottedPhase::Wait:
+
+
+		break;
+	case TutorialEnemy::SpottedPhase::LoseSightofPlayer:
+		IsPlayerSpotted = false;
 		BackBonePos = BonePos - enemyWorldTrans.translation_;
 		HowAboutFarAway = BackBonePos.length();
 		WalkTime = static_cast<uint32_t>(HowAboutFarAway / EnemySpeed);
 
-		NotFoundPhase_ = NotFoundPhase::ForcedWalking;
+		IsNeverSpotted = true;
+		NotSpottedPhase_ = NotSpottedPhase::ForcedWalking;
 		break;
-	case TutorialEnemy::FoundPhase::Turn:
+	case TutorialEnemy::SpottedPhase::Turn:
 
 		Rot = EnemyToPlayerAngle;
 		AttackStopTime = Random(10, 20);
-		FoundPhase_ = FoundPhase::Intimidation;
+		SpottedPhase_ = SpottedPhase::Intimidation;
 		break;
-	case TutorialEnemy::FoundPhase::Nothing:
+	case TutorialEnemy::SpottedPhase::Nothing:
 
 
 		break;
@@ -250,7 +272,43 @@ void TutorialEnemy::PlayerFoundMove()
 	enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
 }
 
-void TutorialEnemy::PlayerNotFoundMoveTimer()
+void TutorialEnemy::Attack()
+{
+	switch (AttackPhase_)
+	{
+	case TutorialEnemy::AttackPhase::NormalAttack:
+
+		break;
+	case TutorialEnemy::AttackPhase::RunAttack:
+		if (IsEnemyHasADestination == false) {
+			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
+			Distance = EnemyToPlayerVec.length();
+			Distance += LittleFar;
+			EnemyToPlayerVec.normalize();
+			DestinationPos = EnemyToPlayerVec * Distance;
+			RunAttackTime = static_cast<uint32_t>(Distance / RunAttackSpeed);
+			IsEnemyHasADestination = true;
+		}
+		else {
+			if (RunAttackTime > 0) {
+				enemyWorldTrans.translation_ += EnemyToPlayerVec * RunAttackSpeed;
+			}
+			else {
+				IsEnemyHasADestination = false;
+				AttackDelayTime = MaxAttackDelayTime;
+				AttackPhase_ = AttackPhase::Nothing;
+				SpottedPhase_ = SpottedPhase::Walk;
+			}
+		}
+		break;
+	case TutorialEnemy::AttackPhase::Nothing:
+		break;
+	default:
+		break;
+	}
+}
+
+void TutorialEnemy::PlayerNotSpottedMoveTimer()
 {
 	if (WalkTime > 0) {
 		WalkTime--;
@@ -260,7 +318,7 @@ void TutorialEnemy::PlayerNotFoundMoveTimer()
 	}
 }
 
-void TutorialEnemy::PlayerFoundMoveTimer()
+void TutorialEnemy::PlayerSpottedMoveTimer()
 {
 	if (AttackWalkTime > 0) {
 		AttackWalkTime--;
@@ -268,11 +326,17 @@ void TutorialEnemy::PlayerFoundMoveTimer()
 	if (AttackStopTime > 0) {
 		AttackStopTime--;
 	}
+	if (RunAttackTime > 0) {
+		RunAttackTime--;
+	}
+	if (AttackDelayTime > 0) {
+		AttackDelayTime--;
+	}
 }
 
 void TutorialEnemy::SearchingPlayer()
 {
-	if (isPlayerFound == false) {
+	if (IsPlayerSpotted == false) {
 		//円を作ってプレイヤーがいたらフェーズ変えに移行
 		tmp = enemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
@@ -280,20 +344,20 @@ void TutorialEnemy::SearchingPlayer()
 		radius *= radius;
 		GetPlayerForEnemyAngle();
 		if (dist <= radius) {
-			NotFoundPhase_ = NotFoundPhase::FoundPlayer;
+			NotSpottedPhase_ = NotSpottedPhase::SpottedPlayer;
 		}
 	}
 	else {
 		//円を作ってプレイヤーがいたらフェーズ変えに移行
 		tmp = enemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
-		radius = FoundLookingPlayerRadius;
+		radius = SpottedLookingPlayerRadius;
 		radius *= radius;
 		if (dist <= radius) {
 			
 		}
 		else {
-			FoundPhase_ = FoundPhase::LoseSightofPlayer;
+			SpottedPhase_ = SpottedPhase::LoseSightofPlayer;
 		}
 	}
 }

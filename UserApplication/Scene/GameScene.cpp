@@ -131,8 +131,11 @@ void GameScene::Update() {
 		gameCamera->SetCameraPosition(player_->GetPlayerPos());
 	}
 	else {
-		if (cameraSraide < 4) {
-			cameraSraide += 1.0f;
+		if (cameraSraide < 2) {
+			cameraSraide += 0.6f;
+		}
+		else {
+			cameraSraide = 2;
 		}
 		gameCamera->SetCameraPosition(player_->GetPlayerPos() + player_->GetPlayerLook().lookRight * cameraSraide);
 	}
@@ -195,10 +198,8 @@ bool GameScene::CheckReticle()
 	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 	this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
 
-	tmp = Vector2(this->EnemyPos.x, this->EnemyPos.y) - Vector2(640, 360);
-	dist = tmp.dot(tmp);
+	dist = MyMath::Distance2Vec2(Vector2(this->EnemyPos.x, this->EnemyPos.y),Vector2(640, 360));
 	radius = 8.0f;
-	radius *= radius;
 	if (dist <= radius) {
 		int a = 0;
 	}
