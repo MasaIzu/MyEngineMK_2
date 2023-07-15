@@ -52,6 +52,25 @@ void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& e
 	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
 }
 
+void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p3, Vector3& end, float& time)
+{
+	std::vector<Vector3> points{ Start, Start, p1, p2, p3, end, end };
+	this->points = points;
+
+	timeRate_ += time;
+	if (timeRate_ >= MaxTime) {
+		if (startIndex < points.size() - 3) {
+			startIndex += 1;
+			timeRate_ -= MaxTime;
+		}
+		else {
+			timeRate_ = MaxTime;
+			isFinishSpline = true;
+		}
+	}
+	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
+}
+
 void SplinePosition::Update(const std::vector<Vector3>& points, float& time)
 {
 	timeRate_ += time;

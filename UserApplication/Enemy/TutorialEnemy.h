@@ -54,7 +54,7 @@ private://クラス変数
 	CollisionManager* collisionManager = nullptr;
 
 	//スプライン曲線
-	std::unique_ptr<SplinePosition> splinePosition;
+	std::unique_ptr<SplinePosition> splinePosition[AttackSphereCount];
 
 private://イーナム
 	enum class NotSpottedPhase {
@@ -138,6 +138,7 @@ private:
 	Vector3 start = { 0.0f, 0.0f, 0.0f };	//スタート地点
 	Vector3 p1 = { 0.0f, 0.0f, 0.0f };		//制御点その1
 	Vector3 p2 = { 0.0f, 0.0f, 0.0f };		//制御点その2
+	Vector3 p3 = { 0.0f, 0.0f, 0.0f };		//制御点その3
 	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ゴール地点
 	//std::vector<Vector3> points{ start, start, p1, p2, end, end };見本
 

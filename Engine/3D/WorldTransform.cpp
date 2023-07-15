@@ -58,6 +58,12 @@ void WorldTransform::TransferMatrix() {
 	matWorld_ *= matRot;//ワールド行列に回転を反映
 	matWorld_ *= matTrans;//ワールド行列に平行移動を反映
 
+	//親オブジェクトがあれば
+	if (parent_) {
+		//親オブジェクトのワールド行列を掛ける
+		matWorld_ *= parent_->matWorld_;
+	}
+
 	if (IsLookOnlyMatRot == false) {
 		LookVelocity.look = GetLook(matRot, Vector3(0, 0, 1));
 		LookVelocity.lookBack = GetLook(matRot, Vector3(0, 0, -1));
@@ -93,11 +99,6 @@ void WorldTransform::TransferMatrix() {
 		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
 	}
 
-	//親オブジェクトがあれば
-	if (parent_) {
-		//親オブジェクトのワールド行列を掛ける
-		matWorld_ *= parent_->matWorld_;
-	}
 	//定数バッファへのデータ転送
 	constMap->matWorld = matWorld_;
 

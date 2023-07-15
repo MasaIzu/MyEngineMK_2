@@ -40,6 +40,12 @@ public://基本関数
 	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end, float& time);
 
 	/// <summary>
+	/// スプライン曲線アップデート5つ打ち込むVer(5個までなら手打ちでいける)
+	/// </summary>
+	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
+	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p3, Vector3& end, float& time);
+
+	/// <summary>
 	/// スプライン曲線アップデートpointsもアプデVer
 	/// </summary>
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
@@ -54,7 +60,7 @@ public://基本関数
 	/// 細かくリセットを決められるVer
 	/// </summary>
 	/// <param name="ResetIndex">Indexはスタートに戻したい場合は1にする(0は無理)</param>
-	/// <param name="time"></param>
+	/// <param name="time">MaxTime=1でtimeが0.5なら半分から始まる</param>
 	void Reset(const size_t& ResetIndex, float& time);
 
 private://プライベート関数

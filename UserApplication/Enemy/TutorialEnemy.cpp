@@ -39,6 +39,7 @@ void TutorialEnemy::Initialize()
 	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		splinePosition[i] = std::make_unique<SplinePosition>();
 		AttackWorldTrans[i].Initialize();
 		if (i != 0) {
 			AttackWorldTrans[i].translation_ = AttackWorldTrans[i - 1].LookVelocity.lookUp;
@@ -51,7 +52,6 @@ void TutorialEnemy::Initialize()
 
 	collisionManager = CollisionManager::GetInstance();
 
-	splinePosition = std::make_unique<SplinePosition>();
 
 }
 
@@ -72,7 +72,7 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	}
 
 	if (input_->TriggerKey(DIK_P)) {
-		splinePosition->Reset();
+		splinePosition[0]->Reset();
 	}
 
 
@@ -105,7 +105,7 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		if (i != 0) {
-			AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
+			//AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
 		}
 		AttackWorldTrans[i].TransferMatrix();
 		TutorialEnemyAttackSpereCollider[i]->Update(AttackWorldTrans[i].matWorld_);
@@ -289,6 +289,9 @@ void TutorialEnemy::PlayerSpottedMove()
 		break;
 	}
 	enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		AttackWorldTrans[i].SetRot({ 0,MyMath::GetAngle(Rot),0 });
+	}
 }
 
 void TutorialEnemy::Attack()
@@ -297,15 +300,32 @@ void TutorialEnemy::Attack()
 	{
 	case TutorialEnemy::AttackPhase::NormalAttack:
 
+		//回転する手前のボール
 		start = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp;
 		p1 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp_look;
-		p2 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown_look;
+		p2 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.look;
+		p3 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown_look;
 		end = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown;
-		splinePosition->Update(start, p1, p2, end, NormalAttackSpeed);
-		AttackWorldTrans[0].translation_ = splinePosition->NowPos;
+		splinePosition[0]->Update(start, p1, p2, p3, end, NormalAttackSpeed);
+		AttackWorldTrans[0].translation_ = splinePosition[0]->NowPos;
 
-		if (splinePosition->GetFinishSpline()) {
-			splinePosition->Reset();
+		//ボールに追従するボール
+		for (uint32_t i = 0; i < AttackSphereCount; i++) {
+			if (i != 0) {
+				start = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp;
+				p1 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp_look;
+				p2 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.look;
+				p3 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookDown_look;
+				end = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookDown;
+				splinePosition[i]->Update(start, p1, p2, p3, end, NormalAttackSpeed);
+				AttackWorldTrans[i].translation_ = splinePosition[i]->NowPos;
+			}
+		}
+
+		if (splinePosition[0]->GetFinishSpline()) {
+			for (uint32_t i = 0; i < AttackSphereCount; i++) {
+				splinePosition[i]->Reset();
+			}
 			AttackDelayTime = MaxAttackDelayTime;
 			AttackPhase_ = AttackPhase::Nothing;
 			SpottedPhase_ = SpottedPhase::Walk;
