@@ -35,6 +35,7 @@ private:
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 
+
 public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
 	void SetCameraDistance(const Vector3& cameradis) { Distance = cameradis; }
@@ -81,4 +82,5 @@ private://プレイヤークラス変数
 	Vector3 ReticlePos;
 	Vector3 Distance;
 	Vector3 DistanceNolm;
+
 };

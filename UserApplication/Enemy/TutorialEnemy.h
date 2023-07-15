@@ -5,6 +5,7 @@
 #include <Input.h>
 #include <BaseCollider.h>
 #include <CollisionManager.h>
+#include "SplinePosition.h"
 
 class TutorialEnemy {
 
@@ -32,8 +33,9 @@ private:
 	bool GetIsAttackArea();//攻撃できる範囲かどうか
 	void SearchingPlayer();//プレイヤーのサーチ関数
 	void GetPlayerForEnemyAngle();//角度をとる
-	void WorldTransUpdate();//プレーヤーの移動の値更新
+	void WorldTransUpdate();//Enemyだけの移動の値更新
 	uint32_t Random(const uint32_t& low, const uint32_t& high);//ランダム
+
 
 private://const関連
 	static const uint32_t AttackSphereCount = 3;
@@ -50,6 +52,9 @@ private://クラス変数
 	BaseCollider* TutorialEnemyCollider = nullptr;
 	BaseCollider* TutorialEnemyAttackSpereCollider[AttackSphereCount];
 	CollisionManager* collisionManager = nullptr;
+
+	//スプライン曲線
+	std::unique_ptr<SplinePosition> splinePosition;
 
 private://イーナム
 	enum class NotSpottedPhase {
@@ -101,7 +106,7 @@ private:
 	uint32_t TurnTimes = 60;
 	uint32_t RunAttackTime = 60;
 	uint32_t AttackDelayTime = 0;
-	uint32_t MaxAttackDelayTime = 60;
+	uint32_t MaxAttackDelayTime = 120;
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
@@ -120,6 +125,7 @@ private:
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
+	float NormalAttackSpeed = 0.01f;
 
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;
@@ -127,4 +133,12 @@ private:
 	Vector3 EnemyToPlayerVec;
 	Vector3 BackBonePos;
 	Vector3 DestinationPos;
+
+	//スプライン曲線に必要なメンバ変数
+	Vector3 start = { 0.0f, 0.0f, 0.0f };	//スタート地点
+	Vector3 p1 = { 0.0f, 0.0f, 0.0f };		//制御点その1
+	Vector3 p2 = { 0.0f, 0.0f, 0.0f };		//制御点その2
+	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ゴール地点
+	//std::vector<Vector3> points{ start, start, p1, p2, end, end };見本
+
 };

@@ -348,6 +348,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="Engine\3D\ParticleManager.h" />
     <ClInclude Include="Engine\LevelEditor\LoadLevelEditor.h" />
     <ClInclude Include="Engine\2D\MixPostEffect.h" />
+    <ClInclude Include="SplinePosition.h" />
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
     <ClInclude Include="UserApplication\Player\PlayerBullet.h" />
     <ClInclude Include="Engine\2D\PostEffect.h" />
@@ -412,6 +413,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     </ClCompile>
     <ClCompile Include="Engine\LevelEditor\LoadLevelEditor.cpp" />
     <ClCompile Include="Engine\2D\MixPostEffect.cpp" />
+    <ClCompile Include="SplinePosition.cpp" />
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
     <ClCompile Include="Engine\3D\ParticleManager.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerBullet.cpp" />

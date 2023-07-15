@@ -427,6 +427,9 @@
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
+    <ClInclude Include="SplinePosition.h">
+      <Filter>Engine\ヘッダー\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -593,6 +596,9 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SplinePosition.cpp">
+      <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

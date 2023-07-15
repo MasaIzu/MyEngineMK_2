@@ -31,6 +31,7 @@ void Player::Initialize()
 
 	AttackSprite = Sprite::Create(TextureManager::Load("shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
+
 }
 
 void Player::Update()
@@ -134,7 +135,6 @@ void Player::Move()
 		playerMoveMent = { 0.0f,0.0f,0.0f };
 		playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
 	}
-
 
 	playerWorldTrans.translation_ += playerMoveMent;
 

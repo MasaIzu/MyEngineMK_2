@@ -72,6 +72,8 @@ void WorldTransform::TransferMatrix() {
 		LookVelocity.lookBack_lookRight = GetLook(matRot, Vector3(0.5f, 0, -0.5f));
 		LookVelocity.lookBack_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, -0.5f));
 
+		LookVelocity.lookUp_look = GetLook(matRot, Vector3(0, 0.75f, 0.75f));
+		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
 	}
 	else {
 		LookVelocity.look = GetLook(worldLookMatRot, Vector3(0, 0, 1));
@@ -86,6 +88,9 @@ void WorldTransform::TransferMatrix() {
 		LookVelocity.look_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, 0.5f));
 		LookVelocity.lookBack_lookRight = GetLook(matRot, Vector3(0.5f, 0, -0.5f));
 		LookVelocity.lookBack_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, -0.5f));
+
+		LookVelocity.lookUp_look = GetLook(matRot, Vector3(0, 0.75f, 0.75f));
+		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
 	}
 
 	//親オブジェクトがあれば

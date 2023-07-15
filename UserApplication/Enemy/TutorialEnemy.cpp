@@ -21,7 +21,7 @@ void TutorialEnemy::Initialize()
 {
 
 	model_.reset(Model::CreateFromOBJ("sphereColor", true));
-	modelDebug_.reset(Model::CreateFromOBJ("sphereColor", true));
+	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	enemyWorldTrans.Initialize();
 	enemyWorldTrans.translation_ = BonePos;
 	WorldTransUpdate();
@@ -40,12 +40,18 @@ void TutorialEnemy::Initialize()
 
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		AttackWorldTrans[i].Initialize();
+		if (i != 0) {
+			AttackWorldTrans[i].translation_ = AttackWorldTrans[i - 1].LookVelocity.lookUp;
+		}
+		AttackWorldTrans[i].TransferMatrix();
 		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
 		CollisionManager::GetInstance()->AddCollider(TutorialEnemyAttackSpereCollider[i]);
 		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
 	}
 
 	collisionManager = CollisionManager::GetInstance();
+
+	splinePosition = std::make_unique<SplinePosition>();
 
 }
 
@@ -65,7 +71,9 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		PlayerNotSpottedMove();
 	}
 
-
+	if (input_->TriggerKey(DIK_P)) {
+		splinePosition->Reset();
+	}
 
 
 	ImGui::Begin("NotFoundPhase");
@@ -96,6 +104,10 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
 	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		if (i != 0) {
+			AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
+		}
+		AttackWorldTrans[i].TransferMatrix();
 		TutorialEnemyAttackSpereCollider[i]->Update(AttackWorldTrans[i].matWorld_);
 		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
 	}
@@ -111,7 +123,9 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(enemyWorldTrans, viewProjection_);
-	modelDebug_->Draw(DebugWorldTrans, viewProjection_);
+	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
+	}
 }
 
 void TutorialEnemy::PlayerBulletHit()
@@ -225,8 +239,13 @@ void TutorialEnemy::PlayerSpottedMove()
 		}
 		Rot = EnemyToPlayerAngle;
 		if (GetIsAttackArea()) {
-			SpottedPhase_ = SpottedPhase::Attack;
-			AttackPhase_ = AttackPhase::NormalAttack;
+			if (AttackDelayTime > 0) {
+
+			}
+			else {
+				SpottedPhase_ = SpottedPhase::Attack;
+				AttackPhase_ = AttackPhase::NormalAttack;
+			}
 		}
 		else {
 			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
@@ -277,6 +296,20 @@ void TutorialEnemy::Attack()
 	switch (AttackPhase_)
 	{
 	case TutorialEnemy::AttackPhase::NormalAttack:
+
+		start = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp;
+		p1 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp_look;
+		p2 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown_look;
+		end = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown;
+		splinePosition->Update(start, p1, p2, end, NormalAttackSpeed);
+		AttackWorldTrans[0].translation_ = splinePosition->NowPos;
+
+		if (splinePosition->GetFinishSpline()) {
+			splinePosition->Reset();
+			AttackDelayTime = MaxAttackDelayTime;
+			AttackPhase_ = AttackPhase::Nothing;
+			SpottedPhase_ = SpottedPhase::Walk;
+		}
 
 		break;
 	case TutorialEnemy::AttackPhase::RunAttack:
@@ -392,3 +425,4 @@ uint32_t TutorialEnemy::Random(const uint32_t& low, const uint32_t& high)
 	std::uniform_int_distribution<> dist(low, high);
 	return dist(gen);
 }
+
