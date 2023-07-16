@@ -427,8 +427,14 @@
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
-    <ClInclude Include="SplinePosition.h">
+    <ClInclude Include="Engine\Math\SplinePosition.h">
       <Filter>Engine\ヘッダー\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletShotEnemy.h">
+      <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -597,8 +603,14 @@
     <ClCompile Include="Engine\3D\FbxModel.cpp">
       <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="SplinePosition.cpp">
+    <ClCompile Include="Engine\Math\SplinePosition.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletShotEnemy.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,11 +7,11 @@
 #include <CollisionManager.h>
 #include "SplinePosition.h"
 
-class TutorialEnemy {
+class BulletShotEnemy {
 
 public://äÓñ{ä÷êî
-	TutorialEnemy(const Vector3& BonePos_);
-	~TutorialEnemy();
+	BulletShotEnemy(const Vector3& BonePos_);
+	~BulletShotEnemy();
 
 	void Initialize();
 	void Update(const Vector3& PlayerPos);

@@ -117,9 +117,9 @@ void GameScene::Update() {
 		ImGui::End();
 	}
 
-	if (input_->PushKey(DIK_0)) {
+	//if (input_->PushKey(DIK_0)) {
 		ParticleMan->Add(Pos, Verocty, MaxFream);
-	}
+	//}
 
 	ParticleMan->Update();
 
@@ -158,6 +158,10 @@ void GameScene::PostEffectDraw()
 	PostEffect::SetAngle(angle, angle2);
 
 	Model::PreDraw(commandList);
+
+	player_->Draw(*viewProjection_.get());
+	//levelData->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 
@@ -234,9 +238,9 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
-	levelData->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
+	//player_->Draw(*viewProjection_.get());
+	////levelData->Draw(*viewProjection_.get());
+	//tutorialEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();

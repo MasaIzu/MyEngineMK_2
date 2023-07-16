@@ -75,7 +75,7 @@ public://Getter
 public://公開変数
 	Vector3 NowPos;
 
-private://プレイヤークラス変数
+private://クラス変数
 	bool isFinishSpline = false;
 	size_t startIndex = 1;
 	float timeRate_ = 0.0f;
