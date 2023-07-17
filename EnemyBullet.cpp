@@ -10,6 +10,7 @@ EnemyBullet::EnemyBullet()
 		isBulletAlive[i] = 0;
 		BulletLifeTime[i] = MaxBulletLifeTime;
 		BulletRadius[i] = 0.4f;
+		EnemyBulletSpeed[i] = 0.0f;
 		BulletCollider[i] = nullptr;
 	}
 }
@@ -56,13 +57,27 @@ void EnemyBullet::Update()
 	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
 	BulletUpdate();
 
+	ImGui::Begin("enemyBullet");
 
+	ImGui::Text("isBulletAlive:%d", isBulletAlive[0]);
+	ImGui::Text("isBulletAlive:%d", isBulletAlive[1]);
+	ImGui::Text("isBulletAlive:%d", isBulletAlive[2]);
+	ImGui::Text("isBulletAlive:%d", isBulletAlive[3]);
+
+	ImGui::Text("BulletVector:%f,%f,%f", BulletVector[0].x, BulletVector[0].y, BulletVector[0].z);
+
+
+	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
+
+	//ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
+	ImGui::SliderFloat("PlayerParticleSpeed", &EnemyParticleSpeed, 0, 1);
+	ImGui::End();
 
 	ParticleMan->Update();
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		BulletCollider[i]->Update(EnemyBulletWorldTrans[i].matWorld_, BulletRadius[i], EnemyBulletSpeed, BulletVector[i]);
-		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
+		BulletCollider[i]->Update(EnemyBulletWorldTrans[i].matWorld_, BulletRadius[i], EnemyBulletSpeed[i], BulletVector[i]);
+		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
 	}
 }
 
@@ -95,9 +110,9 @@ void EnemyBullet::BulletUpdate()
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
-			EnemyBulletMoveMent[i] = BulletVector[i] * EnemyBulletSpeed;
+			EnemyBulletMoveMent[i] = BulletVector[i] * EnemyBulletSpeed[i];
 			if (isExpanding == false) {
-				MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyBulletSpeed);
+				MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyParticleSpeed);
 			}
 		}
 	}
@@ -116,7 +131,7 @@ void EnemyBullet::BulletUpdate()
 	WorldTransUpdate();
 }
 
-uint32_t EnemyBullet::MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& Distance)
+uint32_t EnemyBullet::MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& bulletSpeed, const float& bulletLife)
 {
 	if (BulletCoolTime <= 0) {
 		for (uint32_t i = 0; i < AllBulletCount; i++) {
@@ -124,9 +139,9 @@ uint32_t EnemyBullet::MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector
 				isBulletAlive[i] = true;
 				EnemyBulletWorldTrans[i].translation_ = MakeBulletPos;
 				BulletVector[i] = BulletVec;
-				BulletLifeTime[i] = MaxBulletLifeTime;
+				BulletLifeTime[i] = static_cast<uint32_t>(bulletLife);
 				BulletRadius[i] = 0.4f;
-				EnemyBulletSpeed = Distance / static_cast<float>(MaxBulletLifeTime);
+				EnemyBulletSpeed[i] = bulletSpeed;
 				EnemyBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
 				return i;
@@ -206,17 +221,18 @@ void EnemyBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const floa
 	//	Vector4 color = { 0.5f,1.0f,0.3f,1 };
 	//	ParticleMan->Add(pos, Verocty, ParticleFile, color);
 	//}
-	for (float i = 0; i < BulletSpeed; i++) {
-		Vector3 Verocty = BulletVelocity;
-		Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
-		Verocty += Rand * EnemyParticleSpeed;
-		Vector3 AddPos = pos + (BulletVelocity * i);
-		Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5, 20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
-		Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
-		Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
-		float scale = (1.0f / BulletSpeed) * i;
-		ParticleMan->Add(AddPos, Verocty, ParticleFile, color, DownColor, scale);
-	}
+
+	Vector3 Verocty = BulletVelocity * BulletSpeed;
+	Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
+	Verocty += Rand * BulletSpeed;
+	Vector3 AddPos = pos;
+	Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(0, 1), Uint32Vector2(0, 1), Uint32Vector2(0, 4)) / 100;
+	Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
+	Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
+	float scale = 1.0f;
+	float DownScale = 0.02f;
+	ParticleMan->Add(AddPos, Verocty, ParticleFile, color, DownColor, scale, DownScale);
+
 }
 
 void EnemyBullet::OldPosUpdate()

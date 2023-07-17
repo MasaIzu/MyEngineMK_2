@@ -6,6 +6,7 @@
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "SplinePosition.h"
+#include "EnemyBullet.h"
 
 class BulletShotEnemy {
 
@@ -17,7 +18,14 @@ public://基本関数
 	void Update(const Vector3& PlayerPos);
 	void Draw(ViewProjection& viewProjection_);
 
-	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
+	//パーティクルを出す用
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void ParticleDraw(ViewProjection& viewProjection_);
+	void CopyParticle();
+
+public://getter
+
+	Vector3 GetBulletShotEnemyPos() const { return MyMath::GetWorldTransform(BulletShotEnemyWorldTrans.matWorld_); };
 private:
 	//動きについての関数
 	void PlayerBulletHit();//プレイヤーの弾が当たった時の処理
@@ -38,23 +46,23 @@ private:
 
 
 private://const関連
-	static const uint32_t AttackSphereCount = 3;
 
 private://クラス変数
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> modelDebug_;
-	WorldTransform enemyWorldTrans;
-	WorldTransform AttackWorldTrans[AttackSphereCount];
+	WorldTransform BulletShotEnemyWorldTrans;
 	WorldTransform DebugWorldTrans;
 
 	//当たり判定
-	BaseCollider* TutorialEnemyCollider = nullptr;
-	BaseCollider* TutorialEnemyAttackSpereCollider[AttackSphereCount];
+	BaseCollider* BulletShotEnemyCollider = nullptr;
 	CollisionManager* collisionManager = nullptr;
 
 	//スプライン曲線
-	std::unique_ptr<SplinePosition> splinePosition[AttackSphereCount];
+	std::unique_ptr<SplinePosition> splinePosition;
+
+	//バレット
+	std::unique_ptr<EnemyBullet> enemyBullet;
 
 private://イーナム
 	enum class NotSpottedPhase {
@@ -107,10 +115,11 @@ private:
 	uint32_t RunAttackTime = 60;
 	uint32_t AttackDelayTime = 0;
 	uint32_t MaxAttackDelayTime = 120;
+	uint32_t bulletNumber = 0;
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
-	float SearchingAreaRadius = 25.0f;
+	float SearchingAreaRadius = 40.0f;
 	float SpottedLookingPlayerRadius = 60.0f;
 	float EnemySpeed = 0.09f;
 	float SpottedEnemySpeed = 0.1f;
@@ -121,12 +130,15 @@ private:
 	float RunAttackSpeed = 0.4f;
 	float LittleFar = 5.0f;
 	float Distance = 0.0f;
+	float EnemyBulletSpeed = 0.3f;
 	//判定をするよう
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float NormalAttackSpeed = 0.02f;
 
+	Vector3 ReticlePos;
+	Vector3 DistanceNolm;
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;
 	Vector3 tmp;

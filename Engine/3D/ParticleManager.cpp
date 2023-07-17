@@ -213,21 +213,20 @@ void ParticleManager::InitializeGraphicsPipeline()
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-
 	// 深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-
 	// 頂点レイアウトの設定
 	gpipeline.InputLayout.pInputElementDescs = inputLayout;
 	gpipeline.InputLayout.NumElements = _countof(inputLayout);
-
 	// 図形の形状設定（三角形）
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
+
+
+
 
 	// デスクリプタレンジ
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
@@ -395,6 +394,10 @@ void ParticleManager::Update()
 	Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
 		[](const VertexPos& p) { return !p.alive; }), Particles.end());
 
+	//// スケールが0以下になったものを削除
+	//Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
+	//	[](const VertexPos& p) { return !p.scale; }), Particles.end());
+
 }
 
 void ParticleManager::Draw(const ViewProjection& view)
@@ -495,7 +498,28 @@ void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFra
 		p.scale = scale;
 		p.color = color;
 		p.DownColor = DownColor;
-		p.MinusAlpha = color.w / MaxFrame;
+		p.MinusAlpha = color.w / static_cast<float>(MaxFrame);
+		Particles.push_back(p);
+	}
+}
+
+void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale, const float& DownScale)
+{
+	if (numParticles > Particles.size()) {
+		//追加した要素の参照
+		VertexPos p;
+		//値のセットt
+		p.position = position;
+		p.velocity = velocity;
+		p.FinalVelocity = velocity / static_cast<float>(MaxFrame);
+		p.Frame = 0;
+		p.MaxFrame = MaxFrame;
+		p.alive = 1;
+		p.scale = scale;
+		p.color = color;
+		p.DownColor = DownColor;
+		p.MinusAlpha = color.w / static_cast<float>(MaxFrame);
+		p.DownScale = DownScale;
 		Particles.push_back(p);
 	}
 }

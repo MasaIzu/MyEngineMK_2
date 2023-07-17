@@ -8,9 +8,7 @@
 BulletShotEnemy::BulletShotEnemy(const Vector3& BonePos_)
 {
 	BonePos = BonePos_;
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		TutorialEnemyAttackSpereCollider[i] = nullptr;
-	}
+
 }
 
 BulletShotEnemy::~BulletShotEnemy()
@@ -22,8 +20,8 @@ void BulletShotEnemy::Initialize()
 
 	model_.reset(Model::CreateFromOBJ("sphereColor", true));
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
-	enemyWorldTrans.Initialize();
-	enemyWorldTrans.translation_ = BonePos;
+	BulletShotEnemyWorldTrans.Initialize();
+	BulletShotEnemyWorldTrans.translation_ = BonePos;
 	WorldTransUpdate();
 
 	input_ = Input::GetInstance();
@@ -34,21 +32,13 @@ void BulletShotEnemy::Initialize()
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 
-	TutorialEnemyCollider = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
-	CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider);
-	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	BulletShotEnemyCollider = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+	CollisionManager::GetInstance()->AddCollider(BulletShotEnemyCollider);
+	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
 
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		splinePosition[i] = std::make_unique<SplinePosition>();
-		AttackWorldTrans[i].Initialize();
-		if (i != 0) {
-			AttackWorldTrans[i].translation_ = AttackWorldTrans[i - 1].LookVelocity.lookUp;
-		}
-		AttackWorldTrans[i].TransferMatrix();
-		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
-		CollisionManager::GetInstance()->AddCollider(TutorialEnemyAttackSpereCollider[i]);
-		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
-	}
+	enemyBullet = std::make_unique<EnemyBullet>();
+	enemyBullet->Initialize();
 
 	collisionManager = CollisionManager::GetInstance();
 
@@ -61,7 +51,7 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 
 	if (IsAlive == false) {
 		IsAlive = true;
-		enemyWorldTrans.translation_ = BonePos;
+		BulletShotEnemyWorldTrans.translation_ = BonePos;
 	}
 
 	if (IsPlayerSpotted) {
@@ -71,12 +61,8 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 		PlayerNotSpottedMove();
 	}
 
-	if (input_->TriggerKey(DIK_P)) {
-		splinePosition[0]->Reset();
-	}
 
-
-	ImGui::Begin("NotFoundPhase");
+	/*ImGui::Begin("NotFoundPhase");
 
 	if (NotSpottedPhase_ == NotSpottedPhase::Walk) {
 		ImGui::Text("Walk");
@@ -95,37 +81,45 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	ImGui::Text("Rot:%f", Rot);
 	ImGui::Text("translation_:%f,%f,%f", enemyWorldTrans.LookVelocity.look.x, enemyWorldTrans.LookVelocity.look.y, enemyWorldTrans.LookVelocity.look.z);
 	ImGui::Text("EnemyToPlayerAngle:%f", EnemyToPlayerAngle);
-	ImGui::End();
+	ImGui::End();*/
 
 
 	WorldTransUpdate();
-
-
-	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
-	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		if (i != 0) {
-			//AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
-		}
-		AttackWorldTrans[i].TransferMatrix();
-		TutorialEnemyAttackSpereCollider[i]->Update(AttackWorldTrans[i].matWorld_);
-		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
-	}
+	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
+	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 
 	if (collisionManager->GetIsAttackHit()) {
 		PlayerBulletHit();
 	}
 
-	DebugWorldTrans.translation_ = enemyWorldTrans.translation_;
+	DebugWorldTrans.translation_ = BulletShotEnemyWorldTrans.translation_;
 	DebugWorldTrans.TransferMatrix();
+
+	enemyBullet->Update();
 }
 
 void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 {
-	model_->Draw(enemyWorldTrans, viewProjection_);
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
+	model_->Draw(BulletShotEnemyWorldTrans, viewProjection_);
+	enemyBullet->Draw(viewProjection_);
+	/*for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
-	}
+	}*/
+}
+
+void BulletShotEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+	enemyBullet->CSUpdate(cmdList);
+}
+
+void BulletShotEnemy::ParticleDraw(ViewProjection& viewProjection_)
+{
+	enemyBullet->ParticleDraw(viewProjection_);
+}
+
+void BulletShotEnemy::CopyParticle()
+{
+	enemyBullet->CopyParticle();
 }
 
 void BulletShotEnemy::PlayerBulletHit()
@@ -142,10 +136,10 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 	case BulletShotEnemy::NotSpottedPhase::Walk:
 
 		if (WalkTime > 0) {
-			enemyWorldTrans.translation_ += enemyWorldTrans.LookVelocity.look * EnemySpeed;
+			BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyWorldTrans.LookVelocity.look * EnemySpeed;
 
 			//円を作って出ない処理を作る
-			tmp = BonePos - enemyWorldTrans.translation_;
+			tmp = BonePos - BulletShotEnemyWorldTrans.translation_;
 			dist = tmp.dot(tmp);
 			radius = TerritoryRadius;
 			radius *= radius;
@@ -155,7 +149,7 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 				NotSpottedPhase_ = NotSpottedPhase::Interruption;
 			}
 
-			enemyWorldTrans.translation_ += enemyMoveMent;
+			BulletShotEnemyWorldTrans.translation_ += enemyMoveMent;
 		}
 		else {
 			StopTime = Random(150, 240);
@@ -168,7 +162,7 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 		if (StopTime <= 0) {
 			WalkTime = Random(60, 120);
 			Rot = static_cast<float>(Random(0, 360));
-			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+			BulletShotEnemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
 			NotSpottedPhase_ = NotSpottedPhase::Walk;
 		}
 
@@ -184,9 +178,9 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 	case BulletShotEnemy::NotSpottedPhase::ForcedWalking:
 
 		if (WalkTime > 0) {
-			BackBonePos = BonePos - enemyWorldTrans.translation_;
+			BackBonePos = BonePos - BulletShotEnemyWorldTrans.translation_;
 			BackBonePos.normalize();
-			enemyWorldTrans.translation_ += BackBonePos * EnemySpeed;
+			BulletShotEnemyWorldTrans.translation_ += BackBonePos * EnemySpeed;
 		}
 		else {
 			StopTime = Random(150, 240);
@@ -224,6 +218,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 		else {
 			if (GetIsAttackArea()) {
 				SpottedPhase_ = SpottedPhase::Attack;
+				AttackPhase_ = AttackPhase::NormalAttack;
 			}
 			else {
 				SpottedPhase_ = SpottedPhase::Walk;
@@ -234,7 +229,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 	case BulletShotEnemy::SpottedPhase::Walk:
 		if (IsNeverSpotted == true) {
 			SpottedPhase_ = SpottedPhase::Attack;
-			AttackPhase_ = AttackPhase::RunAttack;
+			AttackPhase_ = AttackPhase::NormalAttack;
 			IsNeverSpotted = false;
 		}
 		Rot = EnemyToPlayerAngle;
@@ -248,9 +243,9 @@ void BulletShotEnemy::PlayerSpottedMove()
 			}
 		}
 		else {
-			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
+			EnemyToPlayerVec = playerPos - BulletShotEnemyWorldTrans.translation_;
 			EnemyToPlayerVec.normalize();
-			enemyWorldTrans.translation_ += EnemyToPlayerVec * SpottedEnemySpeed;
+			BulletShotEnemyWorldTrans.translation_ += EnemyToPlayerVec * SpottedEnemySpeed;
 		}
 		break;
 	case BulletShotEnemy::SpottedPhase::Stop:
@@ -268,7 +263,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 		break;
 	case BulletShotEnemy::SpottedPhase::LoseSightofPlayer:
 		IsPlayerSpotted = false;
-		BackBonePos = BonePos - enemyWorldTrans.translation_;
+		BackBonePos = BonePos - BulletShotEnemyWorldTrans.translation_;
 		HowAboutFarAway = BackBonePos.length();
 		WalkTime = static_cast<uint32_t>(HowAboutFarAway / EnemySpeed);
 
@@ -288,10 +283,8 @@ void BulletShotEnemy::PlayerSpottedMove()
 	default:
 		break;
 	}
-	enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		AttackWorldTrans[i].SetRot({ 0,MyMath::GetAngle(Rot),0 });
-	}
+	BulletShotEnemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+
 }
 
 void BulletShotEnemy::Attack()
@@ -300,59 +293,23 @@ void BulletShotEnemy::Attack()
 	{
 	case BulletShotEnemy::AttackPhase::NormalAttack:
 
-		//回転する手前のボール
-		start = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp;
-		p1 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp_look;
-		p2 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.look;
-		p3 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown_look;
-		end = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookDown;
-		splinePosition[0]->Update(start, p1, p2, p3, end, NormalAttackSpeed);
-		AttackWorldTrans[0].translation_ = splinePosition[0]->NowPos;
+		DistanceNolm = playerPos - GetBulletShotEnemyPos();
+		DistanceNolm.normalize();
+		bulletNumber = enemyBullet->MakeEnemyBullet(GetBulletShotEnemyPos(), DistanceNolm, EnemyBulletSpeed, SpottedLookingPlayerRadius / EnemyBulletSpeed);
 
-		//ボールに追従するボール
-		for (uint32_t i = 0; i < AttackSphereCount; i++) {
-			if (i != 0) {
-				start = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp;
-				p1 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp_look;
-				p2 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.look;
-				p3 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookDown_look;
-				end = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookDown;
-				splinePosition[i]->Update(start, p1, p2, p3, end, NormalAttackSpeed);
-				AttackWorldTrans[i].translation_ = splinePosition[i]->NowPos;
-			}
-		}
+		AttackDelayTime = MaxAttackDelayTime;
+		AttackPhase_ = AttackPhase::Nothing;
+		SpottedPhase_ = SpottedPhase::Walk;
 
-		if (splinePosition[0]->GetFinishSpline()) {
-			for (uint32_t i = 0; i < AttackSphereCount; i++) {
-				splinePosition[i]->Reset();
-			}
-			AttackDelayTime = MaxAttackDelayTime;
-			AttackPhase_ = AttackPhase::Nothing;
-			SpottedPhase_ = SpottedPhase::Walk;
-		}
 
 		break;
 	case BulletShotEnemy::AttackPhase::RunAttack:
-		if (IsEnemyHasADestination == false) {
-			EnemyToPlayerVec = playerPos - enemyWorldTrans.translation_;
-			Distance = EnemyToPlayerVec.length();
-			Distance += LittleFar;
-			EnemyToPlayerVec.normalize();
-			DestinationPos = EnemyToPlayerVec * Distance;
-			RunAttackTime = static_cast<uint32_t>(Distance / RunAttackSpeed);
-			IsEnemyHasADestination = true;
-		}
-		else {
-			if (RunAttackTime > 0) {
-				enemyWorldTrans.translation_ += EnemyToPlayerVec * RunAttackSpeed;
-			}
-			else {
-				IsEnemyHasADestination = false;
-				AttackDelayTime = MaxAttackDelayTime;
-				AttackPhase_ = AttackPhase::Nothing;
-				SpottedPhase_ = SpottedPhase::Walk;
-			}
-		}
+
+		IsEnemyHasADestination = false;
+		AttackDelayTime = MaxAttackDelayTime;
+		AttackPhase_ = AttackPhase::Nothing;
+		SpottedPhase_ = SpottedPhase::Walk;
+
 		break;
 	case BulletShotEnemy::AttackPhase::Nothing:
 		break;
@@ -391,7 +348,7 @@ void BulletShotEnemy::SearchingPlayer()
 {
 	if (IsPlayerSpotted == false) {
 		//円を作ってプレイヤーがいたらフェーズ変えに移行
-		tmp = enemyWorldTrans.translation_ - playerPos;
+		tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
 		radius = SearchingAreaRadius;
 		radius *= radius;
@@ -402,7 +359,7 @@ void BulletShotEnemy::SearchingPlayer()
 	}
 	else {
 		//円を作ってプレイヤーがいたらフェーズ変えに移行
-		tmp = enemyWorldTrans.translation_ - playerPos;
+		tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
 		radius = SpottedLookingPlayerRadius;
 		radius *= radius;
@@ -417,15 +374,15 @@ void BulletShotEnemy::SearchingPlayer()
 
 void BulletShotEnemy::GetPlayerForEnemyAngle()
 {
-	EnemyToPlayerAngle = MyMath::Get2VecAngle(enemyWorldTrans.LookVelocity.look + enemyWorldTrans.translation_, playerPos);
+	EnemyToPlayerAngle = MyMath::Get2VecAngle(BulletShotEnemyWorldTrans.LookVelocity.look + BulletShotEnemyWorldTrans.translation_, playerPos);
 }
 
 bool BulletShotEnemy::GetIsAttackArea()
 {
 	//円を作ってプレイヤーがいたら攻撃移行
-	tmp = enemyWorldTrans.translation_ - playerPos;
+	tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 	dist = tmp.dot(tmp);
-	radius = AttackAreaRadius;
+	radius = SpottedLookingPlayerRadius;
 	radius *= radius;
 	if (dist <= radius) {
 		return true;
@@ -435,7 +392,7 @@ bool BulletShotEnemy::GetIsAttackArea()
 
 void BulletShotEnemy::WorldTransUpdate()
 {
-	enemyWorldTrans.TransferMatrix();
+	BulletShotEnemyWorldTrans.TransferMatrix();
 }
 
 uint32_t BulletShotEnemy::Random(const uint32_t& low, const uint32_t& high)

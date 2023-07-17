@@ -23,6 +23,7 @@
 
 #include "Player.h"
 #include "TutorialEnemy.h"
+#include "BulletShotEnemy.h"
 #include "LoadLevelEditor.h"
 
 /// <summary>
@@ -101,6 +102,7 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<TutorialEnemy> tutorialEnemy;
+	std::unique_ptr<BulletShotEnemy> bulletShotEnemy;
 	std::unique_ptr<LoadLevelEditor> levelData;
 
 	float dist;

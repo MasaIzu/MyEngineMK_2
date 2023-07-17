@@ -43,6 +43,7 @@ public: // サブクラス
 		uint32_t MaxFrame = 0;//このパーティクルの寿命
 		bool alive = 0; // このパーティクルが生きているかどうか
 		float MinusAlpha = 0.0f;
+		float DownScale = 0;
 	};
 
 	// 定数バッファ用データ構造体
@@ -159,6 +160,7 @@ public: // メンバ関数
 	
 	void Add(Vector3& position,Vector3& velocity, uint32_t& MaxFrame);
 	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color,Vector4& DownColor, const float& scale);
+	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale, const float& DownScale);
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();

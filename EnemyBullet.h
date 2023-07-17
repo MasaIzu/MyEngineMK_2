@@ -26,7 +26,7 @@ public://基本関数
 
 public:
 	//打ち出す球を作る
-	uint32_t MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& Distance);
+	uint32_t MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& bulletSpeed, const float& bulletLife);
 	//弾のコントロール
 	void BulletControl(const uint32_t& BulletNum, const Vector3& BulletVec);
 	//長押しで曲げれるように
@@ -82,7 +82,7 @@ private://クラス変数
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
 
-	float EnemyBulletSpeed = 10.0f;
+	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
 	float EnemyBulletMaxRadius = 5.0f;
 	float EnemyParticleSpeed = 0.02f;

@@ -53,6 +53,9 @@ void GameScene::Initialize() {
 	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
 	tutorialEnemy->Initialize();
 
+	bulletShotEnemy = std::make_unique<BulletShotEnemy>(Vector3(50, 10, 0));
+	bulletShotEnemy->Initialize();
+
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("Task");
 
@@ -117,9 +120,9 @@ void GameScene::Update() {
 		ImGui::End();
 	}
 
-	//if (input_->PushKey(DIK_0)) {
+	if (input_->PushKey(DIK_0)) {
 		ParticleMan->Add(Pos, Verocty, MaxFream);
-	//}
+	}
 
 	ParticleMan->Update();
 
@@ -142,6 +145,7 @@ void GameScene::Update() {
 	gameCamera->Update();
 
 	tutorialEnemy->Update(player_->GetPlayerPos());
+	bulletShotEnemy->Update(player_->GetPlayerPos());
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -159,9 +163,6 @@ void GameScene::PostEffectDraw()
 
 	Model::PreDraw(commandList);
 
-	player_->Draw(*viewProjection_.get());
-	//levelData->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
 
 	Model::PostDraw();
 
@@ -238,22 +239,23 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
-	//player_->Draw(*viewProjection_.get());
-	////levelData->Draw(*viewProjection_.get());
-	//tutorialEnemy->Draw(*viewProjection_.get());
+	player_->Draw(*viewProjection_.get());
+	//levelData->Draw(*viewProjection_.get());
+	tutorialEnemy->Draw(*viewProjection_.get());
+	bulletShotEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
 	player_->DrawSprite(*viewProjection_.get());
 
-	//ParticleMan->CSUpdate(commandList);
-	//ParticleManager::PreDraw(commandList);
-	//
-	//ParticleMan->Draw(*viewProjection_.get());
-	//
+	bulletShotEnemy->CSUpdate(commandList);
+	ParticleManager::PreDraw(commandList);
+	
+	bulletShotEnemy->ParticleDraw(*viewProjection_.get());
+	
 
-	//ParticleManager::PostDraw();
+	ParticleManager::PostDraw();
 
 #pragma endregion
 
@@ -272,5 +274,6 @@ void GameScene::CopyData()
 {
 	ParticleMan->CopyData();
 	player_->CopyParticle();
+	bulletShotEnemy->CopyParticle();
 }
 

@@ -17,6 +17,8 @@ public://Šî–{ŠÖ”
 	void Update(const Vector3& PlayerPos);
 	void Draw(ViewProjection& viewProjection_);
 
+public://getter
+
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
 	//“®‚«‚É‚Â‚¢‚Ä‚ÌŠÖ”
