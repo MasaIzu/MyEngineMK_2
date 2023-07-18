@@ -34,6 +34,8 @@ public:
 
 	inline Matrix4 GetWorldPos() { return worldPos_; }
 
+	inline bool GetHit() { return isHit; }
+
 	/// <summary>
 	/// 当たり判定属性をセット
 	/// </summary>
@@ -66,6 +68,14 @@ public:
 		this->attribute &= !attribute;
 	}
 
+	/// <summary>
+	/// ヒットしたのをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void Reset() {
+		isHit = false;
+	}
+
 protected:
 	// 形状タイプ
 	CollisionShapeType shapeType = SHAPE_UNKNOWN;
@@ -74,6 +84,7 @@ protected:
 	// 雑魚的当たり判定属性
 	unsigned short attributeWakeEnemy = 0b1111111111111111;
 
+	bool isHit = false;
 	//位置
 	Matrix4 worldPos_;
 };

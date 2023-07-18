@@ -12,6 +12,10 @@ LoadLevelEditor::LoadLevelEditor()
 
 LoadLevelEditor::~LoadLevelEditor()
 {
+
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	delete enemy;
+	//}
 	for (auto& object : NewLoadObjects) {
 		if (object.model) {
 			delete object.model;
@@ -74,9 +78,9 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			// 平行移動
-			objectData.translation.x = static_cast<float>(transform["translation"][1]);
+			objectData.translation.x = static_cast<float>(transform["translation"][0]);
 			objectData.translation.y = static_cast<float>(transform["translation"][2]);
-			objectData.translation.z = -static_cast<float>(transform["translation"][0]);
+			objectData.translation.z = static_cast<float>(transform["translation"][1]);
 
 			// 回転角
 			objectData.rotation.x = -static_cast<float>(transform["rotation"][1]);
@@ -126,18 +130,19 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			// 座標
 			WorldTransform Trans;
 			Trans.Initialize();
-			Trans.translation_ = objectData.translation;
-			Trans.scale_ = objectData.scaling;// 座標
+			Trans.translation_ = objectData.translation;// 座標
+			Trans.scale_ = objectData.scaling;
 			Trans.SetRot(objectData.rotation);// 回転角
+			Trans.TransferMatrix();
 
-			// 配列に登録
-			ModelData Data;
-			Data.model = model;
-			Data.worldTrans = Trans;
-			LoadedObjects.push_back(Data);
+			//// 配列に登録
+			//ModelData Data;
+			//Data.model = model;
+			//Data.worldTrans = Trans;
+			//LoadedObjects.push_back(Data);
 
 			if (objectData.fileName == modelSphere->GetName()) {
-				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation);
+				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation, model);
 				tutorialEnemyList.push_back(tutorialEnemy);
 			}
 
@@ -164,9 +169,9 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 
 void LoadLevelEditor::Update()
 {
-	for (auto& modelTrans : LoadedObjects) {
-		modelTrans.worldTrans.TransferMatrix();
-	}
+	//for (auto& modelTrans : LoadedObjects) {
+	//	modelTrans.worldTrans.TransferMatrix();
+	//}
 	for (auto& modelTrans : NewLoadObjects) {
 		modelTrans.worldTrans.TransferMatrix();
 	}
@@ -174,9 +179,9 @@ void LoadLevelEditor::Update()
 
 void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
-	for (auto& object : LoadedObjects) {
-		object.model->Draw(object.worldTrans, viewProjection);
-	}
+	//for (auto& object : LoadedObjects) {
+	//	object.model->Draw(object.worldTrans, viewProjection);
+	//}
 	for (auto& object : NewLoadObjects) {
 		object.model->Draw(object.worldTrans, viewProjection);
 	}

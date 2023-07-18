@@ -10,7 +10,7 @@
 class TutorialEnemy {
 
 public://基本関数
-	TutorialEnemy(const Vector3& BonePos_);
+	TutorialEnemy(const Vector3& BonePos_, Model* model);
 	~TutorialEnemy();
 
 	void Initialize();
@@ -44,7 +44,7 @@ private://const関連
 
 private://クラス変数
 	Input* input_ = nullptr;
-	std::unique_ptr<Model> model_;
+	Model* model_;
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform enemyWorldTrans;
 	WorldTransform AttackWorldTrans[AttackSphereCount];

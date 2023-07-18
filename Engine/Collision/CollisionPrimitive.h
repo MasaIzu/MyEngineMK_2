@@ -20,6 +20,7 @@ struct Sphere {
 	uint32_t firstCoolTime = 0;
 
 	bool isChangeCoolTime = false;
+	bool isHit = false;
 };
 
 struct Plane {

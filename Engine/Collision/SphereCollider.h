@@ -49,5 +49,8 @@ private:
 
 	//isChangeCoolTime
 	bool isChangeCoolTime = false;
+
+	bool isHit = false;
+
 };
 

@@ -5,9 +5,10 @@
 #include <SphereCollider.h>
 #include <CollisionAttribute.h>
 
-TutorialEnemy::TutorialEnemy(const Vector3& BonePos_)
+TutorialEnemy::TutorialEnemy(const Vector3& BonePos_, Model* model)
 {
 	BonePos = BonePos_;
+	model_ = model;
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		TutorialEnemyAttackSpereCollider[i] = nullptr;
 	}
@@ -20,7 +21,6 @@ TutorialEnemy::~TutorialEnemy()
 void TutorialEnemy::Initialize()
 {
 
-	model_.reset(Model::CreateFromOBJ("sphereColor", true));
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	enemyWorldTrans.Initialize();
 	enemyWorldTrans.translation_ = BonePos;
@@ -112,7 +112,8 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
 	}
 
-	if (collisionManager->GetIsAttackHit()) {
+	if (TutorialEnemyCollider->GetHit()) {
+		TutorialEnemyCollider->Reset();
 		PlayerBulletHit();
 	}
 

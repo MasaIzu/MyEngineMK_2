@@ -48,13 +48,15 @@ void CollisionManager::CheckAllCollisions()
 				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS) {
 					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereA, 0)) {
 						HitWorldPos = colA->GetWorldPos();
-						isAttackHit = true;
+						colB->isHit = true;
+						//isAttackHit = true;
 					}
 				}
 				else if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ATTACK) {
 					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereB, 1)) {
 						HitWorldPos = colB->GetWorldPos();
-						isAttackHit = true;
+						colA->isHit = true;
+						//isAttackHit = true;
 					}
 				}
 				if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter)) {

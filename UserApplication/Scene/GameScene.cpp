@@ -12,7 +12,9 @@
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
-
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		delete enemy;
+	}
 }
 
 void GameScene::Initialize() {
@@ -50,14 +52,20 @@ void GameScene::Initialize() {
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
 
-	tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
-	tutorialEnemy->Initialize();
+	//tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
+	//tutorialEnemy->Initialize();
 
 	bulletShotEnemy = std::make_unique<BulletShotEnemy>(Vector3(50, 10, 0));
 	bulletShotEnemy->Initialize();
 
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("enemyTest");
+
+	tutorialEnemyList = levelData->GetEnemyList();
+
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		enemy->Initialize();
+	}
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -144,8 +152,12 @@ void GameScene::Update() {
 	}
 	gameCamera->Update();
 
-	tutorialEnemy->Update(player_->GetPlayerPos());
+	//tutorialEnemy->Update(player_->GetPlayerPos());
 	bulletShotEnemy->Update(player_->GetPlayerPos());
+
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		enemy->Update(player_->GetPlayerPos());
+	}
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -186,31 +198,31 @@ void GameScene::PostEffectDraw()
 
 bool GameScene::CheckReticle()
 {
-	Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
+	////Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
 
-	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+	//Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
 
-	//ビューポート行列
-	Matrix4 Viewport =
-	{ windowWH.x / 2,0,0,0,
-	0,-windowWH.y / 2,0,0,
-	0,0,1,0,
-	windowWH.x / 2, windowWH.y / 2,0,1 };
+	////ビューポート行列
+	//Matrix4 Viewport =
+	//{ windowWH.x / 2,0,0,0,
+	//0,-windowWH.y / 2,0,0,
+	//0,0,1,0,
+	//windowWH.x / 2, windowWH.y / 2,0,1 };
 
-	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+	////ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	//Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
 
-	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-	this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+	////ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	//this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
 
-	dist = MyMath::Distance2Vec2(Vector2(this->EnemyPos.x, this->EnemyPos.y),Vector2(640, 360));
-	radius = 8.0f;
-	if (dist <= radius) {
-		int a = 0;
-	}
-	else {
-		
-	}
+	//dist = MyMath::Distance2Vec2(Vector2(this->EnemyPos.x, this->EnemyPos.y),Vector2(640, 360));
+	//radius = 8.0f;
+	//if (dist <= radius) {
+	//	int a = 0;
+	//}
+	//else {
+	//	
+	//}
 
 	return false;
 }
@@ -241,7 +253,10 @@ void GameScene::Draw() {
 	ground->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
-	tutorialEnemy->Draw(*viewProjection_.get());
+	//tutorialEnemy->Draw(*viewProjection_.get());
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		enemy->Draw(*viewProjection_.get());
+	}
 	bulletShotEnemy->Draw(*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理

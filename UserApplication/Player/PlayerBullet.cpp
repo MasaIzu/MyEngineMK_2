@@ -215,13 +215,6 @@ void PlayerBullet::CheckBulletAlive()
 
 void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
 {
-	//for (uint32_t i = 0; i < MackPaticleMax; i++) {
-	//	Vector3 Verocty = BulletVelocity;
-	//	Vector3 Rand = MyMath::RandomVec3(0, 20);
-	//	Verocty += Rand * PlayerParticleSpeed;
-	//	Vector4 color = { 0.5f,1.0f,0.3f,1 };
-	//	ParticleMan->Add(pos, Verocty, ParticleFile, color);
-	//}
 	for (float i = 0; i < BulletSpeed; i++) {
 		Vector3 Verocty = BulletVelocity;
 		Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
