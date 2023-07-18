@@ -57,7 +57,7 @@ void GameScene::Initialize() {
 	bulletShotEnemy->Initialize();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("Task");
+	levelData->Initialize("enemyTest");
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -240,7 +240,7 @@ void GameScene::Draw() {
 
 	ground->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
-	//levelData->Draw(*viewProjection_.get());
+	levelData->Draw(*viewProjection_.get());
 	tutorialEnemy->Draw(*viewProjection_.get());
 	bulletShotEnemy->Draw(*viewProjection_.get());
 

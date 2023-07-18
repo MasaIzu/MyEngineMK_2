@@ -311,8 +311,8 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletShotEnemy.h" />
-    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
+    <ClInclude Include="UserApplication\Enemy\EnemyBullet.h" />
     <ClInclude Include="Engine\3D\ComputeParticle.h" />
     <ClInclude Include="Engine\Math\Easing.h" />
     <ClInclude Include="Engine\3D\Light.h" />
@@ -379,8 +379,8 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BulletShotEnemy.cpp" />
-    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />
+    <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Engine\3D\ComputeParticle.cpp" />
     <ClCompile Include="Engine\Math\Easing.cpp" />
     <ClCompile Include="Engine\3D\Light.cpp" />

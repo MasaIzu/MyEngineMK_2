@@ -6,7 +6,8 @@
 #include <Model.h>
 #include "WorldTransform.h"
 #include <map>
-
+#include "TutorialEnemy.h"
+#include "BulletShotEnemy.h"
 
 // レベルデータ
 struct LevelData {
@@ -57,11 +58,18 @@ public:// メンバ関数
 
 	void Draw(const ViewProjection& viewProjection);
 
+	std::list<TutorialEnemy*> GetEnemyList() { return tutorialEnemyList; }
+
 private:
 	std::unique_ptr<LevelData> levelData;
-
-
 	std::map<std::string, Model*> models;
-	std::vector<ModelData> objects;
+	std::vector<ModelData> LoadedObjects;
+	std::vector<ModelData> NewLoadObjects;
+	std::list<TutorialEnemy*> tutorialEnemyList;
 
+	//最初から読み込むやつ
+	Model* modelSkydome = nullptr;
+	Model* modelGround = nullptr;
+	Model* modelFighter = nullptr;
+	std::unique_ptr<Model> modelSphere;
 };

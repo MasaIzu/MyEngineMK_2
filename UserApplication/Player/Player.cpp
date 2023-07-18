@@ -47,12 +47,12 @@ void Player::Update()
 	WorldTransUpdate();
 
 	if (input_->MouseInputTrigger(0)) {
-		isPlayerSetUp = true;
-		PlayerAttack();
+		//isPlayerSetUp = true;
+		//PlayerAttack();
 	}
 	if (input_->MouseInputing(0)) {
-		
-		//playerBullet->BulletControl(bulletNumber, playerWorldTransForBullet.LookVelocity.look);
+		isPlayerSetUp = true;
+		PlayerAttack();
 	}
 	if (input_->MouseInputTrigger(1)) {
 		

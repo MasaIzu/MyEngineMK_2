@@ -1,0 +1,89 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "sphereColor",
+            "transform": {
+                "translation": [
+                    -18.91448402404785,
+                    0.0,
+                    8.54175853729248
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "sphereColor",
+            "transform": {
+                "translation": [
+                    -2.9670441150665283,
+                    0.0,
+                    8.54175853729248
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "sphereColor",
+            "transform": {
+                "translation": [
+                    13.892207145690918,
+                    0.0,
+                    8.54175853729248
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "sphereColor",
+            "transform": {
+                "translation": [
+                    29.423603057861328,
+                    0.0,
+                    8.54175853729248
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        }
+    ]
+}

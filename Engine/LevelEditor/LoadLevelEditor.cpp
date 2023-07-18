@@ -12,8 +12,10 @@ LoadLevelEditor::LoadLevelEditor()
 
 LoadLevelEditor::~LoadLevelEditor()
 {
-	for (auto& object : objects) {
-		delete object.model;
+	for (auto& object : NewLoadObjects) {
+		if (object.model) {
+			delete object.model;
+		}
 	}
 }
 
@@ -103,6 +105,17 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 
 	levelData.reset(LoadFile(fileName));
 
+	// モデル読み込み
+	//modelSkydome = Model::CreateFromOBJ("skydome");
+	//modelGround = Model::CreateFromOBJ("ground");
+	//modelFighter = Model::CreateFromOBJ("chr_sword", true);
+	modelSphere.reset(Model::CreateFromOBJ("sphereColor", true));
+
+	//models.insert(std::make_pair("skydome", modelSkydome));
+	//models.insert(std::make_pair("ground", modelGround));
+	//models.insert(std::make_pair("chr_sword", modelFighter));
+	models.insert(std::make_pair("sphereColor", modelSphere.get()));
+
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
 		// ファイル名から登録済みモデルを検索
@@ -110,38 +123,61 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 		decltype(models)::iterator it = models.find(objectData.fileName);
 		if (it != models.end()) {
 			model = it->second;
+			// 座標
+			WorldTransform Trans;
+			Trans.Initialize();
+			Trans.translation_ = objectData.translation;
+			Trans.scale_ = objectData.scaling;// 座標
+			Trans.SetRot(objectData.rotation);// 回転角
+
+			// 配列に登録
+			ModelData Data;
+			Data.model = model;
+			Data.worldTrans = Trans;
+			LoadedObjects.push_back(Data);
+
+			if (objectData.fileName == modelSphere->GetName()) {
+				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation);
+				tutorialEnemyList.push_back(tutorialEnemy);
+			}
+
 		}
+		else {
+			// モデルを指定して3Dオブジェクトを生成
+			model = Model::CreateFromOBJ(objectData.fileName, true);
+			// 座標
+			WorldTransform Trans;
+			Trans.Initialize();
+			Trans.translation_ = objectData.translation;
+			Trans.scale_ = objectData.scaling;// 座標
+			Trans.SetRot(objectData.rotation);// 回転角
 
-		// モデルを指定して3Dオブジェクトを生成
-		Model* newObject = Model::CreateFromOBJ(objectData.fileName, true);
-
-
-		// 座標
-		WorldTransform Trans;
-		Trans.Initialize();
-		Trans.translation_ = objectData.translation;
-		Trans.scale_ = objectData.scaling;// 座標
-		Trans.SetRot(objectData.rotation);// 回転角
-
-		// 配列に登録
-		ModelData Data;
-		Data.model = newObject;
-		Data.worldTrans = Trans;
-		objects.push_back(Data);
+			// 配列に登録
+			ModelData Data;
+			Data.model = model;
+			Data.worldTrans = Trans;
+			NewLoadObjects.push_back(Data);
+		}
 	}
 	Update();
 }
 
 void LoadLevelEditor::Update()
 {
-	for (auto& modelTrans : objects) {
+	for (auto& modelTrans : LoadedObjects) {
+		modelTrans.worldTrans.TransferMatrix();
+	}
+	for (auto& modelTrans : NewLoadObjects) {
 		modelTrans.worldTrans.TransferMatrix();
 	}
 }
 
 void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
-	for (auto& object : objects) {
+	for (auto& object : LoadedObjects) {
+		object.model->Draw(object.worldTrans, viewProjection);
+	}
+	for (auto& object : NewLoadObjects) {
 		object.model->Draw(object.worldTrans, viewProjection);
 	}
 }

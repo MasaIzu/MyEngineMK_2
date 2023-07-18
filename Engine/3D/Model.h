@@ -101,6 +101,7 @@ public: // ƒƒ“ƒoŠÖ”
 
 	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
 
+	std::string GetName() { return name_; }
 
 private: // ƒƒ“ƒo•Ï”
 	// –¼‘O

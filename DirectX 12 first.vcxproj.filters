@@ -430,10 +430,10 @@
     <ClInclude Include="Engine\Math\SplinePosition.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
-    <ClInclude Include="BulletShotEnemy.h">
+    <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
+    <ClInclude Include="UserApplication\Enemy\EnemyBullet.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
@@ -606,10 +606,10 @@
     <ClCompile Include="Engine\Math\SplinePosition.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="BulletShotEnemy.cpp">
+    <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
+    <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
