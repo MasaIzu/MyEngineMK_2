@@ -347,18 +347,3 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 
 	return true;
 }
-
-//AliceMathF::Vector4 Vector4Lerp(const AliceMathF::Vector4& src1, const AliceMathF::Vector4& src2, float t)
-//{
-//	AliceMathF::Vector4 temp;
-//	Vector4Lerp(src1, src2, t, temp);
-//	return temp;
-//}
-//
-//void Vector4Lerp(const AliceMathF::Vector4& src1, const AliceMathF::Vector4& src2, float t, AliceMathF::Vector4& dest)
-//{
-//	dest.m128_f32[0] = src1.m128_f32[0] + (src2.m128_f32[0] - src1.m128_f32[0]) * t;
-//	dest.m128_f32[1] = src1.m128_f32[1] + (src2.m128_f32[1] - src1.m128_f32[1]) * t;
-//	dest.m128_f32[2] = src1.m128_f32[2] + (src2.m128_f32[2] - src1.m128_f32[2]) * t;
-//	dest.m128_f32[3] = src1.m128_f32[3] + (src2.m128_f32[3] - src1.m128_f32[3]) * t;
-//}

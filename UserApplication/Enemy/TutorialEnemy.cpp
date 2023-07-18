@@ -116,6 +116,10 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		TutorialEnemyCollider->Reset();
 		PlayerBulletHit();
 	}
+	if (TutorialEnemyCollider->GetHitEnemyEachOtherHit()) {
+		enemyWorldTrans.translation_ += TutorialEnemyCollider->GetRejectVec();
+		TutorialEnemyCollider->EnemyHittingEachOtherReset();
+	}
 
 	DebugWorldTrans.translation_ = enemyWorldTrans.translation_;
 	DebugWorldTrans.TransferMatrix();

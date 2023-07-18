@@ -29,12 +29,12 @@ public:
 	virtual void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) = 0;
 
 	inline CollisionShapeType GetShapeType() { return shapeType; }
-
 	inline unsigned short GetAttribute() { return attribute; }
-
 	inline Matrix4 GetWorldPos() { return worldPos_; }
+	inline bool GetHit() { return isHitPlayerAttack; }
+	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
+	inline Vector3 GetRejectVec() { return rejectVec; }
 
-	inline bool GetHit() { return isHit; }
 
 	/// <summary>
 	/// 当たり判定属性をセット
@@ -73,7 +73,15 @@ public:
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
 	inline void Reset() {
-		isHit = false;
+		isHitPlayerAttack = false;
+	}
+
+	/// <summary>
+	/// 排斥ベクトルのヒットをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void EnemyHittingEachOtherReset() {
+		isEnemyHittingEachOther = false;
 	}
 
 protected:
@@ -84,7 +92,11 @@ protected:
 	// 雑魚的当たり判定属性
 	unsigned short attributeWakeEnemy = 0b1111111111111111;
 
-	bool isHit = false;
+	bool isHitPlayerAttack = false;//プレーヤーの弾が当たっている場合
+	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
+
+	Vector3 rejectVec;//排斥ベクトル
+
 	//位置
 	Matrix4 worldPos_;
 };
