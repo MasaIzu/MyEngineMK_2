@@ -19,9 +19,9 @@ Player::~Player()
 void Player::Initialize()
 {
 	input_ = Input::GetInstance();
-	model_.reset(Model::CreateFromOBJ("sphere", true));
+	model_.reset(Model::CreateFromOBJ("sphereDisso", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,10.0f,-50.0f };
+	playerWorldTrans.translation_ = { 0,5.0f,-50.0f };
 
 	playerWorldTransForBullet.Initialize();
 
@@ -66,10 +66,9 @@ void Player::Update()
 	}
 
 
-	ImGui::Begin("Player");
-
-	ImGui::Text("Distance:%f,%f,%f", Distance.x, Distance.y, Distance.z);
-
+	ImGui::Begin("modelSetting");
+	ImGui::SliderFloat("alpha", &playerWorldTrans.alpha, 0.0f, 1.0f);
+	ImGui::SliderFloat("Dissolve", &playerWorldTrans.Disso, 0.0f, 1.0f);
 	ImGui::End();
 
 
@@ -85,13 +84,13 @@ void Player::Update()
 void Player::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(playerWorldTrans, viewProjection_);
-	playerBullet->Draw(viewProjection_);
-	model_->Draw(DebugWorldTrans, viewProjection_);
+	//playerBullet->Draw(viewProjection_);
+	//model_->Draw(DebugWorldTrans, viewProjection_);
 }
 
 void Player::DrawSprite(ViewProjection& viewProjection_)
 {
-	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
+	//AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
@@ -101,7 +100,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 void Player::ParticleDraw(ViewProjection& viewProjection_)
 {
-	playerBullet->ParticleDraw(viewProjection_);
+	//playerBullet->ParticleDraw(viewProjection_);
 }
 
 void Player::CopyParticle()
@@ -202,17 +201,17 @@ void Player::CheckPlayerCollider()
 {
 
 	// —‰ºˆ—
-	if (!onGround) {
-		// ‰ºŒü‚«‰Á‘¬“x
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
-		// ‰Á‘¬
-		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// ˆÚ“®
-		playerWorldTrans.translation_.x += fallVec.x;
-		playerWorldTrans.translation_.y += fallVec.y;
-		playerWorldTrans.translation_.z += fallVec.z;
-	}
+	//if (!onGround) {
+	//	// ‰ºŒü‚«‰Á‘¬“x
+	//	const float fallAcc = -0.01f;
+	//	const float fallVYMin = -0.5f;
+	//	// ‰Á‘¬
+	//	fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+	//	// ˆÚ“®
+	//	playerWorldTrans.translation_.x += fallVec.x;
+	//	playerWorldTrans.translation_.y += fallVec.y;
+	//	playerWorldTrans.translation_.z += fallVec.z;
+	//}
 
 	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(PlayerCollider);
 	assert(sphereCollider);

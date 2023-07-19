@@ -57,21 +57,21 @@ void EnemyBullet::Update()
 	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
 	BulletUpdate();
 
-	ImGui::Begin("enemyBullet");
+	//ImGui::Begin("enemyBullet");
 
-	ImGui::Text("isBulletAlive:%d", isBulletAlive[0]);
-	ImGui::Text("isBulletAlive:%d", isBulletAlive[1]);
-	ImGui::Text("isBulletAlive:%d", isBulletAlive[2]);
-	ImGui::Text("isBulletAlive:%d", isBulletAlive[3]);
+	//ImGui::Text("isBulletAlive:%d", isBulletAlive[0]);
+	//ImGui::Text("isBulletAlive:%d", isBulletAlive[1]);
+	//ImGui::Text("isBulletAlive:%d", isBulletAlive[2]);
+	//ImGui::Text("isBulletAlive:%d", isBulletAlive[3]);
 
-	ImGui::Text("BulletVector:%f,%f,%f", BulletVector[0].x, BulletVector[0].y, BulletVector[0].z);
+	//ImGui::Text("BulletVector:%f,%f,%f", BulletVector[0].x, BulletVector[0].y, BulletVector[0].z);
 
 
-	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
+	//ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
-	//ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
-	ImGui::SliderFloat("PlayerParticleSpeed", &EnemyParticleSpeed, 0, 1);
-	ImGui::End();
+	////ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
+	//ImGui::SliderFloat("PlayerParticleSpeed", &EnemyParticleSpeed, 0, 1);
+	//ImGui::End();
 
 	ParticleMan->Update();
 

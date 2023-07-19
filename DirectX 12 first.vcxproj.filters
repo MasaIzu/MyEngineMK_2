@@ -171,6 +171,9 @@
     <None Include="Resources\Shaders\PostEffectGlow.hlsli">
       <Filter>Shaders\PostEffect</Filter>
     </None>
+    <None Include="Resources\Shaders\CloudObj.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\ObjPS.hlsl">
@@ -235,6 +238,15 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowVS.hlsl">
       <Filter>Shaders\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\CloudObjGS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\CloudObjPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\CloudObjVS.hlsl">
+      <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -439,6 +451,9 @@
     <ClInclude Include="TouchableObject.h">
       <Filter>Engine\ヘッダー\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="CloudModel.h">
+      <Filter>Engine\ヘッダー\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -617,6 +632,9 @@
     </ClCompile>
     <ClCompile Include="TouchableObject.cpp">
       <Filter>Engine\ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CloudModel.cpp">
+      <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

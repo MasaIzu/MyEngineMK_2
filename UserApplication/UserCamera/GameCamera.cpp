@@ -118,32 +118,36 @@ void GameCamera::Update() {
 
 
 
-		ImGui::Begin("camera");
-		ImGui::Text("eye:%f", viewProjection->eye.x);
-		ImGui::Text("eye:%f", viewProjection->eye.y);
-		ImGui::Text("eye:%f", viewProjection->eye.z);
+		//ImGui::Begin("camera");
+		//ImGui::Text("eye:%f", viewProjection->eye.x);
+		//ImGui::Text("eye:%f", viewProjection->eye.y);
+		//ImGui::Text("eye:%f", viewProjection->eye.z);
 
-		ImGui::Text("mouseMoved:%f", mouseMoved.x);
-		ImGui::Text("mouseMoved:%f", mouseMoved.y);
-		ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
-		ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
-		MyMath::MatrixText(CameraRot);
+		//ImGui::Text("mouseMoved:%f", mouseMoved.x);
+		//ImGui::Text("mouseMoved:%f", mouseMoved.y);
+		//ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
+		//ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
+		//MyMath::MatrixText(CameraRot);
 
-		ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
+		//ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
 
-		ImGui::End();
+		//ImGui::End();
 	}
 	else {
-		ImGui::Begin("camera");
-		ImGui::SliderFloat("eye:x", &vTargetEye.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("eye:y", &vTargetEye.y, -100.0f, 700.0f);
-		ImGui::SliderFloat("eye:z", &vTargetEye.z, -100.0f, 100.0f);
+		//ImGui::Begin("camera");
+		//ImGui::SliderFloat("eye:x", &vTargetEye.x, -100.0f, 100.0f);
+		//ImGui::SliderFloat("eye:y", &vTargetEye.y, -100.0f, 700.0f);
+		//ImGui::SliderFloat("eye:z", &vTargetEye.z, -100.0f, 100.0f);
 
-		ImGui::SliderFloat("target:x", &target.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("target:y", &target.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("target:z", &target.z, -100.0f, 100.0f);
+		//ImGui::SliderFloat("target:x", &target.x, -100.0f, 100.0f);
+		//ImGui::SliderFloat("target:y", &target.y, -100.0f, 100.0f);
+		//ImGui::SliderFloat("target:z", &target.z, -100.0f, 100.0f);
 
-		ImGui::End();
+		//ImGui::End();
+	}
+
+	if (cameraMode == false) {
+		cameraMode = true;
 	}
 
 	viewProjection->target = target;

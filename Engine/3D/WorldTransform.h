@@ -10,6 +10,7 @@
 struct ConstBufferDataWorldTransform {
 	Matrix4 matWorld;           // ローカル → ワールド変換行列
 	float alpha=1;       // アルファ
+	float Dissolbu = 0.0f;
 };
 
 struct WorldTarnsLook {
@@ -59,7 +60,7 @@ struct WorldTransform {
 	const WorldTransform* parent_ = nullptr;
 
 	Matrix4 matRot;
-
+	float Disso = 0.0f;
 	//回転がオイラー角による回転か
 	bool isEuler = false;
 

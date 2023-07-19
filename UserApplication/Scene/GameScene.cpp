@@ -12,9 +12,9 @@
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		delete enemy;
-	}
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	delete enemy;
+	//}
 }
 
 void GameScene::Initialize() {
@@ -35,8 +35,8 @@ void GameScene::Initialize() {
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,10,0 };
-	worldTransform_.scale_ = { 0.01f,0.01f,0.01f };
+	worldTransform_.translation_ = { 0,0,0 };
+	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
 	worldTransform_.TransferMatrix();
 
 	ParticleMan = std::make_unique<ParticleManager>();
@@ -52,20 +52,22 @@ void GameScene::Initialize() {
 	ground = std::make_unique<Ground>();
 	ground->Initialze();
 
+	cloudModel.reset(CloudModel::Create());
+
 	//tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
 	//tutorialEnemy->Initialize();
 
-	bulletShotEnemy = std::make_unique<BulletShotEnemy>(Vector3(50, 10, 0));
-	bulletShotEnemy->Initialize();
+	//bulletShotEnemy = std::make_unique<BulletShotEnemy>(Vector3(50, 10, 0));
+	//bulletShotEnemy->Initialize();
 
-	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("enemyTest");
+	//levelData = std::make_unique<LoadLevelEditor>();
+	//levelData->Initialize("enemyTest");
 
-	tutorialEnemyList = levelData->GetEnemyList();
+	//tutorialEnemyList = levelData->GetEnemyList();
 
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Initialize();
-	}
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->Initialize();
+	//}
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -73,60 +75,60 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	CheckReticle();
-	ImGui::Begin("Phase");
+	//ImGui::Begin("Phase");
 
-	ImGui::Text("dist:%f", dist);
-	ImGui::Text("radius:%f", radius);
-	ImGui::Text("tmp:%f,%f", tmp.x, tmp.y);
+	//ImGui::Text("dist:%f", dist);
+	//ImGui::Text("radius:%f", radius);
+	//ImGui::Text("tmp:%f,%f", tmp.x, tmp.y);
 
-	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
+	//ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
-	ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
+	//ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
 
-	ImGui::End();
+	//ImGui::End();
 
-	
-	if (shadeNumber == 0) {
-		ImGui::Begin("Not");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+	//
+	//if (shadeNumber == 0) {
+	//	ImGui::Begin("Not");
+	//	ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
-		ImGui::End();
-	}
-	else if (shadeNumber == 1) {
-		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+	//	ImGui::End();
+	//}
+	//else if (shadeNumber == 1) {
+	//	ImGui::Begin("averageBlur");
+	//	ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
-		ImGui::SliderInt("range", &range, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 2) {
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+	//	ImGui::SliderInt("range", &range, 0, 20);
+	//	ImGui::SetCursorPos(ImVec2(0, 20));
+	//	ImGui::End();
+	//}
+	//else if (shadeNumber == 2) {
+	//	ImGui::Begin("RadialBlurBlur");
+	//	ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
-		ImGui::SliderFloat("centerX", &center.x, 0, 1);
-		ImGui::SliderFloat("centerY", &center.y, 0, 1);
-		ImGui::SliderFloat("intensity", &intensity, 0, 1);
-		ImGui::SliderInt("samples", &samples, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 3) {
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+	//	ImGui::SliderFloat("centerX", &center.x, 0, 1);
+	//	ImGui::SliderFloat("centerY", &center.y, 0, 1);
+	//	ImGui::SliderFloat("intensity", &intensity, 0, 1);
+	//	ImGui::SliderInt("samples", &samples, 0, 20);
+	//	ImGui::SetCursorPos(ImVec2(0, 20));
+	//	ImGui::End();
+	//}
+	//else if (shadeNumber == 3) {
+	//	ImGui::Begin("RadialBlurBlur");
+	//	ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
 
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 4) {
-		ImGui::Begin("CloseFilta");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-		ImGui::SliderFloat("angle", &angle, 0.0f, 180.0f);
-		ImGui::SliderFloat("angle2", &angle2, 0.0f, 180.0f);
+	//	ImGui::SetCursorPos(ImVec2(0, 20));
+	//	ImGui::End();
+	//}
+	//else if (shadeNumber == 4) {
+	//	ImGui::Begin("CloseFilta");
+	//	ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
+	//	ImGui::SliderFloat("angle", &angle, 0.0f, 180.0f);
+	//	ImGui::SliderFloat("angle2", &angle2, 0.0f, 180.0f);
 
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
+	//	ImGui::SetCursorPos(ImVec2(0, 20));
+	//	ImGui::End();
+	//}
 
 	if (input_->PushKey(DIK_0)) {
 		ParticleMan->Add(Pos, Verocty, MaxFream);
@@ -153,11 +155,11 @@ void GameScene::Update() {
 	gameCamera->Update();
 
 	//tutorialEnemy->Update(player_->GetPlayerPos());
-	bulletShotEnemy->Update(player_->GetPlayerPos());
+	//bulletShotEnemy->Update(player_->GetPlayerPos());
 
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Update(player_->GetPlayerPos());
-	}
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->Update(player_->GetPlayerPos());
+	//}
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -247,27 +249,34 @@ void GameScene::Draw() {
 
 	ParticleManager::PostDraw();
 
+	CloudModel::PreDraw(commandList);
+
+	//cloudModel->Draw(worldTransform_, *viewProjection_.get());
+
+	CloudModel::PostDraw();
+
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	ground->Draw(*viewProjection_.get());
+	//ground->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
-	levelData->Draw(*viewProjection_.get());
-	//tutorialEnemy->Draw(*viewProjection_.get());
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Draw(*viewProjection_.get());
-	}
-	bulletShotEnemy->Draw(*viewProjection_.get());
+	//levelData->Draw(*viewProjection_.get());
+	////tutorialEnemy->Draw(*viewProjection_.get());
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->Draw(*viewProjection_.get());
+	//}
+	//bulletShotEnemy->Draw(*viewProjection_.get());
+
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
 	player_->DrawSprite(*viewProjection_.get());
 
-	bulletShotEnemy->CSUpdate(commandList);
+	//bulletShotEnemy->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	
-	bulletShotEnemy->ParticleDraw(*viewProjection_.get());
+	//bulletShotEnemy->ParticleDraw(*viewProjection_.get());
 	
 
 	ParticleManager::PostDraw();
@@ -289,6 +298,6 @@ void GameScene::CopyData()
 {
 	ParticleMan->CopyData();
 	player_->CopyParticle();
-	bulletShotEnemy->CopyParticle();
+	//bulletShotEnemy->CopyParticle();
 }
 

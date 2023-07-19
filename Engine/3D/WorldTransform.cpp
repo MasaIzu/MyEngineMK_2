@@ -103,6 +103,7 @@ void WorldTransform::TransferMatrix() {
 	constMap->matWorld = matWorld_;
 
 	constMap->alpha = alpha;
+	constMap->Dissolbu = Disso;
 
 }
 

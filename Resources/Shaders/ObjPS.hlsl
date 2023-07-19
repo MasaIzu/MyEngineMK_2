@@ -124,6 +124,10 @@ float4 main(GSOutput input) : SV_TARGET
 		}
 	}
 
+    float4 col = texcolor;
+	
+    clip(col.r - Dissolbu);
+    col.a = m_alpha;
 	// シェーディングによる色で描画
-	return float4( shadecolor.rgb * texcolor.rgb,shadecolor.a * texcolor.a);
+    return col;
 }

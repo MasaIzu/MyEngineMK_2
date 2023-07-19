@@ -2,6 +2,7 @@
 #include"ParticleManager.h"
 #include "MixPostEffect.h"
 #include <PostEffectManager.h>
+#include "CloudModel.h"
 
 void Framework::Initialize()
 {
@@ -35,6 +36,7 @@ void Framework::Initialize()
 
 	// 3Dƒ‚ƒfƒ‹Ã“I‰Šú‰»
 	Model::StaticInitialize();
+	CloudModel::StaticInitialize();
 	FbxModel::StaticInitialize();
 
 	//Imgui‰Šú‰»
@@ -96,6 +98,7 @@ void Framework::Finalize()
 	sceneFactory_.reset();
 
 	FbxModel::StaticFainalize();
+	CloudModel::StaticFinalize();
 	Model::StaticFinalize();
 
 	Sprite::StaticFinalize();

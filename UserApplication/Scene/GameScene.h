@@ -26,6 +26,8 @@
 #include "BulletShotEnemy.h"
 #include "LoadLevelEditor.h"
 
+#include "CloudModel.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -101,11 +103,12 @@ private: // メンバ変数
 
 	std::unique_ptr<Player> player_;
 
+	std::unique_ptr<CloudModel> cloudModel;
 	//std::unique_ptr<TutorialEnemy> tutorialEnemy;
-	std::unique_ptr<BulletShotEnemy> bulletShotEnemy;
-	std::unique_ptr<LoadLevelEditor> levelData;
+	//std::unique_ptr<BulletShotEnemy> bulletShotEnemy;
+	//std::unique_ptr<LoadLevelEditor> levelData;
 
-	std::list<TutorialEnemy*> tutorialEnemyList;
+	//std::list<TutorialEnemy*> tutorialEnemyList;
 
 	float dist;
 	float radius;

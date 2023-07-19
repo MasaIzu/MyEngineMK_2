@@ -1,5 +1,5 @@
 #include "DirectXCore.h"
-#include "Model.h"
+#include "CloudModel.h"
 #include <algorithm>
 #include <cassert>
 #include <d3dcompiler.h>
@@ -14,24 +14,21 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-const std::string Model::kBaseDirectory = "Resources/";
-const std::string Model::kDefaultModelName = "cube";
-UINT Model::sDescriptorHandleIncrementSize_ = 0;
-ID3D12GraphicsCommandList* Model::sCommandList_ = nullptr;
-ComPtr<ID3D12RootSignature> Model::sRootSignature_;
-ComPtr<ID3D12PipelineState> Model::sPipelineState_;
-std::unique_ptr<LightGroup> Model::lightGroup;
+const std::string CloudModel::kBaseDirectory = "Resources/";
+const std::string CloudModel::kDefaultModelName = "plane";
+UINT CloudModel::sDescriptorHandleIncrementSize_ = 0;
+ID3D12GraphicsCommandList* CloudModel::sCommandList_ = nullptr;
+ComPtr<ID3D12RootSignature> CloudModel::sRootSignature_;
+ComPtr<ID3D12PipelineState> CloudModel::sPipelineState_;
 
-void Model::StaticInitialize() {
+void CloudModel::StaticInitialize() {
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
-	// ライト生成
-	lightGroup.reset(LightGroup::Create());
 }
 
-void Model::StaticFinalize()
+void CloudModel::StaticFinalize()
 {
 
 	sRootSignature_.Reset();
@@ -39,7 +36,7 @@ void Model::StaticFinalize()
 
 }
 
-void Model::InitializeGraphicsPipeline() {
+void CloudModel::InitializeGraphicsPipeline() {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob;    // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;    // ピクセルシェーダオブジェクト
@@ -48,7 +45,7 @@ void Model::InitializeGraphicsPipeline() {
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/ObjVS.hlsl", // シェーダファイル名
+		L"Resources/shaders/CloudObjVS.hlsl", // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -69,7 +66,7 @@ void Model::InitializeGraphicsPipeline() {
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/ObjPS.hlsl", // シェーダファイル名
+		L"Resources/shaders/CloudObjPS.hlsl", // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -110,7 +107,7 @@ void Model::InitializeGraphicsPipeline() {
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	// gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	// gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	//  デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
@@ -183,25 +180,25 @@ void Model::InitializeGraphicsPipeline() {
 	assert(SUCCEEDED(result));
 }
 
-Model* Model::Create() {
+CloudModel* CloudModel::Create() {
 	// メモリ確保
-	Model* instance = new Model;
+	CloudModel* instance = new CloudModel;
 	instance->Initialize(kDefaultModelName, false);
 
 	return instance;
 }
 
-Model* Model::CreateFromOBJ(const std::string& modelname, bool smoothing) {
+CloudModel* CloudModel::CreateFromOBJ(const std::string& modelname, bool smoothing) {
 	// メモリ確保
-	Model* instance = new Model;
+	CloudModel* instance = new CloudModel;
 	instance->Initialize(modelname, smoothing);
 
 	return instance;
 }
 
-void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void CloudModel::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Model::sCommandList_ == nullptr);
+	assert(CloudModel::sCommandList_ == nullptr);
 
 	// コマンドリストをセット
 	sCommandList_ = commandList;
@@ -214,12 +211,12 @@ void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model::PostDraw() {
+void CloudModel::PostDraw() {
 	// コマンドリストを解除
 	sCommandList_ = nullptr;
 }
 
-Model::~Model() {
+CloudModel::~CloudModel() {
 	for (auto m : meshes_) {
 		delete m;
 	}
@@ -231,7 +228,7 @@ Model::~Model() {
 	materials_.clear();
 }
 
-void Model::Initialize(const std::string& modelname, bool smoothing) {
+void CloudModel::Initialize(const std::string& modelname, bool smoothing) {
 	// モデル読み込み
 	LoadModel(modelname, smoothing);
 
@@ -264,7 +261,7 @@ void Model::Initialize(const std::string& modelname, bool smoothing) {
 	LoadTextures();
 }
 
-void Model::LoadModel(const std::string& modelname, bool smoothing) {
+void CloudModel::LoadModel(const std::string& modelname, bool smoothing) {
 	const string filename = modelname + ".obj";
 	const string directoryPath = kBaseDirectory + modelname + "/";
 
@@ -461,7 +458,7 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 	}
 }
 
-void Model::LoadMaterial(const std::string& directoryPath, const std::string& filename) {
+void CloudModel::LoadMaterial(const std::string& directoryPath, const std::string& filename) {
 	// ファイルストリーム
 	std::ifstream file;
 	// マテリアルファイルを開く
@@ -551,12 +548,12 @@ void Model::LoadMaterial(const std::string& directoryPath, const std::string& fi
 	}
 }
 
-void Model::AddMaterial(Material* material) {
+void CloudModel::AddMaterial(Material* material) {
 	// コンテナに登録
 	materials_.emplace(material->name_, material);
 }
 
-void Model::LoadTextures() {
+void CloudModel::LoadTextures() {
 	int textureIndex = 0;
 	string directoryPath = name_ + "/";
 
@@ -579,11 +576,8 @@ void Model::LoadTextures() {
 	}
 }
 
-void Model::Draw(
+void CloudModel::Draw(
 	const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-
-	// ライトの描画
-	lightGroup->Draw(sCommandList_, 4);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
@@ -597,12 +591,9 @@ void Model::Draw(
 	}
 }
 
-void Model::Draw(
+void CloudModel::Draw(
 	const WorldTransform& worldTransform, const ViewProjection& viewProjection,
 	uint32_t textureHadle) {
-
-	// ライトの描画
-	lightGroup->Draw(sCommandList_, 4);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
