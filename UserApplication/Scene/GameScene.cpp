@@ -35,8 +35,8 @@ void GameScene::Initialize() {
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,10,0 };
-	worldTransform_.scale_ = { 0.01f,0.01f,0.01f };
+	worldTransform_.translation_ = { 0,0,-20 };
+	worldTransform_.scale_ = { 10.0f,3.0f,1.0f };
 	worldTransform_.TransferMatrix();
 
 	ParticleMan = std::make_unique<ParticleManager>();
@@ -66,6 +66,10 @@ void GameScene::Initialize() {
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Initialize();
 	}
+
+	model_.reset(Model::CreateFromOBJ("cube", true));
+
+	touchableObject.reset(TouchableObject::Create(model_, worldTransform_));
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -138,18 +142,8 @@ void GameScene::Update() {
 	player_->SetCameraDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
 	player_->Update();
 
-	if (player_->GetIsPlayerSetUp() == false) {
-		gameCamera->SetCameraPosition(player_->GetPlayerPos());
-	}
-	else {
-		if (cameraSraide < 2) {
-			cameraSraide += 0.6f;
-		}
-		else {
-			cameraSraide = 2;
-		}
-		gameCamera->SetCameraPosition(player_->GetPlayerPos() + player_->GetPlayerLook().lookRight * cameraSraide);
-	}
+	
+	gameCamera->SetCameraPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
 	//tutorialEnemy->Update(player_->GetPlayerPos());
@@ -251,11 +245,15 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	ground->Draw(*viewProjection_.get());
+	model_->Draw(worldTransform_ ,*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 	//tutorialEnemy->Draw(*viewProjection_.get());
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Draw(*viewProjection_.get());
+	}
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		enemy->DebugDraw(*viewProjection_.get());
 	}
 	bulletShotEnemy->Draw(*viewProjection_.get());
 

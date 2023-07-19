@@ -209,6 +209,12 @@ Vector3 MyMath::DivVecMat(const Vector3& vector3, const Matrix4& matrix4)
 	return { V3.x, V3.y, V3.z };
 }
 
+Vector4 MyMath::Vec3ToVec4(const Vector3& vec3)
+{
+	Vector4 vec3ToVec4 = Vector4(vec3.x, vec3.y, vec3.z, 0);
+	return vec3ToVec4;
+}
+
 Vector4 MyMath::Vec4Mat4Mul(const Vector4& vec, const Matrix4& mat)
 {
 	Vector4 retVec = {};

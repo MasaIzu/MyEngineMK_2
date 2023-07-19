@@ -26,6 +26,8 @@
 #include "BulletShotEnemy.h"
 #include "LoadLevelEditor.h"
 
+#include "TouchableObject.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -106,6 +108,8 @@ private: // メンバ変数
 	std::unique_ptr<LoadLevelEditor> levelData;
 
 	std::list<TutorialEnemy*> tutorialEnemyList;
+
+	std::unique_ptr<TouchableObject> touchableObject;
 
 	float dist;
 	float radius;

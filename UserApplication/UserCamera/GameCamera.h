@@ -96,8 +96,7 @@ private://プレイヤークラス変数
 	Vector3 LatePlayerPos = { 0,0,0 };
 	Vector3 PlayerMoveMent;
 	Vector3 CameraTarget;
-	Vector3 higth = { 0,10,0 };
-	Vector3 cameraHigh = { 0,0,0 };
+	Vector3 cameraHigh = { 0,5,0 };
 
 	Matrix4 CameraRot;
 	Matrix4 matRot;// 回転行列

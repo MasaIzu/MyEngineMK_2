@@ -88,8 +88,13 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
 	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 
-	if (collisionManager->GetIsAttackHit()) {
+	if (BulletShotEnemyCollider->GetHit()) {
+		BulletShotEnemyCollider->Reset();
 		PlayerBulletHit();
+	}
+	if (BulletShotEnemyCollider->GetHitEnemyEachOtherHit()) {
+		BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyCollider->GetRejectVec();
+		BulletShotEnemyCollider->EnemyHittingEachOtherReset();
 	}
 
 	DebugWorldTrans.translation_ = BulletShotEnemyWorldTrans.translation_;

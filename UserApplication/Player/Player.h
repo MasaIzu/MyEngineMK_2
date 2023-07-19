@@ -37,6 +37,7 @@ private:
 	// ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è
 	void CheckPlayerCollider();
 
+
 public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
 	void SetCameraDistance(const Vector3& cameradis) { Distance = cameradis; }

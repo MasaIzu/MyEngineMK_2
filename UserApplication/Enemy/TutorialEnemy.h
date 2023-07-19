@@ -16,7 +16,7 @@ public://基本関数
 	void Initialize();
 	void Update(const Vector3& PlayerPos);
 	void Draw(ViewProjection& viewProjection_);
-
+	void DebugDraw(ViewProjection& viewProjection_);
 public://getter
 
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
@@ -31,13 +31,18 @@ private:
 	void PlayerNotSpottedMoveTimer();//敵を見つけてない時
 	void PlayerSpottedMoveTimer();//敵を見つけた時
 
+	// 敵の地面の当たり判定
+	void CheckCollider();
+
+	//敵の視線切れているか
+	bool CheckBetweenToPlayerCollider();
+
 	//雑務系関数
 	bool GetIsAttackArea();//攻撃できる範囲かどうか
 	void SearchingPlayer();//プレイヤーのサーチ関数
 	void GetPlayerForEnemyAngle();//角度をとる
 	void WorldTransUpdate();//Enemyだけの移動の値更新
 	uint32_t Random(const uint32_t& low, const uint32_t& high);//ランダム
-
 
 private://const関連
 	static const uint32_t AttackSphereCount = 3;
@@ -100,6 +105,7 @@ private:
 	bool IsAttack = false;
 	bool IsEnemyHasADestination = false;
 	bool IsNeverSpotted = true;
+	bool onGround = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -144,4 +150,5 @@ private:
 	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ゴール地点
 	//std::vector<Vector3> points{ start, start, p1, p2, end, end };見本
 
+	Vector4 fallVec;
 };

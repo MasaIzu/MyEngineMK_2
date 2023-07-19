@@ -50,6 +50,22 @@ void Player::Update()
 		//どう動くか
 		Move();
 	}
+
+	// 落下処理
+	if (!onGround) {
+		// 下向き加速度
+		const float fallAcc = -0.01f;
+		const float fallVYMin = -0.5f;
+		// 加速
+		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+		// 移動
+		playerWorldTrans.translation_.x += fallVec.x;
+		playerWorldTrans.translation_.y += fallVec.y;
+		playerWorldTrans.translation_.z += fallVec.z;
+	}
+	//当たり判定チェック
+	CheckPlayerCollider();
+
 	//移動の値更新
 	WorldTransUpdate();
 
@@ -72,14 +88,12 @@ void Player::Update()
 
 	ImGui::End();
 
-
 	DebugWorldTrans.translation_ = Distance;
 	DebugWorldTrans.TransferMatrix();
 
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerBullet->Update();
 
-	CheckPlayerCollider();
 }
 
 void Player::Draw(ViewProjection& viewProjection_)
@@ -119,8 +133,8 @@ void Player::Move()
 		playerMoveMent += playerWorldTrans.LookVelocity.look * playerSpeed;
 	}
 	if (input_->PushKey(DIK_S)) {
-		//playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
-		playerMoveMent.y -= 0.02f;
+		playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
+		//playerMoveMent.y -= 0.02f;
 	}
 	if (input_->PushKey(DIK_A)) {
 		playerMoveMent += playerWorldTrans.LookVelocity.lookLeft * playerSpeed;
@@ -201,19 +215,6 @@ void Player::WorldTransUpdate()
 void Player::CheckPlayerCollider()
 {
 
-	// 落下処理
-	if (!onGround) {
-		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
-		// 加速
-		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// 移動
-		playerWorldTrans.translation_.x += fallVec.x;
-		playerWorldTrans.translation_.y += fallVec.y;
-		playerWorldTrans.translation_.z += fallVec.z;
-	}
-
 	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(PlayerCollider);
 	assert(sphereCollider);
 
@@ -270,7 +271,7 @@ void Player::CheckPlayerCollider()
 		Ray Groundray;
 		Groundray.start = sphereCollider->center;
 		Groundray.start.y += sphereCollider->GetRadius();
-		Groundray.dir = { 0,-1,0,0 };
+		Groundray.dir = { 0,-1.0f,0,0 };
 		RaycastHit raycastHit;
 
 
@@ -298,6 +299,64 @@ void Player::CheckPlayerCollider()
 			}
 		}
 	}
+	{
+		//横メッシュコライダー
+		Ray wall;
+		wall.start = sphereCollider->center;
+		wall.start.y += sphereCollider->GetRadius();
+		wall.dir = { 0,0,1,0 };
+		RaycastHit wallRaycastHit;
+		// スムーズに坂を下る為の吸着距離
 
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
+			playerWorldTrans.translation_.z += (wallRaycastHit.distance - sphereCollider->GetRadius());
+		}
+
+	}
+	{
+		//横メッシュコライダー
+		Ray wall;
+		wall.start = sphereCollider->center;
+		wall.start.y += sphereCollider->GetRadius();
+		wall.dir = { 0,0,-1,0 };
+		RaycastHit wallRaycastHit;
+		// スムーズに坂を下る為の吸着距離
+
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
+			playerWorldTrans.translation_.z -= (wallRaycastHit.distance - sphereCollider->GetRadius());
+		}
+	}
+	{
+		//横メッシュコライダー
+		Ray wall;
+		wall.start = sphereCollider->center;
+		wall.start.y += sphereCollider->GetRadius();
+		wall.dir = { 1,0,0,0 };
+		RaycastHit wallRaycastHit;
+		// スムーズに坂を下る為の吸着距離
+
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
+			playerWorldTrans.translation_.x += (wallRaycastHit.distance - sphereCollider->GetRadius());
+		}
+
+	}
+	{
+		//横メッシュコライダー
+		Ray wall;
+		wall.start = sphereCollider->center;
+		wall.start.y += sphereCollider->GetRadius();
+		wall.dir = { -1,0,0,0 };
+		RaycastHit wallRaycastHit;
+		// スムーズに坂を下る為の吸着距離
+
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
+			playerWorldTrans.translation_.x -= (wallRaycastHit.distance - sphereCollider->GetRadius());
+		}
+
+	}
 }
 
