@@ -436,6 +436,9 @@
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="TouchableObject.h">
+      <Filter>Engine\ヘッダー\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -611,6 +614,9 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchableObject.cpp">
+      <Filter>Engine\ソース ファイル\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

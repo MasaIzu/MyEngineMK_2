@@ -1,4 +1,5 @@
 #include "Ground.h"
+#include <CollisionManager.h>
 
 void Ground::Initialze()
 {
@@ -7,6 +8,14 @@ void Ground::Initialze()
 	groundTrans.Initialize();
 	groundTrans.scale_ = { 100,0,100 };
 	groundTrans.TransferMatrix();
+
+	touchableObject.reset(TouchableObject::Create(groundModel, groundTrans));
+
+	//meshCollider = std::make_unique<MeshCollider>();
+	//CollisionManager::GetInstance()->AddCollider(meshCollider.get());
+	//meshCollider->Update(groundTrans.matWorld_);
+	//meshCollider->ConstructTriangles(groundModel, groundTrans.matWorld_);
+	//meshCollider->SetAttribute(COLLISION_ATTR_LANDSHAPE);
 
 }
 

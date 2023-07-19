@@ -22,13 +22,21 @@ public:
 	/// <summary>
 	/// 三角形の配列を構築する
 	/// </summary>
-	void ConstructTriangles(std::unique_ptr<Model>& model, Matrix4 matWorld);
+	void ConstructTriangles(std::unique_ptr<Model>& model, Matrix4& matWorld);
 	//void ConstructTriangles(fbxModel* model);
 
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update(const Matrix4& worldPos) override;
+	void Update(const Matrix4& worldPos, const float& radius) override;
+	void Update(const Matrix4& worldPos, const float& radius, const float& speed, const Vector3& look) override;
+	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime) override;
+	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
+	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime) override;
+	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime) override;
+	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
+
 
 	/// <summary>
 	/// 球との当たり判定
@@ -50,5 +58,5 @@ public:
 private:
 	std::vector<Triangle> triangles;
 	// ワールド行列の逆行列
- Matrix4 invMatWorld;
+	Matrix4 invMatWorld;
 };

@@ -34,7 +34,8 @@ private:
 	void PlayerAttack();
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
-
+	// プレイヤーの当たり判定
+	void CheckPlayerCollider();
 
 public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
@@ -54,6 +55,9 @@ private://クラス関連
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
 
+	// コライダー
+	BaseCollider* PlayerCollider = nullptr;
+
 private://イーナムクラス
 	enum class AttackPhase {
 		AttackCombo1,//
@@ -71,9 +75,11 @@ private://別クラスから値をもらう
 
 private://プレイヤークラス変数
 	bool isPlayerSetUp = false;
+	bool onGround = false;
 
 	uint32_t bulletNumber = 0;
 
+	float Radius = 1.0f;
 	float playerSpeed = 0.3f;
 	float diagonalPlayerSpeed = 0.4f;
 	float PlayerToCameraDistance = 0.0f;
@@ -83,4 +89,5 @@ private://プレイヤークラス変数
 	Vector3 Distance;
 	Vector3 DistanceNolm;
 
+	Vector4 fallVec;
 };

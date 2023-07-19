@@ -3,7 +3,7 @@
 #include "MyMath.h"
 
 using namespace DirectX;
-void MeshCollider::ConstructTriangles(std::unique_ptr<Model>& model, Matrix4 matWorld)
+void MeshCollider::ConstructTriangles(std::unique_ptr<Model>& model, Matrix4& matWorld)
 {
 	triangles.clear();
 
@@ -104,6 +104,48 @@ void MeshCollider::ConstructTriangles(std::unique_ptr<Model>& model, Matrix4 mat
 //}
 
 void MeshCollider::Update(const Matrix4& worldPos)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const float& radius)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const float& speed, const Vector3& look)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime)
+{
+	Matrix4 tmp = MyMath::MakeIdentity();
+	invMatWorld = MyMath::MakeInverse(&tmp);
+}
+
+void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
 {
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);

@@ -311,6 +311,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TouchableObject.h" />
     <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h" />
     <ClInclude Include="Engine\3D\ComputeParticle.h" />
@@ -379,6 +380,7 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TouchableObject.cpp" />
     <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Engine\3D\ComputeParticle.cpp" />

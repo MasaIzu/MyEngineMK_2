@@ -5,6 +5,7 @@
 #include <CollisionAttribute.h>
 #include"ImGuiManager.h"
 #include <FbxLoader.h>
+#include <SphereCollider.h>
 
 
 Player::Player()
@@ -31,6 +32,12 @@ void Player::Initialize()
 
 	AttackSprite = Sprite::Create(TextureManager::Load("shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
+
+	// コリジョンマネージャに追加
+	PlayerCollider = new SphereCollider(Vector4(0, Radius, 0, 0), Radius);
+	CollisionManager::GetInstance()->AddCollider(PlayerCollider);
+	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
+	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
 }
 
@@ -71,6 +78,8 @@ void Player::Update()
 
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerBullet->Update();
+
+	CheckPlayerCollider();
 }
 
 void Player::Draw(ViewProjection& viewProjection_)
@@ -110,7 +119,8 @@ void Player::Move()
 		playerMoveMent += playerWorldTrans.LookVelocity.look * playerSpeed;
 	}
 	if (input_->PushKey(DIK_S)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
+		//playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
+		playerMoveMent.y -= 0.02f;
 	}
 	if (input_->PushKey(DIK_A)) {
 		playerMoveMent += playerWorldTrans.LookVelocity.lookLeft * playerSpeed;
@@ -186,5 +196,108 @@ void Player::WorldTransUpdate()
 {
 	playerWorldTrans.TransferMatrix();
 	playerWorldTransForBullet.TransferMatrix();
+}
+
+void Player::CheckPlayerCollider()
+{
+
+	// 落下処理
+	if (!onGround) {
+		// 下向き加速度
+		const float fallAcc = -0.01f;
+		const float fallVYMin = -0.5f;
+		// 加速
+		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+		// 移動
+		playerWorldTrans.translation_.x += fallVec.x;
+		playerWorldTrans.translation_.y += fallVec.y;
+		playerWorldTrans.translation_.z += fallVec.z;
+	}
+
+	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(PlayerCollider);
+	assert(sphereCollider);
+
+	sphereCollider->SetRadius(Radius);
+
+	// クエリーコールバッククラス
+	class PlayerQueryCallback : public QueryCallback
+	{
+	public:
+		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
+
+		// 衝突時コールバック関数
+		bool OnQueryHit(const QueryHit& info) {
+
+			const Vector4 up = { 0,1,0,0 };
+
+			Vector4 rejectDir = info.reject;
+			rejectDir.normalize();
+			rejectDir.dot(up);
+			float cos = rejectDir.y;
+
+			// 地面判定しきい値
+			const float threshold = cosf(DirectX::XMConvertToRadians(30.0f));
+
+			if (-threshold < cos && cos < threshold) {
+				sphere->center += info.reject;
+				move += info.reject;
+			}
+
+			return true;
+		}
+
+		Sphere* sphere = nullptr;
+		Vector4 move = {};
+	};
+
+	PlayerQueryCallback callback(sphereCollider);
+
+	// 球と地形の交差を全検索
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE, &playerWorldTrans.matWorld_);
+	// 交差による排斥分動かす
+	playerWorldTrans.translation_.x += callback.move.x;
+	playerWorldTrans.translation_.y += callback.move.y;
+	playerWorldTrans.translation_.z += callback.move.z;
+	// ワールド行列更新
+	playerWorldTrans.TransferMatrix();
+	PlayerCollider->Update(playerWorldTrans.matWorld_);
+
+	float RayPos = -1.0f;
+
+	//地面メッシュコライダー
+	{
+		// 球の上端から球の下端までのレイキャスト
+		Ray Groundray;
+		Groundray.start = sphereCollider->center;
+		Groundray.start.y += sphereCollider->GetRadius();
+		Groundray.dir = { 0,-1,0,0 };
+		RaycastHit raycastHit;
+
+
+		// 接地状態
+		if (onGround) {
+			// スムーズに坂を下る為の吸着距離
+			const float adsDistance = 0.2f;
+			// 接地を維持
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
+				onGround = true;
+				playerWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			}
+			// 地面がないので落下
+			else {
+				onGround = false;
+				fallVec = {};
+			}
+		}
+		// 落下状態
+		else {
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
+				// 着地
+				onGround = true;
+				playerWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			}
+		}
+	}
+
 }
 
