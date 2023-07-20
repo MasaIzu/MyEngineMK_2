@@ -22,6 +22,8 @@ void BulletShotEnemy::Initialize()
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	BulletShotEnemyWorldTrans.Initialize();
 	BulletShotEnemyWorldTrans.translation_ = BonePos;
+	BulletShotEnemyWorldTransHed.Initialize();
+	BulletShotEnemyWorldTransHed.translation_ = { 0.0f,EnemyRadius * 2,0.0f };
 	WorldTransUpdate();
 
 	input_ = Input::GetInstance();
@@ -48,7 +50,7 @@ void BulletShotEnemy::Initialize()
 void BulletShotEnemy::Update(const Vector3& PlayerPos)
 {
 	playerPos = PlayerPos;
-
+	OldTansPos = BulletShotEnemyWorldTrans.translation_;
 	if (IsAlive == false) {
 		IsAlive = true;
 		BulletShotEnemyWorldTrans.translation_ = BonePos;
@@ -83,10 +85,24 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	ImGui::Text("EnemyToPlayerAngle:%f", EnemyToPlayerAngle);
 	ImGui::End();*/
 
+	// 落下処理
+	if (!onGround) {
+		// 下向き加速度
+		const float fallAcc = -0.01f;
+		const float fallVYMin = -0.5f;
+		// 加速
+		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+		// 移動
+		BulletShotEnemyWorldTrans.translation_.x += fallVec.x;
+		BulletShotEnemyWorldTrans.translation_.y += fallVec.y;
+		BulletShotEnemyWorldTrans.translation_.z += fallVec.z;
+	}
 
 	WorldTransUpdate();
 	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
 	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+
+	CheckCollider();
 
 	if (BulletShotEnemyCollider->GetHit()) {
 		BulletShotEnemyCollider->Reset();
@@ -106,6 +122,7 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(BulletShotEnemyWorldTrans, viewProjection_);
+	model_->Draw(BulletShotEnemyWorldTransHed, viewProjection_);
 	enemyBullet->Draw(viewProjection_);
 	/*for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
@@ -298,14 +315,18 @@ void BulletShotEnemy::Attack()
 	{
 	case BulletShotEnemy::AttackPhase::NormalAttack:
 
-		DistanceNolm = playerPos - GetBulletShotEnemyPos();
-		DistanceNolm.normalize();
-		bulletNumber = enemyBullet->MakeEnemyBullet(GetBulletShotEnemyPos(), DistanceNolm, EnemyBulletSpeed, SpottedLookingPlayerRadius / EnemyBulletSpeed);
+		if (CheckBetweenToPlayerCollider()) {
+			
+		}
+		else {
+			DistanceNolm = playerPos - MyMath::GetWorldTransform(BulletShotEnemyWorldTransHed.matWorld_);
+			DistanceNolm.normalize();
+			bulletNumber = enemyBullet->MakeEnemyBullet(MyMath::GetWorldTransform(BulletShotEnemyWorldTransHed.matWorld_), DistanceNolm, EnemyBulletSpeed, SpottedLookingPlayerRadius / EnemyBulletSpeed);
 
-		AttackDelayTime = MaxAttackDelayTime;
-		AttackPhase_ = AttackPhase::Nothing;
-		SpottedPhase_ = SpottedPhase::Walk;
-
+			AttackDelayTime = MaxAttackDelayTime;
+			AttackPhase_ = AttackPhase::Nothing;
+			SpottedPhase_ = SpottedPhase::Walk;
+		}
 
 		break;
 	case BulletShotEnemy::AttackPhase::RunAttack:
@@ -359,7 +380,9 @@ void BulletShotEnemy::SearchingPlayer()
 		radius *= radius;
 		GetPlayerForEnemyAngle();
 		if (dist <= radius) {
-			NotSpottedPhase_ = NotSpottedPhase::SpottedPlayer;
+			if (CheckBetweenToPlayerCollider() == false) {
+				NotSpottedPhase_ = NotSpottedPhase::SpottedPlayer;
+			}
 		}
 	}
 	else {
@@ -382,6 +405,119 @@ void BulletShotEnemy::GetPlayerForEnemyAngle()
 	EnemyToPlayerAngle = MyMath::Get2VecAngle(BulletShotEnemyWorldTrans.LookVelocity.look + BulletShotEnemyWorldTrans.translation_, playerPos);
 }
 
+void BulletShotEnemy::CheckCollider()
+{
+
+	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(BulletShotEnemyCollider);
+	assert(sphereCollider);
+
+	sphereCollider->SetRadius(EnemyRadius);
+
+	// クエリーコールバッククラス
+	class PlayerQueryCallback : public QueryCallback
+	{
+	public:
+		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
+
+		// 衝突時コールバック関数
+		bool OnQueryHit(const QueryHit& info) {
+
+			const Vector4 up = { 0,1,0,0 };
+
+			Vector4 rejectDir = info.reject;
+			rejectDir.normalize();
+			rejectDir.dot(up);
+			float cos = rejectDir.y;
+
+			// 地面判定しきい値
+			const float threshold = cosf(DirectX::XMConvertToRadians(30.0f));
+
+			if (-threshold < cos && cos < threshold) {
+				sphere->center += info.reject;
+				move += info.reject;
+			}
+
+			return true;
+		}
+
+		Sphere* sphere = nullptr;
+		Vector4 move = {};
+	};
+
+	PlayerQueryCallback callback(sphereCollider);
+
+	// 球と地形の交差を全検索
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE, &BulletShotEnemyWorldTrans.matWorld_);
+	// 交差による排斥分動かす
+	BulletShotEnemyWorldTrans.translation_.x += callback.move.x;
+	BulletShotEnemyWorldTrans.translation_.y += callback.move.y;
+	BulletShotEnemyWorldTrans.translation_.z += callback.move.z;
+	// ワールド行列更新
+	BulletShotEnemyWorldTrans.TransferMatrix();
+	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
+
+	float RayPos = -1.0f;
+
+	//地面メッシュコライダー
+	{
+		// 球の上端から球の下端までのレイキャスト
+		Ray Groundray;
+		Groundray.start = sphereCollider->center;
+		Groundray.start.y += sphereCollider->GetRadius();
+		Groundray.dir = { 0,-1,0,0 };
+		RaycastHit raycastHit;
+
+
+		// 接地状態
+		if (onGround) {
+			// スムーズに坂を下る為の吸着距離
+			const float adsDistance = 0.2f;
+			// 接地を維持
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
+				onGround = true;
+				BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			}
+			// 地面がないので落下
+			else {
+				//onGround = false;
+				fallVec = {};
+				BulletShotEnemyWorldTrans.translation_ = OldTansPos;
+				StopTime = Random(150, 240);
+				NotSpottedPhase_ = NotSpottedPhase::Interruption;
+			}
+		}
+		// 落下状態
+		else {
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
+				// 着地
+				onGround = true;
+				BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			}
+		}
+	}
+}
+
+bool BulletShotEnemy::CheckBetweenToPlayerCollider()
+{
+	// 球の上端から球の下端までのレイキャスト
+	Ray LookRay;
+	LookRay.start = MyMath::Vec3ToVec4(BulletShotEnemyWorldTrans.translation_);
+	LookRay.start.y += EnemyRadius;
+	EnemyToPlayerVec = playerPos - BulletShotEnemyWorldTrans.translation_;
+	Distance = EnemyToPlayerVec.length();
+	LookRay.dir = MyMath::Vec3ToVec4(EnemyToPlayerVec.norm());
+	RaycastHit raycastHit;
+
+	//プレーヤーとの間にオブジェクトがあれば見失う
+	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, Distance)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	return false;
+}
+
 bool BulletShotEnemy::GetIsAttackArea()
 {
 	//円を作ってプレイヤーがいたら攻撃移行
@@ -390,7 +526,12 @@ bool BulletShotEnemy::GetIsAttackArea()
 	radius = SpottedLookingPlayerRadius;
 	radius *= radius;
 	if (dist <= radius) {
-		return true;
+		if (CheckBetweenToPlayerCollider() == false) {
+			return true;
+		}
+		else {
+			SpottedPhase_ = SpottedPhase::LoseSightofPlayer;
+		}
 	}
 	return false;
 }
@@ -398,6 +539,8 @@ bool BulletShotEnemy::GetIsAttackArea()
 void BulletShotEnemy::WorldTransUpdate()
 {
 	BulletShotEnemyWorldTrans.TransferMatrix();
+	BulletShotEnemyWorldTransHed.parent_ = &BulletShotEnemyWorldTrans;
+	BulletShotEnemyWorldTransHed.TransferMatrix();
 }
 
 uint32_t BulletShotEnemy::Random(const uint32_t& low, const uint32_t& high)

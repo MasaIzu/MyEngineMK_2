@@ -55,6 +55,8 @@ void PlayerBullet::Update()
 	CheckBulletAlive();
 	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
 	BulletUpdate();
+	//Ž€‚ñ‚Å‚½‚çŠi”[
+	SetNotAlivePosition();
 
 	ImGui::Begin("PlayerBullet");
 
@@ -70,6 +72,7 @@ void PlayerBullet::Update()
 
 	//ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
 	ImGui::SliderFloat("PlayerParticleSpeed", &PlayerParticleSpeed, 0, 1);
+	ImGui::SliderFloat("PlayerParticleDieSpeed", &PlayerParticleDieSpeed, 0, 2);
 	ImGui::End();
 
 
@@ -80,6 +83,7 @@ void PlayerBullet::Update()
 		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed, BulletVector[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
+
 }
 
 void PlayerBullet::Draw(ViewProjection& viewProjection_)
@@ -112,6 +116,14 @@ void PlayerBullet::BulletUpdate()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			playerBulletMoveMent[i] = BulletVector[i] * playerBulletSpeed;
+			if (BulletCollider[i]->GetBulletHit()) {
+				isBulletAlive[i] = false;
+				BulletCollider[i]->BulletMeshHitReset();
+				Vector3 Verocity = { 0,0,0 };
+				for (uint32_t j = 0; j < DieMaxParticle; j++) {
+					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleDieSpeed, 0.04f);
+				}
+			}
 			if (isExpanding == false) {
 				MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], playerBulletSpeed);
 			}
@@ -213,6 +225,16 @@ void PlayerBullet::CheckBulletAlive()
 	}
 }
 
+void PlayerBullet::SetNotAlivePosition()
+{
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
+		if (isBulletAlive[i] == false) {
+			playerBulletWorldTrans[i].translation_ = Vector3(0, -50, 0);
+			playerBulletWorldTrans[i].TransferMatrix();
+		}
+	}
+}
+
 void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
 {
 	for (float i = 0; i < BulletSpeed; i++) {
@@ -226,6 +248,21 @@ void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const flo
 		float scale = (1.0f / BulletSpeed) * i;
 		ParticleMan->Add(AddPos, Verocty, ParticleFile, color, DownColor, scale);
 	}
+}
+
+void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed, const float& DownScale)
+{
+
+	Vector3 Verocty = BulletVelocity * BulletSpeed;
+	Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
+	Verocty += Rand * BulletSpeed;
+	Vector3 AddPos = pos;
+	Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5, 20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
+	Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
+	Vector4 DownColor = color / static_cast<float>(DieMaxParticleLife);
+	float scale = 1.0f;
+	ParticleMan->Add(AddPos, Verocty, DieMaxParticleLife, color, DownColor, scale, DownScale);
+
 }
 
 void PlayerBullet::OldPosUpdate()

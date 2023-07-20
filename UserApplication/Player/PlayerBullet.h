@@ -43,8 +43,11 @@ private:
 	void BulletAliveTimerUpdate();
 	//生きているかどうか
 	void CheckBulletAlive();
+	//死んでるときは奥深くに格納
+	void SetNotAlivePosition();
 	//パーティクルを出す
 	void MakeParticle(Vector3& pos, Vector3& BulletVelocity,const float& BulletSpeed);
+	void MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed, const float& DownScale);
 	//1フレーム前のポジション
 	void OldPosUpdate();
 
@@ -81,11 +84,14 @@ private://プレイヤークラス変数
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
+	uint32_t DieMaxParticle = 30;
+	uint32_t DieMaxParticleLife = 40;
 
 	float playerBulletSpeed = 10.0f;
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
 	float PlayerParticleSpeed = 0.02f;
+	float PlayerParticleDieSpeed = 0.2f;
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向

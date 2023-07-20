@@ -37,6 +37,12 @@ private:
 	void PlayerNotSpottedMoveTimer();//敵を見つけてない時
 	void PlayerSpottedMoveTimer();//敵を見つけた時
 
+	// 敵の地面の当たり判定
+	void CheckCollider();
+
+	//敵の視線切れているか
+	bool CheckBetweenToPlayerCollider();
+
 	//雑務系関数
 	bool GetIsAttackArea();//攻撃できる範囲かどうか
 	void SearchingPlayer();//プレイヤーのサーチ関数
@@ -52,6 +58,7 @@ private://クラス変数
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform BulletShotEnemyWorldTrans;
+	WorldTransform BulletShotEnemyWorldTransHed;
 	WorldTransform DebugWorldTrans;
 
 	//当たり判定
@@ -106,6 +113,8 @@ private:
 	bool IsAttack = false;
 	bool IsEnemyHasADestination = false;
 	bool IsNeverSpotted = true;
+	bool onGround = false;
+	bool isLanding = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -145,6 +154,7 @@ private:
 	Vector3 EnemyToPlayerVec;
 	Vector3 BackBonePos;
 	Vector3 DestinationPos;
+	Vector3 OldTansPos;
 
 	//スプライン曲線に必要なメンバ変数
 	Vector3 start = { 0.0f, 0.0f, 0.0f };	//スタート地点
@@ -154,4 +164,5 @@ private:
 	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ゴール地点
 	//std::vector<Vector3> points{ start, start, p1, p2, end, end };見本
 
+	Vector4 fallVec;
 };

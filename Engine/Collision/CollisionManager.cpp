@@ -75,8 +75,15 @@ void CollisionManager::CheckAllCollisions()
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
 				Sphere* sphere = dynamic_cast<Sphere*>(colB);
 				Vector4 inter;
-				if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-
+				if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ATTACK) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colB->isBulletMeshHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ENEMYBULLETATTACK) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colB->isBulletMeshHit = true;
+					}
 				}
 			}
 			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
@@ -84,8 +91,15 @@ void CollisionManager::CheckAllCollisions()
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
 				Sphere* sphere = dynamic_cast<Sphere*>(colA);
 				Vector4 inter;
-				if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-
+				if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colA->isBulletMeshHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_ENEMYBULLETATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colA->isBulletMeshHit = true;
+					}
 				}
 			}
 		}
