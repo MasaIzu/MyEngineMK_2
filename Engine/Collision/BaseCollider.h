@@ -30,10 +30,11 @@ public:
 
 	inline CollisionShapeType GetShapeType() { return shapeType; }
 	inline unsigned short GetAttribute() { return attribute; }
-	inline Matrix4 GetWorldPos() { return worldPos_; }
 	inline bool GetHit() { return isHitPlayerAttack; }
 	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
+	inline bool GetBulletHit() { return isBulletMeshHit; }
 	inline Vector3 GetRejectVec() { return rejectVec; }
+	inline Matrix4 GetWorldPos() { return worldPos_; }
 
 
 	/// <summary>
@@ -84,6 +85,14 @@ public:
 		isEnemyHittingEachOther = false;
 	}
 
+	/// <summary>
+	/// 排斥ベクトルのヒットをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void BulletMeshHitReset() {
+		isBulletMeshHit = false;
+	}
+
 protected:
 	// 形状タイプ
 	CollisionShapeType shapeType = SHAPE_UNKNOWN;
@@ -94,6 +103,7 @@ protected:
 
 	bool isHitPlayerAttack = false;//プレーヤーの弾が当たっている場合
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
+	bool isBulletMeshHit = false;
 
 	Vector3 rejectVec;//排斥ベクトル
 

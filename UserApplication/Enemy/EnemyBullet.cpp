@@ -44,6 +44,8 @@ void EnemyBullet::Initialize()
 	ParticleMan->Initialize();
 	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
 
+	//Ž€‚ñ‚Å‚½‚çŠi”[
+	SetNotAlivePosition();
 }
 
 void EnemyBullet::Update()
@@ -56,6 +58,8 @@ void EnemyBullet::Update()
 	CheckBulletAlive();
 	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
 	BulletUpdate();
+	//Ž€‚ñ‚Å‚½‚çŠi”[
+	SetNotAlivePosition();
 
 	ImGui::Begin("enemyBullet");
 
@@ -70,7 +74,8 @@ void EnemyBullet::Update()
 	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
 
 	//ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
-	ImGui::SliderFloat("PlayerParticleSpeed", &EnemyParticleSpeed, 0, 1);
+	ImGui::SliderFloat("EnemyParticleSpeed", &EnemyParticleSpeed, 0, 1);
+	ImGui::SliderFloat("EnemyParticleDieSpeed", &EnemyParticleDieSpeed, 0, 1);
 	ImGui::End();
 
 	ParticleMan->Update();
@@ -111,6 +116,14 @@ void EnemyBullet::BulletUpdate()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			EnemyBulletMoveMent[i] = BulletVector[i] * EnemyBulletSpeed[i];
+			if (BulletCollider[i]->GetBulletHit()) {
+				isBulletAlive[i] = false;
+				BulletCollider[i]->BulletMeshHitReset();
+				Vector3 Verocity = { 0,0,0 };
+				for (uint32_t j = 0; j < DieMaxParticle; j++) {
+					MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyParticleDieSpeed);
+				}
+			}
 			if (isExpanding == false) {
 				MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyParticleSpeed);
 			}
@@ -212,15 +225,18 @@ void EnemyBullet::CheckBulletAlive()
 	}
 }
 
+void EnemyBullet::SetNotAlivePosition()
+{
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
+		if (isBulletAlive[i] == false) {
+			EnemyBulletWorldTrans[i].translation_ = Vector3(0, -50, 0);
+			EnemyBulletWorldTrans[i].TransferMatrix();
+		}
+	}
+}
+
 void EnemyBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
 {
-	//for (uint32_t i = 0; i < MackPaticleMax; i++) {
-	//	Vector3 Verocty = BulletVelocity;
-	//	Vector3 Rand = MyMath::RandomVec3(0, 20);
-	//	Verocty += Rand * PlayerParticleSpeed;
-	//	Vector4 color = { 0.5f,1.0f,0.3f,1 };
-	//	ParticleMan->Add(pos, Verocty, ParticleFile, color);
-	//}
 
 	Vector3 Verocty = BulletVelocity * BulletSpeed;
 	Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);

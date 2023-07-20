@@ -22,6 +22,10 @@ void Player::Initialize()
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
 	playerWorldTrans.translation_ = { 0,10.0f,-50.0f };
+	playerWorldTransHed.Initialize();
+	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
+	playerWorldTransHed.parent_ = &playerWorldTrans;
+	playerWorldTransHed.TransferMatrix();
 
 	playerWorldTransForBullet.Initialize();
 
@@ -99,6 +103,7 @@ void Player::Update()
 void Player::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(playerWorldTrans, viewProjection_);
+	model_->Draw(playerWorldTransHed, viewProjection_);
 	playerBullet->Draw(viewProjection_);
 	model_->Draw(DebugWorldTrans, viewProjection_);
 }
@@ -184,7 +189,7 @@ void Player::PlayerAttack()
 		DistanceNolm = Distance - GetPlayerPos();
 		PlayerToCameraDistance = DistanceNolm.length();
 		DistanceNolm.normalize();
-		bulletNumber = playerBullet->MakePlayerBullet(GetPlayerPos(), DistanceNolm, PlayerToCameraDistance);
+		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), DistanceNolm, PlayerToCameraDistance);
 		break;
 	case Player::AttackPhase::AttackCombo2:
 
@@ -210,6 +215,10 @@ void Player::WorldTransUpdate()
 {
 	playerWorldTrans.TransferMatrix();
 	playerWorldTransForBullet.TransferMatrix();
+
+	playerWorldTransHed.parent_ = &playerWorldTrans;
+	playerWorldTransHed.TransferMatrix();
+
 }
 
 void Player::CheckPlayerCollider()

@@ -35,8 +35,8 @@ void GameScene::Initialize() {
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,-20 };
-	worldTransform_.scale_ = { 10.0f,3.0f,1.0f };
+	worldTransform_.translation_ = { 50,0,0 };
+	worldTransform_.scale_ = { 10.0f,3.0f,4.0f };
 	worldTransform_.TransferMatrix();
 
 	ParticleMan = std::make_unique<ParticleManager>();
@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	bulletShotEnemy->Initialize();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("enemyTest");
+	levelData->Initialize("enemyone");
 
 	tutorialEnemyList = levelData->GetEnemyList();
 

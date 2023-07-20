@@ -50,6 +50,7 @@ private://ƒNƒ‰ƒXŠÖ˜A
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
+	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
 	WorldTransform DebugWorldTrans;
 	std::unique_ptr<PlayerBullet> playerBullet;

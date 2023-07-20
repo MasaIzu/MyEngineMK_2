@@ -43,6 +43,8 @@ private:
 	void BulletAliveTimerUpdate();
 	//生きているかどうか
 	void CheckBulletAlive();
+	//死んでるときは奥深くに格納
+	void SetNotAlivePosition();
 	//パーティクルを出す
 	void MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed);
 	//1フレーム前のポジション
@@ -81,11 +83,13 @@ private://クラス変数
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
+	uint32_t DieMaxParticle = 5;
 
 	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
 	float EnemyBulletMaxRadius = 5.0f;
 	float EnemyParticleSpeed = 0.02f;
+	float EnemyParticleDieSpeed = 0.2f;
 
 	Vector3 EnemyBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向
