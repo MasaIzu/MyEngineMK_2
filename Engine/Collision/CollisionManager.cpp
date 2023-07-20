@@ -70,35 +70,43 @@ void CollisionManager::CheckAllCollisions()
 					//isEnemyHit = true;
 				}
 			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_MESH &&
-				colB->GetShapeType() == COLLISIONSHAPE_SPHERE) {
+			else if (colA->GetShapeType() == COLLISIONSHAPE_MESH && colB->GetShapeType() == COLLISIONSHAPE_SPHERE) {
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
 				Sphere* sphere = dynamic_cast<Sphere*>(colB);
 				Vector4 inter;
 				if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ATTACK) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isBulletMeshHit = true;
+						colB->isSphereMeshHit = true;
 					}
 				}
 				else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ENEMYBULLETATTACK) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isBulletMeshHit = true;
+						colB->isSphereMeshHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_CAMERA) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colB->isSphereMeshHit = true;
 					}
 				}
 			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
-				colB->GetShapeType() == COLLISIONSHAPE_MESH) {
+			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH) {
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
 				Sphere* sphere = dynamic_cast<Sphere*>(colA);
 				Vector4 inter;
 				if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isBulletMeshHit = true;
+						colA->isSphereMeshHit = true;
 					}
 				}
 				else if (colA->attribute == COLLISION_ATTR_ENEMYBULLETATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isBulletMeshHit = true;
+						colA->isSphereMeshHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_CAMERA && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colA->isSphereMeshHit = true;
 					}
 				}
 			}

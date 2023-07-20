@@ -30,6 +30,8 @@ namespace MyMath {
 	const Vector3 AddVector3(const Vector3 v1, const Vector3 v2);
 	Vector3 DivVecMat(const Vector3& vector3, const Matrix4& matrix4);
 
+	Vector3 Vec4ToVec3(const Vector4& vec4);
+
 	Vector4 Vec3ToVec4(const Vector3& vec3);
 	Vector4 Vec4Mat4Mul(const Vector4& vec, const Matrix4& mat);
 

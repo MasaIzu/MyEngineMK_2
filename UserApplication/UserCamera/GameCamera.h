@@ -26,7 +26,6 @@ private:
 	void Collision();
 	void MousePositionReset();
 	void CameraAngle(const float& x, const float& z);
-	void MultiplyMatrix(Matrix4& matrix);
 
 	//カメラの視線切れているか
 	bool CheckBetweenToCameraCollider();
@@ -83,7 +82,8 @@ private://プレイヤークラス変数
 	float CameraDistanceMinus = 0.0f;
 	float CameraMouseMoved = 0.0f;
 	float OldMouseMoved = 0.0f;
-	float CameraCollisionRadius = 0.2f;
+	float CameraCollisionRadius = 2.0f;
+	float CameraRayCollisionRadius = 0.2f;
 	float PlayerToCameraVecDistance = 0.0f;
 
 	Uint32Vector2 windowWH;

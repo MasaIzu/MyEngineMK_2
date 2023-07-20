@@ -116,9 +116,9 @@ void PlayerBullet::BulletUpdate()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			playerBulletMoveMent[i] = BulletVector[i] * playerBulletSpeed;
-			if (BulletCollider[i]->GetBulletHit()) {
+			if (BulletCollider[i]->GetSphereMeshHit()) {
 				isBulletAlive[i] = false;
-				BulletCollider[i]->BulletMeshHitReset();
+				BulletCollider[i]->SphereMeshHitReset();
 				Vector3 Verocity = { 0,0,0 };
 				for (uint32_t j = 0; j < DieMaxParticle; j++) {
 					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleDieSpeed, 0.04f);

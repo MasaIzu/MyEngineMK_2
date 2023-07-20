@@ -32,8 +32,9 @@ public:
 	inline unsigned short GetAttribute() { return attribute; }
 	inline bool GetHit() { return isHitPlayerAttack; }
 	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
-	inline bool GetBulletHit() { return isBulletMeshHit; }
+	inline bool GetSphereMeshHit() { return isSphereMeshHit; }
 	inline Vector3 GetRejectVec() { return rejectVec; }
+	inline Vector4 GetInterVec() { return inter; }
 	inline Matrix4 GetWorldPos() { return worldPos_; }
 
 
@@ -89,8 +90,8 @@ public:
 	/// 排斥ベクトルのヒットをリセット
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
-	inline void BulletMeshHitReset() {
-		isBulletMeshHit = false;
+	inline void SphereMeshHitReset() {
+		isSphereMeshHit = false;
 	}
 
 protected:
@@ -103,9 +104,11 @@ protected:
 
 	bool isHitPlayerAttack = false;//プレーヤーの弾が当たっている場合
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
-	bool isBulletMeshHit = false;
+	bool isSphereMeshHit = false;
+
 
 	Vector3 rejectVec;//排斥ベクトル
+	Vector4 inter;
 
 	//位置
 	Matrix4 worldPos_;

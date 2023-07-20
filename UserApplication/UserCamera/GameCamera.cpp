@@ -21,20 +21,10 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 	scaleX_ = 1.0f / (float)window_width;
 	scaleY_ = 1.0f / (float)window_height;
 
-	float angleX = 0;
-	float angleY = 0;
-
 	MaxCameraTime = 400;
 	cameraTime = MaxCameraTime;
 	oldMousePos = mousePos;
 	mousePos = input_->GetMousePos();
-
-	// 追加回転分の回転行列を生成
-	Matrix4 matRotNew;
-	matRotNew.rotateX(-angleX);
-	matRotNew.rotateY(-angleY);
-
-	MultiplyMatrix(matRotNew);
 
 	cameraPos = { 5,5,5 };
 }
@@ -105,7 +95,7 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 }
 
 void GameCamera::Update() {
-
+	CameraCollider->SetAttribute(COLLISION_ATTR_CAMERA);
 	if (input_->TriggerKey(DIK_F1)) {
 		if (cameraMode == false) {
 			cameraMode = true;
@@ -156,11 +146,19 @@ void GameCamera::Update() {
 
 	viewProjection->target = target;
 	viewProjection->eye = vTargetEye;
-	viewProjection->UpdateMatrix();
+
+	//オブジェクトが挟まったらオブジェクトの前にカメラを持ってくる
+	CheckBetweenToCameraCollider();
 
 	CameraCollider->Update(MyMath::Translation(viewProjection->eye));
 
-	CheckBetweenToCameraCollider();
+	if (CameraCollider->GetSphereMeshHit()) {
+		CameraCollider->SphereMeshHitReset();
+	}
+
+	viewProjection->UpdateMatrix();
+
+
 }
 
 void GameCamera::PlaySceneCamera() {
@@ -349,45 +347,23 @@ void GameCamera::MousePositionReset()
 
 }
 
-
-void GameCamera::MultiplyMatrix(Matrix4& matrix) {
-	// 累積の回転行列を合成
-	matRot = matrix * matRot;
-
-	// 注視点から視点へのベクトルと、上方向ベクトル
-	vTargetEye = { 0.0f, 0.0f, -distance_ };
-	vUp = { 0.0f, 1.0f, 0.0f };
-
-	// ベクトルを回転
-	vTargetEye = MyMath::MatVector(matRot, vTargetEye);
-
-}
-
 bool GameCamera::CheckBetweenToCameraCollider()
 {
 	// 範囲レイキャスト
 	Ray LookRay;
 	LookRay.start = MyMath::Vec3ToVec4(viewProjection->eye);
-	LookRay.start.y += CameraCollisionRadius;
+	LookRay.start.y += CameraRayCollisionRadius;
 	PlayerToCameraVec = playerPos_ - viewProjection->eye;
 	PlayerToCameraVecDistance = PlayerToCameraVec.length();
 	LookRay.dir = MyMath::Vec3ToVec4(PlayerToCameraVec.norm());
 	RaycastHit raycastHit;
 
-	//プレーヤーとの間にオブジェクトがあれば見失う
+	//カメラとの間にオブジェクトがあれば位置を変える
 	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToCameraVecDistance)) {
-		return true;
-	}
-
-	// 球の上端から球の下端までのレイキャスト
-	Ray DownRay;
-	DownRay.start = MyMath::Vec3ToVec4(viewProjection->eye);
-	DownRay.start.y += CameraCollisionRadius;
-	DownRay.dir = { 0,-CameraCollisionRadius,0,0 };;
-	RaycastHit DownRaycastHit;
-
-	//プレーヤーとの間にオブジェクトがあれば見失う
-	if (CollisionManager::GetInstance()->Raycast(DownRay, COLLISION_ATTR_LANDSHAPE, &DownRaycastHit)) {
+		Vector3 eyeToInter = viewProjection->eye - MyMath::Vec4ToVec3(raycastHit.inter);
+		viewProjection->target = viewProjection->target - eyeToInter;
+		viewProjection->eye = MyMath::Vec4ToVec3(raycastHit.inter);
+		CameraCollider->SetAttribute(COLLISION_ATTR_NEARCAMERA);
 		return true;
 	}
 	else {

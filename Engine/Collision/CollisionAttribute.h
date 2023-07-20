@@ -12,3 +12,4 @@ const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b110;//“G‚ÌUŒ‚
 const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b111;//“G‚Ì’e‚ÌUŒ‚
 
 const unsigned short COLLISION_ATTR_CAMERA = 0b1000;//ƒJƒƒ‰
+const unsigned short COLLISION_ATTR_NEARCAMERA = 0b1001;//ƒJƒƒ‰
