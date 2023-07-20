@@ -7,6 +7,7 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Easing.h"
+#include <BaseCollider.h>
 
 class GameCamera {
 
@@ -27,6 +28,9 @@ private:
 	void CameraAngle(const float& x, const float& z);
 	void MultiplyMatrix(Matrix4& matrix);
 
+	//カメラの視線切れているか
+	bool CheckBetweenToCameraCollider();
+
 public://getter
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
 	Vector2 GetCameraAngle() const { return Vector2(mouseMoved.y - MyMath::PI, mouseMoved.x); }
@@ -42,6 +46,9 @@ private://クラス関連
 	Easing* easing_;
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;
+
+	// コライダー
+	BaseCollider* CameraCollider = nullptr;
 
 private://プレイヤークラス変数
 	bool cameraMode = false;
@@ -76,6 +83,8 @@ private://プレイヤークラス変数
 	float CameraDistanceMinus = 0.0f;
 	float CameraMouseMoved = 0.0f;
 	float OldMouseMoved = 0.0f;
+	float CameraCollisionRadius = 0.2f;
+	float PlayerToCameraVecDistance = 0.0f;
 
 	Uint32Vector2 windowWH;
 
@@ -97,6 +106,7 @@ private://プレイヤークラス変数
 	Vector3 PlayerMoveMent;
 	Vector3 CameraTarget;
 	Vector3 cameraHigh = { 0,5,0 };
+	Vector3 PlayerToCameraVec;
 
 	Matrix4 CameraRot;
 	Matrix4 matRot;// 回転行列

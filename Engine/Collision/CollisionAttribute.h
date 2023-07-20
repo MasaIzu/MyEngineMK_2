@@ -11,3 +11,4 @@ const unsigned short COLLISION_ATTR_INVINCIBLE = 0b101;//–³“G
 const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b110;//“G‚ÌUŒ‚
 const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b111;//“G‚Ì’e‚ÌUŒ‚
 
+const unsigned short COLLISION_ATTR_CAMERA = 0b1000;//ƒJƒƒ‰

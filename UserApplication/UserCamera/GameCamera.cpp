@@ -3,7 +3,9 @@
 #include "WinApp.h"
 #include "MyMath.h"
 #include"ImGuiManager.h"
-
+#include <SphereCollider.h>
+#include <CollisionManager.h>
+#include <CollisionAttribute.h>
 
 GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 {
@@ -48,6 +50,12 @@ void GameCamera::Initialize(ViewProjection* viewProjection_, const float& camera
 	viewProjection = viewProjection_;
 	playerPos_ = pos;
 	InitializeCameraPosition(cameraAngle);
+
+	// コリジョンマネージャに追加
+	CameraCollider = new SphereCollider(Vector4(0, CameraCollisionRadius, 0, 0), CameraCollisionRadius);
+	CollisionManager::GetInstance()->AddCollider(CameraCollider);
+	CameraCollider->SetAttribute(COLLISION_ATTR_CAMERA);
+	CameraCollider->Update(MyMath::Translation(viewProjection->eye));
 }
 
 void GameCamera::InitializeCameraPosition(const float& cameraAngle)
@@ -72,17 +80,14 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	SetCursorPos(xPos_absolute, yPos_absolute);//移動させる
 
 	target = playerPos_ + cameraHigh;
-
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
 	//レールカメラの回転を反映
 	forward = MyMath::MatVector(CameraRot, forward);
-
 	forward.normalize();
 
 	//target = pos;
 	vTargetEye = target + (forward * cameraDistance_);
-
 	cameraPos = vTargetEye;
 
 	//距離
@@ -94,6 +99,9 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	player_camera.normalize();
 	cameraPos = target + (player_camera * cameraDistance_);
 
+	viewProjection->target = target;
+	viewProjection->eye = vTargetEye;
+	viewProjection->UpdateMatrix();
 }
 
 void GameCamera::Update() {
@@ -149,6 +157,10 @@ void GameCamera::Update() {
 	viewProjection->target = target;
 	viewProjection->eye = vTargetEye;
 	viewProjection->UpdateMatrix();
+
+	CameraCollider->Update(MyMath::Translation(viewProjection->eye));
+
+	CheckBetweenToCameraCollider();
 }
 
 void GameCamera::PlaySceneCamera() {
@@ -349,6 +361,40 @@ void GameCamera::MultiplyMatrix(Matrix4& matrix) {
 	// ベクトルを回転
 	vTargetEye = MyMath::MatVector(matRot, vTargetEye);
 
+}
+
+bool GameCamera::CheckBetweenToCameraCollider()
+{
+	// 範囲レイキャスト
+	Ray LookRay;
+	LookRay.start = MyMath::Vec3ToVec4(viewProjection->eye);
+	LookRay.start.y += CameraCollisionRadius;
+	PlayerToCameraVec = playerPos_ - viewProjection->eye;
+	PlayerToCameraVecDistance = PlayerToCameraVec.length();
+	LookRay.dir = MyMath::Vec3ToVec4(PlayerToCameraVec.norm());
+	RaycastHit raycastHit;
+
+	//プレーヤーとの間にオブジェクトがあれば見失う
+	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToCameraVecDistance)) {
+		return true;
+	}
+
+	// 球の上端から球の下端までのレイキャスト
+	Ray DownRay;
+	DownRay.start = MyMath::Vec3ToVec4(viewProjection->eye);
+	DownRay.start.y += CameraCollisionRadius;
+	DownRay.dir = { 0,-CameraCollisionRadius,0,0 };;
+	RaycastHit DownRaycastHit;
+
+	//プレーヤーとの間にオブジェクトがあれば見失う
+	if (CollisionManager::GetInstance()->Raycast(DownRay, COLLISION_ATTR_LANDSHAPE, &DownRaycastHit)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+	return false;
 }
 
 Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
