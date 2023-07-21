@@ -3,7 +3,7 @@
 #include "CollisionAttribute.h"
 #include <CollisionManager.h>
 
-TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTransform& worldTrans)
+TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute)
 {
 	// オブジェクトのインスタンスを生成
 	TouchableObject* instance = new TouchableObject();
@@ -12,7 +12,7 @@ TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTra
 	}
 
 	// 初期化
-	if (!instance->Initialize(model, worldTrans)) {
+	if (!instance->Initialize(model, worldTrans, attribute)) {
 		delete instance;
 		assert(0);
 	}
@@ -20,14 +20,14 @@ TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTra
 	return instance;
 }
 
-bool TouchableObject::Initialize(std::unique_ptr<Model>& model, WorldTransform& worldTrans)
+bool TouchableObject::Initialize(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute)
 {
 
 	// コライダーの追加
 	MeshCollider* collider = new MeshCollider();
 	// コリジョンマネージャに追加
 	collider->ConstructTriangles(model, worldTrans.matWorld_);
-	collider->SetAttribute(COLLISION_ATTR_LANDSHAPE);
+	collider->SetAttribute(attribute);
 	CollisionManager::GetInstance()->AddCollider(collider);
 
 	return true;

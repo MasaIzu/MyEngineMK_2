@@ -40,7 +40,9 @@ private:
 
 public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
-	void SetCameraDistance(const Vector3& cameradis) { Distance = cameradis; }
+	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
+	void SetCameraDistance(const float& Distance) { PlayerToCameraDistance = Distance; }
+	void SetCameraMaxDistance(const float& cameraMaxDistance) { this->cameraMaxDistance = cameraMaxDistance; }
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
@@ -85,6 +87,9 @@ private://プレイヤークラス変数
 	float playerSpeed = 0.3f;
 	float diagonalPlayerSpeed = 0.4f;
 	float PlayerToCameraDistance = 0.0f;
+	float PlayerToCameraTargetVecDistance = 0.0f;
+	float cameraMaxDistance = 0.0f;
+	float alpha = 0.0f;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 ReticlePos;

@@ -9,7 +9,7 @@ void Ground::Initialze()
 	groundTrans.scale_ = { 100,0,100 };
 	groundTrans.TransferMatrix();
 
-	touchableObject.reset(TouchableObject::Create(groundModel, groundTrans));
+	touchableObject.reset(TouchableObject::Create(groundModel, groundTrans, COLLISION_ATTR_LANDSHAPE));
 
 	//meshCollider = std::make_unique<MeshCollider>();
 	//CollisionManager::GetInstance()->AddCollider(meshCollider.get());

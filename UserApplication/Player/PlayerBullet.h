@@ -84,13 +84,14 @@ private://プレイヤークラス変数
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
+	uint32_t AttackMaxParticle = 10;
 	uint32_t DieMaxParticle = 30;
 	uint32_t DieMaxParticleLife = 40;
 
 	float playerBulletSpeed = 10.0f;
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
-	float PlayerParticleSpeed = 0.02f;
+	float PlayerParticleSpeed = 0.004f;
 	float PlayerParticleDieSpeed = 0.2f;
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量

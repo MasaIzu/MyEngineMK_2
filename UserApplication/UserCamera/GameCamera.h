@@ -32,6 +32,8 @@ private:
 
 public://getter
 	float GetFovAngle() { return MyMath::GetAngle(Fov); }
+	float GetCameraDistanse() const { return PlayerToCameraVecDistance; }
+	float GetMaxDistance() const { return cameraDistance_; }
 	Vector2 GetCameraAngle() const { return Vector2(mouseMoved.y - MyMath::PI, mouseMoved.x); }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	Vector3 GetEyeToTagetVecDistance(const float& distance) const;
@@ -82,7 +84,7 @@ private://プレイヤークラス変数
 	float CameraDistanceMinus = 0.0f;
 	float CameraMouseMoved = 0.0f;
 	float OldMouseMoved = 0.0f;
-	float CameraCollisionRadius = 2.0f;
+	float CameraCollisionRadius = 0.1f;
 	float CameraRayCollisionRadius = 0.2f;
 	float PlayerToCameraVecDistance = 0.0f;
 

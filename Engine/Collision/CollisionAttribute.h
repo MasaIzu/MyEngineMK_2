@@ -1,15 +1,15 @@
 #pragma once
 
 const unsigned short COLLISION_ATTR_LANDSHAPE = 0b0;//’nŒ`
-const unsigned short COLLISION_ATTR_ALLIES = 0b1;//–¡•û
-const unsigned short COLLISION_ATTR_ENEMYS = 0b10;//“G
+const unsigned short COLLISION_ATTR_OBJECT = 0b1;//ƒIƒuƒWƒFƒNƒg
+const unsigned short COLLISION_ATTR_ALLIES = 0b10;//–¡•û
+const unsigned short COLLISION_ATTR_ENEMYS = 0b11;//“G
 
-const unsigned short COLLISION_ATTR_ATTACK = 0b11;//UŒ‚
-const unsigned short COLLISION_ATTR_NOTATTACK = 0b100;//UŒ‚”»’è‚È‚µ
-const unsigned short COLLISION_ATTR_INVINCIBLE = 0b101;//–³“G
+const unsigned short COLLISION_ATTR_ATTACK = 0b100;//UŒ‚
+const unsigned short COLLISION_ATTR_NOTATTACK = 0b101;//UŒ‚”»’è‚È‚µ
+const unsigned short COLLISION_ATTR_INVINCIBLE = 0b110;//–³“G
 
-const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b110;//“G‚ÌUŒ‚
-const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b111;//“G‚Ì’e‚ÌUŒ‚
+const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b111;//“G‚ÌUŒ‚
+const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b1000;//“G‚Ì’e‚ÌUŒ‚
 
-const unsigned short COLLISION_ATTR_CAMERA = 0b1000;//ƒJƒƒ‰
-const unsigned short COLLISION_ATTR_NEARCAMERA = 0b1001;//ƒJƒƒ‰
+const unsigned short COLLISION_ATTR_CAMERA = 0b1001;//ƒJƒƒ‰

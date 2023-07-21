@@ -316,7 +316,7 @@ void BulletShotEnemy::Attack()
 	case BulletShotEnemy::AttackPhase::NormalAttack:
 
 		if (CheckBetweenToPlayerCollider()) {
-			
+
 		}
 		else {
 			DistanceNolm = playerPos - MyMath::GetWorldTransform(BulletShotEnemyWorldTransHed.matWorld_);
@@ -408,93 +408,42 @@ void BulletShotEnemy::GetPlayerForEnemyAngle()
 void BulletShotEnemy::CheckCollider()
 {
 
-	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(BulletShotEnemyCollider);
-	assert(sphereCollider);
+	//オブジェクトメッシュコライダー
+	// 球の上端から球の下端までのレイキャスト
+	Ray Groundray;
+	Groundray.start = MyMath::Vec3ToVec4(BulletShotEnemyWorldTrans.translation_);
+	Groundray.start.y += EnemyRadius;
+	Groundray.dir = { 0,-1,0,0 };
+	RaycastHit raycastHit;
 
-	sphereCollider->SetRadius(EnemyRadius);
 
-	// クエリーコールバッククラス
-	class PlayerQueryCallback : public QueryCallback
-	{
-	public:
-		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
-
-		// 衝突時コールバック関数
-		bool OnQueryHit(const QueryHit& info) {
-
-			const Vector4 up = { 0,1,0,0 };
-
-			Vector4 rejectDir = info.reject;
-			rejectDir.normalize();
-			rejectDir.dot(up);
-			float cos = rejectDir.y;
-
-			// 地面判定しきい値
-			const float threshold = cosf(DirectX::XMConvertToRadians(30.0f));
-
-			if (-threshold < cos && cos < threshold) {
-				sphere->center += info.reject;
-				move += info.reject;
-			}
-
-			return true;
+	// 接地状態
+	if (onGround) {
+		// スムーズに坂を下る為の吸着距離
+		const float adsDistance = 0.2f;
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_OBJECT, &raycastHit, EnemyRadius * 2.0f + adsDistance)) {
+			onGround = true;
+			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
 		}
-
-		Sphere* sphere = nullptr;
-		Vector4 move = {};
-	};
-
-	PlayerQueryCallback callback(sphereCollider);
-
-	// 球と地形の交差を全検索
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE, &BulletShotEnemyWorldTrans.matWorld_);
-	// 交差による排斥分動かす
-	BulletShotEnemyWorldTrans.translation_.x += callback.move.x;
-	BulletShotEnemyWorldTrans.translation_.y += callback.move.y;
-	BulletShotEnemyWorldTrans.translation_.z += callback.move.z;
-	// ワールド行列更新
-	BulletShotEnemyWorldTrans.TransferMatrix();
-	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
-
-	float RayPos = -1.0f;
-
-	//地面メッシュコライダー
-	{
-		// 球の上端から球の下端までのレイキャスト
-		Ray Groundray;
-		Groundray.start = sphereCollider->center;
-		Groundray.start.y += sphereCollider->GetRadius();
-		Groundray.dir = { 0,-1,0,0 };
-		RaycastHit raycastHit;
-
-
-		// 接地状態
-		if (onGround) {
-			// スムーズに坂を下る為の吸着距離
-			const float adsDistance = 0.2f;
-			// 接地を維持
-			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
-				onGround = true;
-				BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-			}
-			// 地面がないので落下
-			else {
-				//onGround = false;
-				fallVec = {};
-				BulletShotEnemyWorldTrans.translation_ = OldTansPos;
-				StopTime = Random(150, 240);
-				NotSpottedPhase_ = NotSpottedPhase::Interruption;
-			}
-		}
-		// 落下状態
+		// 地面がないので落下
 		else {
-			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
-				// 着地
-				onGround = true;
-				BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-			}
+			//onGround = false;
+			fallVec = {};
+			BulletShotEnemyWorldTrans.translation_ = OldTansPos;
+			StopTime = Random(150, 240);
+			NotSpottedPhase_ = NotSpottedPhase::Interruption;
 		}
 	}
+	// 落下状態
+	else {
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_OBJECT, &raycastHit, EnemyRadius * 2.0f)) {
+			// 着地
+			onGround = true;
+			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
+		}
+	}
+
 }
 
 bool BulletShotEnemy::CheckBetweenToPlayerCollider()

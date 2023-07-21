@@ -84,11 +84,11 @@ void CollisionManager::CheckAllCollisions()
 						colB->isSphereMeshHit = true;
 					}
 				}
-				else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_CAMERA) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isSphereMeshHit = true;
-					}
-				}
+				//else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_CAMERA) {
+				//	if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+				//		colB->isSphereMeshHit = true;
+				//	}
+				//}
 			}
 			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH) {
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
@@ -104,11 +104,11 @@ void CollisionManager::CheckAllCollisions()
 						colA->isSphereMeshHit = true;
 					}
 				}
-				else if (colA->attribute == COLLISION_ATTR_CAMERA && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isSphereMeshHit = true;
-					}
-				}
+				//else if (colA->attribute == COLLISION_ATTR_CAMERA && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
+				//	if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+				//		colA->isSphereMeshHit = true;
+				//	}
+				//}
 			}
 		}
 	}

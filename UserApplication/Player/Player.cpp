@@ -70,6 +70,10 @@ void Player::Update()
 	//当たり判定チェック
 	CheckPlayerCollider();
 
+	//カメラの位置でアルファが決まる
+	alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
+	playerWorldTrans.alpha = alpha;
+	playerWorldTransHed.alpha = alpha;
 	//移動の値更新
 	WorldTransUpdate();
 
@@ -89,7 +93,7 @@ void Player::Update()
 	ImGui::Begin("Player");
 
 	ImGui::Text("Distance:%f,%f,%f", Distance.x, Distance.y, Distance.z);
-
+	ImGui::Text("Distance:%f", alpha);
 	ImGui::End();
 
 	DebugWorldTrans.translation_ = Distance;
@@ -102,10 +106,10 @@ void Player::Update()
 
 void Player::Draw(ViewProjection& viewProjection_)
 {
+	model_->Draw(DebugWorldTrans, viewProjection_);
 	model_->Draw(playerWorldTrans, viewProjection_);
 	model_->Draw(playerWorldTransHed, viewProjection_);
 	playerBullet->Draw(viewProjection_);
-	model_->Draw(DebugWorldTrans, viewProjection_);
 }
 
 void Player::DrawSprite(ViewProjection& viewProjection_)
@@ -186,10 +190,10 @@ void Player::PlayerAttack()
 	switch (AttackPhase_)
 	{
 	case Player::AttackPhase::AttackCombo1:
-		DistanceNolm = Distance - GetPlayerPos();
-		PlayerToCameraDistance = DistanceNolm.length();
+		DistanceNolm = Distance - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
+		PlayerToCameraTargetVecDistance = DistanceNolm.length();
 		DistanceNolm.normalize();
-		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), DistanceNolm, PlayerToCameraDistance);
+		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), DistanceNolm, PlayerToCameraTargetVecDistance);
 		break;
 	case Player::AttackPhase::AttackCombo2:
 

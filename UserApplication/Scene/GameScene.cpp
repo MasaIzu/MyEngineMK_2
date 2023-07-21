@@ -69,7 +69,7 @@ void GameScene::Initialize() {
 
 	model_.reset(Model::CreateFromOBJ("cube", true));
 
-	touchableObject.reset(TouchableObject::Create(model_, worldTransform_));
+	touchableObject.reset(TouchableObject::Create(model_, worldTransform_, COLLISION_ATTR_OBJECT));
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -139,7 +139,9 @@ void GameScene::Update() {
 	ParticleMan->Update();
 
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
-	player_->SetCameraDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
+	player_->SetEyeToTagetVecDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
+	player_->SetCameraDistance(gameCamera->GetCameraDistanse());
+	player_->SetCameraMaxDistance(gameCamera->GetMaxDistance());
 	player_->Update();
 
 	
@@ -246,17 +248,16 @@ void GameScene::Draw() {
 
 	ground->Draw(*viewProjection_.get());
 	model_->Draw(worldTransform_ ,*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 	//tutorialEnemy->Draw(*viewProjection_.get());
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Draw(*viewProjection_.get());
 	}
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->DebugDraw(*viewProjection_.get());
-	}
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->DebugDraw(*viewProjection_.get());
+	//}
 	bulletShotEnemy->Draw(*viewProjection_.get());
-
+	player_->Draw(*viewProjection_.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 

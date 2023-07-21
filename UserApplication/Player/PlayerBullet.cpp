@@ -125,7 +125,9 @@ void PlayerBullet::BulletUpdate()
 				}
 			}
 			if (isExpanding == false) {
-				MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], playerBulletSpeed);
+				for (uint32_t j = 0; j < AttackMaxParticle; j++) {
+					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleSpeed, 0.04f);
+				}
 			}
 		}
 	}
