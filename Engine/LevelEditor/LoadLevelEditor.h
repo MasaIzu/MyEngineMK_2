@@ -8,6 +8,8 @@
 #include <map>
 #include "TutorialEnemy.h"
 #include "BulletShotEnemy.h"
+#include "Ground.h"
+#include "TouchableObject.h"
 
 // レベルデータ
 struct LevelData {
@@ -66,10 +68,10 @@ private:
 	std::vector<ModelData> LoadedObjects;
 	std::vector<ModelData> NewLoadObjects;
 	std::list<TutorialEnemy*> tutorialEnemyList;
+	std::list<Ground*> ground;
 
 	//最初から読み込むやつ
-	Model* modelSkydome = nullptr;
-	Model* modelGround = nullptr;
-	Model* modelFighter = nullptr;
+	std::unique_ptr<Model> modelSrop;
+	std::unique_ptr<Model> modelGround;
 	std::unique_ptr<Model> modelSphere;
 };

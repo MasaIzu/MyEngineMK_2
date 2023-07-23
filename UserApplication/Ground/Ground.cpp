@@ -1,21 +1,19 @@
 #include "Ground.h"
 #include <CollisionManager.h>
 
+Ground::Ground(Model* model)
+{
+	groundModel = model;
+}
+
 void Ground::Initialze()
 {
-	groundModel.reset(Model::CreateFromOBJ("Ground", true));
 
 	groundTrans.Initialize();
-	groundTrans.scale_ = { 100,0,100 };
 	groundTrans.TransferMatrix();
 
 	touchableObject.reset(TouchableObject::Create(groundModel, groundTrans, COLLISION_ATTR_LANDSHAPE));
 
-	//meshCollider = std::make_unique<MeshCollider>();
-	//CollisionManager::GetInstance()->AddCollider(meshCollider.get());
-	//meshCollider->Update(groundTrans.matWorld_);
-	//meshCollider->ConstructTriangles(groundModel, groundTrans.matWorld_);
-	//meshCollider->SetAttribute(COLLISION_ATTR_LANDSHAPE);
 
 }
 

@@ -41,7 +41,7 @@ void GameScene::Initialize() {
 
 	ParticleMan = std::make_unique<ParticleManager>();
 	ParticleMan->Initialize();
-	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
+	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
@@ -49,7 +49,9 @@ void GameScene::Initialize() {
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
 
-	ground = std::make_unique<Ground>();
+	model_.reset(Model::CreateFromOBJ("cube", true));
+
+	ground = std::make_unique<Ground>(model_.get());
 	ground->Initialze();
 
 	//tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
@@ -59,7 +61,7 @@ void GameScene::Initialize() {
 	bulletShotEnemy->Initialize();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("enemyone");
+	levelData->Initialize("stageTest");
 
 	tutorialEnemyList = levelData->GetEnemyList();
 
@@ -67,9 +69,8 @@ void GameScene::Initialize() {
 		enemy->Initialize();
 	}
 
-	model_.reset(Model::CreateFromOBJ("cube", true));
 
-	touchableObject.reset(TouchableObject::Create(model_, worldTransform_, COLLISION_ATTR_OBJECT));
+	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_OBJECT));
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -246,7 +247,7 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	ground->Draw(*viewProjection_.get());
+	//ground->Draw(*viewProjection_.get());
 	model_->Draw(worldTransform_ ,*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 	//tutorialEnemy->Draw(*viewProjection_.get());

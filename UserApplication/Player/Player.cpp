@@ -21,7 +21,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,10.0f,-50.0f };
+	playerWorldTrans.translation_ = { 0,4.0f,-50.0f };
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -34,7 +34,7 @@ void Player::Initialize()
 
 	DebugWorldTrans.Initialize();
 
-	AttackSprite = Sprite::Create(TextureManager::Load("shoujuun.png"));
+	AttackSprite = Sprite::Create(TextureManager::Load("sprite/shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
 
 	// コリジョンマネージャに追加
@@ -54,19 +54,8 @@ void Player::Update()
 		//どう動くか
 		Move();
 	}
-
-	// 落下処理
-	if (!onGround) {
-		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
-		// 加速
-		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// 移動
-		playerWorldTrans.translation_.x += fallVec.x;
-		playerWorldTrans.translation_.y += fallVec.y;
-		playerWorldTrans.translation_.z += fallVec.z;
-	}
+	//落下
+	Fall();
 	//当たり判定チェック
 	CheckPlayerCollider();
 
@@ -168,7 +157,9 @@ void Player::Move()
 		playerMoveMent = { 0.0f,0.0f,0.0f };
 		playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
 	}
-
+	if (input_->PushKey(DIK_SPACE)) {
+		playerMoveMent += playerWorldTrans.LookVelocity.lookUp * 2;
+	}
 	playerWorldTrans.translation_ += playerMoveMent;
 
 }
@@ -370,6 +361,37 @@ void Player::CheckPlayerCollider()
 			playerWorldTrans.translation_.x -= (wallRaycastHit.distance - sphereCollider->GetRadius());
 		}
 
+	}
+	{
+		//スロープメッシュコライダー
+		Ray wall;
+		wall.start = sphereCollider->center;
+		wall.start.y += sphereCollider->GetRadius();
+		wall.dir = { 0,-1,0,0 };
+		RaycastHit wallRaycastHit;
+		// スムーズに坂を下る為の吸着距離
+
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_SROP, &wallRaycastHit, sphereCollider->GetRadius() * 2.0f)) {
+			playerWorldTrans.translation_.z -= (wallRaycastHit.distance - sphereCollider->GetRadius());
+			playerWorldTrans.translation_.y -= (wallRaycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+		}
+	}
+}
+
+void Player::Fall()
+{
+	// 落下処理
+	if (!onGround) {
+		// 下向き加速度
+		const float fallAcc = -0.01f;
+		const float fallVYMin = -0.5f;
+		// 加速
+		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+		// 移動
+		playerWorldTrans.translation_.x += fallVec.x;
+		playerWorldTrans.translation_.y += fallVec.y;
+		playerWorldTrans.translation_.z += fallVec.z;
 	}
 }
 

@@ -41,7 +41,7 @@ void PlayerBullet::Initialize()
 
 	ParticleMan = std::make_unique<ParticleManager>();
 	ParticleMan->Initialize();
-	ParticleMan->SetTextureHandle(TextureManager::Load("effect4.png"));
+	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 }
 

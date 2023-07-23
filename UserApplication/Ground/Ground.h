@@ -8,6 +8,7 @@
 class Ground {
 
 public:
+	Ground(Model* model);
 	void Initialze();
 
 	void Update();
@@ -16,7 +17,7 @@ public:
 
 private:
 
-	std::unique_ptr<Model> groundModel;
+	Model* groundModel = nullptr;
 	WorldTransform groundTrans;
 	std::unique_ptr<TouchableObject> touchableObject;
 	std::unique_ptr<MeshCollider> meshCollider;

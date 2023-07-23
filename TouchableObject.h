@@ -10,12 +10,12 @@ public:
 	/// オブジェクト生成
 	/// </summary>
 	/// <returns></returns>
-	static TouchableObject* Create(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute);
+	static TouchableObject* Create(Model* model, WorldTransform& worldTrans, unsigned short attribute);
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <returns>成否</returns>
-	bool Initialize(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute);
+	bool Initialize(Model* model, WorldTransform& worldTrans, unsigned short attribute);
 };
 

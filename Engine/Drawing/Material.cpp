@@ -44,6 +44,8 @@ void Material::LoadTexture(const std::string& directoryPath) {
 	// テクスチャなし
 	if (textureFilename_.size() == 0) {
 		textureFilename_ = "white1x1.png";
+		textureHandle_ = TextureManager::Load(textureFilename_);
+		return;
 	}
 
 	HRESULT result = S_FALSE;

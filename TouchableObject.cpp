@@ -3,7 +3,7 @@
 #include "CollisionAttribute.h"
 #include <CollisionManager.h>
 
-TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute)
+TouchableObject* TouchableObject::Create(Model* model, WorldTransform& worldTrans, unsigned short attribute)
 {
 	// オブジェクトのインスタンスを生成
 	TouchableObject* instance = new TouchableObject();
@@ -20,7 +20,7 @@ TouchableObject* TouchableObject::Create(std::unique_ptr<Model>& model, WorldTra
 	return instance;
 }
 
-bool TouchableObject::Initialize(std::unique_ptr<Model>& model, WorldTransform& worldTrans, unsigned short attribute)
+bool TouchableObject::Initialize(Model* model, WorldTransform& worldTrans, unsigned short attribute)
 {
 
 	// コライダーの追加

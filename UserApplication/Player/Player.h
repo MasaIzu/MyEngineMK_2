@@ -36,7 +36,8 @@ private:
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
 	void CheckPlayerCollider();
-
+	//落下
+	void Fall();
 
 public://Setter
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
@@ -84,7 +85,7 @@ private://プレイヤークラス変数
 	uint32_t bulletNumber = 0;
 
 	float Radius = 1.0f;
-	float playerSpeed = 0.3f;
+	float playerSpeed = 0.8f;
 	float diagonalPlayerSpeed = 0.4f;
 	float PlayerToCameraDistance = 0.0f;
 	float PlayerToCameraTargetVecDistance = 0.0f;

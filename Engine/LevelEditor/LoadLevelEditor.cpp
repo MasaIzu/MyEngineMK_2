@@ -21,6 +21,9 @@ LoadLevelEditor::~LoadLevelEditor()
 			delete object.model;
 		}
 	}
+	for (Ground* ground : ground) {
+		delete ground;
+	}
 }
 
 LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
@@ -110,13 +113,13 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 	levelData.reset(LoadFile(fileName));
 
 	// モデル読み込み
-	//modelSkydome = Model::CreateFromOBJ("skydome");
-	//modelGround = Model::CreateFromOBJ("ground");
+	modelSrop.reset(Model::CreateFromOBJ("srop1", true));
+	modelGround.reset(Model::CreateFromOBJ("stageTest", true));
 	//modelFighter = Model::CreateFromOBJ("chr_sword", true);
 	modelSphere.reset(Model::CreateFromOBJ("sphereColor", true));
 
-	//models.insert(std::make_pair("skydome", modelSkydome));
-	//models.insert(std::make_pair("ground", modelGround));
+	models.insert(std::make_pair("srop1", modelSrop.get()));
+	models.insert(std::make_pair("stageTest", modelGround.get()));
 	//models.insert(std::make_pair("chr_sword", modelFighter));
 	models.insert(std::make_pair("sphereColor", modelSphere.get()));
 
@@ -135,17 +138,22 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			Trans.SetRot(objectData.rotation);// 回転角
 			Trans.TransferMatrix();
 
-			//// 配列に登録
-			//ModelData Data;
-			//Data.model = model;
-			//Data.worldTrans = Trans;
-			//LoadedObjects.push_back(Data);
-
 			if (objectData.fileName == modelSphere->GetName()) {
 				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation, model);
 				tutorialEnemyList.push_back(tutorialEnemy);
 			}
-
+			else if (objectData.fileName == modelGround->GetName()) {
+				Ground* tutorialEnemy = new Ground(modelGround.get());
+				ground.push_back(tutorialEnemy);
+			}
+			else if (objectData.fileName == modelSrop->GetName()) {
+				// 配列に登録
+				ModelData Data;
+				Data.model = model;
+				Data.worldTrans = Trans;
+				NewLoadObjects.push_back(Data);
+				TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_SROP);
+			}
 		}
 		else {
 			// モデルを指定して3Dオブジェクトを生成
@@ -164,6 +172,9 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			NewLoadObjects.push_back(Data);
 		}
 	}
+	for (Ground* ground : ground) {
+		ground->Initialze();
+	}
 	Update();
 }
 
@@ -179,9 +190,9 @@ void LoadLevelEditor::Update()
 
 void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
-	//for (auto& object : LoadedObjects) {
-	//	object.model->Draw(object.worldTrans, viewProjection);
-	//}
+	for (Ground* ground : ground) {
+		ground->Draw(viewProjection);
+	}
 	for (auto& object : NewLoadObjects) {
 		object.model->Draw(object.worldTrans, viewProjection);
 	}

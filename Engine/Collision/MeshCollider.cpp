@@ -3,7 +3,7 @@
 #include "MyMath.h"
 
 using namespace DirectX;
-void MeshCollider::ConstructTriangles(std::unique_ptr<Model>& model, Matrix4& matWorld)
+void MeshCollider::ConstructTriangles(Model* model, Matrix4& matWorld)
 {
 	triangles.clear();
 

@@ -101,11 +101,13 @@ public: // メンバ関数
 
 	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
 
-	std::string GetName() { return name_; }
+	std::string GetName();
 
 private: // メンバ変数
 	// 名前
 	std::string name_;
+	// 名前
+	std::string exportName_;
 	// メッシュコンテナ
 	std::vector<Mesh*> meshes_;
 	// マテリアルコンテナ

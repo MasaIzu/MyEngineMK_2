@@ -14,7 +14,7 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-const std::string Model::kBaseDirectory = "Resources/";
+const std::string Model::kBaseDirectory = "Resources/object/";
 const std::string Model::kDefaultModelName = "cube";
 UINT Model::sDescriptorHandleIncrementSize_ = 0;
 ID3D12GraphicsCommandList* Model::sCommandList_ = nullptr;
@@ -234,7 +234,7 @@ Model::~Model() {
 void Model::Initialize(const std::string& modelname, bool smoothing) {
 	// モデル読み込み
 	LoadModel(modelname, smoothing);
-
+	exportName_ = modelname;
 	// メッシュのマテリアルチェック
 	for (auto& m : meshes_) {
 		// マテリアルの割り当てがない
@@ -277,7 +277,7 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 		assert(0);
 	}
 
-	name_ = modelname;
+	name_ = "object/" + modelname;
 
 	// メッシュ生成
 	meshes_.emplace_back(new Mesh);
@@ -616,4 +616,9 @@ void Model::Draw(
 			sCommandList_, 2, 3,
 			textureHadle);
 	}
+}
+
+std::string Model::GetName()
+{
+	return exportName_;
 }
