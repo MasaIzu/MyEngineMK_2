@@ -96,6 +96,13 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 
 			// TODO: コライダーのパラメータ読み込み
 		}
+		else if (type.compare("SPLINE") == 0) {
+
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),-static_cast<float>(transform["translation"][1]) };
+			splineVec.push_back(trans);
+		}
 
 		// TODO: オブジェクト走査を再帰関数にまとめ、再帰呼出で枝を走査する
 		if (object.contains("children")) {
@@ -125,6 +132,7 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
+
 		// ファイル名から登録済みモデルを検索
 		Model* model = nullptr;
 		decltype(models)::iterator it = models.find(objectData.fileName);
@@ -147,12 +155,13 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 				ground.push_back(tutorialEnemy);
 			}
 			else if (objectData.fileName == modelSrop->GetName()) {
+
 				// 配列に登録
 				ModelData Data;
-				Data.model = model;
+				Data.model = Model::CreateFromOBJ("srop1", true);
 				Data.worldTrans = Trans;
 				NewLoadObjects.push_back(Data);
-				TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_SROP);
+				TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_RAIL);
 			}
 		}
 		else {
@@ -171,10 +180,12 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			Data.worldTrans = Trans;
 			NewLoadObjects.push_back(Data);
 		}
+
 	}
 	for (Ground* ground : ground) {
 		ground->Initialze();
 	}
+
 	Update();
 }
 

@@ -61,7 +61,7 @@ public:// ƒƒ“ƒoŠÖ”
 	void Draw(const ViewProjection& viewProjection);
 
 	std::list<TutorialEnemy*> GetEnemyList() { return tutorialEnemyList; }
-
+	std::vector<Vector3> GetSpline() { return splineVec; }
 private:
 	std::unique_ptr<LevelData> levelData;
 	std::map<std::string, Model*> models;
@@ -69,6 +69,7 @@ private:
 	std::vector<ModelData> NewLoadObjects;
 	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::list<Ground*> ground;
+	std::vector<Vector3> splineVec;
 
 	//Å‰‚©‚ç“Ç‚İ‚Ş‚â‚Â
 	std::unique_ptr<Model> modelSrop;

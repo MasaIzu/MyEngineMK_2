@@ -43,10 +43,14 @@ void Player::Initialize()
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
+	playerMoveSpline = std::make_unique<SplinePosition>();
 }
 
 void Player::Update()
 {
+	if (playerMoveSpline->GetFinishSpline()) {
+		isHitRail = false;
+	}
 
 	//回転させる
 	PlayerRot();
@@ -58,6 +62,12 @@ void Player::Update()
 	Fall();
 	//当たり判定チェック
 	CheckPlayerCollider();
+
+	if (isHitRail == true && playerMoveSpline->GetFinishSpline() == false) {
+		float speed = 0.02f;
+		playerMoveSpline->Update(speed);
+		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
 
 	//カメラの位置でアルファが決まる
 	alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
@@ -75,7 +85,7 @@ void Player::Update()
 		PlayerAttack();
 	}
 	if (input_->MouseInputTrigger(1)) {
-		
+
 	}
 
 
@@ -125,41 +135,45 @@ void Player::Move()
 {
 	playerMoveMent = { 0.0f,0.0f,0.0f };
 
+	if (isHitRail == false || playerMoveSpline->GetFinishSpline() == true) {
+		if (input_->PushKey(DIK_W)) {
+			playerMoveMent += playerWorldTrans.LookVelocity.look * playerSpeed;
+		}
+		if (input_->PushKey(DIK_S)) {
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
+			//playerMoveMent.y -= 0.02f;
+		}
+		if (input_->PushKey(DIK_A)) {
+			playerMoveMent += playerWorldTrans.LookVelocity.lookLeft * playerSpeed;
+		}
+		if (input_->PushKey(DIK_D)) {
+			playerMoveMent += playerWorldTrans.LookVelocity.lookRight * playerSpeed;
+		}
+
+		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1) {
+			playerMoveMent = { 0.0f,0.0f,0.0f };
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft * diagonalPlayerSpeed;
+		}
+		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1) {
+			playerMoveMent = { 0.0f,0.0f,0.0f };
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight * diagonalPlayerSpeed;
+		}
+		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1) {
+			playerMoveMent = { 0.0f,0.0f,0.0f };
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft * diagonalPlayerSpeed;
+		}
+		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1) {
+			playerMoveMent = { 0.0f,0.0f,0.0f };
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
+		}
+		if (input_->PushKey(DIK_SPACE)) {
+			playerMoveSpline->ResetNearSplineReset();
+			playerMoveMent += playerWorldTrans.LookVelocity.lookUp * 2;
+		}
+	}
+	
 
 
-	if (input_->PushKey(DIK_W)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.look * playerSpeed;
-	}
-	if (input_->PushKey(DIK_S)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
-		//playerMoveMent.y -= 0.02f;
-	}
-	if (input_->PushKey(DIK_A)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.lookLeft * playerSpeed;
-	}
-	if (input_->PushKey(DIK_D)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.lookRight * playerSpeed;
-	}
-
-	if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1) {
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft * diagonalPlayerSpeed;
-	}
-	if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1) {
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight * diagonalPlayerSpeed;
-	}
-	if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1) {
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft * diagonalPlayerSpeed;
-	}
-	if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1) {
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
-	}
-	if (input_->PushKey(DIK_SPACE)) {
-		playerMoveMent += playerWorldTrans.LookVelocity.lookUp * 2;
-	}
 	playerWorldTrans.translation_ += playerMoveMent;
 
 }
@@ -218,7 +232,7 @@ void Player::WorldTransUpdate()
 
 void Player::CheckPlayerCollider()
 {
-
+	isHitRail = false;
 	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(PlayerCollider);
 	assert(sphereCollider);
 
@@ -362,8 +376,16 @@ void Player::CheckPlayerCollider()
 		}
 
 	}
+
+	if (PlayerCollider->GetSphereMeshHit()) {
+		PlayerCollider->SphereMeshHitReset();
+		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
+		playerMoveSpline->ResetNearSpline(splinePos);
+		isHitRail = true;
+	}
+
 	{
-		//スロープメッシュコライダー
+		//レールメッシュコライダー
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
@@ -372,26 +394,27 @@ void Player::CheckPlayerCollider()
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_SROP, &wallRaycastHit, sphereCollider->GetRadius() * 2.0f)) {
-			playerWorldTrans.translation_.z -= (wallRaycastHit.distance - sphereCollider->GetRadius());
-			playerWorldTrans.translation_.y -= (wallRaycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_RAIL, &wallRaycastHit, sphereCollider->GetRadius() * 2.0f)) {
+
 		}
 	}
 }
 
 void Player::Fall()
 {
-	// 落下処理
-	if (!onGround) {
-		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
-		// 加速
-		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// 移動
-		playerWorldTrans.translation_.x += fallVec.x;
-		playerWorldTrans.translation_.y += fallVec.y;
-		playerWorldTrans.translation_.z += fallVec.z;
+	if (isHitRail == false) {
+		// 落下処理
+		if (!onGround) {
+			// 下向き加速度
+			const float fallAcc = -0.01f;
+			const float fallVYMin = -0.5f;
+			// 加速
+			fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
+			// 移動
+			playerWorldTrans.translation_.x += fallVec.x;
+			playerWorldTrans.translation_.y += fallVec.y;
+			playerWorldTrans.translation_.z += fallVec.z;
+		}
 	}
 }
 

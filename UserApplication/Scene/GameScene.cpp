@@ -63,6 +63,8 @@ void GameScene::Initialize() {
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("stageTest");
 
+	player_->SetSpline(levelData->GetSpline());
+
 	tutorialEnemyList = levelData->GetEnemyList();
 
 	for (TutorialEnemy* enemy : tutorialEnemyList) {

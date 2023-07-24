@@ -89,6 +89,11 @@ void CollisionManager::CheckAllCollisions()
 						colB->isSphereMeshHit = true;
 					}
 				}
+				else if (colA->attribute == COLLISION_ATTR_RAIL && colB->attribute == COLLISION_ATTR_ALLIES) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colB->isSphereMeshHit = true;
+					}
+				}
 			}
 			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH) {
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
@@ -105,6 +110,11 @@ void CollisionManager::CheckAllCollisions()
 					}
 				}
 				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_OBJECT) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colA->isSphereMeshHit = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_RAIL) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
 						colA->isSphereMeshHit = true;
 					}

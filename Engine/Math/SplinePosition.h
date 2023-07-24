@@ -63,12 +63,22 @@ public://基本関数
 	/// <param name="time">MaxTime=1でtimeが0.5なら半分から始まる</param>
 	void Reset(const size_t& ResetIndex, float& time);
 
+	/// <summary>
+	/// 近くの曲線にする//今のところ当たったのなら限定
+	/// </summary>
+	void ResetNearSpline(Vector3& Pos);
+
+	/// <summary>
+	/// ResetNearSplineで使ったフラグのリセット
+	/// </summary>
+	void ResetNearSplineReset();
+
 private://プライベート関数
 	Vector3 SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t);
 
 public://Setter
 	void SetSplineMaxTime(const float& MaxTime) { this->MaxTime = MaxTime; }
-
+	void SetNotSplineVector(const std::vector<Vector3>& points);
 public://Getter
 	bool GetFinishSpline()const { return isFinishSpline; }
 
@@ -77,6 +87,7 @@ public://公開変数
 
 private://クラス変数
 	bool isFinishSpline = false;
+	bool isResetNearSpline = false;
 	size_t startIndex = 1;
 	float timeRate_ = 0.0f;
 	float MaxTime = 1.0f;

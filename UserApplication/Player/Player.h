@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "PlayerBullet.h"
 #include <Sprite.h>
+#include "SplinePosition.h"
 
 class Player {
 
@@ -44,6 +45,7 @@ public://Setter
 	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
 	void SetCameraDistance(const float& Distance) { PlayerToCameraDistance = Distance; }
 	void SetCameraMaxDistance(const float& cameraMaxDistance) { this->cameraMaxDistance = cameraMaxDistance; }
+	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
@@ -59,9 +61,10 @@ private://クラス関連
 	std::unique_ptr<PlayerBullet> playerBullet;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
-
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
+	//スプライン
+	std::unique_ptr<SplinePosition> playerMoveSpline;
 
 private://イーナムクラス
 	enum class AttackPhase {
@@ -81,6 +84,7 @@ private://別クラスから値をもらう
 private://プレイヤークラス変数
 	bool isPlayerSetUp = false;
 	bool onGround = false;
+	bool isHitRail = false;
 
 	uint32_t bulletNumber = 0;
 
