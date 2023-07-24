@@ -72,7 +72,7 @@ void GameScene::Initialize() {
 	}
 
 
-	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_OBJECT));
+	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_LANDSHAPE));
 
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -249,7 +249,7 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
-	//ground->Draw(*viewProjection_.get());
+	ground->Draw(*viewProjection_.get());
 	model_->Draw(worldTransform_ ,*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 	//tutorialEnemy->Draw(*viewProjection_.get());

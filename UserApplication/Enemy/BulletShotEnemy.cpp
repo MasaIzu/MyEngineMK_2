@@ -422,7 +422,7 @@ void BulletShotEnemy::CheckCollider()
 		// スムーズに坂を下る為の吸着距離
 		const float adsDistance = 0.2f;
 		// 接地を維持
-		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_OBJECT, &raycastHit, EnemyRadius * 2.0f + adsDistance)) {
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f + adsDistance)) {
 			onGround = true;
 			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
 		}
@@ -437,7 +437,7 @@ void BulletShotEnemy::CheckCollider()
 	}
 	// 落下状態
 	else {
-		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_OBJECT, &raycastHit, EnemyRadius * 2.0f)) {
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f)) {
 			// 着地
 			onGround = true;
 			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
