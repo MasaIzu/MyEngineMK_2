@@ -21,7 +21,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,4.0f,-50.0f };
+	playerWorldTrans.translation_ = { 0,4.0f,0.0f };
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;

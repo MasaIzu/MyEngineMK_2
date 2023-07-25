@@ -79,7 +79,7 @@ private://プレイヤークラス変数
 
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 40;
+	uint32_t MaxBulletLifeTime = 30;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
@@ -88,11 +88,13 @@ private://プレイヤークラス変数
 	uint32_t DieMaxParticle = 30;
 	uint32_t DieMaxParticleLife = 40;
 
-	float playerBulletSpeed = 10.0f;
+	float playerBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
 	float PlayerParticleSpeed = 0.004f;
 	float PlayerParticleDieSpeed = 0.2f;
+	float flame[AllBulletCount];
+	float G = 0.45f;//重力
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向

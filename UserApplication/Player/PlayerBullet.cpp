@@ -11,6 +11,8 @@ PlayerBullet::PlayerBullet()
 		BulletLifeTime[i] = MaxBulletLifeTime;
 		BulletRadius[i] = 0.4f;
 		BulletCollider[i] = nullptr;
+		playerBulletSpeed[i] = 3.0f;
+		flame[i] = 0.0f;
 	}
 }
 
@@ -21,7 +23,7 @@ PlayerBullet::~PlayerBullet()
 void PlayerBullet::Initialize()
 {
 
-	model_.reset(Model::CreateFromOBJ("sphereColor", true));
+	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy", true));
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		playerBulletWorldTrans[i].Initialize();
 		playerBulletWorldTrans[i].scale_ = { BulletRadius[i],BulletRadius[i],BulletRadius[i] };
@@ -80,7 +82,7 @@ void PlayerBullet::Update()
 	ParticleMan->Update();
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed, BulletVector[i]);
+		BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed[i], BulletVector[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 
@@ -112,10 +114,10 @@ void PlayerBullet::CopyParticle()
 
 void PlayerBullet::BulletUpdate()
 {
-
+	//MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed, G, flame)
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
-			playerBulletMoveMent[i] = BulletVector[i] * playerBulletSpeed;
+			playerBulletMoveMent[i] = MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed[i], G, flame[i]);
 			if (BulletCollider[i]->GetSphereMeshHit()) {
 				isBulletAlive[i] = false;
 				BulletCollider[i]->SphereMeshHitReset();
@@ -156,9 +158,10 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 				BulletVector[i] = BulletVec;
 				BulletLifeTime[i] = MaxBulletLifeTime;
 				BulletRadius[i] = 0.4f;
-				playerBulletSpeed = Distance / static_cast<float>(MaxBulletLifeTime);
+				playerBulletSpeed[i] = Distance / static_cast<float>(MaxBulletLifeTime);
 				playerBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
+				flame[i] = 0.0f;
 				return i;
 			}
 		}

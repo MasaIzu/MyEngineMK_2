@@ -22,7 +22,7 @@ EnemyBullet::~EnemyBullet()
 void EnemyBullet::Initialize()
 {
 
-	model_.reset(Model::CreateFromOBJ("sphereColor", true));
+	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy", true));
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		EnemyBulletWorldTrans[i].Initialize();
 		EnemyBulletWorldTrans[i].scale_ = { BulletRadius[i],BulletRadius[i],BulletRadius[i] };

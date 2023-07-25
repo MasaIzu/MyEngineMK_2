@@ -5,10 +5,10 @@
 #include <SphereCollider.h>
 #include <CollisionAttribute.h>
 
-BulletShotEnemy::BulletShotEnemy(const Vector3& BonePos_)
+BulletShotEnemy::BulletShotEnemy(const Vector3& BonePos_, Model* model)
 {
 	BonePos = BonePos_;
-
+	model_ = model;
 }
 
 BulletShotEnemy::~BulletShotEnemy()
@@ -18,7 +18,7 @@ BulletShotEnemy::~BulletShotEnemy()
 void BulletShotEnemy::Initialize()
 {
 
-	model_.reset(Model::CreateFromOBJ("sphereColor", true));
+	//model_.reset(Model::CreateFromOBJ("sphereColor", true));
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	BulletShotEnemyWorldTrans.Initialize();
 	BulletShotEnemyWorldTrans.translation_ = BonePos;
@@ -125,8 +125,9 @@ void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 	model_->Draw(BulletShotEnemyWorldTransHed, viewProjection_);
 	enemyBullet->Draw(viewProjection_);
 	/*for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
+		
 	}*/
+	modelDebug_->Draw(DebugWorldTrans, viewProjection_);
 }
 
 void BulletShotEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)

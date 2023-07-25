@@ -100,7 +100,7 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
-			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),-static_cast<float>(transform["translation"][1]) };
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			splineVec.push_back(trans);
 		}
 
@@ -123,12 +123,14 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 	modelSrop.reset(Model::CreateFromOBJ("srop1", true));
 	modelGround.reset(Model::CreateFromOBJ("stageTest", true));
 	//modelFighter = Model::CreateFromOBJ("chr_sword", true);
-	modelSphere.reset(Model::CreateFromOBJ("sphereColor", true));
+	modelNormalEnemy.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
+	modelBulletShotEnemy.reset(Model::CreateFromOBJ("sphereBulletEnemy", true));
 
 	models.insert(std::make_pair("srop1", modelSrop.get()));
 	models.insert(std::make_pair("stageTest", modelGround.get()));
 	//models.insert(std::make_pair("chr_sword", modelFighter));
-	models.insert(std::make_pair("sphereColor", modelSphere.get()));
+	models.insert(std::make_pair("sphereNormalEnemy", modelNormalEnemy.get()));
+	models.insert(std::make_pair("sphereBulletEnemy", modelBulletShotEnemy.get()));
 
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
@@ -146,9 +148,13 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			Trans.SetRot(objectData.rotation);// 回転角
 			Trans.TransferMatrix();
 
-			if (objectData.fileName == modelSphere->GetName()) {
+			if (objectData.fileName == modelNormalEnemy->GetName()) {
 				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation, model);
 				tutorialEnemyList.push_back(tutorialEnemy);
+			}
+			else if (objectData.fileName == modelBulletShotEnemy->GetName()) {
+				BulletShotEnemy* bulletShotEnemy = new BulletShotEnemy(objectData.translation, model);
+				billetShotEnemyList.push_back(bulletShotEnemy);
 			}
 			else if (objectData.fileName == modelGround->GetName()) {
 				Ground* tutorialEnemy = new Ground(modelGround.get());
@@ -178,7 +184,15 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			ModelData Data;
 			Data.model = model;
 			Data.worldTrans = Trans;
+			Data.worldTrans.TransferMatrix();
 			NewLoadObjects.push_back(Data);
+
+			if (objectData.fileName == "cube") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if (objectData.fileName == "shahei") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
 		}
 
 	}

@@ -15,6 +15,9 @@ GameScene::~GameScene() {
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		delete enemy;
 	}
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		delete enemy;
+	}
 }
 
 void GameScene::Initialize() {
@@ -57,20 +60,20 @@ void GameScene::Initialize() {
 	//tutorialEnemy = std::make_unique<TutorialEnemy>(Vector3(0, 10, 0));
 	//tutorialEnemy->Initialize();
 
-	bulletShotEnemy = std::make_unique<BulletShotEnemy>(Vector3(50, 10, 0));
-	bulletShotEnemy->Initialize();
-
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("stageTest");
 
 	player_->SetSpline(levelData->GetSpline());
 
-	tutorialEnemyList = levelData->GetEnemyList();
+	tutorialEnemyList = levelData->GetTutorialEnemyList();
+	bulletShotEnemy = levelData->GetBulletShotEnemyList();
 
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Initialize();
 	}
-
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->Initialize();
+	}
 
 	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_LANDSHAPE));
 
@@ -152,12 +155,14 @@ void GameScene::Update() {
 	gameCamera->Update();
 
 	//tutorialEnemy->Update(player_->GetPlayerPos());
-	bulletShotEnemy->Update(player_->GetPlayerPos());
+	//bulletShotEnemy->Update(player_->GetPlayerPos());
 
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Update(player_->GetPlayerPos());
 	}
-
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->Update(player_->GetPlayerPos());
+	}
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -259,17 +264,25 @@ void GameScene::Draw() {
 	//for (TutorialEnemy* enemy : tutorialEnemyList) {
 	//	enemy->DebugDraw(*viewProjection_.get());
 	//}
-	bulletShotEnemy->Draw(*viewProjection_.get());
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->Draw(*viewProjection_.get());
+	}
 	player_->Draw(*viewProjection_.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
 	player_->DrawSprite(*viewProjection_.get());
 
-	bulletShotEnemy->CSUpdate(commandList);
+	//bulletShotEnemy->CSUpdate(commandList);
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->CSUpdate(commandList);
+	}
 	ParticleManager::PreDraw(commandList);
 	
-	bulletShotEnemy->ParticleDraw(*viewProjection_.get());
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->ParticleDraw(*viewProjection_.get());
+	}
+	//bulletShotEnemy->ParticleDraw(*viewProjection_.get());
 	
 
 	ParticleManager::PostDraw();
@@ -291,6 +304,9 @@ void GameScene::CopyData()
 {
 	ParticleMan->CopyData();
 	player_->CopyParticle();
-	bulletShotEnemy->CopyParticle();
+	//bulletShotEnemy->CopyParticle();
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->CopyParticle();
+	}
 }
 

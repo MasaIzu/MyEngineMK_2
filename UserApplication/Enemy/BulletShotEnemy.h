@@ -11,7 +11,7 @@
 class BulletShotEnemy {
 
 public://基本関数
-	BulletShotEnemy(const Vector3& BonePos_);
+	BulletShotEnemy(const Vector3& BonePos_, Model* model);
 	~BulletShotEnemy();
 
 	void Initialize();
@@ -55,7 +55,7 @@ private://const関連
 
 private://クラス変数
 	Input* input_ = nullptr;
-	std::unique_ptr<Model> model_;
+	Model* model_ = nullptr;
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform BulletShotEnemyWorldTrans;
 	WorldTransform BulletShotEnemyWorldTransHed;
@@ -128,8 +128,8 @@ private:
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
-	float SearchingAreaRadius = 40.0f;
-	float SpottedLookingPlayerRadius = 60.0f;
+	float SearchingAreaRadius = 92.0f;
+	float SpottedLookingPlayerRadius = 150.0f;
 	float EnemySpeed = 0.09f;
 	float SpottedEnemySpeed = 0.1f;
 	float EnemyRadius = 1.0f;

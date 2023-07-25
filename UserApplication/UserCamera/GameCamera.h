@@ -107,7 +107,7 @@ private://プレイヤークラス変数
 	Vector3 LatePlayerPos = { 0,0,0 };
 	Vector3 PlayerMoveMent;
 	Vector3 CameraTarget;
-	Vector3 cameraHigh = { 0,5,0 };
+	Vector3 cameraHigh = { 0,7,0 };
 	Vector3 PlayerToCameraVec;
 
 	Matrix4 CameraRot;
