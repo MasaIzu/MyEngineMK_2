@@ -127,7 +127,7 @@ void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 	/*for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		
 	}*/
-	modelDebug_->Draw(DebugWorldTrans, viewProjection_);
+	//modelDebug_->Draw(DebugWorldTrans, viewProjection_);
 }
 
 void BulletShotEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
