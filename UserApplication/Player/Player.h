@@ -87,12 +87,13 @@ private://プレイヤークラス変数
 	bool isPlayerSetUp = false;
 	bool onGround = false;
 	bool isHitRail = false;
+	bool isHitFirstRail = false;
 
 	uint32_t bulletNumber = 0;
 
 	float Radius = 1.0f;
-	float playerSpeed = 0.8f;
-	float diagonalPlayerSpeed = 0.4f;
+	float playerSpeed = 0.6f;
+	float diagonalPlayerSpeed = 0.7f;
 	float PlayerToCameraDistance = 0.0f;
 	float PlayerToCameraTargetVecDistance = 0.0f;
 	float cameraMaxDistance = 0.0f;

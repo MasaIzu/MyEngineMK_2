@@ -484,6 +484,204 @@
                 ]
             },
             "file_name": "FIRSTSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "goal",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": ""
+        },
+        {
+            "type": "MESH",
+            "name": "goalCube",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": ""
+        },
+        {
+            "type": "MESH",
+            "name": "goalSrop",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": ""
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec",
+            "transform": {
+                "translation": [
+                    0.0,
+                    494.0202331542969,
+                    60.361000061035156
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec.001",
+            "transform": {
+                "translation": [
+                    0.0,
+                    529.9556884765625,
+                    88.14180755615234
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec.002",
+            "transform": {
+                "translation": [
+                    0.0,
+                    560.1812133789062,
+                    113.47789001464844
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec.003",
+            "transform": {
+                "translation": [
+                    0.0,
+                    670.193115234375,
+                    203.93218994140625
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec.004",
+            "transform": {
+                "translation": [
+                    0.0,
+                    860.5242309570312,
+                    362.0038146972656
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
+        },
+        {
+            "type": "MESH",
+            "name": "FinalVec.005",
+            "transform": {
+                "translation": [
+                    0.0,
+                    989.8716430664062,
+                    468.94879150390625
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    0.3766217827796936,
+                    0.3766217827796936,
+                    0.3766217827796936
+                ]
+            },
+            "file_name": "FINALSPLINE"
         }
     ]
 }

@@ -21,7 +21,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,4.0f,0.0f };
+	playerWorldTrans.translation_ = { 0,-215.0f,-283.0f };
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -44,6 +44,7 @@ void Player::Initialize()
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
 	playerMoveSpline = std::make_unique<SplinePosition>();
+	FirstMoveSpline = std::make_unique<SplinePosition>();
 }
 
 void Player::Update()
@@ -51,7 +52,9 @@ void Player::Update()
 	if (playerMoveSpline->GetFinishSpline()) {
 		isHitRail = false;
 	}
-
+	if (FirstMoveSpline->GetFinishSpline()) {
+		isHitFirstRail = false;
+	}
 	//回転させる
 	PlayerRot();
 	if (playerBullet->GetExpandingBullet() == false) {
@@ -67,6 +70,11 @@ void Player::Update()
 		float speed = 0.02f;
 		playerMoveSpline->Update(speed);
 		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
+	if (isHitFirstRail == true && FirstMoveSpline->GetFinishSpline() == false) {
+		float speed = 0.02f;
+		FirstMoveSpline->Update(speed);
+		playerWorldTrans.translation_ = FirstMoveSpline->NowPos + Vector3(0, Radius, 0);
 	}
 
 	//カメラの位置でアルファが決まる
@@ -168,6 +176,7 @@ void Player::Move()
 		}
 		if (input_->PushKey(DIK_SPACE)) {
 			playerMoveSpline->ResetNearSplineReset();
+			FirstMoveSpline->ResetNearSplineReset();
 			onGround = false;
 			const float jumpVYFist = 0.4f;
 			fallVec = { 0, jumpVYFist, 0, 0 };
@@ -235,7 +244,7 @@ void Player::WorldTransUpdate()
 void Player::CheckPlayerCollider()
 {
 	isHitRail = false;
-
+	//isHitFirstRail = false;
 	// ワールド行列更新
 	playerWorldTrans.TransferMatrix();
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
@@ -341,17 +350,24 @@ void Player::CheckPlayerCollider()
 		playerMoveSpline->ResetNearSpline(splinePos);
 		isHitRail = true;
 	}
+	//レールコライダー
+	if (PlayerCollider->GetFirstSplineHit()) {
+		PlayerCollider->FirstSplineHitReset();
+		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
+		FirstMoveSpline->ResetNearSpline(splinePos);
+		isHitFirstRail = true;
+	}
 
 }
 
 void Player::Fall()
 {
-	if (isHitRail == false) {
+	if (isHitRail == false || isHitFirstRail == false) {
 		// 落下処理
 		if (!onGround) {
 			// 下向き加速度
 			const float fallAcc = -0.03f;
-			const float fallVYMin = -0.5f;
+			const float fallVYMin = -0.7f;
 			// 加速
 			fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
 			// 移動

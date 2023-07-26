@@ -64,6 +64,7 @@ public:// ƒƒ“ƒoŠÖ”
 	std::list<BulletShotEnemy*> GetBulletShotEnemyList() { return billetShotEnemyList; }
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
 	std::vector<Vector3> GetSpline() { return splineVec; }
+	std::vector<Vector3> GetFinalSpline() { return FinalSplineVec; }
 private:
 	std::unique_ptr<LevelData> levelData;
 	std::map<std::string, Model*> models;
@@ -72,8 +73,9 @@ private:
 	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::list<BulletShotEnemy*> billetShotEnemyList;
 	std::list<Ground*> ground;
-	std::vector<Vector3> splineVec;
 	std::vector<Vector3> FirstSplineVec;
+	std::vector<Vector3> splineVec;
+	std::vector<Vector3> FinalSplineVec;
 
 	//Å‰‚©‚ç“Ç‚İ‚Ş‚â‚Â
 	std::unique_ptr<Model> modelSrop;

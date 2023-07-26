@@ -110,6 +110,12 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			splineVec.push_back(trans);
 		}
+		else if (object["file_name"].get<std::string>() == "FINALSPLINE") {
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			FinalSplineVec.push_back(trans);
+		}
 
 		// TODO: オブジェクト走査を再帰関数にまとめ、再帰呼出で枝を走査する
 		if (object.contains("children")) {
