@@ -65,46 +65,46 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 
 		// 種別を取得
 		std::string type = object["type"].get<std::string>();
+		//std::string addType = object["file_name"].get<std::string>();
+		if (object["file_name"].get<std::string>().empty()) {
+			// MESH
+			if (type.compare("MESH") == 0) {
+				// 要素追加
+				levelData->objects.emplace_back(LevelData::ObjectData{});
+				// 今追加した要素の参照を得る
+				LevelData::ObjectData& objectData = levelData->objects.back();
 
-		// MESH
-		if (type.compare("MESH") == 0) {
-			// 要素追加
-			levelData->objects.emplace_back(LevelData::ObjectData{});
-			// 今追加した要素の参照を得る
-			LevelData::ObjectData& objectData = levelData->objects.back();
+				if (object.contains("name")) {
+					// ファイル名
+					objectData.fileName = object["name"];
+				}
 
-			if (object.contains("name")) {
-				// ファイル名
-				objectData.fileName = object["name"];
+				// トランスフォームのパラメータ読み込み
+				nlohmann::json& transform = object["transform"];
+				// 平行移動
+				objectData.translation.x = static_cast<float>(transform["translation"][0]);
+				objectData.translation.y = static_cast<float>(transform["translation"][2]);
+				objectData.translation.z = static_cast<float>(transform["translation"][1]);
+
+				// 回転角
+				objectData.rotation.x = -static_cast<float>(transform["rotation"][1]);
+				objectData.rotation.y = -static_cast<float>(transform["rotation"][2]);
+				objectData.rotation.z = static_cast<float>(transform["rotation"][0]);
+				// スケーリング
+				objectData.scaling.x = static_cast<float>(transform["scaling"][1]);
+				objectData.scaling.y = static_cast<float>(transform["scaling"][2]);
+				objectData.scaling.z = static_cast<float>(transform["scaling"][0]);
+
+				// TODO: コライダーのパラメータ読み込み
 			}
-
-			// トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-			// 平行移動
-			objectData.translation.x = static_cast<float>(transform["translation"][0]);
-			objectData.translation.y = static_cast<float>(transform["translation"][2]);
-			objectData.translation.z = static_cast<float>(transform["translation"][1]);
-
-			// 回転角
-			objectData.rotation.x = -static_cast<float>(transform["rotation"][1]);
-			objectData.rotation.y = -static_cast<float>(transform["rotation"][2]);
-			objectData.rotation.z = static_cast<float>(transform["rotation"][0]);
-			// スケーリング
-			objectData.scaling.x = static_cast<float>(transform["scaling"][1]);
-			objectData.scaling.y = static_cast<float>(transform["scaling"][2]);
-			objectData.scaling.z = static_cast<float>(transform["scaling"][0]);
-
-			// TODO: コライダーのパラメータ読み込み
 		}
-		else if (type.compare("SPLINE") == 0) {
-
+		else if (object["file_name"].get<std::string>() == "FIRSTSPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
-			splineVec.push_back(trans);
+			FirstSplineVec.push_back(trans);
 		}
-		else if (type.compare("FIRSTSPLINE") == 0) {
-
+		else if (object["file_name"].get<std::string>() == "SPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
@@ -144,7 +144,24 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 
 		// ファイル名から登録済みモデルを検索
 		Model* model = nullptr;
-		decltype(models)::iterator it = models.find(objectData.fileName);
+
+		std::string fileName;
+
+		if (objectData.fileName.find(".") != std::string::npos) {
+			for (uint32_t i = 0; i < objectData.fileName.length(); i++) {
+				if (objectData.fileName.substr(i, 1) != ".") {
+					fileName += objectData.fileName.substr(i, 1);
+				}
+				else {
+					break;
+				}
+			}
+		}
+		else {
+			fileName = objectData.fileName;
+		}
+
+		decltype(models)::iterator it = models.find(fileName);
 		if (it != models.end()) {
 			model = it->second;
 			// 座標
