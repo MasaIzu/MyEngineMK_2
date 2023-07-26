@@ -172,19 +172,19 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			Trans.SetRot(objectData.rotation);// 回転角
 			Trans.TransferMatrix();
 
-			if (objectData.fileName == modelNormalEnemy->GetName()) {
+			if (fileName == modelNormalEnemy->GetName()) {
 				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation, model);
 				tutorialEnemyList.push_back(tutorialEnemy);
 			}
-			else if (objectData.fileName == modelBulletShotEnemy->GetName()) {
+			else if (fileName == modelBulletShotEnemy->GetName()) {
 				BulletShotEnemy* bulletShotEnemy = new BulletShotEnemy(objectData.translation, model);
 				billetShotEnemyList.push_back(bulletShotEnemy);
 			}
-			else if (objectData.fileName == modelGround->GetName()) {
+			else if (fileName == modelGround->GetName()) {
 				Ground* tutorialEnemy = new Ground(modelGround.get());
 				ground.push_back(tutorialEnemy);
 			}
-			else if (objectData.fileName == modelSrop->GetName()) {
+			else if (fileName == modelSrop->GetName()) {
 
 				// 配列に登録
 				ModelData Data;
@@ -196,7 +196,7 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 		}
 		else {
 			// モデルを指定して3Dオブジェクトを生成
-			model = Model::CreateFromOBJ(objectData.fileName, true);
+			model = Model::CreateFromOBJ(fileName, true);
 			// 座標
 			WorldTransform Trans;
 			Trans.Initialize();
@@ -211,11 +211,14 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			Data.worldTrans.TransferMatrix();
 			NewLoadObjects.push_back(Data);
 
-			if (objectData.fileName == "cube") {
+			if (fileName == "cube") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
 			}
-			else if (objectData.fileName == "shahei") {
+			else if (fileName == "shahei") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if (fileName == "srop") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
 		}
 

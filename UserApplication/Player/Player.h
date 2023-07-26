@@ -45,6 +45,7 @@ public://Setter
 	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
 	void SetCameraDistance(const float& Distance) { PlayerToCameraDistance = Distance; }
 	void SetCameraMaxDistance(const float& cameraMaxDistance) { this->cameraMaxDistance = cameraMaxDistance; }
+	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }
 	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
@@ -64,6 +65,7 @@ private://クラス関連
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	//スプライン
+	std::unique_ptr<SplinePosition> FirstMoveSpline;
 	std::unique_ptr<SplinePosition> playerMoveSpline;
 
 private://イーナムクラス
