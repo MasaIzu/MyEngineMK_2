@@ -34,6 +34,7 @@ public:
 	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
 	inline bool GetSphereMeshHit() { return isSphereMeshHit; }
 	inline bool GetFirstSplineHit() { return isHitFirstSplineRail; }
+	inline bool GetFinalSplineHit() { return isHitFinalSplineRail; }
 	inline Vector3 GetRejectVec() { return rejectVec; }
 	inline Vector4 GetInterVec() { return inter; }
 	inline Matrix4 GetWorldPos() { return worldPos_; }
@@ -100,6 +101,13 @@ public:
 	inline void FirstSplineHitReset() {
 		isHitFirstSplineRail = false;
 	}
+	/// <summary>
+	/// 排斥ベクトルのヒットをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void FinalSplineHitReset() {
+		isHitFinalSplineRail = false;
+	}
 
 protected:
 	// 形状タイプ
@@ -113,6 +121,7 @@ protected:
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
 	bool isSphereMeshHit = false;
 	bool isHitFirstSplineRail = false;
+	bool isHitFinalSplineRail = false;
 
 	Vector3 rejectVec;//排斥ベクトル
 	Vector4 inter;

@@ -20,11 +20,14 @@ public://基本関数
 	void InitializeCameraPosition(const float& cameraAngle);
 	void Update();
 
+public://リセット
+	void MousePositionReset();
+	void MousePositionReset(Uint32Vector2& uint32Vector2);//少し細工する
 
 private:
 	void PlaySceneCamera();
+	void SceneCamera();
 	void Collision();
-	void MousePositionReset();
 	void CameraAngle(const float& x, const float& z);
 
 	//カメラの視線切れているか
@@ -40,8 +43,11 @@ public://getter
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 
 public://setter
-	void SetCameraPosition(const Vector3& pos) { playerPos_ = pos; }
+	void SetCameraMode(const bool& mode) { cameraMode = mode; }
+	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 	void SetPlayerMoveMent(Vector3& playerMoveMent) { PlayerMoveMent = playerMoveMent; }
+	void SetFreeCamera(const bool& mode) { FreeCamera = mode; }
+	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
 
 private://クラス関連
 	Easing* easing_;
@@ -56,6 +62,7 @@ private://プレイヤークラス変数
 	bool isShake = false;
 	bool cameraDown = false;
 	bool cameraUp = false;
+	bool FreeCamera = false;
 
 	uint32_t cameraType = 0;
 	uint32_t winWidth = 0;
@@ -69,7 +76,6 @@ private://プレイヤークラス変数
 
 	float scaleX_ = 1.0f;// スケーリング
 	float scaleY_ = 1.0f;
-	float distance_ = 10;// カメラ注視点までの距離
 	float angleAroundPlayer; // プレイヤーの周りを回転する角度
 	float cameraDistance_ = 30.0f;
 	float angle = 0.0f;
@@ -97,7 +103,7 @@ private://プレイヤークラス変数
 	Vector2 mouseMoved{ 0,MyMath::PI };
 
 	Vector3 rot;
-	Vector3 vTargetEye;
+	Vector3 eye;
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
@@ -109,6 +115,9 @@ private://プレイヤークラス変数
 	Vector3 CameraTarget;
 	Vector3 cameraHigh = { 0,7,0 };
 	Vector3 PlayerToCameraVec;
+	//セットされたVec
+	Vector3 SetTargetVec;
+	Vector3 SetEyeVec;
 
 	Matrix4 CameraRot;
 	Matrix4 matRot;// 回転行列

@@ -77,12 +77,12 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	forward.normalize();
 
 	//target = pos;
-	vTargetEye = target + (forward * cameraDistance_);
-	cameraPos = vTargetEye;
+	eye = target + (forward * cameraDistance_);
+	cameraPos = eye;
 
 	//距離
 	//cameraPos += PlayerMoveMent;
-	Vector3 dVec = vTargetEye - cameraPos;
+	Vector3 dVec = eye - cameraPos;
 	dVec *= cameraDelay;
 	cameraPos += viewProjection->eye;
 	Vector3 player_camera = cameraPos - target;
@@ -90,7 +90,7 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 	cameraPos = target + (player_camera * cameraDistance_);
 
 	viewProjection->target = target;
-	viewProjection->eye = vTargetEye;
+	viewProjection->eye = eye;
 	viewProjection->UpdateMatrix();
 }
 
@@ -103,67 +103,51 @@ void GameCamera::Update() {
 			cameraMode = false;
 		}
 	}
-	if (cameraMode == false) {
-		/*if (input_->PushKey(DIK_LSHIFT)) {
-			PlayerLockOnCamera(viewProjection_);
+	if (FreeCamera == false) {
+		if (cameraMode == false) {
+
+			if (input_->PushKey(DIK_UP)) {
+				mouseMoved.x += 0.001f;
+			}
+			if (input_->PushKey(DIK_DOWN)) {
+				mouseMoved.x -= 0.001f;
+			}
+			PlaySceneCamera();
+
+			ImGui::Begin("camera");
+			ImGui::Text("eye:%f", viewProjection->eye.x);
+			ImGui::Text("eye:%f", viewProjection->eye.y);
+			ImGui::Text("eye:%f", viewProjection->eye.z);
+			ImGui::Text("mouseMoved:%f", mouseMoved.x);
+			ImGui::Text("mouseMoved:%f", mouseMoved.y);
+			ImGui::Text("PlayerToCameraVecDistance:%f", PlayerToCameraVecDistance);
+			ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
+			ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
+			MyMath::MatrixText(CameraRot);
+			ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
+
+			ImGui::End();
 		}
 		else {
-			PlaySceneCamera(viewProjection_);
-		}*/
-
-		if (input_->PushKey(DIK_UP)) {
-			mouseMoved.x += 0.001f;
+			SceneCamera();
 		}
-		if (input_->PushKey(DIK_DOWN)) {
-			mouseMoved.x -= 0.001f;
+		//オブジェクトが挟まったらオブジェクトの前にカメラを持ってくる
+		CheckBetweenToCameraCollider();
+		CameraCollider->Update(MyMath::Translation(eye));
+
+		if (CameraCollider->GetSphereMeshHit()) {
+			CameraCollider->SphereMeshHitReset();
 		}
-
-
-		PlaySceneCamera();
-
-
-
-		ImGui::Begin("camera");
-		ImGui::Text("eye:%f", viewProjection->eye.x);
-		ImGui::Text("eye:%f", viewProjection->eye.y);
-		ImGui::Text("eye:%f", viewProjection->eye.z);
-
-		ImGui::Text("mouseMoved:%f", mouseMoved.x);
-		ImGui::Text("mouseMoved:%f", mouseMoved.y);
-		ImGui::Text("PlayerToCameraVecDistance:%f", PlayerToCameraVecDistance);
-		ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
-		ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
-		MyMath::MatrixText(CameraRot);
-
-		ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
-
-		ImGui::End();
 	}
 	else {
-		ImGui::Begin("camera");
-		ImGui::SliderFloat("eye:x", &vTargetEye.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("eye:y", &vTargetEye.y, -100.0f, 700.0f);
-		ImGui::SliderFloat("eye:z", &vTargetEye.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("target:x", &target.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("target:y", &target.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("target:z", &target.z, -100.0f, 100.0f);
-
-		ImGui::End();
+		target = SetTargetVec;
+		eye = SetEyeVec;
 	}
+
+
 
 	viewProjection->target = target;
-	viewProjection->eye = vTargetEye;
-
-	//オブジェクトが挟まったらオブジェクトの前にカメラを持ってくる
-	CheckBetweenToCameraCollider();
-
-	CameraCollider->Update(MyMath::Translation(viewProjection->eye));
-
-	if (CameraCollider->GetSphereMeshHit()) {
-		CameraCollider->SphereMeshHitReset();
-	}
-
+	viewProjection->eye = eye;
 	viewProjection->UpdateMatrix();
 
 
@@ -171,7 +155,7 @@ void GameCamera::Update() {
 
 void GameCamera::PlaySceneCamera() {
 
-	oldCameraPos = vTargetEye;
+	oldCameraPos = eye;
 	if (cameraTime < MaxCameraTime) {
 		cameraTime++;
 	}
@@ -234,51 +218,6 @@ void GameCamera::PlaySceneCamera() {
 	else if (mouseMoved.x > 1.30f) {
 		mouseMoved.x = 1.30f;
 	}
-	
-	//if (cameraDown == true) {
-	//	if (mouseMoved.x < -0.10f + CameraMouseMoved) {
-	//		mouseMoved.x = -0.10f + CameraMouseMoved;
-	//		if (cameraDis - 10.0f > CameraDistanceMinus) {
-	//			CameraDistanceMinus -= Mous_UP_DOWN.x * 40;
-	//			if (CameraMouseMoved > -0.2f) {
-	//				CameraMouseMoved += Mous_UP_DOWN.x;
-	//			}
-	//			if (cameraDis - 10.0f < CameraDistanceMinus) {
-	//				CameraDistanceMinus = cameraDis - 10.0f;
-	//				CameraMouseMoved = -0.2f;
-	//			}
-
-	//		}
-	//		else {
-	//			CameraMouseMoved = -0.2f;
-	//		}
-	//	}
-	//	else {
-	//	}
-	//}
-	//if (cameraUp == true) {
-
-	//	if (mouseMoved.x < -0.10f) {
-	//		mouseMoved.x = -0.10f + CameraMouseMoved;
-	//	}
-
-	//	if (CameraDistanceMinus > 0) {
-	//		CameraDistanceMinus -= Mous_UP_DOWN.x * 60;
-	//		if (CameraMouseMoved < 0.0f) {
-	//			CameraMouseMoved += Mous_UP_DOWN.x / 2;
-	//		}
-	//		if (CameraDistanceMinus < 0) {
-	//			CameraDistanceMinus = 0;
-	//		}
-	//	}
-	//	else {
-	//		CameraMouseMoved = 0;
-	//	}
-
-	//	if (mouseMoved.x > 1.30f) {
-	//		mouseMoved.x = 1.30f;
-	//	}
-	//}
 
 
 	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
@@ -300,9 +239,9 @@ void GameCamera::PlaySceneCamera() {
 	forward.normalize();
 
 	//target = pos;
-	vTargetEye = target + (forward * cameraDistance_);
+	eye = target + (forward * cameraDistance_);
 
-	CameraAngle(vTargetEye.z - target.z, vTargetEye.x - target.x);
+	CameraAngle(eye.z - target.z, eye.x - target.x);
 
 
 	////遅延カメラ
@@ -323,6 +262,23 @@ void GameCamera::PlaySceneCamera() {
 	//cameraPos = target + (player_camera);
 
 
+}
+
+void GameCamera::SceneCamera()
+{
+	target = playerPos_ + cameraHigh;
+
+	//ワールド前方ベクトル
+	Vector3 forward(0, 0, cameraDistance_);
+	//レールカメラの回転を反映
+	forward = MyMath::MatVector(CameraRot, forward);
+
+	forward.normalize();
+
+	//target = pos;
+	//eye = target + (forward * cameraDistance_);
+
+	CameraAngle(eye.z - target.z, eye.x - target.x);
 }
 
 void GameCamera::Collision()
@@ -355,6 +311,29 @@ void GameCamera::MousePositionReset()
 	
 }
 
+void GameCamera::MousePositionReset(Uint32Vector2& uint32Vector2)
+{
+	POINT mousePosition;
+	//マウス座標(スクリーン座標)を取得する
+	GetCursorPos(&mousePosition);
+
+	//クライアントエリア座標に変換する
+	HWND hwnd = WinApp::GetInstance()->Gethwnd();
+	ScreenToClient(hwnd, &mousePosition);
+
+	uint32_t xPos_absolute, yPos_absolute;
+
+	WINDOWINFO windowInfo;
+	//ウィンドウの位置を取得
+	windowInfo.cbSize = sizeof(WINDOWINFO);
+	GetWindowInfo(hwnd, &windowInfo);
+
+	//マウスの移動先の絶対座標（モニター左上からの座標）
+	xPos_absolute = windowWH.x + windowInfo.rcWindow.left + 8 + uint32Vector2.x;//なんかずれてるから直す
+	yPos_absolute = windowWH.y + windowInfo.rcWindow.top + 31 + uint32Vector2.y; //ウィンドウのタイトルバーの分（31px）をプラス
+	SetCursorPos(xPos_absolute, yPos_absolute);//移動させる
+}
+
 bool GameCamera::CheckBetweenToCameraCollider()
 {
 	bool isGroundHit = false;
@@ -363,17 +342,17 @@ bool GameCamera::CheckBetweenToCameraCollider()
 	Ray GroundRay;
 	GroundRay.start = MyMath::Vec3ToVec4(playerPos_);
 	//LookRay.start.y += CameraRayCollisionRadius;
-	PlayerToCameraVec = (viewProjection->eye - Vector3(0, CameraCollisionRadius, 0)) - playerPos_;
+	PlayerToCameraVec = (eye - Vector3(0, CameraCollisionRadius, 0)) - playerPos_;
 	PlayerToCameraVecDistance = PlayerToCameraVec.length();
 	GroundRay.dir = MyMath::Vec3ToVec4(PlayerToCameraVec.norm());
 	RaycastHit raycastHit;
 
 	//カメラとの間に地面があれば位置を変える
 	if (CollisionManager::GetInstance()->Raycast(GroundRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToCameraVecDistance)) {
-		Vector3 eyeToInter = viewProjection->eye - MyMath::Vec4ToVec3(raycastHit.inter);
-		viewProjection->target = viewProjection->target - eyeToInter;
-		viewProjection->eye = MyMath::Vec4ToVec3(raycastHit.inter) + Vector3(0, CameraCollisionRadius, 0);
-		PlayerToCameraVec = viewProjection->eye - playerPos_;
+		Vector3 eyeToInter = eye - MyMath::Vec4ToVec3(raycastHit.inter);
+		target = target - eyeToInter;
+		eye = MyMath::Vec4ToVec3(raycastHit.inter) + Vector3(0, CameraCollisionRadius, 0);
+		PlayerToCameraVec = eye - playerPos_;
 		PlayerToCameraVecDistance = PlayerToCameraVec.length();
 		isGroundHit = true;
 	}
@@ -382,17 +361,17 @@ bool GameCamera::CheckBetweenToCameraCollider()
 	Ray LookRay;
 	LookRay.start = MyMath::Vec3ToVec4(playerPos_);
 	//LookRay.start.y += CameraRayCollisionRadius;
-	PlayerToCameraVec = viewProjection->eye - playerPos_;
+	PlayerToCameraVec = eye - playerPos_;
 	PlayerToCameraVecDistance = PlayerToCameraVec.length();
 	LookRay.dir = MyMath::Vec3ToVec4(PlayerToCameraVec.norm());
 	RaycastHit ObjectRaycastHit;
 
 	//カメラとの間にオブジェクトがあれば位置を変える
 	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_OBJECT, &ObjectRaycastHit, PlayerToCameraVecDistance)) {
-		Vector3 eyeToInter = viewProjection->eye - MyMath::Vec4ToVec3(ObjectRaycastHit.inter);
-		viewProjection->target = viewProjection->target - eyeToInter;
-		viewProjection->eye = MyMath::Vec4ToVec3(ObjectRaycastHit.inter) + Vector3(0, CameraCollisionRadius, 0);
-		PlayerToCameraVec = viewProjection->eye - playerPos_;
+		Vector3 eyeToInter = eye - MyMath::Vec4ToVec3(ObjectRaycastHit.inter);
+		target = target - eyeToInter;
+		eye = MyMath::Vec4ToVec3(ObjectRaycastHit.inter) + Vector3(0, CameraCollisionRadius, 0);
+		PlayerToCameraVec = eye - playerPos_;
 		PlayerToCameraVecDistance = PlayerToCameraVec.length();
 		isGroundHit = true;
 	}
@@ -402,10 +381,16 @@ bool GameCamera::CheckBetweenToCameraCollider()
 
 Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
 {
-	Vector3 eyeToTargetVec = viewProjection->target - viewProjection->eye;
+	Vector3 eyeToTargetVec = target - eye;
 	eyeToTargetVec.normalize();
 
-	return eyeToTargetVec * distance + viewProjection->eye;
+	return eyeToTargetVec * distance + eye;
+}
+
+void GameCamera::SetCameraTargetAndPos(const Vector3& target, const Vector3& eye)
+{
+	SetTargetVec = target;
+	SetEyeVec = eye;
 }
 
 

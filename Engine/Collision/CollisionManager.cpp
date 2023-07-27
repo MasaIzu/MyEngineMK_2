@@ -99,6 +99,11 @@ void CollisionManager::CheckAllCollisions()
 						colB->isHitFirstSplineRail = true;
 					}
 				}
+				else if (colA->attribute == COLLISION_ATTR_FINALRAIL && colB->attribute == COLLISION_ATTR_ALLIES) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colB->isHitFinalSplineRail = true;
+					}
+				}
 			}
 			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH) {
 				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
@@ -127,6 +132,11 @@ void CollisionManager::CheckAllCollisions()
 				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FIRSTRAIL) {
 					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
 						colA->isHitFirstSplineRail = true;
+					}
+				}
+				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FINALRAIL) {
+					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
+						colA->isHitFinalSplineRail = true;
 					}
 				}
 			}

@@ -65,6 +65,7 @@ void GameScene::Initialize() {
 
 	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
 	player_->SetSpline(levelData->GetSpline());
+	player_->SetFinalSpline(levelData->GetFinalSpline());
 
 	tutorialEnemyList = levelData->GetTutorialEnemyList();
 	bulletShotEnemy = levelData->GetBulletShotEnemyList();
@@ -79,6 +80,12 @@ void GameScene::Initialize() {
 	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_LANDSHAPE));
 
 	collisionManager = CollisionManager::GetInstance();
+
+	gameCamera->SetFreeCamera(true);
+	//Vector3 target = levelData->GetFirstSpline()[1] + Vector3(10, -5, 0);
+	eye = levelData->GetFirstSpline()[1] + Vector3(-50, 20, -10);
+	Vector3 target = levelData->GetFirstSpline()[1] + levelData->GetFirstSpline()[1] - eye;
+	gameCamera->SetCameraTargetAndPos(target, eye);
 }
 
 void GameScene::Update() {
@@ -151,8 +158,26 @@ void GameScene::Update() {
 	player_->SetCameraMaxDistance(gameCamera->GetMaxDistance());
 	player_->Update();
 
-	
-	gameCamera->SetCameraPosition(player_->GetPlayerPos());
+	if (isSpline == false) {
+		if (player_->GetHowReturnSpline(2)) {
+			isSpline = true;
+		}
+	}
+	else {
+		if (player_->GetHowReturnSpline(4)) {
+			gameCamera->SetFreeCamera(false);
+			uint32_t mousX = 0;
+			uint32_t mousY = -100;
+			Uint32Vector2 Mous = { mousX,mousY };
+			gameCamera->MousePositionReset(Mous);
+			player_->SetCameraModeNotFree(true);
+			isSpline = false;
+		}
+		gameCamera->SetCameraTargetAndPos(player_->GetPlayerPos(), eye);
+	}
+
+	gameCamera->SetCameraMode(player_->GetHitFinalRail());
+	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
 	//tutorialEnemy->Update(player_->GetPlayerPos());

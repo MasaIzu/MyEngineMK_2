@@ -21,7 +21,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,-215.0f,-283.0f };
+	playerWorldTrans.translation_ = { 0,-155.0f,-283.0f };
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -45,6 +45,7 @@ void Player::Initialize()
 
 	playerMoveSpline = std::make_unique<SplinePosition>();
 	FirstMoveSpline = std::make_unique<SplinePosition>();
+	FinalMoveSpline = std::make_unique<SplinePosition>();
 }
 
 void Player::Update()
@@ -66,21 +67,16 @@ void Player::Update()
 	//当たり判定チェック
 	CheckPlayerCollider();
 
-	if (isHitRail == true && playerMoveSpline->GetFinishSpline() == false) {
-		float speed = 0.02f;
-		playerMoveSpline->Update(speed);
-		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0, Radius, 0);
-	}
-	if (isHitFirstRail == true && FirstMoveSpline->GetFinishSpline() == false) {
-		float speed = 0.02f;
-		FirstMoveSpline->Update(speed);
-		playerWorldTrans.translation_ = FirstMoveSpline->NowPos + Vector3(0, Radius, 0);
-	}
+	//スプラインアップデート
+	SplineUpdate();
 
-	//カメラの位置でアルファが決まる
-	alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
-	playerWorldTrans.alpha = alpha;
-	playerWorldTransHed.alpha = alpha;
+	if (isCameraModeNotFree == true) {
+		//カメラの位置でアルファが決まる
+		alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
+		playerWorldTrans.alpha = alpha;
+		playerWorldTransHed.alpha = alpha;
+	}
+	
 	//移動の値更新
 	WorldTransUpdate();
 
@@ -113,7 +109,7 @@ void Player::Update()
 
 void Player::Draw(ViewProjection& viewProjection_)
 {
-	model_->Draw(DebugWorldTrans, viewProjection_);
+	//model_->Draw(DebugWorldTrans, viewProjection_);
 	model_->Draw(playerWorldTrans, viewProjection_);
 	model_->Draw(playerWorldTransHed, viewProjection_);
 	playerBullet->Draw(viewProjection_);
@@ -357,6 +353,13 @@ void Player::CheckPlayerCollider()
 		FirstMoveSpline->ResetNearSpline(splinePos);
 		isHitFirstRail = true;
 	}
+	//レールコライダー
+	if (PlayerCollider->GetFinalSplineHit()) {
+		PlayerCollider->FinalSplineHitReset();
+		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
+		FirstMoveSpline->ResetNearSpline(splinePos);
+		isHitFinalRail = true;
+	}
 
 }
 
@@ -376,5 +379,25 @@ void Player::Fall()
 			playerWorldTrans.translation_.z += fallVec.z;
 		}
 	}
+}
+
+void Player::SplineUpdate()
+{
+	if (isHitRail == true && playerMoveSpline->GetFinishSpline() == false) {
+		float speed = 0.02f;
+		playerMoveSpline->Update(speed);
+		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
+	if (isHitFirstRail == true && FirstMoveSpline->GetFinishSpline() == false) {
+		float speed = 0.02f;
+		FirstMoveSpline->Update(speed);
+		playerWorldTrans.translation_ = FirstMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
+	if (isHitFinalRail == true && FinalMoveSpline->GetFinishSpline() == false) {
+		float speed = 0.02f;
+		FinalMoveSpline->Update(speed);
+		playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
+
 }
 

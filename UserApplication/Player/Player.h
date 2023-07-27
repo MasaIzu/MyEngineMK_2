@@ -39,16 +39,22 @@ private:
 	void CheckPlayerCollider();
 	//落下
 	void Fall();
+	//スプラインアップデート
+	void SplineUpdate();
 
 public://Setter
+	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
 	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
 	void SetCameraDistance(const float& Distance) { PlayerToCameraDistance = Distance; }
 	void SetCameraMaxDistance(const float& cameraMaxDistance) { this->cameraMaxDistance = cameraMaxDistance; }
 	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }
 	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }
+	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
+	bool GetHitFinalRail()const { return isHitFinalRail; }
+	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); };
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
 	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }
 
@@ -65,8 +71,9 @@ private://クラス関連
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	//スプライン
-	std::unique_ptr<SplinePosition> FirstMoveSpline;
-	std::unique_ptr<SplinePosition> playerMoveSpline;
+	std::unique_ptr<SplinePosition> FirstMoveSpline;//最初のカメラスプライン
+	std::unique_ptr<SplinePosition> playerMoveSpline;//途中のスプライン
+	std::unique_ptr<SplinePosition> FinalMoveSpline;//最後のカメラスプライン
 
 private://イーナムクラス
 	enum class AttackPhase {
@@ -88,6 +95,8 @@ private://プレイヤークラス変数
 	bool onGround = false;
 	bool isHitRail = false;
 	bool isHitFirstRail = false;
+	bool isHitFinalRail = false;
+	bool isCameraModeNotFree = false;
 
 	uint32_t bulletNumber = 0;
 

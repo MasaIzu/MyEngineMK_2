@@ -171,3 +171,12 @@ void SplinePosition::SetNotSplineVector(const std::vector<Vector3>& points)
 	}
 	this->points = setPoints;
 }
+
+bool SplinePosition::GetHowReturnIndex(const uint32_t& HowIndex) const
+{
+	if (HowIndex == startIndex) {
+		return true;
+	}
+	return false;
+}
+

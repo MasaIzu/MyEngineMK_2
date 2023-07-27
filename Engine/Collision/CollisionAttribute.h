@@ -16,3 +16,4 @@ const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b1001;//敵の弾の攻撃
 const unsigned short COLLISION_ATTR_CAMERA = 0b1010;//カメラ
 const unsigned short COLLISION_ATTR_FIRSTRAIL = 0b1011;//スロープ
 const unsigned short COLLISION_ATTR_RAIL = 0b1100;//スロープ
+const unsigned short COLLISION_ATTR_FINALRAIL = 0b1101;//スロープ

@@ -71,6 +71,8 @@ private: // メンバ変数
 	WorldTransform worldTransform_;//ワールド変換データ
 	uint32_t textureHandle_ = 0;//テクスチャハンドル
 
+	bool isSpline = false;
+
 	int shadeNumber = 3;
 
 	//ぼかし強度
@@ -116,4 +118,5 @@ private: // メンバ変数
 	Vector2 tmp;
 
 	Vector3 EnemyPos;
+	Vector3 eye;
 };

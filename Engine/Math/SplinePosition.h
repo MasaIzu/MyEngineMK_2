@@ -81,7 +81,9 @@ public://Setter
 	void SetNotSplineVector(const std::vector<Vector3>& points);
 public://Getter
 	bool GetFinishSpline()const { return isFinishSpline; }
-
+	bool GetHowReturnIndex(const uint32_t& HowIndex)const;
+	size_t GetNowIndex()const { return startIndex; }
+	Vector3 GetSplineVecPoint(const uint32_t& point) { return points[point]; }
 public://ŒöŠJ•Ï”
 	Vector3 NowPos;
 

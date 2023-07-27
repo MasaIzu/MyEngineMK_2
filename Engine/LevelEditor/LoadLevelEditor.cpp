@@ -232,6 +232,9 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			else if (fileName == "srop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
+			else if (fileName == "goalSrop") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FINALRAIL);
+			}
 		}
 
 	}
