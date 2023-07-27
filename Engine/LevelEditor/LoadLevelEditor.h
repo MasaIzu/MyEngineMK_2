@@ -80,6 +80,7 @@ private:
 	//Å‰‚©‚ç“Ç‚İ‚Ş‚â‚Â
 	std::unique_ptr<Model> modelSrop;
 	std::unique_ptr<Model> modelGround;
+	std::unique_ptr<Model> modelGoal;
 	std::unique_ptr<Model> modelNormalEnemy;
 	std::unique_ptr<Model> modelBulletShotEnemy;
 };

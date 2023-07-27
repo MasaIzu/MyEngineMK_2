@@ -135,12 +135,14 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 	// モデル読み込み
 	modelSrop.reset(Model::CreateFromOBJ("srop1", true));
 	modelGround.reset(Model::CreateFromOBJ("stageTest", true));
+	modelGoal.reset(Model::CreateFromOBJ("goal", true));
 	//modelFighter = Model::CreateFromOBJ("chr_sword", true);
 	modelNormalEnemy.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
 	modelBulletShotEnemy.reset(Model::CreateFromOBJ("sphereBulletEnemy", true));
 
 	models.insert(std::make_pair("srop1", modelSrop.get()));
 	models.insert(std::make_pair("stageTest", modelGround.get()));
+	models.insert(std::make_pair("goal", modelGoal.get()));
 	//models.insert(std::make_pair("chr_sword", modelFighter));
 	models.insert(std::make_pair("sphereNormalEnemy", modelNormalEnemy.get()));
 	models.insert(std::make_pair("sphereBulletEnemy", modelBulletShotEnemy.get()));
@@ -188,6 +190,10 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			}
 			else if (fileName == modelGround->GetName()) {
 				Ground* tutorialEnemy = new Ground(modelGround.get());
+				ground.push_back(tutorialEnemy);
+			}
+			else if (fileName == modelGoal->GetName()) {
+				Ground* tutorialEnemy = new Ground(modelGoal.get());
 				ground.push_back(tutorialEnemy);
 			}
 			else if (fileName == modelSrop->GetName()) {
