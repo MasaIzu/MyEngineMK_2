@@ -418,15 +418,6 @@
     <ClInclude Include="Engine\2D\MixPostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\FbxAnimation.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3D\FbxModel.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3D\FbxLoader.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\SplinePosition.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
@@ -438,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="TouchableObject.h">
       <Filter>Engine\ヘッダー\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelect.h">
+      <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -597,15 +591,6 @@
     <ClCompile Include="Engine\2D\MixPostEffect.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\FbxAnimation.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\FbxLoader.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\FbxModel.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Math\SplinePosition.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
@@ -617,6 +602,9 @@
     </ClCompile>
     <ClCompile Include="TouchableObject.cpp">
       <Filter>Engine\ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelect.cpp">
+      <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

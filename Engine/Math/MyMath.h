@@ -4,7 +4,6 @@
 #include "WinApp.h"
 #include <DirectXMath.h>
 #include <Vector4.h>
-#include<assimp/scene.h>
 #include "Quaternion.h"
 #include "Uint32Vector2.h"
 
@@ -52,14 +51,14 @@ namespace MyMath {
 	Matrix4 Matrix4Orthographic(
 		float viewLeft, float viewRight, float viewBottom, float viewTop, float nearZ, float farZ);
 
-	Matrix4 AssimpMatrix(aiMatrix4x4 mat4);
+	//Matrix4 AssimpMatrix(aiMatrix4x4 mat4);
 
-	Vector3 AssimpVector3(aiVector3D assimpVec3);
+	//Vector3 AssimpVector3(aiVector3D assimpVec3);
 
-	Vector4 AssimpQuaternionVec4(aiQuaternion assimpaiQuaternion);
-	Quaternion AssimpQuaternion(aiQuaternion assimpaiQuaternion);
+	//Vector4 AssimpQuaternionVec4(aiQuaternion assimpaiQuaternion);
+	//Quaternion AssimpQuaternion(aiQuaternion assimpaiQuaternion);
 
-	Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
+	//Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
 
 	float GetAngle(const float& angle);
 

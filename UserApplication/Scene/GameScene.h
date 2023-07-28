@@ -13,7 +13,6 @@
 #include "BaseScene.h"
 #include "SceneManager.h"
 
-#include "FbxModel.h"
 #include<memory>
 #include<vector>
 #include "GameCamera.h"
@@ -66,60 +65,45 @@ private: // メンバ変数
 	DirectXCore* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
-
-	
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
 	std::unique_ptr<Model> model_;// 3Dモデル
 	WorldTransform worldTransform_;//ワールド変換データ
-	uint32_t textureHandle_ = 0;//テクスチャハンドル
-
-	bool isSpline = false;
-
-	int shadeNumber = 3;
-
-	//ぼかし強度
-	int range = 0;
-
-
-	Vector2 center = {0.5f,0.5f};
-	float intensity = 0.1f;
-	int samples = 5;
-
-	float angle = 45.0f;
-	float angle2 = 135.0f;
-
-	float cameraSraide = 0.0f;
-
 	std::unique_ptr<ParticleManager> ParticleMan;
-
-	//当たり判定
-	CollisionManager* collisionManager = nullptr;
-	//シーンマネージャー
-	SceneManager* sceneManager_ = nullptr;
-
-	Vector3 Pos = { 0, 0, -25 };
-	Vector3 Verocty = { 0, 0.1f, 0 };
-	uint32_t MaxFream = 60;
-
+	CollisionManager* collisionManager = nullptr;//当たり判定
+	SceneManager* sceneManager_ = nullptr;//シーンマネージャー
 	std::unique_ptr<GameCamera> gameCamera;
-
 	std::unique_ptr<Ground> ground;
-
 	std::unique_ptr<Player> player_;
-
 	//std::unique_ptr<TutorialEnemy> tutorialEnemy;
 	std::list<BulletShotEnemy*> bulletShotEnemy;
 	std::unique_ptr<LoadLevelEditor> levelData;
-
 	std::list<TutorialEnemy*> tutorialEnemyList;
-
 	std::unique_ptr<TouchableObject> touchableObject;
 
+	uint32_t textureHandle_ = 0;//テクスチャハンドル
+
+	bool isSpline = false;
+	bool isFinish = false;
+
+	int shadeNumber = 3;
+	int range = 0;//ぼかし強度
+	int samples = 5;
+
+	uint32_t MaxFream = 60;
+
+	float intensity = 0.1f;
+	float angle = 45.0f;
+	float angle2 = 135.0f;
+	float cameraSraide = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float larpTime = 0.0f;
+
+	Vector2 center = {0.5f,0.5f};
 	Vector2 tmp;
 
+	Vector3 Pos = { 0, 0, -25 };
+	Vector3 Verocty = { 0, 0.1f, 0 };
 	Vector3 EnemyPos;
 	Vector3 eye;
 };

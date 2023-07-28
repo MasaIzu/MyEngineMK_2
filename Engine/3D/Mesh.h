@@ -33,8 +33,8 @@ struct Node
 /// 形状データ
 /// </summary>
 class Mesh {
-	friend class FbxLoader;
-	friend class FbxModel;
+	//friend class FbxLoader;
+	//friend class FbxModel;
 
 public:
 	// 骨

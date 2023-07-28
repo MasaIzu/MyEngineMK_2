@@ -4,7 +4,7 @@
 #include "CollisionManager.h"
 #include <CollisionAttribute.h>
 #include"ImGuiManager.h"
-#include <FbxLoader.h>
+//#include <FbxLoader.h>
 #include <SphereCollider.h>
 
 
@@ -76,7 +76,11 @@ void Player::Update()
 		playerWorldTrans.alpha = alpha;
 		playerWorldTransHed.alpha = alpha;
 	}
-	
+	if (FinalMoveSpline->GetHowReturnIndex(5)) {
+		Stop = true;
+	}
+
+
 	//ˆÚ“®‚Ì’lXV
 	WorldTransUpdate();
 
@@ -402,9 +406,11 @@ void Player::SplineUpdate()
 		isHitFirstRail = false;
 	}
 	if (isHitFinalRail == true && FinalMoveSpline->GetFinishSpline() == false) {
-		float speed = 0.02f;
-		FinalMoveSpline->Update(speed);
-		playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0, Radius, 0);
+		if (Stop == false) {
+			float speed = 0.02f;
+			FinalMoveSpline->Update(speed);
+			playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0, Radius, 0);
+		}
 	}
 	else if (FinalMoveSpline->GetFinishSpline()) {
 		isHitFinalRail = false;

@@ -7,8 +7,8 @@
 #include "FPS.h"
 #include "ImGuiManager.h"
 #include "SceneManager.h"
-#include "FbxModel.h"
-#include <FbxLoader.h>
+//#include "FbxModel.h"
+//#include <FbxLoader.h>
 #include <memory>
 
 class Framework {
@@ -57,13 +57,13 @@ protected:
 	Input* input_ = nullptr;
 	SceneManager* sceneManager_;
 	TextureManager* TextureManager_ = nullptr;
-	FbxLoader* fbxLoader_ = nullptr;
+	/*FbxLoader* fbxLoader_ = nullptr;*/
 
 	//シングルトン以外
 	std::unique_ptr<ImGuiManager> imGui;
 	std::unique_ptr <FPS> fps;
 	std::unique_ptr <AbstractSceneFactory> sceneFactory_;
-	std::unique_ptr<FbxModel> fbx;
+	/*std::unique_ptr<FbxModel> fbx;*/
 
 
 	bool isEndRequst = false;

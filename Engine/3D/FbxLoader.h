@@ -6,10 +6,10 @@
 #include <d3dx12.h>
 #include <string>
 
-#include<assimp/Importer.hpp>
-#include<assimp/scene.h>
-#include<assimp/postprocess.h>
-#include<assimp/cimport.h>
+//#include<assimp/Importer.hpp>
+//#include<assimp/scene.h>
+//#include<assimp/postprocess.h>
+//#include<assimp/cimport.h>
 
 class FbxLoader
 {

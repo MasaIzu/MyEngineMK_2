@@ -55,6 +55,7 @@ public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
 	bool GetHitFinalRail()const { return isHitFinalRail; }
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }
+	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
 	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }
@@ -98,6 +99,7 @@ private://プレイヤークラス変数
 	bool isHitFirstRail = false;
 	bool isHitFinalRail = false;
 	bool isCameraModeNotFree = false;
+	bool Stop = false;
 
 	uint32_t bulletNumber = 0;
 

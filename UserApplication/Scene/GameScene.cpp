@@ -3,7 +3,7 @@
 #include <cassert>
 #include <random>
 #include <fstream>
-#include "FbxLoader.h"
+//#include "FbxLoader.h"
 #include"ImGuiManager.h"
 #include <CollisionAttribute.h>
 #include "Collision.h"
@@ -52,7 +52,7 @@ void GameScene::Initialize() {
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
 
-	model_.reset(Model::CreateFromOBJ("cube", true));
+	model_.reset(Model::CreateFromOBJ("SelectFoundationSrop", true));
 
 	ground = std::make_unique<Ground>(model_.get());
 	ground->Initialze();
@@ -176,7 +176,9 @@ void GameScene::Update() {
 		gameCamera->SetCameraTargetAndPos(larp.lerp(levelData->GetFirstSpline()[1] + Vector3(0, 10, 0), player_->GetPlayerPos() + Vector3(0,7,0), larpTime),
 			larp.lerp(eye, gameCamera->GetPlayerDistanceEyePos(player_->GetPlayerPos()),larpTime));
 	}
-
+	if (player_->GetHowReturnFainalSpline(5)) {
+		isFinish = true;
+	}
 	gameCamera->SetCameraMode(player_->GetHitFinalRail());
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
