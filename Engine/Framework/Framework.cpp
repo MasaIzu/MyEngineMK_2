@@ -135,6 +135,8 @@ void Framework::Run()
 			break;
 		}
 
+		CSUpdate();
+
 		PostEffectDraw();
 
 		PostEffectManager::PreDrawScene(directXCore_->GetCommandList());

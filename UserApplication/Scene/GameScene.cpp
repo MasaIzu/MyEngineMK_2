@@ -210,8 +210,6 @@ void GameScene::PostEffectDraw()
 	Model::PostDraw();
 
 	////パーティクル
-	ParticleMan->CSUpdate(commandList);
-	player_->CSUpdate(commandList);
 	ParticleManager::PreDraw(commandList);
 	ParticleMan->Draw(*viewProjection_.get());
 	player_->ParticleDraw(*viewProjection_.get());
@@ -225,6 +223,18 @@ void GameScene::PostEffectDraw()
 
 
 	PostEffect::PostDrawScene();
+}
+
+void GameScene::CSUpdate()
+{
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	////パーティクル
+	ParticleMan->CSUpdate(commandList);
+	player_->CSUpdate(commandList);
+	for (BulletShotEnemy* enemy : bulletShotEnemy) {
+		enemy->CSUpdate(commandList);
+	}
 }
 
 bool GameScene::CheckReticle()
@@ -301,9 +311,7 @@ void GameScene::Draw() {
 	player_->DrawSprite(*viewProjection_.get());
 
 	//bulletShotEnemy->CSUpdate(commandList);
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->CSUpdate(commandList);
-	}
+
 	ParticleManager::PreDraw(commandList);
 	
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
@@ -311,6 +319,8 @@ void GameScene::Draw() {
 	}
 	//bulletShotEnemy->ParticleDraw(*viewProjection_.get());
 	
+	//ParticleMan->Draw(*viewProjection_.get());
+	//player_->ParticleDraw(*viewProjection_.get());
 
 	ParticleManager::PostDraw();
 

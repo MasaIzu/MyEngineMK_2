@@ -35,6 +35,8 @@ public:
 	//コンピュートシェーダーで計算した後のコピー処理
 	virtual void CopyData() = 0;
 
+	//CSアップデート
+	virtual void CSUpdate() = 0;
 
 public://デストラクタ
 	virtual ~Framework() = default;

@@ -31,6 +31,9 @@ public: // メンバ関数
 	/// </summary>
 	void CopyData();
 
+	//CSアップデート
+	void CSUpdate();
+
 	// 次のシーン予約
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory);
 	void ChangeScene(const std::string& sceneName);

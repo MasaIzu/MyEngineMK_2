@@ -39,3 +39,8 @@ void MainGame::CopyData()
 {
 	sceneManager_->CopyData();
 }
+
+void MainGame::CSUpdate()
+{
+	sceneManager_->CSUpdate();
+}

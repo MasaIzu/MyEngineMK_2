@@ -56,6 +56,8 @@ public: // メンバ関数
 	void CopyData() override;
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
+	//CSアップデート
+	void CSUpdate() override;
 
 	bool CheckReticle();
 

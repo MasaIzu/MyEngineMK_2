@@ -39,6 +39,8 @@ public: // メンバ関数
 	//コピー処理
 	void CopyData() override;
 
+	//CSアップデート
+	void CSUpdate() override;
 
 private:
 	Input* input = nullptr;

@@ -20,6 +20,8 @@ public: // メンバ関数
 	void Draw() override;
 
 	void CopyData() override;
+	//CSアップデート
+	void CSUpdate()override;
 
 private:
 	// ゲーム終了フラグ

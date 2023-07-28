@@ -52,6 +52,11 @@ void SceneManager::CopyData()
 	scene_->CopyData();
 }
 
+void SceneManager::CSUpdate()
+{
+	scene_->CSUpdate();
+}
+
 void SceneManager::SetSceneFactory(AbstractSceneFactory* sceneFactory)
 {
 	sceneFactory_ = sceneFactory;

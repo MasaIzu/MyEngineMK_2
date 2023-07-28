@@ -25,6 +25,8 @@ public:
 
 	virtual void CopyData() = 0;
 
+	//CSアップデート
+	virtual void CSUpdate() = 0;
 public://メンバ関数
 
 	virtual ~BaseScene() = default;

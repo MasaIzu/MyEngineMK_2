@@ -84,7 +84,7 @@ float4 main(VSOutput input) : SV_TARGET
 		
         float4 AddAllColor = tex0.Sample(smp, input.uv);
 		
-        float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.001; //Bloomはブラーを大げさに
+        float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.002; //Bloomはブラーを大げさに
         float4 col = float4(0, 0, 0, 0);
 		
         for (float py = -_Sigma * 3; py <= _Sigma * 3; py += _StepWidth)//xyで2の幅で色を取得
