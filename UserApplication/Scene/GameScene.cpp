@@ -83,26 +83,14 @@ void GameScene::Initialize() {
 
 	gameCamera->SetFreeCamera(true);
 	//Vector3 target = levelData->GetFirstSpline()[1] + Vector3(10, -5, 0);
-	eye = levelData->GetFirstSpline()[1] + Vector3(-50, 20, -10);
-	Vector3 target = levelData->GetFirstSpline()[1] + levelData->GetFirstSpline()[1] - eye;
+	eye = levelData->GetFirstSpline()[1] + Vector3(-50, 0, 0);
+	Vector3 target = levelData->GetFirstSpline()[1] + Vector3(0, 10, 0);
 	gameCamera->SetCameraTargetAndPos(target, eye);
 }
 
 void GameScene::Update() {
 
 	CheckReticle();
-	ImGui::Begin("Phase");
-
-	ImGui::Text("dist:%f", dist);
-	ImGui::Text("radius:%f", radius);
-	ImGui::Text("tmp:%f,%f", tmp.x, tmp.y);
-
-	ImGui::Text("ParticleSize:%d", ParticleMan->GetParticlesListSize());
-
-	ImGui::Text("EnemyPos:%f,%f,%f", EnemyPos.x, EnemyPos.y, EnemyPos.z);
-
-	ImGui::End();
-
 	
 	if (shadeNumber == 0) {
 		ImGui::Begin("Not");
@@ -160,20 +148,33 @@ void GameScene::Update() {
 
 	if (isSpline == false) {
 		if (player_->GetHowReturnSpline(2)) {
+			larpTime = 0.0f;
 			isSpline = true;
 		}
 	}
 	else {
-		if (player_->GetHowReturnSpline(4)) {
+		if (player_->GetHowReturnSpline(3)) {
+
+			Vector2 Mous(0, -2);
+			gameCamera->MousePositionReset(Mous, true);
+
+		}
+		if (player_->GetFinishFirstSpline()) {
+			gameCamera->MousePositionReset();
 			gameCamera->SetFreeCamera(false);
-			uint32_t mousX = 0;
-			uint32_t mousY = -100;
-			Uint32Vector2 Mous = { mousX,mousY };
-			gameCamera->MousePositionReset(Mous);
 			player_->SetCameraModeNotFree(true);
 			isSpline = false;
 		}
-		gameCamera->SetCameraTargetAndPos(player_->GetPlayerPos(), eye);
+		Vector3 larp;
+		if (larpTime < 1.0f) {
+			larpTime += 0.012f;
+		}
+		else {
+			larpTime = 1.0f;
+		}
+		
+		gameCamera->SetCameraTargetAndPos(larp.lerp(levelData->GetFirstSpline()[1] + Vector3(0, 10, 0), player_->GetPlayerPos() + Vector3(0,7,0), larpTime),
+			larp.lerp(eye, gameCamera->GetPlayerDistanceEyePos(player_->GetPlayerPos()),larpTime));
 	}
 
 	gameCamera->SetCameraMode(player_->GetHitFinalRail());

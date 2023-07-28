@@ -21,7 +21,7 @@ void Player::Initialize()
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,-155.0f,-283.0f };
+	playerWorldTrans.translation_ = { 0,-210.0f,-283.0f };
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -93,11 +93,11 @@ void Player::Update()
 	}
 
 
-	ImGui::Begin("Player");
+	//ImGui::Begin("Player");
 
-	ImGui::Text("Distance:%f,%f,%f", Distance.x, Distance.y, Distance.z);
-	ImGui::Text("Distance:%f", alpha);
-	ImGui::End();
+	//ImGui::Text("Distance:%f,%f,%f", Distance.x, Distance.y, Distance.z);
+	//ImGui::Text("Distance:%f", alpha);
+	//ImGui::End();
 
 	DebugWorldTrans.translation_ = Distance;
 	DebugWorldTrans.TransferMatrix();
@@ -239,7 +239,7 @@ void Player::WorldTransUpdate()
 
 void Player::CheckPlayerCollider()
 {
-	isHitRail = false;
+	//isHitRail = false;
 	//isHitFirstRail = false;
 	// ワールド行列更新
 	playerWorldTrans.TransferMatrix();
@@ -340,11 +340,13 @@ void Player::CheckPlayerCollider()
 	}
 
 	//レールコライダー
-	if (PlayerCollider->GetSphereMeshHit()) {
-		PlayerCollider->SphereMeshHitReset();
-		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
-		playerMoveSpline->ResetNearSpline(splinePos);
-		isHitRail = true;
+	if (isHitRail == false) {
+		if (PlayerCollider->GetSphereMeshHit()) {
+			PlayerCollider->SphereMeshHitReset();
+			Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
+			playerMoveSpline->ResetNearSpline(splinePos);
+			isHitRail = true;
+		}
 	}
 	//レールコライダー
 	if (PlayerCollider->GetFirstSplineHit()) {
@@ -365,7 +367,7 @@ void Player::CheckPlayerCollider()
 
 void Player::Fall()
 {
-	if (isHitRail == false || isHitFirstRail == false) {
+	if (isHitRail == false/* || isHitFirstRail == false*/) {
 		// 落下処理
 		if (!onGround) {
 			// 下向き加速度
@@ -388,16 +390,24 @@ void Player::SplineUpdate()
 		playerMoveSpline->Update(speed);
 		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0, Radius, 0);
 	}
+	else if (playerMoveSpline->GetFinishSpline()) {
+		isHitRail = false;
+	}
 	if (isHitFirstRail == true && FirstMoveSpline->GetFinishSpline() == false) {
 		float speed = 0.02f;
 		FirstMoveSpline->Update(speed);
 		playerWorldTrans.translation_ = FirstMoveSpline->NowPos + Vector3(0, Radius, 0);
+	}
+	else if (FirstMoveSpline->GetFinishSpline()) {
+		isHitFirstRail = false;
 	}
 	if (isHitFinalRail == true && FinalMoveSpline->GetFinishSpline() == false) {
 		float speed = 0.02f;
 		FinalMoveSpline->Update(speed);
 		playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0, Radius, 0);
 	}
-
+	else if (FinalMoveSpline->GetFinishSpline()) {
+		isHitFinalRail = false;
+	}
 }
 

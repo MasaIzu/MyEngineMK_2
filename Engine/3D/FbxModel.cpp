@@ -594,7 +594,7 @@ void FbxModel::CalcInterpolatedScaling(Vector3& mxOut, float AnimationTime, cons
 	float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
 	ATLASSERT(Factor >= 0.0f && Factor <= 1.0f);
 
-	mxOut = lerp(MyMath::AssimpVector3(pNodeAnim->mScalingKeys[ScalingIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mScalingKeys[NextScalingIndex].mValue), Factor);
+	mxOut = Vector3::lerp(MyMath::AssimpVector3(pNodeAnim->mScalingKeys[ScalingIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mScalingKeys[NextScalingIndex].mValue), Factor);
 
 }
 
@@ -649,7 +649,7 @@ void FbxModel::CalcInterpolatedPosition(Vector3& mxOut, float AnimationTime, con
 	float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
 	ATLASSERT(Factor >= 0.0f && Factor <= 1.0f);
 
-	mxOut = lerp(MyMath::AssimpVector3(pNodeAnim->mPositionKeys[PositionIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mPositionKeys[NextPositionIndex].mValue), Factor);
+	mxOut = Vector3::lerp(MyMath::AssimpVector3(pNodeAnim->mPositionKeys[PositionIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mPositionKeys[NextPositionIndex].mValue), Factor);
 }
 
 bool FbxModel::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nPosIndex)

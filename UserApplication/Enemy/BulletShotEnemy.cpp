@@ -64,27 +64,6 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	}
 
 
-	/*ImGui::Begin("NotFoundPhase");
-
-	if (NotSpottedPhase_ == NotSpottedPhase::Walk) {
-		ImGui::Text("Walk");
-	}
-	else if (NotSpottedPhase_ == NotSpottedPhase::Stop) {
-		ImGui::Text("Stop");
-	}
-
-	ImGui::Text("WalkTime:%d", WalkTime);
-	ImGui::Text("StopTime:%d", StopTime);
-	ImGui::Text("RunAttackTime:%d", RunAttackTime);
-
-
-	ImGui::Text("BackAngle:%f", BackAngle);
-	ImGui::Text("radius:%f", radius);
-	ImGui::Text("Rot:%f", Rot);
-	ImGui::Text("translation_:%f,%f,%f", enemyWorldTrans.LookVelocity.look.x, enemyWorldTrans.LookVelocity.look.y, enemyWorldTrans.LookVelocity.look.z);
-	ImGui::Text("EnemyToPlayerAngle:%f", EnemyToPlayerAngle);
-	ImGui::End();*/
-
 	// óéâ∫èàóù
 	if (!onGround) {
 		// â∫å¸Ç´â¡ë¨ìx

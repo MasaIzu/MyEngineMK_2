@@ -26,7 +26,6 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 	oldMousePos = mousePos;
 	mousePos = input_->GetMousePos();
 
-	cameraPos = { 5,5,5 };
 }
 
 GameCamera::~GameCamera()
@@ -78,16 +77,6 @@ void GameCamera::InitializeCameraPosition(const float& cameraAngle)
 
 	//target = pos;
 	eye = target + (forward * cameraDistance_);
-	cameraPos = eye;
-
-	//距離
-	//cameraPos += PlayerMoveMent;
-	Vector3 dVec = eye - cameraPos;
-	dVec *= cameraDelay;
-	cameraPos += viewProjection->eye;
-	Vector3 player_camera = cameraPos - target;
-	player_camera.normalize();
-	cameraPos = target + (player_camera * cameraDistance_);
 
 	viewProjection->target = target;
 	viewProjection->eye = eye;
@@ -114,19 +103,6 @@ void GameCamera::Update() {
 			}
 			PlaySceneCamera();
 
-			ImGui::Begin("camera");
-			ImGui::Text("eye:%f", viewProjection->eye.x);
-			ImGui::Text("eye:%f", viewProjection->eye.y);
-			ImGui::Text("eye:%f", viewProjection->eye.z);
-			ImGui::Text("mouseMoved:%f", mouseMoved.x);
-			ImGui::Text("mouseMoved:%f", mouseMoved.y);
-			ImGui::Text("PlayerToCameraVecDistance:%f", PlayerToCameraVecDistance);
-			ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
-			ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
-			MyMath::MatrixText(CameraRot);
-			ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
-
-			ImGui::End();
 		}
 		else {
 			SceneCamera();
@@ -153,21 +129,8 @@ void GameCamera::Update() {
 
 }
 
-void GameCamera::PlaySceneCamera() {
-
-	oldCameraPos = eye;
-	if (cameraTime < MaxCameraTime) {
-		cameraTime++;
-	}
-	if (shakeTime > 0) {
-		shakeTime--;
-	}
-	else {
-		isShake = false;
-	}
-
-	//カメラの回転ベクトル
-	Vector3 rotat = { 0, 0, 0 };
+void GameCamera::HowMuchMoved()
+{
 	//カメラの移動の速さ
 	const float cameraSpeed = 0.0005f;
 
@@ -197,6 +160,10 @@ void GameCamera::PlaySceneCamera() {
 	Mous_UP_DOWN = Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
 	mouseMoved += Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
 	HowMachMovePointer += static_cast<uint32_t>(MouseMove.y);
+}
+
+void GameCamera::CheckCameraWhichWayMove()
+{
 	//どっち向きに移動したのか
 	if (Mous_UP_DOWN.x > 0) {
 		cameraUp = true;
@@ -210,6 +177,23 @@ void GameCamera::PlaySceneCamera() {
 		cameraUp = false;
 		cameraDown = false;
 	}
+}
+
+void GameCamera::PlaySceneCamera() {
+
+	if (cameraTime < MaxCameraTime) {
+		cameraTime++;
+	}
+	if (shakeTime > 0) {
+		shakeTime--;
+	}
+	else {
+		isShake = false;
+	}
+	//カメラ移動量取得
+	HowMuchMoved();
+	//どっち向きに移動したのか
+	CheckCameraWhichWayMove();
 
 	//カメラ制限
 	if (mouseMoved.x < -0.80f) {
@@ -221,46 +205,21 @@ void GameCamera::PlaySceneCamera() {
 
 
 	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
-
 	Matrix4 cameraRot;
-
 	cameraRot = MyMath::Rotation(rotation, 6);
 
 	rot = rotation;
 	CameraRot = cameraRot;
-
 	target = playerPos_ + cameraHigh;
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
-	//レールカメラの回転を反映
-	forward = MyMath::MatVector(CameraRot, forward);
-
+	forward = MyMath::MatVector(CameraRot, forward);//レールカメラの回転を反映
 	forward.normalize();
 
 	//target = pos;
 	eye = target + (forward * cameraDistance_);
-
 	CameraAngle(eye.z - target.z, eye.x - target.x);
-
-
-	////遅延カメラ
-	////距離
-	//cameraPos += PlayerMoveMent;
-	//Vector3 dVec = vTargetEye - cameraPos;
-	//dVec *= cameraDelay;
-	//cameraPos += dVec * cameraSpeed_;
-	//Vector3 player_camera = cameraPos - target;
-	//player_camera.normalize();
-
-	//float DISTANCE = cameraDis - CameraDistanceMinus;
-
-	//player_camera.x = player_camera.x * DISTANCE;
-	//player_camera.y = player_camera.y * (cameraDis - CameraDistanceMinus / 2);
-	//player_camera.z = player_camera.z * DISTANCE;
-
-	//cameraPos = target + (player_camera);
-
 
 }
 
@@ -270,9 +229,7 @@ void GameCamera::SceneCamera()
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
-	//レールカメラの回転を反映
-	forward = MyMath::MatVector(CameraRot, forward);
-
+	forward = MyMath::MatVector(CameraRot, forward);//レールカメラの回転を反映
 	forward.normalize();
 
 	//target = pos;
@@ -311,8 +268,10 @@ void GameCamera::MousePositionReset()
 	
 }
 
-void GameCamera::MousePositionReset(Uint32Vector2& uint32Vector2)
+void GameCamera::MousePositionReset(Vector2& vector2, bool setORnot)
 {
+	//MousePositionReset();
+
 	POINT mousePosition;
 	//マウス座標(スクリーン座標)を取得する
 	GetCursorPos(&mousePosition);
@@ -329,9 +288,42 @@ void GameCamera::MousePositionReset(Uint32Vector2& uint32Vector2)
 	GetWindowInfo(hwnd, &windowInfo);
 
 	//マウスの移動先の絶対座標（モニター左上からの座標）
-	xPos_absolute = windowWH.x + windowInfo.rcWindow.left + 8 + uint32Vector2.x;//なんかずれてるから直す
-	yPos_absolute = windowWH.y + windowInfo.rcWindow.top + 31 + uint32Vector2.y; //ウィンドウのタイトルバーの分（31px）をプラス
+	xPos_absolute = windowWH.x + windowInfo.rcWindow.left + 8;//なんかずれてるから直す
+	yPos_absolute = windowWH.y + windowInfo.rcWindow.top + 31; //ウィンドウのタイトルバーの分（31px）をプラス
 	SetCursorPos(xPos_absolute, yPos_absolute);//移動させる
+
+	//マウスの移動量を取得
+	MouseMove = Vector2(0, 0);
+	MouseMove = Vector2(vector2.y, vector2.x);
+	Mous_UP_DOWN = Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
+	mouseMoved += Vector2(MouseMove.x, MouseMove.y) / (318.5f + kand);
+	HowMachMovePointer += static_cast<uint32_t>(MouseMove.y);
+
+	//カメラ制限
+	if (mouseMoved.x < -0.80f) {
+		mouseMoved.x = -0.80f;
+	}
+	else if (mouseMoved.x > 1.30f) {
+		mouseMoved.x = 1.30f;
+	}
+
+
+	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
+	Matrix4 cameraRot;
+	cameraRot = MyMath::Rotation(rotation, 6);
+
+	rot = rotation;
+	CameraRot = cameraRot;
+	target = playerPos_ + cameraHigh;
+
+	//ワールド前方ベクトル
+	Vector3 forward(0, 0, cameraDistance_);
+	forward = MyMath::MatVector(CameraRot, forward);//レールカメラの回転を反映
+	forward.normalize();
+
+	//target = pos;
+	eye = target + (forward * cameraDistance_);
+	CameraAngle(eye.z - target.z, eye.x - target.x);
 }
 
 bool GameCamera::CheckBetweenToCameraCollider()
@@ -385,6 +377,24 @@ Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
 	eyeToTargetVec.normalize();
 
 	return eyeToTargetVec * distance + eye;
+}
+
+Vector3 GameCamera::GetPlayerDistanceEyePos(const Vector3& playerPos_)
+{
+	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
+	Matrix4 cameraRot;
+	cameraRot = MyMath::Rotation(rotation, 6);
+
+	Vector3 target = playerPos_ + cameraHigh;
+
+	//ワールド前方ベクトル
+	Vector3 forward(0, 0, cameraDistance_);
+	forward = MyMath::MatVector(cameraRot, forward);//レールカメラの回転を反映
+	forward.normalize();
+
+	//target = pos;
+	Vector3 eye = target + (forward * cameraDistance_);
+	return eye;
 }
 
 void GameCamera::SetCameraTargetAndPos(const Vector3& target, const Vector3& eye)

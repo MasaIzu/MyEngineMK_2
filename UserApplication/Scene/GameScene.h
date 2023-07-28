@@ -113,8 +113,9 @@ private: // メンバ変数
 
 	std::unique_ptr<TouchableObject> touchableObject;
 
-	float dist;
-	float radius;
+	float dist = 0.0f;
+	float radius = 0.0f;
+	float larpTime = 0.0f;
 	Vector2 tmp;
 
 	Vector3 EnemyPos;

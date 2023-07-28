@@ -22,9 +22,11 @@ public://基本関数
 
 public://リセット
 	void MousePositionReset();
-	void MousePositionReset(Uint32Vector2& uint32Vector2);//少し細工する
+	void MousePositionReset(Vector2& vector2,bool setORnot);//少し細工する
 
 private:
+	void HowMuchMoved();
+	void CheckCameraWhichWayMove();
 	void PlaySceneCamera();
 	void SceneCamera();
 	void Collision();
@@ -40,12 +42,12 @@ public://getter
 	Vector2 GetCameraAngle() const { return Vector2(mouseMoved.y - MyMath::PI, mouseMoved.x); }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	Vector3 GetEyeToTagetVecDistance(const float& distance) const;
+	Vector3 GetPlayerDistanceEyePos(const Vector3& playerPos_);
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 
 public://setter
 	void SetCameraMode(const bool& mode) { cameraMode = mode; }
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
-	void SetPlayerMoveMent(Vector3& playerMoveMent) { PlayerMoveMent = playerMoveMent; }
 	void SetFreeCamera(const bool& mode) { FreeCamera = mode; }
 	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
 
@@ -107,12 +109,6 @@ private://プレイヤークラス変数
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
-	//遅延カメラ
-	Vector3 cameraPos;// カメラの現在の位置
-	Vector3 oldCameraPos;
-	Vector3 LatePlayerPos = { 0,0,0 };
-	Vector3 PlayerMoveMent;
-	Vector3 CameraTarget;
 	Vector3 cameraHigh = { 0,7,0 };
 	Vector3 PlayerToCameraVec;
 	//セットされたVec
