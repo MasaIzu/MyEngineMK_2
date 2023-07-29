@@ -25,6 +25,10 @@ public://ƒƒ“ƒoŠÖ”
 		colliders.remove(collide);
 	}
 
+	inline void AllClearCollider() {
+		colliders.clear();
+	}
+
 	void CheckAllCollisions();
 
 	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);

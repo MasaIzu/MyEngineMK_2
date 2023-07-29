@@ -5,14 +5,15 @@
 #include "LoadLevelEditor.h"
 #include "GameCamera.h"
 #include "Player.h"
+#include "CollisionManager.h"
 
 // タイトルシーン
 class StageSelect : public BaseScene
 {
 public: // メンバ関数
 
-	StageSelect() = default;
-	~StageSelect() = default;
+	StageSelect();
+	~StageSelect();
 
 	/// <summary>
 	/// 初期化
@@ -49,10 +50,20 @@ private:
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
-
+	CollisionManager* collisionManager = nullptr;//当たり判定
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
 
+	int shadeNumber = 3;
+	int range = 0;//ぼかし強度
+	int samples = 5;
+
 	uint32_t loserTexture_ = 0;
+
+	float intensity = 0.1f;
+	float angle = 45.0f;
+	float angle2 = 135.0f;
+
+	Vector2 center = { 0.5f,0.5f };
 };

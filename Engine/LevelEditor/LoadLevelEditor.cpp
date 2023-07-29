@@ -98,22 +98,32 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 				// TODO: コライダーのパラメータ読み込み
 			}
 		}
+		else if (object["file_name"].get<std::string>() == "TutorialSropVec") {
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			trans.x *= -1.0f;
+			FirstSplineVec.push_back(trans);
+		}
 		else if (object["file_name"].get<std::string>() == "FIRSTSPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			trans.x *= -1.0f;
 			FirstSplineVec.push_back(trans);
 		}
 		else if (object["file_name"].get<std::string>() == "SPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			trans.x *= -1.0f;
 			splineVec.push_back(trans);
 		}
 		else if (object["file_name"].get<std::string>() == "FINALSPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			trans.x *= -1.0f;
 			FinalSplineVec.push_back(trans);
 		}
 
@@ -234,6 +244,15 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			}
 			else if (fileName == "goalSrop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FINALRAIL);
+			}
+			else if (fileName == "foundationCube") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if (fileName == "stageSrop") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if (fileName == "tutorialSrop") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
 		}
 

@@ -16,7 +16,7 @@ public://äÓñ{ä÷êî
 	Player();
 	~Player();
 
-	void Initialize();
+	void Initialize(const Vector3& Pos);
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 	void DrawSprite(ViewProjection& viewProjection_);
@@ -53,6 +53,7 @@ public://Setter
 	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
+	bool GetHitFirstRail()const { return isHitFirstRail; }
 	bool GetHitFinalRail()const { return isHitFinalRail; }
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }

@@ -18,6 +18,7 @@ GameScene::~GameScene() {
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		delete enemy;
 	}
+	collisionManager->AllClearCollider();
 }
 
 void GameScene::Initialize() {
@@ -47,12 +48,12 @@ void GameScene::Initialize() {
 	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize();
+	player_->Initialize(Vector3(0, -210.0f, -283.0f));
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
 
-	model_.reset(Model::CreateFromOBJ("SelectFoundationSrop", true));
+	model_.reset(Model::CreateFromOBJ("cube", true));
 
 	ground = std::make_unique<Ground>(model_.get());
 	ground->Initialze();
@@ -178,6 +179,7 @@ void GameScene::Update() {
 	}
 	if (player_->GetHowReturnFainalSpline(5)) {
 		isFinish = true;
+		sceneManager_->ChangeScene("STAGESELECT");
 	}
 	gameCamera->SetCameraMode(player_->GetHitFinalRail());
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
@@ -237,37 +239,6 @@ void GameScene::CSUpdate()
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		enemy->CSUpdate(commandList);
 	}
-}
-
-bool GameScene::CheckReticle()
-{
-	////Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
-
-	//Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
-
-	////ビューポート行列
-	//Matrix4 Viewport =
-	//{ windowWH.x / 2,0,0,0,
-	//0,-windowWH.y / 2,0,0,
-	//0,0,1,0,
-	//windowWH.x / 2, windowWH.y / 2,0,1 };
-
-	////ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	//Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
-
-	////ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-	//this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
-
-	//dist = MyMath::Distance2Vec2(Vector2(this->EnemyPos.x, this->EnemyPos.y),Vector2(640, 360));
-	//radius = 8.0f;
-	//if (dist <= radius) {
-	//	int a = 0;
-	//}
-	//else {
-	//	
-	//}
-
-	return false;
 }
 
 void GameScene::Draw() {
@@ -349,3 +320,33 @@ void GameScene::CopyData()
 	}
 }
 
+bool GameScene::CheckReticle()
+{
+	////Vector3 EnemyPos = tutorialEnemy->GetTutorialEnemyPos();
+
+	//Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+
+	////ビューポート行列
+	//Matrix4 Viewport =
+	//{ windowWH.x / 2,0,0,0,
+	//0,-windowWH.y / 2,0,0,
+	//0,0,1,0,
+	//windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	////ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	//Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+	////ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	//this->EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+
+	//dist = MyMath::Distance2Vec2(Vector2(this->EnemyPos.x, this->EnemyPos.y),Vector2(640, 360));
+	//radius = 8.0f;
+	//if (dist <= radius) {
+	//	int a = 0;
+	//}
+	//else {
+	//	
+	//}
+
+	return false;
+}

@@ -102,7 +102,19 @@ void GameCamera::Update() {
 				mouseMoved.x -= 0.001f;
 			}
 			PlaySceneCamera();
+			ImGui::Begin("camera");
+			ImGui::Text("eye:%f", viewProjection->eye.x);
+			ImGui::Text("eye:%f", viewProjection->eye.y);
+			ImGui::Text("eye:%f", viewProjection->eye.z);
+			ImGui::Text("mouseMoved:%f", mouseMoved.x);
+			ImGui::Text("mouseMoved:%f", mouseMoved.y);
+			ImGui::Text("PlayerToCameraVecDistance:%f", PlayerToCameraVecDistance);
+			ImGui::Text("AngleX:%f", MyMath::GetRadAngle(mouseMoved.y));
+			ImGui::Text("AngleY:%f", MyMath::GetRadAngle(mouseMoved.x));
+			MyMath::MatrixText(CameraRot);
+			ImGui::Text("HowMachMovePointer:%d", HowMachMovePointer);
 
+			ImGui::End();
 		}
 		else {
 			SceneCamera();

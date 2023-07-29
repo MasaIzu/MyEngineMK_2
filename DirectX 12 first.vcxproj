@@ -136,9 +136,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\assimp-vc143-mtd.dll" "$(TargetDir)"
-copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\pugixml.dll" "$(TargetDir)"
-copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(TargetDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,9 +159,8 @@ copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(Target
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\assimp-vc143-mtd.dll" "$(TargetDir)"
-copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\pugixml.dll" "$(TargetDir)"
-copy /y "$(ProjectDir)External\assimp\lib\$(Configuration)\zlibd1.dll" "$(TargetDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

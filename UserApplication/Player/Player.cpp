@@ -16,12 +16,12 @@ Player::~Player()
 {
 }
 
-void Player::Initialize()
+void Player::Initialize(const Vector3& Pos)
 {
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
-	playerWorldTrans.translation_ = { 0,-210.0f,-283.0f };
+	playerWorldTrans.translation_ = Pos;
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -344,6 +344,13 @@ void Player::CheckPlayerCollider()
 	}
 
 	//レールコライダー
+	if (PlayerCollider->GetFirstSplineHit()) {
+		PlayerCollider->FirstSplineHitReset();
+		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
+		FirstMoveSpline->ResetNearSpline(splinePos);
+		isHitFirstRail = true;
+	}
+	//レールコライダー
 	if (isHitRail == false) {
 		if (PlayerCollider->GetSphereMeshHit()) {
 			PlayerCollider->SphereMeshHitReset();
@@ -351,13 +358,6 @@ void Player::CheckPlayerCollider()
 			playerMoveSpline->ResetNearSpline(splinePos);
 			isHitRail = true;
 		}
-	}
-	//レールコライダー
-	if (PlayerCollider->GetFirstSplineHit()) {
-		PlayerCollider->FirstSplineHitReset();
-		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
-		FirstMoveSpline->ResetNearSpline(splinePos);
-		isHitFirstRail = true;
 	}
 	//レールコライダー
 	if (PlayerCollider->GetFinalSplineHit()) {
