@@ -18,7 +18,7 @@ public://基本関数
 	void Draw(ViewProjection& viewProjection_);
 	void DebugDraw(ViewProjection& viewProjection_);
 public://getter
-
+	bool GetIsDead() { return isDead; }
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
 	//動きについての関数
@@ -45,6 +45,7 @@ private:
 	uint32_t Random(const uint32_t& low, const uint32_t& high);//ランダム
 
 private://const関連
+	static const uint32_t ColliderSphereCount = 2;
 	static const uint32_t AttackSphereCount = 3;
 
 private://クラス変数
@@ -52,11 +53,12 @@ private://クラス変数
 	Model* model_;
 	std::unique_ptr<Model> modelDebug_;
 	WorldTransform enemyWorldTrans;
+	WorldTransform enemyWorldTransHed;
 	WorldTransform AttackWorldTrans[AttackSphereCount];
 	WorldTransform DebugWorldTrans;
 
 	//当たり判定
-	BaseCollider* TutorialEnemyCollider = nullptr;
+	BaseCollider* TutorialEnemyCollider[ColliderSphereCount];
 	BaseCollider* TutorialEnemyAttackSpereCollider[AttackSphereCount];
 	CollisionManager* collisionManager = nullptr;
 
@@ -106,6 +108,7 @@ private:
 	bool IsEnemyHasADestination = false;
 	bool IsNeverSpotted = true;
 	bool onGround = false;
+	bool isDead = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -118,7 +121,7 @@ private:
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
-	float SearchingAreaRadius = 25.0f;
+	float SearchingAreaRadius = 40.0f;
 	float SpottedLookingPlayerRadius = 60.0f;
 	float EnemySpeed = 0.09f;
 	float SpottedEnemySpeed = 0.1f;

@@ -12,12 +12,6 @@
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		delete enemy;
-	}
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		delete enemy;
-	}
 	collisionManager->AllClearCollider();
 }
 
@@ -194,6 +188,9 @@ void GameScene::Update() {
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		enemy->Update(player_->GetPlayerPos());
 	}
+	// 敵のデスフラグが立っていたらリストから消す
+	tutorialEnemyList.remove_if([](TutorialEnemy* enemy) { return enemy->GetIsDead(); });
+	bulletShotEnemy.remove_if([](BulletShotEnemy* enemy) { return enemy->GetIsDead(); });
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
@@ -271,9 +268,9 @@ void GameScene::Draw() {
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		enemy->Draw(*viewProjection_.get());
 	}
-	//for (TutorialEnemy* enemy : tutorialEnemyList) {
-	//	enemy->DebugDraw(*viewProjection_.get());
-	//}
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		enemy->DebugDraw(*viewProjection_.get());
+	}
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		enemy->Draw(*viewProjection_.get());
 	}

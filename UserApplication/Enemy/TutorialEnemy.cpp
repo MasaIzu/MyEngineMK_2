@@ -24,19 +24,24 @@ void TutorialEnemy::Initialize()
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	enemyWorldTrans.Initialize();
 	enemyWorldTrans.translation_ = BonePos;
+	enemyWorldTransHed.Initialize();
+	enemyWorldTransHed.translation_ = { 0.0f,EnemyRadius * 2,0.0f };
 	WorldTransUpdate();
 
 	input_ = Input::GetInstance();
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
-	DebugWorldTrans.scale_ = { SpottedLookingPlayerRadius,SpottedLookingPlayerRadius,SpottedLookingPlayerRadius };
+	DebugWorldTrans.scale_ = { SearchingAreaRadius,SearchingAreaRadius,SearchingAreaRadius };
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 
-	TutorialEnemyCollider = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
-	CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider);
-	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		TutorialEnemyCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider[i]);
+		TutorialEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
+	}
+	
 
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		splinePosition[i] = std::make_unique<SplinePosition>();
@@ -92,8 +97,12 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 
 	CheckCollider();
 
-	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
-	TutorialEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	TutorialEnemyCollider[0]->Update(enemyWorldTrans.matWorld_);
+
+	TutorialEnemyCollider[1]->Update(enemyWorldTransHed.matWorld_);
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		TutorialEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
+	}
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		if (i != 0) {
 			//AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
@@ -103,13 +112,16 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
 	}
 
-	if (TutorialEnemyCollider->GetHit()) {
-		TutorialEnemyCollider->Reset();
-		PlayerBulletHit();
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		if (TutorialEnemyCollider[i]->GetHit()) {
+			TutorialEnemyCollider[i]->Reset();
+			//PlayerBulletHit();
+			isDead = true;
+		}
 	}
-	if (TutorialEnemyCollider->GetHitEnemyEachOtherHit()) {
-		enemyWorldTrans.translation_ += TutorialEnemyCollider->GetRejectVec();
-		TutorialEnemyCollider->EnemyHittingEachOtherReset();
+	if (TutorialEnemyCollider[0]->GetHitEnemyEachOtherHit()) {
+		enemyWorldTrans.translation_ += TutorialEnemyCollider[0]->GetRejectVec();
+		TutorialEnemyCollider[0]->EnemyHittingEachOtherReset();
 	}
 
 	DebugWorldTrans.translation_ = enemyWorldTrans.translation_;
@@ -119,11 +131,12 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(enemyWorldTrans, viewProjection_);
+	model_->Draw(enemyWorldTransHed, viewProjection_);
 }
 
 void TutorialEnemy::DebugDraw(ViewProjection& viewProjection_)
 {
-	model_->Draw(DebugWorldTrans, viewProjection_);
+	//model_->Draw(DebugWorldTrans, viewProjection_);
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
 	}
@@ -395,7 +408,7 @@ void TutorialEnemy::PlayerSpottedMoveTimer()
 void TutorialEnemy::CheckCollider()
 {
 
-	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(TutorialEnemyCollider);
+	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(TutorialEnemyCollider[0]);
 	assert(sphereCollider);
 
 	sphereCollider->SetRadius(EnemyRadius);
@@ -441,7 +454,7 @@ void TutorialEnemy::CheckCollider()
 	enemyWorldTrans.translation_.z += callback.move.z;
 	// ワールド行列更新
 	enemyWorldTrans.TransferMatrix();
-	TutorialEnemyCollider->Update(enemyWorldTrans.matWorld_);
+	TutorialEnemyCollider[0]->Update(enemyWorldTrans.matWorld_);
 
 	float RayPos = -1.0f;
 
@@ -612,6 +625,8 @@ bool TutorialEnemy::GetIsAttackArea()
 void TutorialEnemy::WorldTransUpdate()
 {
 	enemyWorldTrans.TransferMatrix();
+	enemyWorldTransHed.translation_ = enemyWorldTrans.translation_ + Vector3( 0.0f, EnemyRadius * 2, 0.0f );
+	enemyWorldTransHed.TransferMatrix();
 }
 
 uint32_t TutorialEnemy::Random(const uint32_t& low, const uint32_t& high)

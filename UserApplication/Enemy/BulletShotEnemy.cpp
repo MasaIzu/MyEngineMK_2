@@ -34,11 +34,12 @@ void BulletShotEnemy::Initialize()
 	DebugWorldTrans.alpha = 0.5f;
 	DebugWorldTrans.TransferMatrix();
 
-	BulletShotEnemyCollider = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
-	CollisionManager::GetInstance()->AddCollider(BulletShotEnemyCollider);
-	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
-	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
-
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		BulletShotEnemyCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		CollisionManager::GetInstance()->AddCollider(BulletShotEnemyCollider[i]);
+		BulletShotEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
+		BulletShotEnemyCollider[i]->Update(BulletShotEnemyWorldTrans.matWorld_);
+	}
 	enemyBullet = std::make_unique<EnemyBullet>();
 	enemyBullet->Initialize();
 
@@ -78,18 +79,24 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	}
 
 	WorldTransUpdate();
-	BulletShotEnemyCollider->Update(BulletShotEnemyWorldTrans.matWorld_);
-	BulletShotEnemyCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 
+	BulletShotEnemyCollider[0]->Update(BulletShotEnemyWorldTrans.matWorld_);
+	BulletShotEnemyCollider[1]->Update(BulletShotEnemyWorldTransHed.matWorld_);
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		BulletShotEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
+	}
 	CheckCollider();
 
-	if (BulletShotEnemyCollider->GetHit()) {
-		BulletShotEnemyCollider->Reset();
-		PlayerBulletHit();
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		if (BulletShotEnemyCollider[i]->GetHit()) {
+			BulletShotEnemyCollider[i]->Reset();
+			//PlayerBulletHit();
+			isDead = true;
+		}
 	}
-	if (BulletShotEnemyCollider->GetHitEnemyEachOtherHit()) {
-		BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyCollider->GetRejectVec();
-		BulletShotEnemyCollider->EnemyHittingEachOtherReset();
+	if (BulletShotEnemyCollider[0]->GetHitEnemyEachOtherHit()) {
+		BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyCollider[0]->GetRejectVec();
+		BulletShotEnemyCollider[0]->EnemyHittingEachOtherReset();
 	}
 
 	DebugWorldTrans.translation_ = BulletShotEnemyWorldTrans.translation_;
@@ -104,7 +111,7 @@ void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 	model_->Draw(BulletShotEnemyWorldTransHed, viewProjection_);
 	enemyBullet->Draw(viewProjection_);
 	/*for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		
+
 	}*/
 	//modelDebug_->Draw(DebugWorldTrans, viewProjection_);
 }
@@ -468,7 +475,7 @@ bool BulletShotEnemy::GetIsAttackArea()
 void BulletShotEnemy::WorldTransUpdate()
 {
 	BulletShotEnemyWorldTrans.TransferMatrix();
-	BulletShotEnemyWorldTransHed.parent_ = &BulletShotEnemyWorldTrans;
+	BulletShotEnemyWorldTransHed.translation_ = BulletShotEnemyWorldTrans.translation_ + Vector3(0.0f, EnemyRadius * 2, 0.0f);
 	BulletShotEnemyWorldTransHed.TransferMatrix();
 }
 

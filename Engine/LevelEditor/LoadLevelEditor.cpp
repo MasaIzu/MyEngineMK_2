@@ -24,6 +24,12 @@ LoadLevelEditor::~LoadLevelEditor()
 	for (Ground* ground : ground) {
 		delete ground;
 	}
+	for (TutorialEnemy* enemy : tutorialEnemyList) {
+		delete enemy;
+	}
+	for (BulletShotEnemy* enemy : billetShotEnemyList) {
+		delete enemy;
+	}
 }
 
 LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {

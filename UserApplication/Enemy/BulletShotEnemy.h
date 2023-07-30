@@ -24,7 +24,7 @@ public://基本関数
 	void CopyParticle();
 
 public://getter
-
+	bool GetIsDead() { return isDead; }
 	Vector3 GetBulletShotEnemyPos() const { return MyMath::GetWorldTransform(BulletShotEnemyWorldTrans.matWorld_); };
 private:
 	//動きについての関数
@@ -52,6 +52,7 @@ private:
 
 
 private://const関連
+	static const uint32_t ColliderSphereCount = 2;
 
 private://クラス変数
 	Input* input_ = nullptr;
@@ -62,7 +63,7 @@ private://クラス変数
 	WorldTransform DebugWorldTrans;
 
 	//当たり判定
-	BaseCollider* BulletShotEnemyCollider = nullptr;
+	BaseCollider* BulletShotEnemyCollider[ColliderSphereCount];
 	CollisionManager* collisionManager = nullptr;
 
 	//スプライン曲線
@@ -115,6 +116,7 @@ private:
 	bool IsNeverSpotted = true;
 	bool onGround = false;
 	bool isLanding = false;
+	bool isDead = false;
 
 	uint32_t WalkTime = 0;
 	uint32_t StopTime = 0;
@@ -139,7 +141,7 @@ private:
 	float RunAttackSpeed = 0.4f;
 	float LittleFar = 5.0f;
 	float Distance = 0.0f;
-	float EnemyBulletSpeed = 0.3f;
+	float EnemyBulletSpeed = 0.5f;
 	//判定をするよう
 	float Rot = 0.0f;
 	float dist = 0.0f;
