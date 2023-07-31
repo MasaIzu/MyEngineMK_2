@@ -1,17 +1,17 @@
-#include "StageSelect.h"
+#include "MediumBossStage.h"
 #include "MyMath.h"
 #include <PostEffect.h>
 
-StageSelect::StageSelect()
+MediumBossStage::MediumBossStage()
 {
 }
 
-StageSelect::~StageSelect()
+MediumBossStage::~MediumBossStage()
 {
 	collisionManager->AllClearCollider();
 }
 
-void StageSelect::Initialize()
+void MediumBossStage::Initialize()
 {
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
@@ -26,13 +26,12 @@ void StageSelect::Initialize()
 	viewProjection_->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("stageSelect");
+	levelData->Initialize("stage2");
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0, 20, 0), viewProjection_.get());
 
 	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
-	player_->SetSpline(levelData->GetStage2SropSpline());
 	player_->SetCameraModeNotFree(false);
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
@@ -41,11 +40,15 @@ void StageSelect::Initialize()
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
 
+	bossEnemy = std::make_unique<BossEnemy>();
+	bossEnemy->Initialize(levelData->GetBossSpline()[0], viewProjection_.get());
+	bossEnemy->SetStageMoveSpline(levelData->GetBossSpline());
+
 	sceneManager_ = SceneManager::GetInstance();
 	collisionManager = CollisionManager::GetInstance();
 }
 
-void StageSelect::Update()
+void MediumBossStage::Update()
 {
 	player_->SetCameraModeNotFree(true);
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
@@ -57,27 +60,26 @@ void StageSelect::Update()
 	if (player_->GetHitFirstRail()) {
 		gameCamera->SetCameraMode(true);
 	}
-	if (player_->GetHit2ndRail()) {
-		gameCamera->SetCameraMode(true);
-	}
 
-	if (player_->GetHowReturnSpline(5)) {
+	//if (player_->GetHowReturnSpline(5)) {
 
-		sceneManager_->ChangeScene("GAMEPLAY");
-	}
-	if (player_->GetHowReturnSpline2ndRail(6)) {
-
-		sceneManager_->ChangeScene("STAGE2");
-	}
+	//	sceneManager_->ChangeScene("GAMEPLAY");
+	//}
 
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
+
+	bossEnemy->StagingUpdate();
+
+	if (bossEnemy->GetFinishSpline()) {
+		sceneManager_->ChangeScene("STAGESELECT");
+	}
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 }
 
-void StageSelect::PostEffectDraw()
+void MediumBossStage::PostEffectDraw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -95,37 +97,36 @@ void StageSelect::PostEffectDraw()
 	PostEffect::PostDrawScene();
 }
 
-void StageSelect::Draw()
+void MediumBossStage::Draw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	
+
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
 	skydome->Draw(*viewProjection_.get());
-
 	levelData->Draw(*viewProjection_.get());
 
-
+	bossEnemy->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
-	
+
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
 	player_->DrawSprite(*viewProjection_.get());
 
 }
 
-void StageSelect::Finalize()
+void MediumBossStage::Finalize()
 {
 }
 
-void StageSelect::CopyData()
+void MediumBossStage::CopyData()
 {
 	////パーティクル
 	player_->CopyParticle();
 }
 
-void StageSelect::CSUpdate()
+void MediumBossStage::CSUpdate()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();

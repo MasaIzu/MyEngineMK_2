@@ -77,6 +77,8 @@ private://プレイヤークラス変数
 	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
 
+	int x = 0;
+
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
 	uint32_t MaxBulletLifeTime = 30;
@@ -85,6 +87,7 @@ private://プレイヤークラス変数
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
 	uint32_t AttackMaxParticle = 10;
+	uint32_t MakeBulletMaxParticle = 8;
 	uint32_t DieMaxParticle = 30;
 	uint32_t DieMaxParticleLife = 40;
 
@@ -92,6 +95,7 @@ private://プレイヤークラス変数
 	float BulletRadius[AllBulletCount];
 	float playerBulletMaxRadius = 5.0f;
 	float PlayerParticleSpeed = 0.004f;
+	float PlayerBulletMakeParticleSpeed = 0.2f;
 	float PlayerParticleDieSpeed = 0.2f;
 	float flame[AllBulletCount];
 	float G = 0.45f;//重力

@@ -65,6 +65,8 @@ public:// ƒƒ“ƒoŠÖ”
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
 	std::vector<Vector3> GetSpline() { return splineVec; }
 	std::vector<Vector3> GetFinalSpline() { return FinalSplineVec; }
+	std::vector<Vector3> GetBossSpline() { return BossEnemySplineVec; }
+	std::vector<Vector3> GetStage2SropSpline() { return stage2SropSplineVec; }
 private:
 	std::unique_ptr<LevelData> levelData;
 	std::map<std::string, Model*> models;
@@ -76,6 +78,8 @@ private:
 	std::vector<Vector3> FirstSplineVec;
 	std::vector<Vector3> splineVec;
 	std::vector<Vector3> FinalSplineVec;
+	std::vector<Vector3> BossEnemySplineVec;
+	std::vector<Vector3> stage2SropSplineVec;
 
 	//Å‰‚©‚ç“Ç‚İ‚Ş‚â‚Â
 	std::unique_ptr<Model> modelSrop;

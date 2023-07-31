@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "StageSelect.h"
+#include "MediumBossStage.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {
@@ -16,6 +17,9 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
     }
     else if (sceneName == "GAMEPLAY") {
         newScene = new GameScene();
+    }
+    else if (sceneName == "STAGE2") {
+        newScene = new MediumBossStage();
     }
 
     return newScene;

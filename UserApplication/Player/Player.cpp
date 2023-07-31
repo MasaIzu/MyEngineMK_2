@@ -16,7 +16,7 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(const Vector3& Pos)
+void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 {
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
@@ -26,6 +26,8 @@ void Player::Initialize(const Vector3& Pos)
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
 	playerWorldTransHed.TransferMatrix();
+
+	viewProjection_ = viewProjection;
 
 	playerWorldTransForBullet.Initialize();
 
@@ -46,6 +48,47 @@ void Player::Initialize(const Vector3& Pos)
 	playerMoveSpline = std::make_unique<SplinePosition>();
 	FirstMoveSpline = std::make_unique<SplinePosition>();
 	FinalMoveSpline = std::make_unique<SplinePosition>();
+
+	// Wフォント
+	W_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
+	W_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
+	W_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
+	W_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
+	W_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
+	W_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
+	// Aフォント
+	A_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
+	A_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
+	A_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
+	A_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
+	A_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
+	A_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
+	// Sフォント
+	S_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
+	S_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
+	S_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
+	S_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
+	S_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
+	S_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
+	// Dフォント
+	D_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_D_Font.png"));
+	D_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
+	D_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
+	D_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_D_Font.png"));
+	D_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
+	D_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
+
+	Vector2 W_Fontsize = { 32.0f ,28.0f };
+	Vector2 A_Fontsize = { 32.0f ,28.0f };
+	Vector2 S_Fontsize = { 32.0f ,28.0f };
+	Vector2 D_Fontsize = { 32.0f ,28.0f };
+
+	for (int i = 0; i < 2; i++) {
+		W_FontSprite[i]->SetSize(W_Fontsize);
+		A_FontSprite[i]->SetSize(A_Fontsize);
+		S_FontSprite[i]->SetSize(S_Fontsize);
+		D_FontSprite[i]->SetSize(D_Fontsize);
+	}
 }
 
 void Player::Update()
@@ -84,6 +127,12 @@ void Player::Update()
 	//移動の値更新
 	WorldTransUpdate();
 
+	DistanceNolm = Distance - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
+	PlayerToCameraTargetVecDistance = DistanceNolm.length();
+	DistanceNolm.normalize();
+
+	UpdateReticle();
+
 	if (input_->MouseInputTrigger(0)) {
 		//isPlayerSetUp = true;
 		//PlayerAttack();
@@ -103,8 +152,8 @@ void Player::Update()
 	//ImGui::Text("Distance:%f", alpha);
 	//ImGui::End();
 
-	DebugWorldTrans.translation_ = Distance;
-	DebugWorldTrans.TransferMatrix();
+	//DebugWorldTrans.translation_ = Distance;
+	//DebugWorldTrans.TransferMatrix();
 
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerBullet->Update();
@@ -121,7 +170,37 @@ void Player::Draw(ViewProjection& viewProjection_)
 
 void Player::DrawSprite(ViewProjection& viewProjection_)
 {
-	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
+	AttackSprite->Draw(Vector2(640,360), Vector4(1, 1, 1, 1), 2);
+	Vector2 W_Fontpos = { 270,530 };
+	Vector2 A_Fontpos = { 240,560 };
+	Vector2 S_Fontpos = { 270,560 };
+	Vector2 D_Fontpos = { 300,560 };
+	for (int i = 0; i < 2; i++) {
+		if (input_->PushKey(DIK_W)) {
+			W_FontSprite[1]->Draw(W_Fontpos, { 1,1,1,1 });
+		}
+		else {
+			W_FontSprite[0]->Draw(W_Fontpos, { 1,1,1,1 });
+		}
+		if (input_->PushKey(DIK_A)) {
+			A_FontSprite[1]->Draw(A_Fontpos, { 1,1,1,1 });
+		}
+		else {
+			A_FontSprite[0]->Draw(A_Fontpos, { 1,1,1,1 });
+		}
+		if (input_->PushKey(DIK_S)) {
+			S_FontSprite[1]->Draw(S_Fontpos, { 1,1,1,1 });
+		}
+		else {
+			S_FontSprite[0]->Draw(S_Fontpos, { 1,1,1,1 });
+		}
+		if (input_->PushKey(DIK_D)) {
+			D_FontSprite[1]->Draw(D_Fontpos, { 1,1,1,1 });
+		}
+		else {
+			D_FontSprite[0]->Draw(D_Fontpos, { 1,1,1,1 });
+		}
+	}
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
@@ -206,10 +285,8 @@ void Player::PlayerAttack()
 	switch (AttackPhase_)
 	{
 	case Player::AttackPhase::AttackCombo1:
-		DistanceNolm = Distance - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
-		PlayerToCameraTargetVecDistance = DistanceNolm.length();
-		DistanceNolm.normalize();
-		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), DistanceNolm, PlayerToCameraTargetVecDistance);
+		
+		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);
 		break;
 	case Player::AttackPhase::AttackCombo2:
 
@@ -415,5 +492,44 @@ void Player::SplineUpdate()
 	else if (FinalMoveSpline->GetFinishSpline()) {
 		isHitFinalRail = false;
 	}
+}
+
+void Player::UpdateReticle()
+{
+	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+	//バレットレイメッシュコライダー
+	Ray wall;
+	wall.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
+	wall.start.y -= 0.4f;
+	wall.dir = MyMath::Vec3ToVec4(DistanceNolm);
+	RaycastHit wallRaycastHit;
+
+	if (input_->MouseInputing(1) == false) {
+		// 接地を維持
+		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, PlayerToCameraTargetVecDistance)) {
+			//playerWorldTrans.translation_.x -= (wallRaycastHit.distance - Radius);
+			ReticlePos = MyMath::Vec4ToVec3(wallRaycastHit.inter);
+			ReticlePos.y += 0.4f;
+			ShootVec = ReticlePos - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
+			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+			//ReticlePos = MyMath::DivVecMat(ReticlePos, matViewProjectionViewport);
+		}
+		else {
+			//ReticlePos = MyMath::DivVecMat(Distance, matViewProjectionViewport);
+			ShootVec = DistanceNolm;
+		}
+	}
+
+	DebugWorldTrans.translation_ = ReticlePos;
+	DebugWorldTrans.TransferMatrix();
 }
 

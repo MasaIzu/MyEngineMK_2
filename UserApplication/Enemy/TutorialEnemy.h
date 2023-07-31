@@ -41,7 +41,7 @@ private:
 	bool GetIsAttackArea();//攻撃できる範囲かどうか
 	void SearchingPlayer();//プレイヤーのサーチ関数
 	void GetPlayerForEnemyAngle();//角度をとる
-	void WorldTransUpdate();//Enemyだけの移動の値更新
+	void WorldTransUpdate();//移動の値更新
 	uint32_t Random(const uint32_t& low, const uint32_t& high);//ランダム
 
 private://const関連

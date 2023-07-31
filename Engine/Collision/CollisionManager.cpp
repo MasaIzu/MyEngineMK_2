@@ -55,6 +55,7 @@ void CollisionManager::CheckAllCollisions()
 				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS) {
 					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereA, 0)) {
 						HitWorldPos = colA->GetWorldPos();
+						colA->isHitPlayerAttack = true;
 						colB->isHitPlayerAttack = true;
 						//isAttackHit = true;
 					}
@@ -63,6 +64,7 @@ void CollisionManager::CheckAllCollisions()
 					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereB, 1)) {
 						HitWorldPos = colB->GetWorldPos();
 						colA->isHitPlayerAttack = true;
+						colB->isHitPlayerAttack = true;
 						//isAttackHit = true;
 					}
 				}

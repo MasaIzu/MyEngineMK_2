@@ -27,6 +27,9 @@ void GameScene::Initialize() {
 
 	sceneManager_ = SceneManager::GetInstance();
 
+	skydome = std::make_unique<Skydome>();
+	skydome->Initialize();
+
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
 	viewProjection_->eye = { 0,0,-50 };
@@ -42,7 +45,7 @@ void GameScene::Initialize() {
 	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0, -210.0f, -283.0f));
+	player_->Initialize(Vector3(0, -210.0f, -283.0f), viewProjection_.get());
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
@@ -162,7 +165,7 @@ void GameScene::Update() {
 		}
 		Vector3 larp;
 		if (larpTime < 1.0f) {
-			larpTime += 0.012f;
+			larpTime += 0.01f;
 		}
 		else {
 			larpTime = 1.0f;
@@ -260,7 +263,7 @@ void GameScene::Draw() {
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
+	skydome->Draw(*viewProjection_.get());
 	ground->Draw(*viewProjection_.get());
 	model_->Draw(worldTransform_ ,*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());

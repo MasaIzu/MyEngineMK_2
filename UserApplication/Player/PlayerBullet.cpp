@@ -9,7 +9,7 @@ PlayerBullet::PlayerBullet()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		isBulletAlive[i] = 0;
 		BulletLifeTime[i] = MaxBulletLifeTime;
-		BulletRadius[i] = 0.4f;
+		BulletRadius[i] = 0.01f;
 		BulletCollider[i] = nullptr;
 		playerBulletSpeed[i] = 3.0f;
 		flame[i] = 0.0f;
@@ -74,10 +74,22 @@ void PlayerBullet::Update()
 
 	////ImGui::SliderInt("MackPaticleMax", &MackPaticleMax, 0, 20);
 	//ImGui::SliderFloat("PlayerParticleSpeed", &PlayerParticleSpeed, 0, 1);
-	//ImGui::SliderFloat("PlayerParticleDieSpeed", &PlayerParticleDieSpeed, 0, 2);
+	//ImGui::SliderInt("x", &x, 0, 100);
+	//ImGui::SliderFloat("PlayerBulletMakeParticleSpeed", &PlayerBulletMakeParticleSpeed, 0, 2);
 	//ImGui::End();
 
-
+	//MakeBulletMaxParticle = static_cast<uint32_t>(x);
+	for (uint32_t i = 0; i < AllBulletCount; i++) {
+		if (BulletCollider[i]->GetHit()) {
+			BulletCollider[i]->Reset();
+			isBulletAlive[i] = false;
+			BulletCollider[i]->SphereMeshHitReset();
+			Vector3 Verocity = { 0,0,0 };
+			for (uint32_t j = 0; j < DieMaxParticle; j++) {
+				MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleDieSpeed, 0.04f);
+			}
+		}
+	}
 
 	ParticleMan->Update();
 
@@ -162,6 +174,11 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 				playerBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
 				flame[i] = 0.0f;
+				BulletCollider[i]->Reset();
+				BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed[i], BulletVector[i]);
+				for (uint32_t j = 0; j < MakeBulletMaxParticle; j++) {
+					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerBulletMakeParticleSpeed, 0.04f);
+				}
 				return i;
 			}
 		}
@@ -181,7 +198,7 @@ void PlayerBullet::MakeExpandingStunBullet()
 			if (isBulletAlive[i] == false) {
 				isBulletAlive[i] = true;
 				BulletLifeTime[i] = MaxBulletLifeTime;
-				BulletRadius[i] = 0.4f;
+				BulletRadius[i] = 0.01f;
 				isExpanding = true;
 				BulletNum_ = i;
 				break;
@@ -247,7 +264,7 @@ void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const flo
 		Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
 		Verocty += Rand * PlayerParticleSpeed;
 		Vector3 AddPos = pos + (BulletVelocity * i);
-		Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5,20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
+		Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5, 20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
 		Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
 		Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
 		float scale = (1.0f / BulletSpeed) * i;

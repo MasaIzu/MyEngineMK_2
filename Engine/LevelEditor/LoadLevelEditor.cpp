@@ -132,7 +132,20 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 			trans.x *= -1.0f;
 			FinalSplineVec.push_back(trans);
 		}
-
+		else if (object["file_name"].get<std::string>() == "stage2SropVec") {
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			trans.x *= -1.0f;
+			stage2SropSplineVec.push_back(trans);
+		}
+		else if (object["file_name"].get<std::string>() == "EnemyBossSpline") {
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
+			//trans.x *= -1.0f;
+			BossEnemySplineVec.push_back(trans);
+		}
 		// TODO: オブジェクト走査を再帰関数にまとめ、再帰呼出で枝を走査する
 		if (object.contains("children")) {
 
@@ -259,6 +272,15 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 			}
 			else if (fileName == "tutorialSrop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
+			}
+			else if (fileName == "stage2") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if (fileName == "stage2Srop") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_RAIL);
+			}
+			else if (fileName == "stageSrop2") {
+				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
 			}
 		}
 

@@ -14,7 +14,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model);
+	void Initialize();
 
 	/// <summary>
 	/// 更新
@@ -24,12 +24,12 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ViewProjection viewProjection_);
+	void Draw(ViewProjection& viewProjection_);
 
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_;
 
 };

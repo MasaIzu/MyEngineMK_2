@@ -6,15 +6,16 @@
 #include "GameCamera.h"
 #include "Player.h"
 #include "CollisionManager.h"
+#include "BossEnemy.h"
 #include "Skydome.h"
 
 // タイトルシーン
-class StageSelect : public BaseScene
+class MediumBossStage : public BaseScene
 {
 public: // メンバ関数
 
-	StageSelect();
-	~StageSelect();
+	MediumBossStage();
+	~MediumBossStage();
 
 	/// <summary>
 	/// 初期化
@@ -55,6 +56,7 @@ private:
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
+	std::unique_ptr<BossEnemy> bossEnemy;
 	std::unique_ptr<Skydome> skydome;
 
 	int shadeNumber = 3;

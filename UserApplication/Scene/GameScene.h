@@ -26,6 +26,7 @@
 #include "LoadLevelEditor.h"
 
 #include "TouchableObject.h"
+#include <Skydome.h>
 
 /// <summary>
 /// ゲームシーン
@@ -79,6 +80,7 @@ private: // メンバ変数
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::unique_ptr<TouchableObject> touchableObject;
+	std::unique_ptr<Skydome> skydome;
 
 	uint32_t textureHandle_ = 0;//テクスチャハンドル
 

@@ -16,7 +16,7 @@ public://基本関数
 	Player();
 	~Player();
 
-	void Initialize(const Vector3& Pos);
+	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 	void DrawSprite(ViewProjection& viewProjection_);
@@ -41,6 +41,8 @@ private:
 	void Fall();
 	//スプラインアップデート
 	void SplineUpdate();
+	//レティクルアップデート
+	void UpdateReticle();
 
 public://Setter
 	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }
@@ -54,8 +56,10 @@ public://Setter
 public://Getter
 	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
 	bool GetHitFirstRail()const { return isHitFirstRail; }
+	bool GetHit2ndRail()const { return isHitRail; }
 	bool GetHitFinalRail()const { return isHitFinalRail; }
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }
+	bool GetHowReturnSpline2ndRail(const uint32_t & HowIndex)const { return playerMoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
@@ -68,9 +72,16 @@ private://クラス関連
 	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
 	WorldTransform DebugWorldTrans;
+	ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<PlayerBullet> playerBullet;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
+	//WASDスプライト
+	std::unique_ptr<Sprite> W_FontSprite[2];
+	std::unique_ptr<Sprite> A_FontSprite[2];
+	std::unique_ptr<Sprite> S_FontSprite[2];
+	std::unique_ptr<Sprite> D_FontSprite[2];
+
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	//スプライン
@@ -113,9 +124,10 @@ private://プレイヤークラス変数
 	float alpha = 0.0f;
 
 	Vector3 playerMoveMent;//移動量
-	Vector3 ReticlePos;
 	Vector3 Distance;
 	Vector3 DistanceNolm;
+	Vector3 ReticlePos;
+	Vector3 ShootVec;
 
 	Vector4 fallVec;
 };

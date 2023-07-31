@@ -433,6 +433,12 @@
     <ClInclude Include="StageSelect.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="BossEnemy.h">
+      <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MediumBossStage.h">
+      <Filter>ユーザーヘッダー ファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -605,6 +611,12 @@
     </ClCompile>
     <ClCompile Include="StageSelect.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEnemy.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MediumBossStage.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -137,8 +137,10 @@ void TutorialEnemy::Draw(ViewProjection& viewProjection_)
 void TutorialEnemy::DebugDraw(ViewProjection& viewProjection_)
 {
 	//model_->Draw(DebugWorldTrans, viewProjection_);
-	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
+	if (IsAttack) {
+		for (uint32_t i = 0; i < AttackSphereCount; i++) {
+			modelDebug_->Draw(AttackWorldTrans[i], viewProjection_);
+		}
 	}
 }
 
@@ -225,6 +227,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 
 void TutorialEnemy::PlayerSpottedMove()
 {
+	IsAttack = false;
 	GetPlayerForEnemyAngle();
 	PlayerSpottedMoveTimer();
 	SearchingPlayer();
@@ -276,7 +279,6 @@ void TutorialEnemy::PlayerSpottedMove()
 
 		break;
 	case TutorialEnemy::SpottedPhase::Attack:
-		IsAttack = true;
 		Attack();
 
 		break;
@@ -318,7 +320,7 @@ void TutorialEnemy::Attack()
 	switch (AttackPhase_)
 	{
 	case TutorialEnemy::AttackPhase::NormalAttack:
-
+		IsAttack = true;
 		//âÒì]Ç∑ÇÈéËëOÇÃÉ{Å[Éã
 		start = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp;
 		p1 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp_look;

@@ -1,0 +1,203 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "stage2",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": ""
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline",
+            "transform": {
+                "translation": [
+                    206.08944702148438,
+                    -133.0428924560547,
+                    -171.30360412597656
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.001",
+            "transform": {
+                "translation": [
+                    180.6183624267578,
+                    -37.25199890136719,
+                    -143.75588989257812
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.002",
+            "transform": {
+                "translation": [
+                    426.6059265136719,
+                    288.02862548828125,
+                    277.1660461425781
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.003",
+            "transform": {
+                "translation": [
+                    10.216100692749023,
+                    95.87982177734375,
+                    78.27104187011719
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.004",
+            "transform": {
+                "translation": [
+                    116.89680480957031,
+                    433.6907043457031,
+                    68.6322021484375
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.005",
+            "transform": {
+                "translation": [
+                    -103.22386169433594,
+                    341.220703125,
+                    163.02545166015625
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.006",
+            "transform": {
+                "translation": [
+                    -244.117431640625,
+                    496.17181396484375,
+                    370.2593688964844
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.007",
+            "transform": {
+                "translation": [
+                    -655.845458984375,
+                    767.2662963867188,
+                    752.1708374023438
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        }
+    ]
+}

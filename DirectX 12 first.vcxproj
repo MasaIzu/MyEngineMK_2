@@ -309,6 +309,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="MediumBossStage.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="TouchableObject.h" />
     <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
@@ -376,6 +378,8 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="MediumBossStage.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="TouchableObject.cpp" />
     <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />

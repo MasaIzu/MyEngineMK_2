@@ -201,6 +201,7 @@ bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, Vector4* i
 
 			tempInter = MyMath::Vec4Mat4Mul(tempInter, matWorld);
 
+
 			if (distance) {
 				Vector4 sub = tempInter - ray.start;
 				*distance = sub.Vector3Dot(ray.dir);
