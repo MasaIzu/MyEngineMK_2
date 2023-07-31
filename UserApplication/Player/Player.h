@@ -81,7 +81,7 @@ private://クラス関連
 	std::unique_ptr<Sprite> A_FontSprite[2];
 	std::unique_ptr<Sprite> S_FontSprite[2];
 	std::unique_ptr<Sprite> D_FontSprite[2];
-
+	std::unique_ptr<Sprite> AttackFontSprite[2];
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	//スプライン
@@ -111,6 +111,7 @@ private://プレイヤークラス変数
 	bool isHitFirstRail = false;
 	bool isHitFinalRail = false;
 	bool isCameraModeNotFree = false;
+	bool isAttack = false;
 	bool Stop = false;
 
 	uint32_t bulletNumber = 0;

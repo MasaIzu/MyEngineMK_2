@@ -46,7 +46,7 @@ private:
 
 private://constŠÖ˜A
 	static const uint32_t ColliderSphereCount = 2;
-	static const uint32_t AttackSphereCount = 3;
+	static const uint32_t AttackSphereCount = 6;
 
 private://ƒNƒ‰ƒX•Ï”
 	Input* input_ = nullptr;
@@ -136,7 +136,7 @@ private:
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
-	float NormalAttackSpeed = 0.02f;
+	float NormalAttackSpeed = 0.04f;
 
 	Vector3 enemyMoveMent;
 	Vector3 BonePos;

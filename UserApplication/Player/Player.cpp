@@ -49,6 +49,12 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	FirstMoveSpline = std::make_unique<SplinePosition>();
 	FinalMoveSpline = std::make_unique<SplinePosition>();
 
+	// Attackフォント
+	AttackFontSprite[0] = Sprite::Create(TextureManager::Load("sprite/Attack_off.png"));
+	AttackFontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
+	AttackFontSprite[1] = Sprite::Create(TextureManager::Load("sprite/Attack_on.png"));
+	AttackFontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
+
 	// Wフォント
 	W_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
 	W_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
@@ -78,12 +84,14 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	D_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
 	D_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
 
+	Vector2 AttackFontsize = { 188.0f,54.0f };
 	Vector2 W_Fontsize = { 32.0f ,28.0f };
 	Vector2 A_Fontsize = { 32.0f ,28.0f };
 	Vector2 S_Fontsize = { 32.0f ,28.0f };
 	Vector2 D_Fontsize = { 32.0f ,28.0f };
 
 	for (int i = 0; i < 2; i++) {
+		AttackFontSprite[i]->SetSize(AttackFontsize);
 		W_FontSprite[i]->SetSize(W_Fontsize);
 		A_FontSprite[i]->SetSize(A_Fontsize);
 		S_FontSprite[i]->SetSize(S_Fontsize);
@@ -93,6 +101,7 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 
 void Player::Update()
 {
+	isAttack = false;
 	if (playerMoveSpline->GetFinishSpline()) {
 		isHitRail = false;
 	}
@@ -139,6 +148,7 @@ void Player::Update()
 	}
 	if (input_->MouseInputing(0)) {
 		isPlayerSetUp = true;
+		isAttack = true;
 		PlayerAttack();
 	}
 	if (input_->MouseInputTrigger(1)) {
@@ -175,6 +185,7 @@ void Player::DrawSprite(ViewProjection& viewProjection_)
 	Vector2 A_Fontpos = { 240,560 };
 	Vector2 S_Fontpos = { 270,560 };
 	Vector2 D_Fontpos = { 300,560 };
+	Vector2 AttackFontpos = { 150,480 };
 	for (int i = 0; i < 2; i++) {
 		if (input_->PushKey(DIK_W)) {
 			W_FontSprite[1]->Draw(W_Fontpos, { 1,1,1,1 });
@@ -199,6 +210,12 @@ void Player::DrawSprite(ViewProjection& viewProjection_)
 		}
 		else {
 			D_FontSprite[0]->Draw(D_Fontpos, { 1,1,1,1 });
+		}
+		if (isAttack) {
+			AttackFontSprite[0]->Draw(AttackFontpos, { 1,1,1,1 });
+		}
+		else if (isAttack == false) {
+			AttackFontSprite[1]->Draw(AttackFontpos, { 1,1,1,1 });
 		}
 	}
 }

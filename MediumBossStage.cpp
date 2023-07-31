@@ -72,7 +72,7 @@ void MediumBossStage::Update()
 	bossEnemy->StagingUpdate();
 
 	if (bossEnemy->GetFinishSpline()) {
-		sceneManager_->ChangeScene("STAGESELECT");
+		//sceneManager_->ChangeScene("STAGESELECT");
 	}
 
 	//全ての衝突をチェック
