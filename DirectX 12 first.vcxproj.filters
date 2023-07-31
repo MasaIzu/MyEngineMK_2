@@ -427,16 +427,16 @@
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="TouchableObject.h">
+    <ClInclude Include="Engine\Collision\TouchableObject.h">
       <Filter>Engine\ヘッダー\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="StageSelect.h">
+    <ClInclude Include="UserApplication\Scene\StageSelect.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="BossEnemy.h">
+    <ClInclude Include="UserApplication\Enemy\BossEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="MediumBossStage.h">
+    <ClInclude Include="UserApplication\Scene\MediumBossStage.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -606,16 +606,16 @@
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="TouchableObject.cpp">
+    <ClCompile Include="Engine\Collision\TouchableObject.cpp">
       <Filter>Engine\ソース ファイル\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="StageSelect.cpp">
+    <ClCompile Include="UserApplication\Scene\StageSelect.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="BossEnemy.cpp">
+    <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="MediumBossStage.cpp">
+    <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>

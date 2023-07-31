@@ -178,6 +178,10 @@ void GameScene::Update() {
 		isFinish = true;
 		sceneManager_->ChangeScene("STAGESELECT");
 	}
+	if (player_->GetPlayerPos().y < -250.0f) {
+		sceneManager_->ChangeScene("GAMEPLAY");
+	}
+
 	gameCamera->SetCameraMode(player_->GetHitFinalRail());
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();

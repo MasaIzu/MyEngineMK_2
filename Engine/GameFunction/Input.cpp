@@ -1,3 +1,5 @@
+#pragma comment(lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
 #include "Input.h"
 #include "WinApp.h"
 #include <cassert>
@@ -9,9 +11,6 @@
 #include <shellapi.h>
 #include <wbemidl.h>
 #include <wrl/client.h>
-
-#pragma comment(lib,"dinput8.lib")
-#pragma comment(lib,"dxguid.lib")
 
 #include <dinputd.h>
 #include <memory>

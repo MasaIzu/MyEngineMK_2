@@ -270,13 +270,16 @@ void Player::Move()
 			playerMoveMent = { 0.0f,0.0f,0.0f };
 			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
 		}
-		if (input_->PushKey(DIK_SPACE)) {
-			playerMoveSpline->ResetNearSplineReset();
-			FirstMoveSpline->ResetNearSplineReset();
-			onGround = false;
-			const float jumpVYFist = 0.4f;
-			fallVec = { 0, jumpVYFist, 0, 0 };
+		if (onGround) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				playerMoveSpline->ResetNearSplineReset();
+				FirstMoveSpline->ResetNearSplineReset();
+				onGround = false;
+				const float jumpVYFist = 0.6f;
+				fallVec = { 0, jumpVYFist, 0, 0 };
+			}
 		}
+		
 	}
 	
 
