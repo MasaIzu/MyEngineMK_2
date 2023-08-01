@@ -3,7 +3,6 @@
 #include <cassert>
 #include <random>
 #include <fstream>
-#include "FbxLoader.h"
 #include"ImGuiManager.h"
 #include <CollisionAttribute.h>
 #include "Collision.h"

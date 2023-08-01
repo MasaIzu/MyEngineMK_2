@@ -13,7 +13,6 @@
 #include "BaseScene.h"
 #include "SceneManager.h"
 
-#include "FbxModel.h"
 #include<memory>
 #include<vector>
 #include "GameCamera.h"

@@ -26,9 +26,6 @@ void Framework::Initialize()
 	TextureManager_->Initialize(directXCore_->GetDevice());
 	TextureManager::Load("white1x1.png");
 
-	// FBX関連静的初期化
-	fbxLoader_ = FbxLoader::GetInstance();
-	fbxLoader_->Initialize(directXCore_->GetDevice());
 
 	// スプライト静的初期化
 	Sprite::StaticInitialize(directXCore_->GetDevice());
@@ -37,7 +34,6 @@ void Framework::Initialize()
 	// 3Dモデル静的初期化
 	Model::StaticInitialize();
 	CloudModel::StaticInitialize();
-	FbxModel::StaticInitialize();
 
 	//Imgui初期化
 	imGui = std::make_unique <ImGuiManager>();
@@ -97,13 +93,11 @@ void Framework::Finalize()
 	imGui->Finalize();
 	sceneFactory_.reset();
 
-	FbxModel::StaticFainalize();
 	CloudModel::StaticFinalize();
 	Model::StaticFinalize();
 
 	Sprite::StaticFinalize();
 
-	fbxLoader_->Finalize();
 
 	TextureManager_->Delete();
 
