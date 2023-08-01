@@ -13,14 +13,11 @@
 #include "BaseScene.h"
 #include "SceneManager.h"
 
-#include "FbxModel.h"
 #include<memory>
 #include<vector>
 #include "GameCamera.h"
 #include <CollisionManager.h>
 
-#include"FbxAnimation.h"
-#include "FbxLoader.h"
 
 #include "Ground.h"
 
@@ -77,9 +74,6 @@ private: // メンバ変数
 
 	//FBX関係
 	float frem = 0;
-	std::unique_ptr<FbxModel>fbxModel;
-	std::unique_ptr<FbxAnimation>anim;
-	FbxLoader* fbxLoad = nullptr;
 
 	int shadeNumber = 0;
 

@@ -379,9 +379,6 @@
     <ClInclude Include="Engine\Math\Quaternion.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\FbxModel.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
     <ClInclude Include="GameCamera.h">
       <Filter>ユーザーヘッダー ファイル</Filter>
     </ClInclude>
@@ -393,12 +390,6 @@
     </ClInclude>
     <ClInclude Include="PostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3D\FbxAnimation.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3D\FbxLoader.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
     </ClInclude>
     <ClInclude Include="PostEffectManager.h">
       <Filter>Engine\ヘッダー\2D</Filter>
@@ -534,9 +525,6 @@
     <ClCompile Include="Engine\Math\Quaternion.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\FbxModel.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
     <ClCompile Include="GameCamera.cpp">
       <Filter>ユーザーソース ファイル</Filter>
     </ClCompile>
@@ -548,12 +536,6 @@
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\FbxAnimation.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\FbxLoader.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
     <ClCompile Include="PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>

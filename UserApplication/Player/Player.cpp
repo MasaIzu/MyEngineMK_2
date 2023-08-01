@@ -4,7 +4,6 @@
 #include "CollisionManager.h"
 #include <CollisionAttribute.h>
 #include"ImGuiManager.h"
-#include <FbxLoader.h>
 
 
 Player::Player()

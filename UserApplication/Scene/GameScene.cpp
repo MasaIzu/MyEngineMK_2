@@ -3,7 +3,6 @@
 #include <cassert>
 #include <random>
 #include <fstream>
-#include "FbxLoader.h"
 #include"ImGuiManager.h"
 #include <CollisionAttribute.h>
 #include "Collision.h"
@@ -148,10 +147,6 @@ void GameScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	//FBXモデル
-	FbxModel::PreDraw(commandList);
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-	FbxModel::PostDraw();
 
 	////パーティクル
 	ParticleMan->CSUpdate(commandList);
@@ -197,11 +192,6 @@ void GameScene::Draw() {
 
 
 
-	FbxModel::PreDraw(commandList);
-
-	//fbxModel->Draw(worldTransform_, viewProjection_);
-
-	FbxModel::PostDraw();
 
 	//ParticleMan->CSUpdate(commandList);
 	//ParticleManager::PreDraw(commandList);
