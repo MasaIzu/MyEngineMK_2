@@ -12,6 +12,7 @@ PlayerBullet::PlayerBullet()
 		BulletRadius[i] = 0.01f;
 		BulletCollider[i] = nullptr;
 		playerBulletSpeed[i] = 3.0f;
+		isBulletDownSpeed[i] = false;
 		flame[i] = 0.0f;
 	}
 }
@@ -129,7 +130,12 @@ void PlayerBullet::BulletUpdate()
 	//MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed, G, flame)
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
-			playerBulletMoveMent[i] = /*MyMath::HorizontalProjection(*/BulletVector[i] * playerBulletSpeed[i]/*, G, flame[i])*/;
+			if (isBulletDownSpeed[i] == false) {
+				playerBulletMoveMent[i] = /*MyMath::HorizontalProjection(*/BulletVector[i] * playerBulletSpeed[i]/*, G, flame[i])*/;
+			}
+			else {
+				playerBulletMoveMent[i] = MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed[i], G, flame[i]);
+			}
 			if (BulletCollider[i]->GetSphereMeshHit()) {
 				isBulletAlive[i] = false;
 				BulletCollider[i]->SphereMeshHitReset();
@@ -166,14 +172,15 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 		for (uint32_t i = 0; i < AllBulletCount; i++) {
 			if (isBulletAlive[i] == false) {
 				isBulletAlive[i] = true;
+				playerBulletSpeed[i] = 10.0f;
 				playerBulletWorldTrans[i].translation_ = MakeBulletPos;
 				BulletVector[i] = BulletVec;
-				BulletLifeTime[i] = MaxBulletLifeTime;
+				BulletSpeedDownTime[i] = static_cast<uint32_t>(Distance / playerBulletSpeed[i]);
 				BulletRadius[i] = 0.4f;
-				playerBulletSpeed[i] = Distance / static_cast<float>(MaxBulletLifeTime);
 				playerBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
-				flame[i] = 0.0f;
+				flame[i] = 10.0f;
+				isBulletDownSpeed[i] = false;
 				BulletCollider[i]->Reset();
 				BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed[i], BulletVector[i]);
 				for (uint32_t j = 0; j < MakeBulletMaxParticle; j++) {
@@ -227,8 +234,8 @@ void PlayerBullet::BulletAliveTimerUpdate()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
-			if (BulletLifeTime[i] > 0) {
-				BulletLifeTime[i]--;
+			if (BulletSpeedDownTime[i] > 0) {
+				BulletSpeedDownTime[i]--;
 			}
 		}
 	}
@@ -240,9 +247,16 @@ void PlayerBullet::BulletAliveTimerUpdate()
 void PlayerBullet::CheckBulletAlive()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		if (BulletLifeTime[i] <= 0) {
-			isBulletAlive[i] = false;
-			BulletVector[i] = { 0,0,0 };
+		if (isBulletAlive[i] == true) {
+			if (BulletSpeedDownTime[i] <= 0) {
+				isBulletDownSpeed[i] = true;
+				if (playerBulletSpeed[i] > 2.0f) {
+					playerBulletSpeed[i] -= 0.5f;
+				}
+
+				//isBulletAlive[i] = false;
+				//BulletVector[i] = { 0,0,0 };
+			}
 		}
 	}
 }

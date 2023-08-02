@@ -616,7 +616,7 @@
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
-      <Filter>ユーザーソース ファイル\Enemy</Filter>
+      <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

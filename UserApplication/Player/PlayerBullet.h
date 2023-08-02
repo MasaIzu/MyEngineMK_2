@@ -76,14 +76,16 @@ private://プレイヤークラス変数
 	bool isBulletAlive[AllBulletCount];
 	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
+	bool isBulletDownSpeed[AllBulletCount];
 
 	int x = 0;
 
 	uint32_t BulletLifeTime[AllBulletCount];
+	uint32_t BulletSpeedDownTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
 	uint32_t MaxBulletLifeTime = 30;
 	uint32_t BulletCoolTime = 0;
-	uint32_t MaxBulletCoolTime = 5;
+	uint32_t MaxBulletCoolTime = 7;
 	uint32_t ParticleFile = 60;
 	uint32_t MackPaticleMax = 1;
 	uint32_t AttackMaxParticle = 10;
@@ -98,7 +100,7 @@ private://プレイヤークラス変数
 	float PlayerBulletMakeParticleSpeed = 0.2f;
 	float PlayerParticleDieSpeed = 0.2f;
 	float flame[AllBulletCount];
-	float G = 0.45f;//重力
+	float G = 3.0f;//重力
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向

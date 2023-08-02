@@ -146,7 +146,7 @@ void Player::Update()
 		//isPlayerSetUp = true;
 		//PlayerAttack();
 	}
-	if (input_->MouseInputing(0)) {
+	if (input_->MouseInputing(1)) {
 		isPlayerSetUp = true;
 		isAttack = true;
 		PlayerAttack();
@@ -270,15 +270,15 @@ void Player::Move()
 			playerMoveMent = { 0.0f,0.0f,0.0f };
 			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
 		}
-		if (onGround) {
-			if (input_->TriggerKey(DIK_SPACE)) {
+		//if (onGround) {
+			if (input_->PushKey(DIK_SPACE)) {
 				playerMoveSpline->ResetNearSplineReset();
 				FirstMoveSpline->ResetNearSplineReset();
 				onGround = false;
 				const float jumpVYFist = 0.6f;
 				fallVec = { 0, jumpVYFist, 0, 0 };
 			}
-		}
+		//}
 		
 	}
 	
@@ -533,7 +533,7 @@ void Player::UpdateReticle()
 	wall.dir = MyMath::Vec3ToVec4(DistanceNolm);
 	RaycastHit wallRaycastHit;
 
-	if (input_->MouseInputing(1) == false) {
+	if (input_->MouseInputing(2) == false) {
 		// Ú’n‚ðˆÛŽ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, PlayerToCameraTargetVecDistance)) {
 			//playerWorldTrans.translation_.x -= (wallRaycastHit.distance - Radius);
