@@ -294,7 +294,7 @@ void ParticleManager::InitializeVerticeBuff()
 {
 
 	HRESULT result;
-
+	ComPtr<ID3D12Resource> commandBufferUpload;
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
 
 	// ヒーププロパティ
@@ -313,7 +313,11 @@ void ParticleManager::InitializeVerticeBuff()
 
 	// 頂点バッファ生成
 	result = device->CreateCommittedResource(
-		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COMMON, nullptr,
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
 		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 
@@ -321,6 +325,8 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(VertexPos);
+
+
 
 }
 
@@ -372,19 +378,45 @@ void ParticleManager::Initialize()
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES UploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
-	CD3DX12_RESOURCE_DESC UploadResourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(VertexPos));
+	 const UINT ResourceDescSize = numParticles * sizeof(VertexPos);
 
 	// アップロードバッファの作成
 	device->CreateCommittedResource(
-		&UploadHeapProps,
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&UploadResourceDesc,
+		&CD3DX12_RESOURCE_DESC::Buffer(ResourceDescSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&uploadBuffer)
 	);
 
+	D3D12_GPU_VIRTUAL_ADDRESS gpuAddress = vertBuff->GetGPUVirtualAddress();
+	UINT commandIndex = 0;
+
+	for (UINT frame = 0; frame < FrameCount; frame++)
+	{
+		for (UINT n = 0; n < TriangleCount; n++)
+		{
+			commands[commandIndex].cbv = gpuAddress;
+			commands[commandIndex].drawArguments.VertexCountPerInstance = 3;
+			commands[commandIndex].drawArguments.InstanceCount = 1;
+			commands[commandIndex].drawArguments.StartVertexLocation = 0;
+			commands[commandIndex].drawArguments.StartInstanceLocation = 0;
+
+			commandIndex++;
+			gpuAddress += sizeof(SceneConstantBuffer);
+		}
+	}
+
+	// Copy data to the intermediate upload heap and then schedule a copy
+	// from the upload heap to the command buffer.
+	D3D12_SUBRESOURCE_DATA commandData = {};
+	commandData.pData = reinterpret_cast<UINT8*>(&commands[0]);
+	commandData.RowPitch = ResourceDescSize;
+	commandData.SlicePitch = commandData.RowPitch;
+
+	UpdateSubresources<1>(cmdList, vertBuff.Get(), uploadBuffer.Get(), 0, 0, 1, &commandData);
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE));
 }
 
 void ParticleManager::Update()
