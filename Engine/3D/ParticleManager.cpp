@@ -294,8 +294,6 @@ void ParticleManager::InitializeVerticeBuff()
 {
 
 	HRESULT result;
-	ComPtr<ID3D12Resource>  vertexBufferHeap;
-	ComPtr<ID3D12Resource> commandBufferUpload;
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
 
 	// ヒーププロパティ
@@ -310,8 +308,7 @@ void ParticleManager::InitializeVerticeBuff()
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
 	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 
 	// 頂点バッファ生成
 	result = device->CreateCommittedResource(
@@ -329,8 +326,8 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(VertexPos);
 
-	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
+	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
+	cmdList->ResourceBarrier(1, &transitionBarrier);
 }
 
 void ParticleManager::SetTextureHandle(uint32_t textureHandle) {
@@ -391,7 +388,7 @@ void ParticleManager::Initialize()
 		&UploadHeapProps,
 		D3D12_HEAP_FLAG_NONE,
 		&uploadResourceDesc,
-		D3D12_RESOURCE_STATE_COMMON,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&uploadBuffer)
 	);
@@ -443,7 +440,7 @@ void ParticleManager::Draw(const ViewProjection& view)
 	// シェーダリソースビューをセット
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList, 1, textureHandle_);
 
-	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
+	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ);
 	cmdList->ResourceBarrier(1, &transitionBarrier);
 
 	// 描画コマンド
@@ -458,7 +455,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {  
 
 	if (Particles.size()) {
-		CD3DX12_RESOURCE_BARRIER transitionBarrier;
+		//CD3DX12_RESOURCE_BARRIER transitionBarrier;
 		// サイズ設定
 		const UINT BufferSize = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
 
@@ -467,17 +464,10 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		memcpy(mappedData, Particles.data(), Particles.size() * sizeof(VertexPos));
 		uploadBuffer->Unmap(0, nullptr);
 
-		transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_DEST);
-		cmdList->ResourceBarrier(1, &transitionBarrier);
-		transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(uploadBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE);
-		cmdList->ResourceBarrier(1, &transitionBarrier);
-		// コピー操作
-		DirectXCore::GetInstance()->GetCommandList()->CopyBufferRegion(vertBuff.Get(), 0, uploadBuffer.Get(), 0, BufferSize);
 
-		transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		cmdList->ResourceBarrier(1, &transitionBarrier);
-		transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(uploadBuffer.Get(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON);
-		cmdList->ResourceBarrier(1, &transitionBarrier);
+		// コピー操作
+		DirectXCore::GetInstance()->GetCommandList()->CopyBufferRegion(vertBuff.Get(), BufferSize, uploadBuffer.Get(), 0, sizeof(UINT));
+
 
 		// パイプラインステートの設定
 		cmdList->SetPipelineState(pipelineState.Get());
@@ -557,18 +547,17 @@ void ParticleManager::CopyData()
 {
 	// サイズ設定
 	const UINT BufferSize = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
+	CD3DX12_RESOURCE_BARRIER transitionBarrier;
 
 	// vertBuffをCOPY_SOURCEに遷移
-	CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE);
-	// uploadBufferをCOPY_DESTに遷移
-	CD3DX12_RESOURCE_BARRIER::Transition(uploadBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
+	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COPY_SOURCE);
+	DirectXCore::GetInstance()->GetCommandList()->ResourceBarrier(1, &transitionBarrier);
 
 	// コピー操作
 	DirectXCore::GetInstance()->GetCommandList()->CopyBufferRegion(uploadBuffer.Get(), 0, vertBuff.Get(), 0, BufferSize);
 
 	// 必要に応じてリソースを元の状態に戻す
-	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	CD3DX12_RESOURCE_BARRIER::Transition(uploadBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_COMMON);
+	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
 	DirectXCore::GetInstance()->GetCommandList()->ResourceBarrier(1, &transitionBarrier);
 
 	VertexPos* outPutDeta = nullptr;
