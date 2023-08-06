@@ -327,7 +327,7 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.StrideInBytes = sizeof(VertexPos);
 
 	CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
-	cmdList->ResourceBarrier(1, &transitionBarrier);
+	DirectXCore::GetInstance()->GetCommandList()->ResourceBarrier(1, &transitionBarrier);
 }
 
 void ParticleManager::SetTextureHandle(uint32_t textureHandle) {
@@ -457,7 +457,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	if (Particles.size()) {
 		//CD3DX12_RESOURCE_BARRIER transitionBarrier;
 		// サイズ設定
-		const UINT BufferSize = static_cast<UINT>(sizeof(VertexPos)) * numParticles;
+		const UINT BufferSize = static_cast<UINT>(sizeof(VertexPos)) * static_cast<UINT>(Particles.size());
 
 		// パーティクルデータをアップロードバッファにコピー
 		uploadBuffer->Map(0, nullptr, &mappedData);
@@ -466,7 +466,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 
 		// コピー操作
-		DirectXCore::GetInstance()->GetCommandList()->CopyBufferRegion(vertBuff.Get(), BufferSize, uploadBuffer.Get(), 0, sizeof(UINT));
+		DirectXCore::GetInstance()->GetCommandList()->CopyBufferRegion(vertBuff.Get(), 0, uploadBuffer.Get(), 0, BufferSize);
 
 
 		// パイプラインステートの設定
