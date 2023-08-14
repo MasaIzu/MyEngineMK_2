@@ -6,7 +6,10 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
-
+#include <d3d12.h>
+#include "d3dx12.h"
+#include <CreateResource.h>
+#include <combaseapi.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace std;
@@ -21,6 +24,16 @@ ComPtr<ID3D12RootSignature> ParticleManager::rootsignature;
 ComPtr<ID3D12RootSignature> ParticleManager::rootSignature;//コンピュートシェーダー用
 ComPtr<ID3D12PipelineState> ParticleManager::pipelinestate;
 ComPtr<ID3D12PipelineState> ParticleManager::pipelineState;//コンピュートシェーダー用
+
+std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> ParticleManager::m_pipelines;
+ComPtr<ID3D12DescriptorHeap> ParticleManager::m_cbvSrvUavHeap;
+
+const std::string ParticleManager::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string ParticleManager::PSO_CS_INIT = "PSO_CS_INIT";
+const std::string ParticleManager::PSO_CS_EMIT = "PSO_CS_EMIT";
+const std::string ParticleManager::PSO_CS_UPDATE = "PSO_CS_UPDATE";
+const std::string ParticleManager::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
+const std::string ParticleManager::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
 float easeOutQuint(float x)
 {
@@ -46,9 +59,6 @@ void ParticleManager::StaticInitialize(ID3D12Device* device)
 void ParticleManager::StaticFinalize()
 {
 
-	rootsignature.Reset();
-	pipelinestate.Reset();
-
 }
 
 void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
@@ -60,7 +70,7 @@ void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
 	ParticleManager::cmdList = cmdList;
 
 	// パイプラインステートの設定
-	cmdList->SetPipelineState(pipelinestate.Get());
+	cmdList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
 	// ルートシグネチャの設定
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
@@ -78,7 +88,6 @@ void ParticleManager::InitializeGraphicsPipeline()
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> gsBlob; //ジオメトリシェーダオブジェクト
-	ComPtr<ID3DBlob> csBlob; //コンピュートシェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob; // ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
 
@@ -254,39 +263,88 @@ void ParticleManager::InitializeGraphicsPipeline()
 	gpipeline.pRootSignature = rootsignature.Get();
 
 	// グラフィックスパイプラインの生成
-	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
+	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&m_pipelines[PSO_DEFAULT]));
 	assert(SUCCEEDED(result));
 
+	{
+		// カウンタ付き UAV はルートパラメータとして設定できない.
+		CD3DX12_DESCRIPTOR_RANGE uavIndexList{};
+		uavIndexList.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 1);
+		// ルートシグネチャの作成
+		std::array<CD3DX12_ROOT_PARAMETER, 3> rootParameters;
+		rootParameters[0].InitAsConstantBufferView(0); // b0: Params
+		rootParameters[1].InitAsUnorderedAccessView(0);// u0: Particles
+		rootParameters[2].InitAsDescriptorTable(1, &uavIndexList); // u1: ParticleIndexList
 
+		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
+		rootSignatureDesc.Init(
+			UINT(rootParameters.size()), rootParameters.data(),
+			1, &samplerDesc);
 
+			ComPtr<ID3DBlob> signature, errBlob;
+		D3D12SerializeRootSignature(&rootSignatureDesc,
+			D3D_ROOT_SIGNATURE_VERSION_1_0, &signature, &errBlob);
+		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	}
+
+	ComPtr<ID3DBlob> csBlobInit; //コンピュートシェーダオブジェクト
+	ComPtr<ID3DBlob> csBlobEmit;
+	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleComputeShader.hlsl",
+		L"Resources/Shaders/ShaderGpuParticle.hlsl",
 		nullptr, nullptr,
-		"main", "cs_5_0",
+		"initParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
 		0,
-		&csBlob,
+		&csBlobInit,
+		nullptr);
+	D3DCompileFromFile(
+		L"Resources/Shaders/ShaderGpuParticle.hlsl",
+		nullptr, nullptr,
+		"emitParticle", "cs_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
+		0,
+		&csBlobEmit,
+		nullptr);
+	D3DCompileFromFile(
+		L"Resources/Shaders/ShaderGpuParticle.hlsl",
+		nullptr, nullptr,
+		"updateParticle", "cs_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
+		0,
+		&csBlobUpdate,
 		nullptr);
 
-	// ルートシグネチャの作成
-	CD3DX12_ROOT_PARAMETER1 rootParameters[1];
-	rootParameters[0].InitAsUnorderedAccessView(0);  // UAVをバインド
-
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC CSrootSignatureDesc;
-	CSrootSignatureDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_NONE);
-
-	ComPtr<ID3DBlob> signature;
-	ComPtr<ID3DBlob> error;
-	D3D12SerializeVersionedRootSignature(&CSrootSignatureDesc, &signature, &error);
-	device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
-
 	// PSOの作成
+	ComPtr<ID3D12PipelineState> pipelineState;
 	D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.pRootSignature = rootSignature.Get();
-	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlob.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
 
+	//initialize用
+	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobInit.Get());
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
+	m_pipelines[PSO_CS_INIT] = pipelineState;
+
+	//emit用
+	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobEmit.Get());
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
+	m_pipelines[PSO_CS_EMIT] = pipelineState;
+
+	//update用
+	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobUpdate.Get());
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
+	m_pipelines[PSO_CS_UPDATE] = pipelineState;
+
+
+	//デスクリプタヒープ
+	// Describe and create a constant buffer view (CBV), Shader resource
+	// view (SRV), and unordered access view (UAV) descriptor heap.
+	D3D12_DESCRIPTOR_HEAP_DESC cbvSrvUavHeapDesc = {};
+	cbvSrvUavHeapDesc.NumDescriptors = 3 * 3;
+	cbvSrvUavHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvSrvUavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	device->CreateDescriptorHeap(&cbvSrvUavHeapDesc, IID_PPV_ARGS(&m_cbvSrvUavHeap));
 
 }
 
@@ -321,6 +379,46 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(VertexPos);
+
+
+
+	UINT64 bufferSize;
+	bufferSize = sizeof(GpuParticleElement) * MaxParticleCount;
+	auto resDescParticleElement = CD3DX12_RESOURCE_DESC::Buffer(
+		bufferSize,
+		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
+	);
+	m_gpuParticleElement = MyFunction::CreateResource(resDescParticleElement, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, nullptr, D3D12_HEAP_TYPE_DEFAULT);
+	m_gpuParticleElement->SetName(L"ParticleElement");
+
+	bufferSize = sizeof(UINT) * MaxParticleCount;
+	UINT uavCounterAlign = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1;
+	bufferSize = UINT64(bufferSize + uavCounterAlign) & ~static_cast<UINT64>(uavCounterAlign);
+	bufferSize += sizeof(Vector4);   // カウンタをこの場所先頭に配置.
+
+	auto resDescParticleIndexList = CD3DX12_RESOURCE_DESC::Buffer(
+		bufferSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	m_gpuParticleIndexList = MyFunction::CreateResource(resDescParticleIndexList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, nullptr, D3D12_HEAP_TYPE_DEFAULT);
+	m_gpuParticleIndexList->SetName(L"ParticleIndexList");
+
+	UINT64 offsetToCounter = bufferSize - sizeof(Vector4);
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+	uavDesc.Buffer.NumElements = MaxParticleCount;
+	// インデックス用バッファの後方でカウンタを設置する.
+	uavDesc.Buffer.CounterOffsetInBytes = offsetToCounter;
+	uavDesc.Buffer.StructureByteStride = sizeof(UINT);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle(m_cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart(), 2, device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+	
+	processedCommandsHandle_ = processedCommandsHandle;
+	device->CreateUnorderedAccessView(
+		m_gpuParticleIndexList.Get(),
+		m_gpuParticleIndexList.Get(),
+		&uavDesc, processedCommandsHandle_
+	);
 
 }
 

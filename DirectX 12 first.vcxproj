@@ -309,6 +309,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateResource.h" />
     <ClInclude Include="UserApplication\Enemy\BossEnemy.h" />
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h" />
     <ClInclude Include="UserApplication\Scene\StageSelect.h" />
@@ -378,6 +379,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateResource.cpp" />
     <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp" />
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp" />
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp" />

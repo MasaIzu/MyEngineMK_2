@@ -1,0 +1,21 @@
+#include "CreateResource.h"
+#include "DirectXCore.h"
+#include <cassert>
+
+MyFunction::ComPtr<ID3D12Resource1> MyFunction::CreateResource(const CD3DX12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES resourceStates, const D3D12_CLEAR_VALUE* clearValue, D3D12_HEAP_TYPE heapType)
+{
+    HRESULT hr;
+    ComPtr<ID3D12Resource1> ret;
+    const auto heapProps = CD3DX12_HEAP_PROPERTIES(heapType);
+    hr = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
+        &heapProps,
+        D3D12_HEAP_FLAG_NONE,
+        &desc,
+        resourceStates,
+        clearValue,
+        IID_PPV_ARGS(&ret)
+    );
+    assert(SUCCEEDED(hr));
+    return ret;
+}
+

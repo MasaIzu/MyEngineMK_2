@@ -142,6 +142,12 @@
     <Filter Include="Shaders\PostEffect">
       <UniqueIdentifier>{dfec28f9-61a5-4acb-ad9a-110be0046960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ソース ファイル\MyFunction">
+      <UniqueIdentifier>{163f556c-ff2a-440f-9b0e-6bfee9b502bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ヘッダー\MyFunction">
+      <UniqueIdentifier>{7829a3f0-eab6-4703-87e6-83838ca3eff5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -439,6 +445,9 @@
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="CreateResource.h">
+      <Filter>Engine\ヘッダー\MyFunction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -617,6 +626,9 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateResource.cpp">
+      <Filter>Engine\ソース ファイル\MyFunction</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

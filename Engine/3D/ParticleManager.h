@@ -54,17 +54,13 @@ public: // サブクラス
 		Matrix4 matBillboard;//ビルボード行列
 	};
 
-	struct ConstantBufferCS
-	{
-		UINT param[4];
-		float paramf[4];
-	};
-
-	enum class Type
-	{
-		Normal,
-		Out,
-		In,
+	struct GpuParticleElement {
+		UINT  isActive;	// 生存フラグ.
+		float lifeTime;
+		float elapsed;
+		UINT  colorIndex;
+		Vector4 position;
+		Vector4 velocity;
 	};
 
 	//// パーティクルの定義
@@ -119,6 +115,9 @@ private: // 静的メンバ変数
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 	// コンピュートシェーダー用パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelineState;
+
+	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> m_pipelines;
+
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// 頂点バッファ
@@ -128,6 +127,17 @@ private: // 静的メンバ変数
 	// アップロードバッファの作成
 	ComPtr<ID3D12Resource> uploadBuffer;
 	ComPtr<ID3D12Resource> m_cacheVertexBuffer;
+
+	ComPtr<ID3D12Resource1> m_gpuParticleIndexList;
+	ComPtr<ID3D12Resource1> m_gpuParticleElement;
+	static ComPtr<ID3D12DescriptorHeap> m_cbvSrvUavHeap;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle_;
+	static const std::string PSO_DEFAULT;
+	static const std::string PSO_CS_INIT;
+	static const std::string PSO_CS_EMIT;
+	static const std::string PSO_CS_UPDATE;
+	static const std::string PSO_DRAW_PARTICLE;
+	static const std::string PSO_DRAW_PARTICLE_USE_TEX;
 
 private:// 静的メンバ関数
 
@@ -191,6 +201,8 @@ private: // メンバ変数
 	UINT textureHandle_ = 0;
 
 	uint32_t numParticles = 50000;
+	uint32_t MaxParticleCount = 50000;
+
 	// パーティクルデータをアップロードバッファにコピー
 	void* mappedData = nullptr;
 
