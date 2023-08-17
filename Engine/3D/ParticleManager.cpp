@@ -540,26 +540,22 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	if (Particles.size()) {
 
-		CD3DX12_RESOURCE_BARRIER transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(vertBuff.Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ);
-		cmdList->ResourceBarrier(1, &transitionBarrier);
+		if (m_frameCount == 0) {
+			// Particle の初期化コード.
+			cmdList->SetComputeRootSignature(rootSignature.Get());
+			cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB[m_frameIndex]->GetGPUVirtualAddress());
+			cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+			cmdList->SetComputeRootDescriptorTable(2, m_uavParticleIndexList);
+			cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
-		// パーティクルデータをアップロードバッファにコピー
-		vertBuff->Map(0, nullptr, &mappedData);
-		memcpy(mappedData, Particles.data(), Particles.size() * sizeof(VertexPos));
-		vertBuff->Unmap(0, nullptr);
+			UINT invokeCount = MaxParticleCount / 32 + 1;
+			cmdList->Dispatch(invokeCount, 1, 1);
+		}
 
-		// パイプラインステートの設定
-		cmdList->SetPipelineState(pipelineState.Get());
-		// ルートシグネチャの設定
-		cmdList->SetComputeRootSignature(rootSignature.Get());
-		// Set the particle buffer as a UAV.
-		cmdList->SetComputeRootUnorderedAccessView(0, vertBuff->GetGPUVirtualAddress());
-
-		// コンピュートシェーダーを実行
-		cmdList->Dispatch(static_cast<UINT>(Particles.size() / 256 + 1), 1, 1);
-
+		++m_frameCount;
 	}
 
+	
 }
 
 void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame)
