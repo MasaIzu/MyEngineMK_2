@@ -210,4 +210,5 @@ private: // メンバ変数
 	ComPtr<ID3D12Fence> fence;
 	uint64_t fenceValue = 0;
 	UINT64 m_frameCount = 0;
+	static UINT m_cbvSrvUavDescriptorSize;
 };

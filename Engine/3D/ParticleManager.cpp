@@ -35,6 +35,8 @@ const std::string ParticleManager::PSO_CS_UPDATE = "PSO_CS_UPDATE";
 const std::string ParticleManager::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
 const std::string ParticleManager::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
+UINT ParticleManager::m_cbvSrvUavDescriptorSize = 0;
+
 float easeOutQuint(float x)
 {
 	return sin((x * PI) / 2);
@@ -50,6 +52,8 @@ void ParticleManager::StaticInitialize(ID3D12Device* device)
 	assert(device);
 
 	ParticleManager::device = device;
+
+	m_cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -541,11 +545,19 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	if (Particles.size()) {
 
 		if (m_frameCount == 0) {
+			UINT frameDescriptorOffset = 3;
+			D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 			// Particle の初期化コード.
 			cmdList->SetComputeRootSignature(rootSignature.Get());
-			cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB[m_frameIndex]->GetGPUVirtualAddress());
+
+			ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
+			cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+			//cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB[m_frameIndex]->GetGPUVirtualAddress());
 			cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-			cmdList->SetComputeRootDescriptorTable(2, m_uavParticleIndexList);
+			cmdList->SetComputeRootDescriptorTable(
+				2,
+				CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvUavHandle, 0 + frameDescriptorOffset, m_cbvSrvUavDescriptorSize));
 			cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
 			UINT invokeCount = MaxParticleCount / 32 + 1;
