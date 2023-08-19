@@ -33,7 +33,7 @@ AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
 [numthreads(32, 1, 1)]
 void initParticle(uint3 id : SV_DispatchThreadID)
 {
-    if (id.x < MaxParticleCount)
+    if (id.x < 50000)
     {
         uint index = id.x;
         gParticles[index].isActive = 0;
@@ -45,7 +45,7 @@ void initParticle(uint3 id : SV_DispatchThreadID)
 void main(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
-    if (index >= MaxParticleCount)
+    if (index >= 50000)
     {
         return;
     }
