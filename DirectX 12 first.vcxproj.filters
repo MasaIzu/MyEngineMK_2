@@ -403,9 +403,6 @@
     <ClInclude Include="Engine\2D\PostEffectManager.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\ComputeParticle.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\Uint32Vector2.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
@@ -584,9 +581,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2D\PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\ComputeParticle.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>

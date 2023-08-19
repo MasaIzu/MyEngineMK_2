@@ -55,11 +55,13 @@ public: // サブクラス
 	};
 
 	struct GpuParticleElement {
+		Vector3 position;
+		float scale = 1;
+		Vector4 color = { 1,1,1,1 };
 		UINT  isActive;	// 生存フラグ.
 		float lifeTime;
 		float elapsed;
 		UINT  colorIndex;
-		Vector4 position;
 		Vector4 velocity;
 	};
 

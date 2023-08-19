@@ -316,7 +316,6 @@
     <ClInclude Include="Engine\Collision\TouchableObject.h" />
     <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h" />
-    <ClInclude Include="Engine\3D\ComputeParticle.h" />
     <ClInclude Include="Engine\Math\Easing.h" />
     <ClInclude Include="Engine\3D\Light.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
@@ -386,7 +385,6 @@
     <ClCompile Include="Engine\Collision\TouchableObject.cpp" />
     <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp" />
-    <ClCompile Include="Engine\3D\ComputeParticle.cpp" />
     <ClCompile Include="Engine\Math\Easing.cpp" />
     <ClCompile Include="Engine\3D\Light.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
