@@ -17,4 +17,5 @@ namespace MyFunction {
         D3D12_HEAP_TYPE heapType
     );
 
+    void WriteToUploadHeapMemory(ID3D12Resource1* resource, uint32_t size, const void* data);
 }

@@ -49,9 +49,10 @@ public: // サブクラス
 	// 定数バッファ用データ構造体
 	struct ConstBufferData
 	{
-		//Vector4 color;	// 色 (RGBA)
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
+		UINT maxParticleCount;
+		UINT particleCount;
 	};
 
 	struct GpuParticleElement {
@@ -64,6 +65,14 @@ public: // サブクラス
 		UINT  colorIndex;
 		Vector4 velocity;
 	};
+
+	struct ShaderParameters {
+		Matrix4 mat;	// 3D変換行列
+		Matrix4 matBillboard;//ビルボード行列
+		UINT maxParticleCount;
+		UINT particleCount;
+	};
+	ShaderParameters shaderParameters;
 
 	//// パーティクルの定義
 	//struct Particle {
@@ -130,6 +139,7 @@ private: // 静的メンバ変数
 	ComPtr<ID3D12Resource> uploadBuffer;
 	ComPtr<ID3D12Resource> m_cacheVertexBuffer;
 
+	ComPtr<ID3D12Resource1> m_sceneParameterCB;
 	ComPtr<ID3D12Resource1> m_gpuParticleIndexList;
 	ComPtr<ID3D12Resource1> m_gpuParticleElement;
 	static ComPtr<ID3D12DescriptorHeap> m_cbvSrvUavHeap;

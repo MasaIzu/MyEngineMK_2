@@ -19,3 +19,14 @@ MyFunction::ComPtr<ID3D12Resource1> MyFunction::CreateResource(const CD3DX12_RES
     return ret;
 }
 
+void MyFunction::WriteToUploadHeapMemory(ID3D12Resource1* resource, uint32_t size, const void* data)
+{
+    void* mapped;
+    HRESULT hr = resource->Map(0, nullptr, &mapped);
+    if (SUCCEEDED(hr))
+    {
+        memcpy(mapped, data, size);
+        resource->Unmap(0, nullptr);
+    }
+}
+

@@ -385,7 +385,9 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(GpuParticleElement);
 
-
+	auto cbDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderParameters));
+	
+	m_sceneParameterCB = MyFunction::CreateResource(cbDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, D3D12_HEAP_TYPE_UPLOAD);
 
 	UINT64 bufferSize;
 	bufferSize = sizeof(GpuParticleElement) * MaxParticleCount;
@@ -515,7 +517,13 @@ void ParticleManager::Draw(const ViewProjection& view)
 	constMatToSend *= view.matProjection;
 	constMap->mat = constMatToSend;	// 行列の合成
 	constMap->matBillboard = view.matBillboard;
+	constMap->maxParticleCount = static_cast<UINT>(MaxParticleCount);
+	constMap->particleCount = 1;
 	constBuff->Unmap(0, nullptr);
+
+	shaderParameters.mat = constMatToSend;
+	shaderParameters.matBillboard = view.matBillboard;
+	MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
 	// nullptrチェック
 	assert(device);
@@ -528,7 +536,7 @@ void ParticleManager::Draw(const ViewProjection& view)
 	//cmdList->IASetIndexBuffer(&ibView);
 
 	// 定数バッファビューをセット
-	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
 	cmdList->SetGraphicsRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 	// シェーダリソースビューをセット
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList, 2, textureHandle_);
@@ -546,6 +554,11 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	//初期化
 	if (m_frameCount == 0) {
+		shaderParameters.maxParticleCount = MaxParticleCount;
+		shaderParameters.particleCount = 0;
+
+		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
+
 		CD3DX12_RESOURCE_BARRIER transitionBarrier[2];
 		transitionBarrier[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleElement.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		transitionBarrier[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleIndexList.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
@@ -557,7 +570,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		cmdList->SetComputeRootSignature(rootSignature.Get());
 
 
-		//cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB[m_frameIndex]->GetGPUVirtualAddress());
+		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
 		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 		cmdList->SetComputeRootDescriptorTable(
 			2,
@@ -574,7 +587,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
 		cmdList->SetComputeRootSignature(rootSignature.Get());
-		//cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB[m_frameIndex]->GetGPUVirtualAddress());
+		cmdList->SetComputeRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 		cmdList->SetComputeRootDescriptorTable(
 			2,

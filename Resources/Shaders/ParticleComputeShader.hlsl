@@ -10,21 +10,12 @@ struct GpuParticleElement
     float4 velocity;
 };
 
-cbuffer SceneParameter : register(b0)
+cbuffer ShaderParameters : register(b0)
 {
-    float4x4 view;
-    float4x4 proj;
-    float4 lightDir;
-    float4 cameraPosition;
-
-    float4 forceCenter1;
-
+    matrix mat; // 3D変換行列
+    matrix matBillboard; //ビルボード行列
     uint MaxParticleCount;
-    float frameDeltaTime;
-    uint padd0;
-    uint padd1;
-
-    float4 particleColors[8];
+    uint particleCount;
 }
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
@@ -33,10 +24,15 @@ AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
 [numthreads(32, 1, 1)]
 void initParticle(uint3 id : SV_DispatchThreadID)
 {
-    if (id.x < 50000)
+    if (id.x < MaxParticleCount)
     {
         uint index = id.x;
         gParticles[index].isActive = 0;
+        gParticles[index].position.xyz = float3(0,10,0);
+        gParticles[index].scale = 1;
+        gParticles[index].velocity.xyz = float3(0, 0.1, 0);
+        gParticles[index].lifeTime = 300;
+        gParticles[index].color = float4(1, 1, 1, 1);
         gDeadIndexList.Append(index);
     }
 }
@@ -45,7 +41,7 @@ void initParticle(uint3 id : SV_DispatchThreadID)
 void main(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
-    if (index >= 50000)
+    if (index >= MaxParticleCount)
     {
         return;
     }
@@ -53,7 +49,7 @@ void main(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
-    const float dt = 0.01666;
+    const float dt = 1;
 
     gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
     if (gParticles[index].lifeTime <= 0)
@@ -121,8 +117,8 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     }
 
     float3 velocity = float3(0, 0.1, 0);
-    float3 position = float3(0, 0, 0);
-
+    float3 position = float3(0, 20, 0);
+    
     uint seed = id.x + index * 1235;
     position.x = 0;
     position.z = 0;
@@ -136,7 +132,9 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
 
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = position;
+    gParticles[index].scale = 1;
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = 300;
+    gParticles[index].color = float4(1, 1, 1, 1);
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }
