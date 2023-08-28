@@ -143,7 +143,11 @@ private: // 静的メンバ変数
 	ComPtr<ID3D12Resource1> m_gpuParticleIndexList;
 	ComPtr<ID3D12Resource1> m_gpuParticleElement;
 	static ComPtr<ID3D12DescriptorHeap> m_cbvSrvUavHeap;
-	CD3DX12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle_;
+	D3D12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle_;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE m_handleCpu;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE m_handleGpu;
+	static UINT m_incrementSize;
+
 	static const std::string PSO_DEFAULT;
 	static const std::string PSO_CS_INIT;
 	static const std::string PSO_CS_EMIT;

@@ -28,11 +28,11 @@ void initParticle(uint3 id : SV_DispatchThreadID)
     {
         uint index = id.x;
         gParticles[index].isActive = 0;
-        gParticles[index].position.xyz = float3(0,10,0);
-        gParticles[index].scale = 1;
-        gParticles[index].velocity.xyz = float3(0, 0.1, 0);
-        gParticles[index].lifeTime = 300;
-        gParticles[index].color = float4(1, 1, 1, 1);
+        gParticles[index].position.xyz = float3(0, 10, 0);
+        //gParticles[index].scale = 1;
+        //gParticles[index].velocity.xyz = float3(0, 0.1, 0);
+        //gParticles[index].lifeTime = 300;
+        //gParticles[index].color = float4(1, 1, 1, 1);
         gDeadIndexList.Append(index);
     }
 }
@@ -116,6 +116,8 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         return;
     }
 
+    float a = index;
+    
     float3 velocity = float3(0, 0.1, 0);
     float3 position = float3(0, 20, 0);
     
@@ -127,7 +129,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     float r = nextRand(seed) * 50;
     float theta = nextRand(seed) * 3.14192 * 2.0;
     velocity.x = 0;
-    velocity.z = 0;
+    velocity.z = nextRand(seed);
     velocity.y = 0.1f;
 
     gParticles[index].isActive = 1;
@@ -135,6 +137,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].scale = 1;
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = 300;
-    gParticles[index].color = float4(1, 1, 1, 1);
+    gParticles[index].color = float4(1, 0.3, 0.3, 1);
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }
