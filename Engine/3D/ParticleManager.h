@@ -53,6 +53,7 @@ public: // サブクラス
 		Matrix4 matBillboard;//ビルボード行列
 		UINT maxParticleCount;
 		UINT particleCount;
+		Vector3 StartPos;
 	};
 
 	struct GpuParticleElement {
@@ -67,6 +68,7 @@ public: // サブクラス
 	};
 
 	struct ShaderParameters {
+		Vector4 StartPos;
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
 		UINT maxParticleCount;

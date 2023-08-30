@@ -561,6 +561,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = MaxParticleCount;
 		shaderParameters.particleCount = 0;
+		shaderParameters.StartPos = Vector4(10, 20, 0, 0);
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
@@ -590,7 +591,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
 		cmdList->SetComputeRootSignature(rootSignature.Get());
-		cmdList->SetComputeRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
+		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
 		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		cmdList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());

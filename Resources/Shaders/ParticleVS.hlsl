@@ -23,7 +23,7 @@ struct PSInput
 VSOutput main(uint vertexId : SV_VertexId)
 {
     VSOutput output = (VSOutput) 0; // ピクセルシェーダーに渡す値
-    if (vertexId >= maxParticleCount)
+    if (vertexId >= MaxParticleCount)
     {
         return output;
     }

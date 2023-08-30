@@ -1,8 +1,9 @@
 cbuffer ShaderParameters : register(b0)
 {
+    float4 StartPos;
     matrix mat; // 3D変換行列
     matrix matBillboard; //ビルボード行列
-    uint maxParticleCount;
+    uint MaxParticleCount;
     uint particleCount;
 };
 
