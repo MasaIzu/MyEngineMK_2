@@ -30,6 +30,7 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	viewProjection_ = viewProjection;
 
 	playerWorldTransForBullet.Initialize();
+	StartingPointOfGrapple.Initialize();
 
 	playerBullet = std::make_unique<PlayerBullet>();
 	playerBullet->Initialize();
@@ -102,6 +103,7 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 void Player::Update()
 {
 	isAttack = false;
+	isPressing = false;
 	if (playerMoveSpline->GetFinishSpline()) {
 		isHitRail = false;
 	}
@@ -110,9 +112,15 @@ void Player::Update()
 	}
 	//回転させる
 	PlayerRot();
-	if (playerBullet->GetExpandingBullet() == false) {
+	if (isGrapple == false) {
 		//どう動くか
 		Move();
+	}
+	else {
+
+		/*StartingPoint;*/
+		playerWorldTrans.translation_ = StartingPoint;
+		isGrapple = false;
 	}
 	//落下
 	Fall();
@@ -142,14 +150,37 @@ void Player::Update()
 
 	UpdateReticle();
 
-	if (input_->MouseInputTrigger(0)) {
-		//isPlayerSetUp = true;
-		//PlayerAttack();
-	}
 	if (input_->MouseInputing(1)) {
-		isPlayerSetUp = true;
-		isAttack = true;
-		PlayerAttack();
+		isPressing = true;
+
+		// 範囲レイキャスト
+		Ray GroundRay;
+		GroundRay.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
+		//LookRay.start.y += CameraRayCollisionRadius;
+		PlayerToAimSaiteVec = ShootVec.norm();
+		PlayerToAimSaiteVecDistance = PlayerToCameraTargetVecDistance * 1.5f;
+		GroundRay.dir = MyMath::Vec3ToVec4(PlayerToAimSaiteVec.norm());
+		RaycastHit raycastHit;
+
+		//カメラとの間に地面があれば位置を変える
+		if (CollisionManager::GetInstance()->Raycast(GroundRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToAimSaiteVecDistance)) {
+			StartingPointOfGrapple.translation_ = MyMath::Vec4ToVec3(raycastHit.inter);
+		}
+
+		StartingPointOfGrapple.TransferMatrix();
+	}
+	if (isPressing) {
+		if (input_->MouseInputTrigger(0)) {
+			isGrapple = true;
+			StartingPoint = StartingPointOfGrapple.translation_;
+		}
+	}
+	else {
+		if (input_->MouseInputing(0)) {
+			isPlayerSetUp = true;
+			isAttack = true;
+			PlayerAttack();
+		}
 	}
 	if (input_->MouseInputTrigger(1)) {
 
@@ -173,9 +204,12 @@ void Player::Update()
 void Player::Draw(ViewProjection& viewProjection_)
 {
 	//model_->Draw(DebugWorldTrans, viewProjection_);
+	if (isPressing) {
+		model_->Draw(StartingPointOfGrapple, viewProjection_);
+	}
+	playerBullet->Draw(viewProjection_);
 	model_->Draw(playerWorldTrans, viewProjection_);
 	model_->Draw(playerWorldTransHed, viewProjection_);
-	playerBullet->Draw(viewProjection_);
 }
 
 void Player::DrawSprite(ViewProjection& viewProjection_)

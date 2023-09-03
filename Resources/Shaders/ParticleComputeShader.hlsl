@@ -109,9 +109,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
 
     float a = index;
     
-    float3 velocity = float3(0, 0.1, 0);
-    float3 position = float3(0, 30, 0);
-    
     uint seed = id.x + index * 1235;
 
     float r = nextRand(seed) * 50;
@@ -122,7 +119,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
 
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(StartPos.xyz);
-    gParticles[index].scale = 1;
+    gParticles[index].scale = 0.3f;
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = 300;
     gParticles[index].color = float4(1, 1, 1, 1);

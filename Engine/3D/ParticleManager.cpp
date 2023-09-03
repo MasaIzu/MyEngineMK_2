@@ -561,7 +561,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = MaxParticleCount;
 		shaderParameters.particleCount = 0;
-		shaderParameters.StartPos = Vector4(10, 20, 0, 0);
+		shaderParameters.StartPos = Vector4(0, -40, 0, 0);
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 

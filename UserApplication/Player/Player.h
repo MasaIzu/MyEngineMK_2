@@ -71,6 +71,7 @@ private://クラス関連
 	WorldTransform playerWorldTrans;
 	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
+	WorldTransform StartingPointOfGrapple;
 	WorldTransform DebugWorldTrans;
 	ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<PlayerBullet> playerBullet;
@@ -113,6 +114,8 @@ private://プレイヤークラス変数
 	bool isCameraModeNotFree = false;
 	bool isAttack = false;
 	bool Stop = false;
+	bool isPressing = false;
+	bool isGrapple = false;
 
 	uint32_t bulletNumber = 0;
 
@@ -123,12 +126,16 @@ private://プレイヤークラス変数
 	float PlayerToCameraTargetVecDistance = 0.0f;
 	float cameraMaxDistance = 0.0f;
 	float alpha = 0.0f;
+	float PlayerToAimSaiteVecDistance = 0.0f;
+	float GrappleSpeed = 0.0f;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 Distance;
 	Vector3 DistanceNolm;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;
+	Vector3 PlayerToAimSaiteVec;
+	Vector3 StartingPoint;
 
 	Vector4 fallVec;
 };
