@@ -219,8 +219,8 @@ void GameScene::PostEffectDraw()
 
 	////パーティクル
 	ParticleManager::PreDraw(commandList);
-	ParticleMan->Draw(*viewProjection_.get());
-	player_->ParticleDraw(*viewProjection_.get());
+	//ParticleMan->Draw(*viewProjection_.get());
+	//player_->ParticleDraw(*viewProjection_.get());
 	ParticleManager::PostDraw();
 
 
@@ -267,7 +267,7 @@ void GameScene::Draw() {
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-	skydome->Draw(*viewProjection_.get());
+	//skydome->Draw(*viewProjection_.get());
 	ground->Draw(*viewProjection_.get());
 	model_->Draw(worldTransform_ ,*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
@@ -291,9 +291,9 @@ void GameScene::Draw() {
 
 	ParticleManager::PreDraw(commandList);
 	
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->ParticleDraw(*viewProjection_.get());
-	}
+	//for (BulletShotEnemy* enemy : bulletShotEnemy) {
+	//	enemy->ParticleDraw(*viewProjection_.get());
+	//}
 	//bulletShotEnemy->ParticleDraw(*viewProjection_.get());
 	
 	//ParticleMan->Draw(*viewProjection_.get());

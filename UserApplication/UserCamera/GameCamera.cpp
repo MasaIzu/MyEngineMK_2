@@ -21,11 +21,15 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 	scaleX_ = 1.0f / (float)window_width;
 	scaleY_ = 1.0f / (float)window_height;
 
+	mousePos = { 0.0f,0.0f };
+	oldMousePos = { 0.0f,0.0f };
+
 	MaxCameraTime = 400;
 	cameraTime = MaxCameraTime;
 	oldMousePos = mousePos;
 	mousePos = input_->GetMousePos();
 
+	cameraHigh = { 0,7,0 };
 }
 
 GameCamera::~GameCamera()
@@ -383,6 +387,21 @@ bool GameCamera::CheckBetweenToCameraCollider()
 	return isGroundHit;
 }
 
+float GameCamera::GetFovAngle()
+{
+	return MyMath::GetAngle(Fov);
+}
+
+float GameCamera::GetCameraDistanse()
+{
+	return PlayerToCameraVecDistance;
+}
+
+float GameCamera::GetMaxDistance()
+{
+	return cameraDistance_;
+}
+
 Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
 {
 	Vector3 eyeToTargetVec = target - eye;
@@ -409,6 +428,21 @@ Vector3 GameCamera::GetPlayerDistanceEyePos(const Vector3& playerPos_)
 	return eye;
 }
 
+void GameCamera::SetCameraMode(const bool& mode)
+{
+	cameraMode = mode;
+}
+
+void GameCamera::SetPlayerPosition(const Vector3& pos)
+{
+	playerPos_ = pos;
+}
+
+void GameCamera::SetFreeCamera(const bool& mode)
+{
+	FreeCamera = mode;
+}
+
 void GameCamera::SetCameraTargetAndPos(const Vector3& target, const Vector3& eye)
 {
 	SetTargetVec = target;
@@ -421,9 +455,9 @@ void GameCamera::CameraAngle(const float& x, const float& z)
 	angle = atan2(x, z);
 
 	if (angle < 0) {
-		angle = angle + 2 * MyMath::PI;
+		angle = angle + 2 * PI;
 	}
 
-	angle = floor(angle * 360 / (2 * MyMath::PI));
+	angle = floor(angle * 360 / (2 * PI));
 
 }

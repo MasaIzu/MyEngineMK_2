@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "WinApp.h"
-#include"MyMath.h"
+#include "MyMath.h"
 #include "CollisionManager.h"
 #include <CollisionAttribute.h>
 #include"ImGuiManager.h"
@@ -118,9 +118,7 @@ void Player::Update()
 	}
 	else {
 
-		/*StartingPoint;*/
-		playerWorldTrans.translation_ = StartingPoint;
-		isGrapple = false;
+
 	}
 	//落下
 	Fall();
@@ -150,38 +148,13 @@ void Player::Update()
 
 	UpdateReticle();
 
-	if (input_->MouseInputing(1)) {
-		isPressing = true;
 
-		// 範囲レイキャスト
-		Ray GroundRay;
-		GroundRay.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
-		//LookRay.start.y += CameraRayCollisionRadius;
-		PlayerToAimSaiteVec = ShootVec.norm();
-		PlayerToAimSaiteVecDistance = PlayerToCameraTargetVecDistance * 1.5f;
-		GroundRay.dir = MyMath::Vec3ToVec4(PlayerToAimSaiteVec.norm());
-		RaycastHit raycastHit;
+	if (input_->MouseInputing(0)) {
+		isPlayerSetUp = true;
+		isAttack = true;
+		PlayerAttack();
+	}
 
-		//カメラとの間に地面があれば位置を変える
-		if (CollisionManager::GetInstance()->Raycast(GroundRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToAimSaiteVecDistance)) {
-			StartingPointOfGrapple.translation_ = MyMath::Vec4ToVec3(raycastHit.inter);
-		}
-
-		StartingPointOfGrapple.TransferMatrix();
-	}
-	if (isPressing) {
-		if (input_->MouseInputTrigger(0)) {
-			isGrapple = true;
-			StartingPoint = StartingPointOfGrapple.translation_;
-		}
-	}
-	else {
-		if (input_->MouseInputing(0)) {
-			isPlayerSetUp = true;
-			isAttack = true;
-			PlayerAttack();
-		}
-	}
 	if (input_->MouseInputTrigger(1)) {
 
 	}
@@ -214,7 +187,7 @@ void Player::Draw(ViewProjection& viewProjection_)
 
 void Player::DrawSprite(ViewProjection& viewProjection_)
 {
-	AttackSprite->Draw(Vector2(640,360), Vector4(1, 1, 1, 1), 2);
+	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
 	Vector2 W_Fontpos = { 270,530 };
 	Vector2 A_Fontpos = { 240,560 };
 	Vector2 S_Fontpos = { 270,560 };
@@ -305,17 +278,17 @@ void Player::Move()
 			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
 		}
 		//if (onGround) {
-			if (input_->PushKey(DIK_SPACE)) {
-				playerMoveSpline->ResetNearSplineReset();
-				FirstMoveSpline->ResetNearSplineReset();
-				onGround = false;
-				const float jumpVYFist = 0.6f;
-				fallVec = { 0, jumpVYFist, 0, 0 };
-			}
+		if (input_->PushKey(DIK_SPACE)) {
+			playerMoveSpline->ResetNearSplineReset();
+			FirstMoveSpline->ResetNearSplineReset();
+			onGround = false;
+			const float jumpVYFist = 0.6f;
+			fallVec = { 0, jumpVYFist, 0, 0 };
+		}
 		//}
-		
+
 	}
-	
+
 
 
 	playerWorldTrans.translation_ += playerMoveMent;
@@ -339,7 +312,7 @@ void Player::PlayerAttack()
 	switch (AttackPhase_)
 	{
 	case Player::AttackPhase::AttackCombo1:
-		
+
 		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);
 		break;
 	case Player::AttackPhase::AttackCombo2:

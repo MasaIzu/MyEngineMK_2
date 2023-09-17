@@ -7,10 +7,10 @@
 #include "Quaternion.h"
 #include "Uint32Vector2.h"
 
+#define PI 3.1415926534f
+
 //•Ö—˜Œn‚Ü‚Æ‚ß
 namespace MyMath {
-
-	const float PI = 3.141592f;
 
 	Matrix4 Initialize();
 	Matrix4 Scale(const Vector3& scale);
@@ -66,7 +66,9 @@ namespace MyMath {
 
 	void MatrixText(Matrix4& mat);
 
+	//vec1‚ğ’†S‚Æ‚µ‚½‚Ìvec2‚ÌŠp“x‚ğo‚·
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
+	float Get2FloatAngle(const float& x, const float& y);
 	float Distance2Vec2(const Vector2& vec1, const Vector2& vec2);
 
 	Vector3 HorizontalProjection(const Vector3& startSpeed, float& G, float& flame);

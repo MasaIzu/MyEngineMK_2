@@ -10,6 +10,11 @@
 #include <Sprite.h>
 #include "SplinePosition.h"
 
+#define LENGTH 200
+#define CLENGHT (LENGTH * 2 * PI)
+#define MASS 0.1346
+#define G 9.81f
+
 class Player {
 
 public://基本関数
@@ -129,13 +134,18 @@ private://プレイヤークラス変数
 	float PlayerToAimSaiteVecDistance = 0.0f;
 	float GrappleSpeed = 0.0f;
 
+	float pendulumLength = 0.0f;
+	const float timeStep = 0.1f;
+
 	Vector3 playerMoveMent;//移動量
 	Vector3 Distance;
 	Vector3 DistanceNolm;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;
 	Vector3 PlayerToAimSaiteVec;
-	Vector3 StartingPoint;
+	//振り子角度
+	Vector3 angle;
+	Vector3 angularVelocity;
 
 	Vector4 fallVec;
 };

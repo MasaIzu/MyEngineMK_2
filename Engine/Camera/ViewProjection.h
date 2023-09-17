@@ -4,8 +4,7 @@
 #include"Matrix4.h"
 #include <d3d12.h>
 #include <wrl.h>
-
-const float PI = 3.141592f;
+#include "MyMath.h"
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {

@@ -109,6 +109,9 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
 
     float a = index;
     
+    float3 velocity = float3(0, 0.1, 0);
+    float3 position = float3(0, 30, 0);
+    
     uint seed = id.x + index * 1235;
 
     float r = nextRand(seed) * 50;

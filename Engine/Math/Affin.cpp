@@ -1,8 +1,6 @@
 #include "Affin.h"
 #include <cmath>
 
-const float PI = 3.141592f;
-
 Matrix4 AffinTrans::Initialize() {
 	Matrix4 matInitialize = {
 		1.0f, 0.0f, 0.0f, 0.0f,

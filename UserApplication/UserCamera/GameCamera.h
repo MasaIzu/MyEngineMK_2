@@ -36,19 +36,19 @@ private:
 	bool CheckBetweenToCameraCollider();
 
 public://getter
-	float GetFovAngle() { return MyMath::GetAngle(Fov); }
-	float GetCameraDistanse() const { return PlayerToCameraVecDistance; }
-	float GetMaxDistance() const { return cameraDistance_; }
-	Vector2 GetCameraAngle() const { return Vector2(mouseMoved.y - MyMath::PI, mouseMoved.x); }
+	float GetFovAngle();
+	float GetCameraDistanse();
+	float GetMaxDistance();
+	Vector2 GetCameraAngle() { return Vector2(mouseMoved.y - PI, mouseMoved.x); }
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	Vector3 GetEyeToTagetVecDistance(const float& distance) const;
 	Vector3 GetPlayerDistanceEyePos(const Vector3& playerPos_);
 	Matrix4 GetCameraRot() { return this->CameraRot; }
 
 public://setter
-	void SetCameraMode(const bool& mode) { cameraMode = mode; }
-	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
-	void SetFreeCamera(const bool& mode) { FreeCamera = mode; }
+	void SetCameraMode(const bool& mode);
+	void SetPlayerPosition(const Vector3& pos);
+	void SetFreeCamera(const bool& mode);
 	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
 
 private://クラス関連
@@ -98,18 +98,18 @@ private://プレイヤークラス変数
 
 	Uint32Vector2 windowWH;
 
-	Vector2 mousePos = { 0.0f,0.0f };
-	Vector2 oldMousePos = { 0.0f,0.0f };
+	Vector2 mousePos;
+	Vector2 oldMousePos;
 	Vector2 Mous_UP_DOWN;
 	Vector2 MouseMove;
-	Vector2 mouseMoved{ 0,MyMath::PI };
+	Vector2 mouseMoved{ 0, PI };
 
 	Vector3 rot;
 	Vector3 eye;
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
-	Vector3 cameraHigh = { 0,7,0 };
+	Vector3 cameraHigh;
 	Vector3 PlayerToCameraVec;
 	//セットされたVec
 	Vector3 SetTargetVec;

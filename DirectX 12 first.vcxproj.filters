@@ -442,7 +442,7 @@
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="CreateResource.h">
+    <ClInclude Include="Engine\Base\CreateResource.h">
       <Filter>Engine\ヘッダー\MyFunction</Filter>
     </ClInclude>
   </ItemGroup>
@@ -621,7 +621,7 @@
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="CreateResource.cpp">
+    <ClCompile Include="Engine\Base\CreateResource.cpp">
       <Filter>Engine\ソース ファイル\MyFunction</Filter>
     </ClCompile>
   </ItemGroup>

@@ -634,16 +634,31 @@ void MyMath::MatrixText(Matrix4& mat)
 
 }
 
+
 float MyMath::Get2VecAngle(const Vector3& vec1, const Vector3& vec2)
 {
 
 	float angle = atan2(vec2.x - vec1.x, vec2.z - vec1.z);
 
 	if (angle < 0) {
-		angle = angle + 2 * MyMath::PI;
+		angle = angle + 2 * PI;
 	}
 
-	angle = floor(angle * 360 / (2 * MyMath::PI));
+	angle = floor(angle * 360 / (2 * PI));
+
+	return angle;
+}
+
+float MyMath::Get2FloatAngle(const float& x, const float& y)
+{
+
+	float angle = atan2(x, y);
+
+	if (angle < 0) {
+		angle = angle + 2 * PI;
+	}
+
+	angle = floor(angle * 360 / (2 * PI));
 
 	return angle;
 }
