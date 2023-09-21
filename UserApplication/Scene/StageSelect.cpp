@@ -90,10 +90,6 @@ void StageSelect::PostEffectDraw()
 	PostEffect::SetRadialBlur(center, intensity, samples);
 	PostEffect::SetAngle(angle, angle2);
 
-	////パーティクル
-	ParticleManager::PreDraw(commandList);
-	player_->ParticleDraw(*viewProjection_.get());
-	ParticleManager::PostDraw();
 
 	PostEffect::PostDrawScene();
 }

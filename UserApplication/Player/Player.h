@@ -10,11 +10,6 @@
 #include <Sprite.h>
 #include "SplinePosition.h"
 
-#define LENGTH 200
-#define CLENGHT (LENGTH * 2 * PI)
-#define MASS 0.1346
-#define G 9.81f
-
 class Player {
 
 public://äÓñ{ä÷êî

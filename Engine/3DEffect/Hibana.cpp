@@ -1,4 +1,4 @@
-﻿#include "ParticleManager.h"
+﻿#include "Hibana.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -18,42 +18,33 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-ID3D12Device* ParticleManager::device = nullptr;
-ID3D12GraphicsCommandList* ParticleManager::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> ParticleManager::rootsignature;
-ComPtr<ID3D12RootSignature> ParticleManager::rootSignature;//コンピュートシェーダー用
-ComPtr<ID3D12PipelineState> ParticleManager::pipelinestate;
-ComPtr<ID3D12PipelineState> ParticleManager::pipelineState;//コンピュートシェーダー用
+ID3D12Device* Hibana::device = nullptr;
+ID3D12GraphicsCommandList* Hibana::cmdList = nullptr;
+ComPtr<ID3D12RootSignature> Hibana::rootsignature;
+ComPtr<ID3D12RootSignature> Hibana::rootSignature;//コンピュートシェーダー用
+ComPtr<ID3D12PipelineState> Hibana::pipelinestate;
+ComPtr<ID3D12PipelineState> Hibana::pipelineState;//コンピュートシェーダー用
 
-std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> ParticleManager::m_pipelines;
-ComPtr<ID3D12DescriptorHeap> ParticleManager::m_cbvSrvUavHeap;
+std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> Hibana::m_pipelines;
+ComPtr<ID3D12DescriptorHeap> Hibana::m_cbvSrvUavHeap;
 
-const std::string ParticleManager::PSO_DEFAULT = "PSO_DEFAULT";
-const std::string ParticleManager::PSO_CS_INIT = "PSO_CS_INIT";
-const std::string ParticleManager::PSO_CS_EMIT = "PSO_CS_EMIT";
-const std::string ParticleManager::PSO_CS_UPDATE = "PSO_CS_UPDATE";
-const std::string ParticleManager::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
-const std::string ParticleManager::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
+const std::string Hibana::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string Hibana::PSO_CS_INIT = "PSO_CS_INIT";
+const std::string Hibana::PSO_CS_EMIT = "PSO_CS_EMIT";
+const std::string Hibana::PSO_CS_UPDATE = "PSO_CS_UPDATE";
+const std::string Hibana::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
+const std::string Hibana::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
-UINT ParticleManager::m_incrementSize;
+UINT Hibana::m_incrementSize;
 
-UINT ParticleManager::m_cbvSrvUavDescriptorSize = 0;
+UINT Hibana::m_cbvSrvUavDescriptorSize = 0;
 
-float easeOutQuint(float x)
-{
-	return sin((x * PI) / 2);
-}
-float easeInQuint(float x)
-{
-	return x * x * x * x * x;
-}
-
-void ParticleManager::StaticInitialize(ID3D12Device* device)
+void Hibana::StaticInitialize(ID3D12Device* device)
 {
 	// nullptrチェック
 	assert(device);
 
-	ParticleManager::device = device;
+	Hibana::device = device;
 
 	m_cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -62,18 +53,18 @@ void ParticleManager::StaticInitialize(ID3D12Device* device)
 
 }
 
-void ParticleManager::StaticFinalize()
+void Hibana::StaticFinalize()
 {
 
 }
 
-void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void Hibana::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(ParticleManager::cmdList == nullptr);
+	assert(Hibana::cmdList == nullptr);
 
 	// コマンドリストをセット
-	ParticleManager::cmdList = cmdList;
+	Hibana::cmdList = cmdList;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
@@ -83,13 +74,13 @@ void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
-void ParticleManager::PostDraw()
+void Hibana::PostDraw()
 {
 	// コマンドリストを解除
-	ParticleManager::cmdList = nullptr;
+	Hibana::cmdList = nullptr;
 }
 
-void ParticleManager::InitializeGraphicsPipeline()
+void Hibana::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -210,9 +201,9 @@ void ParticleManager::InitializeGraphicsPipeline()
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
 	//加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
+	blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
 	////減算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//デストからソースを減算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
@@ -222,9 +213,9 @@ void ParticleManager::InitializeGraphicsPipeline()
 	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
 	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
 	////半透明合成
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
+	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
@@ -299,7 +290,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleComputeShader.hlsl",
+		L"Resources/Shaders/HibanaCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"initParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -307,7 +298,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 		&csBlobInit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleComputeShader.hlsl",
+		L"Resources/Shaders/HibanaCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"emitParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -315,7 +306,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 		&csBlobEmit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleComputeShader.hlsl",
+		L"Resources/Shaders/HibanaCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -356,12 +347,12 @@ void ParticleManager::InitializeGraphicsPipeline()
 	m_incrementSize = device->GetDescriptorHandleIncrementSize(cbvSrvUavHeapDesc.Type);
 }
 
-void ParticleManager::InitializeVerticeBuff()
+void Hibana::InitializeVerticeBuff()
 {
 
 	HRESULT result;
 
-	UINT sizeVB = static_cast<UINT>(sizeof(GpuParticleElement)) * MaxParticleCount;
+	UINT sizeVB = static_cast<UINT>(sizeof(GpuParticleElement)) * particleCount;
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -389,11 +380,11 @@ void ParticleManager::InitializeVerticeBuff()
 	vbView.StrideInBytes = sizeof(GpuParticleElement);
 
 	auto cbDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderParameters));
-	
+
 	m_sceneParameterCB = MyFunction::CreateResource(cbDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, D3D12_HEAP_TYPE_UPLOAD);
 
 	UINT64 bufferSize;
-	bufferSize = sizeof(GpuParticleElement) * MaxParticleCount;
+	bufferSize = sizeof(GpuParticleElement) * particleCount;
 	auto resDescParticleElement = CD3DX12_RESOURCE_DESC::Buffer(
 		bufferSize,
 		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS
@@ -401,7 +392,7 @@ void ParticleManager::InitializeVerticeBuff()
 	m_gpuParticleElement = MyFunction::CreateResource(resDescParticleElement, D3D12_RESOURCE_STATE_COMMON, nullptr, D3D12_HEAP_TYPE_DEFAULT);
 	m_gpuParticleElement->SetName(L"ParticleElement");
 
-	bufferSize = sizeof(UINT) * MaxParticleCount;
+	bufferSize = sizeof(UINT) * particleCount;
 	UINT uavCounterAlign = D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT - 1;
 	bufferSize = UINT64(bufferSize + uavCounterAlign) & ~static_cast<UINT64>(uavCounterAlign);
 	bufferSize += sizeof(Vector4);   // カウンタをこの場所先頭に配置.
@@ -416,7 +407,7 @@ void ParticleManager::InitializeVerticeBuff()
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
-	uavDesc.Buffer.NumElements = MaxParticleCount;
+	uavDesc.Buffer.NumElements = particleCount;
 	// インデックス用バッファの後方でカウンタを設置する.
 	uavDesc.Buffer.CounterOffsetInBytes = offsetToCounter;
 	uavDesc.Buffer.StructureByteStride = sizeof(UINT);
@@ -434,13 +425,15 @@ void ParticleManager::InitializeVerticeBuff()
 
 }
 
-void ParticleManager::SetTextureHandle(uint32_t textureHandle) {
+void Hibana::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void ParticleManager::Initialize()
+void Hibana::Initialize(uint32_t ParticleCount)
 {
 	HRESULT result;
+
+	particleCount = ParticleCount;
 
 	InitializeVerticeBuff();
 
@@ -467,7 +460,7 @@ void ParticleManager::Initialize()
 
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-	uavDesc.Buffer.NumElements = numParticles;
+	uavDesc.Buffer.NumElements = particleCount;
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 	uavDesc.Buffer.StructureByteStride = sizeof(GpuParticleElement);
 
@@ -483,7 +476,7 @@ void ParticleManager::Initialize()
 	CD3DX12_HEAP_PROPERTIES UploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
 	CD3DX12_RESOURCE_DESC UploadResourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(numParticles * sizeof(GpuParticleElement));
+		CD3DX12_RESOURCE_DESC::Buffer(particleCount * sizeof(GpuParticleElement));
 
 	// アップロードバッファの作成
 	device->CreateCommittedResource(
@@ -495,9 +488,11 @@ void ParticleManager::Initialize()
 		IID_PPV_ARGS(&uploadBuffer)
 	);
 
+	input_ = Input::GetInstance();
+
 }
 
-void ParticleManager::Update()
+void Hibana::Update()
 {
 
 	// 死んでいるパーティクルを削除
@@ -510,29 +505,17 @@ void ParticleManager::Update()
 
 }
 
-void ParticleManager::Draw(const ViewProjection& view)
+void Hibana::Draw(const ViewProjection& view)
 {
-	HRESULT result;
-	// 定数バッファへデータ転送
-	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
-	constMap->mat = constMatToSend;	// 行列の合成
-	constMap->matBillboard = view.matBillboard;
-	constMap->maxParticleCount = static_cast<UINT>(MaxParticleCount);
-	constMap->particleCount = 1;
-	constBuff->Unmap(0, nullptr);
-
 	shaderParameters.mat = constMatToSend;
 	shaderParameters.matBillboard = view.matBillboard;
 	MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
 	// nullptrチェック
 	assert(device);
-	assert(ParticleManager::cmdList);
+	assert(Hibana::cmdList);
 
 
 	// 頂点バッファの設定
@@ -547,11 +530,11 @@ void ParticleManager::Draw(const ViewProjection& view)
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList, 2, textureHandle_);
 	// 描画コマンド
 	//cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
-	cmdList->DrawInstanced(static_cast<UINT>(MaxParticleCount), 1, 0, 0);
+	cmdList->DrawInstanced(static_cast<UINT>(particleCount), 1, 0, 0);
 
 }
 
-void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+void Hibana::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
@@ -559,9 +542,8 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	//初期化
 	if (m_frameCount == 0) {
-		shaderParameters.maxParticleCount = MaxParticleCount;
-		shaderParameters.particleCount = 0;
-		shaderParameters.StartPos = Vector4(0, -40, 0, 0);
+		shaderParameters.maxParticleCount = particleCount;
+		shaderParameters.StartPos = StartPos;
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
@@ -581,7 +563,7 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
-		UINT invokeCount = MaxParticleCount / 32 + 1;
+		UINT invokeCount = particleCount / 128 + 1;
 		cmdList->Dispatch(invokeCount, 1, 1);
 	}
 
@@ -596,9 +578,24 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		cmdList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
-		UINT invokeCount = MaxParticleCount / 32 + 1;
+		if (input_->PushKey(DIK_U)) {
+			DispatchCount++;
+		}
+		if (input_->PushKey(DIK_J)) {
+			DispatchCount--;
+		}
+
+		UINT invokeCount = particleCount / 128 + 1;
+		if (DispatchCount > invokeCount) {
+			DispatchCount = invokeCount;
+		}
+		if (DispatchCount <= 0) {
+			DispatchCount = 1;
+		}
 		{
-			cmdList->Dispatch(2, 1, 1);
+			if (input_->PushKey(DIK_SPACE)) {
+				cmdList->Dispatch(invokeCount, 1, 1);
+			}
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
@@ -617,67 +614,9 @@ void ParticleManager::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 }
 
-void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame)
-{
-	if (numParticles > Particles.size()) {
-		//追加した要素の参照
-		VertexPos p;
-		//値のセットt
-		p.position = position;
-		p.velocity = velocity;
-		p.FinalVelocity = { 0,0,0 };
-		p.Frame = 0;
-		p.MaxFrame = MaxFrame;
-		p.alive = 1;
-		p.scale = 1;
-		p.color = { 1,1,1,1 };
-		p.MinusAlpha = 0.0f;
-		Particles.push_back(p);
-	}
-}
 
-void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale)
-{
-	if (numParticles > Particles.size()) {
-		//追加した要素の参照
-		VertexPos p;
-		//値のセットt
-		p.position = position;
-		p.velocity = velocity;
-		p.FinalVelocity = velocity / static_cast<float>(MaxFrame);
-		p.Frame = 0;
-		p.MaxFrame = MaxFrame;
-		p.alive = 1;
-		p.scale = scale;
-		p.color = color;
-		p.DownColor = DownColor;
-		p.MinusAlpha = color.w / static_cast<float>(MaxFrame);
-		Particles.push_back(p);
-	}
-}
 
-void ParticleManager::Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale, const float& DownScale)
-{
-	if (numParticles > Particles.size()) {
-		//追加した要素の参照
-		VertexPos p;
-		//値のセットt
-		p.position = position;
-		p.velocity = velocity;
-		p.FinalVelocity = velocity / static_cast<float>(MaxFrame);
-		p.Frame = 0;
-		p.MaxFrame = MaxFrame;
-		p.alive = 1;
-		p.scale = scale;
-		p.color = color;
-		p.DownColor = DownColor;
-		p.MinusAlpha = color.w / static_cast<float>(MaxFrame);
-		p.DownScale = DownScale;
-		Particles.push_back(p);
-	}
-}
-
-void ParticleManager::CopyData()
+void Hibana::CopyData()
 {
 
 	VertexPos* outPutDeta = nullptr;
@@ -685,5 +624,13 @@ void ParticleManager::CopyData()
 	memcpy(Particles.data(), outPutDeta, Particles.size() * sizeof(VertexPos));
 	vertBuff->Unmap(0, nullptr);
 
+}
+
+void Hibana::SetMeshPos(std::vector<MyStruct::Meshes> meshPos)
+{
+	for (size_t i = 0; i < meshPos.size(); i++) {
+		shaderParameters.meshPos[i] = meshPos[i];
+	}
+	shaderParameters.MeshCount = static_cast<UINT>(meshPos.size());
 }
 

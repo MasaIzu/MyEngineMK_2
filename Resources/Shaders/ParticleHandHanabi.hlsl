@@ -70,7 +70,21 @@ void main(uint3 id : SV_DispatchThreadID)
     //        velocity = 0;
     //    }
     //}
+#if 0
+  // フォースの処理.
+  float3 center = forceCenter1.xyz;
+  float  radius = forceCenter1.w;
 
+  float3 toCenter = center - position.xyz;
+  float L = length(toCenter);
+  if (L < radius) {
+    float velocityLen = length(velocity);
+    velocity = reflect(normalize(velocity), -normalize(toCenter));
+    velocity *= velocityLen;
+
+    position = radius * -normalize(toCenter) + center;
+  }
+#endif
 
     gParticles[index].position.xyz = position;
     //gParticles[index].velocity.xyz = velocity;
@@ -78,6 +92,7 @@ void main(uint3 id : SV_DispatchThreadID)
 
 
 ConsumeStructuredBuffer<uint> gFreeIndexList : register(u1);
+
 
 [numthreads(32, 1, 1)]
 void emitParticle(uint3 id : SV_DispatchThreadID)
@@ -96,15 +111,15 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float r = nextRand(seed) * 50;
     float theta = nextRand(seed) * 3.14192 * 2.0;
-    velocity.x = r * cos(theta);
-    velocity.z = r * sin(theta);
-    velocity.y = nextRand(seed) * 1;
+    velocity.x = nextRand(seed) / 8;
+    velocity.z = nextRand(seed) / 16;
+    velocity.y = (nextRand1(seed) / 16) + 0.2;
 
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(StartPos.xyz);
-    gParticles[index].scale = 1.0f;
+    gParticles[index].scale = 0.3f;
     gParticles[index].velocity.xyz = velocity;
-    gParticles[index].lifeTime = 100;
-    gParticles[index].color = float4(1, 1, 1, 1);
+    gParticles[index].lifeTime = 50;
+    gParticles[index].color = float4(1, 0.05, 0.05, 0.5);
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }

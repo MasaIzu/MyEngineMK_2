@@ -1,7 +1,7 @@
 #include "Framework.h"
-#include"ParticleManager.h"
 #include "MixPostEffect.h"
 #include <PostEffectManager.h>
+#include <ParticleManager.h>
 
 void Framework::Initialize()
 {
@@ -43,7 +43,7 @@ void Framework::Initialize()
 
 	fps = std::make_unique<FPS>();
 
-	ParticleManager::StaticInitialize(DirectXCore::GetInstance()->GetDevice());
+	ParticleManager::Initialize(DirectXCore::GetInstance()->GetDevice());
 
 	//ポストエフェクトの初期化処理
 	PostEffectManager::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
@@ -90,7 +90,7 @@ void Framework::Finalize()
 
 	PostEffectManager::Finalize();
 
-	ParticleManager::StaticFinalize();
+	ParticleManager::Finalize();
 
 	imGui->Finalize();
 	sceneFactory_.reset();

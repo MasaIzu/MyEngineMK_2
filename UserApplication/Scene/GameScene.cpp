@@ -40,10 +40,6 @@ void GameScene::Initialize() {
 	worldTransform_.scale_ = { 10.0f,3.0f,4.0f };
 	worldTransform_.TransferMatrix();
 
-	ParticleMan = std::make_unique<ParticleManager>();
-	ParticleMan->Initialize();
-	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
-
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0, -210.0f, -283.0f), viewProjection_.get());
 
@@ -132,12 +128,6 @@ void GameScene::Update() {
 		ImGui::End();
 	}
 
-	if (input_->PushKey(DIK_0)) {
-		ParticleMan->Add(Pos, Verocty, MaxFream);
-	}
-
-	ParticleMan->Update();
-
 	player_->SetCameraRot(gameCamera->GetCameraAngle());
 	player_->SetEyeToTagetVecDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
 	player_->SetCameraDistance(gameCamera->GetCameraDistanse());
@@ -217,12 +207,6 @@ void GameScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	////パーティクル
-	ParticleManager::PreDraw(commandList);
-	//ParticleMan->Draw(*viewProjection_.get());
-	//player_->ParticleDraw(*viewProjection_.get());
-	ParticleManager::PostDraw();
-
 
 	Model::PreDraw(commandList);
 
@@ -238,7 +222,6 @@ void GameScene::CSUpdate()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	////パーティクル
-	ParticleMan->CSUpdate(commandList);
 	player_->CSUpdate(commandList);
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		enemy->CSUpdate(commandList);
@@ -259,11 +242,6 @@ void GameScene::Draw() {
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
-	ParticleManager::PreDraw(commandList);
-
-
-
-	ParticleManager::PostDraw();
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
@@ -287,19 +265,6 @@ void GameScene::Draw() {
 
 	player_->DrawSprite(*viewProjection_.get());
 
-	//bulletShotEnemy->CSUpdate(commandList);
-
-	ParticleManager::PreDraw(commandList);
-	
-	//for (BulletShotEnemy* enemy : bulletShotEnemy) {
-	//	enemy->ParticleDraw(*viewProjection_.get());
-	//}
-	//bulletShotEnemy->ParticleDraw(*viewProjection_.get());
-	
-	//ParticleMan->Draw(*viewProjection_.get());
-	//player_->ParticleDraw(*viewProjection_.get());
-
-	ParticleManager::PostDraw();
 
 #pragma endregion
 
@@ -316,7 +281,6 @@ void GameScene::Finalize()
 
 void GameScene::CopyData()
 {
-	ParticleMan->CopyData();
 	player_->CopyParticle();
 	//bulletShotEnemy->CopyParticle();
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {

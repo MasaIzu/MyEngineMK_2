@@ -337,6 +337,9 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 			line_stream >> position.y;
 			line_stream >> position.z;
 			positions.emplace_back(position);
+			VertexPos vertPos{};
+			vertPos.pos = position;
+			onlyTriangleVertices.emplace_back(vertPos);
 		}
 		// 先頭文字列がvtならテクスチャ
 		if (key == "vt") {
@@ -376,6 +379,7 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 		// 先頭文字列がfならポリゴン（三角形）
 		if (key == "f") {
 			int faceIndexCount = 0;
+			MyStruct::Meshes meshes;
 			// 半角スペース区切りで行の続きを読み込む
 			string index_string;
 			while (getline(line_stream, index_string, ' ')) {
@@ -397,6 +401,9 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 					vertex.pos = positions[indexPosition - 1];
 					vertex.normal = normals[indexNormal - 1];
 					vertex.uv = texcoords[indexTexcoord - 1];
+					if (faceIndexCount <= 2) {
+						meshes.meshPos[faceIndexCount] = MyMath::Vec3ToVec4(vertex.pos);
+					}
 					mesh->AddVertex(vertex);
 					// エッジ平滑化用のデータを追加
 					if (smoothing) {
@@ -414,6 +421,9 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 						vertex.pos = positions[indexPosition - 1];
 						vertex.normal = { 0, 0, 1 };
 						vertex.uv = { 0, 0 };
+						if (faceIndexCount <= 2) {
+							meshes.meshPos[faceIndexCount] = MyMath::Vec3ToVec4(vertex.pos);
+						}
 						mesh->AddVertex(vertex);
 					}
 					else {
@@ -426,6 +436,9 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 						vertex.pos = positions[indexPosition - 1];
 						vertex.normal = normals[indexNormal - 1];
 						vertex.uv = { 0, 0 };
+						if (faceIndexCount <= 2) {
+							meshes.meshPos[faceIndexCount] = MyMath::Vec3ToVec4(vertex.pos);
+						}
 						mesh->AddVertex(vertex);
 						// エッジ平滑化用のデータを追加
 						if (smoothing) {
@@ -448,6 +461,7 @@ void Model::LoadModel(const std::string& modelname, bool smoothing) {
 				indexCountTex++;
 				faceIndexCount++;
 			}
+			mesheData.emplace_back(meshes);
 		}
 	}
 	file.close();

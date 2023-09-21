@@ -148,6 +148,15 @@
     <Filter Include="Engine\ヘッダー\MyFunction">
       <UniqueIdentifier>{7829a3f0-eab6-4703-87e6-83838ca3eff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ソース ファイル\3DEffect">
+      <UniqueIdentifier>{cc75097a-7c49-415a-a43d-70aa4c377209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ヘッダー\3DEffect">
+      <UniqueIdentifier>{0059b297-7582-4ac7-a5cd-5dfe17259293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Particle">
+      <UniqueIdentifier>{700420b6-d2f8-464d-8b1b-7909c8f52dfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -168,14 +177,17 @@
     <None Include="Resources\Shaders\SpriteShaderHeader.hlsli">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Resources\Shaders\Particle.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\FBX.hlsli">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\PostEffectGlow.hlsli">
       <Filter>Shaders\PostEffect</Filter>
+    </None>
+    <None Include="Resources\Shaders\Easing.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle.hlsli">
+      <Filter>Shaders\Particle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -218,22 +230,10 @@
     <FxCompile Include="Resources\Shaders\ObjGS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
@@ -241,6 +241,27 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowVS.hlsl">
       <Filter>Shaders\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Explosion.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\HibanaCS.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleHandHanabi.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
+      <Filter>Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
+      <Filter>Shaders\Particle</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,9 +415,6 @@
     <ClInclude Include="Engine\Math\Easing.h">
       <Filter>Engine\ヘッダー\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\ParticleManager.h">
-      <Filter>Engine\ヘッダー\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\2D\PostEffect.h">
       <Filter>Engine\ヘッダー\2D</Filter>
     </ClInclude>
@@ -444,6 +462,27 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\CreateResource.h">
       <Filter>Engine\ヘッダー\MyFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\Explosion.h">
+      <Filter>Engine\ヘッダー\3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\Hibana.h">
+      <Filter>Engine\ヘッダー\3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\ParticleCS.h">
+      <Filter>Engine\ヘッダー\3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h">
+      <Filter>Engine\ヘッダー\3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>ユーザーヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MyStruct.h">
+      <Filter>Engine\ヘッダー\MyFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\ParticleManager.h">
+      <Filter>Engine\ヘッダー\3DEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -546,9 +585,6 @@
     <ClCompile Include="UserApplication\Scene\SceneManager.cpp">
       <Filter>Engine\ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Scene\BaseScene.cpp">
-      <Filter>Engine\ソース ファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="UserApplication\Scene\TitleScene.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
@@ -573,13 +609,7 @@
     <ClCompile Include="Engine\Math\Easing.cpp">
       <Filter>Engine\ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\ParticleManager.cpp">
-      <Filter>Engine\ソース ファイル\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\2D\PostEffect.cpp">
-      <Filter>Engine\ソース ファイル\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\2D\PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
@@ -623,6 +653,27 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\CreateResource.cpp">
       <Filter>Engine\ソース ファイル\MyFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\Explosion.cpp">
+      <Filter>Engine\ソース ファイル\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\Hibana.cpp">
+      <Filter>Engine\ソース ファイル\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\ParticleCS.cpp">
+      <Filter>Engine\ソース ファイル\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp">
+      <Filter>Engine\ソース ファイル\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>ユーザーソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\ParticleManager.cpp">
+      <Filter>Engine\ソース ファイル\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\2D\PostEffectManager.cpp">
+      <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

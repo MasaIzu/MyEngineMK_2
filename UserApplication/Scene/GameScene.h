@@ -8,7 +8,6 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "affin.h"
-#include"ParticleManager.h"
 
 #include "BaseScene.h"
 #include "SceneManager.h"
@@ -69,7 +68,6 @@ private: // メンバ変数
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
 	std::unique_ptr<Model> model_;// 3Dモデル
 	WorldTransform worldTransform_;//ワールド変換データ
-	std::unique_ptr<ParticleManager> ParticleMan;
 	CollisionManager* collisionManager = nullptr;//当たり判定
 	SceneManager* sceneManager_ = nullptr;//シーンマネージャー
 	std::unique_ptr<GameCamera> gameCamera;

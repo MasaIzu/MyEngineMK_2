@@ -15,7 +15,7 @@
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class ParticleManager
+class ParticleCS
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -167,14 +167,16 @@ private:// 静的メンバ関数
 
 	void InitializeVerticeBuff();
 
+
+
 public: // メンバ関数
-	void Initialize();
+	void Initialize(uint32_t ParticleCount);
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
 
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList ,Vector4 StartPos);
 
 	/// <summary>
 	/// 描画
@@ -185,15 +187,10 @@ public: // メンバ関数
 
 	size_t GetParticlesListSize() { return Particles.size(); }
 
-	
-	void Add(Vector3& position,Vector3& velocity, uint32_t& MaxFrame);
-	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color,Vector4& DownColor, const float& scale);
-	void Add(Vector3& position, Vector3& velocity, uint32_t& MaxFrame, Vector4& color, Vector4& DownColor, const float& scale, const float& DownScale);
-
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
 
-	
+
 
 
 private: // メンバ変数
@@ -229,4 +226,6 @@ private: // メンバ変数
 	uint64_t fenceValue = 0;
 	UINT64 m_frameCount = 0;
 	static UINT m_cbvSrvUavDescriptorSize;
+
+	uint32_t particleCount;
 };

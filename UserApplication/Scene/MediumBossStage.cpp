@@ -1,6 +1,7 @@
 #include "MediumBossStage.h"
 #include "MyMath.h"
 #include <PostEffect.h>
+#include <ParticleManager.h>
 
 MediumBossStage::MediumBossStage()
 {
