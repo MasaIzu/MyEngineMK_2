@@ -27,7 +27,7 @@ void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 	}
 }
 
-void MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
+bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 {
 	if (isStart == false) {
 		isStart = true;
@@ -45,10 +45,13 @@ void MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 		}
 		else {
 
+			return true;
 		}
 	}
 
 	WorldTransUpdate();
+
+	return false;
 }
 
 void MiddleBossEnemy::WorldTransUpdate()

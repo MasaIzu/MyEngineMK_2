@@ -61,6 +61,8 @@ private:
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 
+	bool VsBoss = false;
+
 	int shadeNumber = 3;
 	int range = 0;//‚Ú‚©‚µ‹­“x
 	int samples = 5;

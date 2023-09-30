@@ -15,7 +15,7 @@ public://äÓñ{ä÷êî
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 
-	void MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
+	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 
 private://ä÷êî
 

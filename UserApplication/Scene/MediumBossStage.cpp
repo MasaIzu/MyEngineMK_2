@@ -75,11 +75,16 @@ void MediumBossStage::Update()
 
 	bossEnemy->StagingUpdate();
 
-	if (bossEnemy->GetFinishSpline()) {
-		Vector3 end = Vector3(0, 10, 150);
-		if (bossEnemy->GetBodyNoAlpha()) {
-			middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
+	if (VsBoss == false) {
+		if (bossEnemy->GetFinishSpline()) {
+			Vector3 end = Vector3(0, 10, 150);
+			if (bossEnemy->GetBodyNoAlpha()) {
+				VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
+			}
 		}
+	}
+	else {
+		middleBossEnemy->Update();
 	}
 
 	if (player_->GetPlayerPos().y < -250.0f) {
