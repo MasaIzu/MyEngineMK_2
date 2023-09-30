@@ -129,7 +129,7 @@ void PlayerBullet::BulletUpdate()
 				playerBulletMoveMent[i] = /*MyMath::HorizontalProjection(*/BulletVector[i] * playerBulletSpeed[i]/*, G, flame[i])*/;
 			}
 			else {
-				playerBulletMoveMent[i] = MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed[i], G, flame[i]);
+				playerBulletMoveMent[i] = MyMath::HorizontalProjection(BulletVector[i] * playerBulletSpeed[i], g, flame[i]);
 			}
 			if (BulletCollider[i]->GetSphereMeshHit()) {
 				isBulletAlive[i] = false;

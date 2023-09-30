@@ -45,6 +45,9 @@ void MediumBossStage::Initialize()
 	bossEnemy->Initialize(levelData->GetBossSpline()[0], viewProjection_.get());
 	bossEnemy->SetStageMoveSpline(levelData->GetBossSpline());
 
+	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
+
+
 	sceneManager_ = SceneManager::GetInstance();
 	collisionManager = CollisionManager::GetInstance();
 }
@@ -73,7 +76,10 @@ void MediumBossStage::Update()
 	bossEnemy->StagingUpdate();
 
 	if (bossEnemy->GetFinishSpline()) {
-		//sceneManager_->ChangeScene("STAGESELECT");
+		Vector3 end = Vector3(0, 10, 150);
+		if (bossEnemy->GetBodyNoAlpha()) {
+			middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
+		}
 	}
 
 	if (player_->GetPlayerPos().y < -250.0f) {
@@ -114,6 +120,8 @@ void MediumBossStage::Draw()
 
 	bossEnemy->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
+
+	middleBossEnemy->Draw(*viewProjection_.get());
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 

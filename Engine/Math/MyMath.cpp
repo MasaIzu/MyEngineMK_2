@@ -670,13 +670,13 @@ float MyMath::Distance2Vec2(const Vector2& vec1, const Vector2& vec2)
 	return sqrtf(x + y);
 }
 
-Vector3 MyMath::HorizontalProjection(const Vector3& startSpeed, float& G, float& flame)
+Vector3 MyMath::HorizontalProjection(const Vector3& startSpeed, float& g, float& flame)
 {
 	Vector3 speed;
 
 	speed = startSpeed;
 	//速度を計算(鉛直投げ上げ)
-	speed.y = startSpeed.y - G * (static_cast<float>(flame) / 60.0f);
+	speed.y = startSpeed.y - g * (static_cast<float>(flame) / 60.0f);
 
 
 	//フレームを追加

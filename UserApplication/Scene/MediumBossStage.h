@@ -8,6 +8,7 @@
 #include "CollisionManager.h"
 #include "BossEnemy.h"
 #include "Skydome.h"
+#include "MiddleBossEnemy.h"
 
 // タイトルシーン
 class MediumBossStage : public BaseScene
@@ -58,6 +59,7 @@ private:
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<BossEnemy> bossEnemy;
 	std::unique_ptr<Skydome> skydome;
+	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

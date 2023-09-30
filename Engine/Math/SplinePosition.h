@@ -84,6 +84,7 @@ public://Getter
 	bool GetHowReturnIndex(const uint32_t& HowIndex)const;
 	size_t GetNowIndex()const { return startIndex; }
 	Vector3 GetSplineVecPoint(const uint32_t& point) { return points[point]; }
+	Vector3 GetFinalSplineVecPoint() { return points[points.size() - 1]; }
 public://ŒöŠJ•Ï”
 	Vector3 NowPos;
 

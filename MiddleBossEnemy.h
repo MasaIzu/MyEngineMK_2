@@ -5,39 +5,30 @@
 #include <Input.h>
 #include "SplinePosition.h"
 
-class BossEnemy {
+class MiddleBossEnemy {
 
 public://基本関数
-	BossEnemy();
-	~BossEnemy();
+	MiddleBossEnemy();
+	~MiddleBossEnemy();
 
-	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
+	void Initialize(const Vector3& Pos);
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 
-
-	//パーティクルを出す用
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
-	void ParticleDraw(ViewProjection& viewProjection_);
-	void CopyParticle();
-
-	//演出用動き
-	void StagingUpdate();
+	void MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 
 private://関数
-	
+
 	void WorldTransUpdate();//移動の値更新
 
 public://Setter
-	
+
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }
 
 public://Getter
 
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return MoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetFinishSpline()const { return MoveSpline->GetFinishSpline(); }
-	bool GetBodyNoAlpha()const;
-	Vector3 GetSplinePos()const { return MoveSpline->GetFinalSplineVecPoint(); }
 
 private://const関連
 	static const uint32_t BossEnemyBodyCount = 20;
@@ -45,7 +36,7 @@ private://const関連
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
-	WorldTransform BossWorldTrans[BossEnemyBodyCount];
+	WorldTransform BossWorldTrans;
 
 	WorldTransform DebugWorldTrans;
 	ViewProjection* viewProjection_ = nullptr;
@@ -61,9 +52,15 @@ private://別クラスから値をもらう
 
 private://EnemyBossクラス変数
 
+	bool isStart = false;
+	bool isSporn = false;
+
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
+	float MovieUpdateTimes = 0.0f;
 
 	Vector3 BonePos;
+	Vector3 EndPos;
+	Vector3 Velocity;
 
 };

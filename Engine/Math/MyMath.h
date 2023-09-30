@@ -9,6 +9,11 @@
 
 #define PI 3.1415926534f
 
+#define LENGTH      5.0                 // •R‚Ì’·‚³
+#define CLENGTH     (LENGTH * 2.0 * PI)   // •R‚ğL‚Î‚µ‚Äˆêü‚³‚¹‚½ê‡‚Éo—ˆ‚é‰~‚Ì‰~ü‚Ì’·‚³
+#define MASS        0.1346               // ‚Ô‚ç‰º‚ª‚Á‚Ä‚¢‚é•¨‚Ì¿—Ê
+#define G           9.81                // d—Í‰Á‘¬“x
+
 //•Ö—˜Œn‚Ü‚Æ‚ß
 namespace MyMath {
 
@@ -71,7 +76,7 @@ namespace MyMath {
 	float Get2FloatAngle(const float& x, const float& y);
 	float Distance2Vec2(const Vector2& vec1, const Vector2& vec2);
 
-	Vector3 HorizontalProjection(const Vector3& startSpeed, float& G, float& flame);
+	Vector3 HorizontalProjection(const Vector3& startSpeed, float& g, float& flame);
 
 	//ƒ‰ƒ“ƒ_ƒ€ŠÖŒW
 	uint32_t Random(const uint32_t& low, const uint32_t& high);

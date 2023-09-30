@@ -29,10 +29,6 @@
 #include <Explosion.h>
 #include <Hibana.h>
 
-#define LENGTH      200.0                 // 紐の長さ
-#define CLENGTH     (LENGTH * 2.0 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
-#define MASS        0.1346               // ぶら下がっている物の質量
-#define G           9.81                // 重力加速度
 
 /// <summary>
 /// ゲームシーン

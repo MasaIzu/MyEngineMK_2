@@ -37,7 +37,7 @@ void DebugScene::Initialize() {
 
 
 	// 初期位置は軸の真下から左方向に45度傾いた位置
-	x = CLENGTH / 8.0;
+	x = (100.0 * 2.0 * PI) / 4.0;
 
 	// 初速度は０
 	speed = 0.0;
@@ -48,7 +48,7 @@ void DebugScene::Update() {
 
 	// 公式に従って速度を加算
 	// MASSの値を小さくするとゆっくり動く
-	speed += -MASS * G * sin(x / LENGTH);
+	speed += -MASS * G * sin(x / 100.0);
 
 	// 速度に従って円上の座標を変更
 	x += speed;
@@ -56,11 +56,11 @@ void DebugScene::Update() {
 	// 軸を原点とした場合のぶら下がっている物の座標を算出
 	// このままだと－45～45度の振り子になるので
 	// 時計回りに90度（PI/2.0）回転
-	Angle = x / LENGTH + PI / 2.0;
+	Angle = x / 200.0 + PI / 2.0;
 
 	// 求めた角度から軸を原点とした円周上の座標を取得
-	nx = static_cast<float>(cos(Angle) * LENGTH);
-	ny = static_cast<float>(sin(Angle) * LENGTH);
+	nx = static_cast<float>(cos(Angle) * 100.0);
+	ny = static_cast<float>(sin(Angle) * 100.0);
 
 
 	worldTransform_.translation_ = Vector3(jiku_x + nx, -(jiku_y + ny), jiku_x + nx);
@@ -69,6 +69,12 @@ void DebugScene::Update() {
 
 	viewProjection_->target.y = -250.0f;
 	viewProjection_->UpdateMatrix();
+
+
+	ImGui::Begin("XXXXX");
+	ImGui::Text("x = %lf", x);
+
+	ImGui::End();
 
 	if (shadeNumber == 0) {
 		ImGui::Begin("Not");

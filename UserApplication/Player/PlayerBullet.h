@@ -99,7 +99,7 @@ private://プレイヤークラス変数
 	float PlayerBulletMakeParticleSpeed = 0.2f;
 	float PlayerParticleDieSpeed = 0.2f;
 	float flame[AllBulletCount];
-	float G = 3.0f;//重力
+	float g = 3.0f;//重力
 
 	Vector3 playerBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向

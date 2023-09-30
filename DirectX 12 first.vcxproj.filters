@@ -484,6 +484,9 @@
     <ClInclude Include="Engine\3DEffect\ParticleManager.h">
       <Filter>Engine\ヘッダー\3DEffect</Filter>
     </ClInclude>
+    <ClInclude Include="MiddleBossEnemy.h">
+      <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -674,6 +677,9 @@
     </ClCompile>
     <ClCompile Include="Engine\2D\PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="MiddleBossEnemy.cpp">
+      <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

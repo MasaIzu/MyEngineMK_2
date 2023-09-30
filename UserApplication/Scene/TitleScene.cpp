@@ -4,7 +4,7 @@ void TitleScene::Initialize()
 {
 	input = Input::GetInstance();
 
-	loserTexture_ = TextureManager::Load("kyomu.png");
+	loserTexture_ = TextureManager::Load("sprite/Title.png");
 	sprite_=  Sprite::Create(loserTexture_);
 	sceneManager_ = SceneManager::GetInstance();
 
@@ -14,7 +14,7 @@ void TitleScene::Update()
 {
 	if (input->TriggerKey(DIK_SPACE))
 	{
-		sceneManager_->ChangeScene("GAMEPLAY");
+		sceneManager_->ChangeScene("STAGESELECT");
 	}
 }
 
