@@ -335,7 +335,9 @@
     <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h" />
     <ClInclude Include="Engine\3DEffect\ParticleManager.h" />
     <ClInclude Include="Engine\Base\CreateResource.h" />
+    <ClInclude Include="MultiBullet.h" />
     <ClInclude Include="MiddleBossEnemy.h" />
+    <ClInclude Include="MissileBullet.h" />
     <ClInclude Include="MyStruct.h" />
     <ClInclude Include="UserApplication\Enemy\BossEnemy.h" />
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h" />
@@ -412,7 +414,9 @@
     <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleManager.cpp" />
     <ClCompile Include="Engine\Base\CreateResource.cpp" />
+    <ClCompile Include="MultiBullet.cpp" />
     <ClCompile Include="MiddleBossEnemy.cpp" />
+    <ClCompile Include="MissileBullet.cpp" />
     <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp" />
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp" />
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp" />

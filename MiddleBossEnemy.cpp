@@ -12,16 +12,38 @@ MiddleBossEnemy::~MiddleBossEnemy()
 {
 }
 
-void MiddleBossEnemy::Initialize(const Vector3& Pos)
+void MiddleBossEnemy::Initialize(Player* player)
 {
+	multiBullet = std::make_unique<MultiBullet>();
+	missileBullet = std::make_unique<MissileBullet>();
+	this->player = player;
 }
 
 void MiddleBossEnemy::Update()
 {
+	if (isStart) {
+		if (BulletCoolTime > 0) {
+			BulletCoolTime--;
+		}
+		else {
+			BulletCoolTime = 5;
+
+			Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
+			Velocity.normalize();
+			float BulletSpeed = 6.0f;
+
+			multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
+			missileBullet->MakeBullet(BossWorldTrans.translation_);
+		}
+		multiBullet->Update();
+		missileBullet->Update(player->GetPlayerPos());
+	}
 }
 
 void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 {
+	multiBullet->Draw(viewProjection_);
+	missileBullet->Draw(viewProjection_);
 	if (isSporn) {
 		model_->Draw(BossWorldTrans, viewProjection_);
 	}
@@ -29,8 +51,7 @@ void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 {
-	if (isStart == false) {
-		isStart = true;
+	if (isSporn == false) {
 		isSporn = true;
 		BossWorldTrans.translation_ = StartPos;
 		this->EndPos = EndPos;
@@ -44,8 +65,8 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 			BossWorldTrans.translation_ += Velocity;
 		}
 		else {
-
-			return true;
+			isStart = true;
+			return isStart;
 		}
 	}
 

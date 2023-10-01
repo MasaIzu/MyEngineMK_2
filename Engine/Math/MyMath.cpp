@@ -685,6 +685,11 @@ Vector3 MyMath::HorizontalProjection(const Vector3& startSpeed, float& g, float&
 	return speed;
 }
 
+const Vector3 MyMath::lerp(const Vector3& start, const Vector3& end, const float t) {
+
+	return start * (1.0f - t) + end * t;
+}
+
 uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;
@@ -704,9 +709,39 @@ Vector3 MyMath::RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2
 	return RandVec;
 }
 
+Vector3 MyMath::RandomCenterVec3(const uint32_t& low, const uint32_t& high)
+{
+	float half = static_cast<float>(high - low) / 2.0f;
+	uint32_t vecX = Random(low, high);
+	uint32_t vecY = Random(low, high);
+	uint32_t vecZ = Random(low, high);
+
+	Vector3 RandVec = castVec(vecX, vecY, vecZ);
+	RandVec = Vector3(RandVec.x - half, RandVec.y - half, RandVec.z - half);
+
+	return RandVec;
+}
+
+Vector3 MyMath::RandomCenterVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh)
+{
+	Vector3 Half;
+	Half.x = static_cast<float>(RLowAndHigh.y - RLowAndHigh.x) / 2.0f;
+	Half.y = static_cast<float>(GLowAndHigh.y - GLowAndHigh.x) / 2.0f;
+	Half.z = static_cast<float>(BLowAndHigh.y - BLowAndHigh.x) / 2.0f;
+
+	uint32_t vecX = Random(RLowAndHigh.x, RLowAndHigh.y);
+	uint32_t vecY = Random(GLowAndHigh.x, GLowAndHigh.y);
+	uint32_t vecZ = Random(BLowAndHigh.x, BLowAndHigh.y);
+
+	Vector3 RandVec = castVec(vecX, vecY, vecZ);
+	RandVec = Vector3(RandVec.x - Half.x, RandVec.y - Half.y, RandVec.z - Half.z);
+
+	return RandVec;
+}
+
 Vector3 MyMath::RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high)
 {
-	uint32_t half = (high - low) / 2;
+	float half = static_cast<float>(high - low) / 2.0f;
 	uint32_t vecX = Random(low, high);
 	uint32_t vecY = Random(low, high);
 	uint32_t vecZ = Random(low, high);

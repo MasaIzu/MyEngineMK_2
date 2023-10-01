@@ -4,6 +4,9 @@
 #include "WorldTransform.h"
 #include <Input.h>
 #include "SplinePosition.h"
+#include "MultiBullet.h"
+#include "Player.h"
+#include "MissileBullet.h"
 
 class MiddleBossEnemy {
 
@@ -11,7 +14,7 @@ public://基本関数
 	MiddleBossEnemy();
 	~MiddleBossEnemy();
 
-	void Initialize(const Vector3& Pos);
+	void Initialize(Player* player);
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 
@@ -44,16 +47,22 @@ private://クラス関連
 	//スプライン
 	std::unique_ptr<SplinePosition> MoveSpline;//途中のスプライン
 
+	//弾
+	std::unique_ptr<MultiBullet> multiBullet;
+	std::unique_ptr<MissileBullet> missileBullet;
+
 private://イーナムクラス
 
 
 private://別クラスから値をもらう
-
+	Player* player = nullptr;
 
 private://EnemyBossクラス変数
 
 	bool isStart = false;
 	bool isSporn = false;
+
+	uint32_t BulletCoolTime = 0;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;

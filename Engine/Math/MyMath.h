@@ -78,9 +78,13 @@ namespace MyMath {
 
 	Vector3 HorizontalProjection(const Vector3& startSpeed, float& g, float& flame);
 
+	const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
+
 	//ƒ‰ƒ“ƒ_ƒ€ŠÖŒW
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
+	Vector3 RandomCenterVec3(const uint32_t& low, const uint32_t& high);
+	Vector3 RandomCenterVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
 	Vector3 RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high);
 	Vector3 castVec(const uint32_t& x, const uint32_t& y, const uint32_t& z);
 };

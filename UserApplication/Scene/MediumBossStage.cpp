@@ -46,7 +46,7 @@ void MediumBossStage::Initialize()
 	bossEnemy->SetStageMoveSpline(levelData->GetBossSpline());
 
 	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
-
+	middleBossEnemy->Initialize(player_.get());
 
 	sceneManager_ = SceneManager::GetInstance();
 	collisionManager = CollisionManager::GetInstance();

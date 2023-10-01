@@ -157,6 +157,12 @@
     <Filter Include="Shaders\Particle">
       <UniqueIdentifier>{700420b6-d2f8-464d-8b1b-7909c8f52dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ユーザーヘッダー ファイル\Bullet">
+      <UniqueIdentifier>{7f33b210-62a5-410d-aa5f-fcd257a19a97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ユーザーソース ファイル\Bullet">
+      <UniqueIdentifier>{2d6a7d8b-4c95-47f3-9d82-68590bf43c63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -487,6 +493,12 @@
     <ClInclude Include="MiddleBossEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="MissileBullet.h">
+      <Filter>ユーザーヘッダー ファイル\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiBullet.h">
+      <Filter>ユーザーヘッダー ファイル\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -680,6 +692,12 @@
     </ClCompile>
     <ClCompile Include="MiddleBossEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileBullet.cpp">
+      <Filter>ユーザーソース ファイル\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiBullet.cpp">
+      <Filter>ユーザーソース ファイル\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
