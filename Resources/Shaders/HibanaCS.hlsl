@@ -53,7 +53,7 @@ void main(uint3 id : SV_DispatchThreadID)
     }
 
   // 生き残っているパーティクルを動かす.
-    //float3 velocity = gParticles[index].velocity.xyz;
+    float3 velocity = gParticles[index].velocity.xyz;
     float3 position = gParticles[index].position.xyz;
 
     //float4 color = gParticles[index].color;
@@ -63,6 +63,12 @@ void main(uint3 id : SV_DispatchThreadID)
     //scale -= 0.1;
     
     float3 gravity = float3(0, -98.0, 0);
+    
+    if (Shot == 1)
+    {
+        position += velocity;
+    }
+    
     //position += velocity;
     //velocity += gravity * dt;
 
@@ -143,10 +149,19 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float3 randomPoint = triangleVertices[0] + sqrtRandomWeight1 * (1.0f - randomWeight2) * edge1 + sqrtRandomWeight1 * randomWeight2 * edge2;
     
+    float3 velocity;
+    
+    float r = nextRand(seed) * 50;
+    float theta = nextRand(seed) * 3.14192 * 2.0;
+    velocity.x = nextRand(seed) / 4;
+    velocity.z = nextRand(seed) / 4;
+    velocity.y = (nextRand(seed) / 4);
+    
     gParticles[id.x].isActive = 1;
     gParticles[id.x].position.xyz = Pos + randomPoint;
     gParticles[id.x].scale = 0.1;
+    gParticles[id.x].velocity.xyz = velocity;
     gParticles[id.x].lifeTime = 1000;
-    gParticles[id.x].color = float4(0.9, 0.01, 0.01, 1.0);
+    gParticles[id.x].color = float4(1.0, 1.0, 1.0, 1.0);
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }

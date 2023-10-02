@@ -593,9 +593,10 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
 			DispatchCount = 1;
 		}
 		{
-			if (input_->PushKey(DIK_SPACE)) {
-				cmdList->Dispatch(invokeCount, 1, 1);
+			if (input_->PushKey(DIK_G)) {
+				shaderParameters.Shot = 1;
 			}
+			cmdList->Dispatch(invokeCount, 1, 1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {

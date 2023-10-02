@@ -1,4 +1,6 @@
 #include "MiddleBossEnemy.h"
+#include <CollisionAttribute.h>
+#include <SphereCollider.h>
 
 MiddleBossEnemy::MiddleBossEnemy()
 {
@@ -17,6 +19,12 @@ void MiddleBossEnemy::Initialize(Player* player)
 	multiBullet = std::make_unique<MultiBullet>();
 	missileBullet = std::make_unique<MissileBullet>();
 	this->player = player;
+
+	// コリジョンマネージャに追加
+	MiddleBossCollider = new SphereCollider(Vector4(0, Radius, 0, 0), Radius);
+	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider);
+	MiddleBossCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
+	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 }
 
 void MiddleBossEnemy::Update()
@@ -35,14 +43,29 @@ void MiddleBossEnemy::Update()
 			multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
 			missileBullet->MakeBullet(BossWorldTrans.translation_);
 		}
+
+		if (MiddleBossCollider->GetHit()) {
+			MiddleBossCollider->Reset();
+			MiddleBossHp--;
+		}
+
+		if (MiddleBossHp > 0) {
+			
+		}
+		else {
+			isDead = true;
+		}
+
 		multiBullet->Update();
 		missileBullet->Update(player->GetPlayerPos());
+
+		MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 	}
 }
 
 void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 {
-	//multiBullet->Draw(viewProjection_);
+	multiBullet->Draw(viewProjection_);
 	missileBullet->Draw(viewProjection_);
 	if (isSporn) {
 		model_->Draw(BossWorldTrans, viewProjection_);

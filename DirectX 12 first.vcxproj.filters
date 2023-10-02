@@ -499,6 +499,9 @@
     <ClInclude Include="MultiBullet.h">
       <Filter>ユーザーヘッダー ファイル\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="ClearScene.h">
+      <Filter>ユーザーヘッダー ファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -698,6 +701,9 @@
     </ClCompile>
     <ClCompile Include="MultiBullet.cpp">
       <Filter>ユーザーソース ファイル\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearScene.cpp">
+      <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

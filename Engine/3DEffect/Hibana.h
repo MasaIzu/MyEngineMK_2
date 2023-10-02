@@ -78,7 +78,8 @@ public: // サブクラス
 		Matrix4 matBillboard;//ビルボード行列
 		UINT maxParticleCount;
 		UINT MeshCount;
-		uint64_t pad;
+		uint32_t Shot;
+		uint32_t pad;
 		MyStruct::Meshes meshPos[1000];
 	};
 	ShaderParameters shaderParameters;

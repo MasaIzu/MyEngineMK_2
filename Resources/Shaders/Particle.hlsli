@@ -17,7 +17,8 @@ cbuffer ShaderParameters : register(b0)
     matrix matBillboard : packoffset(c5); //ビルボード行列
     uint MaxParticleCount : packoffset(c9);
     uint verticeCount : packoffset(c9.y);
-    uint2 pad : packoffset(c9.z);
+    uint Shot : packoffset(c9.z);
+    uint pad : packoffset(c9.w);
     MeshPos meshPos[1000] : packoffset(c10);
 };
 

@@ -328,6 +328,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
     <ClInclude Include="Engine\3DEffect\Hibana.h" />
@@ -406,6 +407,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />
     <ClCompile Include="Engine\3DEffect\Explosion.cpp" />

@@ -4,6 +4,7 @@
 #include "StageSelect.h"
 #include "MediumBossStage.h"
 #include "DebugScene.h"
+#include "ClearScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {
@@ -25,6 +26,10 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
     else if (sceneName == "Debug") {
         newScene = new DebugScene();
     }
+    else if (sceneName == "ClearScene") {
+        newScene = new ClearScene();
+    }
+
 
     return newScene;
 }

@@ -168,6 +168,7 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 			if (isBulletAlive[i] == false) {
 				isBulletAlive[i] = true;
 				playerBulletSpeed[i] = 10.0f;
+				BulletLifeTime[i] = MaxBulletLifeTime;
 				playerBulletWorldTrans[i].translation_ = MakeBulletPos;
 				BulletVector[i] = BulletVec;
 				BulletSpeedDownTime[i] = static_cast<uint32_t>(Distance / playerBulletSpeed[i]);
@@ -243,6 +244,14 @@ void PlayerBullet::CheckBulletAlive()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
+
+			if (BulletLifeTime[i] > 0) {
+				BulletLifeTime[i]--;
+			}
+			else {
+				isBulletAlive[i] = false;
+			}
+
 			if (BulletSpeedDownTime[i] <= 0) {
 				isBulletDownSpeed[i] = true;
 				if (playerBulletSpeed[i] > 2.0f) {

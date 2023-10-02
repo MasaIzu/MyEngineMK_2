@@ -82,7 +82,7 @@ private://プレイヤークラス変数
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletSpeedDownTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 30;
+	uint32_t MaxBulletLifeTime = 60;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 7;
 	uint32_t ParticleFile = 60;

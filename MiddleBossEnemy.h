@@ -33,6 +33,8 @@ public://Getter
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return MoveSpline->GetHowReturnIndex(HowIndex); }
 	bool GetFinishSpline()const { return MoveSpline->GetFinishSpline(); }
 
+	bool GetIsDead()const { return isDead; }
+
 private://const関連
 	static const uint32_t BossEnemyBodyCount = 20;
 
@@ -51,6 +53,9 @@ private://クラス関連
 	std::unique_ptr<MultiBullet> multiBullet;
 	std::unique_ptr<MissileBullet> missileBullet;
 
+	// コライダー
+	BaseCollider* MiddleBossCollider = nullptr;
+
 private://イーナムクラス
 
 
@@ -61,12 +66,15 @@ private://EnemyBossクラス変数
 
 	bool isStart = false;
 	bool isSporn = false;
+	bool isDead = false;
 
 	uint32_t BulletCoolTime = 0;
+	uint32_t MiddleBossHp = 20;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;
+	float Radius = 10.0f;
 
 	Vector3 BonePos;
 	Vector3 EndPos;
