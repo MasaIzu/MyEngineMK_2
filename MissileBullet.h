@@ -49,6 +49,7 @@ private://const関連
 
 private://クラス関連
 	std::unique_ptr<Model> model_;
+	Input* input_ = nullptr;
 	WorldTransform EnemyBulletWorldTrans[AllBulletCount];
 
 	//当たり判定
@@ -63,6 +64,7 @@ private://クラス変数
 	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
 	bool isStartTracking[AllBulletCount];
+	bool isNearPlayer[AllBulletCount];
 
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
@@ -78,11 +80,10 @@ private://クラス変数
 	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
 	float EnemyBulletMaxRadius = 5.0f;
-	float EnemyParticleSpeed = 0.02f;
-	float EnemyParticleDieSpeed = 0.2f;
+	float LarpT = 0.0f;
+	float BulletSpeed = 0.0f;
 
-	Vector3 EnemyBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向
-	Vector3 BulletOldPos[AllBulletCount];//1フレーム前のポジション
-	Vector3 BulletTrackingStartPos[AllBulletCount];
+	Vector3 BulletOldPos[AllBulletCount];
+	Vector3 BulletVelocity[AllBulletCount];
 };

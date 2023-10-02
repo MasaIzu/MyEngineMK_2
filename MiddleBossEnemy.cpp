@@ -42,7 +42,7 @@ void MiddleBossEnemy::Update()
 
 void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 {
-	multiBullet->Draw(viewProjection_);
+	//multiBullet->Draw(viewProjection_);
 	missileBullet->Draw(viewProjection_);
 	if (isSporn) {
 		model_->Draw(BossWorldTrans, viewProjection_);

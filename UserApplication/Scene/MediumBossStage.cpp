@@ -76,12 +76,12 @@ void MediumBossStage::Update()
 	bossEnemy->StagingUpdate();
 
 	if (VsBoss == false) {
-		if (bossEnemy->GetFinishSpline()) {
+		//if (bossEnemy->GetFinishSpline()) {
 			Vector3 end = Vector3(0, 10, 150);
-			if (bossEnemy->GetBodyNoAlpha()) {
+			//if (bossEnemy->GetBodyNoAlpha()) {
 				VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
-			}
-		}
+			//}
+		//}
 	}
 	else {
 		middleBossEnemy->Update();
@@ -124,9 +124,9 @@ void MediumBossStage::Draw()
 	levelData->Draw(*viewProjection_.get());
 
 	bossEnemy->Draw(*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
 
 	middleBossEnemy->Draw(*viewProjection_.get());
+	player_->Draw(*viewProjection_.get());
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
