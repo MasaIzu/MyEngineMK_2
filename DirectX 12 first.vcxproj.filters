@@ -481,25 +481,25 @@
     <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h">
       <Filter>Engine\ヘッダー\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="DebugScene.h">
+    <ClInclude Include="UserApplication\Scene\DebugScene.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="MyStruct.h">
+    <ClInclude Include="Engine\Base\MyStruct.h">
       <Filter>Engine\ヘッダー\MyFunction</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3DEffect\ParticleManager.h">
       <Filter>Engine\ヘッダー\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="MiddleBossEnemy.h">
+    <ClInclude Include="UserApplication\Enemy\MiddleBossEnemy.h">
       <Filter>ユーザーヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="MissileBullet.h">
+    <ClInclude Include="UserApplication\Bullet\MissileBullet.h">
       <Filter>ユーザーヘッダー ファイル\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="MultiBullet.h">
+    <ClInclude Include="UserApplication\Bullet\MultiBullet.h">
       <Filter>ユーザーヘッダー ファイル\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="ClearScene.h">
+    <ClInclude Include="UserApplication\Scene\ClearScene.h">
       <Filter>ユーザーヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -684,7 +684,7 @@
     <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp">
       <Filter>Engine\ソース ファイル\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="DebugScene.cpp">
+    <ClCompile Include="UserApplication\Scene\DebugScene.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleManager.cpp">
@@ -693,16 +693,16 @@
     <ClCompile Include="Engine\2D\PostEffectManager.cpp">
       <Filter>Engine\ソース ファイル\2D</Filter>
     </ClCompile>
-    <ClCompile Include="MiddleBossEnemy.cpp">
+    <ClCompile Include="UserApplication\Enemy\MiddleBossEnemy.cpp">
       <Filter>ユーザーソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="MissileBullet.cpp">
+    <ClCompile Include="UserApplication\Bullet\MissileBullet.cpp">
       <Filter>ユーザーソース ファイル\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="MultiBullet.cpp">
+    <ClCompile Include="UserApplication\Bullet\MultiBullet.cpp">
       <Filter>ユーザーソース ファイル\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
+    <ClCompile Include="UserApplication\Scene\ClearScene.cpp">
       <Filter>ユーザーソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>

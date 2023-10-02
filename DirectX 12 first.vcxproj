@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -149,7 +149,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -328,18 +328,18 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="UserApplication\Scene\ClearScene.h" />
+    <ClInclude Include="UserApplication\Scene\DebugScene.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
     <ClInclude Include="Engine\3DEffect\Hibana.h" />
     <ClInclude Include="Engine\3DEffect\ParticleCS.h" />
     <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h" />
     <ClInclude Include="Engine\3DEffect\ParticleManager.h" />
     <ClInclude Include="Engine\Base\CreateResource.h" />
-    <ClInclude Include="MultiBullet.h" />
-    <ClInclude Include="MiddleBossEnemy.h" />
-    <ClInclude Include="MissileBullet.h" />
-    <ClInclude Include="MyStruct.h" />
+    <ClInclude Include="UserApplication\Bullet\MultiBullet.h" />
+    <ClInclude Include="UserApplication\Enemy\MiddleBossEnemy.h" />
+    <ClInclude Include="UserApplication\Bullet\MissileBullet.h" />
+    <ClInclude Include="Engine\Base\MyStruct.h" />
     <ClInclude Include="UserApplication\Enemy\BossEnemy.h" />
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h" />
     <ClInclude Include="UserApplication\Scene\StageSelect.h" />
@@ -407,8 +407,8 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="UserApplication\Scene\ClearScene.cpp" />
+    <ClCompile Include="UserApplication\Scene\DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />
     <ClCompile Include="Engine\3DEffect\Explosion.cpp" />
     <ClCompile Include="Engine\3DEffect\Hibana.cpp" />
@@ -416,9 +416,9 @@
     <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleManager.cpp" />
     <ClCompile Include="Engine\Base\CreateResource.cpp" />
-    <ClCompile Include="MultiBullet.cpp" />
-    <ClCompile Include="MiddleBossEnemy.cpp" />
-    <ClCompile Include="MissileBullet.cpp" />
+    <ClCompile Include="UserApplication\Bullet\MultiBullet.cpp" />
+    <ClCompile Include="UserApplication\Enemy\MiddleBossEnemy.cpp" />
+    <ClCompile Include="UserApplication\Bullet\MissileBullet.cpp" />
     <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp" />
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp" />
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp" />
