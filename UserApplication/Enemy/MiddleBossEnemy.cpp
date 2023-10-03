@@ -8,6 +8,10 @@ MiddleBossEnemy::MiddleBossEnemy()
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
 	BossWorldTrans.scale_ = Vector3(5.0f, 5.0f, 5.0f);
 	BossWorldTrans.Initialize();
+
+	for (uint32_t i = 0; i < AttackedKeepCount; i++) {
+		oldAttackType[i] = AttackType::NotAttack;
+	}
 }
 
 MiddleBossEnemy::~MiddleBossEnemy()
@@ -98,7 +102,30 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 	return false;
 }
 
+void MiddleBossEnemy::ThinkingTime()
+{
+	if (isAtack) {
+
+	}
+	else {
+		if (AttackCooltime > 0) {
+			AttackCooltime--;
+		}
+		else {
+
+		}
+	}
+}
+
 void MiddleBossEnemy::WorldTransUpdate()
 {
 	BossWorldTrans.TransferMatrix();
+}
+
+void MiddleBossEnemy::CheckAttackType(AttackType& attackType)
+{
+	if (attackType == oldAttackType[0]) {
+
+	}
+
 }
