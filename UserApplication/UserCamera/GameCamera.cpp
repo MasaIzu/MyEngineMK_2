@@ -12,8 +12,6 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 
 	input_ = Input::GetInstance();
 
-	easing_ = new Easing();
-
 	winWidth = window_width;
 	winHeight = window_height;
 
@@ -34,7 +32,7 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 
 GameCamera::~GameCamera()
 {
-	delete easing_;
+	
 }
 
 void GameCamera::Initialize(ViewProjection* viewProjection_, const float& cameraAngle, const Vector3& pos) {

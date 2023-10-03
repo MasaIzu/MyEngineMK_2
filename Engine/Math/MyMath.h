@@ -73,6 +73,7 @@ namespace MyMath {
 
 	//vec1‚ğ’†S‚Æ‚µ‚½‚Ìvec2‚ÌŠp“x‚ğo‚·
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
+	float Get2VecAngleY(const Vector3& vec1, const Vector3& vec2);
 	float Get2FloatAngle(const float& x, const float& y);
 	float Distance2Vec2(const Vector2& vec1, const Vector2& vec2);
 

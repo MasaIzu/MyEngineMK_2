@@ -1,6 +1,8 @@
 #include "MiddleBossEnemy.h"
 #include <CollisionAttribute.h>
 #include <SphereCollider.h>
+#include <imgui.h>
+#include <Easing.h>
 
 MiddleBossEnemy::MiddleBossEnemy()
 {
@@ -33,19 +35,54 @@ void MiddleBossEnemy::Initialize(Player* player)
 
 void MiddleBossEnemy::Update()
 {
-	if (isStart) {
-		if (BulletCoolTime > 0) {
-			BulletCoolTime--;
+	if (isTurn) {
+
+		if (RotTime > 0) {
+			RotTime--;
+			Angle += RotSpeed;
 		}
 		else {
-			BulletCoolTime = 5;
+			isTurn = false;
+			isStart = true;
+		}
 
-			Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
-			Velocity.normalize();
-			float BulletSpeed = 6.0f;
+		BossWorldTrans.SetRot(Vector3(0, MyMath::GetAngle(Angle), 0));
 
-			multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
-			missileBullet->MakeBullet(BossWorldTrans.translation_);
+	}
+	if (isStart) {
+		Timer();
+
+		Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look, player->GetPlayerPos());
+
+		BossWorldTrans.SetRot(Vector3(0, MyMath::GetAngle(Angle), 0));
+		if (KeepAttackingTime == 0) {
+			isAttack = false;
+		}
+		if (isAttack) {
+			if (BulletCoolTime == 0) {
+				Attack();
+			}
+		}
+		else {
+			ThinkingTime();
+		}
+
+		if (isMoveing) {
+			BossWorldTrans.translation_ = Easing::EaseOutQuintVec3(MoveStartPos, MovePos, MoveingTimer, MaxMoveingTimer);
+
+			if (MoveingTimer == MaxMoveingTimer) {
+				if (isOneMoreTime == false) {
+					isOneMoreTime = true;
+					isMoveing = true;
+					MoveingTimer = 0;
+					MaxMoveingTimer = 30;
+					MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 20.0f);
+					MoveStartPos = BossWorldTrans.translation_;
+				}
+				else {
+					isMoveing = false;
+				}
+			}
 		}
 
 		if (MiddleBossCollider->GetHit()) {
@@ -54,7 +91,7 @@ void MiddleBossEnemy::Update()
 		}
 
 		if (MiddleBossHp > 0) {
-			
+
 		}
 		else {
 			isDead = true;
@@ -65,6 +102,15 @@ void MiddleBossEnemy::Update()
 
 		MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 	}
+
+	WorldTransUpdate();
+
+	ImGui::Begin("MiddleBoss");
+	ImGui::Text("Angle = %f", Angle);
+	ImGui::Text("AngleSize = %f", AngleSize);
+	ImGui::Text("RotTime = %d", RotTime);
+	ImGui::End();
+
 }
 
 void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
@@ -90,10 +136,13 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 
 			MovieUpdateTimes -= 1.0f;
 			BossWorldTrans.translation_ += Velocity;
+			AngleSize = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look, player->GetPlayerPos());
+
+			RotTime = static_cast<uint32_t>(AngleSize / RotSpeed);
 		}
 		else {
-			isStart = true;
-			return isStart;
+			isTurn = true;
+			return isTurn;
 		}
 	}
 
@@ -102,17 +151,56 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
 	return false;
 }
 
-void MiddleBossEnemy::ThinkingTime()
+void MiddleBossEnemy::Timer()
 {
-	if (isAtack) {
+	if (BulletCoolTime > 0) {
+		BulletCoolTime--;
+	}
+	if (KeepAttackingTime > 0) {
+		KeepAttackingTime--;
+	}
+	if (MoveingTimer < MaxMoveingTimer) {
+		MoveingTimer++;
+	}
+}
+
+void MiddleBossEnemy::Attack()
+{
+	if (attackType == AttackType::Nomal) {
+		BulletCoolTime = MaxBulletCoolTime;
+
+		Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
+		Velocity.normalize();
+
+		multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
 
 	}
-	else {
+	else if (attackType == AttackType::Missile) {
+		BulletCoolTime = MaxBulletCoolTime;
+		uint32_t MissileShotCount = 6;
+		missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
+			BossWorldTrans.LookVelocity.lookLeft, BossWorldTrans.LookVelocity.lookUp,
+			BossWorldTrans.LookVelocity.lookRight, MissileShotCount);
+
+	}
+	else if (attackType == AttackType::MoveingAttack) {
+		BulletCoolTime = MaxBulletCoolTime;
+
+		Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
+		Velocity.normalize();
+
+		multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
+	}
+}
+
+void MiddleBossEnemy::ThinkingTime()
+{
+	if (isAttack == false && isMoveing == false) {
 		if (AttackCooltime > 0) {
 			AttackCooltime--;
 		}
 		else {
-
+			CheckAttackType();
 		}
 	}
 }
@@ -122,10 +210,68 @@ void MiddleBossEnemy::WorldTransUpdate()
 	BossWorldTrans.TransferMatrix();
 }
 
-void MiddleBossEnemy::CheckAttackType(AttackType& attackType)
+void MiddleBossEnemy::CheckAttackType()
 {
-	if (attackType == oldAttackType[0]) {
+	attackType = static_cast<AttackType>(MyMath::Random(0, AllAttackTypeCount));
 
+	for (uint32_t i = 0; i < AttackedKeepCount; i++) {
+		if (attackType == AttackType::Move) {//à⁄ìÆÇÕàÍâÒÇ‹Ç≈
+			if (attackType == oldAttackType[i]) {
+				uint32_t AttackCount = static_cast<uint32_t>(attackType);
+				attackType = static_cast<AttackType>(RandomType(AttackCount));
+				break;
+			}
+		}
 	}
 
+	if (attackType == oldAttackType[0]) {
+		if (attackType == oldAttackType[1]) {//ìØÇ∂çUåÇÇÕ2âÒÇ‹Ç≈
+			uint32_t AttackCount = static_cast<uint32_t>(attackType);
+			attackType = static_cast<AttackType>(RandomType(AttackCount));
+		}
+	}
+
+	if (attackType == AttackType::Nomal) {
+		isAttack = true;
+		MaxBulletCoolTime = 5;
+		AttackCooltime = 50;
+		KeepAttackingTime = 50;
+	}
+	else if (attackType == AttackType::Missile) {
+		isAttack = true;
+		MaxBulletCoolTime = 50;
+		AttackCooltime = 50;
+		KeepAttackingTime = 100;
+	}
+	else if (attackType == AttackType::MoveingAttack) {
+		isAttack = true;
+		MaxBulletCoolTime = 1;
+		AttackCooltime = 50;
+		KeepAttackingTime = 10;
+	}
+	else if (attackType == AttackType::Move) {
+		isMoveing = true;
+		isOneMoreTime = false;
+		MoveingTimer = 0;
+		MaxMoveingTimer = 50;
+		MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f);
+		MoveStartPos = BossWorldTrans.translation_;
+	}
+	for (uint32_t i = AttackedKeepCount - 1; i > 0; i--) {
+		oldAttackType[i] = oldAttackType[i - 1];
+	}
+	oldAttackType[0] = attackType;
+}
+
+uint32_t MiddleBossEnemy::RandomType(uint32_t& NoUseType)
+{
+	uint32_t attackType = MyMath::Random(0, AllAttackTypeCount);
+	if (NoUseType == attackType) {
+		return RandomType(NoUseType);
+	}
+	else {
+		return attackType;
+	}
+
+	return attackType;
 }

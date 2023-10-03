@@ -6,7 +6,6 @@
 #include <Input.h>
 #include "WorldTransform.h"
 #include "ViewProjection.h"
-#include "Easing.h"
 #include <BaseCollider.h>
 
 class GameCamera {
@@ -52,7 +51,7 @@ public://setter
 	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
 
 private://ƒNƒ‰ƒXŠÖ˜A
-	Easing* easing_;
+	
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;
 

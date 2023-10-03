@@ -649,6 +649,16 @@ float MyMath::Get2VecAngle(const Vector3& vec1, const Vector3& vec2)
 	return angle;
 }
 
+float MyMath::Get2VecAngleY(const Vector3& vec1, const Vector3& vec2)
+{
+
+	float angle = atan2(vec2.x - vec1.x, vec2.z - vec1.z);
+
+	angle = floor(angle * 360 / (2 * PI));
+
+	return angle;
+}
+
 float MyMath::Get2FloatAngle(const float& x, const float& y)
 {
 

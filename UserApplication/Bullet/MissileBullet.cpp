@@ -39,7 +39,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 
 					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, 0.1f);
 					float VelocityY = BulletVelocity[i].y;
-					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, 1.0f);
+					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, 0.5f);
 					BulletVelocity[i].y = VelocityY;
 
 					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed;
@@ -77,6 +77,49 @@ void MissileBullet::Draw(ViewProjection& viewProjection_)
 			model_->Draw(EnemyBulletWorldTrans[i], viewProjection_);
 		}
 	}
+}
+
+void MissileBullet::MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount)
+{
+	uint32_t harfCount = MakeCount / 2;
+
+	float lerpPos = 1.0f / static_cast<float>(harfCount);
+
+	uint32_t BulletCounter = 0;
+	makeBulletCount = 0;
+	while (makeBulletCount < harfCount)
+	{
+		if (isBulletAlive[BulletCounter] == false) {
+			BulletNotTrackingTime[BulletCounter] = 0;
+			BulletLifeTime[BulletCounter] = 500;
+			isBulletAlive[BulletCounter] = true;
+			isStartTracking[BulletCounter] = false;
+			isNearPlayer[BulletCounter] = false;
+			EnemyBulletWorldTrans[BulletCounter].translation_ = pos;
+
+			BulletVelocity[BulletCounter] = MyMath::lerp(left * 20.0f, top * 5.0f, lerpPos * makeBulletCount);
+			BulletVelocity[BulletCounter] = BulletVelocity[BulletCounter].normalize() * 5.0f;
+
+			makeBulletCount++;
+		}
+		BulletCounter++;
+	}
+
+
+	//for (uint32_t i = harfCount; i < MakeCount; i++) {
+	//	if (isBulletAlive[i] == false) {
+	//		BulletNotTrackingTime[i] = 0;
+	//		BulletLifeTime[i] = 500;
+	//		isBulletAlive[i] = true;
+	//		isStartTracking[i] = false;
+	//		isNearPlayer[i] = false;
+	//		EnemyBulletWorldTrans[i].translation_ = pos;
+
+	//		BulletVelocity[i] = MyMath::lerp(top, right, lerpPos * i);
+	//		BulletVelocity[i] = BulletVelocity[i].normalize() * 3.0f;
+
+	//	}
+	//}
 }
 
 void MissileBullet::WorldTransUpdate()

@@ -26,8 +26,9 @@ public:
 	//’e‚ğì‚èo‚·
 	void MakeBullet(Vector3& pos);
 
-private:
+	void MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount);
 
+private:
 	//’e‚Ìî•ñXV
 	void WorldTransUpdate();
 	//¶‚«‚Ä‚¢‚é‚©‚Ç‚¤‚©

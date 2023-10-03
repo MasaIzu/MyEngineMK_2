@@ -155,14 +155,56 @@ double Easing::easeOutCubic(double start, double end, double time, double max_ti
 	return start + (end - start) * x;
 }
 
-Vector3 Easing::InOutVec3(Vector3 start, Vector3 end, double time, double max_time)
+float Easing::EaseOutQuart(float& start, float& end, float& time, float& max_time)
 {
-	Vector3 InOutVec;
+	float Time = time / max_time;
+	float x = 1 - powf(1 - Time, 4);
+	return start + (end - start) * x;
+}
+
+float Easing::EaseOutQuint(float& start, float& end, float& time, float& max_time)
+{
+	float Time = time / max_time;
+	float x = 1 - powf(1 - Time, 5);
+	return start + (end - start) * x;
+}
+
+Vector3 Easing::EaseOutCubicVec3(Vector3& start, Vector3& end, double& time, double& max_time)
+{
+	Vector3 easeOutCubicVec3;
 	double x = easeOutCubic(static_cast <double>(start.x), static_cast <double>(end.x), time, max_time);
 	double y = easeOutCubic(static_cast <double>(start.y), static_cast <double>(end.y), time, max_time);
 	double z = easeOutCubic(static_cast <double>(start.z), static_cast <double>(end.z), time, max_time);
 
-	InOutVec = { static_cast <float>(x),static_cast <float>(y),static_cast <float>(z) };
+	easeOutCubicVec3 = { static_cast <float>(x),static_cast <float>(y),static_cast <float>(z) };
 
-	return InOutVec;
+	return easeOutCubicVec3;
+}
+
+Vector3 Easing::EaseOutQuartVec3(Vector3& start, Vector3& end, uint32_t& time, uint32_t& max_time)
+{
+	Vector3 easeOutQuartVec3;
+
+	float timef = static_cast<float>(time);
+	float max_timef = static_cast<float>(max_time);
+
+	easeOutQuartVec3.x = EaseOutQuart(start.x, end.x, timef, max_timef);
+	easeOutQuartVec3.y = EaseOutQuart(start.y, end.y, timef, max_timef);
+	easeOutQuartVec3.z = EaseOutQuart(start.z, end.z, timef, max_timef);
+
+	return easeOutQuartVec3;
+}
+
+Vector3 Easing::EaseOutQuintVec3(Vector3& start, Vector3& end, uint32_t& time, uint32_t& max_time)
+{
+	Vector3 easeOutQuintVec3;
+
+	float timef = static_cast<float>(time);
+	float max_timef = static_cast<float>(max_time);
+
+	easeOutQuintVec3.x = EaseOutQuint(start.x, end.x, timef, max_timef);
+	easeOutQuintVec3.y = EaseOutQuint(start.y, end.y, timef, max_timef);
+	easeOutQuintVec3.z = EaseOutQuint(start.z, end.z, timef, max_timef);
+
+	return easeOutQuintVec3;
 }
