@@ -24,7 +24,7 @@ namespace Easing
 	double InOut_Bounce(double start, double end, double time, double max_time);
 
 	double easeOutCubic(double start, double end, double time, double max_time);
-
+	float easeOutCubic(float& start, float& end, uint32_t& time, uint32_t& max_time);
 	float EaseOutQuart(float& start, float& end, float& time, float& max_time);
 	float EaseOutQuint(float& start, float& end, float& time, float& max_time);
 

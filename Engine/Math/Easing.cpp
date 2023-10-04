@@ -155,6 +155,13 @@ double Easing::easeOutCubic(double start, double end, double time, double max_ti
 	return start + (end - start) * x;
 }
 
+float Easing::easeOutCubic(float& start, float& end, uint32_t& time, uint32_t& max_time)
+{
+	float Time = static_cast<float>(time) / static_cast<float>(max_time);
+	float x = 1 - powf(1 - Time, 3);
+	return start + (end - start) * x;
+}
+
 float Easing::EaseOutQuart(float& start, float& end, float& time, float& max_time)
 {
 	float Time = time / max_time;

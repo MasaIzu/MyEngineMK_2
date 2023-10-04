@@ -46,7 +46,7 @@ public://Setter
 
 
 private://const関連
-	static const uint32_t AllBulletCount = 30;
+	static const uint32_t AllBulletCount = 100;
 
 private://クラス関連
 	std::unique_ptr<Model> model_;
@@ -78,11 +78,23 @@ private://クラス変数
 	uint32_t makeBulletCount = 0;
 	uint32_t BulletNotTrackingTime[AllBulletCount];
 
+	//イージング
+	uint32_t BulletEasingTime[AllBulletCount];
+	uint32_t BulletMaxEasingTime[AllBulletCount];
+	uint32_t BulletLarpEasingTime[AllBulletCount];
+	uint32_t BulletLarpMaxEasingTime[AllBulletCount];
+
 	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
 	float EnemyBulletMaxRadius = 5.0f;
 	float LarpT = 0.0f;
-	float BulletSpeed = 0.0f;
+	float BulletSpeed[AllBulletCount];
+	float BulletStartSpeed = 1.0f;
+	float BulletEndSpeed = 3.0f;
+	float BulletLerpSpeed[AllBulletCount];
+	float BulletLerpStartSpeed = 0.04f;
+	float BulletLrrpEndSpeed = 1.5f;
+	float BulletStartLerpTime = 0.04f;
 
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向
 	Vector3 BulletOldPos[AllBulletCount];

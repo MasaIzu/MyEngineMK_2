@@ -76,7 +76,12 @@ void MiddleBossEnemy::Update()
 					isMoveing = true;
 					MoveingTimer = 0;
 					MaxMoveingTimer = 30;
-					MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 20.0f);
+					if (mveType == 0) {
+						MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f);
+					}
+					else if (mveType == 1) {
+						MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f);
+					}
 					MoveStartPos = BossWorldTrans.translation_;
 				}
 				else {
@@ -254,7 +259,13 @@ void MiddleBossEnemy::CheckAttackType()
 		isOneMoreTime = false;
 		MoveingTimer = 0;
 		MaxMoveingTimer = 50;
-		MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f);
+		mveType = MyMath::Random(0, 1);
+		if (mveType == 0) {
+			MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f);
+		}
+		else if (mveType == 1) {
+			MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f);
+		}
 		MoveStartPos = BossWorldTrans.translation_;
 	}
 	for (uint32_t i = AttackedKeepCount - 1; i > 0; i--) {

@@ -1,4 +1,5 @@
 #include "MissileBullet.h"
+#include "Easing.h"
 
 MissileBullet::MissileBullet()
 {
@@ -7,8 +8,8 @@ MissileBullet::MissileBullet()
 		EnemyBulletWorldTrans[i].scale_ = Vector3(0.5f, 0.5f, 0.5f);
 		EnemyBulletWorldTrans[i].Initialize();
 		isNearPlayer[i] = false;
+		BulletSpeed[i] = 1.5f;
 	}
-	BulletSpeed = 3.0f;
 	input_ = Input::GetInstance();
 }
 
@@ -27,28 +28,27 @@ void MissileBullet::Update(const Vector3& EndPos)
 	for (int i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {
 			if (isStartTracking[i] == false) {
-				EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i] * BulletSpeed;
 
-				BulletOldPos[i] = EnemyBulletWorldTrans[i].translation_;
+				Vector3 goPos = EndPos - EnemyBulletWorldTrans[i].translation_;
+				goPos.normalize();
+				BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, BulletStartLerpTime);
+				EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
 			}
 			else {
 
 				if (isNearPlayer[i] == false) {
 					Vector3 goPos = EndPos - EnemyBulletWorldTrans[i].translation_;
 					goPos.normalize();
-
-					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, 0.1f);
-					float VelocityY = BulletVelocity[i].y;
-					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, 0.5f);
-					BulletVelocity[i].y = VelocityY;
-
-					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed;
+					BulletSpeed[i] = Easing::easeOutCubic(BulletStartSpeed, BulletEndSpeed, BulletEasingTime[i], BulletMaxEasingTime[i]);
+					BulletLerpSpeed[i] = Easing::easeOutCubic(BulletLerpStartSpeed, BulletLrrpEndSpeed, BulletLarpEasingTime[i], BulletLarpMaxEasingTime[i]);
+					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, BulletLerpSpeed[i]);
+					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
 
 					// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒð·
 					Vector3 tmp;
 					tmp = EndPos - EnemyBulletWorldTrans[i].translation_;
 					float dist = tmp.dot(tmp);
-					float radius2 = 20.0f + 1.0f;
+					float radius2 = 7.0f + 1.0f;
 					radius2 *= radius2;
 
 					if (dist <= radius2)
@@ -61,7 +61,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 					goPos.normalize();
 					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i].norm(), goPos, 0.005f);
 
-					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed;;
+					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
 				}
 			}
 		}
@@ -86,40 +86,43 @@ void MissileBullet::MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3
 	float lerpPos = 1.0f / static_cast<float>(harfCount);
 
 	uint32_t BulletCounter = 0;
+	uint32_t BulletLerpTime = 0;
+	uint32_t BulletLerpRightTime = 0;
 	makeBulletCount = 0;
-	while (makeBulletCount < harfCount)
+	while (makeBulletCount < MakeCount)
 	{
 		if (isBulletAlive[BulletCounter] == false) {
-			BulletNotTrackingTime[BulletCounter] = 0;
+			BulletNotTrackingTime[BulletCounter] = 30;
 			BulletLifeTime[BulletCounter] = 500;
 			isBulletAlive[BulletCounter] = true;
 			isStartTracking[BulletCounter] = false;
 			isNearPlayer[BulletCounter] = false;
 			EnemyBulletWorldTrans[BulletCounter].translation_ = pos;
 
-			BulletVelocity[BulletCounter] = MyMath::lerp(left * 20.0f, top * 5.0f, lerpPos * makeBulletCount);
-			BulletVelocity[BulletCounter] = BulletVelocity[BulletCounter].normalize() * 5.0f;
+			BulletSpeed[BulletCounter] = 1.0f;
+			BulletStartSpeed = 0.8f;
 
+			BulletEasingTime[BulletCounter] = 0;
+			BulletMaxEasingTime[BulletCounter] = 80;
+
+			BulletLarpEasingTime[BulletCounter] = 0;
+			BulletLarpMaxEasingTime[BulletCounter] = 60;
+			BulletLerpSpeed[BulletCounter] = BulletStartLerpTime;
+
+
+			if (makeBulletCount < harfCount) {
+				BulletVelocity[BulletCounter] = MyMath::lerp(left, top, lerpPos * BulletLerpTime).norm();
+			}
+			else {
+				BulletLerpRightTime = BulletLerpTime - harfCount + 1;
+				BulletVelocity[BulletCounter] = MyMath::lerp(top, right, lerpPos * BulletLerpRightTime).norm();
+			}
+
+			BulletLerpTime++;
 			makeBulletCount++;
 		}
 		BulletCounter++;
 	}
-
-
-	//for (uint32_t i = harfCount; i < MakeCount; i++) {
-	//	if (isBulletAlive[i] == false) {
-	//		BulletNotTrackingTime[i] = 0;
-	//		BulletLifeTime[i] = 500;
-	//		isBulletAlive[i] = true;
-	//		isStartTracking[i] = false;
-	//		isNearPlayer[i] = false;
-	//		EnemyBulletWorldTrans[i].translation_ = pos;
-
-	//		BulletVelocity[i] = MyMath::lerp(top, right, lerpPos * i);
-	//		BulletVelocity[i] = BulletVelocity[i].normalize() * 3.0f;
-
-	//	}
-	//}
 }
 
 void MissileBullet::WorldTransUpdate()
@@ -144,6 +147,14 @@ void MissileBullet::CheckBulletAlive()
 			}
 			else {
 				isBulletAlive[i] = false;
+			}
+			if (isStartTracking[i] == true) {
+				if (BulletEasingTime[i] < BulletMaxEasingTime[i]) {
+					BulletEasingTime[i]++;
+				}
+				if (BulletLarpEasingTime[i] < BulletLarpMaxEasingTime[i]) {
+					BulletLarpEasingTime[i]++;
+				}
 			}
 		}
 	}

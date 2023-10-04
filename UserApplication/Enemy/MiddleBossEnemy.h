@@ -98,6 +98,7 @@ private://EnemyBossƒNƒ‰ƒX•Ï”
 	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack) + 1;
 	uint32_t KeepAttackingTime = 0;
 	uint32_t RotTime = 0;
+	uint32_t mveType = 0;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
