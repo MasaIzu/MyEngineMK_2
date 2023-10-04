@@ -273,17 +273,9 @@ void Player::Update()
 	}
 
 	if (input_->MouseInputing(0)) {
-		isPlayerSetUp = true;
 		isAttack = true;
-		PlayerAttack();
 	}
 
-
-	//if (input_->MouseInputing(0)) {
-	//	isPlayerSetUp = true;
-	//	isAttack = true;
-	//	PlayerAttack();
-	//}
 
 	if (input_->MouseInputTrigger(1)) {
 
@@ -372,6 +364,13 @@ void Player::CopyParticle()
 	playerBullet->CopyParticle();
 }
 
+void Player::AttackUpdate(const Vector3& EnemyPos, bool& LockOn)
+{
+	if (isAttack == true) {
+		PlayerAttack(EnemyPos, LockOn);
+	}
+}
+
 void Player::Move()
 {
 	playerMoveMent = { 0.0f,0.0f,0.0f };
@@ -379,37 +378,37 @@ void Player::Move()
 	if (isHitRail == false || playerMoveSpline->GetFinishSpline() == true) {
 		if (input_->PushKey(DIK_W)) {
 			isPushW = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.look * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
 		}
 		if (input_->PushKey(DIK_S)) {
 			isPushS = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack.norm() * playerSpeed;
 			//playerMoveMent.y -= 0.02f;
 		}
 		if (input_->PushKey(DIK_A)) {
 			isPushA = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookLeft * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookLeft.norm() * playerSpeed;
 		}
 		if (input_->PushKey(DIK_D)) {
 			isPushD = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookRight * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookRight.norm() * playerSpeed;
 		}
 
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * diagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * diagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * diagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * diagonalPlayerSpeed;
 		}
 		//if (onGround) {
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -509,7 +508,7 @@ void Player::PlayerRot()
 	WorldTransUpdate();
 }
 
-void Player::PlayerAttack()
+void Player::PlayerAttack(const Vector3& EnemyPos, bool& LockOn)
 {
 	if (AttackPhase_ == AttackPhase::Nothing) {
 		AttackPhase_ = AttackPhase::AttackCombo1;
@@ -517,8 +516,13 @@ void Player::PlayerAttack()
 	switch (AttackPhase_)
 	{
 	case Player::AttackPhase::AttackCombo1:
-
-		bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);
+		if (LockOn) {
+			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), EnemyPos.norm(), PlayerToCameraTargetVecDistance);
+		}
+		else {
+			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);
+		}
+	
 		break;
 	case Player::AttackPhase::AttackCombo2:
 

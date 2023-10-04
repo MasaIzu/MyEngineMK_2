@@ -48,6 +48,8 @@ public://Getter
 
 	bool GetIsDead()const { return isDead; }
 
+	Vector3 GetPosition() const;
+
 private://const関連
 	static const uint32_t BossEnemyBodyCount = 20;
 
@@ -87,6 +89,7 @@ private://EnemyBossクラス変数
 	bool isMoveing = false;
 	bool isAngleGet = false;
 	bool isOneMoreTime = false;
+	bool isBackSponePos = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -99,6 +102,10 @@ private://EnemyBossクラス変数
 	uint32_t KeepAttackingTime = 0;
 	uint32_t RotTime = 0;
 	uint32_t mveType = 0;
+	uint32_t MoveTimes = 0;
+	uint32_t MaxMoveTimes = 5;
+	uint32_t BackLengthHalfUint32 = 0;
+	uint32_t BackLengthUint32 = 0;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
@@ -108,12 +115,18 @@ private://EnemyBossクラス変数
 	float AngleSize = 0.0f;
 	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
+	float MoveSafeRadius = 80.0f;
+	float BackLength = 0.0f;
+	float JumpMoveSpeed = 1.0f;
+	float JumpHeight = 0.0f;
+	float MaxJumpHeight = 15.0f;
 
 	Vector3 BonePos;
 	Vector3 EndPos;
 	Vector3 Velocity;
 	Vector3 MovePos;
 	Vector3 MoveStartPos;
+	Vector3 JampBackVelocity;
 
 	AttackType attackType = AttackType::NotAttack;
 	AttackType oldAttackType[AttackedKeepCount];

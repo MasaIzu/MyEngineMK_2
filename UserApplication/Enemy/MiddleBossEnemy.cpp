@@ -83,10 +83,34 @@ void MiddleBossEnemy::Update()
 						MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f);
 					}
 					MoveStartPos = BossWorldTrans.translation_;
+
+					uint32_t MissileShotCount = 6;
+					missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
+						BossWorldTrans.LookVelocity.lookLeft, BossWorldTrans.LookVelocity.lookUp,
+						BossWorldTrans.LookVelocity.lookRight, MissileShotCount);
+
 				}
 				else {
 					isMoveing = false;
 				}
+			}
+		}
+
+		if (isBackSponePos == true) {
+			if (BackLengthUint32 > BackLengthHalfUint32) {
+				BackLengthUint32--;
+				BossWorldTrans.translation_ += (JampBackVelocity * JumpMoveSpeed) + Vector3(0, JumpHeight, 0);
+			}
+			else if (BackLengthUint32 < BackLengthHalfUint32) {
+				BackLengthUint32--;
+				BossWorldTrans.translation_ += (JampBackVelocity * JumpMoveSpeed) - Vector3(0, JumpHeight, 0);
+
+				if (BackLengthUint32 <= 0) {
+					isBackSponePos = false;
+				}
+			}
+			else {
+		
 			}
 		}
 
@@ -200,7 +224,7 @@ void MiddleBossEnemy::Attack()
 
 void MiddleBossEnemy::ThinkingTime()
 {
-	if (isAttack == false && isMoveing == false) {
+	if (isAttack == false && isMoveing == false && isBackSponePos == false) {
 		if (AttackCooltime > 0) {
 			AttackCooltime--;
 		}
@@ -255,6 +279,7 @@ void MiddleBossEnemy::CheckAttackType()
 		KeepAttackingTime = 10;
 	}
 	else if (attackType == AttackType::Move) {
+		MoveTimes++;
 		isMoveing = true;
 		isOneMoreTime = false;
 		MoveingTimer = 0;
@@ -267,6 +292,37 @@ void MiddleBossEnemy::CheckAttackType()
 			MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f);
 		}
 		MoveStartPos = BossWorldTrans.translation_;
+
+		if (MoveTimes >= MaxMoveTimes) {
+
+			// íÜêSì_ÇÃãóó£ÇÃÇQèÊ <= îºåaÇÃòaÇÃÇQèÊÅ@Ç»ÇÁåç∑
+			Vector3 tmp;
+			tmp = EndPos - BossWorldTrans.translation_;
+			float dist = tmp.dot(tmp);
+			float radius2 = MoveSafeRadius;
+			radius2 *= radius2;
+
+			if (dist <= radius2)
+			{
+				
+			}
+			else {
+				MoveTimes = 0;
+				isBackSponePos = true;
+				BackLength = tmp.length();
+				JampBackVelocity = tmp.norm();
+
+				BackLengthUint32 = static_cast<uint32_t>(BackLength / 2);
+				BackLengthHalfUint32 = BackLengthUint32;
+				BackLengthUint32 *= 2;
+				BackLength = static_cast<float>(BackLengthUint32);
+				JumpHeight = MaxJumpHeight / ((BackLength / 2.0f) * JumpMoveSpeed);
+
+			}
+
+
+		}
+
 	}
 	for (uint32_t i = AttackedKeepCount - 1; i > 0; i--) {
 		oldAttackType[i] = oldAttackType[i - 1];
@@ -285,4 +341,9 @@ uint32_t MiddleBossEnemy::RandomType(uint32_t& NoUseType)
 	}
 
 	return attackType;
+}
+
+Vector3 MiddleBossEnemy::GetPosition() const
+{
+	return MyMath::GetWorldTransform(BossWorldTrans.matWorld_);
 }

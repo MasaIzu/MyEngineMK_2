@@ -77,11 +77,11 @@ void MediumBossStage::Update()
 
 	if (VsBoss == false) {
 		//if (bossEnemy->GetFinishSpline()) {
-			Vector3 end = Vector3(0, 10, 150);
-			//if (bossEnemy->GetBodyNoAlpha()) {
-				VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
-			/*}
-		}*/
+		Vector3 end = Vector3(0, 10, 150);
+		//if (bossEnemy->GetBodyNoAlpha()) {
+		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
+		/*}
+	}*/
 	}
 	else {
 		middleBossEnemy->Update();
@@ -94,6 +94,10 @@ void MediumBossStage::Update()
 	if (middleBossEnemy->GetIsDead()) {
 		sceneManager_->ChangeScene("ClearScene");
 	}
+
+	LockOn();
+
+	player_->AttackUpdate(middleBossEnemy->GetPosition(), isLockOn);
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -154,4 +158,33 @@ void MediumBossStage::CSUpdate()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	////パーティクル
 	player_->CSUpdate(commandList);
+}
+
+void MediumBossStage::LockOn()
+{
+	Vector3 EnemyPos = middleBossEnemy->GetPosition();
+
+	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+
+	float dist = MyMath::Distance2Vec2(Vector2(EnemyPos.x, EnemyPos.y), Vector2(640, 360));
+	float radius = 128.0f;
+	if (dist <= radius) {
+		isLockOn = true;
+	}
+	else {
+		isLockOn = false;
+	}
 }

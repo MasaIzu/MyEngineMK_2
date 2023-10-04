@@ -46,6 +46,10 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	//レティクル内に敵がいたらロックオンする
+	void LockOn();
+
+
 private:
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -62,6 +66,7 @@ private:
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 
 	bool VsBoss = false;
+	bool isLockOn = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

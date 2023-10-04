@@ -26,13 +26,15 @@ public://基本関数
 	void ParticleDraw(ViewProjection& viewProjection_);
 	void CopyParticle();
 
+	void AttackUpdate(const Vector3& EnemyPos, bool& LockOn);
+
 private:
 	//プレーヤーの移動
 	void Move();
 	//プレイヤーの回転
 	void PlayerRot();
 	//プレーヤーの攻撃
-	void PlayerAttack();
+	void PlayerAttack(const Vector3& EnemyPos, bool& LockOn);
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定

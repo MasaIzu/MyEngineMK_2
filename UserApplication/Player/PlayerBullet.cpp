@@ -253,7 +253,7 @@ void PlayerBullet::CheckBulletAlive()
 			}
 
 			if (BulletSpeedDownTime[i] <= 0) {
-				isBulletDownSpeed[i] = true;
+				//isBulletDownSpeed[i] = true;
 				if (playerBulletSpeed[i] > 2.0f) {
 					playerBulletSpeed[i] -= 0.5f;
 				}
