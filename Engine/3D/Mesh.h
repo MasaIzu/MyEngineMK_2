@@ -1,16 +1,22 @@
 #pragma once
 #include "Material.h"
 #include "DirectXCore.h"
-#include <Windows.h>
-#include <d3d12.h>
-#include <d3dx12.h>
-#include <unordered_map>
-#include <vector>
-#include <wrl.h>
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3d12.h>
+#include <d3dx12.h>
+#include <Windows.h>
+#include <unordered_map>
+#include <vector>
+#include <wrl.h>
+MY_SUPPRESS_WARNINGS_END
 
 // ノード
 struct Node

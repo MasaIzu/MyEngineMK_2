@@ -1,7 +1,10 @@
 #pragma once
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <d3dx12.h>
 #include <vector>
-
+MY_SUPPRESS_WARNINGS_END
 
 namespace MyFunction {
 

@@ -1,10 +1,16 @@
 #include "PostEffect.h"
-#include<d3dx12.h>
+
 #include"WinApp.h"
-#include <cassert>
-#include <d3dcompiler.h>
+
 
 #pragma comment(lib, "d3dcompiler.lib")
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <cassert>
+#include <d3dcompiler.h>
+#include<d3dx12.h>
+MY_SUPPRESS_WARNINGS_END
 
 ID3D12Device* PostEffect::device_;
 ID3D12GraphicsCommandList* PostEffect::commandList;

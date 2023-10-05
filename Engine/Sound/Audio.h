@@ -1,7 +1,10 @@
 #pragma once
 #include "DirectXCore.h"
-#include <xaudio2.h>
+
 #pragma comment(lib,"xaudio2.lib")
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <fstream>
 #include <array>
 #include <cstdint>
@@ -12,6 +15,8 @@
 #include <Windows.h>
 #include <cassert>
 #include <iterator>
+#include <xaudio2.h>
+MY_SUPPRESS_WARNINGS_END
 
 //チャンクヘッダ
 struct ChunkHeader {

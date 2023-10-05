@@ -6,11 +6,17 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
-#include <d3d12.h>
-#include "d3dx12.h"
+
 #include <CreateResource.h>
 #include <combaseapi.h>
 #pragma comment(lib, "d3dcompiler.lib")
+
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3d12.h>
+#include <d3dx12.h>
+MY_SUPPRESS_WARNINGS_END
 
 using namespace std;
 using namespace Microsoft::WRL;

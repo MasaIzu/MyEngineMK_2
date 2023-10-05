@@ -1,9 +1,14 @@
 #pragma once
-#include <imgui.h>
+
 #include "WinApp.h"
-#include <d3dx12.h>
+
 #include "DirectXCore.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3dx12.h>
+#include <imgui.h>
+MY_SUPPRESS_WARNINGS_END
 
 //ImGUIの管理
 class ImGuiManager

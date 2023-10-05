@@ -1,13 +1,18 @@
 #include "Sprite.h"
 #include "TextureManager.h"
-#include <cassert>
-#include <d3dcompiler.h>
-#include <d3dx12.h>
+
 #include "MyMath.h"
 #include "WinApp.h"
 #include "DirectXCore.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <cassert>
+#include <d3dcompiler.h>
+#include <d3dx12.h>
+MY_SUPPRESS_WARNINGS_END
 
 using namespace Microsoft::WRL;
 
@@ -227,7 +232,7 @@ void Sprite::StaticFinalize()
 
 	RootSignature_.Reset();
 
-	for (int i = 0; i < PipelineStates_.size(); i++) {
+	for (size_t i = 0; i < PipelineStates_.size(); i++) {
 		PipelineStates_[i].Reset();
 	}
 

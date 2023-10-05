@@ -10,7 +10,7 @@ void TitleScene::Initialize()
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
 
-	loserTexture_ = TextureManager::Load("sprite/Title.png");
+	loserTexture_ = TextureManager::Load("sprite/ParticleDemo.png");
 	sprite_=  Sprite::Create(loserTexture_);
 	sceneManager_ = SceneManager::GetInstance();
 
@@ -19,14 +19,13 @@ void TitleScene::Initialize()
 	viewProjection_->eye = { 0,0,-200 };
 	viewProjection_->UpdateMatrix();
 
-	int a = 1000000;
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), Vector3(0, 0, 0));
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
 
-	ParticleMan = std::make_unique<Hibana>();
-	ParticleMan->Initialize(a);
+	ParticleMan = std::make_unique<MeshParticle>();
+	ParticleMan->Initialize(MaxParticleCount);
 	ParticleMan->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	model.reset(Model::CreateFromOBJ("ken", true));
@@ -80,10 +79,10 @@ void TitleScene::Update()
 		ImGui::End();
 	}
 
-	if (input_->TriggerKey(DIK_SPACE))
-	{
-		sceneManager_->ChangeScene("STAGESELECT");
-	}
+	//if (input_->TriggerKey(DIK_SPACE))
+	//{
+	//	sceneManager_->ChangeScene("STAGESELECT");
+	//}
 
 	CameraPos.z = 5.0f;
 
@@ -116,9 +115,9 @@ void TitleScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	Hibana::PreDraw(commandList);
+	MeshParticle::PreDraw(commandList);
 	ParticleMan->Draw(*viewProjection_.get());
-	Hibana::PostDraw();
+	MeshParticle::PostDraw();
 
 	PostEffect::PostDrawScene();
 }

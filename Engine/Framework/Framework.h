@@ -9,8 +9,11 @@
 #include "SceneManager.h"
 //#include "FbxModel.h"
 //#include <FbxLoader.h>
-#include <memory>
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <memory>
+MY_SUPPRESS_WARNINGS_END
 
 class Framework {
 public:

@@ -1,8 +1,14 @@
 #pragma once
+
+#include "Vector2.h"
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+
 #include<Windows.h>
 #include <cstdint>
 #include <string>
-#include "Vector2.h"
+
+MY_SUPPRESS_WARNINGS_END
 
 
 class WinApp

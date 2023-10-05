@@ -1,16 +1,22 @@
 #pragma once
 
-#include <string>
-#include <vector>
+
 #include "Vector3.h"
-#include <Model.h>
+
 #include "WorldTransform.h"
-#include <map>
+
 #include "TutorialEnemy.h"
 #include "BulletShotEnemy.h"
 #include "Ground.h"
 #include "TouchableObject.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <map>
+#include <string>
+#include <vector>
+#include <Model.h>
+MY_SUPPRESS_WARNINGS_END
 
 // レベルデータ
 struct LevelData {

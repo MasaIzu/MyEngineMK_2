@@ -2,9 +2,15 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "MyMath.h"
+
+#include "Quaternion.h"
+
+#pragma warning(push)
+#pragma warning(disable: 4820)
 #include <d3d12.h>
 #include <wrl.h>
-#include "Quaternion.h"
+#pragma warning(pop)
+
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4 matWorld;           // ローカル → ワールド変換行列

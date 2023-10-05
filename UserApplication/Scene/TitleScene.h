@@ -4,10 +4,10 @@
 #include "Sprite.h"
 #include "Input.h"
 #include "SceneManager.h"
-#include <Hibana.h>
+#include "MeshParticle.h"
 #include "ViewProjection.h"
 #include "GameCamera.h"
-#include <Model.h>
+#include "Model.h"
 
 
 // タイトルシーン
@@ -54,7 +54,7 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	uint32_t loserTexture_ = 0;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
-	std::unique_ptr<Hibana> ParticleMan;
+	std::unique_ptr<MeshParticle> ParticleMan;
 	std::unique_ptr<Model> model;
 	std::unique_ptr<GameCamera> gameCamera;
 
@@ -63,6 +63,7 @@ private:
 	int samples = 5;
 
 	uint32_t MaxFream = 60;
+	uint32_t MaxParticleCount = 1000000;
 
 	float intensity = 0.1f;
 	float angle = 45.0f;

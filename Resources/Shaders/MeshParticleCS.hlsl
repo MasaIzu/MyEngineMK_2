@@ -45,8 +45,8 @@ void main(uint3 id : SV_DispatchThreadID)
     }
     const float dt = 1;
 
-    gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
-    if (gParticles[index].lifeTime <= 0)
+    //gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
+    if (Shot == 2)
     {
         gParticles[index].isActive = 0;
         gDeadIndexList.Append(index);

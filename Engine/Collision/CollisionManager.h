@@ -5,9 +5,12 @@
 #include "QueryCallback.h"
 
 #include"Matrix4.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <d3d12.h>
 #include <forward_list>
-
+MY_SUPPRESS_WARNINGS_END
 
 class BaseCollider;
 

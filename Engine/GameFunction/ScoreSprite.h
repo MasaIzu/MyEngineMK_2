@@ -4,8 +4,12 @@
 #include <memory>
 #include "Vector2.h"
 #include "Vector4.h"
-#include <list>
 
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <list>
+MY_SUPPRESS_WARNINGS_END
 
 class ScoreSprite
 {

@@ -6,11 +6,15 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
-#include <d3d12.h>
 #include "d3dx12.h"
 #include <CreateResource.h>
 #include <combaseapi.h>
 #pragma comment(lib, "d3dcompiler.lib")
+
+#pragma warning(push)
+#pragma warning(disable: 4820)
+#include <d3d12.h>
+#pragma warning(pop)
 
 using namespace std;
 using namespace Microsoft::WRL;
@@ -239,7 +243,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[ 3 ] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsUnorderedAccessView(0);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);

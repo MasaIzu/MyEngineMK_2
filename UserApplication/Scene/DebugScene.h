@@ -22,10 +22,7 @@
 #include "LoadLevelEditor.h"
 
 #include "TouchableObject.h"
-#include <Skydome.h>
-#include <ParticleHandHanabi.h>
-#include <Explosion.h>
-#include <Hibana.h>
+#include "Skydome.h"
 
 
 /// <summary>

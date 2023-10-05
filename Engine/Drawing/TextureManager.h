@@ -1,10 +1,14 @@
 #pragma once
 
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <array>
 #include <d3dx12.h>
 #include <string>
 #include <unordered_map>
 #include <wrl.h>
+MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
 /// テクスチャマネージャ

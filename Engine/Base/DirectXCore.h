@@ -1,11 +1,17 @@
 #pragma once
 
-#include <Windows.h>
-#include <cstdlib>
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <dxgi1_6.h>
+
+#include <Windows.h>
+#include <cstdlib>
 #include <wrl.h>
+
+MY_SUPPRESS_WARNINGS_END
 
 class DirectXCore {
 
@@ -67,7 +73,7 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr <ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
 
-	HWND hwnd_;
+	HWND hwnd_ = {};
 
 	static DirectXCore* DirectXCore_;
 

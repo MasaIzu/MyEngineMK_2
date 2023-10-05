@@ -4,10 +4,14 @@
 ///当たり判定プリミティブ
 /// </summary>
 
-#include <stdint.h>
+
 #include"Vector3.h"
 #include"Vector4.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <stdint.h>
+MY_SUPPRESS_WARNINGS_END
 
 struct Sphere {
 	Vector4 center = { 0,0,0,1 };

@@ -1,10 +1,15 @@
 #include "MixPostEffect.h"
-#include<d3dx12.h>
+
 #include"WinApp.h"
-#include <cassert>
-#include <d3dcompiler.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include<d3dx12.h>
+#include <cassert>
+#include <d3dcompiler.h>
+MY_SUPPRESS_WARNINGS_END
 
 ID3D12Device* MixPostEffect::device_;
 ID3D12GraphicsCommandList* MixPostEffect::commandList;

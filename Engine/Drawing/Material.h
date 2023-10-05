@@ -1,10 +1,14 @@
 #pragma once
 
 #include "Vector3.h"
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <string>
 #include <wrl.h>
+MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
 /// マテリアル

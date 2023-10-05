@@ -1,6 +1,11 @@
 #include "WinApp.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <string>
 #include<imgui_impl_win32.h>
+
+MY_SUPPRESS_WARNINGS_END
 
 WinApp* WinApp::WinApp_ = nullptr;
 const uint32_t WinApp::window_width = 1280;
@@ -36,6 +41,7 @@ WinApp* WinApp::GetInstance() {
 
 	return WinApp_;
 }
+
 
 void WinApp::Destroy()
 {

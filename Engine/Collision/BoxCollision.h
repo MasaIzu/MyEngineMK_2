@@ -1,11 +1,17 @@
 #pragma once
 #include "WorldTransform.h"
 #include "Model.h"
-#include <cassert>
+
 #include "Input.h"
 #include "ViewProjection.h"
+
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <memory>
 #include <list>
+#include <cassert>
+MY_SUPPRESS_WARNINGS_END
 
 class BoxCollision {
 public:

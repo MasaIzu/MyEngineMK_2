@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Vector4
 {
 public:

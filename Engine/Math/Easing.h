@@ -1,6 +1,11 @@
 #pragma once
 #include "Vector3.h"
+
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <cstdint>
+MY_SUPPRESS_WARNINGS_END
 
 //追加
 namespace Easing

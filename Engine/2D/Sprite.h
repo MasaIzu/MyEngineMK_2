@@ -3,11 +3,15 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <Windows.h>
 #include <d3d12.h>
 #include <string>
 #include <wrl.h>
-#include<memory>
+#include <memory>
+MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
 /// スプライト

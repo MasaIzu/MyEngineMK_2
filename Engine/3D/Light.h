@@ -1,12 +1,16 @@
 #pragma once
-
-#include <Windows.h>
-#include <wrl.h>
-#include <d3d12.h>
-#include <d3dx12.h>
 #include"DirectXCore.h"
 #include "Vector3.h"
 #include "Vector4.h"
+
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3d12.h>
+#include <d3dx12.h>
+#include <wrl.h>
+#include <Windows.h>
+MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
 /// ライト

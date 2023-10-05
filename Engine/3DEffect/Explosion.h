@@ -4,13 +4,19 @@
 #include "WorldTransform.h"
 #include "Mesh.h"
 #include "Light.h"
-#include <string>
-#include <unordered_map>
-#include <vector>
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <string>
+#include <unordered_map>
+#include <vector>
+MY_SUPPRESS_WARNINGS_END
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>

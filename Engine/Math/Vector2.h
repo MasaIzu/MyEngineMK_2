@@ -1,7 +1,11 @@
 #pragma once
-#include <cstdint>
+
 #include "Uint32Vector2.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <cstdint>
+MY_SUPPRESS_WARNINGS_END
 
 class Vector2
 {

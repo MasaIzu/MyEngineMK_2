@@ -123,19 +123,10 @@ void DebugScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	////パーティクル
-	Explosion::PreDraw(commandList);
-
-	Explosion::PostDraw();
-
-
 	Model::PreDraw(commandList);
 
 	Model::PostDraw();
 
-	Hibana::PreDraw(commandList);
-	
-	Hibana::PostDraw();
 
 	PostEffect::PostDrawScene();
 }
@@ -174,18 +165,6 @@ void DebugScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
-
-	ParticleHandHanabi::PreDraw(commandList);
-
-	ParticleHandHanabi::PostDraw();
-
-	Explosion::PreDraw(commandList);
-	//ParticleMan->Draw(*viewProjection_.get());
-	Explosion::PostDraw();
-
-	Hibana::PreDraw(commandList);
-
-	Hibana::PostDraw();
 
 #pragma endregion
 

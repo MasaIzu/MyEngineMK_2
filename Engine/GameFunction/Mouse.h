@@ -1,11 +1,17 @@
 #pragma once
 #include"ErrorException.h"
-#include <dinput.h>
+
 #include"Vector2.h"
 #include"Vector3.h"
 #include"WinApp.h"
-#include <wrl.h>
+
 #include "MyMath.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <wrl.h>
+#include <dinput.h>
+MY_SUPPRESS_WARNINGS_END
 
 class Mouse
 {

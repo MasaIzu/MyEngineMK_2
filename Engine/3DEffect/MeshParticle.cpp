@@ -1,4 +1,4 @@
-#include "Hibana.h"
+#include "MeshParticle.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -6,11 +6,16 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
-#include <d3d12.h>
-#include "d3dx12.h"
 #include <CreateResource.h>
 #include <combaseapi.h>
 #pragma comment(lib, "d3dcompiler.lib")
+
+#include "Defined.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3d12.h>
+#include <d3dx12.h>
+MY_SUPPRESS_WARNINGS_END
 
 using namespace std;
 using namespace Microsoft::WRL;
@@ -18,33 +23,33 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-ID3D12Device* Hibana::device = nullptr;
-ID3D12GraphicsCommandList* Hibana::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> Hibana::rootsignature;
-ComPtr<ID3D12RootSignature> Hibana::rootSignature;//コンピュートシェーダー用
-ComPtr<ID3D12PipelineState> Hibana::pipelinestate;
-ComPtr<ID3D12PipelineState> Hibana::pipelineState;//コンピュートシェーダー用
+ID3D12Device* MeshParticle::device = nullptr;
+ID3D12GraphicsCommandList* MeshParticle::cmdList = nullptr;
+ComPtr<ID3D12RootSignature> MeshParticle::rootsignature;
+ComPtr<ID3D12RootSignature> MeshParticle::rootSignature;//コンピュートシェーダー用
+ComPtr<ID3D12PipelineState> MeshParticle::pipelinestate;
+ComPtr<ID3D12PipelineState> MeshParticle::pipelineState;//コンピュートシェーダー用
 
-std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> Hibana::m_pipelines;
-ComPtr<ID3D12DescriptorHeap> Hibana::m_cbvSrvUavHeap;
+std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> MeshParticle::m_pipelines;
+ComPtr<ID3D12DescriptorHeap> MeshParticle::m_cbvSrvUavHeap;
 
-const std::string Hibana::PSO_DEFAULT = "PSO_DEFAULT";
-const std::string Hibana::PSO_CS_INIT = "PSO_CS_INIT";
-const std::string Hibana::PSO_CS_EMIT = "PSO_CS_EMIT";
-const std::string Hibana::PSO_CS_UPDATE = "PSO_CS_UPDATE";
-const std::string Hibana::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
-const std::string Hibana::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
+const std::string MeshParticle::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string MeshParticle::PSO_CS_INIT = "PSO_CS_INIT";
+const std::string MeshParticle::PSO_CS_EMIT = "PSO_CS_EMIT";
+const std::string MeshParticle::PSO_CS_UPDATE = "PSO_CS_UPDATE";
+const std::string MeshParticle::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
+const std::string MeshParticle::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
-UINT Hibana::m_incrementSize;
+UINT MeshParticle::m_incrementSize;
 
-UINT Hibana::m_cbvSrvUavDescriptorSize = 0;
+UINT MeshParticle::m_cbvSrvUavDescriptorSize = 0;
 
-void Hibana::StaticInitialize(ID3D12Device* Device)
+void MeshParticle::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
 	assert(Device);
 
-	Hibana::device = Device;
+	MeshParticle::device = Device;
 
 	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -53,18 +58,18 @@ void Hibana::StaticInitialize(ID3D12Device* Device)
 
 }
 
-void Hibana::StaticFinalize()
+void MeshParticle::StaticFinalize()
 {
 
 }
 
-void Hibana::PreDraw(ID3D12GraphicsCommandList* commandList)
+void MeshParticle::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Hibana::cmdList == nullptr);
+	assert(MeshParticle::cmdList == nullptr);
 
 	// コマンドリストをセット
-	Hibana::cmdList = commandList;
+	MeshParticle::cmdList = commandList;
 
 	// パイプラインステートの設定
 	commandList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
@@ -74,13 +79,13 @@ void Hibana::PreDraw(ID3D12GraphicsCommandList* commandList)
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
-void Hibana::PostDraw()
+void MeshParticle::PostDraw()
 {
 	// コマンドリストを解除
-	Hibana::cmdList = nullptr;
+	MeshParticle::cmdList = nullptr;
 }
 
-void Hibana::InitializeGraphicsPipeline()
+void MeshParticle::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -290,7 +295,7 @@ void Hibana::InitializeGraphicsPipeline()
 	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/HibanaCS.hlsl",
+		L"Resources/Shaders/MeshParticleCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"initParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -298,7 +303,7 @@ void Hibana::InitializeGraphicsPipeline()
 		&csBlobInit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/HibanaCS.hlsl",
+		L"Resources/Shaders/MeshParticleCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"emitParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -306,7 +311,7 @@ void Hibana::InitializeGraphicsPipeline()
 		&csBlobEmit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/HibanaCS.hlsl",
+		L"Resources/Shaders/MeshParticleCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -321,7 +326,7 @@ void Hibana::InitializeGraphicsPipeline()
 
 	//initialize用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobInit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
 	m_pipelines[PSO_CS_INIT] = CSpipelineState;
 
 	//emit用
@@ -347,7 +352,7 @@ void Hibana::InitializeGraphicsPipeline()
 	m_incrementSize = device->GetDescriptorHandleIncrementSize(cbvSrvUavHeapDesc.Type);
 }
 
-void Hibana::InitializeVerticeBuff()
+void MeshParticle::InitializeVerticeBuff()
 {
 
 	HRESULT result;
@@ -425,11 +430,11 @@ void Hibana::InitializeVerticeBuff()
 
 }
 
-void Hibana::SetTextureHandle(uint32_t textureHandle) {
+void MeshParticle::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void Hibana::Initialize(uint32_t ParticleCount)
+void MeshParticle::Initialize(uint32_t ParticleCount)
 {
 	HRESULT result;
 
@@ -492,7 +497,7 @@ void Hibana::Initialize(uint32_t ParticleCount)
 
 }
 
-void Hibana::Update()
+void MeshParticle::Update()
 {
 
 	// 死んでいるパーティクルを削除
@@ -505,7 +510,7 @@ void Hibana::Update()
 
 }
 
-void Hibana::Draw(const ViewProjection& view)
+void MeshParticle::Draw(const ViewProjection& view)
 {
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
@@ -515,7 +520,7 @@ void Hibana::Draw(const ViewProjection& view)
 
 	// nullptrチェック
 	assert(device);
-	assert(Hibana::cmdList);
+	assert(MeshParticle::cmdList);
 
 
 	// 頂点バッファの設定
@@ -534,17 +539,20 @@ void Hibana::Draw(const ViewProjection& view)
 
 }
 
-void Hibana::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
+void MeshParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 {
+
+	if ( shaderParameters.Shot == 2 )
+	{
+		shaderParameters.Shot = 0;
+	}
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;
 		shaderParameters.StartPos = StartPos;
-
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
 		CD3DX12_RESOURCE_BARRIER transitionBarrier[ 2 ] = {};
@@ -565,6 +573,15 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 		UINT invokeCount = particleCount / 128 + 1;
 		commandList->Dispatch(invokeCount, 1, 1);
 	}
+	if ( input_->TriggerKey(DIK_F) )
+	{
+		shaderParameters.Shot = 1;
+	}
+	else if ( input_->TriggerKey(DIK_G) )
+	{
+		shaderParameters.Shot = 2;
+	}
+	MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(),sizeof(ShaderParameters),&shaderParameters);
 
 
 	{
@@ -592,9 +609,7 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 			DispatchCount = 1;
 		}
 		{
-			if (input_->PushKey(DIK_G)) {
-				shaderParameters.Shot = 1;
-			}
+			
 			commandList->Dispatch(invokeCount, 1, 1);
 		}
 
@@ -616,7 +631,7 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 
 
 
-void Hibana::CopyData()
+void MeshParticle::CopyData()
 {
 
 	VertexPos* outPutDeta = nullptr;
@@ -626,7 +641,7 @@ void Hibana::CopyData()
 
 }
 
-void Hibana::SetMeshPos(std::vector<MyStruct::Meshes> meshPos)
+void MeshParticle::SetMeshPos(std::vector<MyStruct::Meshes> meshPos)
 {
 	for (size_t i = 0; i < meshPos.size(); i++) {
 		shaderParameters.meshPos[i] = meshPos[i];

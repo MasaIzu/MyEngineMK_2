@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectX 12 first", "DirectX 12 first.vcxproj", "{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectX12Engine", "DirectX 12 first.vcxproj", "{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{AAD31867-0D0A-4155-A935-2A6648B0D2A3}"
 EndProject

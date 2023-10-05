@@ -2,10 +2,14 @@
 
 #include"Vector3.h"
 #include"Matrix4.h"
-#include <d3d12.h>
-#include <wrl.h>
 #include "MyMath.h"
 
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <d3d12.h>
+#include <wrl.h>
+MY_SUPPRESS_WARNINGS_END
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {

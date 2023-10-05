@@ -1,14 +1,19 @@
 #pragma once
+
+#define DIRECTINPUT_VERSION 0x0800 //DirectInputのバージョン指定
+
+#include "WinApp.h"
+#include "Mouse.h"
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <dinput.h>
 #include <DirectXMath.h>
 #include <Windows.h>
 #include <array>
 #include <vector>
 #include <wrl.h>
-#define DIRECTINPUT_VERSION 0x0800 //DirectInputのバージョン指定
-#include <dinput.h>
-#include "WinApp.h"
-#include "Mouse.h"
-
+MY_SUPPRESS_WARNINGS_END
 
 // 入力
 class Input

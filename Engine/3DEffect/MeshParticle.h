@@ -5,9 +5,7 @@
 #include "WorldTransform.h"
 #include "Mesh.h"
 #include "Light.h"
-#include <string>
-#include <unordered_map>
-#include <vector>
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -16,10 +14,17 @@
 #include "Input.h"
 #include "MyStruct.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <string>
+#include <unordered_map>
+#include <vector>
+MY_SUPPRESS_WARNINGS_END
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class Hibana
+class MeshParticle
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略

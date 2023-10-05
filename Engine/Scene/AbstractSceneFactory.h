@@ -1,8 +1,10 @@
 #pragma once
-
-#include <string>
 #include "BaseScene.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <string>
+MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
 /// シーンファクトリー

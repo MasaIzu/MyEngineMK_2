@@ -2,11 +2,15 @@
 #include"Vector3.h"
 #include"Matrix4.h"
 #include "WinApp.h"
-#include <DirectXMath.h>
-#include <Vector4.h>
+
+#include "Vector4.h"
 #include "Quaternion.h"
 #include "Uint32Vector2.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <DirectXMath.h>
+MY_SUPPRESS_WARNINGS_END
 
 //便利系まとめ
 namespace MyMath {

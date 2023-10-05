@@ -1,7 +1,12 @@
 #pragma once
 #include "Vector3.h"
 #include "Vector4.h"
+
+
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
 #include <DirectXMath.h>
+MY_SUPPRESS_WARNINGS_END
 
 class Matrix4
 {

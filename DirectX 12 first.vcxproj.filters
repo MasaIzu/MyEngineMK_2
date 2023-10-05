@@ -251,7 +251,7 @@
     <FxCompile Include="Resources\Shaders\Explosion.hlsl">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\HibanaCS.hlsl">
+    <FxCompile Include="Resources\Shaders\MeshParticleCS.hlsl">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ParticleHandHanabi.hlsl">
@@ -469,7 +469,7 @@
     <ClInclude Include="Engine\3DEffect\Explosion.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3DEffect\Hibana.h">
+    <ClInclude Include="Engine\3DEffect\MeshParticle.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3DEffect\ParticleCS.h">
@@ -498,6 +498,9 @@
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\ClearScene.h">
       <Filter>UserHeaderFile\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Defined.h">
+      <Filter>Engine\HeaderFile\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -669,7 +672,7 @@
     <ClCompile Include="Engine\3DEffect\Explosion.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3DEffect\Hibana.cpp">
+    <ClCompile Include="Engine\3DEffect\MeshParticle.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleCS.cpp">

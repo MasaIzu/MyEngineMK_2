@@ -1,8 +1,11 @@
 #include "DirectXCore.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
+
 #include <algorithm>
 #include <cassert>
 #include <vector>
-
+MY_SUPPRESS_WARNINGS_END
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -88,7 +91,7 @@ void DirectXCore::PreDraw() {
 
 	// レンダーターゲットビュー用ディスクリプタヒープのハンドルを取得
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvH = CD3DX12_CPU_DESCRIPTOR_HANDLE(
-		rtvHeap->GetCPUDescriptorHandleForHeapStart(), bbIndex,
+		rtvHeap->GetCPUDescriptorHandleForHeapStart(), static_cast<INT>(bbIndex),
 		device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 	// 深度ステンシルビュー用デスクリプタヒープのハンドルを取得
 	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvH =
@@ -148,8 +151,11 @@ void DirectXCore::PostDraw() {
 	if (fence->GetCompletedValue() != fenceVal) {
 		HANDLE event = CreateEvent(nullptr, false, false, nullptr);
 		fence->SetEventOnCompletion(fenceVal, event);
-		WaitForSingleObject(event, INFINITE);
-		CloseHandle(event);
+		if ( event != 0 )
+		{
+			WaitForSingleObject(event,INFINITE);
+			CloseHandle(event);
+		}
 	}
 
 	commandAllocator->Reset(); // キューをクリア
@@ -162,7 +168,7 @@ void DirectXCore::ClearRenderTarget() {
 
 	// レンダーターゲットビュー用ディスクリプタヒープのハンドルを取得
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvH = CD3DX12_CPU_DESCRIPTOR_HANDLE(
-		rtvHeap->GetCPUDescriptorHandleForHeapStart(), bbIndex,
+		rtvHeap->GetCPUDescriptorHandleForHeapStart(),static_cast<INT>(bbIndex),
 		device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 
 	// 全画面クリア        Red   Green Blue  Alpha
@@ -235,7 +241,7 @@ void DirectXCore::InitializeDevice() {
 
 	result = S_FALSE;
 	D3D_FEATURE_LEVEL featureLevel;
-	for (int i = 0; i < adapters.size(); i++) {
+	for (size_t i = 0; i < adapters.size(); i++) {
 		// デバイスを生成
 		for (int levelIndex = 0; levelIndex < _countof(levels); levelIndex++) {
 			result =
@@ -341,14 +347,14 @@ void DirectXCore::InitializeRenderTargets() {
 
 	// 裏表の２つ分について
 	backBuffers.resize(swcDesc.BufferCount);
-	for (int i = 0; i < backBuffers.size(); i++) {
+	for (size_t i = 0; i < backBuffers.size(); i++) {
 		// スワップチェーンからバッファを取得
-		result = swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffers[i]));
+		result = swapChain->GetBuffer(static_cast<UINT>(i), IID_PPV_ARGS(&backBuffers[i]));
 		assert(SUCCEEDED(result));
 
 		// ディスクリプタヒープのハンドルを取得
 		CD3DX12_CPU_DESCRIPTOR_HANDLE handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(
-			rtvHeap->GetCPUDescriptorHandleForHeapStart(), i,
+			rtvHeap->GetCPUDescriptorHandleForHeapStart(),static_cast<UINT>(i),
 			device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
 		// レンダーターゲットビューの設定
 		D3D12_RENDER_TARGET_VIEW_DESC renderTargetViewDesc{};
