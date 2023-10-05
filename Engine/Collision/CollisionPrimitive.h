@@ -1,12 +1,13 @@
 #pragma once
 #pragma once
 /// <summary>
-///“–‚½‚è”»’èƒvƒŠƒ~ƒeƒBƒu
+///å½“ãŸã‚Šåˆ¤å®šãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–
 /// </summary>
 
 #include <stdint.h>
 #include"Vector3.h"
 #include"Vector4.h"
+
 
 struct Sphere {
 	Vector4 center = { 0,0,0,1 };

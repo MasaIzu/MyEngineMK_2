@@ -7,61 +7,60 @@
 #include <wrl.h>
 #include "MyMath.h"
 
-
 class Mouse
 {
 private:
-	//ƒ}ƒEƒX
+	//ãƒã‚¦ã‚¹
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> mouseDevice;
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 oldMouseState = {};
-	//ƒ}ƒEƒX‚ÌƒQ[ƒ€‹óŠÔ“à‚Å‚ÌƒŒƒC
+	//ãƒã‚¦ã‚¹ã®ã‚²ãƒ¼ãƒ ç©ºé–“å†…ã§ã®ãƒ¬ã‚¤
 	Vector2 mousePos;
 	Vector3 mouseMove;
 
 public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(IDirectInput8* dinput);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒ}ƒEƒXƒ{ƒ^ƒ“‚ÌƒgƒŠƒK[“ü—Í
+	/// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®ãƒˆãƒªã‚¬ãƒ¼å…¥åŠ›
 	/// </summary>
-	/// <param name="button">ƒ`ƒFƒbƒN‚µ‚½‚¢ƒ{ƒ^ƒ“</param>
-	/// <returns>‰Ÿ‚µ‚½‚©</returns>
+	/// <param name="button">ãƒã‚§ãƒƒã‚¯ã—ãŸã„ãƒœã‚¿ãƒ³</param>
+	/// <returns>æŠ¼ã—ãŸã‹</returns>
 	bool MouseInputTrigger(int button);
 
 	/// <summary>
-	/// ƒ}ƒEƒXƒ{ƒ^ƒ“‚Ì“ü—Í
+	/// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®å…¥åŠ›
 	/// </summary>
-	/// <param name="button">ƒ`ƒFƒbƒN‚µ‚½‚¢ƒ{ƒ^ƒ“</param>
-	/// <returns>‰Ÿ‚µ‚½‚©</returns>
+	/// <param name="button">ãƒã‚§ãƒƒã‚¯ã—ãŸã„ãƒœã‚¿ãƒ³</param>
+	/// <returns>æŠ¼ã—ãŸã‹</returns>
 	bool MouseInput(int button);
 
 	/// <summary>
-	/// ƒ}ƒEƒXƒ{ƒ^ƒ“‚Ì—£‚µ‚½uŠÔ
+	/// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®é›¢ã—ãŸç¬é–“
 	/// </summary>
-	/// <param name="button">ƒ`ƒFƒbƒN‚µ‚½‚¢ƒ{ƒ^ƒ“</param>
-	/// <returns>—£‚µ‚½‚©</returns>
+	/// <param name="button">ãƒã‚§ãƒƒã‚¯ã—ãŸã„ãƒœã‚¿ãƒ³</param>
+	/// <returns>é›¢ã—ãŸã‹</returns>
 	bool MouseOffTrigger(int button);
 
 	/// <summary>
-	/// ƒ}ƒEƒX‚ÌˆÊ’u
+	/// ãƒã‚¦ã‚¹ã®ä½ç½®
 	/// </summary>
-	/// <returns>ƒ}ƒEƒX‚ÌˆÊ’u</returns>
+	/// <returns>ãƒã‚¦ã‚¹ã®ä½ç½®</returns>
 	const Vector2 GetMousePos()const;
 
 	/// <summary>
-	/// ƒ}ƒEƒX‚ÌˆÊ’u
+	/// ãƒã‚¦ã‚¹ã®ä½ç½®
 	/// </summary>
-	/// <returns>ƒ}ƒEƒX‚ÌˆÊ’u</returns>
+	/// <returns>ãƒã‚¦ã‚¹ã®ä½ç½®</returns>
 	const Vector3 GetMouseMove();
 
 	char PADDING[4];

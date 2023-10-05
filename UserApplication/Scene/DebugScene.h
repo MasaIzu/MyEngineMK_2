@@ -7,9 +7,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "affin.h"
 #include "ParticleCS.h"
-
 #include "BaseScene.h"
 #include "SceneManager.h"
 
@@ -31,50 +29,50 @@
 
 
 /// <summary>
-/// ƒQ[ƒ€ƒV[ƒ“
+/// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
 /// </summary>
 class DebugScene : public BaseScene {
 
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	DebugScene();
 	~DebugScene();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize() override;
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
+	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	/// </summary>
 	void Update() override;
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw() override;
-	// I—¹ˆ—
+	// çµ‚äº†å‡¦ç†
 	void Finalize() override;
-	//ƒRƒs[ˆ—
+	//ã‚³ãƒ”ãƒ¼å‡¦ç†
 	void CopyData() override;
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚ğŠ|‚¯‚é‚â‚Â
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æ›ã‘ã‚‹ã‚„ã¤
 	void PostEffectDraw() override;
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate() override;
 
-private: // ƒƒ“ƒo•Ï”
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
-	WorldTransform worldTransform_;//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
-	std::unique_ptr<ViewProjection> viewProjection_;//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+	WorldTransform worldTransform_;//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
+	std::unique_ptr<ViewProjection> viewProjection_;//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<Ground> ground;
 	std::unique_ptr<Model> model;
 	std::unique_ptr<Model> model1;
 
 	int shadeNumber = 3;
-	int range = 0;//‚Ú‚©‚µ‹­“x
+	int range = 0;//ã¼ã‹ã—å¼·åº¦
 	int samples = 5;
 
 	uint32_t MaxFream = 60;
@@ -87,11 +85,5 @@ private: // ƒƒ“ƒo•Ï”
 	Vector2 center = { 0.5f,0.5f };
 
 	Vector3 CameraPos;
-
-	double x;     // •R‚ğL‚Î‚µ‚Äˆêü‚³‚¹‚½ê‡‚Éo—ˆ‚é‰~üã‚ÌÀ•WA‚O‚Í•R‚ª²‚Ì^‰º‚É‚¢‚éˆÊ’u
-	double speed; // x‚Ì‘¬“x
-	double Angle;
-	float    jiku_x = 320, jiku_y = 100; // ²‚ÌˆÊ’u
-	float nx, ny;
 
 };

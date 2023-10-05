@@ -14,6 +14,7 @@ Player::Player()
 
 Player::~Player()
 {
+
 }
 
 void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
@@ -40,7 +41,7 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	AttackSprite = Sprite::Create(TextureManager::Load("sprite/shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
 
-	// ƒRƒŠƒWƒ‡ƒ“ƒ}ƒl[ƒWƒƒ‚É’Ç‰Á
+	// ã‚³ãƒªã‚¸ãƒ§ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ã«è¿½åŠ 
 	PlayerCollider = new SphereCollider(Vector4(0, Radius, 0, 0), Radius);
 	CollisionManager::GetInstance()->AddCollider(PlayerCollider);
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
@@ -50,34 +51,34 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	FirstMoveSpline = std::make_unique<SplinePosition>();
 	FinalMoveSpline = std::make_unique<SplinePosition>();
 
-	// AttackƒtƒHƒ“ƒg
+	// Attackãƒ•ã‚©ãƒ³ãƒˆ
 	AttackFontSprite[0] = Sprite::Create(TextureManager::Load("sprite/Attack_off.png"));
 	AttackFontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
 	AttackFontSprite[1] = Sprite::Create(TextureManager::Load("sprite/Attack_on.png"));
 	AttackFontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
 
-	// WƒtƒHƒ“ƒg
+	// Wãƒ•ã‚©ãƒ³ãƒˆ
 	W_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
 	W_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
 	W_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
 	W_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
 	W_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
 	W_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// AƒtƒHƒ“ƒg
+	// Aãƒ•ã‚©ãƒ³ãƒˆ
 	A_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
 	A_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
 	A_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
 	A_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
 	A_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
 	A_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// SƒtƒHƒ“ƒg
+	// Sãƒ•ã‚©ãƒ³ãƒˆ
 	S_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
 	S_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
 	S_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
 	S_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
 	S_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
 	S_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// DƒtƒHƒ“ƒg
+	// Dãƒ•ã‚©ãƒ³ãƒˆ
 	D_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_D_Font.png"));
 	D_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
 	D_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
@@ -119,22 +120,22 @@ void Player::Update()
 	if (FirstMoveSpline->GetFinishSpline()) {
 		isHitFirstRail = false;
 	}
-	//‰ñ“]‚³‚¹‚é
+	//å›è»¢ã•ã›ã‚‹
 	PlayerRot();
 
-	//‚Ç‚¤“®‚­‚©
+	//ã©ã†å‹•ãã‹
 	Move();
 
-	//—‰º
+	//è½ä¸‹
 	Fall();
-	//“–‚½‚è”»’èƒ`ƒFƒbƒN
+	//å½“ãŸã‚Šåˆ¤å®šãƒã‚§ãƒƒã‚¯
 	CheckPlayerCollider();
 
-	//ƒXƒvƒ‰ƒCƒ“ƒAƒbƒvƒf[ƒg
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	SplineUpdate();
 
 	if (isCameraModeNotFree == true) {
-		//ƒJƒƒ‰‚ÌˆÊ’u‚ÅƒAƒ‹ƒtƒ@‚ªŒˆ‚Ü‚é
+		//ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã§ã‚¢ãƒ«ãƒ•ã‚¡ãŒæ±ºã¾ã‚‹
 		alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
 		playerWorldTrans.alpha = alpha;
 		playerWorldTransHed.alpha = alpha;
@@ -241,7 +242,7 @@ void Player::Update()
 		}
 	}
 
-	//ˆÚ“®‚Ì’lXV
+	//ç§»å‹•ã®å€¤æ›´æ–°
 	WorldTransUpdate();
 
 	DistanceNolm = Distance - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
@@ -254,7 +255,7 @@ void Player::Update()
 	if (input_->MouseInputing(1)) {
 		isPressing = true;
 
-		// ”ÍˆÍƒŒƒCƒLƒƒƒXƒg
+		// ç¯„å›²ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 		Ray GroundRay;
 		GroundRay.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
 		//LookRay.start.y += CameraRayCollisionRadius;
@@ -263,7 +264,7 @@ void Player::Update()
 		GroundRay.dir = MyMath::Vec3ToVec4(PlayerToAimSaiteVec.norm());
 		RaycastHit raycastHit;
 
-		//ƒJƒƒ‰‚Æ‚ÌŠÔ‚É’n–Ê‚ª‚ ‚ê‚ÎˆÊ’u‚ğ•Ï‚¦‚é
+		//ã‚«ãƒ¡ãƒ©ã¨ã®é–“ã«åœ°é¢ãŒã‚ã‚Œã°ä½ç½®ã‚’å¤‰ãˆã‚‹
 		if (CollisionManager::GetInstance()->Raycast(GroundRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToAimSaiteVecDistance)) {
 			StartingPointOfGrapple.translation_ = MyMath::Vec4ToVec3(raycastHit.inter);
 		}
@@ -296,18 +297,18 @@ void Player::Update()
 
 }
 
-void Player::Draw(ViewProjection& viewProjection_)
+void Player::Draw(ViewProjection& viewProjection)
 {
 	//model_->Draw(DebugWorldTrans, viewProjection_);
 	if (isPressing) {
-		model_->Draw(StartingPointOfGrapple, viewProjection_);
+		model_->Draw(StartingPointOfGrapple, viewProjection);
 	}
-	playerBullet->Draw(viewProjection_);
-	model_->Draw(playerWorldTrans, viewProjection_);
-	model_->Draw(playerWorldTransHed, viewProjection_);
+	playerBullet->Draw(viewProjection);
+	model_->Draw(playerWorldTrans, viewProjection);
+	model_->Draw(playerWorldTransHed, viewProjection);
 }
 
-void Player::DrawSprite(ViewProjection& viewProjection_)
+void Player::DrawSprite()
 {
 	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
 	Vector2 W_Fontpos = { 270,530 };
@@ -347,16 +348,6 @@ void Player::DrawSprite(ViewProjection& viewProjection_)
 			AttackFontSprite[1]->Draw(AttackFontpos, { 1,1,1,1 });
 		}
 	}
-}
-
-void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
-{
-	playerBullet->CSUpdate(cmdList);
-}
-
-void Player::ParticleDraw(ViewProjection& viewProjection_)
-{
-	playerBullet->ParticleDraw(viewProjection_);
 }
 
 void Player::CopyParticle()
@@ -504,7 +495,7 @@ void Player::PlayerRot()
 
 	playerWorldTrans.SetRot(Vector3(0.0f, cameraRot.x, 0.0f));
 	playerWorldTransForBullet.SetRot(Vector3(cameraRot.y, cameraRot.x, 0.0f));
-	//’lXV
+	//å€¤æ›´æ–°
 	WorldTransUpdate();
 }
 
@@ -558,13 +549,13 @@ void Player::CheckPlayerCollider()
 {
 	//isHitRail = false;
 	//isHitFirstRail = false;
-	// ƒ[ƒ‹ƒhs—ñXV
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—æ›´æ–°
 	playerWorldTrans.TransferMatrix();
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
-	//’n–ÊƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+	//åœ°é¢ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	{
-		// ‹…‚Ìã’[‚©‚ç‹…‚Ì‰º’[‚Ü‚Å‚ÌƒŒƒCƒLƒƒƒXƒg
+		// çƒã®ä¸Šç«¯ã‹ã‚‰çƒã®ä¸‹ç«¯ã¾ã§ã®ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 		Ray Groundray;
 		Groundray.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		Groundray.start.y += Radius;
@@ -572,98 +563,98 @@ void Player::CheckPlayerCollider()
 		RaycastHit raycastHit;
 
 
-		// Ú’nó‘Ô
+		// æ¥åœ°çŠ¶æ…‹
 		if (onGround) {
-			// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+			// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 			const float adsDistance = 0.2f;
-			// Ú’n‚ğˆÛ
+			// æ¥åœ°ã‚’ç¶­æŒ
 			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, Radius * 2.0f + adsDistance)) {
 				onGround = true;
 				playerWorldTrans.translation_.y -= (raycastHit.distance - Radius * 2.0f);
 			}
-			// ’n–Ê‚ª‚È‚¢‚Ì‚Å—‰º
+			// åœ°é¢ãŒãªã„ã®ã§è½ä¸‹
 			else {
 				onGround = false;
 				fallVec = {};
 			}
 		}
-		// —‰ºó‘Ô
+		// è½ä¸‹çŠ¶æ…‹
 		else {
 			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, Radius * 2.0f)) {
-				// ’…’n
+				// ç€åœ°
 				onGround = true;
 				playerWorldTrans.translation_.y -= (raycastHit.distance - Radius * 2.0f);
 			}
 		}
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
 		wall.dir = { 0,0,1,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, Radius)) {
 			playerWorldTrans.translation_.z += (wallRaycastHit.distance - Radius);
 		}
 
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
 		wall.dir = { 0,0,-1,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, Radius)) {
 			playerWorldTrans.translation_.z -= (wallRaycastHit.distance - Radius);
 		}
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
 		wall.dir = { 1,0,0,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, Radius)) {
 			playerWorldTrans.translation_.x += (wallRaycastHit.distance - Radius);
 		}
 
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
 		wall.dir = { -1,0,0,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, Radius)) {
 			playerWorldTrans.translation_.x -= (wallRaycastHit.distance - Radius);
 		}
 
 	}
 
-	//ƒŒ[ƒ‹ƒRƒ‰ƒCƒ_[
+	//ãƒ¬ãƒ¼ãƒ«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	if (PlayerCollider->GetFirstSplineHit()) {
 		PlayerCollider->FirstSplineHitReset();
 		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
 		FirstMoveSpline->ResetNearSpline(splinePos);
 		isHitFirstRail = true;
 	}
-	//ƒŒ[ƒ‹ƒRƒ‰ƒCƒ_[
+	//ãƒ¬ãƒ¼ãƒ«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	if (isHitRail == false) {
 		if (PlayerCollider->GetSphereMeshHit()) {
 			PlayerCollider->SphereMeshHitReset();
@@ -672,7 +663,7 @@ void Player::CheckPlayerCollider()
 			isHitRail = true;
 		}
 	}
-	//ƒŒ[ƒ‹ƒRƒ‰ƒCƒ_[
+	//ãƒ¬ãƒ¼ãƒ«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	if (PlayerCollider->GetFinalSplineHit()) {
 		PlayerCollider->FinalSplineHitReset();
 		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0, Radius, 0);
@@ -685,14 +676,14 @@ void Player::CheckPlayerCollider()
 void Player::Fall()
 {
 	if (isHitRail == false/* || isHitFirstRail == false*/) {
-		// —‰ºˆ—
+		// è½ä¸‹å‡¦ç†
 		if (!onGround) {
-			// ‰ºŒü‚«‰Á‘¬“x
+			// ä¸‹å‘ãåŠ é€Ÿåº¦
 			const float fallAcc = -0.035f;
 			const float fallVYMin = -1.3f;
-			// ‰Á‘¬
+			// åŠ é€Ÿ
 			fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-			// ˆÚ“®
+			// ç§»å‹•
 			playerWorldTrans.translation_.x += fallVec.x;
 			playerWorldTrans.translation_.y += fallVec.y;
 			playerWorldTrans.translation_.z += fallVec.z;
@@ -733,16 +724,16 @@ void Player::SplineUpdate()
 void Player::UpdateReticle()
 {
 	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
-	//ƒrƒ…[ƒ|[ƒgs—ñ
+	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—
 	Matrix4 Viewport =
 	{ windowWH.x / 2,0,0,0,
 	0,-windowWH.y / 2,0,0,
 	0,0,1,0,
 	windowWH.x / 2, windowWH.y / 2,0,1 };
-	//ƒrƒ…[s—ñ‚ÆƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñAƒrƒ…[ƒ|[ƒgs—ñ‚ğ‡¬‚·‚é
+	//ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã¨ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã€ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’åˆæˆã™ã‚‹
 	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
 
-	//ƒoƒŒƒbƒgƒŒƒCƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+	//ãƒãƒ¬ãƒƒãƒˆãƒ¬ã‚¤ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	Ray wall;
 	wall.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
 	wall.start.y -= 0.4f;
@@ -750,13 +741,13 @@ void Player::UpdateReticle()
 	RaycastHit wallRaycastHit;
 
 	if (input_->MouseInputing(2) == false) {
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, PlayerToCameraTargetVecDistance)) {
 			//playerWorldTrans.translation_.x -= (wallRaycastHit.distance - Radius);
 			ReticlePos = MyMath::Vec4ToVec3(wallRaycastHit.inter);
 			ReticlePos.y += 0.4f;
 			ShootVec = ReticlePos - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
-			//ƒ[ƒ‹ƒh¨ƒXƒNƒŠ[ƒ“À•W•ÏŠ·(‚±‚±‚Å3D‚©‚ç2D‚É‚È‚é)
+			//ãƒ¯ãƒ¼ãƒ«ãƒ‰â†’ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™å¤‰æ›(ã“ã“ã§3Dã‹ã‚‰2Dã«ãªã‚‹)
 			//ReticlePos = MyMath::DivVecMat(ReticlePos, matViewProjectionViewport);
 		}
 		else {
@@ -769,14 +760,14 @@ void Player::UpdateReticle()
 	DebugWorldTrans.TransferMatrix();
 }
 
-float Player::AngleSelect(float& angle, float& selectAngle)
+float Player::AngleSelect(float& angle_, float& selectAngle)
 {
 	//float sprt = std::sqrt(angle * angle);
-	int intOverAngle = static_cast<int>(angle / selectAngle);
+	int intOverAngle = static_cast<int>(angle_ / selectAngle);
 
 	float floatOverAngle = static_cast<float>(intOverAngle);
 
-	float Angle = angle - (selectAngle * floatOverAngle);
+	float Angle = angle_ - (selectAngle * floatOverAngle);
 
 	return Angle;
 }

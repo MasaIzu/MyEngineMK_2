@@ -4,13 +4,14 @@
 #include <GameScene.h>
 
 void Enemy::Initialize(Model* model) {
-	//NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	//NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	model_.reset(model);
 
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
 	worldTransform_.Initialize();
 	
 }
+
 
 void Enemy::Move() {
 
@@ -51,9 +52,9 @@ Vector3 Enemy::bVelocity(Vector3& velocity, WorldTransform& worldTransform) {
 
 
 Vector3 Enemy::GetWorldPosition() {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñˆÚ“®¬•ª‚ğæ“¾(ƒ[ƒ‹ƒhÀ•W)
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ç§»å‹•æˆåˆ†ã‚’å–å¾—(ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™)
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];

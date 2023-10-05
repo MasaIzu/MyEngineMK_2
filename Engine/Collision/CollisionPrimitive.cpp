@@ -11,3 +11,4 @@ void Triangle::ComputeNormal()
 	normal = normal.Vector3Normal();
 
 }
+

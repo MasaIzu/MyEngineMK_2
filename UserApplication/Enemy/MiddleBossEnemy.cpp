@@ -18,15 +18,16 @@ MiddleBossEnemy::MiddleBossEnemy()
 
 MiddleBossEnemy::~MiddleBossEnemy()
 {
+
 }
 
-void MiddleBossEnemy::Initialize(Player* player)
+void MiddleBossEnemy::Initialize(Player* Player)
 {
 	multiBullet = std::make_unique<MultiBullet>();
 	missileBullet = std::make_unique<MissileBullet>();
-	this->player = player;
+	this->player = Player;
 
-	// ÉRÉäÉWÉáÉìÉ}ÉlÅ[ÉWÉÉÇ…í«â¡
+	// „Ç≥„É™„Ç∏„Éß„É≥„Éû„Éç„Éº„Ç∏„É£„Å´ËøΩÂä†
 	MiddleBossCollider = new SphereCollider(Vector4(0, Radius, 0, 0), Radius);
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider);
 	MiddleBossCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
@@ -99,11 +100,11 @@ void MiddleBossEnemy::Update()
 		if (isBackSponePos == true) {
 			if (BackLengthUint32 > BackLengthHalfUint32) {
 				BackLengthUint32--;
-				BossWorldTrans.translation_ += (JampBackVelocity * JumpMoveSpeed) + Vector3(0, JumpHeight, 0);
+				BossWorldTrans.translation_ += JampBackVelocity * JumpMoveSpeed;
 			}
-			else if (BackLengthUint32 < BackLengthHalfUint32) {
+			else if (BackLengthUint32 <= BackLengthHalfUint32) {
 				BackLengthUint32--;
-				BossWorldTrans.translation_ += (JampBackVelocity * JumpMoveSpeed) - Vector3(0, JumpHeight, 0);
+				BossWorldTrans.translation_ += JampBackVelocity * JumpMoveSpeed;
 
 				if (BackLengthUint32 <= 0) {
 					isBackSponePos = false;
@@ -151,13 +152,13 @@ void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 	}
 }
 
-bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& EndPos)
+bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& endPos)
 {
 	if (isSporn == false) {
 		isSporn = true;
 		BossWorldTrans.translation_ = StartPos;
-		this->EndPos = EndPos;
-		Vector3 startToEnd = EndPos - StartPos;
+		this->EndPos = endPos;
+		Vector3 startToEnd = endPos - StartPos;
 		Velocity = startToEnd / MovieUpdateTimes;
 	}
 	else {
@@ -198,10 +199,10 @@ void MiddleBossEnemy::Attack()
 	if (attackType == AttackType::Nomal) {
 		BulletCoolTime = MaxBulletCoolTime;
 
-		Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
-		Velocity.normalize();
+		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
+		AttackVelocity.normalize();
 
-		multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
+		multiBullet->MakeBullet(BossWorldTrans.translation_, AttackVelocity, BulletSpeed);
 
 	}
 	else if (attackType == AttackType::Missile) {
@@ -215,10 +216,10 @@ void MiddleBossEnemy::Attack()
 	else if (attackType == AttackType::MoveingAttack) {
 		BulletCoolTime = MaxBulletCoolTime;
 
-		Vector3 Velocity = player->GetPlayerPos() - BossWorldTrans.translation_;
-		Velocity.normalize();
+		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
+		AttackVelocity.normalize();
 
-		multiBullet->MakeBullet(BossWorldTrans.translation_, Velocity, BulletSpeed);
+		multiBullet->MakeBullet(BossWorldTrans.translation_, AttackVelocity, BulletSpeed);
 	}
 }
 
@@ -241,20 +242,20 @@ void MiddleBossEnemy::WorldTransUpdate()
 
 void MiddleBossEnemy::CheckAttackType()
 {
-	attackType = static_cast<AttackType>(MyMath::Random(0, AllAttackTypeCount));
+	attackType = AttackType::Move;
 
-	for (uint32_t i = 0; i < AttackedKeepCount; i++) {
-		if (attackType == AttackType::Move) {//à⁄ìÆÇÕàÍâÒÇ‹Ç≈
-			if (attackType == oldAttackType[i]) {
-				uint32_t AttackCount = static_cast<uint32_t>(attackType);
-				attackType = static_cast<AttackType>(RandomType(AttackCount));
-				break;
-			}
-		}
-	}
+	//for (uint32_t i = 0; i < AttackedKeepCount; i++) {
+	//	if (attackType == AttackType::Move) {//ÁßªÂãï„ÅØ‰∏ÄÂõû„Åæ„Åß
+	//		if (attackType == oldAttackType[i]) {
+	//			uint32_t AttackCount = static_cast<uint32_t>(attackType);
+	//			attackType = static_cast<AttackType>(RandomType(AttackCount));
+	//			break;
+	//		}
+	//	}
+	//}
 
 	if (attackType == oldAttackType[0]) {
-		if (attackType == oldAttackType[1]) {//ìØÇ∂çUåÇÇÕ2âÒÇ‹Ç≈
+		if (attackType == oldAttackType[1]) {//Âêå„ÅòÊîªÊíÉ„ÅØ2Âõû„Åæ„Åß
 			uint32_t AttackCount = static_cast<uint32_t>(attackType);
 			attackType = static_cast<AttackType>(RandomType(AttackCount));
 		}
@@ -284,7 +285,7 @@ void MiddleBossEnemy::CheckAttackType()
 		isOneMoreTime = false;
 		MoveingTimer = 0;
 		MaxMoveingTimer = 50;
-		mveType = MyMath::Random(0, 1);
+		mveType = 1;
 		if (mveType == 0) {
 			MovePos = BossWorldTrans.translation_ + (BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f);
 		}
@@ -295,7 +296,7 @@ void MiddleBossEnemy::CheckAttackType()
 
 		if (MoveTimes >= MaxMoveTimes) {
 
-			// íÜêSì_ÇÃãóó£ÇÃÇQèÊ <= îºåaÇÃòaÇÃÇQèÊÅ@Ç»ÇÁåç∑
+			// ‰∏≠ÂøÉÁÇπ„ÅÆË∑ùÈõ¢„ÅÆÔºí‰πó <= ÂçäÂæÑ„ÅÆÂíå„ÅÆÔºí‰πó„ÄÄ„Å™„Çâ‰∫§Â∑Æ
 			Vector3 tmp;
 			tmp = EndPos - BossWorldTrans.translation_;
 			float dist = tmp.dot(tmp);
@@ -310,7 +311,10 @@ void MiddleBossEnemy::CheckAttackType()
 				MoveTimes = 0;
 				isBackSponePos = true;
 				BackLength = tmp.length();
-				JampBackVelocity = tmp.norm();
+				Vector3 Case;
+				Case = tmp;
+				Case.y = 0.0f;
+				JampBackVelocity = Case.normalize();
 
 				BackLengthUint32 = static_cast<uint32_t>(BackLength / 2);
 				BackLengthHalfUint32 = BackLengthUint32;
@@ -332,15 +336,13 @@ void MiddleBossEnemy::CheckAttackType()
 
 uint32_t MiddleBossEnemy::RandomType(uint32_t& NoUseType)
 {
-	uint32_t attackType = MyMath::Random(0, AllAttackTypeCount);
-	if (NoUseType == attackType) {
+	uint32_t newAttackType = MyMath::Random(0, AllAttackTypeCount);
+	if (NoUseType == newAttackType) {
 		return RandomType(NoUseType);
 	}
 	else {
-		return attackType;
+		return newAttackType;
 	}
-
-	return attackType;
 }
 
 Vector3 MiddleBossEnemy::GetPosition() const

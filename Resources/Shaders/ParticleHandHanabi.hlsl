@@ -1,6 +1,7 @@
 #include "Particle.hlsli"
 #include "Easing.hlsli"
 
+
 struct GpuParticleElement
 {
     float4 position;

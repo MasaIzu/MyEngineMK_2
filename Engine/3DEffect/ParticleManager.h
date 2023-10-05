@@ -1,7 +1,6 @@
 #pragma once
 #include <d3d12.h>
 
-
 class ParticleManager {
 
 public:
@@ -10,13 +9,13 @@ public:
 	static void Finalize();
 
 	/// <summary>
-	/// •`‰æ‘Oˆ—
+	/// æç”»å‰å‡¦ç†
 	/// </summary>
-	/// <param name="cmdList">•`‰æƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
+	/// <param name="cmdList">æç”»ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	/// •`‰æŒãˆ—
+	/// æç”»å¾Œå‡¦ç†
 	/// </summary>
 	static void PostDraw();
 

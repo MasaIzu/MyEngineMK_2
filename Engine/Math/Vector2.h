@@ -2,24 +2,25 @@
 #include <cstdint>
 #include "Uint32Vector2.h"
 
+
 class Vector2
 {
 public:
-	float x;//x¬•ª
-	float y;//y¬•ª
+	float x;//xæˆåˆ†
+	float y;//yæˆåˆ†
 
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	Vector2();							//—ëƒxƒNƒgƒ‹‚Æ‚µ‚Ä¶¬
-	Vector2(float x, float y);			//x¬•ª,y¬•ª‚ğw’è‚µ‚Ä¶¬
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	Vector2();							//é›¶ãƒ™ã‚¯ãƒˆãƒ«ã¨ã—ã¦ç”Ÿæˆ
+	Vector2(float x, float y);			//xæˆåˆ†,yæˆåˆ†ã‚’æŒ‡å®šã—ã¦ç”Ÿæˆ
 
-	//ƒƒ“ƒoŠÖ”
-	float length() const;				//ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é
-	Vector2& normalize();				//³‹K‰»‚·‚é
-	float dot(const Vector2& v)const;	//“àÏ‚ğ‹‚ß‚é
-	float cross(const Vector2& v)const;	//ŠOÏ‚ğ‹‚ß‚é
+	//ãƒ¡ãƒ³ãƒé–¢æ•°
+	float length() const;				//ãƒãƒ«ãƒ (é•·ã•)ã‚’æ±‚ã‚ã‚‹
+	Vector2& normalize();				//æ­£è¦åŒ–ã™ã‚‹
+	float dot(const Vector2& v)const;	//å†…ç©ã‚’æ±‚ã‚ã‚‹
+	float cross(const Vector2& v)const;	//å¤–ç©ã‚’æ±‚ã‚ã‚‹
 
-	  //‘ã“ü‰‰ZqƒI[ƒo[ƒ[ƒh
+	  //ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	Vector2& operator+=(const Vector2& v);
 	Vector2& operator-=(const Vector2& v);
 	Vector2& operator+=(const Uint32Vector2& v);
@@ -29,8 +30,8 @@ public:
 
 };
 
-//2€–Ú‰‰ZqƒI[ƒo[ƒ[ƒh
-//‚¢‚ë‚¢‚ë‚Èˆø”(ˆø”‚ÌŒ^‚Æ˜—ñ)‚Ìƒpƒ^[ƒ“‚É‘Î‰‚·‚é‚½‚ßAˆÈ‰º‚Ì‚æ‚¤‚É‚µ‚Ä‚¢‚é
+//2é …ç›®æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
+//ã„ã‚ã„ã‚ãªå¼•æ•°(å¼•æ•°ã®å‹ã¨åºåˆ—)ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã«å¯¾å¿œã™ã‚‹ãŸã‚ã€ä»¥ä¸‹ã®ã‚ˆã†ã«ã—ã¦ã„ã‚‹
 
 const Vector2 operator+(const Vector2& v1, const Vector2& v2);
 const Vector2 operator-(const Vector2& v1, const Vector2& v2);

@@ -15,6 +15,7 @@ MissileBullet::MissileBullet()
 
 MissileBullet::~MissileBullet()
 {
+
 }
 
 void MissileBullet::Initialize()
@@ -44,7 +45,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 					BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, BulletLerpSpeed[i]);
 					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
 
-					// íÜêSì_ÇÃãóó£ÇÃÇQèÊ <= îºåaÇÃòaÇÃÇQèÊÅ@Ç»ÇÁåç∑
+					// ‰∏≠ÂøÉÁÇπ„ÅÆË∑ùÈõ¢„ÅÆÔºí‰πó <= ÂçäÂæÑ„ÅÆÂíå„ÅÆÔºí‰πó„ÄÄ„Å™„Çâ‰∫§Â∑Æ
 					Vector3 tmp;
 					tmp = EndPos - EnemyBulletWorldTrans[i].translation_;
 					float dist = tmp.dot(tmp);

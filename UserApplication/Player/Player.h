@@ -3,58 +3,56 @@
 #include "Model.h"
 #include <assert.h>
 #include "Input.h"
-#include "affin.h"
 #include <memory>
 #include "ViewProjection.h"
 #include "PlayerBullet.h"
 #include <Sprite.h>
 #include "SplinePosition.h"
 
+
 class Player {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	Player();
 	~Player();
 
 	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
-	void DrawSprite(ViewProjection& viewProjection_);
+	void DrawSprite();
 
-	//ƒp[ƒeƒBƒNƒ‹‚ğo‚·—p
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
-	void ParticleDraw(ViewProjection& viewProjection_);
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚’å‡ºã™ç”¨
 	void CopyParticle();
 
 	void AttackUpdate(const Vector3& EnemyPos, bool& LockOn);
 
 private:
-	//ƒvƒŒ[ƒ„[‚ÌˆÚ“®
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ç§»å‹•
 	void Move();
-	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å›è»¢
 	void PlayerRot();
-	//ƒvƒŒ[ƒ„[‚ÌUŒ‚
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®æ”»æ’ƒ
 	void PlayerAttack(const Vector3& EnemyPos, bool& LockOn);
-	//ƒvƒŒ[ƒ„[‚ÌˆÚ“®‚Ì’lXV
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ç§»å‹•ã®å€¤æ›´æ–°
 	void WorldTransUpdate();
-	// ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®š
 	void CheckPlayerCollider();
-	//—‰º
+	//è½ä¸‹
 	void Fall();
-	//ƒXƒvƒ‰ƒCƒ“ƒAƒbƒvƒf[ƒg
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void SplineUpdate();
-	//ƒŒƒeƒBƒNƒ‹ƒAƒbƒvƒf[ƒg
+	//ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void UpdateReticle();
 
-	//Šp“x‚ğŒˆ‚ß‚é“z
+	//è§’åº¦ã‚’æ±ºã‚ã‚‹å¥´
 	float AngleSelect(float& angle, float& selectAngle);
 
 public://Setter
 	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
 	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
-	void SetCameraDistance(const float& Distance) { PlayerToCameraDistance = Distance; }
-	void SetCameraMaxDistance(const float& cameraMaxDistance) { this->cameraMaxDistance = cameraMaxDistance; }
+	void SetCameraDistance(const float& distance) { PlayerToCameraDistance = distance; }
+	void SetCameraMaxDistance(const float& CameraMaxDistance) { this->cameraMaxDistance = CameraMaxDistance; }
 	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }
 	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }
 	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }
@@ -70,7 +68,7 @@ public://Getter
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
 	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
@@ -80,37 +78,37 @@ private://ƒNƒ‰ƒXŠÖ˜A
 	WorldTransform DebugWorldTrans;
 	ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<PlayerBullet> playerBullet;
-	// Æ€ƒXƒvƒ‰ƒCƒg
+	// ç…§æº–ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 	std::unique_ptr<Sprite> AttackSprite;
-	//WASDƒXƒvƒ‰ƒCƒg
+	//WASDã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 	std::unique_ptr<Sprite> W_FontSprite[2];
 	std::unique_ptr<Sprite> A_FontSprite[2];
 	std::unique_ptr<Sprite> S_FontSprite[2];
 	std::unique_ptr<Sprite> D_FontSprite[2];
 	std::unique_ptr<Sprite> AttackFontSprite[2];
-	// ƒRƒ‰ƒCƒ_[
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	BaseCollider* PlayerCollider = nullptr;
-	//ƒXƒvƒ‰ƒCƒ“
-	std::unique_ptr<SplinePosition> FirstMoveSpline;//Å‰‚ÌƒJƒƒ‰ƒXƒvƒ‰ƒCƒ“
-	std::unique_ptr<SplinePosition> playerMoveSpline;//“r’†‚ÌƒXƒvƒ‰ƒCƒ“
-	std::unique_ptr<SplinePosition> FinalMoveSpline;//ÅŒã‚ÌƒJƒƒ‰ƒXƒvƒ‰ƒCƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
+	std::unique_ptr<SplinePosition> FirstMoveSpline;//æœ€åˆã®ã‚«ãƒ¡ãƒ©ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
+	std::unique_ptr<SplinePosition> playerMoveSpline;//é€”ä¸­ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
+	std::unique_ptr<SplinePosition> FinalMoveSpline;//æœ€å¾Œã®ã‚«ãƒ¡ãƒ©ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
 
-private://ƒC[ƒiƒ€ƒNƒ‰ƒX
+private://ã‚¤ãƒ¼ãƒŠãƒ ã‚¯ãƒ©ã‚¹
 	enum class AttackPhase {
 		AttackCombo1,//
 		AttackCombo2,//
 		AttackCombo3,//
 		AttackCombo4,//
 		AttackUlt,//
-		Nothing,//‰½‚à‚µ‚È‚¢
+		Nothing,//ä½•ã‚‚ã—ãªã„
 	};
-	//Œ©‚Â‚¯‚Ä‚È‚¢‚Æ‚«‚Ì“®‚«ƒtƒF[ƒY
+	//è¦‹ã¤ã‘ã¦ãªã„ã¨ãã®å‹•ããƒ•ã‚§ãƒ¼ã‚º
 	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 
-private://•ÊƒNƒ‰ƒX‚©‚ç’l‚ğ‚à‚ç‚¤
+private://åˆ¥ã‚¯ãƒ©ã‚¹ã‹ã‚‰å€¤ã‚’ã‚‚ã‚‰ã†
 	Vector2 cameraRot;
 
-private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
+private://ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	bool isPlayerSetUp = false;
 	bool onGround = false;
 	bool isHitRail = false;
@@ -145,14 +143,14 @@ private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
 	float SlidingSpeed = 0.0f;
 	float DownSlidingTimes = 0.0f;
 
-	Vector3 playerMoveMent;//ˆÚ“®—Ê
+	Vector3 playerMoveMent;//ç§»å‹•é‡
 	Vector3 Distance;
 	Vector3 DistanceNolm;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;
 	Vector3 PlayerToAimSaiteVec;
 	Vector3 StartingPoint;
-	//U‚èqŠp“x
+	//æŒ¯ã‚Šå­è§’åº¦
 	Vector3 angle;
 	Vector3 pendulumLengthVec;
 	Vector3 SlidingVelocity;
@@ -162,12 +160,12 @@ private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
 	Vector4 fallVec;
 
 
-	// U‚èq‚Ìƒpƒ‰ƒ[ƒ^
-	const float g = 9.81f;     // d—Í‰Á‘¬“x (m/s^2)
-	const float pendulumLength = 2.0f; // U‚èq‚Ì’·‚³ (ƒ[ƒgƒ‹)
-	float theta = MyMath::GetAngle(45.0f);   // ‰ŠúŠp“x (ƒ‰ƒWƒAƒ“)
-	float angularVelocity = 0.0f; // ‰ŠúŠp‘¬“x (ƒ‰ƒWƒAƒ“/•b)
-	const float timeStep = 0.01f; // ŠÔƒXƒeƒbƒv (•b)
+	// æŒ¯ã‚Šå­ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	const float g = 9.81f;     // é‡åŠ›åŠ é€Ÿåº¦ (m/s^2)
+	const float pendulumLength = 2.0f; // æŒ¯ã‚Šå­ã®é•·ã• (ãƒ¡ãƒ¼ãƒˆãƒ«)
+	float theta = MyMath::GetAngle(45.0f);   // åˆæœŸè§’åº¦ (ãƒ©ã‚¸ã‚¢ãƒ³)
+	float angularVelocity = 0.0f; // åˆæœŸè§’é€Ÿåº¦ (ãƒ©ã‚¸ã‚¢ãƒ³/ç§’)
+	const float timeStep = 0.01f; // æ™‚é–“ã‚¹ãƒ†ãƒƒãƒ— (ç§’)
 
 
 	float PendulumLength = 0.0f;

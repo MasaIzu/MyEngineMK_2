@@ -10,7 +10,6 @@ Uint32Vector2::Uint32Vector2(uint32_t x, uint32_t y) {
 	this->y = y;
 }
 
-
 Uint32Vector2& Uint32Vector2::operator+=(const Uint32Vector2& v)
 {
 	this->x += v.x;
@@ -39,7 +38,7 @@ Uint32Vector2& Uint32Vector2::operator/=(uint32_t s)
 	return *this;
 }
 
-//Vector2 ƒNƒ‰ƒX‚É‘®‚³‚È‚¢ŠÖ”ŒQ
+//Vector2 ã‚¯ãƒ©ã‚¹ã«å±ã•ãªã„é–¢æ•°ç¾¤
 const Uint32Vector2 operator+(const Uint32Vector2& v1, const Uint32Vector2& v2)
 {
 	Uint32Vector2 temp = v1;

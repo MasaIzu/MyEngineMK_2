@@ -2,21 +2,22 @@
 #include "PostEffect.h"
 #include "MixPostEffect.h"
 
+
 class PostEffectManager {
 public:
 
     static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
     /// <summary>
-    /// ƒV[ƒ“•`‰æ‘Oˆ—
+    /// ã‚·ãƒ¼ãƒ³æç”»å‰å‡¦ç†
     /// </summary>
-    /// <param name="cmdList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
+    /// <param name="cmdList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
     static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
     /// <summary>
-    /// ƒV[ƒ“•`‰æŒãˆ—
+    /// ã‚·ãƒ¼ãƒ³æç”»å¾Œå‡¦ç†
     /// </summary>
-    /// <param name="cmdList">ƒRƒ}ƒ“ƒhˆ—</param>
+    /// <param name="cmdList">ã‚³ãƒãƒ³ãƒ‰å‡¦ç†</param>
     static void PostDrawScene();
 
     static void Draw(ID3D12GraphicsCommandList* cmdList);

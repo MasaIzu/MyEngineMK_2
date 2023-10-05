@@ -10,43 +10,44 @@
 #include "Skydome.h"
 #include "MiddleBossEnemy.h"
 
-// ƒ^ƒCƒgƒ‹ƒV[ƒ“
+
+// ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
 class MediumBossStage : public BaseScene
 {
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	MediumBossStage();
 	~MediumBossStage();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update() override;
 
 	void PostEffectDraw() override;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw() override;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	void Finalize() override;
 
-	//ƒRƒs[ˆ—
+	//ã‚³ãƒ”ãƒ¼å‡¦ç†
 	void CopyData() override;
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate() override;
 
-	//ƒŒƒeƒBƒNƒ‹“à‚É“G‚ª‚¢‚½‚çƒƒbƒNƒIƒ“‚·‚é
+	//ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«å†…ã«æ•µãŒã„ãŸã‚‰ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã™ã‚‹
 	void LockOn();
 
 
@@ -56,8 +57,8 @@ private:
 	Input* input_ = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
-	std::unique_ptr<ViewProjection> viewProjection_;//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“
-	CollisionManager* collisionManager = nullptr;//“–‚½‚è”»’è
+	std::unique_ptr<ViewProjection> viewProjection_;//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
+	CollisionManager* collisionManager = nullptr;//å½“ãŸã‚Šåˆ¤å®š
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
@@ -69,7 +70,7 @@ private:
 	bool isLockOn = false;
 
 	int shadeNumber = 3;
-	int range = 0;//‚Ú‚©‚µ‹­“x
+	int range = 0;//ã¼ã‹ã—å¼·åº¦
 	int samples = 5;
 
 	uint32_t loserTexture_ = 0;

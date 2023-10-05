@@ -1,19 +1,20 @@
 #pragma once
 
-const unsigned short COLLISION_ATTR_LANDSHAPE = 0b0;//’nŒ`
-const unsigned short COLLISION_ATTR_OBJECT = 0b1;//ƒIƒuƒWƒFƒNƒg
-const unsigned short COLLISION_ATTR_ALLIES = 0b10;//–¡•û
-const unsigned short COLLISION_ATTR_ENEMYS = 0b11;//“G
+const unsigned short COLLISION_ATTR_LANDSHAPE = 0b0;//åœ°å½¢
+const unsigned short COLLISION_ATTR_OBJECT = 0b1;//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+const unsigned short COLLISION_ATTR_ALLIES = 0b10;//å‘³æ–¹
+const unsigned short COLLISION_ATTR_ENEMYS = 0b11;//æ•µ
 
-const unsigned short COLLISION_ATTR_ATTACK = 0b100;//UŒ‚
-const unsigned short COLLISION_ATTR_NOTATTACK = 0b101;//UŒ‚”»’è‚È‚µ
-const unsigned short COLLISION_ATTR_PLAYERINVINCIBLE = 0b110;//–³“G
-const unsigned short COLLISION_ATTR_ENEMYINVINCIBLE = 0b111;//–³“G
+const unsigned short COLLISION_ATTR_ATTACK = 0b100;//æ”»æ’ƒ
+const unsigned short COLLISION_ATTR_NOTATTACK = 0b101;//æ”»æ’ƒåˆ¤å®šãªã—
+const unsigned short COLLISION_ATTR_PLAYERINVINCIBLE = 0b110;//ç„¡æ•µ
+const unsigned short COLLISION_ATTR_ENEMYINVINCIBLE = 0b111;//ç„¡æ•µ
 
-const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b1000;//“G‚ÌUŒ‚
-const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b1001;//“G‚Ì’e‚ÌUŒ‚
+const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b1000;//æ•µã®æ”»æ’ƒ
+const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b1001;//æ•µã®å¼¾ã®æ”»æ’ƒ
 
-const unsigned short COLLISION_ATTR_CAMERA = 0b1010;//ƒJƒƒ‰
-const unsigned short COLLISION_ATTR_FIRSTRAIL = 0b1011;//ƒXƒ[ƒv
-const unsigned short COLLISION_ATTR_RAIL = 0b1100;//ƒXƒ[ƒv
-const unsigned short COLLISION_ATTR_FINALRAIL = 0b1101;//ƒXƒ[ƒv
+const unsigned short COLLISION_ATTR_CAMERA = 0b1010;//ã‚«ãƒ¡ãƒ©
+const unsigned short COLLISION_ATTR_FIRSTRAIL = 0b1011;//ã‚¹ãƒ­ãƒ¼ãƒ—
+const unsigned short COLLISION_ATTR_RAIL = 0b1100;//ã‚¹ãƒ­ãƒ¼ãƒ—
+const unsigned short COLLISION_ATTR_FINALRAIL = 0b1101;//ã‚¹ãƒ­ãƒ¼ãƒ—
+

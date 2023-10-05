@@ -7,7 +7,7 @@
 
 
 /// <summary>
-/// ƒƒbƒVƒ…Õ“Ë”»’èƒIƒuƒWƒFƒNƒg
+/// ãƒ¡ãƒƒã‚·ãƒ¥è¡çªåˆ¤å®šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 /// </summary>
 class MeshCollider :
 	public BaseCollider
@@ -15,48 +15,49 @@ class MeshCollider :
 public:
 	MeshCollider()
 	{
-		// ƒƒbƒVƒ…Œ`ó‚ğƒZƒbƒg
+		// ãƒ¡ãƒƒã‚·ãƒ¥å½¢çŠ¶ã‚’ã‚»ãƒƒãƒˆ
 		shapeType = COLLISIONSHAPE_MESH;
 	}
 
 	/// <summary>
-	/// OŠpŒ`‚Ì”z—ñ‚ğ\’z‚·‚é
+	/// ä¸‰è§’å½¢ã®é…åˆ—ã‚’æ§‹ç¯‰ã™ã‚‹
 	/// </summary>
 	void ConstructTriangles(Model* model, Matrix4& matWorld);
 	//void ConstructTriangles(fbxModel* model);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	void Update(const Matrix4& worldPos) override;
-	void Update(const Matrix4& worldPos, const float& radius) override;
-	void Update(const Matrix4& worldPos, const float& radius, const float& speed, const Vector3& look) override;
-	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime) override;
-	void Update(const Matrix4& worldPos, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
-	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime) override;
-	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime) override;
-	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const float& radius) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const float& radius, [[maybe_unused]] const float& speed, [[maybe_unused]] const Vector3& look) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const uint32_t& Cooltime, [[maybe_unused]] const bool& isCoolTime) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const uint32_t& Cooltime, [[maybe_unused]] const uint32_t& FirstCoolTime, [[maybe_unused]] const bool& isCoolTime) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const float& radius, [[maybe_unused]] const uint32_t& Cooltime) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const float& radius, [[maybe_unused]] const uint32_t& Cooltime, [[maybe_unused]] const bool& isCoolTime) override;
+	void Update([[maybe_unused]] const Matrix4& worldPos, [[maybe_unused]] const float& radius, [[maybe_unused]] const uint32_t& Cooltime, [[maybe_unused]] const uint32_t& FirstCoolTime, [[maybe_unused]] const bool& isCoolTime) override;
+
 
 
 	/// <summary>
-	/// ‹…‚Æ‚Ì“–‚½‚è”»’è
+	/// çƒã¨ã®å½“ãŸã‚Šåˆ¤å®š
 	/// </summary>
-	/// <param name="sphere">‹…</param>
-	/// <param name="inter">Œğ“_io—Í—pj</param>
-	/// <returns>Œğ·‚µ‚Ä‚¢‚é‚©”Û‚©</returns>
+	/// <param name="sphere">çƒ</param>
+	/// <param name="inter">äº¤ç‚¹ï¼ˆå‡ºåŠ›ç”¨ï¼‰</param>
+	/// <returns>äº¤å·®ã—ã¦ã„ã‚‹ã‹å¦ã‹</returns>
 	bool CheckCollisionSphere(const Sphere& sphere, Vector4* inter = nullptr, Vector4* reject = nullptr);
 
 	/// <summary>
-	/// ƒŒƒC‚Æ‚Ì“–‚½‚è”»’è
+	/// ãƒ¬ã‚¤ã¨ã®å½“ãŸã‚Šåˆ¤å®š
 	/// </summary>
-	/// <param name="sphere">ƒŒƒC</param>
-	/// <param name="distance">‹——£io—Í—pj</param>
-	/// <param name="inter">Œğ“_io—Í—pj</param>
-	/// <returns>Œğ·‚µ‚Ä‚¢‚é‚©”Û‚©</returns>
+	/// <param name="sphere">ãƒ¬ã‚¤</param>
+	/// <param name="distance">è·é›¢ï¼ˆå‡ºåŠ›ç”¨ï¼‰</param>
+	/// <param name="inter">äº¤ç‚¹ï¼ˆå‡ºåŠ›ç”¨ï¼‰</param>
+	/// <returns>äº¤å·®ã—ã¦ã„ã‚‹ã‹å¦ã‹</returns>
 	bool CheckCollisionRay(const Ray& ray, float* distance = nullptr, Vector4* inter = nullptr);
 
 private:
 	std::vector<Triangle> triangles;
-	// ƒ[ƒ‹ƒhs—ñ‚Ì‹ts—ñ
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®é€†è¡Œåˆ—
 	Matrix4 invMatWorld;
 };

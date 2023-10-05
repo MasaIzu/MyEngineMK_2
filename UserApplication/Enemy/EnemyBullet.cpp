@@ -17,6 +17,7 @@ EnemyBullet::EnemyBullet()
 
 EnemyBullet::~EnemyBullet()
 {
+
 }
 
 void EnemyBullet::Initialize()
@@ -33,28 +34,28 @@ void EnemyBullet::Initialize()
 
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		// ƒRƒŠƒWƒ‡ƒ“ƒ}ƒl[ƒWƒƒ‚É’Ç‰Á
+		// ã‚³ãƒªã‚¸ãƒ§ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ã«è¿½åŠ 
 		BulletCollider[i] = new SphereCollider(Vector4(0, BulletRadius[i], 0, 0), BulletRadius[i]);
 		CollisionManager::GetInstance()->AddCollider(BulletCollider[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
 	}
 	collisionManager = CollisionManager::GetInstance();
 
-	//€‚ñ‚Å‚½‚çŠi”[
+	//æ­»ã‚“ã§ãŸã‚‰æ ¼ç´
 	SetNotAlivePosition();
 }
 
 void EnemyBullet::Update()
 {
-	//‘O‰ñ‚ÌˆÊ’u‚ğ‹L˜^
+	//å‰å›ã®ä½ç½®ã‚’è¨˜éŒ²
 	OldPosUpdate();
-	//ƒ^ƒCƒ}[XV
+	//ã‚¿ã‚¤ãƒãƒ¼æ›´æ–°
 	BulletAliveTimerUpdate();
-	//ŠÔ‚ªØ‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	//æ™‚é–“ãŒåˆ‡ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
 	CheckBulletAlive();
-	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
+	//ç”Ÿãã¦ã„ãŸã‚‰ã‚¢ãƒ—ãƒ‡
 	BulletUpdate();
-	//€‚ñ‚Å‚½‚çŠi”[
+	//æ­»ã‚“ã§ãŸã‚‰æ ¼ç´
 	SetNotAlivePosition();
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
@@ -72,20 +73,6 @@ void EnemyBullet::Draw(ViewProjection& viewProjection_)
 	}
 }
 
-void EnemyBullet::CSUpdate(ID3D12GraphicsCommandList* cmdList)
-{
-	
-}
-
-void EnemyBullet::ParticleDraw(ViewProjection& viewProjection_)
-{
-	
-}
-
-void EnemyBullet::CopyParticle()
-{
-	
-}
 
 void EnemyBullet::BulletUpdate()
 {
@@ -96,13 +83,6 @@ void EnemyBullet::BulletUpdate()
 			if (BulletCollider[i]->GetSphereMeshHit()) {
 				isBulletAlive[i] = false;
 				BulletCollider[i]->SphereMeshHitReset();
-				Vector3 Verocity = { 0,0,0 };
-				for (uint32_t j = 0; j < DieMaxParticle; j++) {
-					MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyParticleDieSpeed);
-				}
-			}
-			if (isExpanding == false) {
-				MakeParticle(EnemyBulletWorldTrans[i].translation_, BulletVector[i], EnemyParticleSpeed);
 			}
 		}
 	}
@@ -212,20 +192,6 @@ void EnemyBullet::SetNotAlivePosition()
 	}
 }
 
-void EnemyBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
-{
-
-	Vector3 Verocty = BulletVelocity * BulletSpeed;
-	Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
-	Verocty += Rand * BulletSpeed;
-	Vector3 AddPos = pos;
-	Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(0, 1), Uint32Vector2(0, 1), Uint32Vector2(0, 4)) / 100;
-	Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
-	Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
-	float scale = 1.0f;
-	float DownScale = 0.02f;
-
-}
 
 void EnemyBullet::OldPosUpdate()
 {

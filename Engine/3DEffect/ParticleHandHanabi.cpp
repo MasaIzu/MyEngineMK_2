@@ -1,4 +1,4 @@
-﻿#include "ParticleHandHanabi.h"
+#include "ParticleHandHanabi.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -39,14 +39,14 @@ UINT ParticleHandHanabi::m_incrementSize;
 
 UINT ParticleHandHanabi::m_cbvSrvUavDescriptorSize = 0;
 
-void ParticleHandHanabi::StaticInitialize(ID3D12Device* device)
+void ParticleHandHanabi::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
-	assert(device);
+	assert(Device);
 
-	ParticleHandHanabi::device = device;
+	ParticleHandHanabi::device = Device;
 
-	m_cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -58,20 +58,20 @@ void ParticleHandHanabi::StaticFinalize()
 
 }
 
-void ParticleHandHanabi::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void ParticleHandHanabi::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(ParticleHandHanabi::cmdList == nullptr);
 
 	// コマンドリストをセット
-	ParticleHandHanabi::cmdList = cmdList;
+	ParticleHandHanabi::cmdList = commandList;
 
 	// パイプラインステートの設定
-	cmdList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
+	commandList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
 	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	commandList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
 void ParticleHandHanabi::PostDraw()
@@ -274,13 +274,13 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 		rootParameters[1].InitAsUnorderedAccessView(0);// u0: Particles
 		rootParameters[2].InitAsDescriptorTable(1, &uavIndexList); // u1: ParticleIndexList
 
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
-		rootSignatureDesc.Init(
+		CD3DX12_ROOT_SIGNATURE_DESC uavRootSignatureDesc{};
+		uavRootSignatureDesc.Init(
 			UINT(rootParameters.size()), rootParameters.data(),
 			1, &samplerDesc);
 
 		ComPtr<ID3DBlob> signature, errBlob;
-		D3D12SerializeRootSignature(&rootSignatureDesc,
+		D3D12SerializeRootSignature(&uavRootSignatureDesc,
 			D3D_ROOT_SIGNATURE_VERSION_1_0, &signature, &errBlob);
 		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	}
@@ -315,24 +315,24 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 		nullptr);
 
 	// PSOの作成
-	ComPtr<ID3D12PipelineState> pipelineState;
+	ComPtr<ID3D12PipelineState> CSpipelineState;
 	D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.pRootSignature = rootSignature.Get();
 
 	//initialize用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobInit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_INIT] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_INIT] = CSpipelineState;
 
 	//emit用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobEmit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_EMIT] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_EMIT] = CSpipelineState;
 
 	//update用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobUpdate.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_UPDATE] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_UPDATE] = CSpipelineState;
 
 	const int MaxDescriptorCount = 2048; // SRV,CBV,UAV など.
 	// SRV のディスクリプタヒープ
@@ -544,11 +544,11 @@ void ParticleHandHanabi::Draw(const ViewProjection& view)
 
 }
 
-void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
+void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	//初期化
 	if (m_frameCount == 0) {
@@ -561,49 +561,48 @@ void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 Sta
 		CD3DX12_RESOURCE_BARRIER transitionBarrier[2];
 		transitionBarrier[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleElement.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		transitionBarrier[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleIndexList.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		cmdList->ResourceBarrier(2, transitionBarrier);
+		commandList->ResourceBarrier(2, transitionBarrier);
 
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 		// Particle の初期化コード.
-		cmdList->SetComputeRootSignature(rootSignature.Get());
+		commandList->SetComputeRootSignature(rootSignature.Get());
 
 
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
+		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
 		UINT invokeCount = particleCount / 32 + 1;
-		cmdList->Dispatch(invokeCount, 1, 1);
+		commandList->Dispatch(invokeCount, 1, 1);
 	}
+
 
 	{
 		// Particle の発生.
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
-		cmdList->SetComputeRootSignature(rootSignature.Get());
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
+		commandList->SetComputeRootSignature(rootSignature.Get());
+		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
 		UINT invokeCount = particleCount / 32 + 1;
 		{
-			cmdList->Dispatch(2, 1, 1);
+			commandList->Dispatch(2, 1, 1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleElement.Get()),
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleIndexList.Get()),
 		};
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commandList->ResourceBarrier(_countof(barriers), barriers);
 
 		// Particle の更新処理.
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
-		cmdList->Dispatch(invokeCount, 1, 1);
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
+		commandList->Dispatch(invokeCount, 1, 1);
+		commandList->ResourceBarrier(_countof(barriers), barriers);
 	}
 
 	++m_frameCount;

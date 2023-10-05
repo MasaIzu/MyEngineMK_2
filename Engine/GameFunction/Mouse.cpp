@@ -4,7 +4,7 @@ void Mouse::Initialize(IDirectInput8* dinput)
 {
 	HRESULT result;
 
-	//ƒ}ƒEƒXƒfƒoƒCƒX‚Ì¶¬
+	//ãƒžã‚¦ã‚¹ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ
 	result = dinput->CreateDevice(GUID_SysMouse, &mouseDevice, NULL);
 	assert(SUCCEEDED(result));
 
@@ -15,11 +15,12 @@ void Mouse::Initialize(IDirectInput8* dinput)
 	assert(SUCCEEDED(result));
 }
 
+
 void Mouse::Update()
 {
 	HRESULT result;
 
-	//ƒ}ƒEƒX
+	//ãƒžã‚¦ã‚¹
 	result = mouseDevice->Acquire();
 	oldMouseState = mouseState;
 	result = mouseDevice->GetDeviceState(sizeof(mouseState), &mouseState);

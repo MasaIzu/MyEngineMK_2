@@ -6,7 +6,7 @@
 
 using namespace DirectX;
 
-void Mesh::SetName(const std::string& name_) { this->name_ = name_; }
+void Mesh::SetName(const std::string& Name_) { this->name_ = Name_; }
 
 void Mesh::AddVertex(const VertexPosNormalUv& vertex) { vertices_.emplace_back(vertex); }
 
@@ -16,12 +16,13 @@ void Mesh::AddSmoothData(unsigned short indexPosition, unsigned short indexVerte
 	smoothData_[indexPosition].emplace_back(indexVertex);
 }
 
+
 void Mesh::CalculateSmoothedVertexNormals() {
 	auto itr = smoothData_.begin();
 	for (; itr != smoothData_.end(); ++itr) {
-		// Še–Ê—p‚Ì‹¤’Ê’¸“_ƒRƒŒƒNƒVƒ‡ƒ“
+		// å„é¢ç”¨ã®å…±é€šé ‚ç‚¹ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
 		std::vector<unsigned short>& v = itr->second;
-		// ‘S’¸“_‚Ì–@ü‚ğ•½‹Ï‚·‚é
+		// å…¨é ‚ç‚¹ã®æ³•ç·šã‚’å¹³å‡ã™ã‚‹
 		XMVECTOR normal = {};
 		for (unsigned short index : v) {
 			normal += XMVectorSet(
@@ -42,18 +43,18 @@ void Mesh::CreateBuffers() {
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices_.size());
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
 
-	// ’¸“_ƒoƒbƒtƒ@¶¬
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
 		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&vertBuff_));
 	assert(SUCCEEDED(result));
 
-	// ’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
 	VertexPosNormalUv* vertMap = nullptr;
 	result = vertBuff_->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
@@ -61,7 +62,7 @@ void Mesh::CreateBuffers() {
 		vertBuff_->Unmap(0, nullptr);
 	}
 
-	// ’¸“_ƒoƒbƒtƒ@ƒrƒ…[‚Ìì¬
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
 	vbView_.SizeInBytes = sizeVB;
 	vbView_.StrideInBytes = sizeof(vertices_[0]);
@@ -72,9 +73,9 @@ void Mesh::CreateBuffers() {
 	}
 
 	UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * indices_.size());
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	resourceDesc.Width = sizeIB;
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@¶¬
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
 		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&indexBuff_));
@@ -83,7 +84,7 @@ void Mesh::CreateBuffers() {
 		return;
 	}
 
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
 	unsigned short* indexMap = nullptr;
 	result = indexBuff_->Map(0, nullptr, (void**)&indexMap);
 	if (SUCCEEDED(result)) {
@@ -91,23 +92,23 @@ void Mesh::CreateBuffers() {
 		indexBuff_->Unmap(0, nullptr);
 	}
 
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒrƒ…[‚Ìì¬
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
 	ibView_.BufferLocation = indexBuff_->GetGPUVirtualAddress();
 	ibView_.Format = DXGI_FORMAT_R16_UINT;
 	ibView_.SizeInBytes = sizeIB;
 
 
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC BoneResourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(Bone) + 0xff) & ~0xff);
 
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
+		&heapProps, // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å¯èƒ½
 		D3D12_HEAP_FLAG_NONE, &BoneResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&BoneBuff_));
 
-	// ’è”ƒoƒbƒtƒ@‚Æ‚Ìƒf[ƒ^ƒŠƒ“ƒN
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¨ã®ãƒ‡ãƒ¼ã‚¿ãƒªãƒ³ã‚¯
 	result = BoneBuff_->Map(0, nullptr, (void**)&constMap);
 	assert(SUCCEEDED(result));
 
@@ -117,30 +118,30 @@ void Mesh::CreateBuffers() {
 void Mesh::Draw(
 	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 	UINT rooParameterIndexTexture, uint32_t textureIndex) {
-	// ’¸“_ƒoƒbƒtƒ@‚ğƒZƒbƒg
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 	commandList->IASetVertexBuffers(0, 1, &vbView_);
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ğƒZƒbƒg
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 	commandList->IASetIndexBuffer(&ibView_);
 
-	// ƒ}ƒeƒŠƒAƒ‹‚ÌƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ğƒZƒbƒg
+	// ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒãƒ³ãƒ‰ã‚’ã‚»ãƒƒãƒˆ
 	material_->SetGraphicsCommand(commandList, rooParameterIndexMaterial, rooParameterIndexTexture, textureIndex);
 
-	// •`‰æƒRƒ}ƒ“ƒh
+	// æç”»ã‚³ãƒãƒ³ãƒ‰
 	commandList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);
 }
 
 //void Mesh::Draw(
 //	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 //	UINT rooParameterIndexTexture, uint32_t textureHandle) {
-//	// ’¸“_ƒoƒbƒtƒ@‚ğƒZƒbƒg
+//	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 //	commandList->IASetVertexBuffers(0, 1, &vbView_);
-//	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ğƒZƒbƒg
+//	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 //	commandList->IASetIndexBuffer(&ibView_);
 //
-//	// ƒ}ƒeƒŠƒAƒ‹‚ÌƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ğƒZƒbƒg
+//	// ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒãƒ³ãƒ‰ã‚’ã‚»ãƒƒãƒˆ
 //	material_->SetGraphicsCommand(commandList, rooParameterIndexMaterial, rooParameterIndexTexture, textureHandle);
 //
-//	// •`‰æƒRƒ}ƒ“ƒh
+//	// æç”»ã‚³ãƒãƒ³ãƒ‰
 //	commandList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);
 //}
 

@@ -3,15 +3,16 @@
 #include "CollisionAttribute.h"
 #include <CollisionManager.h>
 
+
 TouchableObject* TouchableObject::Create(Model* model, WorldTransform& worldTrans, unsigned short attribute)
 {
-	// ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ð¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	TouchableObject* instance = new TouchableObject();
 	if (instance == nullptr) {
 		return nullptr;
 	}
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	if (!instance->Initialize(model, worldTrans, attribute)) {
 		delete instance;
 		assert(0);
@@ -23,9 +24,9 @@ TouchableObject* TouchableObject::Create(Model* model, WorldTransform& worldTran
 bool TouchableObject::Initialize(Model* model, WorldTransform& worldTrans, unsigned short attribute)
 {
 
-	// ƒRƒ‰ƒCƒ_[‚Ì’Ç‰Á
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®è¿½åŠ 
 	MeshCollider* collider = new MeshCollider();
-	// ƒRƒŠƒWƒ‡ƒ“ƒ}ƒl[ƒWƒƒ‚É’Ç‰Á
+	// ã‚³ãƒªã‚¸ãƒ§ãƒ³ãƒžãƒãƒ¼ã‚¸ãƒ£ã«è¿½åŠ 
 	collider->ConstructTriangles(model, worldTrans.matWorld_);
 	collider->SetAttribute(attribute);
 	CollisionManager::GetInstance()->AddCollider(collider);

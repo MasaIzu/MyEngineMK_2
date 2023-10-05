@@ -5,7 +5,12 @@ MultiBullet::MultiBullet()
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
 	for (int i = 0; i < AllBulletCount; i++) {
 		EnemyBulletWorldTrans[i].scale_ = Vector3(0.5f, 0.5f, 0.5f);
-		EnemyBulletWorldTrans[i].Initialize();
+		EnemyBulletWorldTrans[ i ].Initialize();
+		BulletCollider[ i ] = nullptr;
+		BulletLifeTime[ i ] = 0;
+		BulletRadius[ i ] = 0;
+		EnemyBulletSpeed[ i ] = 0;
+		isBulletAlive[ i ] = false;
 	}
 }
 
@@ -15,6 +20,7 @@ MultiBullet::~MultiBullet()
 
 void MultiBullet::Initialize()
 {
+
 }
 
 void MultiBullet::Update()

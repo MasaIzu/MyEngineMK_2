@@ -8,29 +8,28 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-
 /// <summary>
-/// ƒ‰ƒCƒg
+/// ãƒ©ã‚¤ãƒˆ
 /// </summary>
 class LightGroup
 {
-private: // ƒGƒCƒŠƒAƒX
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 
-public: // ’è”
-	// •½sŒõŒ¹‚Ì”
+public: // å®šæ•°
+	// å¹³è¡Œå…‰æºã®æ•°
 	static const int kDirLightNum = 3;
-	// “_ŒõŒ¹‚Ì”
+	// ç‚¹å…‰æºã®æ•°
 	static const int kPointLightNum = 3;
-	// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì”
+	// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®æ•°
 	static const int kSpotLightNum = 3;
-	// ŠÛ‰e‚Ì”
+	// ä¸¸å½±ã®æ•°
 	static const int kCircleShadowNum = 1;
 
-public: // ƒTƒuƒNƒ‰ƒX
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
 
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct ConstBufferLightData
 	{
 		Vector4 lightv;
@@ -38,53 +37,53 @@ public: // ƒTƒuƒNƒ‰ƒX
 		unsigned int active;
 	};
 
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct ConstBufferData
 	{
-		// ŠÂ‹«Œõ‚ÌF
+		// ç’°å¢ƒå…‰ã®è‰²
 		Vector3 ambientColor;
 		float pad1;
-		// •½sŒõŒ¹—p
+		// å¹³è¡Œå…‰æºç”¨
 		ConstBufferLightData dirLights[kDirLightNum];
 		
 	};
 
 
-public: // Ã“Iƒƒ“ƒoŠÖ”
-	// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
 	static LightGroup* Create();
 
-public: // ƒƒ“ƒoŠÖ”
-	// ‰Šú‰»
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
+	// åˆæœŸåŒ–
 	void Initialize();
 
-	// XV
+	// æ›´æ–°
 	void Update();
 
-	// •`‰æ
+	// æç”»
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
 
-	// ’è”ƒoƒbƒtƒ@“]‘—
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡è»¢é€
 	void TransferConstBuffer();
 
 	
 
-private: // ƒƒ“ƒo•Ï”
-	// ’è”ƒoƒbƒtƒ@
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 	ComPtr<ID3D12Resource> constBuff_;
-	// ’è”ƒoƒbƒtƒ@‚Ìƒ}ƒbƒv
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒƒãƒ—
 	ConstBufferData* constMap_ = nullptr;
 
-	// ŠÂ‹«Œõ‚ÌF
+	// ç’°å¢ƒå…‰ã®è‰²
 	Vector3 ambientColor_ = { 1,1,1 };
 
 
-	// ƒ‰ƒCƒg•ûŒüi’PˆÊƒxƒNƒgƒ‹j
+	// ãƒ©ã‚¤ãƒˆæ–¹å‘ï¼ˆå˜ä½ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
 	Vector4 lightdir = { 1,0,0,0 };
-	// ƒ‰ƒCƒgF
+	// ãƒ©ã‚¤ãƒˆè‰²
 	Vector3 lightcolor = { 1,1,1 };
 
-	// ƒ_[ƒeƒBƒtƒ‰ƒO
+	// ãƒ€ãƒ¼ãƒ†ã‚£ãƒ•ãƒ©ã‚°
 	bool dirty_ = false;
 };
 

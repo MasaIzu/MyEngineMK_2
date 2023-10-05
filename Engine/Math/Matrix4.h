@@ -3,20 +3,19 @@
 #include "Vector4.h"
 #include <DirectXMath.h>
 
-
 class Matrix4
 {
 public:
-	// Matrix4@\‘¢‘Ì
+	// Matrix4ã€€æ§‹é€ ä½“
 	float m[4][4];
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Matrix4();
 
 	//XMMatrixVer
 	Matrix4(const DirectX::XMMATRIX& Matrix4);
 
-	// ¬•ª‚ğw’è‚µ‚Ä‚Ì¶¬
+	// æˆåˆ†ã‚’æŒ‡å®šã—ã¦ã®ç”Ÿæˆ
 	Matrix4(
 		float m00, float m01, float m02, float m03,
 		float m10, float m11, float m12, float m13,
@@ -26,21 +25,21 @@ public:
 
 
 
-	// ’PˆÊs—ñ‚ğ‹‚ß‚é
+	// å˜ä½è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 	Matrix4 identity();
 
-	//Šg‘åk¬s—ñ‚Ìİ’è
+	//æ‹¡å¤§ç¸®å°è¡Œåˆ—ã®è¨­å®š
 	Matrix4 scale(const Vector3& s);
 
-	// ‰ñ“]s—ñ‚Ìİ’è
+	// å›è»¢è¡Œåˆ—ã®è¨­å®š
 	Matrix4 rotateX(float angle);
 	Matrix4 rotateY(float angle);
 	Matrix4 rotateZ(float angle);
 
-	// •½sˆÚ“®s—ñ‚Ìì¬
+	// å¹³è¡Œç§»å‹•è¡Œåˆ—ã®ä½œæˆ
 	Matrix4 translate(const Vector3& t);
 
-	// À•W•ÏŠ·iƒxƒNƒgƒ‹‚Æs—ñ‚ÌŠ|‚¯Z‚ğ‚·‚éj
+	// åº§æ¨™å¤‰æ›ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ã¨è¡Œåˆ—ã®æ›ã‘ç®—ã‚’ã™ã‚‹ï¼‰
 	Vector3 transform(const Vector3& v, const Matrix4& m);
 
 
@@ -53,7 +52,7 @@ public:
 	Vector4 Vec4AddPs(const Vector4& v4_1, const Vector4& v4_2);
 
 
-	// ‘ã“ü‰‰ZqƒI[ƒo[ƒ[ƒh
+	// ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	Matrix4& operator*=(const Matrix4& m1);
 
 	Matrix4 operator*(const Matrix4& m1);
@@ -62,6 +61,6 @@ private:
 
 };
 
-// 2€‰‰ZqƒI[ƒo[ƒ[ƒh
+// 2é …æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 
 Vector3 operator*(const Vector3& v, const Matrix4& m);

@@ -10,6 +10,7 @@ void ClearScene::Initialize()
 
 }
 
+
 void ClearScene::Update()
 {
 	if (input->TriggerKey(DIK_SPACE))

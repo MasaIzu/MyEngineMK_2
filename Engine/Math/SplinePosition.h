@@ -5,79 +5,80 @@
 
 class SplinePosition {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	/// <summary>
-	/// Œã‚ÅŒˆ‚ß‚é•û
+	/// å¾Œã§æ±ºã‚ã‚‹æ–¹
 	/// </summary>
 	SplinePosition();
 
 	/// <summary>
-	/// Vector3‚ğ4‚Â“ü‚ê‚éƒo[ƒWƒ‡ƒ“(vectorŒ^‚Å“n‚·•û‚à‚ ‚é)
+	/// Vector3ã‚’4ã¤å…¥ã‚Œã‚‹ãƒãƒ¼ã‚¸ãƒ§ãƒ³(vectorå‹ã§æ¸¡ã™æ–¹ã‚‚ã‚ã‚‹)
 	/// </summary>
-	/// <param name="Start">ƒXƒ^[ƒg’n“_</param>
-	/// <param name="p1">§Œä“_‚»‚Ì1</param>
-	/// <param name="p2">§Œä“_‚»‚Ì2</param>
-	/// <param name="end">ƒS[ƒ‹’n“_</param>
+	/// <param name="Start">ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹</param>
+	/// <param name="p1">åˆ¶å¾¡ç‚¹ãã®1</param>
+	/// <param name="p2">åˆ¶å¾¡ç‚¹ãã®2</param>
+	/// <param name="end">ã‚´ãƒ¼ãƒ«åœ°ç‚¹</param>
 	SplinePosition(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end);
 
 	/// <summary>
-	/// ƒXƒ^[ƒg’n“_,§Œä“_,ƒS[ƒ‹’n“_‚ğD‚«‚ÉŒˆ‚ß‚ç‚ê‚é•û
+	/// ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹,åˆ¶å¾¡ç‚¹,ã‚´ãƒ¼ãƒ«åœ°ç‚¹ã‚’å¥½ãã«æ±ºã‚ã‚‰ã‚Œã‚‹æ–¹
 	/// </summary>
-	/// <param name="points">points{ start, start, p1, p2, p3, end, end };‚İ‚½‚¢‚Ép3‚ğ’Ç‰Á‚µ‚½‚è</param>
+	/// <param name="points">points{ start, start, p1, p2, p3, end, end };ã¿ãŸã„ã«p3ã‚’è¿½åŠ ã—ãŸã‚Š</param>
 	SplinePosition(const std::vector<Vector3>& points);
 	~SplinePosition();
 
 	/// <summary>
-	/// ƒXƒvƒ‰ƒCƒ“‹ÈüƒAƒbƒvƒf[ƒg
+	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	/// </summary>
-	/// <param name="time">ƒfƒtƒHMaxTime=1‚Ì‚¤‚¿‚Ì‚Ç‚±‚©</param>
+	/// <param name="time">ãƒ‡ãƒ•ã‚©MaxTime=1ã®ã†ã¡ã®ã©ã“ã‹</param>
 	void Update(float& time);
 
 	/// <summary>
-	/// ƒXƒvƒ‰ƒCƒ“‹ÈüƒAƒbƒvƒf[ƒg4‚Â‘Å‚¿‚ŞVer
+	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ4ã¤æ‰“ã¡è¾¼ã‚€Ver
 	/// </summary>
-	/// <param name="time">ƒfƒtƒHMaxTime=1‚Ì‚¤‚¿‚Ì‚Ç‚±‚©</param>
+	/// <param name="time">ãƒ‡ãƒ•ã‚©MaxTime=1ã®ã†ã¡ã®ã©ã“ã‹</param>
 	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end, float& time);
 
 	/// <summary>
-	/// ƒXƒvƒ‰ƒCƒ“‹ÈüƒAƒbƒvƒf[ƒg5‚Â‘Å‚¿‚ŞVer(5ŒÂ‚Ü‚Å‚È‚çè‘Å‚¿‚Å‚¢‚¯‚é)
+	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ5ã¤æ‰“ã¡è¾¼ã‚€Ver(5å€‹ã¾ã§ãªã‚‰æ‰‹æ‰“ã¡ã§ã„ã‘ã‚‹)
 	/// </summary>
-	/// <param name="time">ƒfƒtƒHMaxTime=1‚Ì‚¤‚¿‚Ì‚Ç‚±‚©</param>
+	/// <param name="time">ãƒ‡ãƒ•ã‚©MaxTime=1ã®ã†ã¡ã®ã©ã“ã‹</param>
 	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p3, Vector3& end, float& time);
 
 	/// <summary>
-	/// ƒXƒvƒ‰ƒCƒ“‹ÈüƒAƒbƒvƒf[ƒgpoints‚àƒAƒvƒfVer
+	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆpointsã‚‚ã‚¢ãƒ—ãƒ‡Ver
 	/// </summary>
-	/// <param name="time">ƒfƒtƒHMaxTime=1‚Ì‚¤‚¿‚Ì‚Ç‚±‚©</param>
+	/// <param name="time">ãƒ‡ãƒ•ã‚©MaxTime=1ã®ã†ã¡ã®ã©ã“ã‹</param>
 	void Update(const std::vector<Vector3>& points, float& time);
 
 	/// <summary>
-	/// ƒXƒ^[ƒg‚É–ß‚·Ver
+	/// ã‚¹ã‚¿ãƒ¼ãƒˆã«æˆ»ã™Ver
 	/// </summary>
 	void Reset();
 
 	/// <summary>
-	/// ×‚©‚­ƒŠƒZƒbƒg‚ğŒˆ‚ß‚ç‚ê‚éVer
+	/// ç´°ã‹ããƒªã‚»ãƒƒãƒˆã‚’æ±ºã‚ã‚‰ã‚Œã‚‹Ver
 	/// </summary>
-	/// <param name="ResetIndex">Index‚ÍƒXƒ^[ƒg‚É–ß‚µ‚½‚¢ê‡‚Í1‚É‚·‚é(0‚Í–³—)</param>
-	/// <param name="time">MaxTime=1‚Åtime‚ª0.5‚È‚ç”¼•ª‚©‚çn‚Ü‚é</param>
+	/// <param name="ResetIndex">Indexã¯ã‚¹ã‚¿ãƒ¼ãƒˆã«æˆ»ã—ãŸã„å ´åˆã¯1ã«ã™ã‚‹(0ã¯ç„¡ç†)</param>
+	/// <param name="time">MaxTime=1ã§timeãŒ0.5ãªã‚‰åŠåˆ†ã‹ã‚‰å§‹ã¾ã‚‹</param>
 	void Reset(const size_t& ResetIndex, float& time);
 
 	/// <summary>
-	/// ‹ß‚­‚Ì‹Èü‚É‚·‚é//¡‚Ì‚Æ‚±‚ë“–‚½‚Á‚½‚Ì‚È‚çŒÀ’è
+	/// è¿‘ãã®æ›²ç·šã«ã™ã‚‹//ä»Šã®ã¨ã“ã‚å½“ãŸã£ãŸã®ãªã‚‰é™å®š
 	/// </summary>
 	void ResetNearSpline(Vector3& Pos);
 
 	/// <summary>
-	/// ResetNearSpline‚Åg‚Á‚½ƒtƒ‰ƒO‚ÌƒŠƒZƒbƒg
+	/// ResetNearSplineã§ä½¿ã£ãŸãƒ•ãƒ©ã‚°ã®ãƒªã‚»ãƒƒãƒˆ
 	/// </summary>
 	void ResetNearSplineReset();
 
-private://ƒvƒ‰ƒCƒx[ƒgŠÖ”
+private://ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆé–¢æ•°
 	Vector3 SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t);
 
+
 public://Setter
-	void SetSplineMaxTime(const float& MaxTime) { this->MaxTime = MaxTime; }
+	void SetSplineMaxTime(const float& maxTime) { MaxTime = maxTime; }
 	void SetNotSplineVector(const std::vector<Vector3>& points);
 public://Getter
 	bool GetFinishSpline()const { return isFinishSpline; }
@@ -85,10 +86,10 @@ public://Getter
 	size_t GetNowIndex()const { return startIndex; }
 	Vector3 GetSplineVecPoint(const uint32_t& point) { return points[point]; }
 	Vector3 GetFinalSplineVecPoint() { return points[points.size() - 1]; }
-public://ŒöŠJ•Ï”
+public://å…¬é–‹å¤‰æ•°
 	Vector3 NowPos;
 
-private://ƒNƒ‰ƒX•Ï”
+private://ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	bool isFinishSpline = false;
 	bool isResetNearSpline = false;
 	size_t startIndex = 1;

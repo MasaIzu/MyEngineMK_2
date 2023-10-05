@@ -3,7 +3,7 @@
 
 void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& triangle, Vector4* closest)
 {
-	// point‚ªp0‚ÌŠO‘¤‚Ì’¸“_—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN
+	// pointãŒp0ã®å¤–å´ã®é ‚ç‚¹é ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯
 	Vector4 p0_p1 = triangle.p1 - triangle.p0;
 	Vector4 p0_p2 = triangle.p2 - triangle.p0;
 	Vector4 p0_pt = point - triangle.p0;
@@ -13,12 +13,12 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 
 	if (d1 <= 0.0f && d2 <= 0.0f)
 	{
-		// p0‚ªÅ‹ß–T
+		// p0ãŒæœ€è¿‘å‚
 		*closest = triangle.p0;
 		return;
 	}
 
-	// point‚ªp1‚ÌŠO‘¤‚Ì’¸“_—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN
+	// pointãŒp1ã®å¤–å´ã®é ‚ç‚¹é ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯
 	Vector4 p1_pt = point - triangle.p1;
 
 	float d3 = p0_p1.Vector3Dot(p1_pt);
@@ -26,12 +26,12 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 
 	if (d3 >= 0.0f && d4 <= d3)
 	{
-		// p1‚ªÅ‹ß–T
+		// p1ãŒæœ€è¿‘å‚
 		*closest = triangle.p1;
 		return;
 	}
 
-	// point‚ªp0_p1‚Ì•Ó—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN‚µA‚ ‚ê‚Îpoint‚Ìp0_p1ã‚É‘Î‚·‚éË‰e‚ğ•Ô‚·
+	// pointãŒp0_p1ã®è¾ºé ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã—ã€ã‚ã‚Œã°pointã®p0_p1ä¸Šã«å¯¾ã™ã‚‹å°„å½±ã‚’è¿”ã™
 	float vc = d1 * d4 - d3 * d2;
 	if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
 	{
@@ -40,7 +40,7 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 		return;
 	}
 
-	// point‚ªp2‚ÌŠO‘¤‚Ì’¸“_—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN
+	// pointãŒp2ã®å¤–å´ã®é ‚ç‚¹é ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯
 	Vector4 p2_pt = point - triangle.p2;
 
 	float d5 = p0_p1.Vector3Dot(p2_pt);
@@ -51,7 +51,7 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 		return;
 	}
 
-	// point‚ªp0_p2‚Ì•Ó—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN‚µA‚ ‚ê‚Îpoint‚Ìp0_p2ã‚É‘Î‚·‚éË‰e‚ğ•Ô‚·
+	// pointãŒp0_p2ã®è¾ºé ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã—ã€ã‚ã‚Œã°pointã®p0_p2ä¸Šã«å¯¾ã™ã‚‹å°„å½±ã‚’è¿”ã™
 	float vb = d5 * d2 - d1 * d6;
 	if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
 	{
@@ -60,7 +60,7 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 		return;
 	}
 
-	// point‚ªp1_p2‚Ì•Ó—Ìˆæ‚Ì’†‚É‚ ‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒN‚µA‚ ‚ê‚Îpoint‚Ìp1_p2ã‚É‘Î‚·‚éË‰e‚ğ•Ô‚·
+	// pointãŒp1_p2ã®è¾ºé ˜åŸŸã®ä¸­ã«ã‚ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã—ã€ã‚ã‚Œã°pointã®p1_p2ä¸Šã«å¯¾ã™ã‚‹å°„å½±ã‚’è¿”ã™
 	float va = d3 * d6 - d5 * d4;
 	if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
 	{
@@ -77,7 +77,7 @@ void Collision::ClosestPtPoint2Triangle(const Vector4& point, const Triangle& tr
 
 bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, Vector4* inter, Vector4* reject)
 {
-	// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒğ·
+	// ä¸­å¿ƒç‚¹ã®è·é›¢ã®ï¼’ä¹— <= åŠå¾„ã®å’Œã®ï¼’ä¹—ã€€ãªã‚‰äº¤å·®
 	Vector4 tmp;
 	tmp = sphereA.center - sphereB.center;
 	float dist = tmp.Vector3Dot(tmp);
@@ -90,11 +90,11 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 	{
 		if (inter)
 		{
-			// A‚Ì”¼Œa‚ª0‚ÌÀ•W‚ÍB‚Ì’†S@B‚Ì”¼Œa‚ª0‚ÌÀ•W‚ÍA‚Ì’†S@‚Æ‚È‚é‚æ‚¤•âŠ®
+			// Aã®åŠå¾„ãŒ0ã®æ™‚åº§æ¨™ã¯Bã®ä¸­å¿ƒã€€Bã®åŠå¾„ãŒ0ã®æ™‚åº§æ¨™ã¯Aã®ä¸­å¿ƒã€€ã¨ãªã‚‹ã‚ˆã†è£œå®Œ
 			float t = sphereB.radius / (sphereA.radius + sphereB.radius);
 			*inter = Vector4Lerp(sphereA.center, sphereB.center, t);
 		}
-		// ‰Ÿ‚µo‚·ƒxƒNƒgƒ‹‚ğŒvZ
+		// æŠ¼ã—å‡ºã™ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
 		if (reject)
 		{
 			float rejectLen = sphereA.radius + sphereB.radius - sqrtf(dist);
@@ -114,7 +114,7 @@ bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphe
 	
 	if (whichSpeher == 0) {
 		for (uint32_t i = 0; i < HowLoop; i++) {
-			// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒğ·
+			// ä¸­å¿ƒç‚¹ã®è·é›¢ã®ï¼’ä¹— <= åŠå¾„ã®å’Œã®ï¼’ä¹—ã€€ãªã‚‰äº¤å·®
 			Vector4 tmp;
 			Vector4 LookVec = Vector4(checkFastSphere.look.x * i, checkFastSphere.look.y * i, checkFastSphere.look.z * i, 0);
 			tmp = (sphereA.center + (LookVec)) - sphereB.center;
@@ -130,7 +130,7 @@ bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphe
 	}
 	else {
 		for (uint32_t i = 0; i < HowLoop; i++) {
-			// ’†S“_‚Ì‹——£‚Ì‚Qæ <= ”¼Œa‚Ì˜a‚Ì‚Qæ@‚È‚çŒğ·
+			// ä¸­å¿ƒç‚¹ã®è·é›¢ã®ï¼’ä¹— <= åŠå¾„ã®å’Œã®ï¼’ä¹—ã€€ãªã‚‰äº¤å·®
 			Vector4 tmp;
 			Vector4 LookVec = Vector4(checkFastSphere.look.x * i, checkFastSphere.look.y * i, checkFastSphere.look.z * i, 0);
 			tmp = sphereA.center - (sphereB.center + (LookVec));
@@ -148,12 +148,8 @@ bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphe
 	return false;
 }
 
-// ’·•ûŒ`‚Æ“_‚Ì“–‚½‚è”»’è
-bool Collision::CheckRectSphere(Vector3 rectPos, Vector3 rectWidthHeightDepth1, Vector3 rectWidthHeightDepth2, Vector3 sphere, float sphereRadius) {
-	// ’·•ûŒ`‚Ì’†S“_‚ğŒvZ
-	float centerX = rectPos.x;
-	float centerY = rectPos.y;
-	float centerZ = rectPos.z;
+// é•·æ–¹å½¢ã¨ç‚¹ã®å½“ãŸã‚Šåˆ¤å®š
+bool Collision::CheckRectSphere(Vector3 rectWidthHeightDepth1, Vector3 rectWidthHeightDepth2, Vector3 sphere) {
 
 	if (rectWidthHeightDepth1.x > sphere.x && sphere.x > rectWidthHeightDepth2.x) {
 		if (rectWidthHeightDepth1.y > sphere.y && sphere.y > rectWidthHeightDepth2.y) {
@@ -163,9 +159,10 @@ bool Collision::CheckRectSphere(Vector3 rectPos, Vector3 rectWidthHeightDepth1, 
 		}
 	}
 
-	// “–‚½‚è”»’è‚ª‚È‚¢ê‡‚ÍA“–‚½‚Á‚Ä‚¢‚È‚¢‚Æ”»’f‚·‚é
+	// å½“ãŸã‚Šåˆ¤å®šãŒãªã„å ´åˆã¯ã€å½“ãŸã£ã¦ã„ãªã„ã¨åˆ¤æ–­ã™ã‚‹
 	return false;
 }
+
 
 bool Collision::CheckSphere2Plane(Sphere& sphere, Plane& plane, Vector4* inter)
 {
@@ -179,10 +176,10 @@ bool Collision::CheckSphere2Plane(Sphere& sphere, Plane& plane, Vector4* inter)
 		return false;
 	}
 
-	// ‹[—Œğ“_‚ğŒvZ
+	// æ“¬ä¼¼äº¤ç‚¹ã‚’è¨ˆç®—
 	if (inter)
 	{
-		// •½–Êã‚ÌÄÚ‹ß“_‚ğA‹^—Œğ“_‚Æ‚·‚é
+		// å¹³é¢ä¸Šã®å†æ¥è¿‘ç‚¹ã‚’ã€ç–‘ä¼¼äº¤ç‚¹ã¨ã™ã‚‹
 		*inter = -dist * plane.normal + sphere.center;
 	}
 
@@ -223,10 +220,10 @@ bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& trian
 
 bool Collision::CheckRay2Plane(const Ray& ray, const Plane& plane, float* distance, Vector4* inter)
 {
-	const float epsilon = 1.0e-5f;	// Œë·‹zû—p‚Ì”÷¬‚È’l
+	const float epsilon = 1.0e-5f;	// èª¤å·®å¸åç”¨ã®å¾®å°ãªå€¤
 
 	float d1 = plane.normal.Vector3Dot(ray.dir);
-	// — –Ê‚É‚Í“–‚½‚ç‚È‚¢
+	// è£é¢ã«ã¯å½“ãŸã‚‰ãªã„
 	if (d1 > -epsilon)
 	{
 		return false;
@@ -239,13 +236,13 @@ bool Collision::CheckRay2Plane(const Ray& ray, const Plane& plane, float* distan
 
 	if (t < 0) return false;
 
-	// ‹——£‚ğ‘‚«‚Ş
+	// è·é›¢ã‚’æ›¸ãè¾¼ã‚€
 	if (distance)
 	{
 		*distance = t;
 	}
 
-	// Œğ“_‚ğŒvZ
+	// äº¤ç‚¹ã‚’è¨ˆç®—
 	if (inter)
 	{
 		*inter = ray.start + t * ray.dir;
@@ -281,21 +278,21 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& triangle, floa
 		return false;
 	}
 
-	// •Óp1_p2‚É‚Â‚¢‚Ä
+	// è¾ºp1_p2ã«ã¤ã„ã¦
 	Vector4 pt_p1 = triangle.p1 - interPlane;
 	Vector4 p1_p2 = triangle.p2 - triangle.p1;
 	m = pt_p1.Vector3Cross(p1_p2);
-	// •Ó‚ÌŠO‘¤
+	// è¾ºã®å¤–å´
 	if (m.Vector3Dot(triangle.normal) < -epsilon)
 	{
 		return false;
 	}
 
-	// •Óp2_p0‚É‚Â‚¢‚Ä
+	// è¾ºp2_p0ã«ã¤ã„ã¦
 	Vector4 pt_p2 = triangle.p2 - interPlane;
 	Vector4 p2_p0 = triangle.p0 - triangle.p2;
 	m = pt_p2.Vector3Cross(p2_p0);
-	// •Ó‚ÌŠO‘¤
+	// è¾ºã®å¤–å´
 	if (m.Vector3Dot(triangle.normal) < -epsilon)
 	{
 		return false;
@@ -305,7 +302,7 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& triangle, floa
 		*inter = interPlane;
 	}
 
-	// “à‘¤‚È‚Ì‚ÅA“–‚½‚Á‚Ä‚¢‚é
+	// å†…å´ãªã®ã§ã€å½“ãŸã£ã¦ã„ã‚‹
 	return true;
 
 }
@@ -315,24 +312,24 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 	Vector4 m = ray.start - sphere.center;
 	float b = m.Vector3Dot(ray.dir);
 	float c = m.Vector3Dot(m) - sphere.radius * sphere.radius;
-	// lay‚Ìn“_‚ªsphere‚ÌŠO‘¤‚É‚ ‚è(c > 0)Alay‚ªsphere‚©‚ç—£‚ê‚Ä‚¢‚­•ûŒü‚ğ
-	// ·‚µ‚Ä‚¢‚éê‡(b > 0)A“–‚½‚ç‚È‚¢
+	// layã®å§‹ç‚¹ãŒsphereã®å¤–å´ã«ã‚ã‚Š(c > 0)ã€layãŒsphereã‹ã‚‰é›¢ã‚Œã¦ã„ãæ–¹å‘ã‚’
+	// å·®ã—ã¦ã„ã‚‹å ´åˆ(b > 0)ã€å½“ãŸã‚‰ãªã„
 	if (c > 0.0f && b > 0.0f)
 	{
 		return false;
 	}
 
 	float discr = b * b - c;
-	// •‰‚Ì”»•Ê®‚ÍƒŒƒC‚ª‹…‚ğŠO‚ê‚Ä‚¢‚é‚±‚Æ‚Éˆê’v
+	// è² ã®åˆ¤åˆ¥å¼ã¯ãƒ¬ã‚¤ãŒçƒã‚’å¤–ã‚Œã¦ã„ã‚‹ã“ã¨ã«ä¸€è‡´
 	if (discr < 0.0f)
 	{
 		return false;
 	}
 
-	// ƒŒƒC‚Í‹…‚ÆŒğ·‚µ‚Ä‚¢‚éB
-	// Œğ·‚·‚éÅ¬‚Ì’lt‚ğŒvZ
+	// ãƒ¬ã‚¤ã¯çƒã¨äº¤å·®ã—ã¦ã„ã‚‹ã€‚
+	// äº¤å·®ã™ã‚‹æœ€å°ã®å€¤tã‚’è¨ˆç®—
 	float t = -b - sqrtf(discr);
-	// t‚ª•‰‚Å‚ ‚éê‡AƒŒƒC‚Í‹…‚Ì“à‘¤‚©‚çŠJn‚µ‚Ä‚¢‚é‚Ì‚Åt‚ğƒ[ƒ‚ÉƒNƒ‰ƒ“ƒv
+	// tãŒè² ã§ã‚ã‚‹å ´åˆã€ãƒ¬ã‚¤ã¯çƒã®å†…å´ã‹ã‚‰é–‹å§‹ã—ã¦ã„ã‚‹ã®ã§tã‚’ã‚¼ãƒ­ã«ã‚¯ãƒ©ãƒ³ãƒ—
 	if (t < 0) t = 0.0f;
 
 	if (distance)

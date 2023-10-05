@@ -1,29 +1,30 @@
 #pragma once
 #include "Framework.h"
 
-// ƒQ[ƒ€‘S‘Ì
+
+// ã‚²ãƒ¼ãƒ å…¨ä½“
 class MainGame : public Framework
 {
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 	MainGame() = default;
 	~MainGame() = default;
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Initialize() override;
-	// I—¹
+	// çµ‚äº†
 	void Finalize() override;
-	// XV
+	// æ›´æ–°
 	void Update() override;
 	//PostEffectDraw
 	void PostEffectDraw() override; 
-	// •`‰æ
+	// æç”»
 	void Draw() override;
 
 	void CopyData() override;
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate()override;
 
 private:
-	// ƒQ[ƒ€I—¹ƒtƒ‰ƒO
+	// ã‚²ãƒ¼ãƒ çµ‚äº†ãƒ•ãƒ©ã‚°
 	bool endRequest_ = false;
 };

@@ -2,40 +2,39 @@
 #include "ErrorException.h"
 
 #pragma comment(lib, "winmm.lib")
-
 class FPS {
 private:
-	// CPUü”g”
+	// CPUå‘¨æ³¢æ•°
 	LARGE_INTEGER cpuClock{};
-	//Œv‘ªŠJnŠÔ
+	//è¨ˆæ¸¬é–‹å§‹æ™‚é–“
 	LARGE_INTEGER timeStart{};
-	//Œv‘ªI—¹ŠÔ
+	//è¨ˆæ¸¬çµ‚äº†æ™‚é–“
 	LARGE_INTEGER timeEnd{};
-	//ŒÅ’è‚·‚éŠÔ
+	//å›ºå®šã™ã‚‹æ™‚é–“
 	float frameTime = 1 / 60.0f;
-	// FPS’l
+	// FPSå€¤
 	float fps;
 
 public:
 	/// <summary>
-	/// FPS§Œä‰Šú‰»
+	/// FPSåˆ¶å¾¡åˆæœŸåŒ–
 	/// </summary>
 	void FpsControlBegin();
 
 	/// <summary>
-	/// FPS§Œä
+	/// FPSåˆ¶å¾¡
 	/// </summary>
 	void FpsControlEnd();
 
 	/// <summary>
-	/// ƒtƒŒ[ƒ€ƒŒ[ƒg‚ğİ’è
+	/// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã‚’è¨­å®š
 	/// </summary>
-	/// <param name="fps_">ƒtƒŒ[ƒ€ƒŒ[ƒg</param>
+	/// <param name="fps_">ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆ</param>
 	void SetFrameRate(float fps_);
 
 	/// <summary>
-	/// ƒtƒŒ[ƒ€ƒŒ[ƒg‚ğæ“¾
+	/// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã‚’å–å¾—
 	/// </summary>
-	/// <returns>ƒtƒŒ[ƒ€ƒŒ[ƒg</returns>
+	/// <returns>ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆ</returns>
 	float GetFrameRate();
 };

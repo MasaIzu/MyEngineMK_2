@@ -7,70 +7,70 @@
 #include <wrl.h>
 
 /// <summary>
-/// ƒeƒNƒXƒ`ƒƒƒ}ƒl[ƒWƒƒ
+/// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒãƒ¼ã‚¸ãƒ£
 /// </summary>
 class TextureManager {
 public:
-	// ƒfƒXƒNƒŠƒvƒ^[‚Ì”
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼ã®æ•°
 	static const size_t kNumDescriptors = 256;
 
 	/// <summary>
-	/// ƒeƒNƒXƒ`ƒƒ
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 	/// </summary>
 	struct Texture {
-		// ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒX
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-		// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(CPU)
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-		// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(CPU)
 		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
-		// –¼‘O
+		// åå‰
 		std::string name;
 	};
 
 	/// <summary>
-	/// “Ç‚İ‚İ
+	/// èª­ã¿è¾¼ã¿
 	/// </summary>
-	/// <param name="fileName">ƒtƒ@ƒCƒ‹–¼</param>
-	/// <returns>ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹</returns>
+	/// <param name="fileName">ãƒ•ã‚¡ã‚¤ãƒ«å</param>
+	/// <returns>ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«</returns>
 	static uint32_t Load(const std::string& fileName);
 
 	/// <summary>
-	/// ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+	/// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX</returns>
+	/// <returns>ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</returns>
 	static TextureManager* GetInstance();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <returns>ƒfƒXƒgƒ‰ƒNƒ^</returns>
+	/// <returns>ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿</returns>
 	void Delete();
 
 	/// <summary>
-	/// ƒVƒXƒeƒ€‰Šú‰»
+	/// ã‚·ã‚¹ãƒ†ãƒ åˆæœŸåŒ–
 	/// </summary>
-	/// <param name="device">ƒfƒoƒCƒX</param>
+	/// <param name="device">ãƒ‡ãƒã‚¤ã‚¹</param>
 	void Initialize(ID3D12Device* device, std::string directoryPath = "Resources/");
 
 	/// <summary>
-	/// ‘SƒeƒNƒXƒ`ƒƒƒŠƒZƒbƒg
+	/// å…¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚»ãƒƒãƒˆ
 	/// </summary>
 	void ResetAll();
 
 	/// <summary>
-	/// ƒŠƒ\[ƒXî•ñæ“¾
+	/// ãƒªã‚½ãƒ¼ã‚¹æƒ…å ±å–å¾—
 	/// </summary>
-	/// <param name="textureHandle">ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹</param>
-	/// <returns>ƒŠƒ\[ƒXî•ñ</returns>
+	/// <param name="textureHandle">ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«</param>
+	/// <returns>ãƒªã‚½ãƒ¼ã‚¹æƒ…å ±</returns>
 	const D3D12_RESOURCE_DESC GetResoureDesc(uint32_t textureHandle);
 
 	/// <summary>
-	/// ƒfƒXƒNƒŠƒvƒ^ƒe[ƒuƒ‹‚ğƒZƒbƒg
+	/// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
-	/// <param name="commandList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
-	/// <param name="rootParamIndex">ƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	/// <param name="textureHandle">ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹</param>
+	/// <param name="commandList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
+	/// <param name="rootParamIndex">ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
+	/// <param name="textureHandle">ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«</param>
 	void SetGraphicsRootDescriptorTable(
 		ID3D12GraphicsCommandList* commandList, UINT rootParamIndex, uint32_t textureHandle);
 
@@ -83,22 +83,22 @@ private:
 	TextureManager(const TextureManager&) = delete;
 	TextureManager& operator=(const TextureManager&) = delete;
 
-	// ƒfƒoƒCƒX
-	ID3D12Device* device_;
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
+	// ãƒ‡ãƒã‚¤ã‚¹
+	ID3D12Device* device_ = nullptr;
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
 	UINT DescriptorHandleSize_ = 0u;
-	// ƒfƒBƒŒƒNƒgƒŠƒpƒX
+	// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹
 	std::string directoryPath_;
-	// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-	// Ÿ‚Ég‚¤ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì”Ô†
+	// æ¬¡ã«ä½¿ã†ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ç•ªå·
 	uint32_t NextDescriptorHeapNumber_ = 0u;
-	// ƒeƒNƒXƒ`ƒƒƒRƒ“ƒeƒi
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚³ãƒ³ãƒ†ãƒŠ
 	std::array<Texture, kNumDescriptors> textures_;
 
 	/// <summary>
-	/// “Ç‚İ‚İ
+	/// èª­ã¿è¾¼ã¿
 	/// </summary>
-	/// <param name="fileName">ƒtƒ@ƒCƒ‹–¼</param>
+	/// <param name="fileName">ãƒ•ã‚¡ã‚¤ãƒ«å</param>
 	uint32_t LoadInternal(const std::string& fileName);
 };

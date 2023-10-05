@@ -4,14 +4,13 @@
 #include "MainGame.h"
 #include "Framework.h"
 
-// WindowsƒAƒvƒŠ‚Å‚ÌƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg(mainŠÖ”)
+// Windowsã‚¢ãƒ—ãƒªã§ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ãƒã‚¤ãƒ³ãƒˆ(mainé–¢æ•°)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	std::unique_ptr<Framework> myGame = std::make_unique<MainGame>();
 
 
 	myGame->Run();
-
     
 	return 0;
 }

@@ -1,4 +1,4 @@
-﻿#include "Hibana.h"
+#include "Hibana.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -39,14 +39,14 @@ UINT Hibana::m_incrementSize;
 
 UINT Hibana::m_cbvSrvUavDescriptorSize = 0;
 
-void Hibana::StaticInitialize(ID3D12Device* device)
+void Hibana::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
-	assert(device);
+	assert(Device);
 
-	Hibana::device = device;
+	Hibana::device = Device;
 
-	m_cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -58,20 +58,20 @@ void Hibana::StaticFinalize()
 
 }
 
-void Hibana::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void Hibana::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(Hibana::cmdList == nullptr);
 
 	// コマンドリストをセット
-	Hibana::cmdList = cmdList;
+	Hibana::cmdList = commandList;
 
 	// パイプラインステートの設定
-	cmdList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
+	commandList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
 	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	commandList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
 void Hibana::PostDraw()
@@ -235,11 +235,11 @@ void Hibana::InitializeGraphicsPipeline()
 
 
 	// デスクリプタレンジ
-	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRV = {};
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[ 3 ] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsUnorderedAccessView(0);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
@@ -248,7 +248,7 @@ void Hibana::InitializeGraphicsPipeline()
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
 
 	// ルートシグネチャの設定
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
+	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
 	rootSignatureDesc.Init_1_0(_countof(rootparams), rootparams, 1, &samplerDesc, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 	ComPtr<ID3DBlob> rootSigBlob;
@@ -269,18 +269,18 @@ void Hibana::InitializeGraphicsPipeline()
 		CD3DX12_DESCRIPTOR_RANGE uavIndexList{};
 		uavIndexList.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 1);
 		// ルートシグネチャの作成
-		std::array<CD3DX12_ROOT_PARAMETER, 3> rootParameters;
+		std::array<CD3DX12_ROOT_PARAMETER,3> rootParameters = {};
 		rootParameters[0].InitAsConstantBufferView(0); // b0: Params
 		rootParameters[1].InitAsUnorderedAccessView(0);// u0: Particles
 		rootParameters[2].InitAsDescriptorTable(1, &uavIndexList); // u1: ParticleIndexList
 
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
-		rootSignatureDesc.Init(
+		CD3DX12_ROOT_SIGNATURE_DESC uavRootSignatureDesc{};
+		uavRootSignatureDesc.Init(
 			UINT(rootParameters.size()), rootParameters.data(),
 			1, &samplerDesc);
 
 		ComPtr<ID3DBlob> signature, errBlob;
-		D3D12SerializeRootSignature(&rootSignatureDesc,
+		D3D12SerializeRootSignature(&uavRootSignatureDesc,
 			D3D_ROOT_SIGNATURE_VERSION_1_0, &signature, &errBlob);
 		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	}
@@ -315,24 +315,24 @@ void Hibana::InitializeGraphicsPipeline()
 		nullptr);
 
 	// PSOの作成
-	ComPtr<ID3D12PipelineState> pipelineState;
+	ComPtr<ID3D12PipelineState> CSpipelineState;
 	D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.pRootSignature = rootSignature.Get();
 
 	//initialize用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobInit.Get());
 	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_INIT] = pipelineState;
+	m_pipelines[PSO_CS_INIT] = CSpipelineState;
 
 	//emit用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobEmit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_EMIT] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_EMIT] = CSpipelineState;
 
 	//update用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobUpdate.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_UPDATE] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_UPDATE] = CSpipelineState;
 
 	const int MaxDescriptorCount = 2048; // SRV,CBV,UAV など.
 	// SRV のディスクリプタヒープ
@@ -534,11 +534,11 @@ void Hibana::Draw(const ViewProjection& view)
 
 }
 
-void Hibana::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
+void Hibana::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	//初期化
 	if (m_frameCount == 0) {
@@ -547,36 +547,35 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
-		CD3DX12_RESOURCE_BARRIER transitionBarrier[2];
+		CD3DX12_RESOURCE_BARRIER transitionBarrier[ 2 ] = {};
 		transitionBarrier[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleElement.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		transitionBarrier[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleIndexList.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		cmdList->ResourceBarrier(2, transitionBarrier);
+		commandList->ResourceBarrier(2, transitionBarrier);
 
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 		// Particle の初期化コード.
-		cmdList->SetComputeRootSignature(rootSignature.Get());
+		commandList->SetComputeRootSignature(rootSignature.Get());
 
 
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
+		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
 		UINT invokeCount = particleCount / 128 + 1;
-		cmdList->Dispatch(invokeCount, 1, 1);
+		commandList->Dispatch(invokeCount, 1, 1);
 	}
+
 
 	{
 		// Particle の発生.
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
-		cmdList->SetComputeRootSignature(rootSignature.Get());
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
+		commandList->SetComputeRootSignature(rootSignature.Get());
+		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
 		if (input_->PushKey(DIK_U)) {
 			DispatchCount++;
@@ -596,19 +595,19 @@ void Hibana::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
 			if (input_->PushKey(DIK_G)) {
 				shaderParameters.Shot = 1;
 			}
-			cmdList->Dispatch(invokeCount, 1, 1);
+			commandList->Dispatch(invokeCount, 1, 1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleElement.Get()),
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleIndexList.Get()),
 		};
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commandList->ResourceBarrier(_countof(barriers), barriers);
 
 		// Particle の更新処理.
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
-		cmdList->Dispatch(invokeCount, 1, 1);
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commandList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
+		commandList->Dispatch(invokeCount, 1, 1);
+		commandList->ResourceBarrier(_countof(barriers), barriers);
 	}
 
 	++m_frameCount;

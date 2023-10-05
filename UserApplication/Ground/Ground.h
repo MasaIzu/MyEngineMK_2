@@ -7,6 +7,7 @@
 
 class Ground {
 
+
 public:
 	Ground(Model* model);
 	void Initialze();

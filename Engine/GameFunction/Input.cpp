@@ -15,6 +15,7 @@
 #include <dinputd.h>
 #include <memory>
 
+
 Input* Input::Input_ = nullptr;
 
 Input* Input::GetInstance() {
@@ -49,74 +50,74 @@ void Input::Initialize()
 	hwnd_ = winApp->Gethwnd();
 	HRESULT result = S_FALSE;
 
-	// DirectInputƒIƒuƒWƒFƒNƒg‚Ì¶¬
+	// DirectInputã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
 	result = DirectInput8Create(
 		winApp->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dInput_, nullptr);
 	assert(SUCCEEDED(result));
 
-	// ƒL[ƒ{[ƒhƒfƒoƒCƒX‚Ì¶¬
+	// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ
 	result = dInput_->CreateDevice(GUID_SysKeyboard, &devKeyboard_, NULL);
 	assert(SUCCEEDED(result));
 
-	// “ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
-	result = devKeyboard_->SetDataFormat(&c_dfDIKeyboard); // •W€Œ`®
+	// å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
+	result = devKeyboard_->SetDataFormat(&c_dfDIKeyboard); // æ¨™æº–å½¢å¼
 	assert(SUCCEEDED(result));
 
-	// ”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
+	// æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
 	result = devKeyboard_->SetCooperativeLevel(
 		hwnd_, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
-	//ƒ}ƒEƒXƒfƒoƒCƒX‚Ì‰Šú‰»
+	//ãƒã‚¦ã‚¹ãƒ‡ãƒã‚¤ã‚¹ã®åˆæœŸåŒ–
 	mouse = std::make_unique<Mouse>();
 	mouse->Initialize(dInput_.Get());
 }
 
 void Input::Update()
 {
-	// ‘O‰ñ‚ÌƒL[“ü—Í‚ğ•Û‘¶
+	// å‰å›ã®ã‚­ãƒ¼å…¥åŠ›ã‚’ä¿å­˜
 	memcpy(keyPre, key, sizeof(key));
 
-	// ƒL[ƒ{[ƒhî•ñ‚Ìæ“¾ŠJn
+	// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æƒ…å ±ã®å–å¾—é–‹å§‹
 	devKeyboard_->Acquire();
 
-	// ‘SƒL[‚Ì“ü—Íó‘Ô‚ğæ“¾‚·‚é
+	// å…¨ã‚­ãƒ¼ã®å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
 	devKeyboard_->GetDeviceState(sizeof(key), key);
 
-	//ƒ}ƒEƒXXV
+	//ãƒã‚¦ã‚¹æ›´æ–°
 	mouse->Update();
 }
 
 bool Input::PushKey(BYTE keyNumber)
 {
-	// w’è‚µ‚½ƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚ê‚Îtrue‚ğ•Ô‚·
+	// æŒ‡å®šã—ãŸã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ã‚Œã°trueã‚’è¿”ã™
 	if (key[keyNumber]) {
 		return true;
 	}
 
-	// ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse‚ğ•Ô‚·
+	// ãã†ã§ãªã‘ã‚Œã°falseã‚’è¿”ã™
 	return false;
 }
 
 bool Input::TriggerKey(BYTE keyNumber)
 {
-	// w’èƒL[‚ğ‘OƒtƒŒ[ƒ€‚Å‰Ÿ‚µ‚Ä‚¢‚È‚­A¡‚ÌƒtƒŒ[ƒ€‚Å‰Ÿ‚µ‚Ä‚¢‚ê‚Îtrue‚ğ•Ô‚·
+	// æŒ‡å®šã‚­ãƒ¼ã‚’å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã§æŠ¼ã—ã¦ã„ãªãã€ä»Šã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§æŠ¼ã—ã¦ã„ã‚Œã°trueã‚’è¿”ã™
 	if (!keyPre[keyNumber] && key[keyNumber]) {
 		return true;
 	}
 
-	// ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse‚ğ•Ô‚·
+	// ãã†ã§ãªã‘ã‚Œã°falseã‚’è¿”ã™
 	return false;
 }
 
 bool Input::ReleasedKey(BYTE keyNumber)
 {
-	// w’èƒL[‚ğ‘OƒtƒŒ[ƒ€‚Å‰Ÿ‚µ‚Ä‚¢‚ÄA¡‚ÌƒtƒŒ[ƒ€‚Å‰Ÿ‚µ‚Ä‚¢‚È‚¯‚ê‚Îtrue‚ğ•Ô‚·
+	// æŒ‡å®šã‚­ãƒ¼ã‚’å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã§æŠ¼ã—ã¦ã„ã¦ã€ä»Šã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§æŠ¼ã—ã¦ã„ãªã‘ã‚Œã°trueã‚’è¿”ã™
 	if (keyPre[keyNumber] && !key[keyNumber]) {
 		return true;
 	}
 
-	// ‚»‚¤‚Å‚È‚¯‚ê‚Îfalse‚ğ•Ô‚·
+	// ãã†ã§ãªã‘ã‚Œã°falseã‚’è¿”ã™
 	return false;
 }
 

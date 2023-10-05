@@ -11,21 +11,22 @@
 #include "Ground.h"
 #include "TouchableObject.h"
 
-// ƒŒƒxƒ‹ƒf[ƒ^
+
+// ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿
 struct LevelData {
 
 	struct ObjectData {
-		// ƒtƒ@ƒCƒ‹–¼
+		// ãƒ•ã‚¡ã‚¤ãƒ«å
 		std::string fileName;
-		// •½sˆÚ“®
+		// å¹³è¡Œç§»å‹•
 		Vector3 translation;
-		// ‰ñ“]Šp
+		// å›è»¢è§’
 		Vector3 rotation;
-		// ƒXƒP[ƒŠƒ“ƒO
+		// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
 		Vector3 scaling;
 	};
 
-	// ƒIƒuƒWƒFƒNƒg”z—ñ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—
 	std::vector<ObjectData> objects;
 };
 
@@ -34,24 +35,24 @@ struct ModelData {
 	WorldTransform worldTrans;
 };
 
-// ƒŒƒxƒ‹ƒf[ƒ^‚Ì¶¬
+// ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿ã®ç”Ÿæˆ
 class LoadLevelEditor {
 
-public:// ’è”
-	// ƒfƒtƒHƒ‹ƒg‚Ì“Ç‚İ‚İƒfƒBƒŒƒNƒgƒŠ
+public:// å®šæ•°
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®èª­ã¿è¾¼ã¿ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	static const std::string kDefaultBaseDirectory;
-	// ƒtƒ@ƒCƒ‹Šg’£q
+	// ãƒ•ã‚¡ã‚¤ãƒ«æ‹¡å¼µå­
 	static const std::string kExtension;
 
-public:// ƒƒ“ƒoŠÖ”
+public:// ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	LoadLevelEditor();
 	~LoadLevelEditor();
 
 	/// <summary>
-	/// ƒŒƒxƒ‹ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+	/// ãƒ¬ãƒ™ãƒ«ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 	/// </summary>
-	/// <param name="fileName">ƒtƒ@ƒCƒ‹–¼</param>
+	/// <param name="fileName">ãƒ•ã‚¡ã‚¤ãƒ«å</param>
 	LevelData* LoadFile(const std::string& fileName);
 
 	void Initialize(const std::string& fileName);
@@ -81,7 +82,7 @@ private:
 	std::vector<Vector3> BossEnemySplineVec;
 	std::vector<Vector3> stage2SropSplineVec;
 
-	//Å‰‚©‚ç“Ç‚İ‚Ş‚â‚Â
+	//æœ€åˆã‹ã‚‰èª­ã¿è¾¼ã‚€ã‚„ã¤
 	std::unique_ptr<Model> modelSrop;
 	std::unique_ptr<Model> modelGround;
 	std::unique_ptr<Model> modelGoal;

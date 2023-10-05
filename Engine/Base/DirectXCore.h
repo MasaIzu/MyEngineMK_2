@@ -7,38 +7,37 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
-
 class DirectXCore {
 
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	// ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+	// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 	static DirectXCore* GetInstance();
 
 	void DirectXCoreInitialize(HWND hwnd, const float& window_width, const float& window_height);
 
 
 	/// <summary>
-	/// •`‰æ‘OŒãˆ—
+	/// æç”»å‰å¾Œå‡¦ç†
 	/// </summary>
 	void PreDraw();
 	void PostDraw();
 
-	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒNƒŠƒA
+	// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¯ãƒªã‚¢
 	void ClearRenderTarget();
 
-	// [“xƒoƒbƒtƒ@‚ÌƒNƒŠƒA
+	// æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã®ã‚¯ãƒªã‚¢
 	void ClearDepthBuffer();
 
 	void Destroy();
 
-	// ƒfƒoƒCƒX‚Ìæ“¾
+	// ãƒ‡ãƒã‚¤ã‚¹ã®å–å¾—
 	ID3D12Device* GetDevice() { return device.Get(); }
 
-	// •`‰æƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// æç”»ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList.Get(); }
 
-	//ƒoƒbƒNƒoƒbƒtƒ@‚Ì”‚ğæ“¾
+	//ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®æ•°ã‚’å–å¾—
 	size_t GetBackBufferCount()const { return backBuffers.size(); }
 
 	ID3D12DescriptorHeap* GetdsvHeap() {return dsvHeap.Get(); }
@@ -47,9 +46,9 @@ public://ƒƒ“ƒoŠÖ”
 
 	ID3D12CommandQueue* GetCommandQueue() { return commandQueue.Get(); }
 
-private://ƒƒ“ƒo•Ï”
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 
-	// Direct3DŠÖ˜A
+	// Direct3Dé–¢é€£
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
@@ -64,7 +63,7 @@ private://ƒƒ“ƒo•Ï”
 	float backBufferWidth_ = 0;
 	float backBufferHeight_ = 0;
 
-	//ƒtƒFƒ“ƒX‚Ì¶¬
+	//ãƒ•ã‚§ãƒ³ã‚¹ã®ç”Ÿæˆ
 	Microsoft::WRL::ComPtr <ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
 
@@ -72,28 +71,28 @@ private://ƒƒ“ƒo•Ï”
 
 	static DirectXCore* DirectXCore_;
 
-private://ƒƒ“ƒo•Ï”
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 	DirectXCore() = default;
 	~DirectXCore();
 	DirectXCore(const DirectXCore&) = delete;
 	const DirectXCore& operator=(const DirectXCore&) = delete;
 
-	// DXGIƒfƒoƒCƒX‰Šú‰»
+	// DXGIãƒ‡ãƒã‚¤ã‚¹åˆæœŸåŒ–
 	void InitializeDevice();
 
-	// ƒXƒƒbƒvƒ`ƒF[ƒ“‚Ì¶¬
+	// ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ãƒ¼ãƒ³ã®ç”Ÿæˆ
 	void InitializeSwapChain();
 
-	// ƒRƒ}ƒ“ƒhŠÖ˜A‰Šú‰»
+	// ã‚³ãƒãƒ³ãƒ‰é–¢é€£åˆæœŸåŒ–
 	void InitializeCommand();
 
-	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg¶¬
+	// ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆç”Ÿæˆ
 	void InitializeRenderTargets();
 
-	// [“xƒoƒbƒtƒ@¶¬
+	// æ·±åº¦ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	void InitializeDepthBuffer();
 
-	// ƒtƒFƒ“ƒX¶¬
+	// ãƒ•ã‚§ãƒ³ã‚¹ç”Ÿæˆ
 	void InitializeFence();
 
 };

@@ -3,33 +3,33 @@
 #include "WorldTransform.h"
 #include <assert.h>
 #include "ViewProjection.h"
-#include "affin.h"
+
 
 /// <summary>
-/// “V‹…
+/// å¤©çƒ
 /// </summary>
 class Skydome {
 
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(ViewProjection& viewProjection_);
 
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	std::unique_ptr<Model> model_;
 
 };

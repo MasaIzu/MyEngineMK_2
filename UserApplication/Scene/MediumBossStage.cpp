@@ -5,6 +5,7 @@
 
 MediumBossStage::MediumBossStage()
 {
+
 }
 
 MediumBossStage::~MediumBossStage()
@@ -99,13 +100,13 @@ void MediumBossStage::Update()
 
 	player_->AttackUpdate(middleBossEnemy->GetPosition(), isLockOn);
 
-	//‘S‚Ä‚ÌÕ“Ë‚ğƒ`ƒFƒbƒN
+	//å…¨ã¦ã®è¡çªã‚’ãƒã‚§ãƒƒã‚¯
 	collisionManager->CheckAllCollisions();
 }
 
 void MediumBossStage::PostEffectDraw()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
@@ -113,7 +114,7 @@ void MediumBossStage::PostEffectDraw()
 	PostEffect::SetRadialBlur(center, intensity, samples);
 	PostEffect::SetAngle(angle, angle2);
 
-	////ƒp[ƒeƒBƒNƒ‹
+	////ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	ParticleManager::PreDraw(commandList);
 	//player_->ParticleDraw(*viewProjection_.get());
 	ParticleManager::PostDraw();
@@ -123,22 +124,22 @@ void MediumBossStage::PostEffectDraw()
 
 void MediumBossStage::Draw()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	Model::PreDraw(commandList);//// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	Model::PreDraw(commandList);//// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 
 	//skydome->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 
-	bossEnemy->Draw(*viewProjection_.get());
+	bossEnemy->Draw();
 
 	middleBossEnemy->Draw(*viewProjection_.get());
 	player_->Draw(*viewProjection_.get());
 
-	Model::PostDraw();//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	Model::PostDraw();//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 
-	player_->DrawSprite(*viewProjection_.get());
+	player_->DrawSprite();
 
 }
 
@@ -148,16 +149,13 @@ void MediumBossStage::Finalize()
 
 void MediumBossStage::CopyData()
 {
-	////ƒp[ƒeƒBƒNƒ‹
+	////ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	player_->CopyParticle();
 }
 
 void MediumBossStage::CSUpdate()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	////ƒp[ƒeƒBƒNƒ‹
-	player_->CSUpdate(commandList);
+
 }
 
 void MediumBossStage::LockOn()
@@ -166,17 +164,17 @@ void MediumBossStage::LockOn()
 
 	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
 
-	//ƒrƒ…[ƒ|[ƒgs—ñ
+	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—
 	Matrix4 Viewport =
 	{ windowWH.x / 2,0,0,0,
 	0,-windowWH.y / 2,0,0,
 	0,0,1,0,
 	windowWH.x / 2, windowWH.y / 2,0,1 };
 
-	//ƒrƒ…[s—ñ‚ÆƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñAƒrƒ…[ƒ|[ƒgs—ñ‚ğ‡¬‚·‚é
+	//ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã¨ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã€ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ã‚’åˆæˆã™ã‚‹
 	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
 
-	//ƒ[ƒ‹ƒh¨ƒXƒNƒŠ[ƒ“À•W•ÏŠ·(‚±‚±‚Å3D‚©‚ç2D‚É‚È‚é)
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰â†’ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™å¤‰æ›(ã“ã“ã§3Dã‹ã‚‰2Dã«ãªã‚‹)
 	EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
 
 	float dist = MyMath::Distance2Vec2(Vector2(EnemyPos.x, EnemyPos.y), Vector2(640, 360));

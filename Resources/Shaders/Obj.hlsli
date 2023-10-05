@@ -3,6 +3,7 @@ cbuffer WorldTransform : register(b0) {
 	float m_alpha;	// アルファ
 };
 
+
 cbuffer ViewProjection : register(b1) {
 	matrix view;       // ビュー変換行列
 	matrix projection; // プロジェクション変換行列

@@ -4,6 +4,7 @@
 
 StageSelect::StageSelect()
 {
+
 }
 
 StageSelect::~StageSelect()
@@ -76,13 +77,13 @@ void StageSelect::Update()
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
-	//‘S‚Ä‚ÌÕ“Ë‚ðƒ`ƒFƒbƒN
+	//å…¨ã¦ã®è¡çªã‚’ãƒã‚§ãƒƒã‚¯
 	collisionManager->CheckAllCollisions();
 }
 
 void StageSelect::PostEffectDraw()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ÌŽæ“¾
+	// ã‚³ãƒžãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
@@ -96,10 +97,10 @@ void StageSelect::PostEffectDraw()
 
 void StageSelect::Draw()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ÌŽæ“¾
+	// ã‚³ãƒžãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	
-	Model::PreDraw(commandList);//// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	Model::PreDraw(commandList);//// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 
 	//skydome->Draw(*viewProjection_.get());
 
@@ -108,9 +109,9 @@ void StageSelect::Draw()
 
 	player_->Draw(*viewProjection_.get());
 	
-	Model::PostDraw();//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	Model::PostDraw();//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 
-	player_->DrawSprite(*viewProjection_.get());
+	player_->DrawSprite();
 
 }
 
@@ -120,14 +121,11 @@ void StageSelect::Finalize()
 
 void StageSelect::CopyData()
 {
-	////ƒp[ƒeƒBƒNƒ‹
+	////ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	player_->CopyParticle();
 }
 
 void StageSelect::CSUpdate()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ÌŽæ“¾
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	////ƒp[ƒeƒBƒNƒ‹
-	player_->CSUpdate(commandList);
+
 }

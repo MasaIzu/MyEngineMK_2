@@ -5,16 +5,15 @@
 #include <d3d12.h>
 #include <wrl.h>
 #include "Quaternion.h"
-
-// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 struct ConstBufferDataWorldTransform {
-	Matrix4 matWorld;           // ƒ[ƒJƒ‹ ¨ ƒ[ƒ‹ƒh•ÏŠ·s—ñ
-	float alpha=1;       // ƒAƒ‹ƒtƒ@
+	Matrix4 matWorld;           // ãƒ­ãƒ¼ã‚«ãƒ« â†’ ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›è¡Œåˆ—
+	float alpha=1;       // ã‚¢ãƒ«ãƒ•ã‚¡
 };
 
 struct WorldTarnsLook {
 
-	//‚»‚Ì•¨‘Ì‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü
+	//ãã®ç‰©ä½“ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘
 	Vector3 look = { 0,0,0 };
 	Vector3 lookBack = { 0,0,0 };
 	Vector3 lookRight = { 0,0,0 };
@@ -33,45 +32,45 @@ struct WorldTarnsLook {
 };
 
 /// <summary>
-/// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+/// ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 struct WorldTransform {
-	// ’è”ƒoƒbƒtƒ@
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-	// ƒ}ƒbƒsƒ“ƒOÏ‚İƒAƒhƒŒƒX
+	// ãƒãƒƒãƒ”ãƒ³ã‚°æ¸ˆã¿ã‚¢ãƒ‰ãƒ¬ã‚¹
 	ConstBufferDataWorldTransform* constMap = nullptr;
-	// ƒ[ƒJƒ‹ƒXƒP[ƒ‹
+	// ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ã‚±ãƒ¼ãƒ«
 	Vector3 scale_ = { 1, 1, 1 };
-	// X,Y,Z²‰ñ‚è‚Ìƒ[ƒJƒ‹‰ñ“]Šp
+	// X,Y,Zè»¸å›ã‚Šã®ãƒ­ãƒ¼ã‚«ãƒ«å›è»¢è§’
 	Vector3 rotation_ = { 0, 0, 0 };
-	// ƒ[ƒJƒ‹À•W
+	// ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™
 	Vector3 translation_ = { 0, 0, 0 };
-	//”CˆÓ²‚Ìƒ[ƒJƒ‹‰ñ“]
+	//ä»»æ„è»¸ã®ãƒ­ãƒ¼ã‚«ãƒ«å›è»¢
 	Quaternion quaternion = { 0,0,0,0 };
-	// ƒ[ƒJƒ‹ ¨ ƒ[ƒ‹ƒh•ÏŠ·s—ñ
+	// ãƒ­ãƒ¼ã‚«ãƒ« â†’ ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›è¡Œåˆ—
 	Matrix4 matWorld_;
-	//ƒAƒ‹ƒtƒ@’l
+	//ã‚¢ãƒ«ãƒ•ã‚¡å€¤
 	float alpha = 1;
-	//‚»‚Ì•¨‘Ì‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü
+	//ãã®ç‰©ä½“ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘
 	WorldTarnsLook LookVelocity;
 
-	// e‚Æ‚È‚éƒ[ƒ‹ƒh•ÏŠ·‚Ö‚Ìƒ|ƒCƒ“ƒ^
+	// è¦ªã¨ãªã‚‹ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 	const WorldTransform* parent_ = nullptr;
 
 	Matrix4 matRot;
 
-	//‰ñ“]‚ªƒIƒCƒ‰[Šp‚É‚æ‚é‰ñ“]‚©
+	//å›è»¢ãŒã‚ªã‚¤ãƒ©ãƒ¼è§’ã«ã‚ˆã‚‹å›è»¢ã‹
 	bool isEuler = false;
 
 	bool IsLookOnlyMatRot = false;
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize();
-	//’è”ƒoƒbƒtƒ@¶¬
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	void CreateConstBuffer();
-	//ƒ}ƒbƒsƒ“ƒO‚·‚é
+	//ãƒãƒƒãƒ”ãƒ³ã‚°ã™ã‚‹
 	void Map();
-	//s—ñ‚ğ“]‘—‚·‚é
+	//è¡Œåˆ—ã‚’è»¢é€ã™ã‚‹
 	void TransferMatrix();
 
 	void SetRot(const Vector3& rot);

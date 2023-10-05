@@ -7,91 +7,92 @@
 #include <wrl.h>
 
 /// <summary>
-/// ƒ}ƒeƒŠƒAƒ‹
+/// ãƒãƒ†ãƒªã‚¢ãƒ«
 /// </summary>
 class Material {
-public: // ƒTƒuƒNƒ‰ƒX
-  // ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+  // å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct ConstBufferData {
-		Vector3 ambient;  // ƒAƒ“ƒrƒGƒ“ƒgŒW”
-		float pad1;        // ƒpƒfƒBƒ“ƒO
-		Vector3 diffuse;  // ƒfƒBƒtƒ…[ƒYŒW”
-		float pad2;        // ƒpƒfƒBƒ“ƒO
-		Vector3 specular; // ƒXƒyƒLƒ…ƒ‰[ŒW”
-		float alpha;       // ƒAƒ‹ƒtƒ@
+		Vector3 ambient;  // ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆä¿‚æ•°
+		float pad1;        // ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
+		Vector3 diffuse;  // ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºä¿‚æ•°
+		float pad2;        // ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
+		Vector3 specular; // ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ä¿‚æ•°
+		float alpha;       // ã‚¢ãƒ«ãƒ•ã‚¡
 	};
 
-public: // Ã“Iƒƒ“ƒoŠÖ”
+
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
   /// <summary>
-  /// ƒ}ƒeƒŠƒAƒ‹¶¬
+  /// ãƒãƒ†ãƒªã‚¢ãƒ«ç”Ÿæˆ
   /// </summary>
-  /// <returns>¶¬‚³‚ê‚½ƒ}ƒeƒŠƒAƒ‹</returns>
+  /// <returns>ç”Ÿæˆã•ã‚ŒãŸãƒãƒ†ãƒªã‚¢ãƒ«</returns>
 	static Material* Create();
 
 public:
-	std::string name_;            // ƒ}ƒeƒŠƒAƒ‹–¼
-	Vector3 ambient_;            // ƒAƒ“ƒrƒGƒ“ƒg‰e‹¿“x
-	Vector3 diffuse_;            // ƒfƒBƒtƒ…[ƒY‰e‹¿“x
-	Vector3 specular_;           // ƒXƒyƒLƒ…ƒ‰[‰e‹¿“x
-	float alpha_;                 // ƒAƒ‹ƒtƒ@
-	std::string textureFilename_; // ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
+	std::string name_;            // ãƒãƒ†ãƒªã‚¢ãƒ«å
+	Vector3 ambient_;            // ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆå½±éŸ¿åº¦
+	Vector3 diffuse_;            // ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºå½±éŸ¿åº¦
+	Vector3 specular_;           // ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼å½±éŸ¿åº¦
+	float alpha_;                 // ã‚¢ãƒ«ãƒ•ã‚¡
+	std::string textureFilename_; // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«å
 
 public:
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@‚Ìæ“¾
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	ID3D12Resource* GetConstantBuffer() { return constBuff_.Get(); }
 
-	/// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	/// </summary>
-	/// <param name="directoryPath">“Ç‚İ‚İƒfƒBƒŒƒNƒgƒŠƒpƒX</param>
+	/// <param name="directoryPath">èª­ã¿è¾¼ã¿ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹</param>
 	void LoadTexture(const std::string& directoryPath);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ÌƒZƒbƒg
+	/// ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒãƒ³ãƒ‰ã®ã‚»ãƒƒãƒˆ
 	/// </summary>
-	/// <param name="commandList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
-	/// <param name="rooParameterIndexMaterial">ƒ}ƒeƒŠƒAƒ‹‚Ìƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	/// <param name="rooParameterIndexTexture">ƒeƒNƒXƒ`ƒƒ‚Ìƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
+	/// <param name="commandList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
+	/// <param name="rooParameterIndexMaterial">ãƒãƒ†ãƒªã‚¢ãƒ«ã®ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
+	/// <param name="rooParameterIndexTexture">ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
 	void SetGraphicsCommand(
 		ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 		UINT rooParameterIndexTexture);
 
 	/// <summary>
-	/// ƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ÌƒZƒbƒgiƒeƒNƒXƒ`ƒƒ·‚µ‘Ö‚¦”Åj
+	/// ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒãƒ³ãƒ‰ã®ã‚»ãƒƒãƒˆï¼ˆãƒ†ã‚¯ã‚¹ãƒãƒ£å·®ã—æ›¿ãˆç‰ˆï¼‰
 	/// </summary>
-	/// <param name="commandList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
-	/// <param name="rooParameterIndexMaterial">ƒ}ƒeƒŠƒAƒ‹‚Ìƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	/// <param name="rooParameterIndexTexture">ƒeƒNƒXƒ`ƒƒ‚Ìƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	/// <param name="textureHandle">·‚µ‘Ö‚¦‚éƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹</param>
+	/// <param name="commandList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
+	/// <param name="rooParameterIndexMaterial">ãƒãƒ†ãƒªã‚¢ãƒ«ã®ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
+	/// <param name="rooParameterIndexTexture">ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
+	/// <param name="textureHandle">å·®ã—æ›¿ãˆã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«</param>
 	void SetGraphicsCommand(
 		ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 		UINT rooParameterIndexTexture, uint32_t textureHandle);
 
-	// ƒZƒbƒgƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	// ã‚»ãƒƒãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	void SetTextureHadle(uint32_t& textureHandles) { textureHandle_ = textureHandles; }
 
-	// ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t GetTextureHadle() { return textureHandle_; }
 
 	void SetLight(Vector3 ambient, Vector3 diffuse, Vector3 specular, float alpha);
 
 private:
-	// ’è”ƒoƒbƒtƒ@
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-	// ’è”ƒoƒbƒtƒ@‚Ìƒ}ƒbƒv
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒƒãƒ—
 	ConstBufferData* constMap_ = nullptr;
-	// ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0;
 
 private:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Material() {
 		ambient_ = { 0.3f, 0.3f, 0.3f };
 		diffuse_ = { 0.0f, 0.0f, 0.0f };
@@ -100,12 +101,12 @@ private:
 	}
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	/// </summary>
 	void CreateConstantBuffer();
 };

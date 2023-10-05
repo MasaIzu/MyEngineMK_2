@@ -13,6 +13,7 @@ BulletShotEnemy::BulletShotEnemy(const Vector3& BonePos_, Model* model)
 
 BulletShotEnemy::~BulletShotEnemy()
 {
+
 }
 
 void BulletShotEnemy::Initialize()
@@ -65,14 +66,14 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	}
 
 
-	// —‰ºˆ—
+	// è½ä¸‹å‡¦ç†
 	if (!onGround) {
-		// ‰ºŒü‚«‰Á‘¬“x
+		// ä¸‹å‘ãåŠ é€Ÿåº¦
 		const float fallAcc = -0.01f;
 		const float fallVYMin = -0.5f;
-		// ‰Á‘¬
+		// åŠ é€Ÿ
 		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// ˆÚ“®
+		// ç§»å‹•
 		BulletShotEnemyWorldTrans.translation_.x += fallVec.x;
 		BulletShotEnemyWorldTrans.translation_.y += fallVec.y;
 		BulletShotEnemyWorldTrans.translation_.z += fallVec.z;
@@ -116,20 +117,6 @@ void BulletShotEnemy::Draw(ViewProjection& viewProjection_)
 	//modelDebug_->Draw(DebugWorldTrans, viewProjection_);
 }
 
-void BulletShotEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
-{
-	enemyBullet->CSUpdate(cmdList);
-}
-
-void BulletShotEnemy::ParticleDraw(ViewProjection& viewProjection_)
-{
-	enemyBullet->ParticleDraw(viewProjection_);
-}
-
-void BulletShotEnemy::CopyParticle()
-{
-	enemyBullet->CopyParticle();
-}
 
 void BulletShotEnemy::PlayerBulletHit()
 {
@@ -147,7 +134,7 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 		if (WalkTime > 0) {
 			BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyWorldTrans.LookVelocity.look * EnemySpeed;
 
-			//‰~‚ğì‚Á‚Äo‚È‚¢ˆ—‚ğì‚é
+			//å††ã‚’ä½œã£ã¦å‡ºãªã„å‡¦ç†ã‚’ä½œã‚‹
 			tmp = BonePos - BulletShotEnemyWorldTrans.translation_;
 			dist = tmp.dot(tmp);
 			radius = TerritoryRadius;
@@ -203,7 +190,7 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 		SpottedPhase_ = SpottedPhase::Turn;
 		break;
 	case BulletShotEnemy::NotSpottedPhase::Nothing:
-		//‰½‚à‚µ‚È‚¢
+		//ä½•ã‚‚ã—ãªã„
 
 		break;
 	default:
@@ -360,7 +347,7 @@ void BulletShotEnemy::PlayerSpottedMoveTimer()
 void BulletShotEnemy::SearchingPlayer()
 {
 	if (IsPlayerSpotted == false) {
-		//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚½‚çƒtƒF[ƒY•Ï‚¦‚ÉˆÚs
+		//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãŸã‚‰ãƒ•ã‚§ãƒ¼ã‚ºå¤‰ãˆã«ç§»è¡Œ
 		tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
 		radius = SearchingAreaRadius;
@@ -373,7 +360,7 @@ void BulletShotEnemy::SearchingPlayer()
 		}
 	}
 	else {
-		//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚½‚çƒtƒF[ƒY•Ï‚¦‚ÉˆÚs
+		//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãŸã‚‰ãƒ•ã‚§ãƒ¼ã‚ºå¤‰ãˆã«ç§»è¡Œ
 		tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 		dist = tmp.dot(tmp);
 		radius = SpottedLookingPlayerRadius;
@@ -395,8 +382,8 @@ void BulletShotEnemy::GetPlayerForEnemyAngle()
 void BulletShotEnemy::CheckCollider()
 {
 
-	//ƒIƒuƒWƒFƒNƒgƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
-	// ‹…‚Ìã’[‚©‚ç‹…‚Ì‰º’[‚Ü‚Å‚ÌƒŒƒCƒLƒƒƒXƒg
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
+	// çƒã®ä¸Šç«¯ã‹ã‚‰çƒã®ä¸‹ç«¯ã¾ã§ã®ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 	Ray Groundray;
 	Groundray.start = MyMath::Vec3ToVec4(BulletShotEnemyWorldTrans.translation_);
 	Groundray.start.y += EnemyRadius;
@@ -404,16 +391,16 @@ void BulletShotEnemy::CheckCollider()
 	RaycastHit raycastHit;
 
 
-	// Ú’nó‘Ô
+	// æ¥åœ°çŠ¶æ…‹
 	if (onGround) {
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 		const float adsDistance = 0.2f;
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f + adsDistance)) {
 			onGround = true;
 			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
 		}
-		// ’n–Ê‚ª‚È‚¢‚Ì‚Å—‰º
+		// åœ°é¢ãŒãªã„ã®ã§è½ä¸‹
 		else {
 			//onGround = false;
 			fallVec = {};
@@ -422,10 +409,10 @@ void BulletShotEnemy::CheckCollider()
 			NotSpottedPhase_ = NotSpottedPhase::Interruption;
 		}
 	}
-	// —‰ºó‘Ô
+	// è½ä¸‹çŠ¶æ…‹
 	else {
 		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f)) {
-			// ’…’n
+			// ç€åœ°
 			onGround = true;
 			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
 		}
@@ -435,7 +422,7 @@ void BulletShotEnemy::CheckCollider()
 
 bool BulletShotEnemy::CheckBetweenToPlayerCollider()
 {
-	// ‹…‚Ìã’[‚©‚ç‹…‚Ì‰º’[‚Ü‚Å‚ÌƒŒƒCƒLƒƒƒXƒg
+	// çƒã®ä¸Šç«¯ã‹ã‚‰çƒã®ä¸‹ç«¯ã¾ã§ã®ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 	Ray LookRay;
 	LookRay.start = MyMath::Vec3ToVec4(BulletShotEnemyWorldTrans.translation_);
 	LookRay.start.y += EnemyRadius;
@@ -444,19 +431,18 @@ bool BulletShotEnemy::CheckBetweenToPlayerCollider()
 	LookRay.dir = MyMath::Vec3ToVec4(EnemyToPlayerVec.norm());
 	RaycastHit raycastHit;
 
-	//ƒvƒŒ[ƒ„[‚Æ‚ÌŠÔ‚ÉƒIƒuƒWƒFƒNƒg‚ª‚ ‚ê‚ÎŒ©¸‚¤
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¨ã®é–“ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Œã°è¦‹å¤±ã†
 	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, Distance)) {
 		return true;
 	}
 	else {
 		return false;
 	}
-	return false;
 }
 
 bool BulletShotEnemy::GetIsAttackArea()
 {
-	//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚½‚çUŒ‚ˆÚs
+	//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãŸã‚‰æ”»æ’ƒç§»è¡Œ
 	tmp = BulletShotEnemyWorldTrans.translation_ - playerPos;
 	dist = tmp.dot(tmp);
 	radius = SpottedLookingPlayerRadius;
@@ -483,7 +469,7 @@ uint32_t BulletShotEnemy::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(low, high);
-	return dist(gen);
+	std::uniform_int_distribution<> Randomist(low, high);
+	return Randomist(gen);
 }
 

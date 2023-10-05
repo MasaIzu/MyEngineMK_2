@@ -14,7 +14,6 @@ void Ground::Initialze()
 
 	touchableObject.reset(TouchableObject::Create(groundModel, groundTrans, COLLISION_ATTR_LANDSHAPE));
 
-
 }
 
 void Ground::Update()

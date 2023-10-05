@@ -4,30 +4,31 @@
 
 class SceneManager;
 
-//ƒV[ƒ“Šî’êƒNƒ‰ƒX
+
+//ã‚·ãƒ¼ãƒ³åŸºåº•ã‚¯ãƒ©ã‚¹
 class BaseScene {
 
 public:
-	//virtualƒƒ“ƒoŠÖ”
-	//‰Šú‰»
+	//virtualãƒ¡ãƒ³ãƒé–¢æ•°
+	//åˆæœŸåŒ–
 	virtual void Initialize() = 0;
 
-	//XV
+	//æ›´æ–°
 	virtual void Update() = 0;
 
 	virtual void PostEffectDraw()=0;
 
-	//•`‰æ
+	//æç”»
 	virtual void Draw() = 0;
 
-	//•`‰æ
+	//æç”»
 	virtual void Finalize() = 0;
 
 	virtual void CopyData() = 0;
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	virtual void CSUpdate() = 0;
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	virtual ~BaseScene() = default;
 
@@ -35,7 +36,7 @@ public://ƒƒ“ƒoŠÖ”
 
 
 private:
-	//ƒV[ƒ“ƒ}ƒl[ƒWƒƒ[
+	//ã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
 	SceneManager* sceneManager_ = nullptr;
 
 };

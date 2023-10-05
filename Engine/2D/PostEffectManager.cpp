@@ -1,5 +1,6 @@
 #include "PostEffectManager.h"
 
+
 void PostEffectManager::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
 {
 	PostEffect::Initialize(dxCore, WinWidth, WinHeight);

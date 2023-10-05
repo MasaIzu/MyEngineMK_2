@@ -4,16 +4,16 @@
 class Uint32Vector2
 {
 public:
-	uint32_t x;//x¬•ª
-	uint32_t y;//y¬•ª
+	uint32_t x;//xæˆåˆ†
+	uint32_t y;//yæˆåˆ†
 
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	Uint32Vector2();							//—ëƒxƒNƒgƒ‹‚Æ‚µ‚Ä¶¬
-	Uint32Vector2(uint32_t x, uint32_t y);			//x¬•ª,y¬•ª‚ğw’è‚µ‚Ä¶¬
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	Uint32Vector2();							//é›¶ãƒ™ã‚¯ãƒˆãƒ«ã¨ã—ã¦ç”Ÿæˆ
+	Uint32Vector2(uint32_t x, uint32_t y);			//xæˆåˆ†,yæˆåˆ†ã‚’æŒ‡å®šã—ã¦ç”Ÿæˆ
 
 
-	//‘ã“ü‰‰ZqƒI[ƒo[ƒ[ƒh
+	//ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	Uint32Vector2& operator+=(const Uint32Vector2& v);
 	Uint32Vector2& operator-=(const Uint32Vector2& v);
 	Uint32Vector2& operator*=(uint32_t s);
@@ -21,8 +21,9 @@ public:
 
 };
 
-//2€–Ú‰‰ZqƒI[ƒo[ƒ[ƒh
-//‚¢‚ë‚¢‚ë‚Èˆø”(ˆø”‚ÌŒ^‚Æ˜—ñ)‚Ìƒpƒ^[ƒ“‚É‘Î‰‚·‚é‚½‚ßAˆÈ‰º‚Ì‚æ‚¤‚É‚µ‚Ä‚¢‚é
+
+//2é …ç›®æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
+//ã„ã‚ã„ã‚ãªå¼•æ•°(å¼•æ•°ã®å‹ã¨åºåˆ—)ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã«å¯¾å¿œã™ã‚‹ãŸã‚ã€ä»¥ä¸‹ã®ã‚ˆã†ã«ã—ã¦ã„ã‚‹
 
 const Uint32Vector2 operator+(const Uint32Vector2& v1, const Uint32Vector2& v2);
 const Uint32Vector2 operator-(const Uint32Vector2& v1, const Uint32Vector2& v2);

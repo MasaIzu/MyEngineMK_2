@@ -8,18 +8,19 @@
 #include "Player.h"
 #include "MissileBullet.h"
 
+
 class MiddleBossEnemy {
 private:
 	enum class AttackType
 	{
-		Nomal,//4‚Âƒoƒ‰ƒ}ƒL
-		Missile,//ƒ~ƒTƒCƒ‹
-		MoveingAttack,//ˆÚ“®‚µ‚È‚ª‚ç
-		Move,//ˆÚ“®
-		NotAttack,//UŒ‚‚µ‚È‚¢
+		Nomal,//4ã¤ãƒãƒ©ãƒã‚­
+		Missile,//ãƒŸã‚µã‚¤ãƒ«
+		MoveingAttack,//ç§»å‹•ã—ãªãŒã‚‰
+		Move,//ç§»å‹•
+		NotAttack,//æ”»æ’ƒã—ãªã„
 	};
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	MiddleBossEnemy();
 	~MiddleBossEnemy();
 
@@ -29,11 +30,11 @@ public://Šî–{ŠÖ”
 
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 
-private://ŠÖ”
+private://é–¢æ•°
 	void Timer();
 	void Attack();
 	void ThinkingTime();
-	void WorldTransUpdate();//ˆÚ“®‚Ì’lXV
+	void WorldTransUpdate();//ç§»å‹•ã®å€¤æ›´æ–°
 	void CheckAttackType();
 	uint32_t RandomType(uint32_t& NoUseType);
 
@@ -50,36 +51,35 @@ public://Getter
 
 	Vector3 GetPosition() const;
 
-private://constŠÖ˜A
+private://consté–¢é€£
 	static const uint32_t BossEnemyBodyCount = 20;
 
 	static const uint32_t AttackedKeepCount = 8;
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform BossWorldTrans;
 
 	WorldTransform DebugWorldTrans;
-	ViewProjection* viewProjection_ = nullptr;
 
-	//ƒXƒvƒ‰ƒCƒ“
-	std::unique_ptr<SplinePosition> MoveSpline;//“r’†‚ÌƒXƒvƒ‰ƒCƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
+	std::unique_ptr<SplinePosition> MoveSpline;//é€”ä¸­ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
 
-	//’e
+	//å¼¾
 	std::unique_ptr<MultiBullet> multiBullet;
 	std::unique_ptr<MissileBullet> missileBullet;
 
-	// ƒRƒ‰ƒCƒ_[
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	BaseCollider* MiddleBossCollider = nullptr;
 
-private://ƒC[ƒiƒ€ƒNƒ‰ƒX
+private://ã‚¤ãƒ¼ãƒŠãƒ ã‚¯ãƒ©ã‚¹
 
 
-private://•ÊƒNƒ‰ƒX‚©‚ç’l‚ğ‚à‚ç‚¤
+private://åˆ¥ã‚¯ãƒ©ã‚¹ã‹ã‚‰å€¤ã‚’ã‚‚ã‚‰ã†
 	Player* player = nullptr;
 
-private://EnemyBossƒNƒ‰ƒX•Ï”
+private://EnemyBossã‚¯ãƒ©ã‚¹å¤‰æ•°
 
 	bool isStart = false;
 	bool isTurn = false;
@@ -115,8 +115,9 @@ private://EnemyBossƒNƒ‰ƒX•Ï”
 	float AngleSize = 0.0f;
 	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
-	float MoveSafeRadius = 80.0f;
+	float MoveSafeRadius = 40.0f;
 	float BackLength = 0.0f;
+	float BackSpeed = 2.0f;
 	float JumpMoveSpeed = 1.0f;
 	float JumpHeight = 0.0f;
 	float MaxJumpHeight = 15.0f;

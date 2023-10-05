@@ -1,10 +1,9 @@
 #include "MainGame.h"
 #include "SceneFactory.h"
 
-
 void MainGame::Initialize()
 {
-	// Šî’êƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—
+	// åŸºåº•ã‚¯ãƒ©ã‚¹ã®åˆæœŸåŒ–å‡¦ç†
 	Framework::Initialize();
 
 	sceneFactory_ = std::make_unique<SceneFactory>();
@@ -14,13 +13,13 @@ void MainGame::Initialize()
 
 void MainGame::Finalize()
 {
-	// Šî’êƒNƒ‰ƒX‚ÌI—¹ˆ—
+	// åŸºåº•ã‚¯ãƒ©ã‚¹ã®çµ‚äº†å‡¦ç†
 	Framework::Finalize();
 }
 
 void MainGame::Update()
 {
-	// Šî’êƒNƒ‰ƒX‚ÌXVˆ—
+	// åŸºåº•ã‚¯ãƒ©ã‚¹ã®æ›´æ–°å‡¦ç†
 	Framework::Update();
 }
 
@@ -31,7 +30,7 @@ void MainGame::PostEffectDraw()
 
 void MainGame::Draw()
 {
-	// ƒQ[ƒ€ƒV[ƒ“‚Ì•`‰æ
+	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã®æç”»
 	sceneManager_->Draw();
 }
 

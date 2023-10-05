@@ -13,15 +13,15 @@ void WorldTransform::CreateConstBuffer() {
 
 	HRESULT result;
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataWorldTransform) + 0xff) & ~0xff);
 
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
+		&heapProps, // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å¯èƒ½
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
@@ -30,7 +30,7 @@ void WorldTransform::CreateConstBuffer() {
 
 void WorldTransform::Map() {
 
-	//’è”ƒoƒbƒtƒ@‚Ìƒ}ƒbƒsƒ“ƒO
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒƒãƒ”ãƒ³ã‚°
 	HRESULT result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	assert(SUCCEEDED(result));
 
@@ -40,10 +40,10 @@ void WorldTransform::TransferMatrix() {
 
 	Matrix4 matScale, matTrans;
 
-	//ƒXƒP[ƒ‹A‰ñ“]A•½sˆÚ“®s—ñ‚ÌŒvZ
+	//ã‚¹ã‚±ãƒ¼ãƒ«ã€å›è»¢ã€å¹³è¡Œç§»å‹•è¡Œåˆ—ã®è¨ˆç®—
 	matScale = MyMath::Scale(scale_);
 	
-	//ƒIƒCƒ‰[Šp‚Å‰ñ“]‚µ‚Ä‚¢‚é‚È‚ç‰ñ“]—p‚Ìƒ}ƒgƒŠƒbƒNƒX‚ğ‰Šú‰»
+	//ã‚ªã‚¤ãƒ©ãƒ¼è§’ã§å›è»¢ã—ã¦ã„ã‚‹ãªã‚‰å›è»¢ç”¨ã®ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã‚’åˆæœŸåŒ–
 	if (isEuler) {
 		matRot = MyMath::Initialize();
 		//matRot *= MyMath::Rotation(rotation_, 6);
@@ -52,15 +52,15 @@ void WorldTransform::TransferMatrix() {
 
 	matTrans = MyMath::Translation(translation_);
 
-	//ƒ[ƒ‹ƒhs—ñ‚Ì‡¬
-	matWorld_ = MyMath::Initialize();//•ÏŒ`‚ğƒŠƒZƒbƒg
-	matWorld_ *= matScale;//ƒ[ƒ‹ƒhs—ñ‚ÉƒXƒP[ƒŠƒ“ƒO‚ğ”½‰f
-	matWorld_ *= matRot;//ƒ[ƒ‹ƒhs—ñ‚É‰ñ“]‚ğ”½‰f
-	matWorld_ *= matTrans;//ƒ[ƒ‹ƒhs—ñ‚É•½sˆÚ“®‚ğ”½‰f
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®åˆæˆ
+	matWorld_ = MyMath::Initialize();//å¤‰å½¢ã‚’ãƒªã‚»ãƒƒãƒˆ
+	matWorld_ *= matScale;//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã‚’åæ˜ 
+	matWorld_ *= matRot;//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«å›è»¢ã‚’åæ˜ 
+	matWorld_ *= matTrans;//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«å¹³è¡Œç§»å‹•ã‚’åæ˜ 
 
-	//eƒIƒuƒWƒFƒNƒg‚ª‚ ‚ê‚Î
+	//è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Œã°
 	if (parent_) {
-		//eƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒ‹ƒhs—ñ‚ğŠ|‚¯‚é
+		//è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’æ›ã‘ã‚‹
 		matWorld_ *= parent_->matWorld_;
 	}
 
@@ -99,7 +99,7 @@ void WorldTransform::TransferMatrix() {
 		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
 	}
 
-	//’è”ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
 	constMap->matWorld = matWorld_;
 
 	constMap->alpha = alpha;
@@ -117,7 +117,7 @@ void WorldTransform::SetRot(const Vector3& rot)
 
 void WorldTransform::SetMatRot(const Matrix4& mat)
 {
-	//ƒIƒCƒ‰[Šp‚Ì‰ñ“]ƒtƒ‰ƒO‚ğfalse‚É
+	//ã‚ªã‚¤ãƒ©ãƒ¼è§’ã®å›è»¢ãƒ•ãƒ©ã‚°ã‚’falseã«
 	isEuler = false;
 	matRot = mat;
 }
@@ -148,13 +148,14 @@ Quaternion& WorldTransform::GetQuaternion()
 	return quaternion;
 }
 
-Vector3 WorldTransform::GetLook(Matrix4 matRot,Vector3 at)
+Vector3 WorldTransform::GetLook(Matrix4 MatRot,Vector3 at)
 {
 	Vector3 Pos = MyMath::GetWorldTransform(matWorld_);
-	Vector3 look_ = MyMath::MatVector(matRot, at);
+	Vector3 look_ = MyMath::MatVector(MatRot, at);
 
 	return look_;
 }
+
 
 void WorldTransform::SetLookMatRot(const Matrix4& mat)
 {

@@ -55,6 +55,7 @@ void MeshCollider::ConstructTriangles(Model* model, Matrix4& matWorld)
 
 }
 
+
 //void MeshCollider::ConstructTriangles(fbxModel* model)
 //{
 //	triangles.clear();
@@ -103,57 +104,65 @@ void MeshCollider::ConstructTriangles(Model* model, Matrix4& matWorld)
 //	}
 //}
 
-void MeshCollider::Update(const Matrix4& worldPos)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const float& radius)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const float& radius)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const float& speed, const Vector3& look)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const float& radius,[[maybe_unused]] const float& speed,[[maybe_unused]] const Vector3& look)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, const bool& isCoolTime)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const uint32_t& Cooltime,[[maybe_unused]] const bool& isCoolTime)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const uint32_t& Cooltime,[[maybe_unused]] const uint32_t& FirstCoolTime,[[maybe_unused]] const bool& isCoolTime)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const float& radius,[[maybe_unused]] const uint32_t& Cooltime)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const float& radius,[[maybe_unused]] const uint32_t& Cooltime,[[maybe_unused]] const bool& isCoolTime)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-void MeshCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
+void MeshCollider::Update([[maybe_unused]] const Matrix4& worldPos,[[maybe_unused]] const float& radius,[[maybe_unused]] const uint32_t& Cooltime,[[maybe_unused]] const uint32_t& FirstCoolTime,[[maybe_unused]] const bool& isCoolTime)
 {
+	
 	Matrix4 tmp = MyMath::MakeIdentity();
 	invMatWorld = MyMath::MakeInverse(&tmp);
 }
 
-bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, Vector4* inter, Vector4* reject)
+bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, Vector4* Inter, Vector4* reject)
 {
-	// ƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒJƒ‹À•WŒn‚Å‚Ì‹…‚ğ“¾‚éi”¼Œa‚ÍXƒXƒP[ƒ‹‚ğQÆ)
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã§ã®çƒã‚’å¾—ã‚‹ï¼ˆåŠå¾„ã¯Xã‚¹ã‚±ãƒ¼ãƒ«ã‚’å‚ç…§)
 	Sphere localSphere;
 	localSphere.center = MyMath::Vec4Mat4Mul(sphere.center, invMatWorld);
 	localSphere.radius *= Vector4(invMatWorld.m[0][0], invMatWorld.m[0][1], invMatWorld.m[0][2], invMatWorld.m[0][3]).Vector3Length();
@@ -163,15 +172,15 @@ bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, Vector4* inter, Ve
 	for (; it != triangles.cend(); ++it) {
 		const Triangle& triangle = *it;
 
-		if (Collision::CheckSphere2Triangle(localSphere, triangle, inter, reject)) {
-			if (inter) {
+		if (Collision::CheckSphere2Triangle(localSphere, triangle, Inter, reject)) {
+			if (Inter) {
 				const Matrix4& matWorld = MyMath::MakeIdentity();
 
-				*inter = MyMath::Vec4Mat4Mul(*inter, matWorld);
+				*Inter = MyMath::Vec4Mat4Mul(*Inter, matWorld);
 			}
 			if (reject) {
 				const Matrix4& matWorld = MyMath::MakeIdentity();
-				//ƒ[ƒ‹ƒhÀ•WŒn‚Å”rËƒxƒNƒgƒ‹‚É•ÏŠ·
+				//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»ã§æ’æ–¥ãƒ™ã‚¯ãƒˆãƒ«ã«å¤‰æ›
 				*reject = MyMath::Vec4Mat4Mul(*reject, matWorld);
 			}
 			return true;
@@ -181,9 +190,9 @@ bool MeshCollider::CheckCollisionSphere(const Sphere& sphere, Vector4* inter, Ve
 	return false;
 }
 
-bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, Vector4* inter)
+bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, Vector4* Inter)
 {
-	// ƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒJƒ‹À•WŒn‚Å‚ÌƒŒƒC‚ğ“¾‚é
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã§ã®ãƒ¬ã‚¤ã‚’å¾—ã‚‹
 	Ray localRay;
 	localRay.start = MyMath::Vec4Mat4Mul(ray.start, invMatWorld);
 	localRay.dir = MyMath::Vec4Mat4Mul(ray.dir, invMatWorld).Vector3Normal();
@@ -207,8 +216,8 @@ bool MeshCollider::CheckCollisionRay(const Ray& ray, float* distance, Vector4* i
 				*distance = sub.Vector3Dot(ray.dir);
 			}
 
-			if (inter) {
-				*inter = tempInter;
+			if (Inter) {
+				*Inter = tempInter;
 			}
 
 			return true;

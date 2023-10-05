@@ -3,50 +3,45 @@
 #include "Model.h"
 #include <assert.h>
 #include "Input.h"
-#include "affin.h"
 #include <memory>
 #include "ViewProjection.h"
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 
+
 class EnemyBullet {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	EnemyBullet();
 	~EnemyBullet();
 
 	void Initialize();
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
-	void ParticleDraw(ViewProjection& viewProjection_);
-	void CopyParticle();
 
 public:
-	//‘Å‚¿o‚·‹…‚ğì‚é
+	//æ‰“ã¡å‡ºã™çƒã‚’ä½œã‚‹
 	uint32_t MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector3& BulletVec, const float& bulletSpeed, const float& bulletLife);
-	//’e‚ÌƒRƒ“ƒgƒ[ƒ‹
+	//å¼¾ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
 	void BulletControl(const uint32_t& BulletNum, const Vector3& BulletVec);
-	//’·‰Ÿ‚µ‚Å‹È‚°‚ê‚é‚æ‚¤‚É
+	//é•·æŠ¼ã—ã§æ›²ã’ã‚Œã‚‹ã‚ˆã†ã«
 	void MakeExpandingStunBullet();
-	//’·‰Ÿ‚µ‚µ‚½ƒo[ƒWƒ‡ƒ“‚ÌƒoƒŒƒbƒgŠg‘å’†XV
+	//é•·æŠ¼ã—ã—ãŸãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®ãƒãƒ¬ãƒƒãƒˆæ‹¡å¤§ä¸­æ›´æ–°
 	void UpdateWhileExpanding(const Vector3& MakeBulletPos, const Vector3& BulletVec);
 
 private:
-	//ƒvƒŒ[ƒ„[‚ÌˆÚ“®
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ç§»å‹•
 	void BulletUpdate();
-	//’e‚Ìî•ñXV
+	//å¼¾ã®æƒ…å ±æ›´æ–°
 	void WorldTransUpdate();
-	//ƒ^ƒCƒ}[XV
+	//ã‚¿ã‚¤ãƒãƒ¼æ›´æ–°
 	void BulletAliveTimerUpdate();
-	//¶‚«‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	//ç”Ÿãã¦ã„ã‚‹ã‹ã©ã†ã‹
 	void CheckBulletAlive();
-	//€‚ñ‚Å‚é‚Æ‚«‚Í‰œ[‚­‚ÉŠi”[
+	//æ­»ã‚“ã§ã‚‹ã¨ãã¯å¥¥æ·±ãã«æ ¼ç´
 	void SetNotAlivePosition();
-	//ƒp[ƒeƒBƒNƒ‹‚ğo‚·
-	void MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed);
-	//1ƒtƒŒ[ƒ€‘O‚Ìƒ|ƒWƒVƒ‡ƒ“
+	//1ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®ãƒã‚¸ã‚·ãƒ§ãƒ³
 	void OldPosUpdate();
 
 public://Getter
@@ -56,21 +51,21 @@ public://Getter
 public://Setter
 
 
-private://constŠÖ˜A
+private://consté–¢é€£
 	static const uint32_t AllBulletCount = 10;
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	std::unique_ptr<Model> model_;
 	WorldTransform EnemyBulletWorldTrans[AllBulletCount];
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 	BaseCollider* BulletCollider[AllBulletCount];
 	CollisionManager* collisionManager = nullptr;
 	
-private://•ÊƒNƒ‰ƒX‚©‚ç’l‚ğ‚à‚ç‚¤
+private://åˆ¥ã‚¯ãƒ©ã‚¹ã‹ã‚‰å€¤ã‚’ã‚‚ã‚‰ã†
 
 
-private://ƒNƒ‰ƒX•Ï”
+private://ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	bool isBulletAlive[AllBulletCount];
 	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
@@ -90,7 +85,7 @@ private://ƒNƒ‰ƒX•Ï”
 	float EnemyParticleSpeed = 0.02f;
 	float EnemyParticleDieSpeed = 0.2f;
 
-	Vector3 EnemyBulletMoveMent[AllBulletCount];//ˆÚ“®—Ê
-	Vector3 BulletVector[AllBulletCount];//‘Å‚¿o‚³‚ê‚é•ûŒü
-	Vector3 BulletOldPos[AllBulletCount];//1ƒtƒŒ[ƒ€‘O‚Ìƒ|ƒWƒVƒ‡ƒ“
+	Vector3 EnemyBulletMoveMent[AllBulletCount];//ç§»å‹•é‡
+	Vector3 BulletVector[AllBulletCount];//æ‰“ã¡å‡ºã•ã‚Œã‚‹æ–¹å‘
+	Vector3 BulletOldPos[AllBulletCount];//1ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®ãƒã‚¸ã‚·ãƒ§ãƒ³
 };

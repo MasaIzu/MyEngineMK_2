@@ -1,5 +1,6 @@
 #include "Particle.hlsli"
 
+
 struct GpuParticleElement
 {
     float4 position;

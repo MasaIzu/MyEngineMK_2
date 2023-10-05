@@ -4,6 +4,7 @@
 #include"Vector3.h"
 #include"Matrix4.h"
 
+
 class Quaternion
 {
 public:
@@ -12,64 +13,64 @@ public:
 	float z;
 	float w;
 
-	//ƒNƒI[ƒ^ƒjƒIƒ“‚ğì¬
+	//ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ä½œæˆ
 
-	//¬•ª‚ğw’è‚µ‚Ä ƒNƒH[ƒ^ƒjƒIƒ“‚ğì¬
+	//æˆåˆ†ã‚’æŒ‡å®šã—ã¦ ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ä½œæˆ
 	Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f);
 
-	//”CˆÓ²‚Ü‚í‚è‚Ì‰ñ“]‚Ìw’è‚©‚çƒNƒH[ƒ^ƒjƒIƒ“‚ğì¬
+	//ä»»æ„è»¸ã¾ã‚ã‚Šã®å›è»¢ã®æŒ‡å®šã‹ã‚‰ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ä½œæˆ
 	Quaternion(const Vector3& v, float angle);
 
-	//‰ñ“]s—ñ‚©‚çƒNƒH[ƒ^ƒjƒIƒ“‚ğì¬
+	//å›è»¢è¡Œåˆ—ã‹ã‚‰ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ä½œæˆ
 	Quaternion(const Matrix4& m);
 
 
 	Quaternion(const Vector4& v);
 
-	//ƒxƒNƒgƒ‹‚©‚çƒxƒNƒgƒ‹‚ÌŠp“x
+	//ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰ãƒ™ã‚¯ãƒˆãƒ«ã®è§’åº¦
 	Quaternion(const Vector3& u, const Vector3& v);
 
-	//“àÏ‚ğ‹‚ß‚é
+	//å†…ç©ã‚’æ±‚ã‚ã‚‹
 	float Dot(const Quaternion& q)const;
 
-	//ƒmƒ‹ƒ€‚ğ‹‚ß‚é
+	//ãƒãƒ«ãƒ ã‚’æ±‚ã‚ã‚‹
 	float Norm()const;
 
-	//³‹K‰»‚·‚é
+	//æ­£è¦åŒ–ã™ã‚‹
 	Quaternion Normalize() const;
 
-	//’PˆÊƒNƒI[ƒ^ƒjƒIƒ“
+	//å˜ä½ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
 	Quaternion Identity() const;
 
-	// ‹¤–ğƒNƒI[ƒ^ƒjƒIƒ“
+	// å…±å½¹ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
 	Quaternion Conjugate() const;
 
-	// ‹tƒNƒI[ƒ^ƒjƒIƒ“
+	// é€†ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
 	Quaternion Inverse() const;
 
-	//ƒNƒI[ƒ^ƒjƒIƒ“‹…–ÊüŒ`•âŠÔ
+	//ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³çƒé¢ç·šå½¢è£œé–“
 	Quaternion Slerp(const Quaternion& q, float t);
 
-	//ƒNƒI[ƒ^ƒjƒIƒ“üŒ`•âŠÔ
+	//ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ç·šå½¢è£œé–“
 	Quaternion Lerp(const Quaternion& q, float t);
 
-	//ƒNƒI[ƒ^ƒjƒIƒ“‚©‚ç‰ñ“]s—ñ‚ğ‹‚ß‚é
+	//ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹ã‚‰å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 	Matrix4 Rotate();
 
-	//‰ñ“]²‚ÌZo
+	//å›è»¢è»¸ã®ç®—å‡º
 	Vector3 GetAxis();
 
-	//ƒIƒCƒ‰[Šp‚É•ÏŠ·
+	//ã‚ªã‚¤ãƒ©ãƒ¼è§’ã«å¤‰æ›
 	Vector3 GetEulerAngles();
 
-	//ƒIƒCƒ‰[Šp‚©‚çƒNƒI[ƒ^ƒjƒIƒ“‚É•ÏŠ·
+	//ã‚ªã‚¤ãƒ©ãƒ¼è§’ã‹ã‚‰ã‚¯ã‚ªãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã«å¤‰æ›
 	void SeTEuler(const Vector3& rot);
 
-	//’P€‰‰ZqƒI[ƒo[ƒ[ƒh
+	//å˜é …æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	Quaternion operator + ();
 	Quaternion operator - ()const;
 
-	//‘ã“ü‰‰ZqƒI[ƒo[ƒ[ƒh
+	//ä»£å…¥æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	Quaternion& operator += (const Quaternion& q);
 	Quaternion& operator -= (const Quaternion& q);
 	Quaternion& operator *= (float s);
@@ -80,7 +81,7 @@ public:
 
 };
 
-//2€‰‰ZqƒI[ƒo[ƒ[ƒh
+//2é …æ¼”ç®—å­ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 const Quaternion operator + (const Quaternion& q1, const Quaternion& q2);
 const Quaternion operator - (const Quaternion& q1, const Quaternion& q2);
 const Quaternion operator * (const Quaternion& q1, const Quaternion& q2);

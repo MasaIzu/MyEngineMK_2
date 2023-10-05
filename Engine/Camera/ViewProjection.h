@@ -6,69 +6,70 @@
 #include <wrl.h>
 #include "MyMath.h"
 
-// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+
+// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 struct ConstBufferDataViewProjection {
-	Matrix4 view;       // ƒ[ƒ‹ƒh ¨ ƒrƒ…[•ÏŠ·s—ñ
-	Matrix4 projection; // ƒrƒ…[ ¨ ƒvƒƒWƒFƒNƒVƒ‡ƒ“•ÏŠ·s—ñ
-	Vector3 cameraPos;  // ƒJƒƒ‰À•Wiƒ[ƒ‹ƒhÀ•Wj
+	Matrix4 view;       // ãƒ¯ãƒ¼ãƒ«ãƒ‰ â†’ ãƒ“ãƒ¥ãƒ¼å¤‰æ›è¡Œåˆ—
+	Matrix4 projection; // ãƒ“ãƒ¥ãƒ¼ â†’ ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³å¤‰æ›è¡Œåˆ—
+	Vector3 cameraPos;  // ã‚«ãƒ¡ãƒ©åº§æ¨™ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼‰
 };
 
 /// <summary>
-/// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“•ÏŠ·ƒf[ƒ^
+/// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 struct ViewProjection {
-	// ’è”ƒoƒbƒtƒ@
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-	// ƒ}ƒbƒsƒ“ƒOÏ‚İƒAƒhƒŒƒX
+	// ãƒãƒƒãƒ”ãƒ³ã‚°æ¸ˆã¿ã‚¢ãƒ‰ãƒ¬ã‚¹
 	ConstBufferDataViewProjection* constMap = nullptr;
 
-#pragma region ƒrƒ…[s—ñ‚Ìİ’è
-	// ‹“_À•W
+#pragma region ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã®è¨­å®š
+	// è¦–ç‚¹åº§æ¨™
 	Vector3 eye = { 0, 0, -50.0f };
-	// ’‹“_À•W
+	// æ³¨è¦–ç‚¹åº§æ¨™
 	Vector3 target = { 0, 0, 0 };
-	// ã•ûŒüƒxƒNƒgƒ‹
+	// ä¸Šæ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 up = { 0, 1, 0 };
 #pragma endregion
 
-#pragma region Ë‰es—ñ‚Ìİ’è
-	// ‚’¼•ûŒü‹–ìŠp
+#pragma region å°„å½±è¡Œåˆ—ã®è¨­å®š
+	// å‚ç›´æ–¹å‘è¦–é‡è§’
 	float fovAngleY = ToRadian(45.0f);
-	// ƒrƒ…[ƒ|[ƒg‚ÌƒAƒXƒyƒNƒg”ä
+	// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã®ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 	float aspectRatio = (float)16 / 9;
-	// [“xŒÀŠEiè‘O‘¤j
+	// æ·±åº¦é™ç•Œï¼ˆæ‰‹å‰å´ï¼‰
 	float nearZ = 0.1f;
-	// [“xŒÀŠEi‰œ‘¤j
+	// æ·±åº¦é™ç•Œï¼ˆå¥¥å´ï¼‰
 	float farZ = 4000.0f;
 #pragma endregion
 
-	// ƒrƒ…[s—ñ
+	// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—
 	Matrix4 matView;
-	// Ë‰es—ñ
+	// å°„å½±è¡Œåˆ—
 	Matrix4 matProjection;
 
 	Matrix4 matBillboard;
 
-	//ƒJƒƒ‰‚ÌŒü‚¢‚Ä‚éŒü‚«
+	//ã‚«ãƒ¡ãƒ©ã®å‘ã„ã¦ã‚‹å‘ã
 	Vector3 cameraLook = target.norm();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@¶¬
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	/// </summary>
 	void CreateConstBuffer();
 	/// <summary>
-	/// ƒ}ƒbƒsƒ“ƒO‚·‚é
+	/// ãƒãƒƒãƒ”ãƒ³ã‚°ã™ã‚‹
 	/// </summary>
 	void Map();
 	/// <summary>
-	/// s—ñ‚ğXV‚·‚é
+	/// è¡Œåˆ—ã‚’æ›´æ–°ã™ã‚‹
 	/// </summary>
 	void UpdateMatrix();
 
 
-	float ToRadian(float x) { return x * (PI / 180); }
+	float ToRadian(float x) { return x * (MyMath::PI / 180); }
 };

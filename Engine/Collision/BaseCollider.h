@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CollisionTypes.h"
 #include "CollisionInfo.h"
@@ -44,32 +44,33 @@ public:
 	/// 当たり判定属性をセット
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
-	inline void SetAttribute(unsigned short attribute) {
-		this->attribute = attribute;
+	inline void SetAttribute(unsigned short Attribute) {
+		this->attribute = Attribute;
 	}
 
 	/// <summary>
 	/// 雑魚敵当たり判定属性をセット
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
-	inline void SetAttributeWakeEnemy(unsigned short attribute) {
-		this->attributeWakeEnemy = attribute;
+	inline void SetAttributeWakeEnemy(unsigned short Attribute) {
+		this->attributeWakeEnemy = Attribute;
 	}
 
 	/// <summary>
 	/// 当たり判定属性を追加
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
-	inline void AddAttribute(unsigned short attribute) {
-		this->attribute |= attribute;
+	inline void AddAttribute(unsigned short Attribute) {
+		this->attribute |= Attribute;
 	}
+
 
 	/// <summary>
 	/// 当たり判定属性を削除
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
-	inline void RemoveAttribute(unsigned short attribute) {
-		this->attribute &= !attribute;
+	inline void RemoveAttribute(unsigned short Attribute) {
+		this->attribute &= !Attribute;
 	}
 
 	/// <summary>

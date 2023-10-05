@@ -3,26 +3,27 @@
 
 SceneManager* SceneManager::SceneManager_ = nullptr;
 
+
 void SceneManager::Update()
 {
-	// ŽŸ‚ÌƒV[ƒ“‚Ì—\–ñ‚ª‚ ‚é‚È‚ç
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®äºˆç´„ãŒã‚ã‚‹ãªã‚‰
 	if (nextScene_)
 	{
-		// ‹ŒƒV[ƒ“‚ÌI—¹
+		// æ—§ã‚·ãƒ¼ãƒ³ã®çµ‚äº†
 		if (scene_)
 		{
 			scene_->Finalize();
 			delete scene_;
 		}
 
-		// ƒV[ƒ“Ø‚è‘Ö‚¦
+		// ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 		scene_ = nextScene_;
 		nextScene_ = nullptr;
 
-		// ƒV[ƒ“ƒ}ƒl[ƒWƒƒ‚ðƒZƒbƒg
+		// ã‚·ãƒ¼ãƒ³ãƒžãƒãƒ¼ã‚¸ãƒ£ã‚’ã‚»ãƒƒãƒˆ
 		scene_->SetSceneManager(this);
 
-		// ŽŸ‚ÌƒV[ƒ“‚ð‰Šú‰»‚·‚é
+		// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã‚’åˆæœŸåŒ–ã™ã‚‹
 		scene_->Initialize();
 	}
 
@@ -41,7 +42,7 @@ void SceneManager::Draw()
 
 void SceneManager::Finalize()
 {
-	// ÅŒã‚ÌƒV[ƒ“‚ÌI—¹‚Æ‰ð•ú
+	// æœ€å¾Œã®ã‚·ãƒ¼ãƒ³ã®çµ‚äº†ã¨è§£æ”¾
 	scene_->Finalize();
 	delete scene_;
 	delete SceneManager_;
@@ -69,7 +70,7 @@ void SceneManager::ChangeScene(const std::string& sceneName)
 	assert(sceneFactory_);
 	assert(nextScene_ == nullptr);
 
-	// ŽŸƒV[ƒ“‚ð¶¬
+	// æ¬¡ã‚·ãƒ¼ãƒ³ã‚’ç”Ÿæˆ
 	nextScene_ = sceneFactory_->CreateScene(sceneName);
 }
 

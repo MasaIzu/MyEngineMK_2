@@ -1,5 +1,4 @@
 #pragma once
-
 #include"CollisionPrimitive.h"
 #include "RaycastHit.h"
 
@@ -9,13 +8,14 @@
 #include <d3d12.h>
 #include <forward_list>
 
+
 class BaseCollider;
 
 class CollisionManager {
 public:
 	static CollisionManager* GetInstance();
 
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	inline void AddCollider(BaseCollider* collider) {
 		colliders.push_front(collider);
@@ -34,10 +34,10 @@ public://ƒƒ“ƒoŠÖ”
 	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 
 
-	//ƒŒƒCƒLƒƒƒXƒgƒI[ƒo[ƒ[ƒh
+	//ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰
 	bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 
-	void QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute = (unsigned short)0xffffffff, Matrix4* worldPos = nullptr);
+	void QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute = static_cast<unsigned short>(0xffffffff));
 
 
 	bool GetIsEnemyHit() { return isEnemyHit; }
@@ -53,7 +53,7 @@ private:
 	~CollisionManager() = default;
 	CollisionManager& operator = (const CollisionManager&) = delete;
 
-	//ƒRƒ‰ƒCƒ_[‚ÌƒŠƒXƒg
+	//ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ãƒªã‚¹ãƒˆ
 	std::forward_list<BaseCollider*> colliders;
 
 	bool isEnemyHit = false;

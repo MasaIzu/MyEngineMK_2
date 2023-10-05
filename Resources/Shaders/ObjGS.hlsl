@@ -10,7 +10,11 @@ float3 rotate(float3 p, float3 rotation)
     float3 a = normalize(rotation);
     float angle = length(rotation);
     //rotationがゼロ行列のときの対応
-    if (abs(angle) < 0.001) return p;
+    if (abs(angle) < 0.001f)
+    {
+        float3 Pos = p;
+        return Pos;
+    }
     float s = sin(angle);
     float c = cos(angle);
     float r = 1.0 - c;
@@ -45,19 +49,51 @@ void main(triangle VSOutput IN[3], inout TriangleStream<GSOutput> triStream)
     float3 vecB = IN[2].svpos.xyz - IN[0].svpos.xyz;
     float3 normal = normalize(cross(vecA, vecB));
 
+    
     [unroll]
     for (int i = 0; i < 3; i++)
     {
         VSOutput v = IN[i];
 
             // centerを起点に三角メッシュの大きさが変化
-            v.svpos.xyz = center + (v.svpos.xyz - center) *  (_ScaleFactor);
+        v.svpos.xyz = center + (v.svpos.xyz - center) * (_ScaleFactor);
 
             // centerを起点に、頂点が回転
-            v.svpos.xyz = center + rotate(v.svpos.xyz - center, r3 * (_Destruction *_RotationFactor));
+        //v.svpos.xyz = center + rotate(v.svpos.xyz - center, r3 * (_Destruction * _RotationFactor));
 
+        //rotationがゼロ行列だと、Geometry shaderが表示されないので注意
+        float3 a = normalize(r3 * (_Destruction * _RotationFactor));
+        float angle = length(r3 * (_Destruction * _RotationFactor));
+        //rotationがゼロ行列のときの対応
+        if (abs(angle) < 0.001f)
+        {
+            v.svpos.xyz = center + v.svpos.xyz - center;
+        }
+        else
+        {
+            float s = sin(angle);
+            float c = cos(angle);
+            float r = 1.0 - c;
+            float3x3 m = float3x3(
+                a.x * a.x * r + c,
+                a.y * a.x * r + a.z * s,
+                a.z * a.x * r - a.y * s,
+                a.x * a.y * r - a.z * s,
+                a.y * a.y * r + c,
+                a.z * a.y * r + a.x * s,
+                a.x * a.z * r + a.y * s,
+                a.y * a.z * r - a.x * s,
+                a.z * a.z * r + c
+            );
+            
+            v.svpos.xyz = center + mul(m, v.svpos.xyz - center);
+            
+        }
+       
+        
+        
             // 法線方向に弾け飛ぶ
-            v.svpos.xyz += normal *(_Destruction * _PositionFactor) * r3;
+        v.svpos.xyz += normal * (_Destruction * _PositionFactor) * r3;
 
         o.svpos = v.svpos;
         o.worldpos = v.worldpos;

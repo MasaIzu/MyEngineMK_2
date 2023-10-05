@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "TextureManager.h"
 #include "ViewProjection.h"
@@ -71,15 +71,14 @@ public: // サブクラス
 		Vector4 velocity;
 	};
 
-
 	struct ShaderParameters {
 		Vector4 StartPos;
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
-		UINT maxParticleCount;
-		UINT MeshCount;
-		uint32_t Shot;
-		uint32_t pad;
+		UINT maxParticleCount = 0;
+		UINT MeshCount = 0;
+		uint32_t Shot = 0;
+		uint32_t pad = 0;
 		MyStruct::Meshes meshPos[1000];
 	};
 	ShaderParameters shaderParameters;
@@ -153,7 +152,7 @@ private: // 静的メンバ変数
 	ComPtr<ID3D12Resource1> m_gpuParticleIndexList;
 	ComPtr<ID3D12Resource1> m_gpuParticleElement;
 	static ComPtr<ID3D12DescriptorHeap> m_cbvSrvUavHeap;
-	D3D12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle_;
+	D3D12_CPU_DESCRIPTOR_HANDLE processedCommandsHandle_ = {};
 	CD3DX12_CPU_DESCRIPTOR_HANDLE m_handleCpu;
 	CD3DX12_GPU_DESCRIPTOR_HANDLE m_handleGpu;
 	static UINT m_incrementSize;
@@ -237,7 +236,7 @@ private: // メンバ変数
 	UINT64 m_frameCount = 0;
 	static UINT m_cbvSrvUavDescriptorSize;
 
-	uint32_t particleCount;
+	uint32_t particleCount = 0;
 
 	UINT DispatchCount = 1;
 

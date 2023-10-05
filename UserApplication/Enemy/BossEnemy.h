@@ -5,28 +5,29 @@
 #include <Input.h>
 #include "SplinePosition.h"
 
+
 class BossEnemy {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	BossEnemy();
 	~BossEnemy();
 
 	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
 	void Update();
-	void Draw(ViewProjection& viewProjection_);
+	void Draw();
 
 
-	//ƒp[ƒeƒBƒNƒ‹‚ðo‚·—p
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
-	void ParticleDraw(ViewProjection& viewProjection_);
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚’å‡ºã™ç”¨
+	void CSUpdate();
+	void ParticleDraw();
 	void CopyParticle();
 
-	//‰‰o—p“®‚«
+	//æ¼”å‡ºç”¨å‹•ã
 	void StagingUpdate();
 
-private://ŠÖ”
+private://é–¢æ•°
 	
-	void WorldTransUpdate();//ˆÚ“®‚Ì’lXV
+	void WorldTransUpdate();//ç§»å‹•ã®å€¤æ›´æ–°
 
 public://Setter
 	
@@ -39,10 +40,10 @@ public://Getter
 	bool GetBodyNoAlpha()const;
 	Vector3 GetSplinePos()const { return MoveSpline->GetFinalSplineVecPoint(); }
 
-private://constŠÖ˜A
+private://consté–¢é€£
 	static const uint32_t BossEnemyBodyCount = 20;
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform BossWorldTrans[BossEnemyBodyCount];
@@ -50,16 +51,16 @@ private://ƒNƒ‰ƒXŠÖ˜A
 	WorldTransform DebugWorldTrans;
 	ViewProjection* viewProjection_ = nullptr;
 
-	//ƒXƒvƒ‰ƒCƒ“
-	std::unique_ptr<SplinePosition> MoveSpline;//“r’†‚ÌƒXƒvƒ‰ƒCƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
+	std::unique_ptr<SplinePosition> MoveSpline;//é€”ä¸­ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³
 
-private://ƒC[ƒiƒ€ƒNƒ‰ƒX
-
-
-private://•ÊƒNƒ‰ƒX‚©‚ç’l‚ð‚à‚ç‚¤
+private://ã‚¤ãƒ¼ãƒŠãƒ ã‚¯ãƒ©ã‚¹
 
 
-private://EnemyBossƒNƒ‰ƒX•Ï”
+private://åˆ¥ã‚¯ãƒ©ã‚¹ã‹ã‚‰å€¤ã‚’ã‚‚ã‚‰ã†
+
+
+private://EnemyBossã‚¯ãƒ©ã‚¹å¤‰æ•°
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;

@@ -4,6 +4,7 @@
 #include <Explosion.h>
 #include <Hibana.h>
 
+
 void ParticleManager::Initialize(ID3D12Device* device)
 {
 	ParticleCS::StaticInitialize(device);

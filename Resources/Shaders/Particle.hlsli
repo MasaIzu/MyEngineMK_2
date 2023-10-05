@@ -1,3 +1,4 @@
+
 struct ParticleCount
 {
     uint UseCount : ParticleUseCount;

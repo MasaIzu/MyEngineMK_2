@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "BaseCollider.h"
 #include "CollisionPrimitive.h"
@@ -32,11 +32,12 @@ public:
 	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime) override;
 	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
 
-	inline void SetRadius(float radius) { this->radius = radius; }
+	inline void SetRadius(float Radius) { this->radius = Radius; }
 
 	inline const Vector4& GetOffset() { return offset; }
-	inline void SetOffset(const Vector4& offset) { this->offset = offset; }
+	inline void SetOffset(const Vector4& Offset) { this->offset = Offset; }
 	inline float GetRadius() { return radius; }
+
 
 private:
 	// オブジェクト中心からのオフセット

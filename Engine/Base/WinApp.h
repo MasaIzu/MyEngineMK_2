@@ -4,25 +4,26 @@
 #include <string>
 #include "Vector2.h"
 
+
 class WinApp
 {
 public:
 
-	// ƒEƒBƒ“ƒhƒEƒTƒCƒY
-	static const uint32_t window_width; // ‰¡•
-	static const uint32_t window_height; // c•
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º
+	static const uint32_t window_width; // æ¨ªå¹…
+	static const uint32_t window_height; // ç¸¦å¹…
 
-public: // Ã“Iƒƒ“ƒoŠÖ”
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	// ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+	// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 	static WinApp* GetInstance();
 
 	/// <summary>
-	/// ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ
+	/// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 	/// </summary>
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 	void MakeWindow(std::wstring title);
 	bool ProcessMessage();
 	void DeleteGameWindow();
@@ -36,7 +37,7 @@ public://GetterSetter
 
 	HWND Gethwnd() { return hwnd; }
 
-private://ƒƒ“ƒo•Ï”
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 	WinApp() = default;
 	~WinApp() = default;
 	WinApp(const WinApp&) = delete;

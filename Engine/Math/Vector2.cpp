@@ -10,6 +10,7 @@ Vector2::Vector2(float x, float y){
 	this->y = y;
 }
 
+
 float Vector2::length()const {
 	return std::sqrt(x * x + y * y);
 }
@@ -74,7 +75,7 @@ Vector2& Vector2::operator/=(float s)
 	return *this;
 }
 
-//Vector2 ƒNƒ‰ƒX‚É‘®‚³‚È‚¢ŠÖ”ŒQ
+//Vector2 ã‚¯ãƒ©ã‚¹ã«å±ã•ãªã„é–¢æ•°ç¾¤
 const Vector2 operator+(const Vector2& v1, const Vector2& v2)
 {
 	Vector2 temp = v1;

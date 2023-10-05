@@ -6,6 +6,7 @@ BossEnemy::BossEnemy()
 
 BossEnemy::~BossEnemy()
 {
+
 }
 
 void BossEnemy::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
@@ -31,18 +32,18 @@ void BossEnemy::Update()
 	
 }
 
-void BossEnemy::Draw(ViewProjection& viewProjection_)
+void BossEnemy::Draw()
 {
 	for (uint32_t i = 0; i < BossEnemyBodyCount; i++) {
-		model_->Draw(BossWorldTrans[i], viewProjection_);
+		model_->Draw(BossWorldTrans[i], *viewProjection_);
 	}
 }
 
-void BossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+void BossEnemy::CSUpdate()
 {
 }
 
-void BossEnemy::ParticleDraw(ViewProjection& viewProjection_)
+void BossEnemy::ParticleDraw()
 {
 }
 

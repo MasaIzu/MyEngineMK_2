@@ -1,4 +1,4 @@
-﻿#include "ParticleCS.h"
+#include "ParticleCS.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -41,21 +41,21 @@ UINT ParticleCS::m_cbvSrvUavDescriptorSize = 0;
 
 float easeOutQuint(float x)
 {
-	return sin((x * PI) / 2);
+	return sin((x * MyMath::PI) / 2);
 }
 float easeInQuint(float x)
 {
 	return x * x * x * x * x;
 }
 
-void ParticleCS::StaticInitialize(ID3D12Device* device)
+void ParticleCS::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
-	assert(device);
+	assert(Device);
 
-	ParticleCS::device = device;
+	ParticleCS::device = Device;
 
-	m_cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -67,20 +67,20 @@ void ParticleCS::StaticFinalize()
 
 }
 
-void ParticleCS::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void ParticleCS::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(ParticleCS::cmdList == nullptr);
 
 	// コマンドリストをセット
-	ParticleCS::cmdList = cmdList;
+	ParticleCS::cmdList = commandList;
 
 	// パイプラインステートの設定
-	cmdList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
+	commandList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
 	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	commandList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
 void ParticleCS::PostDraw()
@@ -248,7 +248,7 @@ void ParticleCS::InitializeGraphicsPipeline()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[ 3 ] = {};
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsUnorderedAccessView(0);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
@@ -283,13 +283,13 @@ void ParticleCS::InitializeGraphicsPipeline()
 		rootParameters[1].InitAsUnorderedAccessView(0);// u0: Particles
 		rootParameters[2].InitAsDescriptorTable(1, &uavIndexList); // u1: ParticleIndexList
 
-		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
-		rootSignatureDesc.Init(
+		CD3DX12_ROOT_SIGNATURE_DESC uavRootSignatureDesc{};
+		uavRootSignatureDesc.Init(
 			UINT(rootParameters.size()), rootParameters.data(),
 			1, &samplerDesc);
 
 		ComPtr<ID3DBlob> signature, errBlob;
-		D3D12SerializeRootSignature(&rootSignatureDesc,
+		D3D12SerializeRootSignature(&uavRootSignatureDesc,
 			D3D_ROOT_SIGNATURE_VERSION_1_0, &signature, &errBlob);
 		device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	}
@@ -324,24 +324,24 @@ void ParticleCS::InitializeGraphicsPipeline()
 		nullptr);
 
 	// PSOの作成
-	ComPtr<ID3D12PipelineState> pipelineState;
+	ComPtr<ID3D12PipelineState> CSpipelineState;
 	D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.pRootSignature = rootSignature.Get();
 
 	//initialize用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobInit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_INIT] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_INIT] = CSpipelineState;
 
 	//emit用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobEmit.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_EMIT] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_EMIT] = CSpipelineState;
 
 	//update用
 	psoDesc.CS = CD3DX12_SHADER_BYTECODE(csBlobUpdate.Get());
-	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState));
-	m_pipelines[PSO_CS_UPDATE] = pipelineState;
+	device->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&CSpipelineState));
+	m_pipelines[PSO_CS_UPDATE] = CSpipelineState;
 
 	const int MaxDescriptorCount = 2048; // SRV,CBV,UAV など.
 	// SRV のディスクリプタヒープ
@@ -553,11 +553,11 @@ void ParticleCS::Draw(const ViewProjection& view)
 
 }
 
-void ParticleCS::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
+void ParticleCS::CSUpdate(ID3D12GraphicsCommandList* commanList,Vector4 StartPos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	commanList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	//初期化
 	if (m_frameCount == 0) {
@@ -570,49 +570,48 @@ void ParticleCS::CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos)
 		CD3DX12_RESOURCE_BARRIER transitionBarrier[2];
 		transitionBarrier[0] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleElement.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		transitionBarrier[1] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleIndexList.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-		cmdList->ResourceBarrier(2, transitionBarrier);
+		commanList->ResourceBarrier(2, transitionBarrier);
 
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 		// Particle の初期化コード.
-		cmdList->SetComputeRootSignature(rootSignature.Get());
+		commanList->SetComputeRootSignature(rootSignature.Get());
 
 
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
+		commanList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commanList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commanList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commanList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
 		UINT invokeCount = particleCount / 32 + 1;
-		cmdList->Dispatch(invokeCount, 1, 1);
+		commanList->Dispatch(invokeCount, 1, 1);
 	}
+
 
 	{
 		// Particle の発生.
-		UINT frameDescriptorOffset = 3;
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
 
-		cmdList->SetComputeRootSignature(rootSignature.Get());
-		cmdList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
-		cmdList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
-		cmdList->SetComputeRootDescriptorTable(2, m_handleGpu);
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
+		commanList->SetComputeRootSignature(rootSignature.Get());
+		commanList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
+		commanList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
+		commanList->SetComputeRootDescriptorTable(2, m_handleGpu);
+		commanList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
 		UINT invokeCount = particleCount / 32 + 1;
 		{
-			cmdList->Dispatch(2, 1, 1);
+			commanList->Dispatch(2, 1, 1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleElement.Get()),
 		  CD3DX12_RESOURCE_BARRIER::UAV(m_gpuParticleIndexList.Get()),
 		};
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commanList->ResourceBarrier(_countof(barriers), barriers);
 
 		// Particle の更新処理.
-		cmdList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
-		cmdList->Dispatch(invokeCount, 1, 1);
-		cmdList->ResourceBarrier(_countof(barriers), barriers);
+		commanList->SetPipelineState(m_pipelines[PSO_CS_UPDATE].Get());
+		commanList->Dispatch(invokeCount, 1, 1);
+		commanList->ResourceBarrier(_countof(barriers), barriers);
 	}
 
 	++m_frameCount;

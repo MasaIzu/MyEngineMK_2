@@ -9,22 +9,21 @@
 
 class BoxCollision {
 public:
-    //ƒvƒŒƒCƒ„[‚ÆƒGƒlƒ~[‚ÌÀ•W‚ğ“ü‚é
-    //ƒvƒŒƒCƒ„[‚Ì”¼Œa‚ğx,y,z‚Ì‡‚É“ü‚ê‚é
-    //ƒGƒlƒ~[‚Ì”¼Œa‚ğx,y,z‚Ì‡‚É“ü‚ê‚é
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™ã‚’å…¥ã‚‹
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åŠå¾„ã‚’x,y,zã®é †ã«å…¥ã‚Œã‚‹
+    //ã‚¨ãƒãƒŸãƒ¼ã®åŠå¾„ã‚’x,y,zã®é †ã«å…¥ã‚Œã‚‹
     bool BoxCollision_1(Vector3 player, Vector3 enemy, Vector3 playerWidth,Vector3 enemyWidth);
     bool BoxCollision_(Vector3 player, Vector3 playerWidth, Vector2 enemyPosX, Vector2 enemyPosY, Vector2 enemyPosZ);
-    bool BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerWidth, Vector3 enemyWidth,bool flag);
+    bool BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerWidth, Vector3 enemyWidth);
 
-    void Contact(int playerMove ,Vector3 player,WorldTransform enemy,Vector3 enemyRotationMove, Vector3 enemyMove);
+    void Contact(int playerMove,WorldTransform enemy,Vector3 enemyRotationMove, Vector3 enemyMove);
 private:
-    //ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
     WorldTransform worldTransform;
 
-    ////ƒ‚ƒfƒ‹
+    ////ãƒ¢ãƒ‡ãƒ«
     //Model* model = nullptr;
-    ////ƒ‚ƒfƒ‹
+    ////ãƒ¢ãƒ‡ãƒ«
     //Model* enemyBulletModel = nullptr;
-
     
 };

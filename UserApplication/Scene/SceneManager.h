@@ -2,39 +2,40 @@
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
 
+
 class SceneManager final
 {
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒ|ƒXƒgƒGƒtƒFƒN‚ğ‚©‚¯‚éƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	/// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ã‚’ã‹ã‘ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	/// </summary>
 	void PostEffectDraw();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	void Finalize();
 
 	/// <summary>
-	/// ƒRƒs[ˆ—
+	/// ã‚³ãƒ”ãƒ¼å‡¦ç†
 	/// </summary>
 	void CopyData();
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate();
 
-	// Ÿ‚ÌƒV[ƒ“—\–ñ
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³äºˆç´„
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory);
 	void ChangeScene(const std::string& sceneName);
 
@@ -44,11 +45,11 @@ private:
 	static SceneManager* SceneManager_;
 
 private:
-	// ¡‚ÌƒV[ƒ“iÀs’†ƒV[ƒ“j
+	// ä»Šã®ã‚·ãƒ¼ãƒ³ï¼ˆå®Ÿè¡Œä¸­ã‚·ãƒ¼ãƒ³ï¼‰
 	BaseScene* scene_ = nullptr;
 	BaseScene* nextScene_ = nullptr;
 
-	// ƒV[ƒ“ƒtƒ@ƒNƒgƒŠ[
+	// ã‚·ãƒ¼ãƒ³ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
 	SceneManager() = default;

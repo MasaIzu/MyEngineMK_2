@@ -7,9 +7,10 @@
 #include <CollisionManager.h>
 #include "SplinePosition.h"
 
+
 class TutorialEnemy {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	TutorialEnemy(const Vector3& BonePos_, Model* model);
 	~TutorialEnemy();
 
@@ -21,34 +22,34 @@ public://getter
 	bool GetIsDead() { return isDead; }
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
-	//“®‚«‚É‚Â‚¢‚Ä‚ÌŠÖ”
-	void PlayerBulletHit();//ƒvƒŒƒCƒ„[‚Ì’e‚ª“–‚½‚Á‚½‚Ìˆ—
-	void PlayerNotSpottedMove();//“G‚ğŒ©‚Â‚¯‚Ä‚È‚¢‚Ì“®‚«
-	void PlayerSpottedMove();//“G‚ğŒ©‚Â‚¯‚½‚Ì“®‚«
+	//å‹•ãã«ã¤ã„ã¦ã®é–¢æ•°
+	void PlayerBulletHit();//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¼¾ãŒå½“ãŸã£ãŸæ™‚ã®å‡¦ç†
+	void PlayerNotSpottedMove();//æ•µã‚’è¦‹ã¤ã‘ã¦ãªã„æ™‚ã®å‹•ã
+	void PlayerSpottedMove();//æ•µã‚’è¦‹ã¤ã‘ãŸæ™‚ã®å‹•ã
 	void Attack();
 
-	//“G‚Ìs“®‚É‚Â‚¢‚Ä‚ÌŠÖ”ƒ^ƒCƒ}[
-	void PlayerNotSpottedMoveTimer();//“G‚ğŒ©‚Â‚¯‚Ä‚È‚¢
-	void PlayerSpottedMoveTimer();//“G‚ğŒ©‚Â‚¯‚½
+	//æ•µã®è¡Œå‹•ã«ã¤ã„ã¦ã®é–¢æ•°ã‚¿ã‚¤ãƒãƒ¼
+	void PlayerNotSpottedMoveTimer();//æ•µã‚’è¦‹ã¤ã‘ã¦ãªã„æ™‚
+	void PlayerSpottedMoveTimer();//æ•µã‚’è¦‹ã¤ã‘ãŸæ™‚
 
-	// “G‚Ì’n–Ê‚Ì“–‚½‚è”»’è
+	// æ•µã®åœ°é¢ã®å½“ãŸã‚Šåˆ¤å®š
 	void CheckCollider();
 
-	//“G‚Ì‹üØ‚ê‚Ä‚¢‚é‚©
+	//æ•µã®è¦–ç·šåˆ‡ã‚Œã¦ã„ã‚‹ã‹
 	bool CheckBetweenToPlayerCollider();
 
-	//G–±ŒnŠÖ”
-	bool GetIsAttackArea();//UŒ‚‚Å‚«‚é”ÍˆÍ‚©‚Ç‚¤‚©
-	void SearchingPlayer();//ƒvƒŒƒCƒ„[‚ÌƒT[ƒ`ŠÖ”
-	void GetPlayerForEnemyAngle();//Šp“x‚ğ‚Æ‚é
-	void WorldTransUpdate();//ˆÚ“®‚Ì’lXV
-	uint32_t Random(const uint32_t& low, const uint32_t& high);//ƒ‰ƒ“ƒ_ƒ€
+	//é›‘å‹™ç³»é–¢æ•°
+	bool GetIsAttackArea();//æ”»æ’ƒã§ãã‚‹ç¯„å›²ã‹ã©ã†ã‹
+	void SearchingPlayer();//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚µãƒ¼ãƒé–¢æ•°
+	void GetPlayerForEnemyAngle();//è§’åº¦ã‚’ã¨ã‚‹
+	void WorldTransUpdate();//ç§»å‹•ã®å€¤æ›´æ–°
+	uint32_t Random(const uint32_t& low, const uint32_t& high);//ãƒ©ãƒ³ãƒ€ãƒ 
 
-private://constŠÖ˜A
+private://consté–¢é€£
 	static const uint32_t ColliderSphereCount = 2;
 	static const uint32_t AttackSphereCount = 6;
 
-private://ƒNƒ‰ƒX•Ï”
+private://ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	Input* input_ = nullptr;
 	Model* model_;
 	std::unique_ptr<Model> modelDebug_;
@@ -57,48 +58,48 @@ private://ƒNƒ‰ƒX•Ï”
 	WorldTransform AttackWorldTrans[AttackSphereCount];
 	WorldTransform DebugWorldTrans;
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 	BaseCollider* TutorialEnemyCollider[ColliderSphereCount];
 	BaseCollider* TutorialEnemyAttackSpereCollider[AttackSphereCount];
 	CollisionManager* collisionManager = nullptr;
 
-	//ƒXƒvƒ‰ƒCƒ“‹Èü
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·š
 	std::unique_ptr<SplinePosition> splinePosition[AttackSphereCount];
 
-private://ƒC[ƒiƒ€
+private://ã‚¤ãƒ¼ãƒŠãƒ 
 	enum class NotSpottedPhase {
-		Walk,//•à‚­
-		Stop,//~‚Ü‚é
-		Interruption,//’†’f
-		ForcedWalking,//‹­§•à‚«
-		SpottedPlayer,//ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½
-		Nothing,//‰½‚à‚µ‚È‚¢
+		Walk,//æ­©ã
+		Stop,//æ­¢ã¾ã‚‹
+		Interruption,//ä¸­æ–­
+		ForcedWalking,//å¼·åˆ¶æ­©ã
+		SpottedPlayer,//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã¤ã‘ãŸ
+		Nothing,//ä½•ã‚‚ã—ãªã„
 	};
-	//Œ©‚Â‚¯‚Ä‚È‚¢‚Æ‚«‚Ì“®‚«ƒtƒF[ƒY
+	//è¦‹ã¤ã‘ã¦ãªã„ã¨ãã®å‹•ããƒ•ã‚§ãƒ¼ã‚º
 	NotSpottedPhase NotSpottedPhase_ = NotSpottedPhase::Walk;
 
 	enum class SpottedPhase {
-		Intimidation,//ˆĞŠd
-		Walk,//•à‚­
-		Stop,//~‚Ü‚é
-		Attack,//UŒ‚
-		Wait,//‘Ò‚Â
-		LoseSightofPlayer,//ƒvƒŒƒCƒ„[‚ğŒ©¸‚È‚Á‚½
-		Turn,//ƒvƒŒƒCƒ„[‚Ì•û‚ğŒü‚­
-		Nothing,//‰½‚à‚µ‚È‚¢
+		Intimidation,//å¨åš‡
+		Walk,//æ­©ã
+		Stop,//æ­¢ã¾ã‚‹
+		Attack,//æ”»æ’ƒ
+		Wait,//å¾…ã¤
+		LoseSightofPlayer,//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ãªã£ãŸæ™‚
+		Turn,//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹ã‚’å‘ã
+		Nothing,//ä½•ã‚‚ã—ãªã„
 	};
-	//Œ©‚Â‚¯‚½‚Ì“®‚«ƒtƒF[ƒY
+	//è¦‹ã¤ã‘ãŸæ™‚ã®å‹•ããƒ•ã‚§ãƒ¼ã‚º
 	SpottedPhase SpottedPhase_ = SpottedPhase::Nothing;
 
 	enum class AttackPhase {
-		NormalAttack,//•’Ê‚ÌUŒ‚
-		RunAttack,//‘–‚Á‚ÄUŒ‚
-		Nothing,//‰½‚à‚µ‚È‚¢
+		NormalAttack,//æ™®é€šã®æ”»æ’ƒ
+		RunAttack,//èµ°ã£ã¦æ”»æ’ƒ
+		Nothing,//ä½•ã‚‚ã—ãªã„
 	};
-	//Œ©‚Â‚¯‚½‚Ì“®‚«ƒtƒF[ƒY
+	//è¦‹ã¤ã‘ãŸæ™‚ã®å‹•ããƒ•ã‚§ãƒ¼ã‚º
 	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 
-private://ŠO‚©‚ç‚Á‚Ä‚«‚½‚à‚Ì‚ÌŠi”[
+private://å¤–ã‹ã‚‰æŒã£ã¦ããŸã‚‚ã®ã®æ ¼ç´
 	Vector3 playerPos;
 
 private:
@@ -132,7 +133,7 @@ private:
 	float RunAttackSpeed = 0.4f;
 	float LittleFar = 5.0f;
 	float Distance = 0.0f;
-	//”»’è‚ğ‚·‚é‚æ‚¤
+	//åˆ¤å®šã‚’ã™ã‚‹ã‚ˆã†
 	float Rot = 0.0f;
 	float dist = 0.0f;
 	float radius = 0.0f;
@@ -145,13 +146,13 @@ private:
 	Vector3 BackBonePos;
 	Vector3 DestinationPos;
 
-	//ƒXƒvƒ‰ƒCƒ“‹Èü‚É•K—v‚Èƒƒ“ƒo•Ï”
-	Vector3 start = { 0.0f, 0.0f, 0.0f };	//ƒXƒ^[ƒg’n“_
-	Vector3 p1 = { 0.0f, 0.0f, 0.0f };		//§Œä“_‚»‚Ì1
-	Vector3 p2 = { 0.0f, 0.0f, 0.0f };		//§Œä“_‚»‚Ì2
-	Vector3 p3 = { 0.0f, 0.0f, 0.0f };		//§Œä“_‚»‚Ì3
-	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ƒS[ƒ‹’n“_
-	//std::vector<Vector3> points{ start, start, p1, p2, end, end };Œ©–{
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã«å¿…è¦ãªãƒ¡ãƒ³ãƒå¤‰æ•°
+	Vector3 start = { 0.0f, 0.0f, 0.0f };	//ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹
+	Vector3 p1 = { 0.0f, 0.0f, 0.0f };		//åˆ¶å¾¡ç‚¹ãã®1
+	Vector3 p2 = { 0.0f, 0.0f, 0.0f };		//åˆ¶å¾¡ç‚¹ãã®2
+	Vector3 p3 = { 0.0f, 0.0f, 0.0f };		//åˆ¶å¾¡ç‚¹ãã®3
+	Vector3 end = { 0.0f, 0.0f, 0.0f };		//ã‚´ãƒ¼ãƒ«åœ°ç‚¹
+	//std::vector<Vector3> points{ start, start, p1, p2, end, end };è¦‹æœ¬
 
 	Vector4 fallVec;
 };

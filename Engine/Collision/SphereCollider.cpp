@@ -1,4 +1,4 @@
-﻿#include "SphereCollider.h"
+#include "SphereCollider.h"
 
 
 void SphereCollider::Update(const Matrix4& worldPos)
@@ -12,7 +12,7 @@ void SphereCollider::Update(const Matrix4& worldPos)
 	Sphere::radius = radius;
 }
 
-void SphereCollider::Update(const Matrix4& worldPos, const float& radius)
+void SphereCollider::Update(const Matrix4& worldPos, const float& Radius)
 {
 	// ワールド行列から座標を抽出
 	worldPos_ = worldPos;
@@ -20,11 +20,11 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius)
 	// 球のメンバ変数を更新
 	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
 	Sphere::center = Vector;
-	Sphere::radius = radius;
+	Sphere::radius = Radius;
 	Sphere::firstCoolTime = 0;
 }
 
-void SphereCollider::Update(const Matrix4& worldPos, const float& radius,const float& speed, const Vector3& look)
+void SphereCollider::Update(const Matrix4& worldPos, const float& Radius,const float& speed, const Vector3& Look)
 {
 	// ワールド行列から座標を抽出
 	worldPos_ = worldPos;
@@ -32,9 +32,9 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius,const f
 	// 球のメンバ変数を更新
 	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
 	Sphere::center = Vector;
-	Sphere::radius = radius;
+	Sphere::radius = Radius;
 	Sphere::Speed = speed;
-	Sphere::look = look;
+	Sphere::look = Look;
 	Sphere::firstCoolTime = 0;
 }
 
@@ -68,7 +68,7 @@ void SphereCollider::Update(const Matrix4& worldPos, const uint32_t& Cooltime, c
 	Sphere::firstCoolTime = FirstCoolTime;
 }
 
-void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime)
+void SphereCollider::Update(const Matrix4& worldPos, const float& Radius, const uint32_t& Cooltime)
 {
 	// ワールド行列から座標を抽出
 	worldPos_ = worldPos;
@@ -76,11 +76,11 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const 
 	// 球のメンバ変数を更新
 	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
 	Sphere::center = Vector;
-	Sphere::radius = radius;
+	Sphere::radius = Radius;
 	Sphere::coolTime = Cooltime;
 }
 
-void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime)
+void SphereCollider::Update(const Matrix4& worldPos, const float& Radius, const uint32_t& Cooltime, const bool& isCoolTime)
 {
 	// ワールド行列から座標を抽出
 	worldPos_ = worldPos;
@@ -88,12 +88,13 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const 
 	// 球のメンバ変数を更新
 	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
 	Sphere::center = Vector;
-	Sphere::radius = radius;
+	Sphere::radius = Radius;
 	Sphere::coolTime = Cooltime;
 	Sphere::isChangeCoolTime = isCoolTime;
 }
 
-void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
+
+void SphereCollider::Update(const Matrix4& worldPos, const float& Radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime)
 {
 
 	// ワールド行列から座標を抽出
@@ -102,7 +103,7 @@ void SphereCollider::Update(const Matrix4& worldPos, const float& radius, const 
 	// 球のメンバ変数を更新
 	Vector4 Vector(worldPos_.m[3][0], worldPos_.m[3][1], worldPos_.m[3][2], worldPos_.m[3][3]);
 	Sphere::center = Vector;
-	Sphere::radius = radius;
+	Sphere::radius = Radius;
 	Sphere::coolTime = Cooltime;
 	Sphere::isChangeCoolTime = isCoolTime;
 	Sphere::firstCoolTime = FirstCoolTime;

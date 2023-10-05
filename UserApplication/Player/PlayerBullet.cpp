@@ -17,6 +17,7 @@ PlayerBullet::PlayerBullet()
 	}
 }
 
+
 PlayerBullet::~PlayerBullet()
 {
 }
@@ -35,7 +36,7 @@ void PlayerBullet::Initialize()
 
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		// ƒRƒŠƒWƒ‡ƒ“ƒ}ƒl[ƒWƒƒ‚É’Ç‰Á
+		// ã‚³ãƒªã‚¸ãƒ§ãƒ³ãƒžãƒãƒ¼ã‚¸ãƒ£ã«è¿½åŠ 
 		BulletCollider[i] = new SphereCollider(Vector4(0, BulletRadius[i], 0, 0), BulletRadius[i]);
 		CollisionManager::GetInstance()->AddCollider(BulletCollider[i]);
 		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ATTACK);
@@ -47,15 +48,15 @@ void PlayerBullet::Initialize()
 
 void PlayerBullet::Update()
 {
-	//‘O‰ñ‚ÌˆÊ’u‚ð‹L˜^
+	//å‰å›žã®ä½ç½®ã‚’è¨˜éŒ²
 	OldPosUpdate();
-	//ƒ^ƒCƒ}[XV
+	//ã‚¿ã‚¤ãƒžãƒ¼æ›´æ–°
 	BulletAliveTimerUpdate();
-	//ŽžŠÔ‚ªØ‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	//æ™‚é–“ãŒåˆ‡ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
 	CheckBulletAlive();
-	//¶‚«‚Ä‚¢‚½‚çƒAƒvƒf
+	//ç”Ÿãã¦ã„ãŸã‚‰ã‚¢ãƒ—ãƒ‡
 	BulletUpdate();
-	//Ž€‚ñ‚Å‚½‚çŠi”[
+	//æ­»ã‚“ã§ãŸã‚‰æ ¼ç´
 	SetNotAlivePosition();
 
 	//ImGui::Begin("PlayerBullet");
@@ -84,7 +85,7 @@ void PlayerBullet::Update()
 			BulletCollider[i]->SphereMeshHitReset();
 			Vector3 Verocity = { 0,0,0 };
 			for (uint32_t j = 0; j < DieMaxParticle; j++) {
-				MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleDieSpeed, 0.04f);
+
 			}
 		}
 	}
@@ -105,15 +106,6 @@ void PlayerBullet::Draw(ViewProjection& viewProjection_)
 	}
 }
 
-void PlayerBullet::CSUpdate(ID3D12GraphicsCommandList* cmdList)
-{
-	
-}
-
-void PlayerBullet::ParticleDraw(ViewProjection& viewProjection_)
-{
-	
-}
 
 void PlayerBullet::CopyParticle()
 {
@@ -136,12 +128,10 @@ void PlayerBullet::BulletUpdate()
 				BulletCollider[i]->SphereMeshHitReset();
 				Vector3 Verocity = { 0,0,0 };
 				for (uint32_t j = 0; j < DieMaxParticle; j++) {
-					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleDieSpeed, 0.04f);
 				}
 			}
 			if (isExpanding == false) {
 				for (uint32_t j = 0; j < AttackMaxParticle; j++) {
-					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerParticleSpeed, 0.04f);
 				}
 			}
 		}
@@ -180,7 +170,6 @@ uint32_t PlayerBullet::MakePlayerBullet(const Vector3& MakeBulletPos, const Vect
 				BulletCollider[i]->Reset();
 				BulletCollider[i]->Update(playerBulletWorldTrans[i].matWorld_, BulletRadius[i], playerBulletSpeed[i], BulletVector[i]);
 				for (uint32_t j = 0; j < MakeBulletMaxParticle; j++) {
-					MakeParticle(playerBulletWorldTrans[i].translation_, BulletVector[i], PlayerBulletMakeParticleSpeed, 0.04f);
 				}
 				return i;
 			}
@@ -273,36 +262,6 @@ void PlayerBullet::SetNotAlivePosition()
 			playerBulletWorldTrans[i].TransferMatrix();
 		}
 	}
-}
-
-void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed)
-{
-	for (float i = 0; i < BulletSpeed; i++) {
-		Vector3 Verocty = BulletVelocity;
-		Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
-		Verocty += Rand * PlayerParticleSpeed;
-		Vector3 AddPos = pos + (BulletVelocity * i);
-		Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5, 20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
-		Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
-		Vector4 DownColor = color / static_cast<float>(MaxBulletLifeTime);
-		float scale = (1.0f / BulletSpeed) * i;
-		
-	}
-}
-
-void PlayerBullet::MakeParticle(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed, const float& DownScale)
-{
-
-	Vector3 Verocty = BulletVelocity * BulletSpeed;
-	Vector3 Rand = MyMath::RandomCenterVec3Normalize(0, 20);
-	Verocty += Rand * BulletSpeed;
-	Vector3 AddPos = pos;
-	Vector3 colorRand = MyMath::RandomVec3(Uint32Vector2(5, 20), Uint32Vector2(0, 3), Uint32Vector2(0, 6)) / 10;
-	Vector4 color = { colorRand.x,colorRand.y,colorRand.z, 3 };
-	Vector4 DownColor = color / static_cast<float>(DieMaxParticleLife);
-	float scale = 1.0f;
-	
-
 }
 
 void PlayerBullet::OldPosUpdate()

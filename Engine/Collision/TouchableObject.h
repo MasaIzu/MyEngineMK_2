@@ -7,15 +7,16 @@ class TouchableObject
 {
 public:
 	/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg¶¬
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	/// </summary>
 	/// <returns></returns>
 	static TouchableObject* Create(Model* model, WorldTransform& worldTrans, unsigned short attribute);
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	/// <returns>¬”Û</returns>
+	/// <returns>æˆå¦</returns>
 	bool Initialize(Model* model, WorldTransform& worldTrans, unsigned short attribute);
 };
+
 

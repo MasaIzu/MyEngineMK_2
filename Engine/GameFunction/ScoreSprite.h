@@ -6,16 +6,17 @@
 #include "Vector4.h"
 #include <list>
 
+
 class ScoreSprite
 {
 public:
     ScoreSprite();
     ~ScoreSprite();
 
-    // ‰Šú‰»‚ÌŠÖ”
+    // åˆæœŸåŒ–ã®é–¢æ•°
     void Initialize();
 
-    // •`‰æ‚ÌŠÖ”
+    // æç”»ã®é–¢æ•°
     void Draw(int num, Vector2 pos);
 
     void DrawSpeed(int num, Vector2 pos);
@@ -23,25 +24,25 @@ public:
     void SetSize(Vector2 size);
 
 private:
-    // ƒXƒvƒ‰ƒCƒg
+    // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
     std::unique_ptr <Sprite> scoresprite[10];
     std::unique_ptr <Sprite> scoresprite2[10];
 
-    // ‰Šú‰»—p•Ï”
+    // åˆæœŸåŒ–ç”¨å¤‰æ•°
     Vector4 color = { 1, 1, 1, 1 };
     Vector2 anker = { 0, 0 };
     Vector2 size = { 50,100 };
-    //ƒXƒvƒ‰ƒCƒgˆê–‡‚ ‚½‚è‚ÌƒTƒCƒY
+    //ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆä¸€æšã‚ãŸã‚Šã®ã‚µã‚¤ã‚º
     const Vector2 texsize = { 80,80 };
     Vector2 texBase = { 0,0 };
 
-    // ‰Šú‰»—p•Ï”
+    // åˆæœŸåŒ–ç”¨å¤‰æ•°
     Vector4 color2 = { 1, 1, 1, 1 };
     Vector2 size2 = { 30,50 };
-    //ƒXƒvƒ‰ƒCƒgˆê–‡‚ ‚½‚è‚ÌƒTƒCƒY
+    //ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆä¸€æšã‚ãŸã‚Šã®ã‚µã‚¤ã‚º
     const Vector2 texsize2 = { 64,96 };
     Vector2 texBase2 = { 0,0 };
 
-    // ˆÊ’u
+    // ä½ç½®
     Vector2 pos = { 800,200 };
 };

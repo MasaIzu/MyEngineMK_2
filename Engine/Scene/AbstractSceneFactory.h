@@ -3,14 +3,15 @@
 #include <string>
 #include "BaseScene.h"
 
+
 /// <summary>
-/// ƒV[ƒ“ƒtƒ@ƒNƒgƒŠ[
+/// ã‚·ãƒ¼ãƒ³ãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼
 /// </summary>
 class AbstractSceneFactory
 {
 public:
-	// ‰¼‘zƒfƒXƒgƒ‰ƒNƒ^
+	// ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	virtual ~AbstractSceneFactory() = default;
-	// ƒV[ƒ“¶¬
+	// ã‚·ãƒ¼ãƒ³ç”Ÿæˆ
 	virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
 };

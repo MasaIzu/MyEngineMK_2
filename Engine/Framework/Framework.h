@@ -11,39 +11,40 @@
 //#include <FbxLoader.h>
 #include <memory>
 
+
 class Framework {
 public:
-	//virtualƒƒ“ƒoŠÖ”
-	//‰Šú‰»
+	//virtualãƒ¡ãƒ³ãƒé–¢æ•°
+	//åˆæœŸåŒ–
 	virtual void Initialize();
 
-	//XV
+	//æ›´æ–°
 	virtual void Update();
 
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 	virtual void PostEffectDraw()=0;
 
-	//•`‰æ
+	//æç”»
 	virtual void Draw() = 0;
 
-	//I—¹ˆ—
+	//çµ‚äº†å‡¦ç†
 	virtual void Finalize();
 
-	//I—¹ƒ`ƒFƒbƒN
+	//çµ‚äº†ãƒã‚§ãƒƒã‚¯
 	virtual bool isPlayMyGame();
 
-	//ƒRƒ“ƒsƒ…[ƒgƒVƒF[ƒ_[‚ÅŒvZ‚µ‚½Œã‚ÌƒRƒs[ˆ—
+	//ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ãƒˆã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã§è¨ˆç®—ã—ãŸå¾Œã®ã‚³ãƒ”ãƒ¼å‡¦ç†
 	virtual void CopyData() = 0;
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	virtual void CSUpdate() = 0;
 
-public://ƒfƒXƒgƒ‰ƒNƒ^
+public://ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	virtual ~Framework() = default;
 
 public:
-	//ƒƒ“ƒoŠÖ”
-	//Às
+	//ãƒ¡ãƒ³ãƒé–¢æ•°
+	//å®Ÿè¡Œ
 	void Run();
 
 	WinApp* GetWinApp() { return winApp_; }
@@ -51,15 +52,15 @@ public:
 
 protected:
 
-	//ƒVƒ“ƒOƒ‹ƒgƒ“
+	//ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³
 	WinApp* winApp_ = nullptr;
 	DirectXCore* directXCore_ = nullptr;
 	Input* input_ = nullptr;
-	SceneManager* sceneManager_;
+	SceneManager* sceneManager_ = nullptr;
 	TextureManager* TextureManager_ = nullptr;
 	/*FbxLoader* fbxLoader_ = nullptr;*/
 
-	//ƒVƒ“ƒOƒ‹ƒgƒ“ˆÈŠO
+	//ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ä»¥å¤–
 	std::unique_ptr<ImGuiManager> imGui;
 	std::unique_ptr <FPS> fps;
 	std::unique_ptr <AbstractSceneFactory> sceneFactory_;

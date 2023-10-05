@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -11,125 +10,125 @@
 #include<memory>
 
 /// <summary>
-/// ƒXƒvƒ‰ƒCƒg
+/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 /// </summary>
 class Sprite {
 
-public: // ƒTƒuƒNƒ‰ƒX
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
 	/// <summary>
-	/// ’¸“_ƒf[ƒ^\‘¢‘Ì
+	/// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	/// </summary>
 	struct VertexPosUv {
-		Vector3 pos; // xyzÀ•W
-		Vector2 uv;  // uvÀ•W
+		Vector3 pos; // xyzåº§æ¨™
+		Vector2 uv;  // uvåº§æ¨™
 	};
 
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	/// </summary>
 	struct ConstBufferData {
-		Vector4 color; // F (RGBA)
-		Matrix4 mat;   // ‚R‚c•ÏŠ·s—ñ
+		Vector4 color; // è‰² (RGBA)
+		Matrix4 mat;   // ï¼“ï¼¤å¤‰æ›è¡Œåˆ—
 	};
 
-public: // Ã“Iƒƒ“ƒoŠÖ”
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	// Ã“I‰Šú‰»
+	// é™çš„åˆæœŸåŒ–
 	static void StaticInitialize(ID3D12Device* device,const std::wstring& directoryPath = L"Resources/");
 
-	// Ã“II—¹ˆ—
+	// é™çš„çµ‚äº†å‡¦ç†
 	static void StaticFinalize();
 
-	// •`‰æ‘Oˆ—
+	// æç”»å‰å‡¦ç†
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList, int blendMode = 1);
 
-	/// •`‰æŒãˆ—
+	/// æç”»å¾Œå‡¦ç†
 	static void PostDraw();
 
 
-	// ƒXƒvƒ‰ƒCƒg¶¬
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 	static std::unique_ptr<Sprite> Create(uint32_t textureHandle);
 
-private: // Ã“Iƒƒ“ƒo•Ï”
-	// ’¸“_”
+private: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// é ‚ç‚¹æ•°
 	static const int kVertNum = 4;
-	// ƒfƒoƒCƒX
+	// ãƒ‡ãƒã‚¤ã‚¹
 	static ID3D12Device* Device_;
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
 	static UINT DescriptorHandleSize_;
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	static ID3D12GraphicsCommandList* CommandList_;
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
+	// ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
 	static Microsoft::WRL::ComPtr<ID3D12RootSignature> RootSignature_;
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	static std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, 6>PipelineStates_;
-	// Ë‰es—ñ
+	// å°„å½±è¡Œåˆ—
 	static Matrix4 Matrix4Projection_;
 
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Sprite();
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Sprite(uint32_t textureHandle,Vector2 size);
 
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	bool Initialize();
 
-	// ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹‚Ìİ’è
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«ã®è¨­å®š
 	void SetTextureHandle(uint32_t textureHandle);
 
 	uint32_t GetTextureHandle() { return textureHandle_; }
 
 
-	// À•W‚Ìİ’è
+	// åº§æ¨™ã®è¨­å®š
 	void SetPosition(const Vector2& position);
 
 	const Vector2& GetPosition() { return position_; }
 
-	// Šp“x‚Ìİ’è
+	// è§’åº¦ã®è¨­å®š
 	void SetRotation(float rotation);
 
 	float GetRotation() { return rotation_; }
 
-	// ƒTƒCƒY‚Ìİ’è
+	// ã‚µã‚¤ã‚ºã®è¨­å®š
 	void SetSize(const Vector2& size);
 
 	const Vector2& GetSize() { return size_; }
 
-	// ƒAƒ“ƒJ[ƒ|ƒCƒ“ƒg‚Ìİ’è
+	// ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆã®è¨­å®š
 	void SetAnchorPoint(const Vector2& anchorpoint);
 
 	const Vector2& GetAnchorPoint() { return anchorPoint_; }
 
-	// F‚Ìİ’è
+	// è‰²ã®è¨­å®š
 	void SetColor(const Vector4& color) { color_ = color; };
 
 	const Vector4& GetColor() { return color_; }
 
-	// ¶‰E”½“]‚Ìİ’è
+	// å·¦å³åè»¢ã®è¨­å®š
 	void SetIsFlipX(bool isFlipX);
 
 	bool GetIsFlipX() { return isFlipX_; }
 
-	// ã‰º”½“]‚Ìİ’è
+	// ä¸Šä¸‹åè»¢ã®è¨­å®š
 	void SetIsFlipY(bool isFlipY);
 
 	bool GetIsFlipY() { return isFlipY_; }
 
-	// ƒeƒNƒXƒ`ƒƒ”ÍˆÍİ’è
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç¯„å›²è¨­å®š
 	void SetTextureRect(const Vector2& texBase, const Vector2& texSize);
 
 	void SetDrawUpdate(Vector2 Position, Vector4 Color);
 
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(Vector2 Position,Vector4 Color, int blendMode = 1);
 
-private: // ƒƒ“ƒo•Ï”
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
 	VertexPosUv* vertMap_ = nullptr;
@@ -146,11 +145,11 @@ private: // ƒƒ“ƒo•Ï”
 	bool isFlipY_ = false;
 	Vector2 texBase_ = { 0, 0 };
 	Vector2 texSize_ = { 100.0f, 100.0f };
-	D3D12_RESOURCE_DESC resourceDesc_;
+	D3D12_RESOURCE_DESC resourceDesc_ = {};
 
-private: // ƒƒ“ƒoŠÖ”
+private: // ãƒ¡ãƒ³ãƒé–¢æ•°
 	/// <summary>
-	/// ’¸“_ƒf[ƒ^“]‘—
+	/// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿è»¢é€
 	/// </summary>
 	void TransferVertices();
 };

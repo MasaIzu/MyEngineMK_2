@@ -6,13 +6,13 @@ SplinePosition::SplinePosition()
 
 SplinePosition::SplinePosition(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end)
 {
-	std::vector<Vector3> points{ Start, Start, p1, p2, end, end };
-	this->points = points;
+	std::vector<Vector3> creatPoints{ Start, Start, p1, p2, end, end };
+	this->points = creatPoints;
 }
 
-SplinePosition::SplinePosition(const std::vector<Vector3>& points)
+SplinePosition::SplinePosition(const std::vector<Vector3>& AllPoints)
 {
-	this->points = points;
+	this->points = AllPoints;
 }
 
 SplinePosition::~SplinePosition() {}
@@ -37,12 +37,12 @@ void SplinePosition::Update(float& time)
 
 void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end, float& time)
 {
-	std::vector<Vector3> points{ Start, Start, p1, p2, end, end };
-	this->points = points;
+	std::vector<Vector3> creatPoints{ Start, Start, p1, p2, end, end };
+	this->points = creatPoints;
 
 	timeRate_ += time;
 	if (timeRate_ >= MaxTime) {
-		if (startIndex < points.size() - 3) {
+		if (startIndex < creatPoints.size() - 3) {
 			startIndex += 1;
 			timeRate_ -= MaxTime;
 		}
@@ -52,17 +52,17 @@ void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& e
 			isResetNearSpline = false;
 		}
 	}
-	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
+	NowPos = SplinePositionUpdate(creatPoints, startIndex, timeRate_);
 }
 
 void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p3, Vector3& end, float& time)
 {
-	std::vector<Vector3> points{ Start, Start, p1, p2, p3, end, end };
-	this->points = points;
+	std::vector<Vector3> creatPoints{ Start, Start, p1, p2, p3, end, end };
+	this->points = creatPoints;
 
 	timeRate_ += time;
 	if (timeRate_ >= MaxTime) {
-		if (startIndex < points.size() - 3) {
+		if (startIndex < creatPoints.size() - 3) {
 			startIndex += 1;
 			timeRate_ -= MaxTime;
 		}
@@ -71,14 +71,14 @@ void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p
 			isFinishSpline = true;
 		}
 	}
-	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
+	NowPos = SplinePositionUpdate(creatPoints, startIndex, timeRate_);
 }
 
-void SplinePosition::Update(const std::vector<Vector3>& points, float& time)
+void SplinePosition::Update(const std::vector<Vector3>& Points, float& time)
 {
 	timeRate_ += time;
 	if (timeRate_ >= MaxTime) {
-		if (startIndex < points.size() - 3) {
+		if (startIndex < Points.size() - 3) {
 			startIndex += 1;
 			timeRate_ -= MaxTime;
 		}
@@ -87,7 +87,7 @@ void SplinePosition::Update(const std::vector<Vector3>& points, float& time)
 			isFinishSpline = true;
 		}
 	}
-	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
+	NowPos = SplinePositionUpdate(Points, startIndex, timeRate_);
 }
 
 void SplinePosition::Reset()
@@ -110,7 +110,7 @@ void SplinePosition::ResetNearSpline(Vector3& Pos)
 	if (isResetNearSpline == false) {
 		for (uint32_t i = 1; i < points.size() - 1; i++) {
 			Vector3 pos = Pos - points[i];
-			Vector3 nextPoint = points[i + 1] - points[i];
+			Vector3 nextPoint = points[ static_cast<std::vector<Vector3,std::allocator<Vector3>>::size_type>( i ) + 1 ] - points[ i ];
 			if (isFinishSpline == true) {
 				if (0.0f < pos.length() && pos.length() < nextPoint.length()) {
 					startIndex = i;
@@ -137,34 +137,35 @@ void SplinePosition::ResetNearSplineReset()
 	isResetNearSpline = false;
 }
 
-Vector3 SplinePosition::SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t)
+Vector3 SplinePosition::SplinePositionUpdate(const std::vector<Vector3>& Points, size_t& StartIndex, float& t)
 {
-	//•âŠÔ‚·‚×‚«“_‚Ì”
-	size_t n = points.size() - 2;
+	//è£œé–“ã™ã¹ãç‚¹ã®æ•°
+	size_t n = Points.size() - 2;
 
-	if (startIndex > n)return points[n];
-	if (startIndex < 1)return points[1];
+	if (StartIndex > n)return Points[n];
+	if (StartIndex < 1)return Points[1];
 
-	Vector3 p0 = points[startIndex - 1];
-	Vector3 p1 = points[startIndex];
-	Vector3 p2 = points[startIndex + 1];
-	Vector3 p3 = points[startIndex + 2];
+	Vector3 p0 = Points[StartIndex - 1];
+	Vector3 p1 = Points[StartIndex];
+	Vector3 p2 = Points[StartIndex + 1];
+	Vector3 p3 = Points[StartIndex + 2];
 
 	Vector3 position = 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * (t * t) + (-p0 + 3 * p1 - 3 * p2 + p3) * (t * t * t));
 
 	return position;
 }
 
-void SplinePosition::SetNotSplineVector(const std::vector<Vector3>& points)
+
+void SplinePosition::SetNotSplineVector(const std::vector<Vector3>& Points)
 {
 	std::vector<Vector3> setPoints;
 	uint32_t vecCount = 0;
-	for (Vector3 ground : points) {
+	for (Vector3 ground : Points) {
 		setPoints.push_back(ground);
 		if (vecCount == 0) {
 			setPoints.push_back(ground);
 		}
-		else if (setPoints.size() - 1 == points.size()) {
+		else if (setPoints.size() - 1 == Points.size()) {
 			setPoints.push_back(ground);
 		}
 		vecCount++;

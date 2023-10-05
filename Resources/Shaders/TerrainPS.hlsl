@@ -5,6 +5,7 @@ SamplerState smp : register(s0);      // 0番スロットに設定されたサ�
 
 static const float ambient = 0.3f;
 
+
 float4 main(VSOutput input) : SV_TARGET
 {
 	// テクスチャマッピング

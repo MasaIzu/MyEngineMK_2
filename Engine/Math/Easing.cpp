@@ -1,12 +1,13 @@
 #include "Easing.h"
 #include"math.h"
-//’Ç‰Á
+//è¿½åŠ 
 double Easing::In(double start, double end, double time, double max_time)
 {
 	time /= max_time;
 	double move = end - start;
 	return start + (move * time * time);
 }
+
 
 double Easing::Out(double start, double end, double time, double max_time)
 {

@@ -14,9 +14,10 @@ Matrix4 MyMath::Initialize() {
 	return matInitialize;
 }
 
+
 Matrix4 MyMath::Scale(const Vector3& scale) {
 
-	//ƒXƒP[ƒŠƒ“ƒOs—ñ‚ğéŒ¾
+	//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°è¡Œåˆ—ã‚’å®£è¨€
 	Matrix4 matScale = {
 		scale.x, 0.0f, 0.0f,   0.0f,
 		0.0f, scale.y, 0.0f, 0.0f,
@@ -31,12 +32,11 @@ Matrix4 MyMath::Scale(const Vector3& scale) {
 }
 
 Matrix4 MyMath::Rotation(const Vector3& rotation, int X_1_Y_2_Z_3_XYZ_6) {
-	int rotationX = 1;
-	int rotationY = 2;
-	int rotationZ = 3;
-	int rotationXYZ = 6;
+	int rotation_X = 1;
+	int rotation_Y = 2;
+	int rotation_Z = 3;
 
-	if (X_1_Y_2_Z_3_XYZ_6 == rotationX) {
+	if (X_1_Y_2_Z_3_XYZ_6 == rotation_X) {
 		Matrix4 matRotX = {
 		  1.0f,0.0f,0.0f,0.0f,
 		  0.0f,cos(rotation.x),sin(rotation.x),0.0f,
@@ -48,7 +48,7 @@ Matrix4 MyMath::Rotation(const Vector3& rotation, int X_1_Y_2_Z_3_XYZ_6) {
 
 		return rotationX;
 	}
-	else if (X_1_Y_2_Z_3_XYZ_6 == rotationY) {
+	else if (X_1_Y_2_Z_3_XYZ_6 == rotation_Y) {
 		Matrix4 matRotY = {
 			cos(rotation.y), 0.0f, -sin(rotation.y), 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
@@ -60,7 +60,7 @@ Matrix4 MyMath::Rotation(const Vector3& rotation, int X_1_Y_2_Z_3_XYZ_6) {
 
 		return rotationY;
 	}
-	else if (X_1_Y_2_Z_3_XYZ_6 == rotationZ) {
+	else if (X_1_Y_2_Z_3_XYZ_6 == rotation_Z) {
 		Matrix4 matRotZ = {
 		  cos(rotation.z),sin(rotation.z),0.0f,0.0f,
 		  -sin(rotation.z),cos(rotation.z),0.0f,0.0f,
@@ -93,7 +93,7 @@ Matrix4 MyMath::Rotation(const Vector3& rotation, int X_1_Y_2_Z_3_XYZ_6) {
 		  0.0f,0.0f,1.0f,0.0f,
 		  0.0f,0.0f,0.0f,1.0f
 		};
-		//Še²‚Ì‰ñ“]s—ñ‚ğ‡¬
+		//å„è»¸ã®å›è»¢è¡Œåˆ—ã‚’åˆæˆ
 		matRotXYZ = Initialize();
 
 		matRotXYZ *= matRot_X;
@@ -140,7 +140,7 @@ Vector3 MyMath::vector3Normalize(const Vector3& v)
 	return Vector3(x, y, z);
 }
 
-//ƒxƒNƒgƒ‹‚Æs—ñ‚ÌŠ|‚¯Z(o—ÍVector3)
+//ãƒ™ã‚¯ãƒˆãƒ«ã¨è¡Œåˆ—ã®æ›ã‘ç®—(å‡ºåŠ›Vector3)
 Vector3 MyMath::MatVector(Matrix4 matrix4, Vector3 vector3) {
 	Vector3 matVector = { 0,0,0 };
 
@@ -235,7 +235,7 @@ Vector4 MyMath::Vec4Mat4Mul(const Vector4& vec, const Matrix4& mat)
 }
 
 Matrix4 MyMath::setViewportMat(WinApp* window, const Vector3& v) {
-	//’PˆÊs—ñ‚Ìİ’è
+	//å˜ä½è¡Œåˆ—ã®è¨­å®š
 	Matrix4 matViewport = Initialize();
 	matViewport.m[0][0] = static_cast<float>(window->window_width) / 2;
 	matViewport.m[1][1] = -static_cast<float>(window->window_height) / 2;
@@ -254,7 +254,7 @@ Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 	float* pF;
 	double* pD;
 
-	//8 x 4s—ñ‚É’l‚ğ“ü‚ê‚é
+	//8 x 4è¡Œåˆ—ã«å€¤ã‚’å…¥ã‚Œã‚‹
 	for (i = 0; i < 4; i++) {
 		pF = pOut.m[i];
 		for (j = 0; j < 4; j++, pF++) mat_8x4[i][j] = (double)(*pF);
@@ -279,7 +279,7 @@ Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 					flag = 0;
 					break;
 				}
-				//s‚ğ“ü‚ê‘Ö‚¦‚é
+				//è¡Œã‚’å…¥ã‚Œæ›¿ãˆã‚‹
 				for (j = 0; j < 8; j++) {
 					fDat = mat_8x4[i][j];
 					mat_8x4[i][j] = mat_8x4[loop][j];
@@ -294,8 +294,8 @@ Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 			if (i != loop) {
 				fDat = mat_8x4[i][loop];
 				if (fDat != 0.0f) {
-					//mat[i][loop]‚ğmat[loop]‚Ìs‚É‚©‚¯‚Ä
-					//(mat[j] - mat[loop] * fDat)‚ğŒvZ
+					//mat[i][loop]ã‚’mat[loop]ã®è¡Œã«ã‹ã‘ã¦
+					//(mat[j] - mat[loop] * fDat)ã‚’è¨ˆç®—
 					for (j = 0; j < 8; j++) {
 						fDat2 = mat_8x4[loop][j] * fDat;
 						mat_8x4[i][j] -= fDat2;
@@ -317,7 +317,7 @@ Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 		}
 	}
 	else {
-		//’PˆÊs—ñ‚ğ‹‚ß‚é
+		//å˜ä½è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 		mat = {
 		1,0,0,0,
 		0,1,0,0,
@@ -335,35 +335,35 @@ Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 Matrix4 MyMath::MakeInverse(const Matrix4* mat)
 {
 
-	//‘|‚«o‚µ–@‚ğs‚¤s—ñ
+	//æƒãå‡ºã—æ³•ã‚’è¡Œã†è¡Œåˆ—
 	float sweep[4][8]{};
-	//’è””{—p
+	//å®šæ•°å€ç”¨
 	float constTimes = 0.0f;
-	//‹–—e‚·‚éŒë·
+	//è¨±å®¹ã™ã‚‹èª¤å·®
 	float MAX_ERR = 1e-10f;
-	//–ß‚è’l—p
+	//æˆ»ã‚Šå€¤ç”¨
 	Matrix4 retMat;
 
 	for (size_t i = 0; i < 4; i++)
 	{
 		for (size_t j = 0; j < 4; j++)
 		{
-			//weep‚Ì¶‘¤‚É‹ts—ñ‚ğ‹‚ß‚és—ñ‚ğƒZƒbƒg
+			//weepã®å·¦å´ã«é€†è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹è¡Œåˆ—ã‚’ã‚»ãƒƒãƒˆ
 			sweep[i][j] = mat->m[i][j];
 
-			//sweep‚Ì‰E‘¤‚É’PˆÊs—ñ‚ğƒZƒbƒg
+			//sweepã®å³å´ã«å˜ä½è¡Œåˆ—ã‚’ã‚»ãƒƒãƒˆ
 			sweep[i][4 + j] = MyMath::MakeIdentity().m[i][j];
 		}
 	}
 
-	//‘S‚Ä‚Ì—ñ‚Ì‘ÎŠp¬•ª‚É‘Î‚·‚éŒJ‚è•Ô‚µ
+	//å…¨ã¦ã®åˆ—ã®å¯¾è§’æˆåˆ†ã«å¯¾ã™ã‚‹ç¹°ã‚Šè¿”ã—
 	for (size_t i = 0; i < 4; i++)
 	{
-		//Å‘å‚Ìâ‘Î’l‚ğ’–Ú‘ÎŠp¬•ª‚Ìâ‘Î’l‚Æ‰¼’è
+		//æœ€å¤§ã®çµ¶å¯¾å€¤ã‚’æ³¨ç›®å¯¾è§’æˆåˆ†ã®çµ¶å¯¾å€¤ã¨ä»®å®š
 		float max = std::fabs(sweep[i][i]);
 		size_t maxIndex = i;
 
-		//i—ñ–Ú‚ªÅ‘å‚Ìâ‘Î’l‚Æ‚È‚és‚ğ’T‚·
+		//iåˆ—ç›®ãŒæœ€å¤§ã®çµ¶å¯¾å€¤ã¨ãªã‚‹è¡Œã‚’æ¢ã™
 		for (size_t j = i + 1; j < 4; j++)
 		{
 			if (std::fabs(sweep[j][i]) > max)
@@ -375,11 +375,11 @@ Matrix4 MyMath::MakeInverse(const Matrix4* mat)
 
 		if (fabs(sweep[maxIndex][i]) <= MAX_ERR)
 		{
-			//‹ts—ñ‚Í‹‚ß‚ç‚ê‚È‚¢
+			//é€†è¡Œåˆ—ã¯æ±‚ã‚ã‚‰ã‚Œãªã„
 			return MyMath::MakeIdentity();
 		}
 
-		//‘€ì(1):is–Ú‚ÆmaxIndexs–Ú‚ğ“ü‚ê‘Ö‚¦‚é
+		//æ“ä½œ(1):iè¡Œç›®ã¨maxIndexè¡Œç›®ã‚’å…¥ã‚Œæ›¿ãˆã‚‹
 		if (i != maxIndex)
 		{
 			for (size_t j = 0; j < 8; j++)
@@ -390,38 +390,38 @@ Matrix4 MyMath::MakeInverse(const Matrix4* mat)
 			}
 		}
 
-		//sweep[i][i]‚ÉŠ|‚¯‚é‚Æ1‚É‚È‚é’l‚ğ‹‚ß‚é
+		//sweep[i][i]ã«æ›ã‘ã‚‹ã¨1ã«ãªã‚‹å€¤ã‚’æ±‚ã‚ã‚‹
 		constTimes = 1 / sweep[i][i];
 
-		//‘€ì(2):ps–Ú‚ğa”{‚·‚é
+		//æ“ä½œ(2):pè¡Œç›®ã‚’aå€ã™ã‚‹
 		for (size_t j = 0; j < 8; j++)
 		{
-			//‚±‚ê‚É‚æ‚èsweep[i][i]‚ª1‚É‚È‚é
+			//ã“ã‚Œã«ã‚ˆã‚Šsweep[i][i]ãŒ1ã«ãªã‚‹
 			sweep[i][j] *= constTimes;
 		}
 
-		//‘€ì(3)‚É‚æ‚èis–ÚˆÈŠO‚Ìs‚Ìi—ñ–Ú‚ğ0‚É‚·‚é
+		//æ“ä½œ(3)ã«ã‚ˆã‚Šiè¡Œç›®ä»¥å¤–ã®è¡Œã®iåˆ—ç›®ã‚’0ã«ã™ã‚‹
 		for (size_t j = 0; j < 4; j++)
 		{
 			if (j == i)
 			{
-				//is–Ú‚Í‚»‚Ì‚Ü‚Ü
+				//iè¡Œç›®ã¯ãã®ã¾ã¾
 				continue;
 			}
 
-			//is–Ú‚ÉŠ|‚¯‚é’l‚ğ‹‚ß‚é
+			//iè¡Œç›®ã«æ›ã‘ã‚‹å€¤ã‚’æ±‚ã‚ã‚‹
 			constTimes = -sweep[j][i];
 
 			for (size_t k = 0; k < 8; k++)
 			{
-				//js–Ú‚Éis–Ú‚ğa”{‚µ‚½s‚ğ‘«‚·
-				//‚±‚ê‚É‚æ‚èsweep[j][i]‚ª0‚É‚È‚é
+				//jè¡Œç›®ã«iè¡Œç›®ã‚’aå€ã—ãŸè¡Œã‚’è¶³ã™
+				//ã“ã‚Œã«ã‚ˆã‚Šsweep[j][i]ãŒ0ã«ãªã‚‹
 				sweep[j][k] += sweep[i][k] * constTimes;
 			}
 		}
 	}
 
-	//sweep‚Ì‰E”¼•ª‚ªmat‚Ì‹ts—ñ
+	//sweepã®å³åŠåˆ†ãŒmatã®é€†è¡Œåˆ—
 	for (size_t i = 0; i < 4; i++)
 	{
 		for (size_t j = 0; j < 4; j++)
@@ -490,7 +490,7 @@ Matrix4 MyMath::MakeIdentity()
 	return me;
 }
 
-// ’l‚ğ”ÍˆÍ“à‚É”[‚ß‚é
+// å€¤ã‚’ç¯„å›²å†…ã«ç´ã‚ã‚‹
 float MyMath::Clamp(float Value, const float low, const float high)
 {
 	if (high < Value)
@@ -685,11 +685,11 @@ Vector3 MyMath::HorizontalProjection(const Vector3& startSpeed, float& g, float&
 	Vector3 speed;
 
 	speed = startSpeed;
-	//‘¬“x‚ğŒvZ(‰”’¼“Š‚°ã‚°)
+	//é€Ÿåº¦ã‚’è¨ˆç®—(é‰›ç›´æŠ•ã’ä¸Šã’)
 	speed.y = startSpeed.y - g * (static_cast<float>(flame) / 60.0f);
 
 
-	//ƒtƒŒ[ƒ€‚ğ’Ç‰Á
+	//ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¿½åŠ 
 	flame++;
 
 	return speed;

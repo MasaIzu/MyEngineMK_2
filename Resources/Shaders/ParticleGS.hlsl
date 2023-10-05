@@ -19,6 +19,7 @@ static const float2 uv_array[vnum] =
 	float2(1,0),
 };
 
+
 [maxvertexcount(vnum)]
 void main(
 	point VSOutput input[1] : SV_POSITION,
@@ -28,7 +29,7 @@ void main(
 	
 	float4 offset;
 	GSOutput element;
-	for (uint i = 0; i < vnum; i++)
+	for (int i = 0; i < vnum; i++)
 	{
 		//offset = mul(matBillboard, offset_array[i]);
 		offset = offset_array[i] * input[0].scale;

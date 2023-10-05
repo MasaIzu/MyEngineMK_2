@@ -2,6 +2,7 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx12.h>
 
+
 void ImGuiManager::Initialize(WinApp* winApp, DirectXCore* dxcore)
 {
 	HRESULT result;
@@ -9,19 +10,19 @@ void ImGuiManager::Initialize(WinApp* winApp, DirectXCore* dxcore)
 	dxcore_ = dxcore;
 	assert(dxcore_);
 
-	//ImGui‚ÌƒRƒ“ƒeƒLƒXƒg‚ğ¶¬
+	//ImGuiã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ç”Ÿæˆ
 	ImGui::CreateContext();
-	//ImGui‚ÌƒXƒ^ƒCƒ‹‚ğİ’è
+	//ImGuiã®ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è¨­å®š
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplWin32_Init(winApp->Gethwnd());
 
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒvİ’è
+	//ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—è¨­å®š
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	desc.NumDescriptors = 1;
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv¶¬
+	//ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ç”Ÿæˆ
 	result = dxcore_->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
 	assert(SUCCEEDED(result));
 
@@ -37,12 +38,12 @@ void ImGuiManager::Initialize(WinApp* winApp, DirectXCore* dxcore)
 
 void ImGuiManager::Finalize()
 {
-	//Œãn––
+	//å¾Œå§‹æœ«
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚ÌŠJ•ú
+	//ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®é–‹æ”¾
 	srvHeap_.Reset();
 }
 
@@ -62,10 +63,10 @@ void ImGuiManager::Draw()
 {
 	ID3D12GraphicsCommandList* commandlist = dxcore_->GetCommandList();
 
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì”z—ñ‚ğƒZƒbƒg‚·‚éƒRƒ}ƒ“ƒh
+	//ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®é…åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã‚³ãƒãƒ³ãƒ‰
 	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap_.Get() };
 	commandlist->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
-	//•`‰æƒRƒ}ƒ“ƒh‚ğ”­s
+	//æç”»ã‚³ãƒãƒ³ãƒ‰ã‚’ç™ºè¡Œ
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandlist);
 }

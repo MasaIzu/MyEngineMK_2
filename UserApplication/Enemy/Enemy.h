@@ -2,51 +2,49 @@
 #include "WorldTransform.h"
 #include "Model.h"
 #include <assert.h>
-#include "affin.h"
-
 
 
 class Enemy {
 
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(Model* model);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Move();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 
-	//€‚ñ‚Å‚é‚©
+	//æ­»ã‚“ã§ã‚‹ã‹
 	bool IsDead() const { return isDead_; }
 
-	//Œü‚«‚ğ•Ï‚¦‚é
+	//å‘ãã‚’å¤‰ãˆã‚‹
 	Vector3 bVelocity(Vector3& velocity, WorldTransform& worldTransform);
-	//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
 
 private:
 
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	std::unique_ptr<Model> model_ = nullptr;
 	
 	
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 
 

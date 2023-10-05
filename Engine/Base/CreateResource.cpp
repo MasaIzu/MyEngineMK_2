@@ -2,6 +2,7 @@
 #include "DirectXCore.h"
 #include <cassert>
 
+
 MyFunction::ComPtr<ID3D12Resource1> MyFunction::CreateResource(const CD3DX12_RESOURCE_DESC& desc, D3D12_RESOURCE_STATES resourceStates, const D3D12_CLEAR_VALUE* clearValue, D3D12_HEAP_TYPE heapType)
 {
     HRESULT hr;

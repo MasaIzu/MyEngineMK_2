@@ -1,4 +1,4 @@
-﻿#include "GameCamera.h"
+#include "GameCamera.h"
 #include <windef.h>
 #include "WinApp.h"
 #include "MyMath.h"
@@ -6,6 +6,7 @@
 #include <SphereCollider.h>
 #include <CollisionManager.h>
 #include <CollisionAttribute.h>
+
 
 GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 {
@@ -32,7 +33,7 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 
 GameCamera::~GameCamera()
 {
-	
+
 }
 
 void GameCamera::Initialize(ViewProjection* viewProjection_, const float& cameraAngle, const Vector3& pos) {
@@ -145,9 +146,6 @@ void GameCamera::Update() {
 
 void GameCamera::HowMuchMoved()
 {
-	//カメラの移動の速さ
-	const float cameraSpeed = 0.0005f;
-
 	POINT mousePosition;
 	//マウス座標(スクリーン座標)を取得する
 	GetCursorPos(&mousePosition);
@@ -279,10 +277,10 @@ void GameCamera::MousePositionReset()
 	xPos_absolute = windowWH.x + windowInfo.rcWindow.left + 8;//なんかずれてるから直す
 	yPos_absolute = windowWH.y + windowInfo.rcWindow.top + 31; //ウィンドウのタイトルバーの分（31px）をプラス
 	SetCursorPos(xPos_absolute, yPos_absolute);//移動させる
-	
+
 }
 
-void GameCamera::MousePositionReset(Vector2& vector2, bool setORnot)
+void GameCamera::MousePositionReset(Vector2& vector2)
 {
 	//MousePositionReset();
 
@@ -400,6 +398,14 @@ float GameCamera::GetMaxDistance()
 	return cameraDistance_;
 }
 
+Vector2 GameCamera::GetCameraAngle() const
+{
+	Vector2 CameraAngle;
+	CameraAngle.x = mouseMoved.y - MyMath::PI;
+	CameraAngle.y = mouseMoved.x;
+	return CameraAngle;
+}
+
 Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
 {
 	Vector3 eyeToTargetVec = target - eye;
@@ -408,13 +414,13 @@ Vector3 GameCamera::GetEyeToTagetVecDistance(const float& distance) const
 	return eyeToTargetVec * distance + eye;
 }
 
-Vector3 GameCamera::GetPlayerDistanceEyePos(const Vector3& playerPos_)
+Vector3 GameCamera::GetPlayerDistanceEyePos(const Vector3& playerPos)
 {
 	Vector3 rotation = Vector3(-mouseMoved.x, mouseMoved.y, 0);
 	Matrix4 cameraRot;
 	cameraRot = MyMath::Rotation(rotation, 6);
 
-	Vector3 target = playerPos_ + cameraHigh;
+	Vector3 Target = playerPos + cameraHigh;
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
@@ -422,8 +428,8 @@ Vector3 GameCamera::GetPlayerDistanceEyePos(const Vector3& playerPos_)
 	forward.normalize();
 
 	//target = pos;
-	Vector3 eye = target + (forward * cameraDistance_);
-	return eye;
+	Vector3 eye_ = Target + (forward * cameraDistance_);
+	return eye_;
 }
 
 void GameCamera::SetCameraMode(const bool& mode)
@@ -441,10 +447,10 @@ void GameCamera::SetFreeCamera(const bool& mode)
 	FreeCamera = mode;
 }
 
-void GameCamera::SetCameraTargetAndPos(const Vector3& target, const Vector3& eye)
+void GameCamera::SetCameraTargetAndPos(const Vector3& Target, const Vector3& Eye)
 {
-	SetTargetVec = target;
-	SetEyeVec = eye;
+	SetTargetVec = Target;
+	SetEyeVec = Eye;
 }
 
 
@@ -453,9 +459,9 @@ void GameCamera::CameraAngle(const float& x, const float& z)
 	angle = atan2(x, z);
 
 	if (angle < 0) {
-		angle = angle + 2 * PI;
+		angle = angle + 2 * MyMath::PI;
 	}
 
-	angle = floor(angle * 360 / (2 * PI));
+	angle = floor(angle * 360 / (2 * MyMath::PI));
 
 }

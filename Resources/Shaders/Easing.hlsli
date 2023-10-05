@@ -1,5 +1,4 @@
 
-
 float EasingIn(float start, float end, float time, float max_time)
 {
     time /= max_time;

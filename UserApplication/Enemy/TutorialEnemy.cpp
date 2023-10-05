@@ -12,6 +12,11 @@ TutorialEnemy::TutorialEnemy(const Vector3& BonePos_, Model* model)
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
 		TutorialEnemyAttackSpereCollider[i] = nullptr;
 	}
+
+	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
+		TutorialEnemyCollider[i] = nullptr;
+		TutorialEnemyAttackSpereCollider[i] = nullptr;
+	}
 }
 
 TutorialEnemy::~TutorialEnemy()
@@ -80,14 +85,14 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		splinePosition[0]->Reset();
 	}
 
-	// —‰ºˆ—
+	// è½ä¸‹å‡¦ç†
 	if (!onGround) {
-		// ‰ºŒü‚«‰Á‘¬“x
+		// ä¸‹å‘ãåŠ é€Ÿåº¦
 		const float fallAcc = -0.01f;
 		const float fallVYMin = -0.5f;
-		// ‰Á‘¬
+		// åŠ é€Ÿ
 		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
-		// ˆÚ“®
+		// ç§»å‹•
 		enemyWorldTrans.translation_.x += fallVec.x;
 		enemyWorldTrans.translation_.y += fallVec.y;
 		enemyWorldTrans.translation_.z += fallVec.z;
@@ -160,7 +165,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 		if (WalkTime > 0) {
 			enemyWorldTrans.translation_ += enemyWorldTrans.LookVelocity.look * EnemySpeed;
 
-			//‰~‚ğì‚Á‚Äo‚È‚¢ˆ—‚ğì‚é
+			//å††ã‚’ä½œã£ã¦å‡ºãªã„å‡¦ç†ã‚’ä½œã‚‹
 			tmp = BonePos - enemyWorldTrans.translation_;
 			dist = tmp.dot(tmp);
 			radius = TerritoryRadius;
@@ -216,7 +221,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 		SpottedPhase_ = SpottedPhase::Turn;
 		break;
 	case TutorialEnemy::NotSpottedPhase::Nothing:
-		//‰½‚à‚µ‚È‚¢
+		//ä½•ã‚‚ã—ãªã„
 
 		break;
 	default:
@@ -249,7 +254,7 @@ void TutorialEnemy::PlayerSpottedMove()
 
 		break;
 	case TutorialEnemy::SpottedPhase::Walk:
-		//ƒvƒŒƒCƒ„[‚Æ‚ÌŠÔ‚ÉƒIƒuƒWƒFƒNƒg‚ª‚È‚¢‚©ƒ`ƒFƒbƒN
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®é–“ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãªã„ã‹ãƒã‚§ãƒƒã‚¯
 		if (CheckBetweenToPlayerCollider()) {
 			SpottedPhase_ = SpottedPhase::LoseSightofPlayer;
 		}
@@ -314,14 +319,14 @@ void TutorialEnemy::PlayerSpottedMove()
 	}
 }
 
-//UŒ‚‚Ü‚Æ‚ß
+//æ”»æ’ƒã¾ã¨ã‚
 void TutorialEnemy::Attack()
 {
 	switch (AttackPhase_)
 	{
 	case TutorialEnemy::AttackPhase::NormalAttack:
 		IsAttack = true;
-		//‰ñ“]‚·‚éè‘O‚Ìƒ{[ƒ‹
+		//å›è»¢ã™ã‚‹æ‰‹å‰ã®ãƒœãƒ¼ãƒ«
 		start = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp;
 		p1 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.lookUp_look;
 		p2 = enemyWorldTrans.translation_ + enemyWorldTrans.LookVelocity.look;
@@ -330,7 +335,7 @@ void TutorialEnemy::Attack()
 		splinePosition[0]->Update(start, p1, p2, p3, end, NormalAttackSpeed);
 		AttackWorldTrans[0].translation_ = splinePosition[0]->NowPos;
 
-		//ƒ{[ƒ‹‚É’Ç]‚·‚éƒ{[ƒ‹
+		//ãƒœãƒ¼ãƒ«ã«è¿½å¾“ã™ã‚‹ãƒœãƒ¼ãƒ«
 		for (uint32_t i = 0; i < AttackSphereCount; i++) {
 			if (i != 0) {
 				start = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp;
@@ -415,13 +420,13 @@ void TutorialEnemy::CheckCollider()
 
 	sphereCollider->SetRadius(EnemyRadius);
 
-	// ƒNƒGƒŠ[ƒR[ƒ‹ƒoƒbƒNƒNƒ‰ƒX
+	// ã‚¯ã‚¨ãƒªãƒ¼ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚¯ãƒ©ã‚¹
 	class PlayerQueryCallback : public QueryCallback
 	{
 	public:
 		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
 
-		// Õ“ËƒR[ƒ‹ƒoƒbƒNŠÖ”
+		// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 		bool OnQueryHit(const QueryHit& info) {
 
 			const Vector4 up = { 0,1,0,0 };
@@ -431,7 +436,7 @@ void TutorialEnemy::CheckCollider()
 			rejectDir.dot(up);
 			float cos = rejectDir.y;
 
-			// ’n–Ê”»’è‚µ‚«‚¢’l
+			// åœ°é¢åˆ¤å®šã—ãã„å€¤
 			const float threshold = cosf(DirectX::XMConvertToRadians(30.0f));
 
 			if (-threshold < cos && cos < threshold) {
@@ -448,21 +453,20 @@ void TutorialEnemy::CheckCollider()
 
 	PlayerQueryCallback callback(sphereCollider);
 
-	// ‹…‚Æ’nŒ`‚ÌŒğ·‚ğ‘SŒŸõ
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE, &enemyWorldTrans.matWorld_);
-	// Œğ·‚É‚æ‚é”rË•ª“®‚©‚·
+	// çƒã¨åœ°å½¢ã®äº¤å·®ã‚’å…¨æ¤œç´¢
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE);
+	// äº¤å·®ã«ã‚ˆã‚‹æ’æ–¥åˆ†å‹•ã‹ã™
 	enemyWorldTrans.translation_.x += callback.move.x;
 	enemyWorldTrans.translation_.y += callback.move.y;
 	enemyWorldTrans.translation_.z += callback.move.z;
-	// ƒ[ƒ‹ƒhs—ñXV
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—æ›´æ–°
 	enemyWorldTrans.TransferMatrix();
 	TutorialEnemyCollider[0]->Update(enemyWorldTrans.matWorld_);
 
-	float RayPos = -1.0f;
 
-	//’n–ÊƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+	//åœ°é¢ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	{
-		// ‹…‚Ìã’[‚©‚ç‹…‚Ì‰º’[‚Ü‚Å‚ÌƒŒƒCƒLƒƒƒXƒg
+		// çƒã®ä¸Šç«¯ã‹ã‚‰çƒã®ä¸‹ç«¯ã¾ã§ã®ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 		Ray Groundray;
 		Groundray.start = sphereCollider->center;
 		Groundray.start.y += sphereCollider->GetRadius();
@@ -470,84 +474,84 @@ void TutorialEnemy::CheckCollider()
 		RaycastHit raycastHit;
 
 
-		// Ú’nó‘Ô
+		// æ¥åœ°çŠ¶æ…‹
 		if (onGround) {
-			// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+			// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 			const float adsDistance = 0.2f;
-			// Ú’n‚ğˆÛ
+			// æ¥åœ°ã‚’ç¶­æŒ
 			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
 				onGround = true;
 				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 			}
-			// ’n–Ê‚ª‚È‚¢‚Ì‚Å—‰º
+			// åœ°é¢ãŒãªã„ã®ã§è½ä¸‹
 			else {
 				onGround = false;
 				fallVec = {};
 			}
 		}
-		// —‰ºó‘Ô
+		// è½ä¸‹çŠ¶æ…‹
 		else {
 			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
-				// ’…’n
+				// ç€åœ°
 				onGround = true;
 				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 			}
 		}
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
 		wall.dir = { 0,0,1,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
 			enemyWorldTrans.translation_.z += (wallRaycastHit.distance - sphereCollider->GetRadius());
 		}
 
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
 		wall.dir = { 0,0,-1,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
 			enemyWorldTrans.translation_.z -= (wallRaycastHit.distance - sphereCollider->GetRadius());
 		}
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
 		wall.dir = { 1,0,0,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
 			enemyWorldTrans.translation_.x += (wallRaycastHit.distance - sphereCollider->GetRadius());
 		}
 
 	}
 	{
-		//‰¡ƒƒbƒVƒ…ƒRƒ‰ƒCƒ_[
+		//æ¨ªãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
 		wall.dir = { -1,0,0,0 };
 		RaycastHit wallRaycastHit;
-		// ƒXƒ€[ƒY‚Éâ‚ğ‰º‚éˆ×‚Ì‹z’…‹——£
+		// ã‚¹ãƒ ãƒ¼ã‚ºã«å‚ã‚’ä¸‹ã‚‹ç‚ºã®å¸ç€è·é›¢
 
-		// Ú’n‚ğˆÛ
+		// æ¥åœ°ã‚’ç¶­æŒ
 		if (CollisionManager::GetInstance()->Raycast(wall, COLLISION_ATTR_LANDSHAPE, &wallRaycastHit, sphereCollider->GetRadius())) {
 			enemyWorldTrans.translation_.x -= (wallRaycastHit.distance - sphereCollider->GetRadius());
 		}
@@ -557,7 +561,7 @@ void TutorialEnemy::CheckCollider()
 
 bool TutorialEnemy::CheckBetweenToPlayerCollider()
 {
-	// ‹…‚Ìã’[‚©‚ç‹…‚Ì‰º’[‚Ü‚Å‚ÌƒŒƒCƒLƒƒƒXƒg
+	// çƒã®ä¸Šç«¯ã‹ã‚‰çƒã®ä¸‹ç«¯ã¾ã§ã®ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 	Ray LookRay;
 	LookRay.start = MyMath::Vec3ToVec4(enemyWorldTrans.translation_);
 	LookRay.start.y += EnemyRadius;
@@ -566,20 +570,19 @@ bool TutorialEnemy::CheckBetweenToPlayerCollider()
 	LookRay.dir = MyMath::Vec3ToVec4(EnemyToPlayerVec.norm());
 	RaycastHit raycastHit;
 
-	//ƒvƒŒ[ƒ„[‚Æ‚ÌŠÔ‚ÉƒIƒuƒWƒFƒNƒg‚ª‚ ‚ê‚ÎŒ©¸‚¤
+	//ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¨ã®é–“ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Œã°è¦‹å¤±ã†
 	if (CollisionManager::GetInstance()->Raycast(LookRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, Distance)) {
 		return true;
 	}
 	else {
 		return false;
 	}
-	return false;
 }
 
 void TutorialEnemy::SearchingPlayer()
 {
 	if (IsPlayerSpotted == false) {
-		//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚½‚çƒtƒF[ƒY•Ï‚¦‚ÉˆÚs
+		//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãŸã‚‰ãƒ•ã‚§ãƒ¼ã‚ºå¤‰ãˆã«ç§»è¡Œ
 		tmp = playerPos - enemyWorldTrans.translation_;
 		dist = tmp.dot(tmp);
 		radius = SearchingAreaRadius;
@@ -592,7 +595,7 @@ void TutorialEnemy::SearchingPlayer()
 		}
 	}
 	else {
-		//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚È‚©‚Á‚½‚çƒtƒF[ƒY•Ï‚¦‚ÉˆÚs
+		//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãªã‹ã£ãŸã‚‰ãƒ•ã‚§ãƒ¼ã‚ºå¤‰ãˆã«ç§»è¡Œ
 		tmp = playerPos - enemyWorldTrans.translation_;
 		dist = tmp.dot(tmp);
 		radius = SpottedLookingPlayerRadius;
@@ -613,7 +616,7 @@ void TutorialEnemy::GetPlayerForEnemyAngle()
 
 bool TutorialEnemy::GetIsAttackArea()
 {
-	//‰~‚ğì‚Á‚ÄƒvƒŒƒCƒ„[‚ª‚¢‚½‚çUŒ‚ˆÚs
+	//å††ã‚’ä½œã£ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ãŸã‚‰æ”»æ’ƒç§»è¡Œ
 	tmp = enemyWorldTrans.translation_ - playerPos;
 	dist = tmp.dot(tmp);
 	radius = AttackAreaRadius;
@@ -635,7 +638,7 @@ uint32_t TutorialEnemy::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(low, high);
-	return dist(gen);
+	std::uniform_int_distribution<> RandomDist(low, high);
+	return RandomDist(gen);
 }
 

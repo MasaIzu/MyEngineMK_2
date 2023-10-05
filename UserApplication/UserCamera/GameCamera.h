@@ -8,9 +8,10 @@
 #include "ViewProjection.h"
 #include <BaseCollider.h>
 
+
 class GameCamera {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 
 	GameCamera(uint32_t window_width, uint32_t window_height);
 	~GameCamera();
@@ -19,9 +20,9 @@ public://Šî–{ŠÖ”
 	void InitializeCameraPosition(const float& cameraAngle);
 	void Update();
 
-public://ƒŠƒZƒbƒg
+public://ãƒªã‚»ãƒƒãƒˆ
 	void MousePositionReset();
-	void MousePositionReset(Vector2& vector2,bool setORnot);//­‚µ×H‚·‚é
+	void MousePositionReset(Vector2& vector2);//å°‘ã—ç´°å·¥ã™ã‚‹
 
 private:
 	void HowMuchMoved();
@@ -31,14 +32,14 @@ private:
 	void Collision();
 	void CameraAngle(const float& x, const float& z);
 
-	//ƒJƒƒ‰‚Ì‹üØ‚ê‚Ä‚¢‚é‚©
+	//ã‚«ãƒ¡ãƒ©ã®è¦–ç·šåˆ‡ã‚Œã¦ã„ã‚‹ã‹
 	bool CheckBetweenToCameraCollider();
 
 public://getter
 	float GetFovAngle();
 	float GetCameraDistanse();
 	float GetMaxDistance();
-	Vector2 GetCameraAngle() { return Vector2(mouseMoved.y - PI, mouseMoved.x); }
+	Vector2 GetCameraAngle() const;
 	Vector3 GetCameraRotVec3() { return this->rot; }
 	Vector3 GetEyeToTagetVecDistance(const float& distance) const;
 	Vector3 GetPlayerDistanceEyePos(const Vector3& playerPos_);
@@ -50,15 +51,15 @@ public://setter
 	void SetFreeCamera(const bool& mode);
 	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;
 
-	// ƒRƒ‰ƒCƒ_[
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	BaseCollider* CameraCollider = nullptr;
 
-private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
+private://ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	bool cameraMode = false;
 	bool isShake = false;
 	bool cameraDown = false;
@@ -70,18 +71,18 @@ private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
 	uint32_t winHeight = 0;
 	uint32_t cameraTime = 0;
 	uint32_t MaxCameraTime = 0;
-	uint32_t cameraMode_ = 0;//ƒJƒƒ‰ƒ‚[ƒh
+	uint32_t cameraMode_ = 0;//ã‚«ãƒ¡ãƒ©ãƒ¢ãƒ¼ãƒ‰
 	uint32_t HowMachMovePointer = 0;
 	uint32_t shakeTime = 0;
 	uint32_t cameraModeChangeCountTimer = 30;
 
-	float scaleX_ = 1.0f;// ƒXƒP[ƒŠƒ“ƒO
+	float scaleX_ = 1.0f;// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
 	float scaleY_ = 1.0f;
-	float angleAroundPlayer; // ƒvƒŒƒCƒ„[‚Ìü‚è‚ğ‰ñ“]‚·‚éŠp“x
+	float angleAroundPlayer = 0.0f; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘¨ã‚Šã‚’å›è»¢ã™ã‚‹è§’åº¦
 	float cameraDistance_ = 30.0f;
 	float angle = 0.0f;
-	float cameraSpeed_ = 3;// ƒJƒƒ‰‚Ì‘¬“x
-	float cameraDelay = 0.1f;// ƒJƒƒ‰‚ª’ÇÕ‚·‚éÛ‚Ì’x‰„—Ê
+	float cameraSpeed_ = 3;// ã‚«ãƒ¡ãƒ©ã®é€Ÿåº¦
+	float cameraDelay = 0.1f;// ã‚«ãƒ¡ãƒ©ãŒè¿½è·¡ã™ã‚‹éš›ã®é…å»¶é‡
 	float playerCameraDelay = 0.1f;
 	float playerCameraSpeed_ = 3;
 	float kand = 400.0f;
@@ -101,7 +102,7 @@ private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
 	Vector2 oldMousePos;
 	Vector2 Mous_UP_DOWN;
 	Vector2 MouseMove;
-	Vector2 mouseMoved{ 0, PI };
+	Vector2 mouseMoved{ 0, MyMath::PI };
 
 	Vector3 rot;
 	Vector3 eye;
@@ -110,12 +111,12 @@ private://ƒvƒŒƒCƒ„[ƒNƒ‰ƒX•Ï”
 	Vector3 target;
 	Vector3 cameraHigh;
 	Vector3 PlayerToCameraVec;
-	//ƒZƒbƒg‚³‚ê‚½Vec
+	//ã‚»ãƒƒãƒˆã•ã‚ŒãŸVec
 	Vector3 SetTargetVec;
 	Vector3 SetEyeVec;
 
 	Matrix4 CameraRot;
-	Matrix4 matRot;// ‰ñ“]s—ñ
+	Matrix4 matRot;// å›è»¢è¡Œåˆ—
 
 
 };

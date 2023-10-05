@@ -3,7 +3,7 @@
 bool BoxCollision::BoxCollision_1(Vector3 player, Vector3 enemy, Vector3 playerWidth, Vector3 enemyWidth)
 {
 
-	//プレイヤー
+	//繝励Ξ繧､繝､繝ｼ
 	float pXMin = player.x - playerWidth.x;
 
 	float pXMax = player.x + playerWidth.x;
@@ -16,8 +16,8 @@ bool BoxCollision::BoxCollision_1(Vector3 player, Vector3 enemy, Vector3 playerW
 
 	float pZMax = player.z + playerWidth.z;
 
-	//敵
-	//平面
+	//謨ｵ
+	//蟷ｳ髱｢
 	float eXMin = enemy.x - enemyWidth.x;
 
 	float eXMax = enemy.x + enemyWidth.x;
@@ -39,7 +39,7 @@ bool BoxCollision::BoxCollision_1(Vector3 player, Vector3 enemy, Vector3 playerW
 bool BoxCollision::BoxCollision_(Vector3 player, Vector3 playerWidth, Vector2 enemyPosX, Vector2 enemyPosY, Vector2 enemyPosZ)
 {
 
-	//プレイヤー
+	//繝励Ξ繧､繝､繝ｼ
 	float pXMin = player.x - playerWidth.x;
 
 	float pXMax = player.x + playerWidth.x;
@@ -52,8 +52,8 @@ bool BoxCollision::BoxCollision_(Vector3 player, Vector3 playerWidth, Vector2 en
 
 	float pZMax = player.z + playerWidth.z;
 
-	//敵
-	//平面
+	//謨ｵ
+	//蟷ｳ髱｢
 	float eXMin = enemyPosX.x;
 
 	float eXMax = enemyPosX.y;
@@ -72,10 +72,10 @@ bool BoxCollision::BoxCollision_(Vector3 player, Vector3 playerWidth, Vector2 en
 	return false;
 }
 
-bool BoxCollision::BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerWidth, Vector3 enemyWidth, bool flag)
+bool BoxCollision::BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerWidth, Vector3 enemyWidth)
 {
 
-	///プレイヤー
+	///繝励Ξ繧､繝､繝ｼ
 	float pXMin = player.x - playerWidth.x;
 
 	float pXMax = player.x + playerWidth.x;
@@ -88,8 +88,8 @@ bool BoxCollision::BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerW
 
 	float pZMax = player.z + playerWidth.z;
 
-	//敵
-	//平面
+	//謨ｵ
+	//蟷ｳ髱｢
 	float eXMin = enemy.x - enemyWidth.x;
 
 	float eXMax = enemy.x + enemyWidth.x;
@@ -108,7 +108,8 @@ bool BoxCollision::BoxCollision_2(Vector3 player, Vector3 enemy, Vector3 playerW
 	return false;
 }
 
-void BoxCollision::Contact(int playerMove, Vector3 player, WorldTransform enemy,Vector3 enemyRotationMove, Vector3 enemyMove)
+
+void BoxCollision::Contact(int playerMove, WorldTransform enemy,Vector3 enemyRotationMove, Vector3 enemyMove)
 {
 	if (playerMove == 1) {
 		enemy.rotation_ += enemyRotationMove;

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "DirectXCore.h"
 #include "Input.h"
@@ -7,8 +7,6 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "affin.h"
-
 #include "BaseScene.h"
 #include "SceneManager.h"
 

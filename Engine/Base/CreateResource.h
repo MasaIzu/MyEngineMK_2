@@ -2,6 +2,7 @@
 #include <d3dx12.h>
 #include <vector>
 
+
 namespace MyFunction {
 
     template<class T>
@@ -9,7 +10,7 @@ namespace MyFunction {
 
     static const UINT FrameBufferCount = 2;
 
-    // ƒŠƒ\[ƒX¶¬
+    // ãƒªã‚½ãƒ¼ã‚¹ç”Ÿæˆ
     ComPtr<ID3D12Resource1> CreateResource(
         const CD3DX12_RESOURCE_DESC& desc,
         D3D12_RESOURCE_STATES resourceStates,

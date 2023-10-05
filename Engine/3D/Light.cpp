@@ -1,12 +1,11 @@
 #include "Light.h"
 #include <assert.h>
 
-
 LightGroup* LightGroup::Create() {
-	// 3DƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ð¶¬
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	LightGroup* instance = new LightGroup();
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	instance->Initialize();
 
 	return instance;
@@ -14,25 +13,25 @@ LightGroup* LightGroup::Create() {
 
 void LightGroup::Initialize() {
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXÝ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff);
 
 	HRESULT result;
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
+		&heapProps, // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å¯èƒ½
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
 
-	// ’è”ƒoƒbƒtƒ@‚Æ‚Ìƒf[ƒ^ƒŠƒ“ƒN
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¨ã®ãƒ‡ãƒ¼ã‚¿ãƒªãƒ³ã‚¯
 	result = constBuff_->Map(0, nullptr, (void**)&constMap_);
 	assert(SUCCEEDED(result));
 
-	// ’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¸ãƒ‡ãƒ¼ã‚¿è»¢é€
 	TransferConstBuffer();
 }
 
@@ -43,15 +42,15 @@ void LightGroup::Update() {
 }
 
 void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList_, UINT rootParameterIndex) {
-	// ’è”ƒoƒbƒtƒ@ƒrƒ…[‚ðƒZƒbƒg
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
 	cmdList_->SetGraphicsRootConstantBufferView(
 		rootParameterIndex, constBuff_->GetGPUVirtualAddress());
 }
 
 void LightGroup::TransferConstBuffer() {
-	// ŠÂ‹«Œõ
+	// ç’°å¢ƒå…‰
 	constMap_->ambientColor = ambientColor_;
-	// •½sŒõŒ¹
+	// å¹³è¡Œå…‰æº
 
 	constMap_->dirLights[0].lightv = -Vector4( 0.0f, -1.0f, 0.0f, 0 );
 	constMap_->dirLights[0].lightcolor = Vector3(1.0f, 1.0f, 1.0f);

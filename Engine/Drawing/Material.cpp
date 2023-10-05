@@ -16,53 +16,53 @@ Material* Material::Create() {
 }
 
 void Material::Initialize() {
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	CreateConstantBuffer();
 }
 
 void Material::CreateConstantBuffer() {
 	HRESULT result;
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXÝ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff);
 
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
 		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
 
-	// ’è”ƒoƒbƒtƒ@‚Æ‚Ìƒf[ƒ^ƒŠƒ“ƒN
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¨ã®ãƒ‡ãƒ¼ã‚¿ãƒªãƒ³ã‚¯
 	result = constBuff_->Map(0, nullptr, (void**)&constMap_);
 	assert(SUCCEEDED(result));
 }
 
+
 void Material::LoadTexture(const std::string& directoryPath) {
-	// ƒeƒNƒXƒ`ƒƒ‚È‚µ
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãªã—
 	if (textureFilename_.size() == 0) {
 		textureFilename_ = "white1x1.png";
 		textureHandle_ = TextureManager::Load(textureFilename_);
 		return;
 	}
 
-	HRESULT result = S_FALSE;
 
-	// WICƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
+	// WICãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
-	// ƒtƒ@ƒCƒ‹ƒpƒX‚ðŒ‹‡
+	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’çµåˆ
 	string filepath = directoryPath + textureFilename_;
 
-	// ƒeƒNƒXƒ`ƒƒ“Ç‚Ýž‚Ý
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	textureHandle_ = TextureManager::Load(filepath);
 }
 
 void Material::Update() {
-	// ’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¸ãƒ‡ãƒ¼ã‚¿è»¢é€
 	constMap_->ambient = ambient_;
 	constMap_->diffuse = diffuse_;
 	constMap_->specular = specular_;
@@ -73,11 +73,11 @@ void Material::SetGraphicsCommand(
 	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 	UINT rooParameterIndexTexture) {
 
-	// SRV‚ðƒZƒbƒg
+	// SRVã‚’ã‚»ãƒƒãƒˆ
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(
 		commandList, rooParameterIndexTexture, textureHandle_);
 
-	// ƒ}ƒeƒŠƒAƒ‹‚Ì’è”ƒoƒbƒtƒ@‚ðƒZƒbƒg
+	// ãƒžãƒ†ãƒªã‚¢ãƒ«ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 	commandList->SetGraphicsRootConstantBufferView(
 		rooParameterIndexMaterial, constBuff_->GetGPUVirtualAddress());
 }
@@ -86,11 +86,11 @@ void Material::SetGraphicsCommand(
 	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
 	UINT rooParameterIndexTexture, uint32_t textureHandle) {
 
-	// SRV‚ðƒZƒbƒg
+	// SRVã‚’ã‚»ãƒƒãƒˆ
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(
 		commandList, rooParameterIndexTexture, textureHandle);
 
-	// ƒ}ƒeƒŠƒAƒ‹‚Ì’è”ƒoƒbƒtƒ@‚ðƒZƒbƒg
+	// ãƒžãƒ†ãƒªã‚¢ãƒ«ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 	commandList->SetGraphicsRootConstantBufferView(
 		rooParameterIndexMaterial, constBuff_->GetGPUVirtualAddress());
 }

@@ -3,41 +3,42 @@
 #include <PostEffectManager.h>
 #include <ParticleManager.h>
 
+
 void Framework::Initialize()
 {
 
-	// ƒQ[ƒ€ƒEƒBƒ“ƒhƒE‚Ìì¬
+	// ã‚²ãƒ¼ãƒ ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
 	winApp_ = WinApp::GetInstance();
 	winApp_->MakeWindow(L"Shooting Star");
 
-	// DirectX‰Šú‰»ˆ—
+	// DirectXåˆæœŸåŒ–å‡¦ç†
 	directXCore_ = DirectXCore::GetInstance();
 	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->GetWindowSize().x, winApp_->GetWindowSize().y);
 
-#pragma region ”Ä—p‹@”\‰Šú‰»
-	// “ü—Í‚Ì‰Šú‰»
+#pragma region æ±ç”¨æ©Ÿèƒ½åˆæœŸåŒ–
+	// å…¥åŠ›ã®åˆæœŸåŒ–
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
 
-	// ƒeƒNƒXƒ`ƒƒƒ}ƒl[ƒWƒƒ‚Ì‰Šú‰»
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–
 	TextureManager_ = TextureManager::GetInstance();
 	TextureManager_->Initialize(directXCore_->GetDevice());
 	TextureManager::Load("white1x1.png");
 
-	//// FBXŠÖ˜AÃ“I‰Šú‰»
+	//// FBXé–¢é€£é™çš„åˆæœŸåŒ–
 	//fbxLoader_ = FbxLoader::GetInstance();
 	//fbxLoader_->Initialize(directXCore_->GetDevice());
 
-	// ƒXƒvƒ‰ƒCƒgÃ“I‰Šú‰»
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆé™çš„åˆæœŸåŒ–
 	Sprite::StaticInitialize(directXCore_->GetDevice());
 
 
-	// 3Dƒ‚ƒfƒ‹Ã“I‰Šú‰»
+	// 3Dãƒ¢ãƒ‡ãƒ«é™çš„åˆæœŸåŒ–
 	Model::StaticInitialize();
 	/*FbxModel::StaticInitialize();*/
 
-	//Imgui‰Šú‰»
+	//ImguiåˆæœŸåŒ–
 	imGui = std::make_unique <ImGuiManager>();
 	imGui->Initialize(winApp_, directXCore_);
 
@@ -45,12 +46,12 @@ void Framework::Initialize()
 
 	ParticleManager::Initialize(DirectXCore::GetInstance()->GetDevice());
 
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì‰Šú‰»ˆ—
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–å‡¦ç†
 	PostEffectManager::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
 
 #pragma endregion
 
-	//ƒV[ƒ“ƒ}ƒl[ƒWƒƒ[‚Ì¶¬
+	//ã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ç”Ÿæˆ
 	sceneManager_ = SceneManager::GetInstance();
 
 
@@ -59,33 +60,33 @@ void Framework::Initialize()
 void Framework::Update()
 {
 
-	//fps§ŒÀ
+	//fpsåˆ¶é™
 	fps->FpsControlBegin();
 
-	// ƒƒbƒZ[ƒWˆ—
+	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
 	if (winApp_->ProcessMessage()) {
 		isEndRequst = true;
 	}
 
-	// “ü—ÍŠÖ˜A‚Ì–ˆƒtƒŒ[ƒ€ˆ—
+	// å…¥åŠ›é–¢é€£ã®æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	input_->Update();
 
-	//Imgui‚ÌXV
+	//Imguiã®æ›´æ–°
 	imGui->Bigin();
 
-	//ƒfƒ‚ƒEƒBƒ“ƒhƒE‚Ì•\¦ƒIƒ“
+	//ãƒ‡ãƒ¢ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºã‚ªãƒ³
 	//ImGui::ShowDemoWindow();
 
-	//ƒV[ƒ“ƒ}ƒl[ƒWƒƒ[‚ÌXV
+	//ã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®æ›´æ–°
 	sceneManager_->Update();
 
-	//Imgui‚ÌƒRƒ}ƒ“ƒhó•tI—¹
+	//Imguiã®ã‚³ãƒãƒ³ãƒ‰å—ä»˜çµ‚äº†
 	imGui->End();
 }
 
 void Framework::Finalize()
 {
-	// Šeí‰ğ•ú
+	// å„ç¨®è§£æ”¾
 	sceneManager_->Finalize();
 
 	PostEffectManager::Finalize();
@@ -108,7 +109,7 @@ void Framework::Finalize()
 
 	directXCore_->Destroy();
 
-	// ƒQ[ƒ€ƒEƒBƒ“ƒhƒE‚Ì”jŠü
+	// ã‚²ãƒ¼ãƒ ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç ´æ£„
 	winApp_->DeleteGameWindow();
 	winApp_->Destroy();
 
@@ -123,14 +124,14 @@ bool Framework::isPlayMyGame()
 void Framework::Run()
 {
 
-	//ƒQ[ƒ€‚Ì‰Šú‰»
+	//ã‚²ãƒ¼ãƒ ã®åˆæœŸåŒ–
 	Initialize();
 
-	while (true) {//ƒQ[ƒ€ƒ‹[ƒv
+	while (true) {//ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—
 
-		//–ˆƒtƒŒ[ƒ€XV
+		//æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æ›´æ–°
 		Update();
-		//I—¹ƒŠƒNƒGƒXƒg‚ª—ˆ‚½‚ç”²‚¯‚é
+		//çµ‚äº†ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒæ¥ãŸã‚‰æŠœã‘ã‚‹
 		if (isPlayMyGame()) {
 			break;
 		}
@@ -146,22 +147,22 @@ void Framework::Run()
 
 		PostEffectManager::PostDrawScene();
 
-		// •`‰æŠJn
+		// æç”»é–‹å§‹
 		directXCore_->PreDraw();
 
 		PostEffectManager::Draw(directXCore_->GetCommandList());
 
-		//ImGui•`‰æ
+		//ImGuiæç”»
 		imGui->Draw();
 
 		
 
-		// •`‰æI—¹
+		// æç”»çµ‚äº†
 		directXCore_->PostDraw();
 
 		CopyData();
 
-		//FPSŒÅ’è
+		//FPSå›ºå®š
 		fps->FpsControlEnd();
 
 		if (input_->TriggerKey(DIK_ESCAPE)) {
@@ -170,7 +171,7 @@ void Framework::Run()
 
 	}
 
-	//ƒQ[ƒ€‚ÌI—¹
+	//ã‚²ãƒ¼ãƒ ã®çµ‚äº†
 	Finalize();
 
 

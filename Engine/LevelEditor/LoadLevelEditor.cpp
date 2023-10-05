@@ -1,4 +1,4 @@
-﻿#include "LoadLevelEditor.h"
+#include "LoadLevelEditor.h"
 #include "External/json.hpp"
 #include <fstream>
 #include <cassert>
@@ -21,8 +21,8 @@ LoadLevelEditor::~LoadLevelEditor()
 			delete object.model;
 		}
 	}
-	for (Ground* ground : ground) {
-		delete ground;
+	for (Ground* Allground : ground) {
+		delete Allground;
 	}
 	for (TutorialEnemy* enemy : tutorialEnemyList) {
 		delete enemy;
@@ -63,7 +63,7 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 	assert(name.compare("scene") == 0);
 
 	// レベルデータ格納用インスタンスを生成
-	LevelData* levelData = new LevelData();
+	LevelData* levelDataLocal = new LevelData();
 
 	// "objects"の全オブジェクトを走査
 	for (nlohmann::json& object : deserialized["objects"]) {
@@ -76,9 +76,9 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 			// MESH
 			if (type.compare("MESH") == 0) {
 				// 要素追加
-				levelData->objects.emplace_back(LevelData::ObjectData{});
+				levelDataLocal->objects.emplace_back(LevelData::ObjectData{});
 				// 今追加した要素の参照を得る
-				LevelData::ObjectData& objectData = levelData->objects.back();
+				LevelData::ObjectData& objectData = levelDataLocal->objects.back();
 
 				if (object.contains("name")) {
 					// ファイル名
@@ -152,14 +152,14 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 		}
 	}
 
-	return levelData;
+	return levelDataLocal;
 }
 
 
-void LoadLevelEditor::Initialize(const std::string& fileName)
+void LoadLevelEditor::Initialize(const std::string& FileName)
 {
 
-	levelData.reset(LoadFile(fileName));
+	levelData.reset(LoadFile(FileName));
 
 	// モデル読み込み
 	modelSrop.reset(Model::CreateFromOBJ("srop1", true));
@@ -285,8 +285,8 @@ void LoadLevelEditor::Initialize(const std::string& fileName)
 		}
 
 	}
-	for (Ground* ground : ground) {
-		ground->Initialze();
+	for (Ground* AllGround : ground) {
+		AllGround->Initialze();
 	}
 
 	Update();
@@ -302,10 +302,11 @@ void LoadLevelEditor::Update()
 	}
 }
 
+
 void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
-	for (Ground* ground : ground) {
-		ground->Draw(viewProjection);
+	for (Ground* AllGround : ground) {
+		AllGround->Draw(viewProjection);
 	}
 	for (auto& object : NewLoadObjects) {
 		object.model->Draw(object.worldTrans, viewProjection);

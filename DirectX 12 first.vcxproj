@@ -121,7 +121,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -129,6 +129,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -150,6 +152,9 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\DirectXtex;$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -391,7 +396,6 @@
     <ClInclude Include="Engine\GameFunction\ScoreSprite.h" />
     <ClInclude Include="UserApplication\Ground\Ground.h" />
     <ClInclude Include="Engine\ImGui\ImGuiManager.h" />
-    <ClInclude Include="Engine\Math\Affin.h" />
     <ClInclude Include="Engine\Math\Matrix4.h" />
     <ClInclude Include="Engine\Math\MyMath.h" />
     <ClInclude Include="Engine\Math\Vector2.h" />
@@ -460,7 +464,6 @@
     <ClCompile Include="UserApplication\Ground\Ground.cpp" />
     <ClCompile Include="Engine\ImGui\ImGuiManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\Math\Affin.cpp" />
     <ClCompile Include="Engine\Math\Matrix4.cpp" />
     <ClCompile Include="Engine\Math\MyMath.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />

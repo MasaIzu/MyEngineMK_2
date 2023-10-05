@@ -3,16 +3,16 @@
 #include "Model.h"
 #include <assert.h>
 #include "Input.h"
-#include "affin.h"
 #include <memory>
 #include "ViewProjection.h"
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 
+
 class MissileBullet {
 
-public://Šî–{ŠÖ”
+public://åŸºæœ¬é–¢æ•°
 	MissileBullet();
 	~MissileBullet();
 
@@ -23,19 +23,19 @@ public://Šî–{ŠÖ”
 
 public:
 
-	//’e‚ğì‚èo‚·
+	//å¼¾ã‚’ä½œã‚Šå‡ºã™
 	void MakeBullet(Vector3& pos);
 
 	void MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount);
 
 private:
-	//’e‚Ìî•ñXV
+	//å¼¾ã®æƒ…å ±æ›´æ–°
 	void WorldTransUpdate();
-	//¶‚«‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	//ç”Ÿãã¦ã„ã‚‹ã‹ã©ã†ã‹
 	void CheckBulletAlive();
-	//€‚ñ‚Å‚é‚Æ‚«‚Í‰œ[‚­‚ÉŠi”[
+	//æ­»ã‚“ã§ã‚‹ã¨ãã¯å¥¥æ·±ãã«æ ¼ç´
 	void SetNotAlivePosition();
-	//1ƒtƒŒ[ƒ€‘O‚Ìƒ|ƒWƒVƒ‡ƒ“
+	//1ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®ãƒã‚¸ã‚·ãƒ§ãƒ³
 	//void OldPosUpdate();
 
 public://Getter
@@ -45,22 +45,22 @@ public://Getter
 public://Setter
 
 
-private://constŠÖ˜A
+private://consté–¢é€£
 	static const uint32_t AllBulletCount = 100;
 
-private://ƒNƒ‰ƒXŠÖ˜A
+private://ã‚¯ãƒ©ã‚¹é–¢é€£
 	std::unique_ptr<Model> model_;
 	Input* input_ = nullptr;
 	WorldTransform EnemyBulletWorldTrans[AllBulletCount];
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 	BaseCollider* BulletCollider[AllBulletCount];
 	CollisionManager* collisionManager = nullptr;
 
-private://•ÊƒNƒ‰ƒX‚©‚ç’l‚ğ‚à‚ç‚¤
+private://åˆ¥ã‚¯ãƒ©ã‚¹ã‹ã‚‰å€¤ã‚’ã‚‚ã‚‰ã†
 
 
-private://ƒNƒ‰ƒX•Ï”
+private://ã‚¯ãƒ©ã‚¹å¤‰æ•°
 	bool isBulletAlive[AllBulletCount];
 	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
@@ -78,7 +78,7 @@ private://ƒNƒ‰ƒX•Ï”
 	uint32_t makeBulletCount = 0;
 	uint32_t BulletNotTrackingTime[AllBulletCount];
 
-	//ƒC[ƒWƒ“ƒO
+	//ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°
 	uint32_t BulletEasingTime[AllBulletCount];
 	uint32_t BulletMaxEasingTime[AllBulletCount];
 	uint32_t BulletLarpEasingTime[AllBulletCount];
@@ -96,7 +96,7 @@ private://ƒNƒ‰ƒX•Ï”
 	float BulletLrrpEndSpeed = 1.5f;
 	float BulletStartLerpTime = 0.04f;
 
-	Vector3 BulletVector[AllBulletCount];//‘Å‚¿o‚³‚ê‚é•ûŒü
+	Vector3 BulletVector[AllBulletCount];//æ‰“ã¡å‡ºã•ã‚Œã‚‹æ–¹å‘
 	Vector3 BulletOldPos[AllBulletCount];
 	Vector3 BulletVelocity[AllBulletCount];
 };

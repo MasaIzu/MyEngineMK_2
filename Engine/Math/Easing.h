@@ -2,11 +2,10 @@
 #include "Vector3.h"
 #include <cstdint>
 
-//’Ç‰Á
+//è¿½åŠ 
 namespace Easing
 {
 	double In(double start, double end, double time, double max_time);
-
 	double Out(double start, double end, double time, double max_time);
 
 	double InOut(double start, double end, double time, double max_time);

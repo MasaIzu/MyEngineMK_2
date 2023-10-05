@@ -6,6 +6,7 @@ Vector3::Vector3() :x(0), y(0), z(0)
 {
 }
 
+
 Vector3::Vector3(float x, float y, float z)
 {
 	this->x = x;
@@ -51,7 +52,7 @@ Vector3 Vector3::cross(const Vector3& v) const
 	);
 }
 
-//üŒ`•âŠÔ
+//ç·šå½¢è£œé–“
 const Vector3 Vector3::lerp(const Vector3& start, const Vector3& end, const float t) {
 	
 	return start * (1.0f - t) + end * t;
@@ -104,7 +105,7 @@ Vector3& Vector3::operator/=(float s)
 	return *this;
 }
 
-//Vector3 ƒNƒ‰ƒX‚É‘®‚³‚È‚¢ŠÖ”ŒQ
+//Vector3 ã‚¯ãƒ©ã‚¹ã«å±ã•ãªã„é–¢æ•°ç¾¤
 
 
 const Vector3 operator+(const Vector3& v1, const Vector3& v2)

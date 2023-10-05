@@ -3,6 +3,7 @@
 #include"PostEffect.h"
 #include <Explosion.h>
 
+
 void TitleScene::Initialize()
 {
 	dxCommon_ = DirectXCore::GetInstance();
@@ -105,7 +106,7 @@ void TitleScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	////パーティクル
+	////繝代�ｼ繝�繧｣繧ｯ繝ｫ
 	Explosion::PreDraw(commandList);
 
 	Explosion::PostDraw();
@@ -124,7 +125,7 @@ void TitleScene::PostEffectDraw()
 
 void TitleScene::Draw()
 {
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	
 	sprite_->Draw({640,360},{1,1,1,1});
 
 	//Hibana::PreDraw(commandList);

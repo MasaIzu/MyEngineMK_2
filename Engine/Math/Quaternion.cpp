@@ -1,6 +1,5 @@
 #include "Quaternion.h"
-
-constexpr float PI = 3.1415926535897931f;
+#include "MyMath.h"
 
 float AngleNormalize(float x)
 {
@@ -11,6 +10,7 @@ Quaternion::Quaternion(float x, float y, float z, float w) : x(x), y(y), z(z), w
 {
 
 }
+
 
 Quaternion::Quaternion(const Vector3& v, float angle)
 {
@@ -249,7 +249,7 @@ Vector3 Quaternion::GetEulerAngles()
 	float cosZ = (2 * powf(w, 2) + 2 * powf(y, 2) - 1) / cosX;
 	result.z = atan2f(sinZ, cosZ);
 
-	result = result * (PI / 180.0f);
+	result = result * ( MyMath::PI / 180.0f);
 
 	result.x = AngleNormalize(result.x);
 	result.y = AngleNormalize(result.y);

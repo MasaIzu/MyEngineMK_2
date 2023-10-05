@@ -1,8 +1,9 @@
-﻿#pragma once
+#pragma once
 
 #include "Vector4.h"
 
 class BaseCollider;
+
 
 /// <summary>
 /// 衝突情報

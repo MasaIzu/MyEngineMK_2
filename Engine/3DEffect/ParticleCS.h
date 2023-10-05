@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "TextureManager.h"
 #include "ViewProjection.h"
@@ -12,6 +12,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>

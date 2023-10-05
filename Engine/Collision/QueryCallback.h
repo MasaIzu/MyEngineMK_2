@@ -7,20 +7,21 @@
 class BaseCollider;
 
 /// <summary>
-/// ƒNƒGƒŠ[‚É‚æ‚éî•ñ‚ğ“¾‚éˆ×‚Ì\‘¢‘Ì
+/// ã‚¯ã‚¨ãƒªãƒ¼ã«ã‚ˆã‚‹æƒ…å ±ã‚’å¾—ã‚‹ç‚ºã®æ§‹é€ ä½“
 /// </summary>
 struct QueryHit
 {
-	// Õ“Ë‘Šè‚ÌƒRƒ‰ƒCƒ_[
+	// è¡çªç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	BaseCollider* collider = nullptr;
-	// Õ“Ë“_
+	// è¡çªç‚¹
 	Vector4 inter;
-	// ”rËƒxƒNƒgƒ‹
+	// æ’æ–¥ãƒ™ã‚¯ãƒˆãƒ«
 	Vector4 reject;
 };
 
+
 /// <summary>
-/// ƒNƒGƒŠ[‚ÅŒğ·‚ğŒŸo‚µ‚½‚Ì“®ì‚ğ‹K’è‚·‚éƒNƒ‰ƒX
+/// ã‚¯ã‚¨ãƒªãƒ¼ã§äº¤å·®ã‚’æ¤œå‡ºã—ãŸæ™‚ã®å‹•ä½œã‚’è¦å®šã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 class QueryCallback
 {
@@ -29,10 +30,10 @@ public:
 	virtual ~QueryCallback() = default;
 
 	/// <summary>
-	/// Œğ·ƒR[ƒ‹ƒoƒbƒN
+	/// äº¤å·®æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
-	/// <param name="info">Œğ·î•ñ</param>
-	/// <returns>ƒNƒGƒŠ[‚ğ‘±‚¯‚é‚È‚çtrueA‘Å‚¿Ø‚é‚È‚çfalse‚ğ•Ô‚·</returns>
+	/// <param name="info">äº¤å·®æƒ…å ±</param>
+	/// <returns>ã‚¯ã‚¨ãƒªãƒ¼ã‚’ç¶šã‘ã‚‹ãªã‚‰trueã€æ‰“ã¡åˆ‡ã‚‹ãªã‚‰falseã‚’è¿”ã™</returns>
 	virtual bool OnQueryHit(const QueryHit& info) = 0;
 };
 

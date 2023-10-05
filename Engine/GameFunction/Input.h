@@ -4,50 +4,49 @@
 #include <array>
 #include <vector>
 #include <wrl.h>
-#define DIRECTINPUT_VERSION 0x0800 //DirectInput‚Ìƒo[ƒWƒ‡ƒ“w’è
+#define DIRECTINPUT_VERSION 0x0800 //DirectInputã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³æŒ‡å®š
 #include <dinput.h>
 #include "WinApp.h"
 #include "Mouse.h"
 
 
-
-// “ü—Í
+// å…¥åŠ›
 class Input
 {
 
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	static Input* GetInstance();
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Initialize();
 
-	// XV
+	// æ›´æ–°
 	void Update();
 
-	// ƒL[‚Ì‰Ÿ‚µ‚½‚©‚ğƒ`ƒFƒbƒN(’·‰Ÿ‚µ)
+	// ã‚­ãƒ¼ã®æŠ¼ã—ãŸã‹ã‚’ãƒã‚§ãƒƒã‚¯(é•·æŠ¼ã—)
 	bool PushKey(BYTE keyNumber);
 
-	// ƒL[‚ÌƒgƒŠƒK[‚ğƒ`ƒFƒbƒN(‰Ÿ‚µ‚½uŠÔ)
+	// ã‚­ãƒ¼ã®ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯(æŠ¼ã—ãŸç¬é–“)
 	bool TriggerKey(BYTE keyNumber);
 
-	// ƒL[‚ÌƒgƒŠƒK[‚ğƒ`ƒFƒbƒN(—£‚µ‚½uŠÔ)
+	// ã‚­ãƒ¼ã®ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯(é›¢ã—ãŸç¬é–“)
 	bool ReleasedKey(BYTE keyNumber);
 
-	// ƒ}ƒEƒXƒ{ƒ^ƒ“‚ÌƒgƒŠƒK[“ü—Í
+	// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®ãƒˆãƒªã‚¬ãƒ¼å…¥åŠ›
 	bool MouseInputTrigger(int button);
 
 
-	// ƒ}ƒEƒXƒ{ƒ^ƒ“‚Ì“ü—Í
+	// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®å…¥åŠ›
 	bool MouseInputing(int button);
 
 
-	// ƒ}ƒEƒXƒ{ƒ^ƒ“‚Ì—£‚µ‚½uŠÔ
+	// ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã®é›¢ã—ãŸç¬é–“
 	bool MouseOffTrigger(int button);
 
-	// ƒ}ƒEƒX‚ÌˆÊ’u
+	// ãƒã‚¦ã‚¹ã®ä½ç½®
 	const Vector2 GetMousePos()const;
 
-	// ƒ}ƒEƒX‚ÌˆÊ’u
+	// ãƒã‚¦ã‚¹ã®ä½ç½®
 	const Vector3 GetMouseMove();
 
 	void Destroy();
@@ -58,21 +57,21 @@ private:
 	Input(const Input&) = delete;
 	const Input& operator=(const Input&) = delete;
 
-private:// Ã“Iƒƒ“ƒo•Ï”
+private:// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
 
 	static Input* Input_;
 
 private:
-	// DirectInput‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+	// DirectInputã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 	Microsoft::WRL::ComPtr<IDirectInput8> dInput_ = nullptr;
 
-	// ƒL[ƒ{[ƒh‚ÌƒfƒoƒCƒX
+	// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®ãƒ‡ãƒã‚¤ã‚¹
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> devKeyboard_ = nullptr;
 
-	// ‘SƒL[‚Ìó‘Ô
+	// å…¨ã‚­ãƒ¼ã®çŠ¶æ…‹
 	BYTE key[256] = {};
 
-	// ‘O‰ñ‚Ì‘SƒL[‚Ìó‘Ô
+	// å‰å›ã®å…¨ã‚­ãƒ¼ã®çŠ¶æ…‹
 	BYTE keyPre[256] = {};
 
 	// WindowsAPI
@@ -80,6 +79,6 @@ private:
 
 	HWND hwnd_;
 
-	//ƒ}ƒEƒX
+	//ãƒã‚¦ã‚¹
 	std::unique_ptr<Mouse> mouse;
 };

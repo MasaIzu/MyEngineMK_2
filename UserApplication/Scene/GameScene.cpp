@@ -1,4 +1,4 @@
-﻿#include "GameScene.h"
+#include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
 #include <random>
@@ -9,6 +9,7 @@
 #include "Collision.h"
 #include"PostEffect.h"
 #include"WinApp.h"
+
 
 GameScene::GameScene() {}
 GameScene::~GameScene() {
@@ -144,7 +145,7 @@ void GameScene::Update() {
 		if (player_->GetHowReturnSpline(3)) {
 
 			Vector2 Mous(0, -2);
-			gameCamera->MousePositionReset(Mous, true);
+			gameCamera->MousePositionReset(Mous);
 
 		}
 		if (player_->GetFinishFirstSpline()) {
@@ -219,13 +220,8 @@ void GameScene::PostEffectDraw()
 
 void GameScene::CSUpdate()
 {
-	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	////パーティクル
-	player_->CSUpdate(commandList);
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->CSUpdate(commandList);
-	}
+
+
 }
 
 void GameScene::Draw() {
@@ -263,7 +259,7 @@ void GameScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
-	player_->DrawSprite(*viewProjection_.get());
+	player_->DrawSprite();
 
 
 #pragma endregion
@@ -282,10 +278,7 @@ void GameScene::Finalize()
 void GameScene::CopyData()
 {
 	player_->CopyParticle();
-	//bulletShotEnemy->CopyParticle();
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->CopyParticle();
-	}
+
 }
 
 bool GameScene::CheckReticle()

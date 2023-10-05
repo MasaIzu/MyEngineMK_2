@@ -7,14 +7,8 @@
 #include "Quaternion.h"
 #include "Uint32Vector2.h"
 
-#define PI 3.1415926534f
 
-#define LENGTH      5.0                 // •R‚Ì’·‚³
-#define CLENGTH     (LENGTH * 2.0 * PI)   // •R‚ğL‚Î‚µ‚Äˆêü‚³‚¹‚½ê‡‚Éo—ˆ‚é‰~‚Ì‰~ü‚Ì’·‚³
-#define MASS        0.1346               // ‚Ô‚ç‰º‚ª‚Á‚Ä‚¢‚é•¨‚Ì¿—Ê
-#define G           9.81                // d—Í‰Á‘¬“x
-
-//•Ö—˜Œn‚Ü‚Æ‚ß
+//ä¾¿åˆ©ç³»ã¾ã¨ã‚
 namespace MyMath {
 
 	Matrix4 Initialize();
@@ -22,9 +16,9 @@ namespace MyMath {
 	Matrix4 Rotation(const Vector3& rotation, int X_1_Y_2_Z_3_XYZ_6);
 	Matrix4 Translation(const Vector3& move);
 
-	//ƒxƒNƒgƒ‹‚Ì³‹K‰»(‚¢‚Á‚Ø‚ñ‚É‚â‚é)
+	//ãƒ™ã‚¯ãƒˆãƒ«ã®æ­£è¦åŒ–(ã„ã£ãºã‚“ã«ã‚„ã‚‹)
 	Vector3 vector3Normalize(const Vector3& v);
-	//ƒxƒNƒgƒ‹‚Æs—ñ‚ÌŠ|‚¯Z(o—ÍVector3)
+	//ãƒ™ã‚¯ãƒˆãƒ«ã¨è¡Œåˆ—ã®æ›ã‘ç®—(å‡ºåŠ›Vector3)
 	Vector3 MatVector(Matrix4 matrix4, Vector3 vector3);
 	Vector3 MulVector3(Vector3 vector3, Vector3 s);
 
@@ -50,7 +44,7 @@ namespace MyMath {
 
 	Matrix4 MakeIdentity();
 
-	// ’l‚ğ”ÍˆÍ“à‚É”[‚ß‚é
+	// å€¤ã‚’ç¯„å›²å†…ã«ç´ã‚ã‚‹
 	float Clamp(float Value, const float low, const float high);
 
 	Matrix4 Matrix4Orthographic(
@@ -71,7 +65,7 @@ namespace MyMath {
 
 	void MatrixText(Matrix4& mat);
 
-	//vec1‚ğ’†S‚Æ‚µ‚½‚Ìvec2‚ÌŠp“x‚ğo‚·
+	//vec1ã‚’ä¸­å¿ƒã¨ã—ãŸæ™‚ã®vec2ã®è§’åº¦ã‚’å‡ºã™
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
 	float Get2VecAngleY(const Vector3& vec1, const Vector3& vec2);
 	float Get2FloatAngle(const float& x, const float& y);
@@ -81,11 +75,14 @@ namespace MyMath {
 
 	const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
 
-	//ƒ‰ƒ“ƒ_ƒ€ŠÖŒW
+	//ãƒ©ãƒ³ãƒ€ãƒ é–¢ä¿‚
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
 	Vector3 RandomCenterVec3(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomCenterVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);
 	Vector3 RandomCenterVec3Normalize(const uint32_t& low, const uint32_t& high);
 	Vector3 castVec(const uint32_t& x, const uint32_t& y, const uint32_t& z);
+
+	constexpr float PI = 3.1415926535897931f;
+
 };

@@ -10,6 +10,7 @@
 #include"PostEffect.h"
 #include"WinApp.h"
 
+
 DebugScene::DebugScene() {}
 DebugScene::~DebugScene() {
 
@@ -26,8 +27,6 @@ void DebugScene::Initialize() {
 	viewProjection_->eye = { 0,0,-1000 };
 	viewProjection_->UpdateMatrix();
 
-	int a = 1000000;
-
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
@@ -36,34 +35,10 @@ void DebugScene::Initialize() {
 
 
 
-	// ‰ŠúˆÊ’u‚Í²‚Ì^‰º‚©‚ç¶•ûŒü‚É45“xŒX‚¢‚½ˆÊ’u
-	x = (100.0 * 2.0 * PI) / 4.0;
-
-	// ‰‘¬“x‚Í‚O
-	speed = 0.0;
-
 }
 
 void DebugScene::Update() {
 
-	// Œö®‚É]‚Á‚Ä‘¬“x‚ğ‰ÁZ
-	// MASS‚Ì’l‚ğ¬‚³‚­‚·‚é‚Æ‚ä‚Á‚­‚è“®‚­
-	speed += -MASS * G * sin(x / 100.0);
-
-	// ‘¬“x‚É]‚Á‚Ä‰~ã‚ÌÀ•W‚ğ•ÏX
-	x += speed;
-
-	// ²‚ğŒ´“_‚Æ‚µ‚½ê‡‚Ì‚Ô‚ç‰º‚ª‚Á‚Ä‚¢‚é•¨‚ÌÀ•W‚ğZo
-	// ‚±‚Ì‚Ü‚Ü‚¾‚Æ|45`45“x‚ÌU‚èq‚É‚È‚é‚Ì‚Å
-	// Œv‰ñ‚è‚É90“xiPI/2.0j‰ñ“]
-	Angle = x / 200.0 + PI / 2.0;
-
-	// ‹‚ß‚½Šp“x‚©‚ç²‚ğŒ´“_‚Æ‚µ‚½‰~üã‚ÌÀ•W‚ğæ“¾
-	nx = static_cast<float>(cos(Angle) * 100.0);
-	ny = static_cast<float>(sin(Angle) * 100.0);
-
-
-	worldTransform_.translation_ = Vector3(jiku_x + nx, -(jiku_y + ny), jiku_x + nx);
 
 	worldTransform_.TransferMatrix();
 
@@ -72,7 +47,7 @@ void DebugScene::Update() {
 
 
 	ImGui::Begin("XXXXX");
-	ImGui::Text("x = %lf", x);
+
 
 	ImGui::End();
 
@@ -148,7 +123,7 @@ void DebugScene::PostEffectDraw()
 
 	Model::PostDraw();
 
-	////ƒp[ƒeƒBƒNƒ‹
+	////ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	Explosion::PreDraw(commandList);
 
 	Explosion::PostDraw();
@@ -167,39 +142,36 @@ void DebugScene::PostEffectDraw()
 
 void DebugScene::CSUpdate()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	
 
 }
 
 void DebugScene::Draw() {
 
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-#pragma region ”wŒiƒXƒvƒ‰ƒCƒg•`‰æ
+#pragma region èƒŒæ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 
-	// [“xƒoƒbƒtƒ@ƒNƒŠƒA
+	// æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã‚¯ãƒªã‚¢
 	dxCommon_->ClearDepthBuffer();
 
 
 #pragma endregion
 
-#pragma region 3DƒIƒuƒWƒFƒNƒg•`‰æ
+#pragma region 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	ParticleCS::PreDraw(commandList);
 
 
 
 	ParticleCS::PostDraw();
 
-	//// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	//// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	Model::PreDraw(commandList);
 	//ground->Draw(*viewProjection_);
 	model->Draw(worldTransform_, *viewProjection_.get());
 	
-	//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	Model::PostDraw();
 
 
@@ -217,7 +189,7 @@ void DebugScene::Draw() {
 
 #pragma endregion
 
-#pragma region ‘OŒiƒXƒvƒ‰ƒCƒg•`‰æ
+#pragma region å‰æ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 
 
 

@@ -2,11 +2,11 @@
 
 void Skydome::Initialize() {
 	model_.reset(Model::CreateFromOBJ("skydome", true));
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
 	worldTransform_.Initialize();
 
 	worldTransform_.scale_ = Vector3(600, 600, 600);
-	//s—ñ‚Ì“]‘—
+	//è¡Œåˆ—ã®è»¢é€
 	worldTransform_.TransferMatrix();
 }
 
@@ -14,7 +14,8 @@ void Skydome::Update() {
 
 }
 
+
 void Skydome::Draw(ViewProjection& viewProjection_) {
-	//3Dƒ‚ƒfƒ‹•`‰æ
+	//3Dãƒ¢ãƒ‡ãƒ«æç”»
 	model_->Draw(worldTransform_, viewProjection_);
 }

@@ -12,77 +12,78 @@ void ViewProjection::Initialize() {
 	UpdateMatrix();
 }
 
+
 void ViewProjection::CreateConstBuffer() {
 	HRESULT result;
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDesc =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataViewProjection) + 0xff) & ~0xff);
 
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
+		&heapProps, // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å¯èƒ½
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff_));
 	assert(SUCCEEDED(result));
 }
 
 void ViewProjection::Map() {
-	// ’è”ƒoƒbƒtƒ@‚Æ‚Ìƒf[ƒ^ƒŠƒ“ƒN
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã¨ã®ãƒ‡ãƒ¼ã‚¿ãƒªãƒ³ã‚¯
 	HRESULT result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	assert(SUCCEEDED(result));
 }
 
 void ViewProjection::UpdateMatrix() {
 
-	// ƒrƒ…[s—ñ‚Ì¶¬
+	// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã®ç”Ÿæˆ
 	Matrix4 tmp = MyMath::LookAtLH(eye, target, up);
 	matView = MyMath::MatrixInverse(tmp);
 
-	// “§‹“Š‰e‚É‚æ‚éË‰es—ñ‚Ì¶¬
+	// é€è¦–æŠ•å½±ã«ã‚ˆã‚‹å°„å½±è¡Œåˆ—ã®ç”Ÿæˆ
 	matProjection = MyMath::PerspectiveFovLH(fovAngleY, aspectRatio, nearZ, farZ);
 
 	cameraLook = target - eye;
 	cameraLook.y = 0;
 	cameraLook.norm();
 
-	// ’è”ƒoƒbƒtƒ@‚É‘‚«‚İ
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«æ›¸ãè¾¼ã¿
 	constMap->view = matView;
 	constMap->projection = matProjection;
 	constMap->cameraPos = eye;
 
-	//‹“_À•W
+	//è¦–ç‚¹åº§æ¨™
 	Vector3 eyePosition = eye;
-	//’‹“_À•WX
+	//æ³¨è¦–ç‚¹åº§æ¨™X
 	Vector3 targetPosition = target;
-	//(‰¼‚Ì)ã•ûŒü
+	//(ä»®ã®)ä¸Šæ–¹å‘
 	Vector3 upVector = up;
 
-	//ƒJƒƒ‰Z²(‹“_•ûŒü)
+	//ã‚«ãƒ¡ãƒ©Zè»¸(è¦–ç‚¹æ–¹å‘)
 	Vector3 cameraAxisZ = targetPosition - eyePosition;
 
-	//ƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	cameraAxisZ.normalize();
 
-	//ƒJƒƒ‰‚ÌX²(‰E•ûŒü)
+	//ã‚«ãƒ¡ãƒ©ã®Xè»¸(å³æ–¹å‘)
 	Vector3 cameraAxisX;
-	//X²‚Íã•ûŒü¨Z²‚ÌŠOÏ‚Å‹‚Ü‚é
+	//Xè»¸ã¯ä¸Šæ–¹å‘â†’Zè»¸ã®å¤–ç©ã§æ±‚ã¾ã‚‹
 	cameraAxisX = upVector.cross(cameraAxisZ);
-	//ƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	cameraAxisX.normalize();
 
-	//ƒJƒƒ‰‚ÌY²(ã•ûŒü)
+	//ã‚«ãƒ¡ãƒ©ã®Yè»¸(ä¸Šæ–¹å‘)
 	Vector3 cameraAxisY;
-	//Y²‚Íã•ûŒü¨Z²‚ÌŠOÏ‚Å‹‚Ü‚é
+	//Yè»¸ã¯ä¸Šæ–¹å‘â†’Zè»¸ã®å¤–ç©ã§æ±‚ã¾ã‚‹
 	cameraAxisY = cameraAxisZ.cross(cameraAxisX);
-	//ƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	cameraAxisY.normalize();
 
 	matBillboard = MyMath::MakeIdentity();
 
-	//ƒrƒ‹ƒ{[ƒhs—ñ
+	//ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰è¡Œåˆ—
 	matBillboard.m[0][0] = cameraAxisX.x;
 	matBillboard.m[0][1] = cameraAxisX.y;
 	matBillboard.m[0][2] = cameraAxisX.z;

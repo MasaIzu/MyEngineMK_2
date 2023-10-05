@@ -6,40 +6,41 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 
-// ƒ^ƒCƒgƒ‹ƒV[ƒ“
+
+// ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
 class ClearScene : public BaseScene
 {
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	ClearScene() = default;
 	~ClearScene() = default;
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update() override;
 
 	void PostEffectDraw() override;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw() override;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	void Finalize() override;
 
-	//ƒRƒs[ˆ—
+	//ã‚³ãƒ”ãƒ¼å‡¦ç†
 	void CopyData() override;
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate() override;
 
 private:

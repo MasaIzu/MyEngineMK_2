@@ -9,40 +9,41 @@
 #include "GameCamera.h"
 #include <Model.h>
 
-// ƒ^ƒCƒgƒ‹ƒV[ƒ“
+
+// ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³
 class TitleScene : public BaseScene
 {
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	TitleScene() = default;
 	~TitleScene() = default;
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update() override;
 
 	void PostEffectDraw() override;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw() override;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	void Finalize() override;
 
-	//ƒRƒs[ˆ—
+	//ã‚³ãƒ”ãƒ¼å‡¦ç†
 	void CopyData() override;
 
-	//CSƒAƒbƒvƒf[ƒg
+	//CSã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	void CSUpdate() override;
 
 private:
@@ -52,13 +53,13 @@ private:
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	uint32_t loserTexture_ = 0;
-	std::unique_ptr<ViewProjection> viewProjection_;//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+	std::unique_ptr<ViewProjection> viewProjection_;//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 	std::unique_ptr<Hibana> ParticleMan;
 	std::unique_ptr<Model> model;
 	std::unique_ptr<GameCamera> gameCamera;
 
 	int shadeNumber = 3;
-	int range = 0;//‚Ú‚©‚µ‹­“x
+	int range = 0;//ã¼ã‹ã—å¼·åº¦
 	int samples = 5;
 
 	uint32_t MaxFream = 60;

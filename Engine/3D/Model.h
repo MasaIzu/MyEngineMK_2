@@ -13,23 +13,22 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 #include "MyStruct.h"
-
 /// <summary>
-/// ƒ‚ƒfƒ‹ƒf[ƒ^
+/// ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 class Model {
 private:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 
 public:
 
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct ConstBufferData
 	{
-		Vector4 color;	// F (RGBA)
-		Matrix4 mat;	// ‚R‚c•ÏŠ·s—ñ
+		Vector4 color;	// è‰² (RGBA)
+		Matrix4 mat;	// ï¼“ï¼¤å¤‰æ›è¡Œåˆ—
 	};
 
 	struct VertexPos {
@@ -40,48 +39,48 @@ private:
 	static const std::string kBaseDirectory;
 	static const std::string kDefaultModelName;
 
-private: // Ã“Iƒƒ“ƒo•Ï”
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
+private: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
 	static UINT sDescriptorHandleIncrementSize_;
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	static ID3D12GraphicsCommandList* sCommandList_;
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
+	// ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
 	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature_;
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState_;
-	// ƒ‰ƒCƒg
+	// ãƒ©ã‚¤ãƒˆ
 	static std::unique_ptr<LightGroup> lightGroup;
 
-public: // Ã“Iƒƒ“ƒoŠÖ”
-	// Ã“I‰Šú‰»
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
+	// é™çš„åˆæœŸåŒ–
 	static void StaticInitialize();
 
-	// Ã“I‰Šú‰»
+	// é™çš„åˆæœŸåŒ–
 	static void StaticFinalize();
 
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“‚Ì‰Šú‰»
+	// ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã®åˆæœŸåŒ–
 	static void InitializeGraphicsPipeline();
 
-	// 3Dƒ‚ƒfƒ‹¶¬
+	// 3Dãƒ¢ãƒ‡ãƒ«ç”Ÿæˆ
 	static Model* Create();
 
-	// OBJƒtƒ@ƒCƒ‹‚©‚çƒƒbƒVƒ…¶¬
+	// OBJãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ¡ãƒƒã‚·ãƒ¥ç”Ÿæˆ
 	static Model* CreateFromOBJ(const std::string& modelname, bool smoothing = false);
 
-	// •`‰æ‘Oˆ—
+	// æç”»å‰å‡¦ç†
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 
-	// •`‰æŒãˆ—
+	// æç”»å¾Œå‡¦ç†
 	static void PostDraw();
 
-public: // ƒƒ“ƒoŠÖ”
-	// ƒfƒXƒgƒ‰ƒNƒ^
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
+	// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~Model();
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Initialize(const std::string& modelname, bool smoothing = false);
 
-	// •`‰æ
+	// æç”»
 	void Draw(
 		const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 	void Draw(
@@ -89,19 +88,19 @@ public: // ƒƒ“ƒoŠÖ”
 		uint32_t textureHadle);
 
 
-	// ƒƒbƒVƒ…ƒRƒ“ƒeƒi‚ğæ“¾
+	// ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ³ãƒ†ãƒŠã‚’å–å¾—
 	inline const std::vector<Mesh*>& GetMeshes() { return meshes_; }
 
 	/// <summary>
-	/// ’¸“_”z—ñ‚ğæ“¾
+	/// é ‚ç‚¹é…åˆ—ã‚’å–å¾—
 	/// </summary>
-	/// <returns>’¸“_”z—ñ</returns>
+	/// <returns>é ‚ç‚¹é…åˆ—</returns>
 	inline const std::vector<Mesh::VertexPosNormalUv>& GetVertices() { return vertices; }
 
 	/// <summary>
-	/// ƒCƒ“ƒfƒbƒNƒX”z—ñ‚ğæ“¾
+	/// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é…åˆ—ã‚’å–å¾—
 	/// </summary>
-	/// <returns>ƒCƒ“ƒfƒbƒNƒX”z—ñ</returns>
+	/// <returns>ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é…åˆ—</returns>
 	inline const std::vector<unsigned short>& GetIndices() { return indices; }
 
 	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
@@ -110,39 +109,39 @@ public: // ƒƒ“ƒoŠÖ”
 	std::vector<MyStruct::Meshes> GetMeshData() { return mesheData; }
 	std::string GetName();
 
-private: // ƒƒ“ƒo•Ï”
-	// –¼‘O
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// åå‰
 	std::string name_;
-	// –¼‘O
+	// åå‰
 	std::string exportName_;
-	// ƒƒbƒVƒ…ƒRƒ“ƒeƒi
+	// ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ³ãƒ†ãƒŠ
 	std::vector<Mesh*> meshes_;
-	// ƒ}ƒeƒŠƒAƒ‹ƒRƒ“ƒeƒi
+	// ãƒãƒ†ãƒªã‚¢ãƒ«ã‚³ãƒ³ãƒ†ãƒŠ
 	std::unordered_map<std::string, Material*> materials_;
-	// ƒfƒtƒHƒ‹ƒgƒ}ƒeƒŠƒAƒ‹
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒãƒ†ãƒªã‚¢ãƒ«
 	Material* defaultMaterial_ = nullptr;
 
-	//’¸“_ƒf[ƒ^
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	std::vector<Mesh::VertexPosNormalUv>vertices;
 	std::vector<MyStruct::Meshes>mesheData;
 	std::vector<VertexPos>onlyTriangleVertices;
 
-	//’¸“_ƒCƒ“ƒfƒbƒNƒX
+	//é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 	std::vector<unsigned short> indices;
 
 	uint32_t modelTextureHandle = 0;
 
-private: // ƒƒ“ƒoŠÖ”
+private: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
+	// ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
 	void LoadModel(const std::string& modelname, bool smoothing);
 
-	// ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ
+	// ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 
-	// ƒ}ƒeƒŠƒAƒ‹“o˜^
+	// ãƒãƒ†ãƒªã‚¢ãƒ«ç™»éŒ²
 	void AddMaterial(Material* material);
 
-	// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	void LoadTextures();
 };
