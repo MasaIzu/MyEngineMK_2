@@ -113,12 +113,10 @@ public: // メンバ関数
 
 	// 左右反転の設定
 	void SetIsFlipX(bool isFlipX);
-
 	bool GetIsFlipX() { return isFlipX_; }
 
 	// 上下反転の設定
 	void SetIsFlipY(bool isFlipY);
-
 	bool GetIsFlipY() { return isFlipY_; }
 
 	// テクスチャ範囲設定
@@ -145,8 +143,8 @@ private: // メンバ変数
 	Vector2 anchorPoint_ = { 0, 0 };
 	Matrix4 matWorld_{};
 	Vector4 color_ = { 1, 1, 1, 1 };
-	bool isFlipX_ = false;
-	bool isFlipY_ = false;
+	bool isFlipX_ = false;//左右入れ替え
+	bool isFlipY_ = false;//上下入れ替え
 	Vector2 texBase_ = { 0, 0 };
 	Vector2 texSize_ = { 100.0f, 100.0f };
 	D3D12_RESOURCE_DESC resourceDesc_ = {};

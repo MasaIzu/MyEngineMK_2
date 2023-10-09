@@ -43,10 +43,15 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	bool IsBreak() override;
+
 private:
 	Input* input = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	uint32_t loserTexture_ = 0;
+
+	bool isFinishGame = false;
+
 };
 

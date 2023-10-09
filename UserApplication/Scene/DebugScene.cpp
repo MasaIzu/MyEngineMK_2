@@ -137,6 +137,11 @@ void DebugScene::CSUpdate()
 
 }
 
+bool DebugScene::IsBreak()
+{
+	return isFinishGame;
+}
+
 void DebugScene::Draw() {
 
 	// コマンドリストの取得

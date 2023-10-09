@@ -165,7 +165,8 @@ void Framework::Run()
 		//FPS固定
 		fps->FpsControlEnd();
 
-		if (input_->TriggerKey(DIK_ESCAPE)) {
+		if ( IsBreak() )
+		{
 			break;
 		}
 

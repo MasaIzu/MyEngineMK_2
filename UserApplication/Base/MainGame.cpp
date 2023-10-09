@@ -43,3 +43,9 @@ void MainGame::CSUpdate()
 {
 	sceneManager_->CSUpdate();
 }
+
+bool MainGame::IsBreak()
+{
+	// ゲームシーンの描画
+	return sceneManager_->IsBreak();
+}

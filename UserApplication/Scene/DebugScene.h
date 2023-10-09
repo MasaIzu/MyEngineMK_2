@@ -56,6 +56,8 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	bool IsBreak() override;
+
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -71,6 +73,7 @@ private: // メンバ変数
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
 	int samples = 5;
+	bool isFinishGame = false;
 
 	uint32_t MaxFream = 60;
 

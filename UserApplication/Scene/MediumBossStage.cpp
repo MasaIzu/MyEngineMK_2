@@ -28,7 +28,7 @@ void MediumBossStage::Initialize()
 	viewProjection_->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("stage2");
+	levelData->Initialize("stage2",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0, 20, 0), viewProjection_.get());
@@ -156,6 +156,11 @@ void MediumBossStage::CopyData()
 void MediumBossStage::CSUpdate()
 {
 
+}
+
+bool MediumBossStage::IsBreak()
+{
+	return isFinishGame;
 }
 
 void MediumBossStage::LockOn()

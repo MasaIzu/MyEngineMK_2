@@ -195,6 +195,9 @@
     <None Include="Resources\Shaders\Particle.hlsli">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </None>
+    <None Include="MathFunction.hlsli">
+      <Filter>ResourceFile\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\ObjPS.hlsl">

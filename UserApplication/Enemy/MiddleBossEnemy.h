@@ -25,10 +25,15 @@ public://基本関数
 	~MiddleBossEnemy();
 
 	void Initialize(Player* player);
+	void TitleInitialize();
 	void Update();
 	void Draw(ViewProjection& viewProjection_);
 
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
+
+	void TitleUpdate(const Vector3& TrackingLocation);
+	void MakeMissileBullet();
+	void ResetTitleMove();
 
 private://関数
 	void Timer();
@@ -90,6 +95,7 @@ private://EnemyBossクラス変数
 	bool isAngleGet = false;
 	bool isOneMoreTime = false;
 	bool isBackSponePos = false;
+	bool isTitleShot = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -110,6 +116,7 @@ private://EnemyBossクラス変数
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;
+	float MaxMovieUpdateTimes = 120.0f;
 	float Radius = 10.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;

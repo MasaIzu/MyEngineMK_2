@@ -1,0 +1,401 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "stage2",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": ""
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline",
+            "transform": {
+                "translation": [
+                    206.08944702148438,
+                    -133.0428924560547,
+                    -171.30360412597656
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.001",
+            "transform": {
+                "translation": [
+                    180.6183624267578,
+                    -37.25199890136719,
+                    -143.75588989257812
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.002",
+            "transform": {
+                "translation": [
+                    426.6059265136719,
+                    288.02862548828125,
+                    277.1660461425781
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.003",
+            "transform": {
+                "translation": [
+                    10.216100692749023,
+                    95.87982177734375,
+                    78.27104187011719
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.004",
+            "transform": {
+                "translation": [
+                    116.89680480957031,
+                    433.6907043457031,
+                    68.6322021484375
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.005",
+            "transform": {
+                "translation": [
+                    -103.22386169433594,
+                    341.220703125,
+                    163.02545166015625
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.006",
+            "transform": {
+                "translation": [
+                    -244.117431640625,
+                    496.17181396484375,
+                    370.2593688964844
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "BossSpline.007",
+            "transform": {
+                "translation": [
+                    -655.845458984375,
+                    767.2662963867188,
+                    752.1708374023438
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "EnemyBossSpline"
+        },
+        {
+            "type": "MESH",
+            "name": "MiddleBossSponePos",
+            "transform": {
+                "translation": [
+                    0.0,
+                    149.9994659423828,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "MiddleBossSponePos"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec",
+            "transform": {
+                "translation": [
+                    55.917476654052734,
+                    -24.202392578125,
+                    5.9407782554626465
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.001",
+            "transform": {
+                "translation": [
+                    -0.20257568359375,
+                    -0.164764404296875,
+                    5.9407782554626465
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.002",
+            "transform": {
+                "translation": [
+                    -88.15599060058594,
+                    101.3535385131836,
+                    15.741016387939453
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.003",
+            "transform": {
+                "translation": [
+                    -79.52140808105469,
+                    219.97994995117188,
+                    58.24597930908203
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.004",
+            "transform": {
+                "translation": [
+                    70.36199951171875,
+                    230.45620727539062,
+                    26.155818939208984
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.005",
+            "transform": {
+                "translation": [
+                    84.94026947021484,
+                    151.0186309814453,
+                    11.812823295593262
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.006",
+            "transform": {
+                "translation": [
+                    66.14671325683594,
+                    116.99920654296875,
+                    5.9407782554626465
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        },
+        {
+            "type": "MESH",
+            "name": "CameraVec.007",
+            "transform": {
+                "translation": [
+                    1.8161468505859375,
+                    122.20560455322266,
+                    5.9407782554626465
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "CameraVec"
+        }
+    ]
+}

@@ -31,8 +31,6 @@ void SplinePosition::Update(float& time)
 		}
 	}
 	NowPos = SplinePositionUpdate(points, startIndex, timeRate_);
-
-
 }
 
 void SplinePosition::Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end, float& time)

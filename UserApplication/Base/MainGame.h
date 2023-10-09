@@ -24,6 +24,9 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate()override;
 
+	//ブレイクするかどうか
+	bool IsBreak() override;
+
 private:
 	// ゲーム終了フラグ
 	bool endRequest_ = false;

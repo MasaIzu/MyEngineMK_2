@@ -59,9 +59,9 @@ public:// メンバ関数
 	/// レベルデータファイルの読み込み
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
-	LevelData* LoadFile(const std::string& fileName);
+	LevelData* LoadFile(const std::string& fileName,const Vector3& vec3);
 
-	void Initialize(const std::string& fileName);
+	void Initialize(const std::string& fileName ,const Vector3& vec3);
 
 	void Update();
 
@@ -74,6 +74,8 @@ public:// メンバ関数
 	std::vector<Vector3> GetFinalSpline() { return FinalSplineVec; }
 	std::vector<Vector3> GetBossSpline() { return BossEnemySplineVec; }
 	std::vector<Vector3> GetStage2SropSpline() { return stage2SropSplineVec; }
+	std::vector<Vector3> GetCameraSpline() { return CameraSplineVec; }
+	Vector3 GetBossBonePos(){ return BossBonePos; }
 private:
 	std::unique_ptr<LevelData> levelData;
 	std::map<std::string, Model*> models;
@@ -87,6 +89,8 @@ private:
 	std::vector<Vector3> FinalSplineVec;
 	std::vector<Vector3> BossEnemySplineVec;
 	std::vector<Vector3> stage2SropSplineVec;
+	std::vector<Vector3> CameraSplineVec;
+	Vector3 BossBonePos;
 
 	//最初から読み込むやつ
 	std::unique_ptr<Model> modelSrop;
