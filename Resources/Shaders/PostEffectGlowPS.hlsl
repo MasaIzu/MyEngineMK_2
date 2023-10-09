@@ -58,8 +58,11 @@ float4 main(VSOutput input) : SV_TARGET
 
 		//	color = colortex1;
 		//}
-		return float4(color.rgb, 1);
-	}
+        
+        float4 postColor = float4(color.rgb, 1);
+        
+        return postColor;
+    }
 	else if (shadeNumber == 2) {
 		float2 uv = input.uv;
 		float2 direction = uv - center;

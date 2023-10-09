@@ -39,6 +39,15 @@ double Easing::In_Back(double start, double end, double time, double max_time)
 	return start + (move * (c3 * time * time * time - c1 * time * time));
 }
 
+float Easing::In_Back(float& start,float& end,uint32_t& time,uint32_t& max_time)
+{
+	float Time = static_cast<float>(time) / static_cast<float>(max_time);
+	float move = end - start;
+	float c1 = 1.70158f;
+	float c3 = ( c1 + 1.0f );
+	return start + ( move * ( c3 * Time * Time * Time - c1 * Time * Time ) );
+}
+
 double Easing::Out_Back(double start, double end, double time, double max_time)
 {
 	time /= max_time;
@@ -175,6 +184,17 @@ float Easing::EaseOutQuint(float& start, float& end, float& time, float& max_tim
 	float Time = time / max_time;
 	float x = 1 - powf(1 - Time, 5);
 	return start + (end - start) * x;
+}
+
+Vector3 Easing::EaseInBackVec3(Vector3& start,Vector3& end,uint32_t& time,uint32_t& max_time)
+{
+	Vector3 easeInBackVec3;
+
+	easeInBackVec3.x = In_Back(start.x,end.x,time,max_time);
+	easeInBackVec3.y = In_Back(start.y,end.y,time,max_time);
+	easeInBackVec3.z = In_Back(start.z,end.z,time,max_time);
+
+	return easeInBackVec3;
 }
 
 Vector3 Easing::EaseOutCubicVec3(Vector3& start, Vector3& end, double& time, double& max_time)

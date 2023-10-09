@@ -83,3 +83,8 @@ SceneManager* SceneManager::GetInstance()
 
 	return SceneManager_;
 }
+
+bool SceneManager::IsBreak()
+{
+	return scene_->IsBreak();
+}

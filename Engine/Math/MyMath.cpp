@@ -615,6 +615,16 @@ float MyMath::GetAngle(const float& angle)
 {
 	return angle * (PI / 180);
 }
+Vector3 MyMath::GetAngleVec3(const Vector3& angle)
+{
+	Vector3 Angle;
+
+	Angle.x = angle.x * ( PI / 180 );
+	Angle.y = angle.y * ( PI / 180 );
+	Angle.z = angle.z * ( PI / 180 );
+
+	return Angle;
+}
 
 float MyMath::GetRadAngle(float angle)
 {

@@ -47,6 +47,8 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	bool IsBreak() override;
+
 	//レティクル内に敵がいたらロックオンする
 	void LockOn();
 
@@ -68,6 +70,7 @@ private:
 
 	bool VsBoss = false;
 	bool isLockOn = false;
+	bool isFinishGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

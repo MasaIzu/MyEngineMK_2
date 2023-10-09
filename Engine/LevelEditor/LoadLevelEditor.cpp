@@ -1,7 +1,10 @@
 #include "LoadLevelEditor.h"
+
+MY_SUPPRESS_WARNINGS_BEGIN
 #include "External/json.hpp"
 #include <fstream>
 #include <cassert>
+MY_SUPPRESS_WARNINGS_END
 
 const std::string LoadLevelEditor::kDefaultBaseDirectory = "Resources/levels/";
 const std::string LoadLevelEditor::kExtension = ".json";
@@ -32,7 +35,7 @@ LoadLevelEditor::~LoadLevelEditor()
 	}
 }
 
-LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
+LevelData* LoadLevelEditor::LoadFile(const std::string& fileName,const Vector3& vec3) {
 	// 連結してフルパスを得る
 	const std::string fullpath = kDefaultBaseDirectory + fileName + kExtension;
 
@@ -88,9 +91,9 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 				// トランスフォームのパラメータ読み込み
 				nlohmann::json& transform = object["transform"];
 				// 平行移動
-				objectData.translation.x = static_cast<float>(transform["translation"][0]);
-				objectData.translation.y = static_cast<float>(transform["translation"][2]);
-				objectData.translation.z = static_cast<float>(transform["translation"][1]);
+				objectData.translation.x = static_cast<float>(transform["translation"][0]) + vec3.x;
+				objectData.translation.y = static_cast<float>(transform["translation"][2]) + vec3.y;
+				objectData.translation.z = static_cast<float>(transform["translation"][1] + vec3.z);
 
 				// 回転角
 				objectData.rotation.x = -static_cast<float>(transform["rotation"][1]);
@@ -109,42 +112,58 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			FirstSplineVec.push_back(trans);
+			FirstSplineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "FIRSTSPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			FirstSplineVec.push_back(trans);
+			FirstSplineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "SPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			splineVec.push_back(trans);
+			splineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "FINALSPLINE") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			FinalSplineVec.push_back(trans);
+			FinalSplineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "stage2SropVec") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			stage2SropSplineVec.push_back(trans);
+			stage2SropSplineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "EnemyBossSpline") {
 			// トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			//trans.x *= -1.0f;
-			BossEnemySplineVec.push_back(trans);
+			BossEnemySplineVec.push_back(trans + vec3);
+		}
+		else if ( object[ "file_name" ].get<std::string>() == "CameraVec" )
+		{
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object[ "transform" ];
+			Vector3 trans = { static_cast< float >( transform[ "translation" ][ 0 ] ),static_cast< float >( transform[ "translation" ][ 2 ] ),static_cast< float >( transform[ "translation" ][ 1 ] ) };
+			//trans.x *= -1.0f;
+			CameraSplineVec.push_back(trans + vec3);
+		}
+		else if ( object[ "file_name" ].get<std::string>() == "MiddleBossSponePos" )
+		{
+			// トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object[ "transform" ];
+			Vector3 trans = { static_cast< float >( transform[ "translation" ][ 0 ] ),static_cast< float >( transform[ "translation" ][ 2 ] ),static_cast< float >( transform[ "translation" ][ 1 ] ) };
+			//trans.x *= -1.0f;
+			BossBonePos = (trans + vec3);
 		}
 		// TODO: オブジェクト走査を再帰関数にまとめ、再帰呼出で枝を走査する
 		if (object.contains("children")) {
@@ -156,10 +175,10 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName) {
 }
 
 
-void LoadLevelEditor::Initialize(const std::string& FileName)
+void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3)
 {
 
-	levelData.reset(LoadFile(FileName));
+	levelData.reset(LoadFile(FileName,vec3));
 
 	// モデル読み込み
 	modelSrop.reset(Model::CreateFromOBJ("srop1", true));
@@ -206,7 +225,8 @@ void LoadLevelEditor::Initialize(const std::string& FileName)
 			Trans.Initialize();
 			Trans.translation_ = objectData.translation;// 座標
 			Trans.scale_ = objectData.scaling;
-			Trans.SetRot(objectData.rotation);// 回転角
+
+			Trans.SetRot(MyMath::GetAngleVec3(objectData.rotation));// 回転角
 			Trans.TransferMatrix();
 
 			if (fileName == modelNormalEnemy->GetName()) {

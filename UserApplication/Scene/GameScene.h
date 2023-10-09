@@ -56,6 +56,8 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	bool IsBreak() override;
+
 	bool CheckReticle();
 
 private: // メンバ変数
@@ -82,6 +84,7 @@ private: // メンバ変数
 
 	bool isSpline = false;
 	bool isFinish = false;
+	bool isFinishGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

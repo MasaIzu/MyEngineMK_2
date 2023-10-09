@@ -45,6 +45,8 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	bool IsBreak() override;
+
 private:
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -57,6 +59,8 @@ private:
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<Skydome> skydome;
+
+	bool isFinishGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

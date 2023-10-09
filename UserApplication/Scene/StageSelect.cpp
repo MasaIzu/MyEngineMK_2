@@ -27,7 +27,7 @@ void StageSelect::Initialize()
 	viewProjection_->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("stageSelect");
+	levelData->Initialize("stageSelect",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0, 20, 0), viewProjection_.get());
@@ -128,4 +128,9 @@ void StageSelect::CopyData()
 void StageSelect::CSUpdate()
 {
 
+}
+
+bool StageSelect::IsBreak()
+{
+	return isFinishGame;
 }

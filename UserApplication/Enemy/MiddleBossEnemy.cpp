@@ -6,7 +6,7 @@
 
 MiddleBossEnemy::MiddleBossEnemy()
 {
-	MovieUpdateTimes = 120.0f;
+	MovieUpdateTimes = MaxMovieUpdateTimes;
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
 	BossWorldTrans.scale_ = Vector3(5.0f, 5.0f, 5.0f);
 	BossWorldTrans.Initialize();
@@ -32,6 +32,12 @@ void MiddleBossEnemy::Initialize(Player* Player)
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider);
 	MiddleBossCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
+}
+
+void MiddleBossEnemy::TitleInitialize()
+{
+	multiBullet = std::make_unique<MultiBullet>();
+	missileBullet = std::make_unique<MissileBullet>();
 }
 
 void MiddleBossEnemy::Update()
@@ -166,7 +172,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& endPos)
 
 			MovieUpdateTimes -= 1.0f;
 			BossWorldTrans.translation_ += Velocity;
-			AngleSize = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look, player->GetPlayerPos());
+			AngleSize = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look, Vector3(0, 0, 0));
 
 			RotTime = static_cast<uint32_t>(AngleSize / RotSpeed);
 		}
@@ -180,6 +186,31 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& StartPos, Vector3& endPos)
 
 	return false;
 }
+
+void MiddleBossEnemy::TitleUpdate(const Vector3& TrackingLocation)
+{
+	missileBullet->Update(TrackingLocation);
+}
+
+void MiddleBossEnemy::MakeMissileBullet()
+{
+	if ( isTitleShot == false )
+	{
+		isTitleShot = true;
+		uint32_t MissileShotCount = 6;
+		missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
+			BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
+			BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+	}
+}
+
+void MiddleBossEnemy::ResetTitleMove()
+{
+	isTitleShot = false;
+	isSporn = false;
+	MovieUpdateTimes = MaxMovieUpdateTimes;
+}
+
 
 void MiddleBossEnemy::Timer()
 {

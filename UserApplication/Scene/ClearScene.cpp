@@ -39,3 +39,8 @@ void ClearScene::CopyData()
 void ClearScene::CSUpdate()
 {
 }
+
+bool ClearScene::IsBreak()
+{
+	return isFinishGame;
+}

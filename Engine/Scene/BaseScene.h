@@ -28,6 +28,10 @@ public:
 
 	//CSアップデート
 	virtual void CSUpdate() = 0;
+
+	//ブレイクするかどうか
+	virtual bool IsBreak() = 0;
+
 public://メンバ関数
 
 	virtual ~BaseScene() = default;

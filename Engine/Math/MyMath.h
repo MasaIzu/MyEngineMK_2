@@ -64,7 +64,7 @@ namespace MyMath {
 	//Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
 
 	float GetAngle(const float& angle);
-
+	Vector3 GetAngleVec3(const Vector3& angle);
 	float GetRadAngle(float angle);
 
 	void MatrixText(Matrix4& mat);
