@@ -110,8 +110,7 @@ private://EnemyBossクラス変数
 	uint32_t mveType = 0;
 	uint32_t MoveTimes = 0;
 	uint32_t MaxMoveTimes = 5;
-	uint32_t BackLengthHalfUint32 = 0;
-	uint32_t BackLengthUint32 = 0;
+	uint32_t BackPosCounter = 1;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
@@ -123,20 +122,19 @@ private://EnemyBossクラス変数
 	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 40.0f;
-	float BackLength = 0.0f;
+	float jampHeight = 20.0f;
+	float BackStrength = 30.0f;
 	float BackSpeed = 2.0f;
-	float JumpMoveSpeed = 1.0f;
-	float JumpHeight = 0.0f;
-	float MaxJumpHeight = 15.0f;
 
 	Vector3 BonePos;
 	Vector3 EndPos;
 	Vector3 Velocity;
 	Vector3 MovePos;
 	Vector3 MoveStartPos;
-	Vector3 JampBackVelocity;
+	Vector3 BackLerpPos;
 
 	AttackType attackType = AttackType::NotAttack;
 	AttackType oldAttackType[AttackedKeepCount];
 
+	std::vector<Vector3> BackPoints{};
 };

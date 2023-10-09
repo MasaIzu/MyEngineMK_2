@@ -155,11 +155,11 @@ void TitleScene::Update()
 
 	viewProjection_->UpdateMatrix();
 
-	if ( input_->TriggerKey(DIK_W) )
+	if ( input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP) )
 	{
 		OutLinePos = OutLinePosition1;
 	}
-	else if ( input_->TriggerKey(DIK_S) )
+	else if ( input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN) )
 	{
 		OutLinePos = OutLinePosition2;
 	}
