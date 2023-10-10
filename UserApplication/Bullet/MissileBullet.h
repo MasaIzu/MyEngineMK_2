@@ -27,6 +27,7 @@ public:
 	void MakeBullet(Vector3& pos);
 
 	void MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount);
+	void MakeSelectMissileBullet(Vector3& pos, Vector3& upLeft, Vector3& upRight, Vector3& downLeft, Vector3& downRight, uint32_t& MakeCount);
 
 private:
 	//弾の情報更新
@@ -69,7 +70,7 @@ private://クラス変数
 
 	uint32_t BulletLifeTime[AllBulletCount];
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 40;
+	uint32_t MaxBulletLifeTime = 200;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;

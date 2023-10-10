@@ -68,6 +68,7 @@ void Framework::Update()
 		isEndRequst = true;
 	}
 
+
 	// 入力関連の毎フレーム処理
 	input_->Update();
 
@@ -153,8 +154,10 @@ void Framework::Run()
 		PostEffectManager::Draw(directXCore_->GetCommandList());
 
 		//ImGui描画
-		imGui->Draw();
 
+#ifdef _DEBUG
+		imGui->Draw();
+#endif
 		
 
 		// 描画終了
@@ -166,6 +169,11 @@ void Framework::Run()
 		fps->FpsControlEnd();
 
 		if ( IsBreak() )
+		{
+			break;
+		}
+
+		if ( input_->TriggerKey(DIK_ESCAPE) )
 		{
 			break;
 		}

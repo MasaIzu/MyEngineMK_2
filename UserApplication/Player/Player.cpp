@@ -358,7 +358,7 @@ void Player::CopyParticle()
 void Player::AttackUpdate(const Vector3& EnemyPos, bool& LockOn)
 {
 	if (isAttack == true) {
-		PlayerAttack(EnemyPos, LockOn);
+		PlayerAttack(EnemyPos - playerWorldTrans.translation_, LockOn);
 	}
 }
 
@@ -499,7 +499,7 @@ void Player::PlayerRot()
 	WorldTransUpdate();
 }
 
-void Player::PlayerAttack(const Vector3& EnemyPos, bool& LockOn)
+void Player::PlayerAttack(const Vector3& velocity, bool& LockOn)
 {
 	if (AttackPhase_ == AttackPhase::Nothing) {
 		AttackPhase_ = AttackPhase::AttackCombo1;
@@ -508,7 +508,7 @@ void Player::PlayerAttack(const Vector3& EnemyPos, bool& LockOn)
 	{
 	case Player::AttackPhase::AttackCombo1:
 		if (LockOn) {
-			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), EnemyPos.norm(), PlayerToCameraTargetVecDistance);
+			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_),velocity.norm(), PlayerToCameraTargetVecDistance);
 		}
 		else {
 			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);

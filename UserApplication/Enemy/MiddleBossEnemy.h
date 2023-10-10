@@ -59,7 +59,7 @@ public://Getter
 private://const関連
 	static const uint32_t BossEnemyBodyCount = 20;
 
-	static const uint32_t AttackedKeepCount = 8;
+	static const uint32_t AttackedKeepCount = 5;
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -101,7 +101,7 @@ private://EnemyBossクラス変数
 	uint32_t MoveingTimer = 0;
 	uint32_t MaxMoveingTimer = 0;
 	uint32_t MaxBulletCoolTime = 0;
-	uint32_t MiddleBossHp = 20;
+	uint32_t MiddleBossHp = 1000;
 	uint32_t AttackCooltime = 0;
 	uint32_t AttackTypeCount = static_cast<uint32_t>(AttackType::Move);
 	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack) + 1;
@@ -109,8 +109,12 @@ private://EnemyBossクラス変数
 	uint32_t RotTime = 0;
 	uint32_t mveType = 0;
 	uint32_t MoveTimes = 0;
-	uint32_t MaxMoveTimes = 5;
+	uint32_t MaxMoveTimes = 3;
 	uint32_t BackPosCounter = 1;
+	uint32_t BackMissileFirstCoolTime = 20;
+	uint32_t BackMissileCoolTime = 6;
+	uint32_t BackMissileTimes = 0;
+	uint32_t BackMissileMaxTimes = 10;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
@@ -121,10 +125,11 @@ private://EnemyBossクラス変数
 	float AngleSize = 0.0f;
 	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
-	float MoveSafeRadius = 40.0f;
+	float MoveSafeRadius = 100.0f;
 	float jampHeight = 20.0f;
 	float BackStrength = 30.0f;
 	float BackSpeed = 2.0f;
+	float MovePower = 30.0f;
 
 	Vector3 BonePos;
 	Vector3 EndPos;

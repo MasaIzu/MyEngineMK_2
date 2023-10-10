@@ -79,6 +79,12 @@ void WorldTransform::TransferMatrix() {
 
 		LookVelocity.lookUp_look = GetLook(matRot, Vector3(0, 0.75f, 0.75f));
 		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
+
+		LookVelocity.lookUp_lookLeft = GetLook(matRot,Vector3(-1.0f,1.0f,0.0f));
+		LookVelocity.lookUp_lookRight = GetLook(matRot,Vector3(1.0f,1.0f,0.0f));
+		LookVelocity.lookDown_lookLeft = GetLook(matRot,Vector3(-1.0f,-1.0f,0.0f));
+		LookVelocity.lookDown_lookRight = GetLook(matRot,Vector3(1.0f,-1.0f,0.0f));
+
 	}
 	else {
 		LookVelocity.look = GetLook(worldLookMatRot, Vector3(0, 0, 1));
@@ -89,13 +95,19 @@ void WorldTransform::TransferMatrix() {
 		LookVelocity.lookUp = GetLook(worldLookMatRot, Vector3(0, 1, 0));
 		LookVelocity.lookDown = GetLook(worldLookMatRot, Vector3(0, -1, 0));
 
-		LookVelocity.look_lookRight = GetLook(matRot, Vector3(0.5f, 0, 0.5f));
-		LookVelocity.look_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, 0.5f));
-		LookVelocity.lookBack_lookRight = GetLook(matRot, Vector3(0.5f, 0, -0.5f));
-		LookVelocity.lookBack_lookLeft = GetLook(matRot, Vector3(-0.5f, 0, -0.5f));
+		LookVelocity.look_lookRight = GetLook(worldLookMatRot, Vector3(0.5f, 0, 0.5f));
+		LookVelocity.look_lookLeft = GetLook(worldLookMatRot, Vector3(-0.5f, 0, 0.5f));
+		LookVelocity.lookBack_lookRight = GetLook(worldLookMatRot, Vector3(0.5f, 0, -0.5f));
+		LookVelocity.lookBack_lookLeft = GetLook(worldLookMatRot, Vector3(-0.5f, 0, -0.5f));
 
-		LookVelocity.lookUp_look = GetLook(matRot, Vector3(0, 0.75f, 0.75f));
-		LookVelocity.lookDown_look = GetLook(matRot, Vector3(0, -0.75, 0.75f));
+		LookVelocity.lookUp_look = GetLook(worldLookMatRot, Vector3(0, 0.75f, 0.75f));
+		LookVelocity.lookDown_look = GetLook(worldLookMatRot, Vector3(0, -0.75, 0.75f));
+
+		LookVelocity.lookUp_lookLeft = GetLook(worldLookMatRot,Vector3(-1.0f,1.0f,0.0f));
+		LookVelocity.lookUp_lookRight = GetLook(worldLookMatRot,Vector3(1.0f,1.0f,0.0f));
+		LookVelocity.lookDown_lookLeft = GetLook(worldLookMatRot,Vector3(-1.0f,-1.0f,0.0f));
+		LookVelocity.lookDown_lookRight = GetLook(worldLookMatRot,Vector3(1.0f,-1.0f,0.0f));
+
 	}
 
 	//定数バッファへのデータ転送

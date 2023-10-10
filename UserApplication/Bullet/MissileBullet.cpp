@@ -94,7 +94,7 @@ void MissileBullet::MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3
 	{
 		if (isBulletAlive[BulletCounter] == false) {
 			BulletNotTrackingTime[BulletCounter] = 30;
-			BulletLifeTime[BulletCounter] = 500;
+			BulletLifeTime[BulletCounter] = MaxBulletLifeTime;
 			isBulletAlive[BulletCounter] = true;
 			isStartTracking[BulletCounter] = false;
 			isNearPlayer[BulletCounter] = false;
@@ -117,6 +117,60 @@ void MissileBullet::MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3
 			else {
 				BulletLerpRightTime = BulletLerpTime - harfCount + 1;
 				BulletVelocity[BulletCounter] = MyMath::lerp(top, right, lerpPos * BulletLerpRightTime).norm();
+			}
+
+			BulletLerpTime++;
+			makeBulletCount++;
+		}
+		BulletCounter++;
+	}
+}
+
+void MissileBullet::MakeSelectMissileBullet(Vector3& pos,Vector3& upLeft,Vector3& upRight,Vector3& downLeft,Vector3& downRight,uint32_t& MakeCount)
+{
+	uint32_t changeCount = MakeCount / 3;
+	uint32_t MakeCountMissile = changeCount * 3 + 1;
+	float lerpPos = 1.0f / static_cast< float >( changeCount );
+
+	uint32_t BulletCounter = 0;
+	uint32_t BulletLerpTime = 1;
+	uint32_t BulletLerpRightTime = 0;
+	makeBulletCount = 0;
+	while ( makeBulletCount < MakeCountMissile )
+	{
+		if ( isBulletAlive[ BulletCounter ] == false )
+		{
+			BulletNotTrackingTime[ BulletCounter ] = 30;
+			BulletLifeTime[ BulletCounter ] = MaxBulletLifeTime;
+			isBulletAlive[ BulletCounter ] = true;
+			isStartTracking[ BulletCounter ] = false;
+			isNearPlayer[ BulletCounter ] = false;
+			EnemyBulletWorldTrans[ BulletCounter ].translation_ = pos;
+
+			BulletSpeed[ BulletCounter ] = 1.0f;
+			BulletStartSpeed = 0.8f;
+
+			BulletEasingTime[ BulletCounter ] = 0;
+			BulletMaxEasingTime[ BulletCounter ] = 80;
+
+			BulletLarpEasingTime[ BulletCounter ] = 0;
+			BulletLarpMaxEasingTime[ BulletCounter ] = 60;
+			BulletLerpSpeed[ BulletCounter ] = BulletStartLerpTime;
+
+
+			if ( makeBulletCount < changeCount )
+			{
+				BulletVelocity[ BulletCounter ] = MyMath::lerp(upLeft.norm(),upRight.norm(),lerpPos * BulletLerpTime).norm();
+			}
+			else if(makeBulletCount < changeCount * 2 + 1)
+			{
+				BulletLerpRightTime = BulletLerpTime - (changeCount) - 1;
+				BulletVelocity[ BulletCounter ] = MyMath::lerp(upLeft.norm(),downLeft.norm(),lerpPos * BulletLerpRightTime).norm();
+			}
+			else
+			{
+				BulletLerpRightTime = BulletLerpTime - (changeCount * 2 + 1);
+				BulletVelocity[ BulletCounter ] = MyMath::lerp(upRight.norm(),downRight.norm(),lerpPos * BulletLerpRightTime).norm();
 			}
 
 			BulletLerpTime++;
@@ -170,7 +224,7 @@ void MissileBullet::MakeBullet(Vector3& pos)
 	for (int i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == false) {
 			BulletNotTrackingTime[i] = 0;
-			BulletLifeTime[i] = 500;
+			BulletLifeTime[i] = MaxBulletLifeTime;
 			isBulletAlive[i] = true;
 			isStartTracking[i] = false;
 			isNearPlayer[i] = false;

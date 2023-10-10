@@ -97,18 +97,26 @@ void MiddleBossEnemy::Update()
 					MaxMoveingTimer = 30;
 					if ( mveType == 0 )
 					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f );
+						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
 					}
 					else if ( mveType == 1 )
 					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f );
+						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
+					}
+					else if ( mveType == 2 )
+					{
+						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
+					}
+					else if ( mveType == 3 )
+					{
+						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
 					}
 					MoveStartPos = BossWorldTrans.translation_;
 
-					uint32_t MissileShotCount = 6;
+					uint32_t MissileShotCount =	9;
 					missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
-						BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
-						BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+						BossWorldTrans.LookVelocity.lookUp_lookLeft,BossWorldTrans.LookVelocity.lookUp_lookRight,
+						BossWorldTrans.LookVelocity.lookDown_lookLeft,BossWorldTrans.LookVelocity.lookDown_lookRight,MissileShotCount);
 
 				}
 				else
@@ -122,7 +130,7 @@ void MiddleBossEnemy::Update()
 		{
 			Vector3 goPos = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
 			goPos.normalize();
-			Velocity = MyMath::lerp(Velocity,goPos,0.04f);
+			Velocity = MyMath::lerp( Velocity, goPos, 0.1f);
 			BossWorldTrans.translation_ += Velocity * BackSpeed;
 			// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
 			Vector3 tmp;
@@ -130,6 +138,19 @@ void MiddleBossEnemy::Update()
 			float dist = tmp.dot(tmp);
 			float radius2 = 5.0f;
 			radius2 *= radius2;
+
+			if ( BackMissileTimes < BackMissileMaxTimes )
+			{
+				if ( BulletCoolTime == 0 )
+				{
+					BulletCoolTime = BackMissileCoolTime;
+					uint32_t MissileShotCount = 6;
+					BackMissileTimes++;
+					missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
+						BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
+						BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+				}
+			}
 
 			if ( dist <= radius2 )
 			{
@@ -313,25 +334,17 @@ void MiddleBossEnemy::WorldTransUpdate()
 
 void MiddleBossEnemy::CheckAttackType()
 {
-	attackType = AttackType::Move;
-
-	//for (uint32_t i = 0; i < AttackedKeepCount; i++) {
-	//	if (attackType == AttackType::Move) {//移動は一回まで
-	//		if (attackType == oldAttackType[i]) {
-	//			uint32_t AttackCount = static_cast<uint32_t>(attackType);
-	//			attackType = static_cast<AttackType>(RandomType(AttackCount));
-	//			break;
-	//		}
-	//	}
-	//}
+	attackType = static_cast< AttackType >( MyMath::Random(0,AllAttackTypeCount) );
+	if ( attackType != AttackType::Move )
+	{
+		attackType = static_cast< AttackType >( MyMath::Random(0,AllAttackTypeCount) );
+	}
 
 	if ( attackType == oldAttackType[ 0 ] )
 	{
-		if ( attackType == oldAttackType[ 1 ] )
-		{//同じ攻撃は2回まで
-			uint32_t AttackCount = static_cast< uint32_t >( attackType );
-			attackType = static_cast< AttackType >( RandomType(AttackCount) );
-		}
+		//同じ攻撃はしない
+		uint32_t AttackCount = static_cast< uint32_t >( attackType );
+		attackType = static_cast< AttackType >( RandomType(AttackCount) );
 	}
 
 	if ( attackType == AttackType::Nomal )
@@ -359,23 +372,36 @@ void MiddleBossEnemy::CheckAttackType()
 	{
 		MoveTimes++;
 		isMoveing = true;
-		isOneMoreTime = false;
+		isOneMoreTime = MyMath::Random(0,1);
 		MoveingTimer = 0;
 		MaxMoveingTimer = 50;
-		mveType = 1;
+		if ( isOneMoreTime == true )
+		{
+			isOneMoreTime = MyMath::Random(0,1);
+		}
+		mveType = MyMath::Random(0,3);
+		/*mveType = 0;*/
 		if ( mveType == 0 )
 		{
-			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookLeft.norm() * 30.0f );
+			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookLeft.norm() * MovePower );
 		}
 		else if ( mveType == 1 )
 		{
-			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookRight.norm() * 30.0f );
+			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookRight.norm() * MovePower );
 		}
+		else if ( mveType == 2 )
+		{
+			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look.norm() * MovePower );
+		}
+		else if ( mveType == 3 )
+		{
+			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack.norm() * MovePower );
+		}
+
 		MoveStartPos = BossWorldTrans.translation_;
 
 		if ( MoveTimes >= MaxMoveTimes )
 		{
-
 			// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
 			Vector3 tmp;
 			tmp = EndPos - BossWorldTrans.translation_;
@@ -394,6 +420,8 @@ void MiddleBossEnemy::CheckAttackType()
 				isMoveing = false;
 				Velocity = { 0,0,0 };
 				BackPosCounter = 1;
+				BackMissileTimes = 0;
+				BulletCoolTime = BackMissileFirstCoolTime;
 				BackLerpPos = ( tmp / 2.0f ) + BossWorldTrans.translation_;
 				BackPoints.clear();
 				BackPoints.push_back(BossWorldTrans.translation_);

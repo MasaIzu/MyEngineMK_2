@@ -32,7 +32,7 @@ private:
 	//プレイヤーの回転
 	void PlayerRot();
 	//プレーヤーの攻撃
-	void PlayerAttack(const Vector3& EnemyPos, bool& LockOn);
+	void PlayerAttack(const Vector3& velocity, bool& LockOn);
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
