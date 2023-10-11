@@ -52,6 +52,22 @@ Vector3 Vector3::cross(const Vector3& v) const
 	);
 }
 
+Vector3 Vector3::faceNormal(const Vector3& v1,const Vector3& v2,const Vector3& v3)
+{
+	Vector3 n;
+
+	// 頂点を結ぶベクトルを算出
+	Vector3 vec1 = { v2.x - v1.x, v2.y - v1.y, v2.z - v1.z };
+	Vector3 vec2 = { v3.x - v1.x, v3.y - v1.y, v3.z - v1.z };
+
+	// ベクトル同士の外積
+	n.x = vec1.y * vec2.z - vec1.z * vec2.y;
+	n.y = vec1.z * vec2.x - vec1.x * vec2.z;
+	n.z = vec1.x * vec2.y - vec1.y * vec2.x;
+
+	return n;
+}
+
 //線形補間
 const Vector3 Vector3::lerp(const Vector3& start, const Vector3& end, const float t) {
 	
