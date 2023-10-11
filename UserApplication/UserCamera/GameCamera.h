@@ -79,7 +79,7 @@ private://プレイヤークラス変数
 	float scaleX_ = 1.0f;// スケーリング
 	float scaleY_ = 1.0f;
 	float angleAroundPlayer = 0.0f; // プレイヤーの周りを回転する角度
-	float cameraDistance_ = 30.0f;
+	float cameraDistance_ = 20.0f;
 	float angle = 0.0f;
 	float cameraSpeed_ = 3;// カメラの速度
 	float cameraDelay = 0.1f;// カメラが追跡する際の遅延量
