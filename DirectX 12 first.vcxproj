@@ -308,7 +308,6 @@
     <ClInclude Include="Engine\Base\WinApp.h" />
     <ClInclude Include="Engine\Camera\ViewProjection.h" />
     <ClInclude Include="Engine\Collision\BaseCollider.h" />
-    <ClInclude Include="Engine\Collision\BoxCollision.h" />
     <ClInclude Include="Engine\Collision\Collision.h" />
     <ClInclude Include="Engine\Collision\CollisionAttribute.h" />
     <ClInclude Include="Engine\Collision\CollisionInfo.h" />
@@ -330,7 +329,6 @@
     <ClInclude Include="Engine\2D\PostEffect.h" />
     <ClInclude Include="Engine\2D\PostEffectManager.h" />
     <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h" />
-    <ClInclude Include="UserApplication\Enemy\Enemy.h" />
     <ClInclude Include="Engine\Framework\Framework.h" />
     <ClInclude Include="Engine\GameFunction\Input.h" />
     <ClInclude Include="Engine\GameFunction\Mouse.h" />
@@ -397,7 +395,6 @@
     <ClCompile Include="UserApplication\Player\PlayerBullet.cpp" />
     <ClCompile Include="Engine\2D\PostEffect.cpp" />
     <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp" />
-    <ClCompile Include="UserApplication\Enemy\Enemy.cpp" />
     <ClCompile Include="Engine\Framework\Framework.cpp" />
     <ClCompile Include="Engine\GameFunction\Input.cpp" />
     <ClCompile Include="Engine\GameFunction\Mouse.cpp" />

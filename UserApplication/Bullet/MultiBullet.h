@@ -9,7 +9,9 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 
-
+/// <summary>
+/// マルチバレットクラス
+/// </summary>
 class MultiBullet {
 
 public://基本関数

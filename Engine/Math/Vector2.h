@@ -7,6 +7,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <cstdint>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// ベクター2
+/// </summary>
 class Vector2
 {
 public:

@@ -8,6 +8,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <DirectXMath.h>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// マトリックス
+/// </summary>
 class Matrix4
 {
 public:

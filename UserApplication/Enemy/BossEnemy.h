@@ -5,7 +5,9 @@
 #include <Input.h>
 #include "SplinePosition.h"
 
-
+/// <summary>
+/// ボスクラス
+/// </summary>
 class BossEnemy {
 
 public://基本関数

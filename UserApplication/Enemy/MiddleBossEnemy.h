@@ -8,7 +8,9 @@
 #include "Player.h"
 #include "MissileBullet.h"
 
-
+/// <summary>
+/// 中ボス
+/// </summary>
 class MiddleBossEnemy {
 private:
 	enum class AttackType

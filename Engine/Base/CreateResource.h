@@ -6,6 +6,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <vector>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// リソース生成
+/// </summary>
 namespace MyFunction {
 
     template<class T>

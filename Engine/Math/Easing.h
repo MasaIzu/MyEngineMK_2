@@ -7,7 +7,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <cstdint>
 MY_SUPPRESS_WARNINGS_END
 
-//追加
+//イージング
 namespace Easing
 {
 	double In(double start, double end, double time, double max_time);

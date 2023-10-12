@@ -17,9 +17,9 @@ struct ConstBufferDataWorldTransform {
 	float alpha=1;       // アルファ
 };
 
+//その物体の向いている方向
 struct WorldTarnsLook {
 
-	//その物体の向いている方向
 	Vector3 look = { 0,0,0 };
 	Vector3 lookBack = { 0,0,0 };
 	Vector3 lookRight = { 0,0,0 };
@@ -41,16 +41,15 @@ struct WorldTarnsLook {
 	Vector3 lookDown_lookLeft = { 0,0,0 };
 	Vector3 lookDown_lookRight = { 0,0,0 };
 
-
 };
 
 /// <summary>
-/// ワールド変換データ
+/// ワールドデータ
 /// </summary>
 struct WorldTransform {
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-	// マッピング済みアドレス
+	// マッピングアドレス
 	ConstBufferDataWorldTransform* constMap = nullptr;
 	// ローカルスケール
 	Vector3 scale_ = { 1, 1, 1 };
@@ -69,12 +68,13 @@ struct WorldTransform {
 
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
-
+	//回転用Matrix
 	Matrix4 matRot;
 
 	//回転がオイラー角による回転か
 	bool isEuler = false;
 
+	//回転が向いている方向のみ
 	bool IsLookOnlyMatRot = false;
 
 	//初期化

@@ -5,6 +5,9 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
+/// <summary>
+/// 実際にポストエフェクトをかける方
+/// </summary>
 class PostEffect
 {
 public:

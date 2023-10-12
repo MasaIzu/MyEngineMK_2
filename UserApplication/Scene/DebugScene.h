@@ -26,7 +26,7 @@
 
 
 /// <summary>
-/// ゲームシーン
+/// デバッグシーン
 /// </summary>
 class DebugScene : public BaseScene {
 

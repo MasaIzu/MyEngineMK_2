@@ -8,7 +8,9 @@
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
 
-
+/// <summary>
+/// 弾を撃つ雑魚敵クラス
+/// </summary>
 class BulletShotEnemy {
 
 public://基本関数

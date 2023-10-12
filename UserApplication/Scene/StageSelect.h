@@ -9,7 +9,7 @@
 #include "Skydome.h"
 
 
-// タイトルシーン
+// ステージセレクトシーン
 class StageSelect : public BaseScene
 {
 public: // メンバ関数

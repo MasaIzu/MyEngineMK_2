@@ -15,6 +15,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <memory>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// フレームワーク
+/// </summary>
 class Framework {
 public:
 	//virtualメンバ関数

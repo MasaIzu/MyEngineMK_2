@@ -2,7 +2,9 @@
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
 
-
+/// <summary>
+/// シーンマネージャー
+/// </summary>
 class SceneManager final
 {
 public: // メンバ関数

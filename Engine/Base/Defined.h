@@ -1,4 +1,5 @@
 #pragma once
+//ワーニング消す
 
 #define MY_PRAGMA(x)				__pragma(x)
 

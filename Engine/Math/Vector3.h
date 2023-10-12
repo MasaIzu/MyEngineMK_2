@@ -1,5 +1,8 @@
 #pragma once
 
+/// <summary>
+/// ベクター3
+/// </summary>
 class Vector3
 {
 public:

@@ -1,5 +1,5 @@
 #pragma once
-
+//インクルード
 #include "Defined.h"
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <fstream>

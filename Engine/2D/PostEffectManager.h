@@ -2,7 +2,9 @@
 #include "PostEffect.h"
 #include "MixPostEffect.h"
 
-
+/// <summary>
+/// ポストエフェクトマネージャー
+/// </summary>
 class PostEffectManager {
 public:
 

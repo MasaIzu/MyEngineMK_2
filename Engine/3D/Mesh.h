@@ -35,7 +35,7 @@ struct Node
 };
 
 /// <summary>
-/// 形状データ
+/// メッシュデータ
 /// </summary>
 class Mesh {
 	//friend class FbxLoader;

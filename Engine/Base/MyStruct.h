@@ -1,7 +1,9 @@
 #pragma once
 #include "Vector4.h"
 
-
+/// <summary>
+/// ストラクトをまとめる
+/// </summary>
 namespace MyStruct {
 
 	struct Meshes {

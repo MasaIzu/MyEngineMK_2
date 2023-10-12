@@ -343,13 +343,7 @@
     <ClInclude Include="Engine\GameFunction\Mouse.h">
       <Filter>Engine\HeaderFile\GameFunction</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\Enemy.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Collision\BaseCollider.h">
-      <Filter>Engine\HeaderFile\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Collision\BoxCollision.h">
       <Filter>Engine\HeaderFile\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collision\Collision.h">
@@ -572,9 +566,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\MyMath.cpp">
       <Filter>Engine\SourceFile\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\Enemy.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collision\BoxCollision.cpp">
       <Filter>Engine\SourceFile\Collision</Filter>

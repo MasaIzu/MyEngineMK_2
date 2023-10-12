@@ -8,7 +8,7 @@
 MY_SUPPRESS_WARNINGS_BEGIN
 #include<DirectXMath.h>
 MY_SUPPRESS_WARNINGS_END
-
+//レイキャストプリミティブ
 struct RaycastHit {
 
 	BaseCollider* collider = nullptr;

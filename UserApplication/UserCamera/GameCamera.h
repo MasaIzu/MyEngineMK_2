@@ -8,7 +8,9 @@
 #include "ViewProjection.h"
 #include <BaseCollider.h>
 
-
+/// <summary>
+/// ゲームプレイカメラ
+/// </summary>
 class GameCamera {
 
 public://基本関数

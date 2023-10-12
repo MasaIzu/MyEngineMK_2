@@ -13,6 +13,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// デバイスやコマンドリストなど生成
+/// </summary>
 class DirectXCore {
 
 public://メンバ関数

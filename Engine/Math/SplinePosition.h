@@ -7,6 +7,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <vector>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// スプライン
+/// </summary>
 class SplinePosition {
 
 public://基本関数

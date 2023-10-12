@@ -22,7 +22,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// 3Dオブジェクト
+/// メッシュに沿わせたパーティクル
 /// </summary>
 class MeshParticle
 {

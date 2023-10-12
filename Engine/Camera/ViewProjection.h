@@ -19,7 +19,7 @@ struct ConstBufferDataViewProjection {
 };
 
 /// <summary>
-/// ビュープロジェクション変換データ
+/// ビュープロジェクションデータ
 /// </summary>
 struct ViewProjection {
 	// 定数バッファ

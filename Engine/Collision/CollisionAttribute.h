@@ -1,4 +1,5 @@
 #pragma once
+//当たり判定属性
 
 const unsigned short COLLISION_ATTR_LANDSHAPE = 0b0;//地形
 const unsigned short COLLISION_ATTR_OBJECT = 0b1;//オブジェクト

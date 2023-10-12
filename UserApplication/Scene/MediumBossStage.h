@@ -11,7 +11,7 @@
 #include "MiddleBossEnemy.h"
 
 
-// タイトルシーン
+// 中ボスシーン
 class MediumBossStage : public BaseScene
 {
 public: // メンバ関数

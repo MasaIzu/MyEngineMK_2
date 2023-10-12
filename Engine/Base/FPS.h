@@ -2,6 +2,10 @@
 #include "ErrorException.h"
 
 #pragma comment(lib, "winmm.lib")
+
+/// <summary>
+/// FPS制限
+/// </summary>
 class FPS {
 private:
 	// CPU周波数

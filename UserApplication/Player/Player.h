@@ -9,7 +9,9 @@
 #include <Sprite.h>
 #include "SplinePosition.h"
 
-
+/// <summary>
+/// プレイヤー
+/// </summary>
 class Player {
 
 public://基本関数

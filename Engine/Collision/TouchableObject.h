@@ -3,6 +3,9 @@
 #include "Model.h"
 #include "CollisionAttribute.h"
 
+/// <summary>
+/// 当たり判定作成
+/// </summary>
 class TouchableObject
 {
 public:

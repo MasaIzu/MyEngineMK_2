@@ -11,6 +11,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <list>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// スコアスプライト
+/// </summary>
 class ScoreSprite
 {
 public:

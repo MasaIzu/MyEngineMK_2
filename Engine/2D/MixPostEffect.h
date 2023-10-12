@@ -5,6 +5,9 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
+/// <summary>
+/// 混ぜるためのポストエフェクト
+/// </summary>
 class MixPostEffect
 {
 public:

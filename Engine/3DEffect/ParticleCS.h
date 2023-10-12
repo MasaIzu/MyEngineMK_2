@@ -19,7 +19,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// 3Dオブジェクト
+/// コンピュートシェーダー実装用
 /// </summary>
 class ParticleCS
 {

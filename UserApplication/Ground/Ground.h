@@ -5,6 +5,9 @@
 #include "TouchableObject.h"
 #include <MeshCollider.h>
 
+/// <summary>
+/// 地面
+/// </summary>
 class Ground {
 
 

@@ -14,6 +14,9 @@ MY_SUPPRESS_WARNINGS_END
 
 class BaseCollider;
 
+/// <summary>
+/// コリジョンマネージャー
+/// </summary>
 class CollisionManager {
 public:
 	static CollisionManager* GetInstance();

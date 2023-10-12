@@ -9,7 +9,9 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 
-
+/// <summary>
+/// 敵の弾用クラス
+/// </summary>
 class EnemyBullet {
 
 public://基本関数

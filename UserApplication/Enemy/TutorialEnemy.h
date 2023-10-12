@@ -7,7 +7,9 @@
 #include <CollisionManager.h>
 #include "SplinePosition.h"
 
-
+/// <summary>
+/// 突進してくる雑魚敵
+/// </summary>
 class TutorialEnemy {
 
 public://基本関数

@@ -5,6 +5,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <cstdint>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// uint32_tのベクター
+/// </summary>
 class Uint32Vector2
 {
 public:

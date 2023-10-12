@@ -13,6 +13,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <dinput.h>
 MY_SUPPRESS_WARNINGS_END
 
+//入力マウス
 class Mouse
 {
 private:

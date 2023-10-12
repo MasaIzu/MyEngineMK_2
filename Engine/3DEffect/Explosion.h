@@ -18,7 +18,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// 3Dオブジェクト
+/// 爆発パーティクル
 /// </summary>
 class Explosion
 {

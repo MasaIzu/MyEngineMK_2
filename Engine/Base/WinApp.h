@@ -10,7 +10,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 
 MY_SUPPRESS_WARNINGS_END
 
-
+/// <summary>
+/// ウィンドウ生成
+/// </summary>
 class WinApp
 {
 public:

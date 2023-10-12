@@ -5,6 +5,9 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <d3d12.h>
 MY_SUPPRESS_WARNINGS_END
 
+/// <summary>
+/// パーティクルマネージャー
+/// </summary>
 class ParticleManager {
 
 public:

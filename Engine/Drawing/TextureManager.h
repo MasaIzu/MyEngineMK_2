@@ -11,7 +11,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// テクスチャマネージャ
+/// テクスチャマネージャー
 /// </summary>
 class TextureManager {
 public:

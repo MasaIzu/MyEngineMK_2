@@ -9,7 +9,9 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 
-
+/// <summary>
+/// プレイヤー用弾クラス
+/// </summary>
 class PlayerBullet {
 
 public://基本関数
