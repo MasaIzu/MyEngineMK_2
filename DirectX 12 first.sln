@@ -5,12 +5,6 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectX12Engine", "DirectX 12 first.vcxproj", "{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{AAD31867-0D0A-4155-A935-2A6648B0D2A3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "External\imgui\imgui.vcxproj", "{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "External\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,21 +15,9 @@ Global
 		{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}.Debug|x64.Build.0 = Debug|x64
 		{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}.Release|x64.ActiveCfg = Release|x64
 		{316E2B90-B85E-4F00-BAEF-5EE13DBF4160}.Release|x64.Build.0 = Release|x64
-		{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2}.Debug|x64.ActiveCfg = Debug|x64
-		{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2}.Debug|x64.Build.0 = Debug|x64
-		{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2}.Release|x64.ActiveCfg = Release|x64
-		{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2}.Release|x64.Build.0 = Release|x64
-		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.ActiveCfg = Debug|x64
-		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.Build.0 = Debug|x64
-		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.ActiveCfg = Release|x64
-		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BE669A8B-70D4-4DE6-A6B8-3E92D630B3D2} = {AAD31867-0D0A-4155-A935-2A6648B0D2A3}
-		{371B9FA9-4C90-4AC6-A123-ACED756D6C77} = {AAD31867-0D0A-4155-A935-2A6648B0D2A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93DDED2D-CD68-4DB0-9ADA-0FB06D484069}
