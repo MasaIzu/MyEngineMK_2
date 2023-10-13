@@ -145,5 +145,5 @@ void TitleScene::CSUpdate()
 {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	ParticleMan->CSUpdate(commandList, Vector4(0, 0, 0, 0));
+	ParticleMan->CSUpdate(commandList, Vector4(0, 7, 0, 0));
 }
