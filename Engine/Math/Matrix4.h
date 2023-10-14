@@ -51,13 +51,11 @@ public:
 	Vector3 transform(const Vector3& v, const Matrix4& m);
 
 
-	//
-	Matrix4 MyMatrixToXMMatrix(const Matrix4& Mat);
+	//XMMATRIXに変換
+	DirectX::XMMATRIX MyMatrixToXMMatrix(const Matrix4& Mat);
 
+	//マトリックスの掛け算
 	Matrix4 MatMul(const Matrix4& Mat);
-
-	Vector4 Vec4MulPs(const Vector4& v4_1, const Vector4& v4_2);
-	Vector4 Vec4AddPs(const Vector4& v4_1, const Vector4& v4_2);
 
 
 	// 代入演算子オーバーロード

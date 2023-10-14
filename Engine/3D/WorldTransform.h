@@ -86,20 +86,48 @@ struct WorldTransform {
 	//行列を転送する
 	void TransferMatrix();
 
+	/// <summary>
+	/// 回転セット
+	/// </summary>
+	/// <param name="rot"></param>
 	void SetRot(const Vector3& rot);
 
+	/// <summary>
+	/// Matrix回転セット
+	/// </summary>
 	void SetMatRot(const Matrix4& mat);
 
+	/// <summary>
+	/// 回転をプラスしていく
+	/// </summary>
+	/// <param name="move"></param>
 	void MoveRot(const Vector3& move);
 
+	/// <summary>
+	/// クオータニオンロット
+	/// </summary>
+	/// <param name="quater"></param>
 	void SetQuater(const Quaternion& quater);
 
+	/// <summary>
+	/// クオータニオンプラスしていく
+	/// </summary>
+	/// <param name="move"></param>
 	void MoveQuater(const Quaternion& move);
-	
+
+	/// <summary>
+	/// クオータニオンゲット
+	/// </summary>
 	Quaternion& GetQuaternion();
-	
+
+	/// <summary>
+	/// 見てる方向のゲット
+	/// </summary>
 	Vector3 GetLook(Matrix4 matRot,Vector3 at);
 
+	/// <summary>
+	/// 見る方向のセット
+	/// </summary>
 	void SetLookMatRot(const Matrix4& mat);
 
 private:

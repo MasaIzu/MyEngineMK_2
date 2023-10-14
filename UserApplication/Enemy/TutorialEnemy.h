@@ -16,19 +16,25 @@ public://基本関数
 	TutorialEnemy(const Vector3& BonePos_, Model* model);
 	~TutorialEnemy();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update(const Vector3& PlayerPos);
+	//描画
 	void Draw(ViewProjection& viewProjection_);
+	//デバッグ描画
 	void DebugDraw(ViewProjection& viewProjection_);
 public://getter
+	//死んだか
 	bool GetIsDead() { return isDead; }
+	//ポジションゲット
 	Vector3 GetTutorialEnemyPos() const { return MyMath::GetWorldTransform(enemyWorldTrans.matWorld_); };
 private:
 	//動きについての関数
 	void PlayerBulletHit();//プレイヤーの弾が当たった時の処理
 	void PlayerNotSpottedMove();//敵を見つけてない時の動き
 	void PlayerSpottedMove();//敵を見つけた時の動き
-	void Attack();
+	void Attack();//アタック
 
 	//敵の行動についての関数タイマー
 	void PlayerNotSpottedMoveTimer();//敵を見つけてない時

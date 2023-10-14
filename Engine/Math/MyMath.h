@@ -69,6 +69,9 @@ namespace MyMath {
 
 	void MatrixText(Matrix4& mat);
 
+	Vector4 Vec4MulPs(const Vector4& v4_1,const Vector4& v4_2);
+	Vector4 Vec4AddPs(const Vector4& v4_1,const Vector4& v4_2);
+
 	//vec1を中心とした時のvec2の角度を出す
 	float Get2VecAngle(const Vector3& vec1, const Vector3& vec2);
 	float Get2VecAngleY(const Vector3& vec1, const Vector3& vec2);

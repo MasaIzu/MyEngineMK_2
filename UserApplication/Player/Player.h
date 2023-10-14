@@ -18,14 +18,18 @@ public://基本関数
 	Player();
 	~Player();
 
+	//初期化
 	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
+	//更新
 	void Update();
+	//描画
 	void Draw(ViewProjection& viewProjection_);
+	//スプライト描画
 	void DrawSprite();
 
 	//パーティクルを出す用
 	void CopyParticle();
-
+	//アタックアップデート
 	void AttackUpdate(const Vector3& EnemyPos, bool& LockOn);
 
 private:
@@ -50,25 +54,24 @@ private:
 	float AngleSelect(float& angle, float& selectAngle);
 
 public://Setter
-	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }
-	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }
-	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }
-	void SetCameraDistance(const float& distance) { PlayerToCameraDistance = distance; }
-	void SetCameraMaxDistance(const float& CameraMaxDistance) { this->cameraMaxDistance = CameraMaxDistance; }
-	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }
-	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }
-	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }
+	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }//カメラモード
+	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }//カメラの回転
+	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }//撃つ場所への距離
+	void SetCameraDistance(const float& distance) { PlayerToCameraDistance = distance; }//プレイヤーとカメラの距離
+	void SetCameraMaxDistance(const float& CameraMaxDistance) { this->cameraMaxDistance = CameraMaxDistance; }//アルファ値を決めるためのカメラ距離のマックス
+	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }//最初のスプライン
+	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }//二つ目のスプライン
+	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }//最後のスプライン
 public://Getter
-	bool GetIsPlayerSetUp()const { return isPlayerSetUp; }
-	bool GetHitFirstRail()const { return isHitFirstRail; }
-	bool GetHit2ndRail()const { return isHitRail; }
-	bool GetHitFinalRail()const { return isHitFinalRail; }
-	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }
-	bool GetHowReturnSpline2ndRail(const uint32_t & HowIndex)const { return playerMoveSpline->GetHowReturnIndex(HowIndex); }
-	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }
-	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }
-	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }
-	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }
+	bool GetHitFirstRail()const { return isHitFirstRail; }//最初のスプラインに当たったか
+	bool GetHit2ndRail()const { return isHitRail; }//二つ目のスプラインに当たったか
+	bool GetHitFinalRail()const { return isHitFinalRail; }//最後のスプラインに当たったか
+	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
+	bool GetHowReturnSpline2ndRail(const uint32_t & HowIndex)const { return playerMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
+	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
+	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }//スプラインが終わったか
+	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }//ポジションゲット
+	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }//見てる方向のゲット
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -111,7 +114,6 @@ private://別クラスから値をもらう
 	Vector2 cameraRot;
 
 private://プレイヤークラス変数
-	bool isPlayerSetUp = false;
 	bool onGround = false;
 	bool isHitRail = false;
 	bool isHitFirstRail = false;

@@ -26,36 +26,50 @@ public://基本関数
 	MiddleBossEnemy();
 	~MiddleBossEnemy();
 
+	//初期化
 	void Initialize(Player* player);
+	//タイトル用初期化
 	void TitleInitialize();
+	//更新
 	void Update();
+	//描画
 	void Draw(ViewProjection& viewProjection_);
-
+	//ムービー用更新
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 
+	//タイトル用アップデート
 	void TitleUpdate(const Vector3& TrackingLocation);
+	//弾を作る
 	void MakeMissileBullet();
+	//タイトルリセット
 	void ResetTitleMove();
 
 private://関数
+	//タイマー
 	void Timer();
+	//アタック
 	void Attack();
+	//考える時間
 	void ThinkingTime();
-	void WorldTransUpdate();//移動の値更新
+	//移動の値更新
+	void WorldTransUpdate();
+	//アタックタイプ変更
 	void CheckAttackType();
+	//タイプのランダム
 	uint32_t RandomType(uint32_t& NoUseType);
 
 public://Setter
-
+	//スプラインセット
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }
 
 public://Getter
-
+	//指定位置にいるかどうか
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return MoveSpline->GetHowReturnIndex(HowIndex); }
+	//スプラインが終わったか
 	bool GetFinishSpline()const { return MoveSpline->GetFinishSpline(); }
-
+	//死んだか
 	bool GetIsDead()const { return isDead; }
-
+	//ポジションリターン
 	Vector3 GetPosition() const;
 
 private://const関連

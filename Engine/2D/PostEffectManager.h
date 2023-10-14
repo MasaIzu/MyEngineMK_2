@@ -8,6 +8,7 @@
 class PostEffectManager {
 public:
 
+	//初期化
     static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
     /// <summary>
@@ -21,9 +22,9 @@ public:
     /// </summary>
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
-
+	//描画
     static void Draw(ID3D12GraphicsCommandList* cmdList);
-
+	//終了処理
     static void Finalize();
 
 private:

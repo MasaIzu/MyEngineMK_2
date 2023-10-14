@@ -17,12 +17,17 @@ public://基本関数
 	BulletShotEnemy(const Vector3& BonePos_, Model* model);
 	~BulletShotEnemy();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update(const Vector3& PlayerPos);
+	//描画
 	void Draw(ViewProjection& viewProjection_);
 
 public://getter
+	//死んでるかどうか
 	bool GetIsDead() { return isDead; }
+	//ポジションゲット
 	Vector3 GetBulletShotEnemyPos() const { return MyMath::GetWorldTransform(BulletShotEnemyWorldTrans.matWorld_); };
 private:
 	//動きについての関数

@@ -109,10 +109,25 @@ public: // メンバ関数
 	/// <returns>インデックス配列</returns>
 	inline const std::vector<unsigned short>& GetIndices() { return indices; }
 
+	/// <summary>
+	/// テクスチャのセット
+	/// </summary>
+	/// <param name="textureHandle">テクスチャ</param>
 	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
 
+	/// <summary>
+	/// 三角形頂点だけ算出
+	/// </summary>
+	/// <returns></returns>
 	std::vector<VertexPos> GetMeshVertice() { return onlyTriangleVertices; }
+	/// <summary>
+	/// メッシュパーティクルよう
+	/// </summary>
+	/// <returns></returns>
 	std::vector<MyStruct::Meshes> GetMeshData() { return mesheData; }
+	/// <summary>
+	/// 名前
+	/// </summary>
 	std::string GetName();
 
 private: // メンバ変数

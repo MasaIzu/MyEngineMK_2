@@ -27,16 +27,25 @@ public:
 	virtual void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime) = 0;
 	virtual void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime) = 0;
 	virtual void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) = 0;
-
+	//スフィアタイプゲット
 	inline CollisionShapeType GetShapeType() { return shapeType; }
+	//当たり判定属性ゲット
 	inline unsigned short GetAttribute() { return attribute; }
+	//プレイヤーの攻撃が当たった
 	inline bool GetHit() { return isHitPlayerAttack; }
+	//敵同士が接触した
 	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
+	//スフィアに当たった
 	inline bool GetSphereMeshHit() { return isSphereMeshHit; }
+	//最初のスプラインの場所に当たった
 	inline bool GetFirstSplineHit() { return isHitFirstSplineRail; }
+	//最後のスプラインの場所に当たった
 	inline bool GetFinalSplineHit() { return isHitFinalSplineRail; }
+	//排斥ベクトルの位置ゲット
 	inline Vector3 GetRejectVec() { return rejectVec; }
+	//inrerベクトルの位置ゲット
 	inline Vector4 GetInterVec() { return inter; }
+	//位置ゲット
 	inline Matrix4 GetWorldPos() { return worldPos_; }
 
 

@@ -29,6 +29,7 @@ public: // メンバ関数
 	/// </summary>
 	void Update() override;
 
+	//ポストエフェクト
 	void PostEffectDraw() override;
 
 	/// <summary>
@@ -47,6 +48,7 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	//ブレイクするか
 	bool IsBreak() override;
 
 	//レティクル内に敵がいたらロックオンする

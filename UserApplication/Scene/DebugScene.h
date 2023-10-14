@@ -55,7 +55,7 @@ public: // メンバ関数
 	void PostEffectDraw() override;
 	//CSアップデート
 	void CSUpdate() override;
-
+	//ブレイクするか
 	bool IsBreak() override;
 
 private: // メンバ変数

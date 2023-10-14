@@ -14,15 +14,13 @@ public://基本関数
 	BossEnemy();
 	~BossEnemy();
 
+	//初期化
 	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
+	//更新
 	void Update();
+	//描画
 	void Draw();
 
-
-	//パーティクルを出す用
-	void CSUpdate();
-	void ParticleDraw();
-	void CopyParticle();
 
 	//演出用動き
 	void StagingUpdate();
@@ -32,14 +30,17 @@ private://関数
 	void WorldTransUpdate();//移動の値更新
 
 public://Setter
-	
+	//ボスのステージ移動のスプライン
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }
 
 public://Getter
-
+	//指定したは所にいるか
 	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return MoveSpline->GetHowReturnIndex(HowIndex); }
+	//スプラインは終わったのか
 	bool GetFinishSpline()const { return MoveSpline->GetFinishSpline(); }
+	//アルファは下がりきったか
 	bool GetBodyNoAlpha()const;
+	//ポジションはどこか
 	Vector3 GetSplinePos()const { return MoveSpline->GetFinalSplineVecPoint(); }
 
 private://const関連

@@ -18,8 +18,11 @@ public://基本関数
 	EnemyBullet();
 	~EnemyBullet();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update();
+	//描画
 	void Draw(ViewProjection& viewProjection_);
 
 public:
@@ -48,6 +51,7 @@ private:
 
 public://Getter
 	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(EnemyBulletWorldTrans[bulletCount].matWorld_); }
+	//弾を大きくするか
 	bool GetExpandingBullet() { return isExpanding; }
 
 public://Setter

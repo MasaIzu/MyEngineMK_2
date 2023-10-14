@@ -32,10 +32,14 @@ public:
 	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const bool& isCoolTime) override;
 	void Update(const Matrix4& worldPos, const float& radius, const uint32_t& Cooltime, const uint32_t& FirstCoolTime, const bool& isCoolTime) override;
 
+	//半径のセット
 	inline void SetRadius(float Radius) { this->radius = Radius; }
 
+	//オフセットのゲット
 	inline const Vector4& GetOffset() { return offset; }
+	//オフセットのセット
 	inline void SetOffset(const Vector4& Offset) { this->offset = Offset; }
+	//半径のゲット
 	inline float GetRadius() { return radius; }
 
 

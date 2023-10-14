@@ -379,7 +379,6 @@
     <ClCompile Include="Engine\Base\FPS.cpp" />
     <ClCompile Include="Engine\Base\WinApp.cpp" />
     <ClCompile Include="Engine\Camera\ViewProjection.cpp" />
-    <ClCompile Include="Engine\Collision\BoxCollision.cpp" />
     <ClCompile Include="Engine\Collision\Collision.cpp" />
     <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collision\CollisionPrimitive.cpp" />

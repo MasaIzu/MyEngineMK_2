@@ -244,6 +244,30 @@ Matrix4 MyMath::setViewportMat(WinApp* window, const Vector3& v) {
 	return matViewport;
 }
 
+Vector4 MyMath::Vec4MulPs(const Vector4& v4_1,const Vector4& v4_2)
+{
+	Vector4 result{
+		v4_1.x * v4_2.x,
+		v4_1.y * v4_2.y,
+		v4_1.z * v4_2.z,
+		v4_1.w * v4_2.w
+	};
+
+	return result;
+}
+
+Vector4 MyMath::Vec4AddPs(const Vector4& v4_1,const Vector4& v4_2)
+{
+	Vector4 result{
+		v4_1.x + v4_2.x,
+		v4_1.y + v4_2.y,
+		v4_1.z + v4_2.z,
+		v4_1.w + v4_2.w
+	};
+
+	return result;
+}
+
 Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
 {
 	Matrix4 mat;

@@ -61,20 +61,30 @@ public:// メンバ関数
 	/// <param name="fileName">ファイル名</param>
 	LevelData* LoadFile(const std::string& fileName,const Vector3& vec3);
 
+	//初期化
 	void Initialize(const std::string& fileName ,const Vector3& vec3);
-
+	//更新
 	void Update();
-
+	//描画
 	void Draw(const ViewProjection& viewProjection);
 
+	//近距離エネミーのリスト
 	std::list<TutorialEnemy*> GetTutorialEnemyList() { return tutorialEnemyList; }
+	//遠距離エネミーのリスト
 	std::list<BulletShotEnemy*> GetBulletShotEnemyList() { return billetShotEnemyList; }
+	//最初のスプライン
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
-	std::vector<Vector3> GetSpline() { return splineVec; }
+	//二つ目のスプライン
+	std::vector<Vector3> GetSpline() { return SecondsplineVec; }
+	//最後のスプライン
 	std::vector<Vector3> GetFinalSpline() { return FinalSplineVec; }
+	//ボスのスプライン
 	std::vector<Vector3> GetBossSpline() { return BossEnemySplineVec; }
+	//スロープスプライン
 	std::vector<Vector3> GetStage2SropSpline() { return stage2SropSplineVec; }
+	//カメラのスプライン
 	std::vector<Vector3> GetCameraSpline() { return CameraSplineVec; }
+	//ボスの生まれる場所
 	Vector3 GetBossBonePos(){ return BossBonePos; }
 private:
 	std::unique_ptr<LevelData> levelData;
@@ -85,7 +95,7 @@ private:
 	std::list<BulletShotEnemy*> billetShotEnemyList;
 	std::list<Ground*> ground;
 	std::vector<Vector3> FirstSplineVec;
-	std::vector<Vector3> splineVec;
+	std::vector<Vector3> SecondsplineVec;
 	std::vector<Vector3> FinalSplineVec;
 	std::vector<Vector3> BossEnemySplineVec;
 	std::vector<Vector3> stage2SropSplineVec;

@@ -18,40 +18,44 @@ public://基本関数
 	GameCamera(uint32_t window_width, uint32_t window_height);
 	~GameCamera();
 
+	//初期化
 	void Initialize(ViewProjection* viewProjection_, const float& cameraAngle, const Vector3& pos);
+	//カメラポジション初期化
 	void InitializeCameraPosition(const float& cameraAngle);
+	//更新
 	void Update();
 
-public://リセット
+public:
+	//リセット
 	void MousePositionReset();
 	void MousePositionReset(Vector2& vector2);//少し細工する
 
 private:
-	void HowMuchMoved();
-	void CheckCameraWhichWayMove();
-	void PlaySceneCamera();
-	void SceneCamera();
-	void Collision();
-	void CameraAngle(const float& x, const float& z);
+	void HowMuchMoved();//どのくらい動いたか
+	void CheckCameraWhichWayMove();//どっちに動いたか
+	void PlaySceneCamera();//プレイヤーがシーンのカメラ
+	void SceneCamera();//シーン状態のカメラ
+	void Collision();//当たり判定
+	void CameraAngle(const float& x, const float& z);//カメラの角度
 
 	//カメラの視線切れているか
 	bool CheckBetweenToCameraCollider();
 
 public://getter
-	float GetFovAngle();
-	float GetCameraDistanse();
-	float GetMaxDistance();
-	Vector2 GetCameraAngle() const;
-	Vector3 GetCameraRotVec3() { return this->rot; }
-	Vector3 GetEyeToTagetVecDistance(const float& distance) const;
-	Vector3 GetPlayerDistanceEyePos(const Vector3& playerPos_);
-	Matrix4 GetCameraRot() { return this->CameraRot; }
+	float GetFovAngle();//アングル
+	float GetCameraDistanse();//離れた距離
+	float GetMaxDistance();//マックスの離れた距離
+	Vector2 GetCameraAngle() const;//カメラのアングルゲット
+	Vector3 GetCameraRotVec3() { return this->rot; }//ロットゲット
+	Vector3 GetEyeToTagetVecDistance(const float& distance) const;//アイとターゲットの距離
+	Vector3 GetPlayerDistanceEyePos(const Vector3& playerPos_);//プレイヤーとの距離
+	Matrix4 GetCameraRot() { return this->CameraRot; }//カメラの回転Matrix4
 
 public://setter
-	void SetCameraMode(const bool& mode);
-	void SetPlayerPosition(const Vector3& pos);
-	void SetFreeCamera(const bool& mode);
-	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);
+	void SetCameraMode(const bool& mode);//カメラのモード
+	void SetPlayerPosition(const Vector3& pos);//プレイヤーのポジション
+	void SetFreeCamera(const bool& mode);//フリーカメラ状態か
+	void SetCameraTargetAndPos(const Vector3& target, const Vector3& eye);//ターゲットとアイの位置をセット
 
 private://クラス関連
 	

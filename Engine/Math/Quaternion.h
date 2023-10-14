@@ -26,7 +26,7 @@ public:
 	//回転行列からクォータニオンを作成
 	Quaternion(const Matrix4& m);
 
-
+	//Vector4からクォータニオンを作成
 	Quaternion(const Vector4& v);
 
 	//ベクトルからベクトルの角度
@@ -79,6 +79,7 @@ public:
 	Quaternion& operator /= (float s);
 	Quaternion& operator *= (const Quaternion& q);
 
+	//ベクター3を掛け算
 	Vector3 multiply(const Vector3& vec);
 
 };

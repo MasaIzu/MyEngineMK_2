@@ -18,8 +18,11 @@ public://基本関数
 	MultiBullet();
 	~MultiBullet();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update();
+	//描画
 	void Draw(ViewProjection& viewProjection_);
 
 
@@ -41,7 +44,6 @@ private:
 
 public://Getter
 	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(EnemyBulletWorldTrans[bulletCount].matWorld_); }
-	bool GetExpandingBullet() { return isExpanding; }
 
 public://Setter
 
@@ -62,7 +64,6 @@ private://別クラスから値をもらう
 
 private://クラス変数
 	bool isBulletAlive[AllBulletCount];
-	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
 
 	uint32_t BulletLifeTime[AllBulletCount];

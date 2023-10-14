@@ -54,6 +54,7 @@ public: // メンバ関数
 	// マウスの位置
 	const Vector3 GetMouseMove();
 
+	//終了処理
 	void Destroy();
 
 private:

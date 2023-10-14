@@ -39,18 +39,6 @@ void BossEnemy::Draw()
 	}
 }
 
-void BossEnemy::CSUpdate()
-{
-}
-
-void BossEnemy::ParticleDraw()
-{
-}
-
-void BossEnemy::CopyParticle()
-{
-}
-
 void BossEnemy::StagingUpdate()
 {
 	MoveSpline->Update(EnemySplineUpdate);

@@ -13,10 +13,11 @@ class Ground {
 
 public:
 	Ground(Model* model);
+	//初期化
 	void Initialze();
-
+	//更新
 	void Update();
-
+	//描画
 	void Draw(const ViewProjection& view);
 
 private:

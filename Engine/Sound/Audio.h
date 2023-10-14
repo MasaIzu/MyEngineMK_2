@@ -52,6 +52,7 @@ public:
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2;
 	IXAudio2MasteringVoice* masterVoice;
 	static const int kMaxSoundData = 256;
+	//初期化
 	void Initialize();
 	//音声読み込み
 	SoundData SoundLoadWave(const char* filename);

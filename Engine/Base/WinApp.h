@@ -32,17 +32,21 @@ public: // 静的メンバ関数
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public://メンバ関数
+	//ウィンドウ作成
 	void MakeWindow(std::wstring title);
+	//プロセスメッセージ
 	bool ProcessMessage();
+	//デリートゲームウィンドウ
 	void DeleteGameWindow();
-
+	//終了処理
 	void Destroy();
-
+	//Hインスタンスゲット
 	HINSTANCE GetHInstance() const { return w.hInstance; }
+	//ウィンドウサイズ
 	Vector2 GetWindowSize() const;
 
 public://GetterSetter
-
+	//hwndゲット
 	HWND Gethwnd() { return hwnd; }
 
 private://メンバ変数

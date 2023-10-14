@@ -126,7 +126,7 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName,const Vector3& 
 			nlohmann::json& transform = object["transform"];
 			Vector3 trans = { static_cast<float>(transform["translation"][0]),static_cast<float>(transform["translation"][2]),static_cast<float>(transform["translation"][1]) };
 			trans.x *= -1.0f;
-			splineVec.push_back(trans + vec3);
+			SecondsplineVec.push_back(trans + vec3);
 		}
 		else if (object["file_name"].get<std::string>() == "FINALSPLINE") {
 			// トランスフォームのパラメータ読み込み

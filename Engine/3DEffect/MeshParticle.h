@@ -179,31 +179,49 @@ private:// 静的メンバ関数
 	/// <returns>成否</returns>
 	static void InitializeGraphicsPipeline();
 
+	/// <summary>
+	/// 頂点バッファの初期化
+	/// </summary>
 	void InitializeVerticeBuff();
 
 
 
 public: // メンバ関数
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="ParticleCount">どのくらい作るのか</param>
 	void Initialize(uint32_t ParticleCount);
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
-
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList ,Vector4 StartPos);
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(const ViewProjection& view);
 
+	/// <summary>
+	/// テクスチャのセット
+	/// </summary>
 	void SetTextureHandle(uint32_t textureHandle);
 
-	size_t GetParticlesListSize() { return Particles.size(); }
+	/// <summary>
+	/// 全体のサイズ
+	/// </summary>
+	size_t GetParticlesListSize() {
+		return Particles.size();
+	}
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
 
+	//メッシュポジションセット
 	void SetMeshPos(std::vector<MyStruct::Meshes> meshPos);
 
 

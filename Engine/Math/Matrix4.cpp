@@ -1,5 +1,6 @@
 #include "Matrix4.h"
 #include <cmath>
+#include <MyMath.h>
 
 Matrix4::Matrix4()
 {
@@ -183,7 +184,7 @@ Vector3 Matrix4::transform(const Vector3& v, const Matrix4& mat)
 	return result;
 }
 
-Matrix4 Matrix4::MyMatrixToXMMatrix(const Matrix4& Mat)
+DirectX::XMMATRIX Matrix4::MyMatrixToXMMatrix(const Matrix4& Mat)
 {
 	DirectX::XMMATRIX m1;
 
@@ -238,14 +239,14 @@ Matrix4 Matrix4::MatMul(const Matrix4& Mat)
 		matR2 = { Mat.m[2][0],Mat.m[2][1],Mat.m[2][2],Mat.m[2][3] };
 		matR3 = { Mat.m[3][0],Mat.m[3][1],Mat.m[3][2],Mat.m[3][3] };
 
-		vX = Vec4MulPs(vX, matR0);
-		vY = Vec4MulPs(vY, matR1);
-		vZ = Vec4MulPs(vZ, matR2);
-		vW = Vec4MulPs(vW, matR3);
+		vX = MyMath::Vec4MulPs(vX, matR0);
+		vY = MyMath::Vec4MulPs(vY, matR1);
+		vZ = MyMath::Vec4MulPs(vZ, matR2);
+		vW = MyMath::Vec4MulPs(vW, matR3);
 
-		vX = Vec4AddPs(vX, vZ);
-		vY = Vec4AddPs(vY, vW);
-		vX = Vec4AddPs(vX, vY);
+		vX = MyMath::Vec4AddPs(vX, vZ);
+		vY = MyMath::Vec4AddPs(vY, vW);
+		vX = MyMath::Vec4AddPs(vX, vY);
 
 		tmp.m[i][0] = vX.x;
 		tmp.m[i][1] = vX.y;
@@ -255,33 +256,6 @@ Matrix4 Matrix4::MatMul(const Matrix4& Mat)
 
 	return tmp;
 }
-
-Vector4 Matrix4::Vec4MulPs(const Vector4& v4_1, const Vector4& v4_2)
-{
-	Vector4 result{
-		v4_1.x * v4_2.x,
-		v4_1.y * v4_2.y,
-		v4_1.z * v4_2.z,
-		v4_1.w * v4_2.w
-	};
-
-	return result;
-}
-
-Vector4 Matrix4::Vec4AddPs(const Vector4& v4_1, const Vector4& v4_2)
-{
-	Vector4 result{
-		v4_1.x + v4_2.x,
-		v4_1.y + v4_2.y,
-		v4_1.z + v4_2.z,
-		v4_1.w + v4_2.w
-	};
-
-	return result;
-}
-
-
-
 
 // 代入演算子　*=　オーバーロード関数（行列と行列の積）
 Matrix4& Matrix4::operator*=(const Matrix4& m1)

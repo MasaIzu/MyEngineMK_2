@@ -23,6 +23,6 @@ namespace MyFunction {
         const D3D12_CLEAR_VALUE* clearValue,
         D3D12_HEAP_TYPE heapType
     );
-
+	//Mapする
     void WriteToUploadHeapMemory(ID3D12Resource1* resource, uint32_t size, const void* data);
 }

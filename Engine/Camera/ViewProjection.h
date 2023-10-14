@@ -74,6 +74,6 @@ struct ViewProjection {
 	/// </summary>
 	void UpdateMatrix();
 
-
+	//ラジアンに変更
 	float ToRadian(float x) { return x * (MyMath::PI / 180); }
 };

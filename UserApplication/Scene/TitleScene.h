@@ -30,6 +30,9 @@ public: // メンバ関数
 	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// ポストエフェクトかける
+	/// </summary>
 	void PostEffectDraw() override;
 
 	/// <summary>
@@ -48,6 +51,10 @@ public: // メンバ関数
 	//CSアップデート
 	void CSUpdate() override;
 
+	/// <summary>
+	/// ブレイクするか
+	/// </summary>
+	/// <returns>ブレイク</returns>
 	bool IsBreak() override;
 
 	//カメラアップデート

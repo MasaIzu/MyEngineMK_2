@@ -18,9 +18,13 @@ public://基本関数
 	PlayerBullet();
 	~PlayerBullet();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update();
+	//描画
 	void Draw(ViewProjection& viewProjection_);
+	//パーティクルコピー
 	void CopyParticle();
 
 public:
@@ -49,6 +53,7 @@ private:
 	void OldPosUpdate();
 
 public://Getter
+	//バレット場所をゲット
 	Vector3 GetPlayerBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(playerBulletWorldTrans[bulletCount].matWorld_); }
 	bool GetExpandingBullet() { return isExpanding; }
 

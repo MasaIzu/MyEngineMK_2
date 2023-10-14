@@ -18,8 +18,11 @@ public://基本関数
 	MissileBullet();
 	~MissileBullet();
 
+	//初期化
 	void Initialize();
+	//更新
 	void Update(const Vector3& EndPos);
+	//描画
 	void Draw(ViewProjection& viewProjection_);
 
 
@@ -27,7 +30,6 @@ public:
 
 	//弾を作り出す
 	void MakeBullet(Vector3& pos);
-
 	void MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount);
 	void MakeSelectMissileBullet(Vector3& pos, Vector3& upLeft, Vector3& upRight, Vector3& downLeft, Vector3& downRight, uint32_t& MakeCount);
 
@@ -42,8 +44,8 @@ private:
 	//void OldPosUpdate();
 
 public://Getter
+	//バレットの位置ゲット
 	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(EnemyBulletWorldTrans[bulletCount].matWorld_); }
-	bool GetExpandingBullet() { return isExpanding; }
 
 public://Setter
 
@@ -65,7 +67,6 @@ private://別クラスから値をもらう
 
 private://クラス変数
 	bool isBulletAlive[AllBulletCount];
-	bool isExpanding = false;
 	bool isMovingExpandingBullet = false;
 	bool isStartTracking[AllBulletCount];
 	bool isNearPlayer[AllBulletCount];

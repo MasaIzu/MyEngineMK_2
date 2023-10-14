@@ -20,13 +20,3 @@ void ParticleManager::Finalize()
 	ParticleHandHanabi::StaticFinalize();
 	ParticleCS::StaticFinalize();
 }
-
-void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
-{
-	ParticleCS::PreDraw(cmdList);
-}
-
-void ParticleManager::PostDraw()
-{
-	ParticleCS::PostDraw();
-}

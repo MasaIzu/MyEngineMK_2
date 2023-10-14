@@ -39,8 +39,14 @@ public:
         float _AngleDeg2;
     };
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
     static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
 
+	/// <summary>
+	/// 修正処理
+	/// </summary>
     static void Finalize();
 
     /// <summary>
@@ -54,6 +60,9 @@ public:
     /// <param name="cmdList">コマンドリスト</param>
     static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
     static void Draw(ID3D12GraphicsCommandList* cmdList);
 
     /// <summary>
@@ -62,12 +71,24 @@ public:
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
 
+	/// <summary>
+	/// シェーダーナンバーセット
+	/// </summary>
     static void SetShadeNumber(int SetShadeNumber);
 
+	/// <summary>
+	/// レンジの大きさ
+	/// </summary>
     static void SetKernelSize(int range);
 
+	/// <summary>
+	/// ラジアルブラー
+	/// </summary>
     static void SetRadialBlur(Vector2 senter, float intensity, int sample);
 
+	/// <summary>
+	/// アングル変更
+	/// </summary>
     static void SetAngle(float angle1, float angle2);
 
 

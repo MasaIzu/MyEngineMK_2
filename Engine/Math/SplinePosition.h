@@ -81,17 +81,25 @@ public://基本関数
 	void ResetNearSplineReset();
 
 private://プライベート関数
+	//ポジションアップデート
 	Vector3 SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t);
 
 
 public://Setter
+	//スプラインのマックス変更
 	void SetSplineMaxTime(const float& maxTime) { MaxTime = maxTime; }
+	//スプライン状態でないものをスプラインにする
 	void SetNotSplineVector(const std::vector<Vector3>& points);
 public://Getter
+	//スプラインが終わったか
 	bool GetFinishSpline()const { return isFinishSpline; }
+	//指定位置に来たらtrueにする
 	bool GetHowReturnIndex(const uint32_t& HowIndex)const;
+	//今のIndexをリターンする
 	size_t GetNowIndex()const { return startIndex; }
+	//ポイントを入れると場所をリターンする
 	Vector3 GetSplineVecPoint(const uint32_t& point) { return points[point]; }
+	//最後のポイントの位置をゲットする
 	Vector3 GetFinalSplineVecPoint() { return points[points.size() - 1]; }
 public://公開変数
 	Vector3 NowPos;

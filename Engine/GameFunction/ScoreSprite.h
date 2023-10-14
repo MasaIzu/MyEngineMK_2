@@ -25,9 +25,9 @@ public:
 
     // 描画の関数
     void Draw(int num, Vector2 pos);
-
+	//描画スピード
     void DrawSpeed(int num, Vector2 pos);
-
+	//サイズのセット
     void SetSize(Vector2 size);
 
 private:

@@ -567,9 +567,6 @@
     <ClCompile Include="Engine\Math\MyMath.cpp">
       <Filter>Engine\SourceFile\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Collision\BoxCollision.cpp">
-      <Filter>Engine\SourceFile\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collision\Collision.cpp">
       <Filter>Engine\SourceFile\Collision</Filter>
     </ClCompile>

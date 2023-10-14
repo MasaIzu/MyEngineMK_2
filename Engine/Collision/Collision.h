@@ -48,8 +48,6 @@ public:
 	//static bool CheckSphere2Triangle(const Sphere& sphere, const Triangle& triangle, AliceMathF::Vector4* inter = nullptr);
 	static bool CheckSphere2Triangle(const Sphere& sphere, const Triangle& triangle, Vector4* inter = nullptr, Vector4* reject = nullptr);
 
-	static bool CheckRectSphere(Vector3 rectWidthHeightDepth1, Vector3 rectWidthHeightDepth2, Vector3 sphere);
-
 	///// <summary>
 	///// 球と法線付き三角形の当たり判定
 	///// </summary>

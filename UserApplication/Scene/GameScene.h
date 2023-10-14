@@ -55,9 +55,9 @@ public: // メンバ関数
 	void PostEffectDraw() override;
 	//CSアップデート
 	void CSUpdate() override;
-
+	//ブレイクするか
 	bool IsBreak() override;
-
+	//レティクルチェック
 	bool CheckReticle();
 
 private: // メンバ変数

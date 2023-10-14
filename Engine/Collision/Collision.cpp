@@ -148,21 +148,6 @@ bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphe
 	return false;
 }
 
-// 長方形と点の当たり判定
-bool Collision::CheckRectSphere(Vector3 rectWidthHeightDepth1, Vector3 rectWidthHeightDepth2, Vector3 sphere) {
-
-	if (rectWidthHeightDepth1.x > sphere.x && sphere.x > rectWidthHeightDepth2.x) {
-		if (rectWidthHeightDepth1.y > sphere.y && sphere.y > rectWidthHeightDepth2.y) {
-			if (rectWidthHeightDepth1.z > sphere.z && sphere.z > rectWidthHeightDepth2.z) {
-				return true;
-			}
-		}
-	}
-
-	// 当たり判定がない場合は、当たっていないと判断する
-	return false;
-}
-
 
 bool Collision::CheckSphere2Plane(Sphere& sphere, Plane& plane, Vector4* inter)
 {

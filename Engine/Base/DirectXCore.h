@@ -38,6 +38,7 @@ public://メンバ関数
 	// 深度バッファのクリア
 	void ClearDepthBuffer();
 
+	// 終了処理
 	void Destroy();
 
 	// デバイスの取得
@@ -48,11 +49,11 @@ public://メンバ関数
 
 	//バックバッファの数を取得
 	size_t GetBackBufferCount()const { return backBuffers.size(); }
-
+	//ヒープのゲット
 	ID3D12DescriptorHeap* GetdsvHeap() {return dsvHeap.Get(); }
-
+	//デプスゲット
 	ID3D12Resource* GetbackBuffers() { return depthBuffer.Get(); }
-
+	//Queueのゲット
 	ID3D12CommandQueue* GetCommandQueue() { return commandQueue.Get(); }
 
 private://メンバ変数

@@ -39,9 +39,15 @@ public:
         float _AngleDeg2;
     };
 
-    static void Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight);
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	static void Initialize(DirectXCore* dxCore,const uint32_t& WinWidth,const uint32_t& WinHeight);
 
-    static void Finalize();
+	/// <summary>
+	/// 修正処理
+	/// </summary>
+	static void Finalize();
     
     /// <summary>
     /// パイプライン生成
@@ -54,7 +60,10 @@ public:
     /// <param name="cmdList">コマンドリスト</param>
     static void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-    static void Draw(ID3D12GraphicsCommandList* cmdList);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	static void Draw(ID3D12GraphicsCommandList* cmdList);
 
     /// <summary>
     /// シーン描画後処理
@@ -62,13 +71,26 @@ public:
     /// <param name="cmdList">コマンド処理</param>
     static void PostDrawScene();
 
-    static void SetShadeNumber(int SetShadeNumber);
 
-    static void SetKernelSize(int range);
+	/// <summary>
+	/// シェーダーナンバーセット
+	/// </summary>
+	static void SetShadeNumber(int SetShadeNumber);
 
-    static void SetRadialBlur(Vector2 senter, float intensity, int sample);
+	/// <summary>
+	/// レンジの大きさ
+	/// </summary>
+	static void SetKernelSize(int range);
 
-    static void SetAngle(float angle1,float angle2);
+	/// <summary>
+	/// ラジアルブラー
+	/// </summary>
+	static void SetRadialBlur(Vector2 senter,float intensity,int sample);
+
+	/// <summary>
+	/// アングル変更
+	/// </summary>
+	static void SetAngle(float angle1,float angle2);
 
 
 

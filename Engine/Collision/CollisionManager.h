@@ -22,35 +22,43 @@ public:
 	static CollisionManager* GetInstance();
 
 public://メンバ関数
-
+	//コライダーの追加
 	inline void AddCollider(BaseCollider* collider) {
 		colliders.push_front(collider);
 	}
-
+	//コライダーを消す
 	inline void RemoveCollider(BaseCollider* collide) {
 		colliders.remove(collide);
 	}
-
+	//コライダークリア
 	inline void AllClearCollider() {
 		colliders.clear();
 	}
 
+	//全てのコリジョンをチェック
 	void CheckAllCollisions();
 
+	//レイキャスト
 	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 
 
 	//レイキャストオーバーロード
 	bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 
+	//QuerySphereの判定
 	void QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute = static_cast<unsigned short>(0xffffffff));
 
-
+	//敵に当たった
 	bool GetIsEnemyHit() { return isEnemyHit; }
+	//攻撃が当たった
 	bool GetIsAttackHit() { return isAttackHit; }
+	//雑魚敵の攻撃が当たった
 	bool GetIsWakeEnemyAttackHit() { return isWakeEnemyAttackHit; }
+	//当たったナンバーを表示
 	int GetHitNumber() { return hitNumber; }
+	//敵のポジションをゲット
 	Matrix4 GetEnemyWorldPos() { return EnemyWorldPos; }
+	//ヒットしたもののポジションをゲット
 	Matrix4 GetAttackHitWorldPos() { return HitWorldPos; }
 
 private:
