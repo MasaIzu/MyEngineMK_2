@@ -173,7 +173,7 @@ void GameScene::Update() {
 		sceneManager_->ChangeScene("GAMEPLAY");
 	}
 
-	gameCamera->SetCameraMode(player_->GetHitFinalRail());
+	//gameCamera->SetCameraMode(player_->GetHitFinalRail());
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 

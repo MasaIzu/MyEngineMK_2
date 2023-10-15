@@ -26,7 +26,7 @@ TutorialEnemy::~TutorialEnemy()
 void TutorialEnemy::Initialize()
 {
 
-	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
+	modelDebug_.reset(Model::CreateFromOBJ("radSphere", true));
 	enemyWorldTrans.Initialize();
 	enemyWorldTrans.translation_ = BonePos;
 	enemyWorldTransHed.Initialize();
