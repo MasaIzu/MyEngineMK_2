@@ -168,11 +168,23 @@ void TitleScene::Update()
 	{
 		if ( OutLinePos == OutLinePosition1 )
 		{
-			sceneManager_->ChangeScene("STAGESELECT");
+			isStartChangeScene = true;
 		}
 		else if ( OutLinePos == OutLinePosition2 )
 		{
 			isFinishGame = true;
+		}
+	}
+
+	if ( isStartChangeScene )
+	{
+		if ( SpriteAlpha < 1 )
+		{
+			SpriteAlpha += 0.02f;
+		}
+		else
+		{
+			sceneManager_->ChangeScene("STAGESELECT");
 		}
 	}
 

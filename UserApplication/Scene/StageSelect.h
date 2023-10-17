@@ -63,6 +63,7 @@ private:
 	std::unique_ptr<Skydome> skydome;
 
 	bool isFinishGame = false;
+	bool isBlackoutStart = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
@@ -73,6 +74,7 @@ private:
 	float intensity = 0.1f;
 	float angle = 45.0f;
 	float angle2 = 135.0f;
+	float SpriteAlpha = 1.0f;
 
 	Vector2 center = { 0.5f,0.5f };
 };

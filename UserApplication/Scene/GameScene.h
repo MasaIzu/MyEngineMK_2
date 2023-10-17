@@ -65,6 +65,7 @@ private: // メンバ変数
 	DirectXCore* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
+	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
 	std::unique_ptr<Model> model_;// 3Dモデル
 	WorldTransform worldTransform_;//ワールド変換データ
@@ -85,6 +86,7 @@ private: // メンバ変数
 	bool isSpline = false;
 	bool isFinish = false;
 	bool isFinishGame = false;
+	bool isBlackoutStart = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
@@ -99,6 +101,7 @@ private: // メンバ変数
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float larpTime = 0.0f;
+	float SpriteAlpha = 1.0f;
 
 	Vector2 center = {0.5f,0.5f};
 	Vector2 tmp;

@@ -95,6 +95,7 @@ private:
 	bool isBlackout = false;
 	bool isStart = false;
 	bool isFinishGame = false;
+	bool isStartChangeScene = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

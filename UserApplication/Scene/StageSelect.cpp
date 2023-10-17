@@ -21,6 +21,8 @@ void StageSelect::Initialize()
 	skydome = std::make_unique<Skydome>();
 	skydome->Initialize();
 
+	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
+
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
 	viewProjection_->eye = { 0,0,-50 };
@@ -56,9 +58,11 @@ void StageSelect::Update()
 	player_->Update();
 
 	if (player_->GetHitFirstRail()) {
+		isBlackoutStart = true;
 		gameCamera->SetCameraMode(true);
 	}
 	if (player_->GetHit2ndRail()) {
+		isBlackoutStart = true;
 		gameCamera->SetCameraMode(true);
 	}
 
@@ -79,6 +83,22 @@ void StageSelect::Update()
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
+
+	if ( isBlackoutStart == false )
+	{
+		if ( SpriteAlpha > 0 )
+		{
+			SpriteAlpha -= 0.01f;
+		}
+	}
+	else
+	{
+		if ( SpriteAlpha < 1 )
+		{
+			SpriteAlpha += 0.008f;
+		}
+	}
+
 }
 
 void StageSelect::PostEffectDraw()
@@ -113,6 +133,7 @@ void StageSelect::Draw()
 
 	player_->DrawSprite();
 
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 
 void StageSelect::Finalize()

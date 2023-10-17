@@ -28,6 +28,7 @@ void GameScene::Initialize() {
 
 	sceneManager_ = SceneManager::GetInstance();
 
+	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
 	skydome = std::make_unique<Skydome>();
 	skydome->Initialize();
 
@@ -142,11 +143,13 @@ void GameScene::Update() {
 		}
 	}
 	else {
-		if (player_->GetHowReturnSpline(3)) {
+		if (player_->GetHowReturnSpline(4)) {
 
 			Vector2 Mous(0, -2);
 			gameCamera->MousePositionReset(Mous);
-
+			gameCamera->SetFreeCamera(false);
+			player_->SetCameraModeNotFree(true);
+			isSpline = false;
 		}
 		if (player_->GetFinishFirstSpline()) {
 			gameCamera->MousePositionReset();
@@ -162,8 +165,8 @@ void GameScene::Update() {
 			larpTime = 1.0f;
 		}
 		
-		gameCamera->SetCameraTargetAndPos(larp.lerp(levelData->GetFirstSpline()[1] + Vector3(0, 10, 0), player_->GetPlayerPos() + Vector3(0,7,0), larpTime),
-			larp.lerp(eye, gameCamera->GetPlayerDistanceEyePos(player_->GetPlayerPos()),larpTime));
+		//gameCamera->SetCameraTargetAndPos(larp.lerp(levelData->GetFirstSpline()[1] + Vector3(0, 10, 0), player_->GetPlayerPos() + Vector3(0,7,0), larpTime),
+		//	larp.lerp(eye, gameCamera->GetPlayerDistanceEyePos(player_->GetPlayerPos()),larpTime));
 	}
 	if (player_->GetHowReturnFainalSpline(5)) {
 		isFinish = true;
@@ -172,8 +175,12 @@ void GameScene::Update() {
 	if (player_->GetPlayerPos().y < -250.0f) {
 		sceneManager_->ChangeScene("GAMEPLAY");
 	}
+	if ( player_->GetHitFinalRail() )
+	{
+		isBlackoutStart = true;
+		gameCamera->SetCameraMode(player_->GetHitFinalRail());
+	}
 
-	//gameCamera->SetCameraMode(player_->GetHitFinalRail());
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
@@ -191,6 +198,21 @@ void GameScene::Update() {
 	bulletShotEnemy.remove_if([](BulletShotEnemy* enemy) { return enemy->GetIsDead(); });
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
+
+	if ( isBlackoutStart == false )
+	{
+		if ( SpriteAlpha > 0 )
+		{
+			SpriteAlpha -= 0.01f;
+		}
+	}
+	else
+	{
+		if ( SpriteAlpha < 1 )
+		{
+			SpriteAlpha += 0.007f;
+		}
+	}
 }
 
 void GameScene::PostEffectDraw()
@@ -271,7 +293,7 @@ void GameScene::Draw() {
 
 #pragma region 前景スプライト描画
 
-
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 
 #pragma endregion
 }
