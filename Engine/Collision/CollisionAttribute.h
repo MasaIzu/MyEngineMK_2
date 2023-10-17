@@ -11,8 +11,8 @@ const unsigned short COLLISION_ATTR_NOTATTACK = 0b101;//攻撃判定なし
 const unsigned short COLLISION_ATTR_PLAYERINVINCIBLE = 0b110;//無敵
 const unsigned short COLLISION_ATTR_ENEMYINVINCIBLE = 0b111;//無敵
 
-const unsigned short COLLISION_ATTR_ENEMYATTACK = 0b1000;//敵の攻撃
-const unsigned short COLLISION_ATTR_ENEMYBULLETATTACK = 0b1001;//敵の弾の攻撃
+const unsigned short COLLISION_ATTR_ENEMY_ATTACK = 0b1000;//敵の攻撃
+const unsigned short COLLISION_ATTR_ENEMY_BULLET_ATTACK = 0b1001;//敵の弾の攻撃
 
 const unsigned short COLLISION_ATTR_CAMERA = 0b1010;//カメラ
 const unsigned short COLLISION_ATTR_FIRSTRAIL = 0b1011;//スロープ

@@ -60,7 +60,7 @@ void EnemyBullet::Update()
 
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		BulletCollider[i]->Update(EnemyBulletWorldTrans[i].matWorld_, BulletRadius[i], EnemyBulletSpeed[i], BulletVector[i]);
-		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
+		BulletCollider[i]->SetAttribute(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	}
 }
 

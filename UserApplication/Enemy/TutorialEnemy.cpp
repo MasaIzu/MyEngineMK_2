@@ -57,7 +57,7 @@ void TutorialEnemy::Initialize()
 		AttackWorldTrans[i].TransferMatrix();
 		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
 		CollisionManager::GetInstance()->AddCollider(TutorialEnemyAttackSpereCollider[i]);
-		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
+		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMY_ATTACK);
 	}
 
 	collisionManager = CollisionManager::GetInstance();
@@ -114,7 +114,7 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		}
 		AttackWorldTrans[i].TransferMatrix();
 		TutorialEnemyAttackSpereCollider[i]->Update(AttackWorldTrans[i].matWorld_);
-		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYATTACK);
+		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMY_ATTACK);
 	}
 
 	for (uint32_t i = 0; i < ColliderSphereCount; i++) {

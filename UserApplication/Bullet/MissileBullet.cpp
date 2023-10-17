@@ -15,14 +15,17 @@ MissileBullet::MissileBullet()
 		// コリジョンマネージャに追加
 		BulletCollider[ i ] = new SphereCollider(Vector4(0,BulletRadius[ i ],0,0),BulletRadius[ i ]);
 		CollisionManager::GetInstance()->AddCollider(BulletCollider[ i ]);
-		BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
+		BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	}
 	input_ = Input::GetInstance();
 }
 
 MissileBullet::~MissileBullet()
 {
-
+	for ( auto&& bulletCollider : BulletCollider )
+	{
+		CollisionManager::GetInstance()->RemoveCollider(bulletCollider);
+	}
 }
 
 void MissileBullet::Initialize()
@@ -80,7 +83,6 @@ void MissileBullet::Update(const Vector3& EndPos)
 	for ( uint32_t i = 0; i < AllBulletCount; i++ )
 	{
 		BulletCollider[ i ]->Update(EnemyBulletWorldTrans[ i ].matWorld_,BulletRadius[ i ],BulletSpeed[ i ],BulletVelocity[ i ]);
-		BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
 	}
 }
 
@@ -131,7 +133,7 @@ void MissileBullet::MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3
 				BulletLerpRightTime = BulletLerpTime - harfCount + 1;
 				BulletVelocity[BulletCounter] = MyMath::lerp(top, right, lerpPos * BulletLerpRightTime).norm();
 			}
-
+			BulletCollider[ BulletCounter ]->SetAttribute(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 			BulletLerpTime++;
 			makeBulletCount++;
 		}
@@ -214,6 +216,7 @@ void MissileBullet::CheckBulletAlive()
 				BulletLifeTime[i]--;
 			}
 			else {
+				BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_NOTATTACK);
 				isBulletAlive[i] = false;
 			}
 			if (isStartTracking[i] == true) {

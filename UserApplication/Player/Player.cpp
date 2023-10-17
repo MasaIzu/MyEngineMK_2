@@ -14,7 +14,7 @@ Player::Player()
 
 Player::~Player()
 {
-
+	CollisionManager::GetInstance()->RemoveCollider(PlayerCollider);
 }
 
 void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
@@ -120,6 +120,10 @@ void Player::Update()
 	if (FirstMoveSpline->GetFinishSpline()) {
 		isHitFirstRail = false;
 	}
+
+	//当たり判定チェック
+	CheckHitCollision();
+
 	//回転させる
 	PlayerRot();
 
@@ -770,5 +774,14 @@ float Player::AngleSelect(float& angle_, float& selectAngle)
 	float Angle = angle_ - (selectAngle * floatOverAngle);
 
 	return Angle;
+}
+
+void Player::CheckHitCollision()
+{
+	if ( PlayerCollider->GetHit() )
+	{
+		isTakeDamages = true;
+		PlayerCollider->Reset();
+	}
 }
 

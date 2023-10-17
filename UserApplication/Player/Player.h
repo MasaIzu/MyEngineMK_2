@@ -53,6 +53,9 @@ private:
 	//角度を決める奴
 	float AngleSelect(float& angle, float& selectAngle);
 
+	//当たり判定チェック
+	void CheckHitCollision();
+
 public://Setter
 	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }//カメラモード
 	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }//カメラの回転
@@ -125,6 +128,7 @@ private://プレイヤークラス変数
 	bool isGrapple = false;
 	bool firstPush = false;
 	bool isSliding = false;
+	bool isTakeDamages = false;
 
 	bool isPushW = false;
 	bool isPushA = false;
@@ -134,6 +138,7 @@ private://プレイヤークラス変数
 	uint32_t bulletNumber = 0;
 	uint32_t SlidingTime = 0;
 	uint32_t SlidingNumber = 0;
+	uint32_t PlayerHP = 5000;
 
 	float Radius = 1.0f;
 	float playerSpeed = 0.9f;
