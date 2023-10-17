@@ -48,6 +48,8 @@ namespace MyMath {
 
 	Matrix4 MakeIdentity();
 
+	float JudgeLeftorRight(const Vector3& A,const Vector3& B,const Vector3& C);
+
 	// 値を範囲内に納める
 	float Clamp(float Value, const float low, const float high);
 
