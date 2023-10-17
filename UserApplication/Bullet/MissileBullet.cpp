@@ -1,5 +1,7 @@
 #include "MissileBullet.h"
 #include "Easing.h"
+#include "SphereCollider.h"
+#include <CollisionAttribute.h>
 
 MissileBullet::MissileBullet()
 {
@@ -9,6 +11,11 @@ MissileBullet::MissileBullet()
 		EnemyBulletWorldTrans[i].Initialize();
 		isNearPlayer[i] = false;
 		BulletSpeed[i] = 1.5f;
+		BulletRadius[ i ] = 0.5f;
+		// コリジョンマネージャに追加
+		BulletCollider[ i ] = new SphereCollider(Vector4(0,BulletRadius[ i ],0,0),BulletRadius[ i ]);
+		CollisionManager::GetInstance()->AddCollider(BulletCollider[ i ]);
+		BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
 	}
 	input_ = Input::GetInstance();
 }
@@ -69,6 +76,12 @@ void MissileBullet::Update(const Vector3& EndPos)
 	}
 
 	WorldTransUpdate();
+
+	for ( uint32_t i = 0; i < AllBulletCount; i++ )
+	{
+		BulletCollider[ i ]->Update(EnemyBulletWorldTrans[ i ].matWorld_,BulletRadius[ i ],BulletSpeed[ i ],BulletVelocity[ i ]);
+		BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYBULLETATTACK);
+	}
 }
 
 void MissileBullet::Draw(ViewProjection& viewProjection_)

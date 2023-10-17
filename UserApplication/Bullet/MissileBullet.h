@@ -12,7 +12,8 @@
 /// <summary>
 /// ミサイルクラス
 /// </summary>
-class MissileBullet {
+class MissileBullet
+{
 
 public://基本関数
 	MissileBullet();
@@ -30,8 +31,8 @@ public:
 
 	//弾を作り出す
 	void MakeBullet(Vector3& pos);
-	void MakeSelectMissileBullet(Vector3& pos, Vector3& left, Vector3& top, Vector3& right, uint32_t& MakeCount);
-	void MakeSelectMissileBullet(Vector3& pos, Vector3& upLeft, Vector3& upRight, Vector3& downLeft, Vector3& downRight, uint32_t& MakeCount);
+	void MakeSelectMissileBullet(Vector3& pos,Vector3& left,Vector3& top,Vector3& right,uint32_t& MakeCount);
+	void MakeSelectMissileBullet(Vector3& pos,Vector3& upLeft,Vector3& upRight,Vector3& downLeft,Vector3& downRight,uint32_t& MakeCount);
 
 private:
 	//弾の情報更新
@@ -45,33 +46,35 @@ private:
 
 public://Getter
 	//バレットの位置ゲット
-	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(EnemyBulletWorldTrans[bulletCount].matWorld_); }
+	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const {
+		return MyMath::GetWorldTransform(EnemyBulletWorldTrans[ bulletCount ].matWorld_);
+	}
 
 public://Setter
 
 
 private://const関連
-	static const uint32_t AllBulletCount = 100;
+	static const uint32_t AllBulletCount = 150;
 
 private://クラス関連
 	std::unique_ptr<Model> model_;
 	Input* input_ = nullptr;
-	WorldTransform EnemyBulletWorldTrans[AllBulletCount];
+	std::array<WorldTransform,AllBulletCount> EnemyBulletWorldTrans;
 
 	//当たり判定
-	BaseCollider* BulletCollider[AllBulletCount];
+	std::array<BaseCollider* , AllBulletCount> BulletCollider;
 	CollisionManager* collisionManager = nullptr;
 
 private://別クラスから値をもらう
 
 
 private://クラス変数
-	bool isBulletAlive[AllBulletCount];
+	std::array<bool,AllBulletCount> isBulletAlive;
 	bool isMovingExpandingBullet = false;
-	bool isStartTracking[AllBulletCount];
-	bool isNearPlayer[AllBulletCount];
+	std::array<bool,AllBulletCount> isStartTracking;
+	std::array<bool,AllBulletCount> isNearPlayer;
 
-	uint32_t BulletLifeTime[AllBulletCount];
+	std::array<uint32_t,AllBulletCount> BulletLifeTime;
 	uint32_t BulletNum_ = 0;
 	uint32_t MaxBulletLifeTime = 200;
 	uint32_t BulletCoolTime = 0;
@@ -80,27 +83,25 @@ private://クラス変数
 	uint32_t MackPaticleMax = 1;
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
-	uint32_t BulletNotTrackingTime[AllBulletCount];
+	std::array<uint32_t,AllBulletCount> BulletNotTrackingTime;
 
 	//イージング
-	uint32_t BulletEasingTime[AllBulletCount];
-	uint32_t BulletMaxEasingTime[AllBulletCount];
-	uint32_t BulletLarpEasingTime[AllBulletCount];
-	uint32_t BulletLarpMaxEasingTime[AllBulletCount];
+	std::array<uint32_t,AllBulletCount> BulletEasingTime;
+	std::array<uint32_t,AllBulletCount> BulletMaxEasingTime;
+	std::array<uint32_t,AllBulletCount> BulletLarpEasingTime;
+	std::array<uint32_t,AllBulletCount> BulletLarpMaxEasingTime;
 
-	float EnemyBulletSpeed[AllBulletCount];
-	float BulletRadius[AllBulletCount];
+	std::array<float,AllBulletCount> BulletRadius;
 	float EnemyBulletMaxRadius = 5.0f;
 	float LarpT = 0.0f;
-	float BulletSpeed[AllBulletCount];
+	std::array<float,AllBulletCount> BulletSpeed;
 	float BulletStartSpeed = 1.0f;
 	float BulletEndSpeed = 3.0f;
-	float BulletLerpSpeed[AllBulletCount];
+	std::array<float,AllBulletCount> BulletLerpSpeed;
 	float BulletLerpStartSpeed = 0.04f;
 	float BulletLrrpEndSpeed = 1.5f;
 	float BulletStartLerpTime = 0.04f;
 
-	Vector3 BulletVector[AllBulletCount];//打ち出される方向
-	Vector3 BulletOldPos[AllBulletCount];
-	Vector3 BulletVelocity[AllBulletCount];
+	std::array<Vector3,AllBulletCount> BulletOldPos;
+	std::array<Vector3,AllBulletCount> BulletVelocity;
 };

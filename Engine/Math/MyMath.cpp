@@ -2,6 +2,7 @@
 #include <cmath>
 #include"ImGuiManager.h"
 #include <random>
+#include <stdint.h>
 
 Matrix4 MyMath::Initialize() {
 	Matrix4 matInitialize{
@@ -648,6 +649,30 @@ Vector3 MyMath::GetAngleVec3(const Vector3& angle)
 	Angle.z = angle.z * ( PI / 180 );
 
 	return Angle;
+}
+
+float MyMath::JudgeLeftorRight(const Vector3& A,const Vector3& B,const Vector3& C) {
+	float crossProductZ = ( B.x - A.x ) * ( C.z - A.z ) - ( B.z - A.z ) * ( C.x - A.x );
+
+	float Left = 1.0f;
+	float Right = -1.0f;
+	float Center = 0.0f;
+
+	if ( crossProductZ > 0.0f )
+	{
+		//左
+		return Left;
+	}
+	else if ( crossProductZ < 0.0f )
+	{
+		//右
+		return Right;
+	}
+	else
+	{
+		//中央
+		return Center;
+	}
 }
 
 float MyMath::GetRadAngle(float angle)

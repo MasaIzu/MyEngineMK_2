@@ -11,9 +11,9 @@ MiddleBossEnemy::MiddleBossEnemy()
 	BossWorldTrans.scale_ = Vector3(5.0f,5.0f,5.0f);
 	BossWorldTrans.Initialize();
 
-	for ( uint32_t i = 0; i < AttackedKeepCount; i++ )
+	for ( auto&& old : oldAttackType )
 	{
-		oldAttackType[ i ] = AttackType::NotAttack;
+		old = AttackType::NotAttack;
 	}
 }
 
@@ -425,7 +425,25 @@ void MiddleBossEnemy::CheckAttackType()
 				BackLerpPos = ( tmp / 2.0f ) + BossWorldTrans.translation_;
 				BackPoints.clear();
 				BackPoints.push_back(BossWorldTrans.translation_);
-				BackPoints.push_back(BackLerpPos + Vector3( 0, jampHeight, 0 ) + BossWorldTrans.LookVelocity.lookBack * BackStrength);
+				float LeftOrLight = MyMath::JudgeLeftorRight(EndPos,player->GetPlayerPos(),BossWorldTrans.translation_);
+				Vector3 EasingWaypoint;
+				if ( LeftOrLight == 1.0f )//左
+				{
+					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookLeft.norm() * BackBosPower );
+					BackPoints.push_back(EasingWaypoint);
+				}
+				else if ( LeftOrLight == -1.0f )//右
+				{
+					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookRight.norm() * BackBosPower );
+					BackPoints.push_back(EasingWaypoint);
+				}
+				else
+				{
+
+				}
+				Vector3 waypoint = EndPos - EasingWaypoint;
+				waypoint = ( waypoint / 2.0f ) + EasingWaypoint + Vector3(0,jampHeight,0) + BossWorldTrans.LookVelocity.lookBack * BackStrength;
+				BackPoints.push_back(waypoint);
 				BackPoints.push_back(EndPos);
 			}
 		}
