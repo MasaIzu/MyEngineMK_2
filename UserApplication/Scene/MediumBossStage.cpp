@@ -56,10 +56,7 @@ void MediumBossStage::Initialize()
 void MediumBossStage::Update()
 {
 	player_->SetCameraModeNotFree(true);
-	player_->SetCameraRot(gameCamera->GetCameraAngle());
-	player_->SetEyeToTagetVecDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
-	player_->SetCameraDistance(gameCamera->GetCameraDistanse());
-	player_->SetCameraMaxDistance(gameCamera->GetMaxDistance());
+	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
 	if (player_->GetHitFirstRail()) {
@@ -130,7 +127,7 @@ void MediumBossStage::Draw()
 	bossEnemy->Draw();
 
 	middleBossEnemy->Draw(*viewProjection_.get());
-	player_->Draw(*viewProjection_.get());
+	player_->Draw();
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
@@ -142,11 +139,6 @@ void MediumBossStage::Finalize()
 {
 }
 
-void MediumBossStage::CopyData()
-{
-	////パーティクル
-	player_->CopyParticle();
-}
 
 void MediumBossStage::CSUpdate()
 {

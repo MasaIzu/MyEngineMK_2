@@ -25,9 +25,6 @@ public:
 	//描画
 	virtual void Finalize() = 0;
 
-	//データをコピー
-	virtual void CopyData() = 0;
-
 	//CSアップデート
 	virtual void CSUpdate() = 0;
 

@@ -42,9 +42,6 @@ public: // メンバ関数
 	/// </summary>
 	void Finalize() override;
 
-	//コピー処理
-	void CopyData() override;
-
 	//CSアップデート
 	void CSUpdate() override;
 

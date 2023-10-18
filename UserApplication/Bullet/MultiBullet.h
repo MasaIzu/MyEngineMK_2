@@ -78,9 +78,7 @@ private://クラス変数
 
 	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
-	float EnemyBulletMaxRadius = 5.0f;
-	float EnemyParticleSpeed = 0.02f;
-	float EnemyParticleDieSpeed = 0.2f;
+
 
 	Vector3 EnemyBulletMoveMent[AllBulletCount];//移動量
 	Vector3 BulletVector[AllBulletCount];//打ち出される方向

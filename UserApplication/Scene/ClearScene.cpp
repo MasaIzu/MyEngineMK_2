@@ -32,10 +32,6 @@ void ClearScene::Finalize()
 {
 }
 
-void ClearScene::CopyData()
-{
-}
-
 void ClearScene::CSUpdate()
 {
 }

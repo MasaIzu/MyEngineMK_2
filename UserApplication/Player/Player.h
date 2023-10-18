@@ -5,7 +5,7 @@
 #include "Input.h"
 #include <memory>
 #include "ViewProjection.h"
-#include "PlayerBullet.h"
+#include "NormalGun.h"
 #include <Sprite.h>
 #include "SplinePosition.h"
 
@@ -19,16 +19,14 @@ public://基本関数
 	~Player();
 
 	//初期化
-	void Initialize(const Vector3& Pos, ViewProjection* viewProjection);
+	void Initialize(const Vector3& Pos,const ViewProjection* viewProjection);
 	//更新
 	void Update();
 	//描画
-	void Draw(ViewProjection& viewProjection_);
+	void Draw();
 	//スプライト描画
 	void DrawSprite();
 
-	//パーティクルを出す用
-	void CopyParticle();
 	//アタックアップデート
 	void AttackUpdate(const Vector3& EnemyPos, bool& LockOn);
 
@@ -38,7 +36,7 @@ private:
 	//プレイヤーの回転
 	void PlayerRot();
 	//プレーヤーの攻撃
-	void PlayerAttack(const Vector3& velocity, bool& LockOn);
+	void PlayerAttack(const Vector3& EnemyPos, bool& LockOn);
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
@@ -56,12 +54,13 @@ private:
 	//当たり判定チェック
 	void CheckHitCollision();
 
+	//HP処理
+	void HPUpdate();
+
 public://Setter
+	//カメラの回転,撃つ場所への距離,プレイヤーとカメラの距離,アルファ値を決めるためのカメラ距離のマックス
+	void SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& cameradis,const float& distance,const float& CameraMaxDistance);
 	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }//カメラモード
-	void SetCameraRot(const Vector2& CameraRot) { cameraRot = CameraRot; }//カメラの回転
-	void SetEyeToTagetVecDistance(const Vector3& cameradis) { Distance = cameradis; }//撃つ場所への距離
-	void SetCameraDistance(const float& distance) { PlayerToCameraDistance = distance; }//プレイヤーとカメラの距離
-	void SetCameraMaxDistance(const float& CameraMaxDistance) { this->cameraMaxDistance = CameraMaxDistance; }//アルファ値を決めるためのカメラ距離のマックス
 	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }//最初のスプライン
 	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }//二つ目のスプライン
 	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }//最後のスプライン
@@ -74,7 +73,6 @@ public://Getter
 	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
 	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }//スプラインが終わったか
 	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }//ポジションゲット
-	WorldTarnsLook GetPlayerLook()const { return playerWorldTrans.LookVelocity; }//見てる方向のゲット
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -84,8 +82,8 @@ private://クラス関連
 	WorldTransform playerWorldTransForBullet;
 	WorldTransform StartingPointOfGrapple;
 	WorldTransform DebugWorldTrans;
-	ViewProjection* viewProjection_ = nullptr;
-	std::unique_ptr<PlayerBullet> playerBullet;
+	const ViewProjection* viewProjection_ = nullptr;
+	std::unique_ptr<NormalGun> playerNormalGun;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
 	//WASDスプライト
@@ -128,7 +126,7 @@ private://プレイヤークラス変数
 	bool isGrapple = false;
 	bool firstPush = false;
 	bool isSliding = false;
-	bool isTakeDamages = false;
+	bool isTakeMissileDamages = false;
 
 	bool isPushW = false;
 	bool isPushA = false;
@@ -153,7 +151,7 @@ private://プレイヤークラス変数
 	float DownSlidingTimes = 0.0f;
 
 	Vector3 playerMoveMent;//移動量
-	Vector3 Distance;
+	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;

@@ -130,7 +130,7 @@ private://EnemyBossクラス変数
 	uint32_t BackMissileFirstCoolTime = 20;
 	uint32_t BackMissileCoolTime = 6;
 	uint32_t BackMissileTimes = 0;
-	uint32_t BackMissileMaxTimes = 15;
+	uint32_t BackMissileMaxTimes = 10;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;

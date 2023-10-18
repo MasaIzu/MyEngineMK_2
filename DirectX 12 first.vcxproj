@@ -273,7 +273,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletDamage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
+    <ClInclude Include="NormalGun.h" />
     <ClInclude Include="UserApplication\Scene\ClearScene.h" />
     <ClInclude Include="UserApplication\Scene\DebugScene.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
@@ -325,7 +327,7 @@
     <ClInclude Include="Engine\2D\MixPostEffect.h" />
     <ClInclude Include="Engine\Math\SplinePosition.h" />
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
-    <ClInclude Include="UserApplication\Player\PlayerBullet.h" />
+    <ClInclude Include="UserApplication\Player\NormalBullet.h" />
     <ClInclude Include="Engine\2D\PostEffect.h" />
     <ClInclude Include="Engine\2D\PostEffectManager.h" />
     <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h" />
@@ -350,6 +352,8 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletDamage.cpp" />
+    <ClCompile Include="NormalGun.cpp" />
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp" />
     <ClCompile Include="UserApplication\Scene\DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />
@@ -391,7 +395,7 @@
     <ClCompile Include="Engine\2D\MixPostEffect.cpp" />
     <ClCompile Include="Engine\Math\SplinePosition.cpp" />
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
-    <ClCompile Include="UserApplication\Player\PlayerBullet.cpp" />
+    <ClCompile Include="UserApplication\Player\NormalBullet.cpp" />
     <ClCompile Include="Engine\2D\PostEffect.cpp" />
     <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp" />
     <ClCompile Include="Engine\Framework\Framework.cpp" />

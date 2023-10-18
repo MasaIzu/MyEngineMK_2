@@ -48,11 +48,6 @@ void SceneManager::Finalize()
 	delete SceneManager_;
 }
 
-void SceneManager::CopyData()
-{
-	scene_->CopyData();
-}
-
 void SceneManager::CSUpdate()
 {
 	scene_->CSUpdate();

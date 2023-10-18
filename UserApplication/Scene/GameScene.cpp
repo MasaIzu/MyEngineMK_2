@@ -130,10 +130,7 @@ void GameScene::Update() {
 		ImGui::End();
 	}
 
-	player_->SetCameraRot(gameCamera->GetCameraAngle());
-	player_->SetEyeToTagetVecDistance(gameCamera->GetEyeToTagetVecDistance(120.0f));
-	player_->SetCameraDistance(gameCamera->GetCameraDistanse());
-	player_->SetCameraMaxDistance(gameCamera->GetMaxDistance());
+	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
 	if (isSpline == false) {
@@ -282,7 +279,7 @@ void GameScene::Draw() {
 	for (BulletShotEnemy* enemy : bulletShotEnemy) {
 		enemy->Draw(*viewProjection_.get());
 	}
-	player_->Draw(*viewProjection_.get());
+	player_->Draw();
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
@@ -302,11 +299,6 @@ void GameScene::Finalize()
 {
 }
 
-void GameScene::CopyData()
-{
-	player_->CopyParticle();
-
-}
 
 bool GameScene::CheckReticle()
 {

@@ -34,10 +34,6 @@ void MainGame::Draw()
 	sceneManager_->Draw();
 }
 
-void MainGame::CopyData()
-{
-	sceneManager_->CopyData();
-}
 
 void MainGame::CSUpdate()
 {

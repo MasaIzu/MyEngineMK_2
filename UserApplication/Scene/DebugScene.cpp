@@ -183,8 +183,3 @@ void DebugScene::Draw() {
 void DebugScene::Finalize()
 {
 }
-
-void DebugScene::CopyData()
-{
-
-}

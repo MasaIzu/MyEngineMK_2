@@ -54,7 +54,7 @@ public://Setter
 
 
 private://const関連
-	static const uint32_t AllBulletCount = 150;
+	static const uint32_t AllBulletCount = 100;
 
 private://クラス関連
 	std::unique_ptr<Model> model_;

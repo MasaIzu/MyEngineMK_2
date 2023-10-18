@@ -6,6 +6,7 @@
 #include"ImGuiManager.h"
 //#include <FbxLoader.h>
 #include <SphereCollider.h>
+#include "BulletDamage.h"
 
 
 Player::Player()
@@ -17,7 +18,7 @@ Player::~Player()
 	CollisionManager::GetInstance()->RemoveCollider(PlayerCollider);
 }
 
-void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
+void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 {
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere", true));
@@ -33,8 +34,8 @@ void Player::Initialize(const Vector3& Pos, ViewProjection* viewProjection)
 	playerWorldTransForBullet.Initialize();
 	StartingPointOfGrapple.Initialize();
 
-	playerBullet = std::make_unique<PlayerBullet>();
-	playerBullet->Initialize();
+	playerNormalGun = std::make_unique<NormalGun>();
+	playerNormalGun->Initialize(Pos,model_.get(),model_.get());
 
 	DebugWorldTrans.Initialize();
 
@@ -123,6 +124,8 @@ void Player::Update()
 
 	//当たり判定チェック
 	CheckHitCollision();
+	//HPのアップデート
+	HPUpdate();
 
 	//回転させる
 	PlayerRot();
@@ -249,10 +252,6 @@ void Player::Update()
 	//移動の値更新
 	WorldTransUpdate();
 
-	DistanceNolm = Distance - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
-	PlayerToCameraTargetVecDistance = DistanceNolm.length();
-	DistanceNolm.normalize();
-
 	UpdateReticle();
 
 	isGrapple = false;
@@ -297,19 +296,19 @@ void Player::Update()
 	//DebugWorldTrans.TransferMatrix();
 
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
-	playerBullet->Update();
+	playerNormalGun->Update(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.lookRight);
 
 }
 
-void Player::Draw(ViewProjection& viewProjection)
+void Player::Draw()
 {
 	//model_->Draw(DebugWorldTrans, viewProjection_);
 	if (isPressing) {
-		model_->Draw(StartingPointOfGrapple, viewProjection);
+		model_->Draw(StartingPointOfGrapple, *viewProjection_);
 	}
-	playerBullet->Draw(viewProjection);
-	model_->Draw(playerWorldTrans, viewProjection);
-	model_->Draw(playerWorldTransHed, viewProjection);
+	playerNormalGun->Draw(*viewProjection_);
+	model_->Draw(playerWorldTrans,*viewProjection_);
+	model_->Draw(playerWorldTransHed,*viewProjection_);
 }
 
 void Player::DrawSprite()
@@ -354,15 +353,10 @@ void Player::DrawSprite()
 	}
 }
 
-void Player::CopyParticle()
-{
-	playerBullet->CopyParticle();
-}
-
 void Player::AttackUpdate(const Vector3& EnemyPos, bool& LockOn)
 {
 	if (isAttack == true) {
-		PlayerAttack(EnemyPos - playerWorldTrans.translation_, LockOn);
+		PlayerAttack(EnemyPos, LockOn);
 	}
 }
 
@@ -503,7 +497,7 @@ void Player::PlayerRot()
 	WorldTransUpdate();
 }
 
-void Player::PlayerAttack(const Vector3& velocity, bool& LockOn)
+void Player::PlayerAttack(const Vector3& EnemyPos, bool& LockOn)
 {
 	if (AttackPhase_ == AttackPhase::Nothing) {
 		AttackPhase_ = AttackPhase::AttackCombo1;
@@ -512,10 +506,10 @@ void Player::PlayerAttack(const Vector3& velocity, bool& LockOn)
 	{
 	case Player::AttackPhase::AttackCombo1:
 		if (LockOn) {
-			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_),velocity.norm(), PlayerToCameraTargetVecDistance);
+			playerNormalGun->ShotBullet(EnemyPos);
 		}
 		else {
-			bulletNumber = playerBullet->MakePlayerBullet(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_), ShootVec.norm(), PlayerToCameraTargetVecDistance);
+			playerNormalGun->ShotBullet(TargetPosition);
 		}
 	
 		break;
@@ -734,8 +728,12 @@ void Player::UpdateReticle()
 	0,-windowWH.y / 2,0,0,
 	0,0,1,0,
 	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	Matrix4 matView = viewProjection_->matView;
+	Matrix4 matProjection = viewProjection_->matProjection;
+
 	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+	Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
 
 	//バレットレイメッシュコライダー
 	Ray wall;
@@ -780,8 +778,25 @@ void Player::CheckHitCollision()
 {
 	if ( PlayerCollider->GetHit() )
 	{
-		isTakeDamages = true;
+		isTakeMissileDamages = true;
 		PlayerCollider->Reset();
 	}
+}
+
+void Player::HPUpdate()
+{
+	if ( isTakeMissileDamages )
+	{
+		isTakeMissileDamages = false;
+		PlayerHP -= BulletDamage::GetInstance()->GetEnemyMissileBulletDamage();
+	}
+}
+
+void Player::SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& targetPosition,const float& distance,const float& CameraMaxDistance)
+{
+	cameraRot = CameraRot;
+	TargetPosition = targetPosition;
+	PlayerToCameraDistance = distance;
+	cameraMaxDistance = CameraMaxDistance;
 }
 

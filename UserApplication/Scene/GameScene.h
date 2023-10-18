@@ -49,8 +49,7 @@ public: // メンバ関数
 	void Draw() override;
 	// 終了処理
 	void Finalize() override;
-	//コピー処理
-	void CopyData() override;
+	
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
 	//CSアップデート

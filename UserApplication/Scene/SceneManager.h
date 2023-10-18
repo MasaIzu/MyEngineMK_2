@@ -29,11 +29,6 @@ public: // メンバ関数
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// コピー処理
-	/// </summary>
-	void CopyData();
-
 	//CSアップデート
 	void CSUpdate();
 

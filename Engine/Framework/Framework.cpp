@@ -163,7 +163,7 @@ void Framework::Run()
 		// 描画終了
 		directXCore_->PostDraw();
 
-		CopyData();
+	
 
 		//FPS固定
 		fps->FpsControlEnd();

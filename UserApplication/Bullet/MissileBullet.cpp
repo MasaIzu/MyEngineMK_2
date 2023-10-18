@@ -44,6 +44,12 @@ void MissileBullet::Update(const Vector3& EndPos)
 				goPos.normalize();
 				BulletVelocity[i] = MyMath::lerp(BulletVelocity[i], goPos, BulletStartLerpTime);
 				EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
+
+				if ( BulletCollider[ i ]->GetHit() )
+				{
+					isBulletAlive[ i ] = false;
+					BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_NOTATTACK);
+				}
 			}
 			else {
 
@@ -74,14 +80,15 @@ void MissileBullet::Update(const Vector3& EndPos)
 
 					EnemyBulletWorldTrans[i].translation_ += BulletVelocity[i].norm() * BulletSpeed[i];
 				}
+				if ( BulletCollider[ i ]->GetHit() )
+				{
+					isBulletAlive[ i ] = false;
+					BulletCollider[ i ]->Reset();
+					BulletCollider[ i ]->SetAttribute(COLLISION_ATTR_NOTATTACK);
+				}
 			}
 		}
-	}
-
-	WorldTransUpdate();
-
-	for ( uint32_t i = 0; i < AllBulletCount; i++ )
-	{
+		EnemyBulletWorldTrans[ i ].TransferMatrix();
 		BulletCollider[ i ]->Update(EnemyBulletWorldTrans[ i ].matWorld_,BulletRadius[ i ],BulletSpeed[ i ],BulletVelocity[ i ]);
 	}
 }
@@ -187,7 +194,7 @@ void MissileBullet::MakeSelectMissileBullet(Vector3& pos,Vector3& upLeft,Vector3
 				BulletLerpRightTime = BulletLerpTime - (changeCount * 2 + 1);
 				BulletVelocity[ BulletCounter ] = MyMath::lerp(upRight.norm(),downRight.norm(),lerpPos * BulletLerpRightTime).norm();
 			}
-
+			BulletCollider[ BulletCounter ]->SetAttribute(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 			BulletLerpTime++;
 			makeBulletCount++;
 		}

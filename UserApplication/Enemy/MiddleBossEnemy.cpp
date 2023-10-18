@@ -236,6 +236,8 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 
 	WorldTransUpdate();
 
+	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
+
 	return false;
 }
 

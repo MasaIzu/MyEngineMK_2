@@ -271,10 +271,6 @@ void TitleScene::Finalize()
 {
 }
 
-void TitleScene::CopyData()
-{
-}
-
 void TitleScene::CSUpdate()
 {
 

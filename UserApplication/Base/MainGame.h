@@ -19,8 +19,7 @@ public: // メンバ関数
 	void PostEffectDraw() override; 
 	// 描画
 	void Draw() override;
-	//データをコピー
-	void CopyData() override;
+
 	//CSアップデート
 	void CSUpdate()override;
 

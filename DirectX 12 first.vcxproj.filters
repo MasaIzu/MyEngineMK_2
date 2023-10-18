@@ -163,6 +163,12 @@
     <Filter Include="ResourceFile\Shaders\Particle">
       <UniqueIdentifier>{700420b6-d2f8-464d-8b1b-7909c8f52dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserHeaderFile\Gun">
+      <UniqueIdentifier>{24ccc78e-1e54-47bc-aa64-523497c95b85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserSourceFile\Gun">
+      <UniqueIdentifier>{ecb2c5fa-2c7b-4cab-8ca9-98052e7816de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -427,9 +433,6 @@
     <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h">
       <Filter>UserHeaderFile\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Player\PlayerBullet.h">
-      <Filter>UserHeaderFile\Player</Filter>
-    </ClInclude>
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
       <Filter>UserHeaderFile\UserCamera</Filter>
     </ClInclude>
@@ -498,6 +501,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\Defined.h">
       <Filter>Engine\HeaderFile\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletDamage.h">
+      <Filter>UserHeaderFile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalGun.h">
+      <Filter>UserHeaderFile\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="UserApplication\Player\NormalBullet.h">
+      <Filter>UserHeaderFile\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -624,9 +636,6 @@
     <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp">
       <Filter>UserSourceFile\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Player\PlayerBullet.cpp">
-      <Filter>UserSourceFile\Player</Filter>
-    </ClCompile>
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
       <Filter>UserSourceFile\UserCamera</Filter>
     </ClCompile>
@@ -692,6 +701,15 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp">
       <Filter>UserSourceFile\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletDamage.cpp">
+      <Filter>UserSourceFile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalGun.cpp">
+      <Filter>UserSourceFile\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\Player\NormalBullet.cpp">
+      <Filter>UserSourceFile\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
