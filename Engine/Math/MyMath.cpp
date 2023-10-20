@@ -754,6 +754,11 @@ Vector3 MyMath::HorizontalProjection(const Vector3& startSpeed, float& g, float&
 	return speed;
 }
 
+const Vector2 MyMath::lerpVec2(const Vector2& start,const Vector2& end,const float t) {
+
+	return start * ( 1.0f - t ) + end * t;
+}
+
 const Vector3 MyMath::lerp(const Vector3& start, const Vector3& end, const float t) {
 
 	return start * (1.0f - t) + end * t;

@@ -81,7 +81,7 @@ namespace MyMath {
 	float Distance2Vec2(const Vector2& vec1, const Vector2& vec2);
 
 	Vector3 HorizontalProjection(const Vector3& startSpeed, float& g, float& flame);
-
+	const Vector2 lerpVec2(const Vector2& start,const Vector2& end,const float t);
 	const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
 
 	//ランダム関係

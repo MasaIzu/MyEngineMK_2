@@ -52,58 +52,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	FirstMoveSpline = std::make_unique<SplinePosition>();
 	FinalMoveSpline = std::make_unique<SplinePosition>();
 
-	// Attackフォント
-	AttackFontSprite[0] = Sprite::Create(TextureManager::Load("sprite/Attack_off.png"));
-	AttackFontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
-	AttackFontSprite[1] = Sprite::Create(TextureManager::Load("sprite/Attack_on.png"));
-	AttackFontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-
-	// Wフォント
-	W_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
-	W_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
-	W_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
-	W_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_W_Font.png"));
-	W_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
-	W_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// Aフォント
-	A_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
-	A_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
-	A_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
-	A_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_A_Font.png"));
-	A_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
-	A_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// Sフォント
-	S_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
-	S_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
-	S_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
-	S_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_S_Font.png"));
-	S_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
-	S_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-	// Dフォント
-	D_FontSprite[0] = Sprite::Create(TextureManager::Load("sprite/160x144_D_Font.png"));
-	D_FontSprite[0]->SetTextureRect({ 0,0 }, { 160,144 });
-	D_FontSprite[0]->SetAnchorPoint({ 0.5f,0.5f });
-	D_FontSprite[1] = Sprite::Create(TextureManager::Load("sprite/160x144_D_Font.png"));
-	D_FontSprite[1]->SetTextureRect({ 160,0 }, { 160,144 });
-	D_FontSprite[1]->SetAnchorPoint({ 0.5f,0.5f });
-
-	Vector2 AttackFontsize = { 188.0f,54.0f };
-	Vector2 W_Fontsize = { 32.0f ,28.0f };
-	Vector2 A_Fontsize = { 32.0f ,28.0f };
-	Vector2 S_Fontsize = { 32.0f ,28.0f };
-	Vector2 D_Fontsize = { 32.0f ,28.0f };
-
-	for (int i = 0; i < 2; i++) {
-		AttackFontSprite[i]->SetSize(AttackFontsize);
-		W_FontSprite[i]->SetSize(W_Fontsize);
-		A_FontSprite[i]->SetSize(A_Fontsize);
-		S_FontSprite[i]->SetSize(S_Fontsize);
-		D_FontSprite[i]->SetSize(D_Fontsize);
-	}
-
-
-
-
+	playerUI = std::make_unique<PlayerUI>();
+	playerUI->Initialize();
 }
 
 void Player::Update()
@@ -298,6 +248,9 @@ void Player::Update()
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerNormalGun->Update(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.lookRight);
 
+	//uiのアプデ
+	playerUI->Update();
+
 }
 
 void Player::Draw()
@@ -314,43 +267,9 @@ void Player::Draw()
 void Player::DrawSprite()
 {
 	AttackSprite->Draw(Vector2(640, 360), Vector4(1, 1, 1, 1), 2);
-	Vector2 W_Fontpos = { 270,530 };
-	Vector2 A_Fontpos = { 240,560 };
-	Vector2 S_Fontpos = { 270,560 };
-	Vector2 D_Fontpos = { 300,560 };
-	Vector2 AttackFontpos = { 150,480 };
-	for (int i = 0; i < 2; i++) {
-		if (input_->PushKey(DIK_W)) {
-			W_FontSprite[1]->Draw(W_Fontpos, { 1,1,1,1 });
-		}
-		else {
-			W_FontSprite[0]->Draw(W_Fontpos, { 1,1,1,1 });
-		}
-		if (input_->PushKey(DIK_A)) {
-			A_FontSprite[1]->Draw(A_Fontpos, { 1,1,1,1 });
-		}
-		else {
-			A_FontSprite[0]->Draw(A_Fontpos, { 1,1,1,1 });
-		}
-		if (input_->PushKey(DIK_S)) {
-			S_FontSprite[1]->Draw(S_Fontpos, { 1,1,1,1 });
-		}
-		else {
-			S_FontSprite[0]->Draw(S_Fontpos, { 1,1,1,1 });
-		}
-		if (input_->PushKey(DIK_D)) {
-			D_FontSprite[1]->Draw(D_Fontpos, { 1,1,1,1 });
-		}
-		else {
-			D_FontSprite[0]->Draw(D_Fontpos, { 1,1,1,1 });
-		}
-		if (isAttack) {
-			AttackFontSprite[0]->Draw(AttackFontpos, { 1,1,1,1 });
-		}
-		else if (isAttack == false) {
-			AttackFontSprite[1]->Draw(AttackFontpos, { 1,1,1,1 });
-		}
-	}
+
+	playerUI->Draw();
+
 }
 
 void Player::AttackUpdate(const Vector3& EnemyPos, bool& LockOn)
@@ -358,6 +277,8 @@ void Player::AttackUpdate(const Vector3& EnemyPos, bool& LockOn)
 	if (isAttack == true) {
 		PlayerAttack(EnemyPos, LockOn);
 	}
+
+	playerUI->AttackReticleUpdate(LockOn);
 }
 
 void Player::Move()
@@ -787,8 +708,9 @@ void Player::HPUpdate()
 {
 	if ( isTakeMissileDamages )
 	{
-		isTakeMissileDamages = false;
 		PlayerHP -= BulletDamage::GetInstance()->GetEnemyMissileBulletDamage();
+		playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
+		isTakeMissileDamages = false;
 	}
 }
 

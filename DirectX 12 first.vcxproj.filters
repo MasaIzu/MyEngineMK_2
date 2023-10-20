@@ -169,6 +169,12 @@
     <Filter Include="UserSourceFile\Gun">
       <UniqueIdentifier>{ecb2c5fa-2c7b-4cab-8ca9-98052e7816de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserSourceFile\HpUpdate">
+      <UniqueIdentifier>{477f7202-09da-4bab-b50a-be2eb5242138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserHeaderFile\HpUpdate">
+      <UniqueIdentifier>{0227e27e-cc73-4369-852f-0163c9da40ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -511,6 +517,12 @@
     <ClInclude Include="UserApplication\Player\NormalBullet.h">
       <Filter>UserHeaderFile\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerUI.h">
+      <Filter>UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HpUpdate.h">
+      <Filter>UserHeaderFile\HpUpdate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -710,6 +722,12 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Player\NormalBullet.cpp">
       <Filter>UserSourceFile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerUI.cpp">
+      <Filter>UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="HpUpdate.cpp">
+      <Filter>UserSourceFile\HpUpdate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

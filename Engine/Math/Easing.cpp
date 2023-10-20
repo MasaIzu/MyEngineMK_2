@@ -172,9 +172,9 @@ float Easing::easeOutCubic(float& start, float& end, uint32_t& time, uint32_t& m
 	return start + (end - start) * x;
 }
 
-float Easing::EaseOutQuart(float& start, float& end, float& time, float& max_time)
+float Easing::EaseOutQuart(float& start, float& end,uint32_t& time,uint32_t& max_time)
 {
-	float Time = time / max_time;
+	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
 	float x = 1 - powf(1 - Time, 4);
 	return start + (end - start) * x;
 }
@@ -213,12 +213,9 @@ Vector3 Easing::EaseOutQuartVec3(Vector3& start, Vector3& end, uint32_t& time, u
 {
 	Vector3 easeOutQuartVec3;
 
-	float timef = static_cast<float>(time);
-	float max_timef = static_cast<float>(max_time);
-
-	easeOutQuartVec3.x = EaseOutQuart(start.x, end.x, timef, max_timef);
-	easeOutQuartVec3.y = EaseOutQuart(start.y, end.y, timef, max_timef);
-	easeOutQuartVec3.z = EaseOutQuart(start.z, end.z, timef, max_timef);
+	easeOutQuartVec3.x = EaseOutQuart(start.x, end.x,time,max_time);
+	easeOutQuartVec3.y = EaseOutQuart(start.y, end.y,time,max_time);
+	easeOutQuartVec3.z = EaseOutQuart(start.z, end.z,time,max_time);
 
 	return easeOutQuartVec3;
 }

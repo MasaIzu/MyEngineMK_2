@@ -31,19 +31,19 @@ void MediumBossStage::Initialize()
 	levelData->Initialize("stage2",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0, 20, 0), viewProjection_.get());
+	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
 
 	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
 	player_->SetCameraModeNotFree(false);
 
-	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
-	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());
+	gameCamera = std::make_unique<GameCamera>(WinApp::window_width,WinApp::window_height);
+	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f),player_->GetPlayerPos());
 
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
 
 	bossEnemy = std::make_unique<BossEnemy>();
-	bossEnemy->Initialize(levelData->GetBossSpline()[0], viewProjection_.get());
+	bossEnemy->Initialize(levelData->GetBossSpline()[ 0 ],viewProjection_.get());
 	bossEnemy->SetStageMoveSpline(levelData->GetBossSpline());
 
 	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
@@ -59,7 +59,8 @@ void MediumBossStage::Update()
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
-	if (player_->GetHitFirstRail()) {
+	if ( player_->GetHitFirstRail() )
+	{
 		gameCamera->SetCameraMode(true);
 	}
 
@@ -73,29 +74,33 @@ void MediumBossStage::Update()
 
 	bossEnemy->StagingUpdate();
 
-	if (VsBoss == false) {
-		//if (bossEnemy->GetFinishSpline()) {
-		Vector3 end = Vector3(0, 10, 150);
+	if ( VsBoss == false )
+	{
+//if (bossEnemy->GetFinishSpline()) {
+		Vector3 end = Vector3(0,10,150);
 		//if (bossEnemy->GetBodyNoAlpha()) {
-		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(), end);
+		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(),end);
 		/*}
 	}*/
 	}
-	else {
+	else
+	{
 		middleBossEnemy->Update();
 	}
 
-	if (player_->GetPlayerPos().y < -250.0f) {
+	if ( player_->GetPlayerPos().y < -250.0f )
+	{
 		sceneManager_->ChangeScene("STAGE2");
 	}
 
-	if (middleBossEnemy->GetIsDead()) {
+	if ( middleBossEnemy->GetIsDead() )
+	{
 		sceneManager_->ChangeScene("ClearScene");
 	}
 
 	LockOn();
 
-	player_->AttackUpdate(middleBossEnemy->GetPosition(), isLockOn);
+	player_->AttackUpdate(middleBossEnemy->GetPosition(),isLockOn);
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
@@ -108,8 +113,8 @@ void MediumBossStage::PostEffectDraw()
 	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
-	PostEffect::SetRadialBlur(center, intensity, samples);
-	PostEffect::SetAngle(angle, angle2);
+	PostEffect::SetRadialBlur(center,intensity,samples);
+	PostEffect::SetAngle(angle,angle2);
 
 	PostEffect::PostDrawScene();
 }
@@ -154,27 +159,42 @@ void MediumBossStage::LockOn()
 {
 	Vector3 EnemyPos = middleBossEnemy->GetPosition();
 
-	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x, WinApp::GetInstance()->GetWindowSize().y);
+	Vector3 forwardVector = ( viewProjection_->target - viewProjection_->eye ).norm();
+	Vector3	toCameraVector = ( EnemyPos - viewProjection_->eye ).norm();
 
-	//ビューポート行列
-	Matrix4 Viewport =
-	{ windowWH.x / 2,0,0,0,
-	0,-windowWH.y / 2,0,0,
-	0,0,1,0,
-	windowWH.x / 2, windowWH.y / 2,0,1 };
+	float dotProduct = forwardVector.dot(toCameraVector);
 
-	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+	if ( dotProduct > 0 )
+	{
+		Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
 
-	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-	EnemyPos = MyMath::DivVecMat(EnemyPos, matViewProjectionViewport);
+		//ビューポート行列
+		Matrix4 Viewport =
+		{ windowWH.x / 2,0,0,0,
+		0,-windowWH.y / 2,0,0,
+		0,0,1,0,
+		windowWH.x / 2, windowWH.y / 2,0,1 };
 
-	float dist = MyMath::Distance2Vec2(Vector2(EnemyPos.x, EnemyPos.y), Vector2(640, 360));
-	float radius = 128.0f;
-	if (dist <= radius) {
-		isLockOn = true;
+		//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+		Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+		//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+		EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
+
+		if ( (0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x) &&
+			(0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ))
+		{
+			isLockOn = true;
+			player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+		}
+		else
+		{
+			isLockOn = false;
+		}
 	}
-	else {
+	else
+	{
 		isLockOn = false;
 	}
+
 }

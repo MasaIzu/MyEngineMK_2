@@ -8,11 +8,13 @@
 #include "NormalGun.h"
 #include <Sprite.h>
 #include "SplinePosition.h"
+#include "PlayerUI.h"
 
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player {
+class Player
+{
 
 public://基本関数
 	Player();
@@ -28,7 +30,7 @@ public://基本関数
 	void DrawSprite();
 
 	//アタックアップデート
-	void AttackUpdate(const Vector3& EnemyPos, bool& LockOn);
+	void AttackUpdate(const Vector3& EnemyPos,bool& LockOn);
 
 private:
 	//プレーヤーの移動
@@ -36,7 +38,7 @@ private:
 	//プレイヤーの回転
 	void PlayerRot();
 	//プレーヤーの攻撃
-	void PlayerAttack(const Vector3& EnemyPos, bool& LockOn);
+	void PlayerAttack(const Vector3& EnemyPos,bool& LockOn);
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
@@ -49,7 +51,7 @@ private:
 	void UpdateReticle();
 
 	//角度を決める奴
-	float AngleSelect(float& angle, float& selectAngle);
+	float AngleSelect(float& angle,float& selectAngle);
 
 	//当たり判定チェック
 	void CheckHitCollision();
@@ -60,19 +62,46 @@ private:
 public://Setter
 	//カメラの回転,撃つ場所への距離,プレイヤーとカメラの距離,アルファ値を決めるためのカメラ距離のマックス
 	void SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& cameradis,const float& distance,const float& CameraMaxDistance);
-	void SetCameraModeNotFree(const bool& mode) { isCameraModeNotFree = mode; }//カメラモード
-	void SetFirstMoveSpline(const std::vector<Vector3>& points) { FirstMoveSpline->SetNotSplineVector(points); }//最初のスプライン
-	void SetSpline(const std::vector<Vector3>& points) { playerMoveSpline->SetNotSplineVector(points); }//二つ目のスプライン
-	void SetFinalSpline(const std::vector<Vector3>& points) { FinalMoveSpline->SetNotSplineVector(points); }//最後のスプライン
+	void SetCameraModeNotFree(const bool& mode) {
+		isCameraModeNotFree = mode;
+	}//カメラモード
+	void SetFirstMoveSpline(const std::vector<Vector3>& points) {
+		FirstMoveSpline->SetNotSplineVector(points);
+	}//最初のスプライン
+	void SetSpline(const std::vector<Vector3>& points) {
+		playerMoveSpline->SetNotSplineVector(points);
+	}//二つ目のスプライン
+	void SetFinalSpline(const std::vector<Vector3>& points) {
+		FinalMoveSpline->SetNotSplineVector(points);
+	}//最後のスプライン
+	void SetReticlePosition(const Vector2& position) {
+		playerUI->SetReticlePosition(position);
+	}
 public://Getter
-	bool GetHitFirstRail()const { return isHitFirstRail; }//最初のスプラインに当たったか
-	bool GetHit2ndRail()const { return isHitRail; }//二つ目のスプラインに当たったか
-	bool GetHitFinalRail()const { return isHitFinalRail; }//最後のスプラインに当たったか
-	bool GetHowReturnSpline(const uint32_t& HowIndex)const { return FirstMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
-	bool GetHowReturnSpline2ndRail(const uint32_t & HowIndex)const { return playerMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
-	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const { return FinalMoveSpline->GetHowReturnIndex(HowIndex); }//指定した場所に来たか
-	bool GetFinishFirstSpline()const { return FirstMoveSpline->GetFinishSpline(); }//スプラインが終わったか
-	Vector3 GetPlayerPos()const { return MyMath::GetWorldTransform(playerWorldTrans.matWorld_); }//ポジションゲット
+	bool GetHitFirstRail()const {
+		return isHitFirstRail;
+	}//最初のスプラインに当たったか
+	bool GetHit2ndRail()const {
+		return isHitRail;
+	}//二つ目のスプラインに当たったか
+	bool GetHitFinalRail()const {
+		return isHitFinalRail;
+	}//最後のスプラインに当たったか
+	bool GetHowReturnSpline(const uint32_t& HowIndex)const {
+		return FirstMoveSpline->GetHowReturnIndex(HowIndex);
+	}//指定した場所に来たか
+	bool GetHowReturnSpline2ndRail(const uint32_t& HowIndex)const {
+		return playerMoveSpline->GetHowReturnIndex(HowIndex);
+	}//指定した場所に来たか
+	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const {
+		return FinalMoveSpline->GetHowReturnIndex(HowIndex);
+	}//指定した場所に来たか
+	bool GetFinishFirstSpline()const {
+		return FirstMoveSpline->GetFinishSpline();
+	}//スプラインが終わったか
+	Vector3 GetPlayerPos()const {
+		return MyMath::GetWorldTransform(playerWorldTrans.matWorld_);
+	}//ポジションゲット
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -86,12 +115,7 @@ private://クラス関連
 	std::unique_ptr<NormalGun> playerNormalGun;
 	// 照準スプライト
 	std::unique_ptr<Sprite> AttackSprite;
-	//WASDスプライト
-	std::unique_ptr<Sprite> W_FontSprite[2];
-	std::unique_ptr<Sprite> A_FontSprite[2];
-	std::unique_ptr<Sprite> S_FontSprite[2];
-	std::unique_ptr<Sprite> D_FontSprite[2];
-	std::unique_ptr<Sprite> AttackFontSprite[2];
+
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	//スプライン
@@ -99,8 +123,12 @@ private://クラス関連
 	std::unique_ptr<SplinePosition> playerMoveSpline;//途中のスプライン
 	std::unique_ptr<SplinePosition> FinalMoveSpline;//最後のカメラスプライン
 
+	//プレイヤーUIクラス
+	std::unique_ptr<PlayerUI> playerUI;
+
 private://イーナムクラス
-	enum class AttackPhase {
+	enum class AttackPhase
+	{
 		AttackCombo1,//
 		AttackCombo2,//
 		AttackCombo3,//
@@ -137,6 +165,7 @@ private://プレイヤークラス変数
 	uint32_t SlidingTime = 0;
 	uint32_t SlidingNumber = 0;
 	uint32_t PlayerHP = 5000;
+	uint32_t PlayerMaxHP = 5000;
 
 	float Radius = 1.0f;
 	float playerSpeed = 0.9f;
