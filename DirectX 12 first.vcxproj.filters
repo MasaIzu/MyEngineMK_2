@@ -175,6 +175,9 @@
     <Filter Include="UserHeaderFile\HpUpdate">
       <UniqueIdentifier>{0227e27e-cc73-4369-852f-0163c9da40ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Sprite">
+      <UniqueIdentifier>{b6c6abb0-5b0d-4292-a316-248225f1317b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -186,13 +189,7 @@
     <None Include="Resources\Shaders\Shape.hlsli">
       <Filter>ResourceFile\Shaders</Filter>
     </None>
-    <None Include="Resources\Shaders\Sprite.hlsli">
-      <Filter>ResourceFile\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\Terrain.hlsli">
-      <Filter>ResourceFile\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\SpriteShaderHeader.hlsli">
       <Filter>ResourceFile\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\FBX.hlsli">
@@ -209,6 +206,12 @@
     </None>
     <None Include="MathFunction.hlsli">
       <Filter>ResourceFile\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Sprite.hlsli">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </None>
+    <None Include="Resources\Shaders\Sprite3D.hlsli">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -230,22 +233,10 @@
     <FxCompile Include="Resources\Shaders\ShapeVS.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpriteVS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\TerrainPS.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\TerrainVS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpritePixelShader.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpriteVertexShader.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ObjGS.hlsl">
@@ -283,6 +274,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpriteVS.hlsl">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Sprite3DVS.hlsl">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Sprite3DPS.hlsl">
+      <Filter>ResourceFile\Shaders\Sprite</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,6 +526,9 @@
     <ClInclude Include="HpUpdate.h">
       <Filter>UserHeaderFile\HpUpdate</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite3D.h">
+      <Filter>Engine\HeaderFile\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -728,6 +734,9 @@
     </ClCompile>
     <ClCompile Include="HpUpdate.cpp">
       <Filter>UserSourceFile\HpUpdate</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite3D.cpp">
+      <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

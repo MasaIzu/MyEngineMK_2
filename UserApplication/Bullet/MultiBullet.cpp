@@ -36,7 +36,7 @@ void MultiBullet::Update()
 	WorldTransUpdate();
 }
 
-void MultiBullet::Draw(ViewProjection& viewProjection_)
+void MultiBullet::Draw(const ViewProjection& viewProjection_)
 {
 	for (int i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {

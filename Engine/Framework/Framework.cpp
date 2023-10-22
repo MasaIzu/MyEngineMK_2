@@ -2,6 +2,7 @@
 #include "MixPostEffect.h"
 #include <PostEffectManager.h>
 #include <ParticleManager.h>
+#include <Sprite3D.h>
 
 
 void Framework::Initialize()
@@ -32,7 +33,7 @@ void Framework::Initialize()
 
 	// スプライト静的初期化
 	Sprite::StaticInitialize(directXCore_->GetDevice());
-
+	Sprite3D::StaticInitialize(directXCore_->GetDevice());
 
 	// 3Dモデル静的初期化
 	Model::StaticInitialize();
@@ -101,7 +102,7 @@ void Framework::Finalize()
 	Model::StaticFinalize();
 
 	Sprite::StaticFinalize();
-
+	Sprite3D::StaticFinalize();
 	/*fbxLoader_->Finalize();*/
 
 	TextureManager_->Delete();

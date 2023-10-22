@@ -10,7 +10,7 @@ MiddleBossEnemy::MiddleBossEnemy()
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy",true));
 	BossWorldTrans.scale_ = Vector3(5.0f,5.0f,5.0f);
 	BossWorldTrans.Initialize();
-
+	HPSprite = Sprite3D::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -196,7 +196,7 @@ void MiddleBossEnemy::Update()
 
 }
 
-void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
+void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
 	multiBullet->Draw(viewProjection_);
 	missileBullet->Draw(viewProjection_);
@@ -204,6 +204,13 @@ void MiddleBossEnemy::Draw(ViewProjection& viewProjection_)
 	{
 		model_->Draw(BossWorldTrans,viewProjection_);
 	}
+}
+
+void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
+{
+	Vector3 aaa = BossWorldTrans.translation_ + Vector3(0,10,0);
+	HPSprite->SetScale(5.0f);
+	HPSprite->Draw(aaa,Vector4(1,1,1,1),viewProjection_);
 }
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)

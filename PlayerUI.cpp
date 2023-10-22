@@ -30,6 +30,9 @@ void PlayerUI::Initialize()
 	HPBackSprite->SetAnchorPoint({ 0.0f,0.5f });
 	HPBackSprite->SetSize(HpSize);
 
+	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	HPBarBackBarSprite->SetAnchorPoint({ 0.0f,0.5f });
+
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 
 }
@@ -78,13 +81,7 @@ void PlayerUI::PlayerHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp)
 {
 	HpSize.x = HpBarMaxSize * ( static_cast< float >( nowHp ) / static_cast< float >( MaxHp ));
 	HP->SetSize(HpSize);
-	HpDownEasingTime = 0;
-	EndHpEasingPos = HpSize.x;
-	isTimeAdvances = false;
-	EasingTimeInAdvance = 0;
-
-	hpUpdate->EasingMaterial(EndHpEasingPos);
-
+	hpUpdate->EasingMaterial(HpSize.x);
 }
 
 
@@ -92,6 +89,7 @@ void PlayerUI::Draw()
 {
 	ReticleOutline->Draw(ReticlePosition,WhiteColor);
 	Reticle->Draw(ReticlePosition,ReticleColor);
+	HPBarBackBarSprite->Draw(HpBarBackBarPosition,WhiteColor);
 	HPBackSprite->Draw(HpPosition,HPDownBarColor);
 	HP->Draw(HpPosition,HPBarColor);
 }

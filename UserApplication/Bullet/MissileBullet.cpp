@@ -93,7 +93,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 	}
 }
 
-void MissileBullet::Draw(ViewProjection& viewProjection_)
+void MissileBullet::Draw(const ViewProjection& viewProjection_)
 {
 	for (int i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == true) {

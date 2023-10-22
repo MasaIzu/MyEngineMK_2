@@ -93,12 +93,12 @@ void Player::Update()
 
 	if (isCameraModeNotFree == true) {
 		//カメラの位置でアルファが決まる
-		alpha = 1.0f - (1.0f - PlayerToCameraDistance / cameraMaxDistance);
-		playerWorldTrans.alpha = alpha;
-		playerWorldTransHed.alpha = alpha;
+		Alpha = 1.0f - (1.0f - PlayerToCameraDistance / CameraMaxDistance);
+		playerWorldTrans.alpha = Alpha;
+		playerWorldTransHed.alpha = Alpha;
 	}
 	if (FinalMoveSpline->GetHowReturnIndex(5)) {
-		Stop = true;
+		isStop = true;
 	}
 
 	if (input_->TriggerKey(DIK_LSHIFT)) {
@@ -239,7 +239,6 @@ void Player::Update()
 	ImGui::Begin("Player");
 
 
-	ImGui::Text("angle:%f,%f,%f", angle.x, angle.y, angle.z);
 	ImGui::End();
 
 	//DebugWorldTrans.translation_ = Distance;
@@ -306,19 +305,19 @@ void Player::Move()
 
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * diagonalPlayerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * DiagonalPlayerSpeed;
 		}
 		//if (onGround) {
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -629,7 +628,7 @@ void Player::SplineUpdate()
 		isHitFirstRail = false;
 	}
 	if (isHitFinalRail == true && FinalMoveSpline->GetFinishSpline() == false) {
-		if (Stop == false) {
+		if (isStop == false) {
 			float speed = 0.02f;
 			FinalMoveSpline->Update(speed);
 			playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0, Radius, 0);
@@ -714,11 +713,11 @@ void Player::HPUpdate()
 	}
 }
 
-void Player::SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& targetPosition,const float& distance,const float& CameraMaxDistance)
+void Player::SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& targetPosition,const float& distance,const float& cameraMaxDistance)
 {
 	cameraRot = CameraRot;
 	TargetPosition = targetPosition;
 	PlayerToCameraDistance = distance;
-	cameraMaxDistance = CameraMaxDistance;
+	CameraMaxDistance = cameraMaxDistance;
 }
 

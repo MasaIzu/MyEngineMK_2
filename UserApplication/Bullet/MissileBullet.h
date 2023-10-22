@@ -24,7 +24,7 @@ public://基本関数
 	//更新
 	void Update(const Vector3& EndPos);
 	//描画
-	void Draw(ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_);
 
 
 public:

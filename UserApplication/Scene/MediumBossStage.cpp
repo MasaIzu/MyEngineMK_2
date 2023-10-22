@@ -136,6 +136,7 @@ void MediumBossStage::Draw()
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
+	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
 
 }

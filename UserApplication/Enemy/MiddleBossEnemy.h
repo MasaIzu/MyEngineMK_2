@@ -7,6 +7,7 @@
 #include "MultiBullet.h"
 #include "Player.h"
 #include "MissileBullet.h"
+#include <Sprite3D.h>
 
 /// <summary>
 /// 中ボス
@@ -33,7 +34,10 @@ public://基本関数
 	//更新
 	void Update();
 	//描画
-	void Draw(ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_);
+	//スプライト描画
+	void DrawSprite(const ViewProjection& viewProjection_);
+
 	//ムービー用更新
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 
@@ -94,6 +98,9 @@ private://クラス関連
 	// コライダー
 	BaseCollider* MiddleBossCollider = nullptr;
 
+	std::unique_ptr<Sprite3D> HPSprite;
+
+
 private://イーナムクラス
 
 
@@ -139,7 +146,7 @@ private://EnemyBossクラス変数
 	float Radius = 10.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
-	float RotSpeed = 1.0f;
+	float RotSpeed = 0.01f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 100.0f;
 	float jampHeight = 20.0f;
