@@ -529,6 +529,9 @@
     <ClInclude Include="Sprite3D.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyHPUI.h">
+      <Filter>UserHeaderFile\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -737,6 +740,9 @@
     </ClCompile>
     <ClCompile Include="Sprite3D.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHPUI.cpp">
+      <Filter>UserSourceFile\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

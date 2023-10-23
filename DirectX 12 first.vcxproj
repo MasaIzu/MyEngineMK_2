@@ -273,6 +273,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyHPUI.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="BulletDamage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
@@ -355,6 +356,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EnemyHPUI.cpp" />
     <ClCompile Include="Sprite3D.cpp" />
     <ClCompile Include="BulletDamage.cpp" />
     <ClCompile Include="HpUpdate.cpp" />

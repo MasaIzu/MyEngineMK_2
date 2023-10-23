@@ -10,7 +10,13 @@ MiddleBossEnemy::MiddleBossEnemy()
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy",true));
 	BossWorldTrans.scale_ = Vector3(5.0f,5.0f,5.0f);
 	BossWorldTrans.Initialize();
-	HPSprite = Sprite3D::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	HP = Sprite3D::Create(TextureManager::Load("sprite/WhiteBar.png"));
+	HPBackSprite = Sprite3D::Create(TextureManager::Load("sprite/WhiteBar.png"));
+	HPBarBackBarSprite = Sprite3D::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+
+	enemyHPUI = std::make_unique<EnemyHPUI>();
+	enemyHPUI->Initialize(HP.get(),HPBackSprite.get(),HPBarBackBarSprite.get());
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -194,6 +200,8 @@ void MiddleBossEnemy::Update()
 	ImGui::Text("RotTime = %d",RotTime);
 	ImGui::End();
 
+	enemyHPUI->Update();
+
 }
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
@@ -209,8 +217,7 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
 {
 	Vector3 aaa = BossWorldTrans.translation_ + Vector3(0,10,0);
-	HPSprite->SetScale(5.0f);
-	HPSprite->Draw(aaa,Vector4(1,1,1,1),viewProjection_);
+	enemyHPUI->Draw(aaa,20.0f,20.0f,viewProjection_);
 }
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)

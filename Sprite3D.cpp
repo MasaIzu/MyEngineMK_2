@@ -291,7 +291,7 @@ Sprite3D::Sprite3D() {}
 Sprite3D::Sprite3D(
 	uint32_t textureHandle,Vector2 size) {
 	size_ = size;
-	anchorPoint_ = Vector2(0.5f,0.5f);
+	anchorPoint_ = Vector2(0.0f,0.5f);
 	matWorld_ = MyMath::MakeIdentity();
 	textureHandle_ = textureHandle;
 	texSize_ = size;
@@ -399,13 +399,19 @@ void Sprite3D::SetScale(const float& Scale)
 
 }
 
-void Sprite3D::Draw(Vector3 Position,Vector4 Color,const ViewProjection& viewProjection,int blendMode) {
+void Sprite3D::SetScale(const Vector2& nowScale,const Vector2& maxScale)
+{
+	scaleVec2 = nowScale;
+	MaxScaleVec2 = maxScale;
+}
 
-	TransferVertices(viewProjection);
+void Sprite3D::Draw(const Vector3& Position,const Vector4& Color,const float& MaxScale,const ViewProjection& viewProjection,int blendMode) {
+
+	TransferVertices(MaxScale,viewProjection);
 	// ワールド行列の更新
 	matWorld_ = MyMath::MakeIdentity();
 	matWorld_ *= MyMath::Rotation(Vector3(0,0,rotation_),3);
-	matWorld_ *= MyMath::Translation(Vector3(Position.x,Position.y,Position.z));
+	matWorld_ *= MyMath::Translation(Vector3(Position.x + positionKeep3D_.x,Position.y + positionKeep3D_.y,Position.z + positionKeep3D_.z));
 
 	// 定数バッファにデータ転送
 	constMap_->color = Color;
@@ -491,7 +497,7 @@ void Sprite3D::TransferVertices()
 	memcpy(vertMap_,vertices,sizeof(vertices));
 }
 
-void Sprite3D::TransferVertices(const ViewProjection& view) {
+void Sprite3D::TransferVertices(const float& MaxScale,const ViewProjection& view) {
 
 	// 左下、左上、右下、右上
 	enum
@@ -501,10 +507,11 @@ void Sprite3D::TransferVertices(const ViewProjection& view) {
 
 	float ratio = size_.y / size_.x;
 
-	float left = ( 0.0f - anchorPoint_.x ) * scale_;
-	float right = ( 1.0f - anchorPoint_.x ) * scale_;
-	float top = ( ( 0.0f - anchorPoint_.y ) * ratio ) * scale_;
-	float bottom = ( ( 1.0f - anchorPoint_.y ) * ratio ) * scale_;
+	float left = ( 0.0f - anchorPoint_.x );
+	float right = ( 1.0f - anchorPoint_.x );
+	float top = ( ( 0.0f - anchorPoint_.y ) * ratio );
+	float bottom = ( ( 1.0f - anchorPoint_.y ) * ratio );
+	ratio = MaxScale;
 	if ( isFlipX_ )
 	{ // 左右入れ替え
 		left = -left;
@@ -522,11 +529,17 @@ void Sprite3D::TransferVertices(const ViewProjection& view) {
 	// 頂点データ
 	VertexPosUv vertices[ kVertNum ];
 
-	vertices[ LB ].pos = { left, bottom, 0.0f };  // 左下
-	vertices[ LT ].pos = { left, top, 0.0f };     // 左上
-	vertices[ RB ].pos = { right, bottom, 0.0f }; // 右下
-	vertices[ RT ].pos = { right, top, 0.0f };    // 右上
+	vertices[ LB ].pos = { left * MaxScaleVec2.x, bottom * MaxScaleVec2.y, 0.0f };  // 左下
+	vertices[ LT ].pos = { left * MaxScaleVec2.x, top * MaxScaleVec2.y, 0.0f };     // 左上
+	vertices[ RB ].pos = { right * MaxScaleVec2.x, bottom * MaxScaleVec2.y, 0.0f }; // 右下
+	vertices[ RT ].pos = { right * MaxScaleVec2.x, top * MaxScaleVec2.y, 0.0f };    // 右上
 
+	positionKeep3D_ = ( MyMath::MatVector(view.matBillboard,vertices[ LB ].pos) - MyMath::MatVector(view.matBillboard,vertices[ RB ].pos) ) * half;
+
+	vertices[ LB ].pos = { left * scaleVec2.x, bottom * scaleVec2.y, 0.0f };  // 左下
+	vertices[ LT ].pos = { left * scaleVec2.x, top * scaleVec2.y, 0.0f };     // 左上
+	vertices[ RB ].pos = { right * scaleVec2.x, bottom * scaleVec2.y, 0.0f }; // 右下
+	vertices[ RT ].pos = { right * scaleVec2.x, top * scaleVec2.y, 0.0f };    // 右上
 
 	vertices[ LB ].pos = MyMath::MatVector(view.matBillboard,vertices[ LB ].pos);
 	vertices[ LT ].pos = MyMath::MatVector(view.matBillboard,vertices[ LT ].pos);

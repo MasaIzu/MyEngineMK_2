@@ -147,11 +147,11 @@ public: // メンバ関数
 	void SetDrawUpdate(Vector4 Color);
 
 	void SetScale(const float& Scale);
-
+	void SetScale(const Vector2& nowScale,const Vector2& maxScale);
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(Vector3 Position,Vector4 Color,const ViewProjection& viewProjection,int blendMode = 1);
+	void Draw(const Vector3& Position,const Vector4& Color,const float& MaxScale, const ViewProjection& viewProjection,int blendMode = 1);
 
 private: // メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
@@ -161,7 +161,9 @@ private: // メンバ変数
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	UINT textureHandle_ = 0;
 	float rotation_ = 0.0f;
+	float half = 0.5f;
 	Vector2 position_{};
+	Vector3 positionKeep3D_;
 	Vector2 size_ = { 100.0f, 100.0f };
 	Vector2 anchorPoint_ = { 0, 0 };
 	Matrix4 matWorld_{};
@@ -171,6 +173,8 @@ private: // メンバ変数
 	Vector2 texBase_ = { 0, 0 };
 	Vector2 texSize_ = { 100.0f, 100.0f };
 	float scale_ = 1.0f;
+	Vector2 scaleVec2 = { 1.0f,1.0f };
+	Vector2 MaxScaleVec2 = { 1.0f,1.0f };
 	D3D12_RESOURCE_DESC resourceDesc_ = {};
 
 private: // メンバ関数
@@ -178,5 +182,5 @@ private: // メンバ関数
 	/// 頂点データ転送
 	/// </summary>
 	void TransferVertices();
-	void TransferVertices(const ViewProjection& view);
+	void TransferVertices(const float& MaxScale,const ViewProjection& view);
 };
