@@ -175,6 +175,7 @@ void MiddleBossEnemy::Update()
 		{
 			MiddleBossCollider->Reset();
 			MiddleBossHp--;
+			enemyHPUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 		}
 
 		if ( MiddleBossHp > 0 )
@@ -217,7 +218,7 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
 {
 	Vector3 aaa = BossWorldTrans.translation_ + Vector3(0,10,0);
-	enemyHPUI->Draw(aaa,20.0f,20.0f,viewProjection_);
+	enemyHPUI->Draw(aaa,viewProjection_);
 }
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)

@@ -127,7 +127,8 @@ private://EnemyBossクラス変数
 	uint32_t MoveingTimer = 0;
 	uint32_t MaxMoveingTimer = 0;
 	uint32_t MaxBulletCoolTime = 0;
-	uint32_t MiddleBossHp = 1000;
+	uint32_t MaxMiddleBossHp = 1000;
+	uint32_t MiddleBossHp = MaxMiddleBossHp;
 	uint32_t AttackCooltime = 0;
 	uint32_t AttackTypeCount = static_cast<uint32_t>(AttackType::Move);
 	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack) + 1;
@@ -149,7 +150,7 @@ private://EnemyBossクラス変数
 	float Radius = 10.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
-	float RotSpeed = 0.01f;
+	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 100.0f;
 	float jampHeight = 20.0f;

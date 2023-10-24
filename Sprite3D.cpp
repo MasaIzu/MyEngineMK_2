@@ -405,9 +405,9 @@ void Sprite3D::SetScale(const Vector2& nowScale,const Vector2& maxScale)
 	MaxScaleVec2 = maxScale;
 }
 
-void Sprite3D::Draw(const Vector3& Position,const Vector4& Color,const float& MaxScale,const ViewProjection& viewProjection,int blendMode) {
+void Sprite3D::Draw(const Vector3& Position,const Vector4& Color,const ViewProjection& viewProjection,int blendMode) {
 
-	TransferVertices(MaxScale,viewProjection);
+	TransferVertices(viewProjection);
 	// ワールド行列の更新
 	matWorld_ = MyMath::MakeIdentity();
 	matWorld_ *= MyMath::Rotation(Vector3(0,0,rotation_),3);
@@ -497,7 +497,7 @@ void Sprite3D::TransferVertices()
 	memcpy(vertMap_,vertices,sizeof(vertices));
 }
 
-void Sprite3D::TransferVertices(const float& MaxScale,const ViewProjection& view) {
+void Sprite3D::TransferVertices(const ViewProjection& view) {
 
 	// 左下、左上、右下、右上
 	enum
@@ -511,7 +511,6 @@ void Sprite3D::TransferVertices(const float& MaxScale,const ViewProjection& view
 	float right = ( 1.0f - anchorPoint_.x );
 	float top = ( ( 0.0f - anchorPoint_.y ) * ratio );
 	float bottom = ( ( 1.0f - anchorPoint_.y ) * ratio );
-	ratio = MaxScale;
 	if ( isFlipX_ )
 	{ // 左右入れ替え
 		left = -left;

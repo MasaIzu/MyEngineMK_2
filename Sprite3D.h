@@ -151,7 +151,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const Vector3& Position,const Vector4& Color,const float& MaxScale, const ViewProjection& viewProjection,int blendMode = 1);
+	void Draw(const Vector3& Position,const Vector4& Color, const ViewProjection& viewProjection,int blendMode = 1);
 
 private: // メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
@@ -182,5 +182,5 @@ private: // メンバ関数
 	/// 頂点データ転送
 	/// </summary>
 	void TransferVertices();
-	void TransferVertices(const float& MaxScale,const ViewProjection& view);
+	void TransferVertices(const ViewProjection& view);
 };
