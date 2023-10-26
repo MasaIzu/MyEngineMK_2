@@ -6,14 +6,14 @@
 #include "HpUpdate.h"
 #include <Sprite3D.h>
 
-class EnemyHPUI
+class EnemyHP3DUI
 {
 public:
-	EnemyHPUI();
-	~EnemyHPUI();
+	EnemyHP3DUI();
+	~EnemyHP3DUI();
 
 	//初期化
-	void Initialize(Sprite3D* hpSprite,Sprite3D* hpBackSprite,Sprite3D* hpBarBackBarSprite);
+	void Initialize();
 	//更新
 	void Update();
 	void EnemyHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp);
@@ -25,9 +25,9 @@ private://コンスト
 
 private:
 
-	Sprite3D* HP = nullptr;
-	Sprite3D* HPBackSprite = nullptr;
-	Sprite3D* HPBarBackBarSprite = nullptr;
+	std::unique_ptr<Sprite3D> HP;
+	std::unique_ptr<Sprite3D> HPBackSprite;
+	std::unique_ptr<Sprite3D> HPBarBackBarSprite;
 
 	std::unique_ptr<HpUpdate> hpUpdate;
 

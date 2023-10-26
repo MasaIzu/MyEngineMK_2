@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "MissileBullet.h"
 #include <Sprite3D.h>
-#include "EnemyHPUI.h"
+#include "EnemyHP3DUI.h"
 
 /// <summary>
 /// 中ボス
@@ -95,13 +95,17 @@ private://クラス関連
 	//弾
 	std::unique_ptr<MultiBullet> multiBullet;
 	std::unique_ptr<MissileBullet> missileBullet;
-	std::unique_ptr<EnemyHPUI> enemyHPUI;
+	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
 	BaseCollider* MiddleBossCollider = nullptr;
 
-	std::unique_ptr<Sprite3D> HP;
-	std::unique_ptr<Sprite3D> HPBackSprite;
-	std::unique_ptr<Sprite3D> HPBarBackBarSprite;
+	std::unique_ptr<Sprite> HP2D;
+	std::unique_ptr<Sprite> HPBackSprite2D;
+	std::unique_ptr<Sprite> HPBarBackBarSprite2D;
+
+	std::unique_ptr<Sprite3D> HP3D;
+	std::unique_ptr<Sprite3D> HPBackSprite3D;
+	std::unique_ptr<Sprite3D> HPBarBackBarSprite3D;
 
 
 private://イーナムクラス

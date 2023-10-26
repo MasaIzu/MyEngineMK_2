@@ -529,7 +529,10 @@
     <ClInclude Include="Sprite3D.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHPUI.h">
+    <ClInclude Include="EnemyHP3DUI.h">
+      <Filter>UserHeaderFile\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHP2DUI.h">
       <Filter>UserHeaderFile\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
@@ -741,7 +744,10 @@
     <ClCompile Include="Sprite3D.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHPUI.cpp">
+    <ClCompile Include="EnemyHP3DUI.cpp">
+      <Filter>UserSourceFile\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHP2DUI.cpp">
       <Filter>UserSourceFile\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
