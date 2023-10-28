@@ -1,128 +1,129 @@
-#pragma once
+ï»¿#pragma once
 
-#include "FbxModel.h"
-
+#include <fbxsdk.h>
+#include "FBXModel.h"
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <string>
+#include <array>
+#include <unordered_map>
 
-//#include<assimp/Importer.hpp>
-//#include<assimp/scene.h>
-//#include<assimp/postprocess.h>
-//#include<assimp/cimport.h>
 
 class FbxLoader
 {
-private: // ƒGƒCƒŠƒAƒX
-	// std::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// std::ã‚’çœç•¥
 	using string = std::string;
 
-public: // ’è”
-	// ƒ‚ƒfƒ‹Ši”[ƒ‹[ƒgƒpƒX
+public: // å®šæ•°
+	// ãƒ¢ãƒ‡ãƒ«æ ¼ç´ãƒ«ãƒ¼ãƒˆãƒ‘ã‚¹
 	static const string baseDirectory;
-	// ƒeƒNƒXƒ`ƒƒ‚ª‚È‚¢ê‡‚Ì•W€ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒãªã„å ´åˆã®æ¨™æº–ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«å
 	static const string defaultTextureFileName;
+
 public:
 	/// <summary>
-	/// ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+	/// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒCƒ“ƒXƒ^ƒ“ƒX</returns>
+	/// <returns>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</returns>
 	static FbxLoader* GetInstance();
 
-public://Ã“Iƒƒ“ƒoŠÖ”
-
-	/// <summary>
-	/// FBX‚Ìs—ñ‚ğXMMatrix‚É•ÏŠ·
-	/// </summary>
-	/// <param name="dst">‘‚«‚İæ</param>
-	/// <param name="src">‚à‚Æ‚Æ‚È‚éFBXs—ñ</param>
-	//static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src);
-
-
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	/// <param name="device">D3D12ƒfƒoƒCƒX</param>
+	/// <param name="device">D3D12ãƒ‡ãƒã‚¤ã‚¹</param>
 	void Initialize(ID3D12Device* device);
 
 	/// <summary>
-	/// Œãn––
+	/// å¾Œå§‹æœ«
 	/// </summary>
 	void Finalize();
 
 	/// <summary>
-	/// ƒtƒ@ƒCƒ‹‚©‚çFBXƒ‚ƒfƒ‹“Ç
+	/// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰FBXãƒ¢ãƒ‡ãƒ«èª­è¾¼
 	/// </summary>
-	/// <param name="modelName">ƒ‚ƒfƒ‹–¼</param>
-	FbxModel* LoadModelFromFile(const string& modelName);
+	/// <param name="modelName">ãƒ¢ãƒ‡ãƒ«å</param>
+	FBXModel* LoadModelFromFile(const string& modelName, bool isSmooth);
 
+	/// <summary>
+	/// FBXã®è¡Œåˆ—XMMatrixã«å¤‰æ›
+	/// </summary>
+	/// <param name="dst">æ›¸ãè¾¼ã¿å…ˆ</param>
+	/// <param name="src">å…ƒã¨ãªã‚‹FBXè¡Œåˆ—</param>
+	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src);
 
-	void ParseSkin(FbxModel* model, aiMesh* fbxMesh);
+	//ã‚¹ã‚­ãƒ‹ãƒ³ã‚°æƒ…å ±ã®èª­ã¿å–ã‚Š
+	void ParseSkin(FBXModel* fbxmodel, FbxMesh* fbxMesh);
 
+	//åŒä¸€é ‚ç‚¹ã®æ³•ç·šåº§æ¨™ã‹UVãŒé‡ãªã‚‹éš›ã®é–¢æ•°(æ–°ã—ãé ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ä½œæˆ)
+	static bool IsExistNormalUVInfo(const std::vector<float>& vertexInfo);
+	static std::vector<float> CreateVertexInfo(const std::vector<float>& vertex, const FbxVector4& normalVec4, const FbxVector2& uvVec2);
+	static int CreateNewVertexIndex(const std::vector<float>& vertexInfo, const FbxVector4& normalVec4, const FbxVector2& uvVec2,
+		std::vector<std::vector<float>>& vertexInfoList, int oldIndex, std::vector<std::array<int, 2>>& oldNewIndexPairList);
+	static bool IsSetNormalUV(const std::vector<float> vertexInfo, const FbxVector4& normalVec4, const FbxVector2& uvVec2);
+	unsigned int FindJointIndex(const std::string& jointname);
 
-	void GetNodeNum(const aiNode* node, UINT32& num);
+	std::vector<std::vector<int>> meshVertice;
+	std::unordered_map<int, std::vector<int>> meshVerticeControlpoints;
+
+	template<typename T>
+	T Min(T a, T b) {
+		return (a < b) ? a : b;
+	}
+
 
 private:
-	// D3D12ƒfƒoƒCƒX
+	// D3D12ãƒ‡ãƒã‚¤ã‚¹
 	ID3D12Device* device = nullptr;
-	// FBXƒ}ƒl[ƒWƒƒ
-	//FbxManager* fbxManager = nullptr;
-	// FBXƒCƒ“ƒ|[ƒ^
-	//FbxImporter* fbxImporter = nullptr;
+	// FBXãƒãƒãƒ¼ã‚¸ãƒ£
+	FbxManager* fbxManager = nullptr;
+	// FBXã‚¤ãƒ³ãƒãƒ¼ã‚¿
+	FbxImporter* fbxImporter = nullptr;
 
 private:
-	// private‚ÈƒRƒ“ƒXƒgƒ‰ƒNƒ^iƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“j
+	// privateãªã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼‰
 	FbxLoader() = default;
-	// private‚ÈƒfƒXƒgƒ‰ƒNƒ^iƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“j
+	// privateãªãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼‰
 	~FbxLoader() = default;
-	// ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ‹Ö~iƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“j
+	// ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ç¦æ­¢ï¼ˆã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼‰
 	FbxLoader(const FbxLoader& obj) = delete;
-	// ƒRƒs[‘ã“ü‰‰Zq‚ğ‹Ö~iƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“j
+	// ã‚³ãƒ”ãƒ¼ä»£å…¥æ¼”ç®—å­ã‚’ç¦æ­¢ï¼ˆã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼‰
 	void operator=(const FbxLoader& obj) = delete;
 
-	static FbxLoader* fbxLoader_;
+	/// <summary>
+	/// å†å¸°çš„ã«ãƒãƒ¼ãƒ‰æ§‹æˆã‚’è§£æ
+	/// </summary>
+	/// <param name="model">èª­ã¿è¾¼ã¿å…ˆãƒ¢ãƒ‡ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
+	/// <param name="fbxNode">è§£æå¯¾è±¡ã®ãƒãƒ¼ãƒ‰</param>
+	/// <param name="parent">è¦ªãƒãƒ¼ãƒ‰</param>
+	void ParseNodeRecursive(FBXModel* fbxmodel, FbxNode* fbxNode, WTFormNode* parent = nullptr);
 
 	/// <summary>
-	/// Ä‹A“I‚Éƒm[ƒh\¬‚ğ‰ğÍ
+	/// ãƒ¡ãƒƒã‚·ãƒ¥èª­ã¿å–ã‚Š
 	/// </summary>
-	/// <param name="model">“Ç‚İ‚İæƒ‚ƒfƒ‹ƒIƒuƒWƒFƒNƒg</param>
-	/// <param name="fbxNode">‰ğÍ‘ÎÛ‚Ìƒm[ƒh</param>
-	/// <param name="parent">eƒm[ƒh</param>
-	void ParseNodeRecursive(FbxModel* model, aiNode* fbxNode, Node* parent = nullptr);
+	/// <param name="model">èª­ã¿è¾¼ã¿å…ˆãƒ¢ãƒ‡ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
+	/// <param name="fbxNode">è§£æå¯¾è±¡ã®ãƒãƒ¼ãƒ‰</param>
+	void ParseMesh(FBXModel* fbxmodel, FbxNode* fbxNode);
+	// é ‚ç‚¹åº§æ¨™èª­ã¿å–ã‚Š
+	void ParseMeshVertices(FBXModel* fbxmodel, FbxMesh* fbxMesh);
+	// é¢æƒ…å ±èª­ã¿å–ã‚Š
+	void ParseMeshFaces(FBXModel* fbxmodel, FbxMesh* fbxMesh);
+	// ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿å–ã‚Š
+	void ParseMaterial(FBXModel* fbxmodel, FbxNode* fbxNode);
+	// ãƒœãƒ¼ãƒ³ãƒ‡ãƒ¼ã‚¿ã®VSBufferã¸ã®æ ¼ç´
+	void SetBoneDataToVertices(FbxMesh* pMesh, FBXModel* pModel, std::vector<FBXModel::VertexPosNormalUv>& vertices);
+	//
+	int FindJointIndexByName(const std::string& name, FBXModel* model);
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+	void LoadTexture(FBXModel* fbxmodel, const std::string& fullpath);
 
-	/// <summary>
-	/// ƒƒbƒVƒ…“Ç‚İæ‚è
-	/// </summary>
-	/// <param name="model">“Ç‚İ‚İæƒ‚ƒfƒ‹ƒIƒuƒWƒFƒNƒg</param>
-	/// <param name="fbxNode">‰ğÍ‘ÎÛ‚Ìƒm[ƒh</param>
-	void ParseMesh(FbxModel* model, aiMesh* fbxNode);
-	// ’¸“_À•W“Ç‚İæ‚è
-	void ParseMeshVertices(FbxModel* model, aiMesh* fbxMesh);
-	// –Êî•ñ“Ç‚İæ‚è
-	void ParseMeshFaces(FbxModel* model, aiMesh* fbxMesh);
-	// ƒ}ƒeƒŠƒAƒ‹“Ç‚İæ‚è
-	void ParseMaterial(FbxModel* model, aiMesh* fbxMesh, aiMaterial* aimaterial);
-
-	// ƒfƒBƒŒƒNƒgƒŠ‚ğŠÜ‚ñ‚¾ƒtƒ@ƒCƒ‹ƒpƒX‚©‚çƒtƒ@ƒCƒ‹–¼‚ğ’Šo‚·‚é
+	// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å«ã‚“ã ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŠ½å‡ºã™ã‚‹
 	std::string ExtractFileName(const std::string& path);
 
-	uint32_t LoadMatrixerialTextures(aiMaterial* cmatrix, aiTextureType type, std::string typeName, const aiScene* scene_, const std::string& modelName);
+	//é ‚ç‚¹æ³•ç·šã‚¹ãƒ ãƒ¼ã‚¸ãƒ³ã‚°ç”¨ãƒ‡ãƒ¼ã‚¿
+	std::unordered_map<unsigned short, std::vector<unsigned short>> smoothDate;
+	bool smoothing = false;
 
-	const UINT flag =
-		aiProcess_Triangulate | //OŠp–Ê‰»
-		aiProcess_CalcTangentSpace | //ÚüƒxƒNƒgƒ‹¶¬
-		aiProcess_GenSmoothNormals | //ƒXƒ€[ƒWƒ“ƒOƒxƒNƒgƒ‹¶¬
-		aiProcess_GenUVCoords | //”ñƒ}ƒbƒsƒ“ƒO‚ğ“KØ‚ÈUVÀ•W‚É•ÏŠ·
-		aiProcess_RemoveRedundantMaterials | //ç’·‚Èƒ}ƒeƒŠƒAƒ‹‚ğíœ
-		aiProcess_OptimizeMeshes | //ƒƒbƒVƒ…”‚ğÅ“K‰»
-		aiProcess_MakeLeftHanded | //ƒm[ƒh‚ğ¶èÀ•WŒn‚É
-		aiProcess_GenBoundingBoxes | //AABB‚ğ¶¬
-		aiProcess_JoinIdenticalVertices |//ƒCƒ“ƒfƒbƒNƒX‚ğ¶¬
-		aiProcess_LimitBoneWeights;//Še’¸“_‚ª‰e‹¿‚ğó‚¯‚éƒ{[ƒ“‚ğ4‚É§ŒÀ
-
-	const aiScene* mScene;
-
-	uint32_t textureHandle = 0;
 
 };

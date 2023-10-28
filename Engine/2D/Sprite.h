@@ -98,7 +98,7 @@ public: // メンバ関数
 
 	// サイズの設定
 	void SetSize(const Vector2& size);
-
+	void SetSizeX(const float& size);
 	const Vector2& GetSize() { return size_; }
 
 	// アンカーポイントの設定

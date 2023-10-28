@@ -1,717 +1,143 @@
-#include "DirectXCore.h"
-#include "FbxModel.h"
-#include <algorithm>
-#include <cassert>
-#include <d3dcompiler.h>
-#include <fstream>
-#include <sstream>
+ï»¿#include "FBXModel.h"
 
-#include<atldef.h>
 
-#pragma comment(lib, "d3dcompiler.lib")
-
-using namespace std;
-using namespace Microsoft::WRL;
-using namespace DirectX;
-
-/// <summary>
-/// Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
-/// </summary>
-const std::string FbxModel::kBaseDirectory = "Resources/";
-const std::string FbxModel::kDefaultModelName = "cube";
-UINT FbxModel::sDescriptorHandleIncrementSize_ = 0;
-ID3D12GraphicsCommandList* FbxModel::sCommandList_ = nullptr;
-ComPtr<ID3D12RootSignature> FbxModel::sRootSignature_;
-ComPtr<ID3D12PipelineState> FbxModel::sPipelineState_;
-std::unique_ptr<LightGroup> FbxModel::lightGroup;
-
-Microsoft::WRL::ComPtr<ID3D12Resource> FbxModel::constBuffSkin_;
-Microsoft::WRL::ComPtr<ID3D12Resource> FbxModel::constBuffNothing_;
-
-void FbxModel::StaticInitialize() {
-
-	// ƒpƒCƒvƒ‰ƒCƒ“‰Šú‰»
-	InitializeGraphicsPipeline();
-
-	// ƒ‰ƒCƒg¶¬
-	lightGroup.reset(LightGroup::Create());
-}
-
-void FbxModel::StaticFainalize()
+FBXModel::~FBXModel()
 {
-
-	sRootSignature_.Reset();
-	sPipelineState_.Reset();
-
-	constBuffSkin_.Reset();
-	constBuffNothing_.Reset();
+    fbxScene->Destroy();
 }
 
-void FbxModel::InitializeGraphicsPipeline() {
-	HRESULT result = S_FALSE;
-	ComPtr<ID3DBlob> vsBlob;    // ’¸“_ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ComPtr<ID3DBlob> psBlob;    // ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ComPtr<ID3DBlob> errorBlob; // ƒGƒ‰[ƒIƒuƒWƒFƒNƒg
-
-
-	// ’¸“_ƒVƒF[ƒ_‚Ì“Ç‚İ‚İ‚ÆƒRƒ“ƒpƒCƒ‹
-	result = D3DCompileFromFile(
-		L"Resources/Shaders/FBXVS.hlsl", // ƒVƒF[ƒ_ƒtƒ@ƒCƒ‹–¼
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // ƒCƒ“ƒNƒ‹[ƒh‰Â”\‚É‚·‚é
-		"main", "vs_5_0", // ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg–¼AƒVƒF[ƒ_[ƒ‚ƒfƒ‹w’è
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // ƒfƒoƒbƒO—pİ’è
-		0, &vsBlob, &errorBlob);
-	if (FAILED(result)) {
-		// errorBlob‚©‚çƒGƒ‰[“à—e‚ğstringŒ^‚ÉƒRƒs[
-		std::string errstr;
-		errstr.resize(errorBlob->GetBufferSize());
-
-		std::copy_n(
-			(char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), errstr.begin());
-		errstr += "\n";
-		// ƒGƒ‰[“à—e‚ğo—ÍƒEƒBƒ“ƒhƒE‚É•\¦
-		OutputDebugStringA(errstr.c_str());
-		exit(1);
-	}
-
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ì“Ç‚İ‚İ‚ÆƒRƒ“ƒpƒCƒ‹
-	result = D3DCompileFromFile(
-		L"Resources/Shaders/FBXPS.hlsl", // ƒVƒF[ƒ_ƒtƒ@ƒCƒ‹–¼
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // ƒCƒ“ƒNƒ‹[ƒh‰Â”\‚É‚·‚é
-		"main", "ps_5_0", // ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg–¼AƒVƒF[ƒ_[ƒ‚ƒfƒ‹w’è
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // ƒfƒoƒbƒO—pİ’è
-		0, &psBlob, &errorBlob);
-	if (FAILED(result)) {
-		// errorBlob‚©‚çƒGƒ‰[“à—e‚ğstringŒ^‚ÉƒRƒs[
-		std::string errstr;
-		errstr.resize(errorBlob->GetBufferSize());
-
-		std::copy_n(
-			(char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), errstr.begin());
-		errstr += "\n";
-		// ƒGƒ‰[“à—e‚ğo—ÍƒEƒBƒ“ƒhƒE‚É•\¦
-		OutputDebugStringA(errstr.c_str());
-		exit(1);
-	}
-
-	// ’¸“_ƒŒƒCƒAƒEƒg
-	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-	  {// xyÀ•W(1s‚Å‘‚¢‚½‚Ù‚¤‚ªŒ©‚â‚·‚¢)
-	   "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
-	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-	  {// –@üƒxƒNƒgƒ‹(1s‚Å‘‚¢‚½‚Ù‚¤‚ªŒ©‚â‚·‚¢)
-	   "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
-	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-	  {// uvÀ•W(1s‚Å‘‚¢‚½‚Ù‚¤‚ªŒ©‚â‚·‚¢)
-	   "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT,
-	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-
-	  {//‰e‹¿‚ğó‚¯‚éƒ{[ƒ“”Ô†
-		"BONEINDICES",0,DXGI_FORMAT_R32G32B32A32_UINT,0,
-		D3D12_APPEND_ALIGNED_ELEMENT,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
-	  },
-	  {//ƒ{[ƒ“‚ÌƒXƒLƒ“ƒEƒFƒCƒg(4‚Â)
-		"BONEWEIGHTS",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,
-		D3D12_APPEND_ALIGNED_ELEMENT,
-		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
-	  },
-
-	};
-
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“‚Ì—¬‚ê‚ğİ’è
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{};
-	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob.Get());
-	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob.Get());
-
-	// ƒTƒ“ƒvƒ‹ƒ}ƒXƒN
-	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // •W€İ’è
-	// ƒ‰ƒXƒ^ƒ‰ƒCƒUƒXƒe[ƒg
-	//gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-
-	// ƒ‰ƒXƒ^ƒ‰ƒCƒUƒXƒe[ƒg
-	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
-	gpipeline.RasterizerState.DepthClipEnable = true;
-
-
-	// gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	// gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-	//  ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg
-	//gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-
-	//  ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg
-	gpipeline.DepthStencilState.DepthEnable = true;
-	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-
-
-	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒuƒŒƒ“ƒhİ’è
-	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // RBGA‘S‚Ä‚Ìƒ`ƒƒƒ“ƒlƒ‹‚ğ•`‰æ
-	blenddesc.BlendEnable = true;
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
-
-	// ƒuƒŒƒ“ƒhƒXƒe[ƒg‚Ìİ’è
-	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	gpipeline.BlendState.RenderTarget[1] = blenddesc;
-
-	// [“xƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-
-	// ’¸“_ƒŒƒCƒAƒEƒg‚Ìİ’è
-	gpipeline.InputLayout.pInputElementDescs = inputLayout;
-	gpipeline.InputLayout.NumElements = _countof(inputLayout);
-
-	// }Œ`‚ÌŒ`óİ’èiOŠpŒ`j
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-
-	gpipeline.NumRenderTargets = 2;                       // •`‰æ‘ÎÛ‚Í2‚Â
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0`255w’è‚ÌRGBA
-	gpipeline.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0`255w’è‚ÌRGBA
-	gpipeline.SampleDesc.Count = 1; // 1ƒsƒNƒZƒ‹‚É‚Â‚«1‰ñƒTƒ“ƒvƒŠƒ“ƒO
-
-	// ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW
-	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
-	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 ƒŒƒWƒXƒ^
-
-	// ƒ‹[ƒgƒpƒ‰ƒ[ƒ^
-	CD3DX12_ROOT_PARAMETER rootparams[6];
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[2].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[3].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[5].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
-
-	// ƒXƒ^ƒeƒBƒbƒNƒTƒ“ƒvƒ‹
-	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
-
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’è
-	CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDesc;
-	rootSignatureDesc.Init_1_0(
-		_countof(rootparams), rootparams, 1, &samplerDesc,
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ComPtr<ID3DBlob> rootSigBlob;
-	// ƒo[ƒWƒ‡ƒ“©“®”»’è‚ÌƒVƒŠƒAƒ‰ƒCƒY
-	result = D3DX12SerializeVersionedRootSignature(
-		&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ì¶¬
-	result = DirectXCore::GetInstance()->GetDevice()->CreateRootSignature(
-		0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(),
-		IID_PPV_ARGS(&sRootSignature_));
-	assert(SUCCEEDED(result));
-
-	gpipeline.pRootSignature = sRootSignature_.Get();
-
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“‚Ì¶¬
-	result = DirectXCore::GetInstance()->GetDevice()->CreateGraphicsPipelineState(
-		&gpipeline, IID_PPV_ARGS(&sPipelineState_));
-	assert(SUCCEEDED(result));
-
-
-	// ƒq[ƒvƒvƒƒpƒeƒB
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
-	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataSkin) + 0xff) & ~0xff);
-	// ƒŠƒ\[ƒXİ’è
-	CD3DX12_RESOURCE_DESC resourceDescNothing = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataInitialMatrix) + 0xff) & ~0xff);
-
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
-	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
-		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&constBuffSkin_));
-
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
-	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // ƒAƒbƒvƒ[ƒh‰Â”\
-		D3D12_HEAP_FLAG_NONE, &resourceDescNothing, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&constBuffNothing_));
-
-
-	//’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	result = constBuffSkin_->Map(0, nullptr, (void**)&constMapSkin);
-	for (int i = 0; i < MAX_BONES; i++) {
-		constMapSkin->bones[i] = MyMath::MakeIdentity();
-	}
-	constBuffSkin_->Unmap(0, nullptr);
-
-}
-
-FbxModel* FbxModel::Create() {
-	// ƒƒ‚ƒŠŠm•Û
-	FbxModel* instance = new FbxModel;
-	instance->Initialize();
-
-	return instance;
-}
-
-FbxModel* FbxModel::CreateFromFbx(const std::string& modelname, bool smoothing) {
-	// ƒƒ‚ƒŠŠm•Û
-	FbxModel* instance = new FbxModel;
-	instance->Initialize();
-
-	return instance;
-}
-
-void FbxModel::PreDraw(ID3D12GraphicsCommandList* commandList) {
-	// PreDraw‚ÆPostDraw‚ªƒyƒA‚ÅŒÄ‚Î‚ê‚Ä‚¢‚È‚¯‚ê‚ÎƒGƒ‰[
-	assert(FbxModel::sCommandList_ == nullptr);
-
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğƒZƒbƒg
-	sCommandList_ = commandList;
-
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Ìİ’è
-	commandList->SetPipelineState(sPipelineState_.Get());
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’è
-	commandList->SetGraphicsRootSignature(sRootSignature_.Get());
-	// ƒvƒŠƒ~ƒeƒBƒuŒ`ó‚ğİ’è
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-}
-
-void FbxModel::PostDraw() {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğ‰ğœ
-	sCommandList_ = nullptr;
-}
-
-FbxModel::~FbxModel() {
-	for (auto m : meshes_) {
-		delete m;
-	}
-	meshes_.clear();
-
-	for (auto m : materials_) {
-		delete m.second;
-	}
-	materials_.clear();
-
-	delete defaultMaterial_;
-}
-
-void FbxModel::Initialize() {
-	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
-	//LoadModelFromFile(modelname);
-
-	// ƒƒbƒVƒ…‚Ìƒ}ƒeƒŠƒAƒ‹ƒ`ƒFƒbƒN
-	for (auto& m : meshes_) {
-		// ƒ}ƒeƒŠƒAƒ‹‚ÌŠ„‚è“–‚Ä‚ª‚È‚¢
-		if (m->GetMaterial() == nullptr) {
-			if (defaultMaterial_ == nullptr) {
-				// ƒfƒtƒHƒ‹ƒgƒ}ƒeƒŠƒAƒ‹‚ğ¶¬
-				defaultMaterial_ = Material::Create();
-				defaultMaterial_->name_ = "no material";
-				materials_.emplace(defaultMaterial_->name_, defaultMaterial_);
-			}
-			// ƒfƒtƒHƒ‹ƒgƒ}ƒeƒŠƒAƒ‹‚ğƒZƒbƒg
-			m->SetMaterial(defaultMaterial_);
-		}
-	}
-
-	// ƒƒbƒVƒ…‚Ìƒoƒbƒtƒ@¶¬
-	for (auto& m : meshes_) {
-
-		Vector3 ambient_ = { 1.0f, 1.0f, 1.0f };
-		Vector3 diffuse_ = { 0.0f, 0.0f, 0.0f };
-		Vector3 specular_ = { 0.0f, 0.0f, 0.0f };
-		float alpha_ = 1.0f;
-
-		m->SetLight(ambient_, diffuse_, specular_, alpha_);
-
-		m->CreateBuffers();
-
-
-	}
-
-	// ƒ}ƒeƒŠƒAƒ‹‚Ì”’l‚ğ’è”ƒoƒbƒtƒ@‚É”½‰f
-	for (auto& m : materials_) {
-
-		m.second->Update();
-	}
-
-	for (auto& m : meshes_) {
-		for (auto& b : m->vecBones) {
-
-			m->bones[b.name] = &b;
-
-		}
-
-	}
-
-
-
-}
-
-void FbxModel::FbxUpdate(float frem)
+void FBXModel::CreateBuffers(ID3D12Device* device)
 {
-	HRESULT result = S_FALSE;
+    HRESULT result;
+    // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿å…¨ä½“ã®ã‚µã‚¤ã‚º
+    UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices.size());
 
-	//std::unordered_map<std::string, Mesh::Bone*> bones = model->GetBones();
+    CD3DX12_HEAP_PROPERTIES unt(D3D12_HEAP_TYPE_UPLOAD);
+    CD3DX12_RESOURCE_DESC unt2 = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
 
-	////’è”ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
-	//ConstBufferDataSkin* constMapSkin = nullptr;
-	//result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
-	//for (int i = 0; i < bones.size(); i++) {
-	//	//¡‚Ìp¨s—ñ
-	//	XMMATRIX matCurrentPose;
-	//	//¡‚Ìp¨s—ñ‚ğæ“¾
-	//	FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
-	//	//XMMATRIX‚É•ÏŠ·
-	//	FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
-	//	//‡¬‚µ‚ÄƒXƒLƒjƒ“ƒOs—ñ‚É
-	//	constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
-	//}
-	//constBuffSkin->Unmap(0, nullptr);
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
+    result = device->CreateCommittedResource(
+        &unt,
+        D3D12_HEAP_FLAG_NONE,
+        &unt2,
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        nullptr,
+        IID_PPV_ARGS(&vertBuff));
+
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
+    VertexPosNormalUv* vertMap = nullptr;
+    result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+    if (SUCCEEDED(result)) {
+        std::copy(vertices.begin(), vertices.end(), vertMap);
+        vertBuff->Unmap(0, nullptr);
+    }
+
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼(VBV)ã®ä½œæˆ
+    vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+    vbView.SizeInBytes = sizeVB;
+    vbView.StrideInBytes = sizeof(vertices[0]);
+    // é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å…¨ä½“ã®ã‚µã‚¤ã‚º
+    UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * indices.size());
+
+    CD3DX12_HEAP_PROPERTIES unt3 = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+    CD3DX12_RESOURCE_DESC unt4 = CD3DX12_RESOURCE_DESC::Buffer(sizeIB);
+
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
+    result = device->CreateCommittedResource(
+        &unt3,
+        D3D12_HEAP_FLAG_NONE,
+        &unt4,
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        nullptr,
+        IID_PPV_ARGS(&indexBuff));
+
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
+    unsigned short* indexMap = nullptr;
+    result = indexBuff->Map(0, nullptr, (void**)&indexMap);
+    if (SUCCEEDED(result)) {
+        std::copy(indices.begin(), indices.end(), indexMap);
+        indexBuff->Unmap(0, nullptr);
+    }
+
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼(IBV)ã®ä½œæˆ
+    ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
+    ibView.Format = DXGI_FORMAT_R16_UINT;
+    ibView.SizeInBytes = sizeIB;
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”»åƒãƒ‡ãƒ¼ã‚¿
+    const DirectX::Image* img = scratchImg.GetImage(0, 0, 0); // ç”Ÿãƒ‡ãƒ¼ã‚¿æŠ½å‡º
+    assert(img);
+
+    // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
+    CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+        metadata.format,
+        metadata.width,
+        (UINT)metadata.height,
+        (UINT16)metadata.arraySize,
+        (UINT16)metadata.mipLevels
+    );
+
+    CD3DX12_HEAP_PROPERTIES unt5 = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
+    result = device->CreateCommittedResource(
+        &unt5,
+        D3D12_HEAP_FLAG_NONE,
+        &texresDesc,
+        D3D12_RESOURCE_STATE_GENERIC_READ, // ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨æŒ‡å®š
+        nullptr,
+        IID_PPV_ARGS(&texbuff));
+
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿è»¢é€
+    result = texbuff->WriteToSubresource(
+        0,
+        nullptr, // å…¨é ˜åŸŸã¸ã‚³ãƒ”ãƒ¼
+        img->pixels,    // å…ƒãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹
+        (UINT)img->rowPitch,  // 1ãƒ©ã‚¤ãƒ³ã‚µã‚¤ã‚º
+        (UINT)img->slicePitch // 1æšã‚µã‚¤ã‚º
+    );
+
+    // SRVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã‚’ç”Ÿæˆ	
+    D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+    descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+    descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//ã‚·ã‚§ãƒ¼ãƒ€ã‹ã‚‰è¦‹ãˆã‚‹ã‚ˆã†ã«
+    descHeapDesc.NumDescriptors = 1; // ãƒ†ã‚¯ã‚¹ãƒãƒ£æšæ•°
+    result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeapSRV));//ç”Ÿæˆ
+
+    // ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼(SRV)ä½œæˆ
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // è¨­å®šæ§‹é€ ä½“
+    D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
+
+    srvDesc.Format = resDesc.Format;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dãƒ†ã‚¯ã‚¹ãƒãƒ£
+    srvDesc.Texture2D.MipLevels = 1;
+
+    device->CreateShaderResourceView(texbuff.Get(), //ãƒ“ãƒ¥ãƒ¼ã¨é–¢é€£ä»˜ã‘ã‚‹ãƒãƒƒãƒ•ã‚¡
+        &srvDesc, //ãƒ†ã‚¯ã‚¹ãƒãƒ£è¨­å®šæƒ…å ±
+        descHeapSRV->GetCPUDescriptorHandleForHeapStart() // ãƒ’ãƒ¼ãƒ—ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+    );
 
 }
 
-
-void FbxModel::Draw(
-	const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-
-	for (int i = 0; i < meshes_.size(); i++) {
-
-		// ƒ‰ƒCƒg‚Ì•`‰æ
-		lightGroup->Draw(sCommandList_, 4);
-
-		// CBV‚ğƒZƒbƒgiƒ[ƒ‹ƒhs—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
-
-		// CBV‚ğƒZƒbƒgiƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(1, viewProjection.constBuff_->GetGPUVirtualAddress());
-
-		if (meshes_[i]->node) {
-
-			HRESULT result = S_FALSE;
-
-			//’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
-			ConstBufferDataInitialMatrix* constMapSkin = nullptr;
-			result = constBuffNothing_->Map(0, nullptr, (void**)&constMapSkin);
-			constMapSkin->InitialMatrix = meshes_[i]->node->globalTransform;
-
-			constBuffNothing_->Unmap(0, nullptr);
-
-
-			sCommandList_->SetGraphicsRootConstantBufferView(5, constBuffNothing_->GetGPUVirtualAddress());
-
-		}
-
-		// CBV‚ğƒZƒbƒgiƒ{[ƒ“s—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(4, constBuffSkin_->GetGPUVirtualAddress());
-
-		// ‘SƒƒbƒVƒ…‚ğ•`‰æ
-		meshes_[i]->Draw(sCommandList_, 2, 3, modelTextureHandle);
-	}
-}
-
-
-void FbxModel::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureHadle) {
-
-	// ‘SƒƒbƒVƒ…‚ğ•`‰æ
-	for (auto& mesh : meshes_) {
-
-		// ƒ‰ƒCƒg‚Ì•`‰æ
-		lightGroup->Draw(sCommandList_, 4);
-
-		// CBV‚ğƒZƒbƒgiƒ[ƒ‹ƒhs—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
-
-		// CBV‚ğƒZƒbƒgiƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(1, viewProjection.constBuff_->GetGPUVirtualAddress());
-
-		if (mesh->node) {
-
-			HRESULT result = S_FALSE;
-
-			//’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
-			ConstBufferDataInitialMatrix* constMapSkin = nullptr;
-			result = constBuffNothing_->Map(0, nullptr, (void**)&constMapSkin);
-			constMapSkin->InitialMatrix = mesh->node->globalTransform;
-
-			constBuffNothing_->Unmap(0, nullptr);
-
-
-			sCommandList_->SetGraphicsRootConstantBufferView(5, constBuffNothing_->GetGPUVirtualAddress());
-
-		}
-
-		// CBV‚ğƒZƒbƒgiƒ{[ƒ“s—ñj
-		sCommandList_->SetGraphicsRootConstantBufferView(4, constBuffSkin_->GetGPUVirtualAddress());
-
-
-		mesh->Draw(sCommandList_, 2, 3, textureHadle);
-	}
-}
-
-
-void FbxModel::ModelAnimation(float frame, aiAnimation* Animation) {
-
-	HRESULT result = S_FALSE;
-
-	Matrix4 mxIdentity = MyMath::MakeIdentity();
-	Node* pNode = &nodes[0];
-
-
-	FLOAT TicksPerSecond = (FLOAT)(Animation->mTicksPerSecond != 0 ? Animation->mTicksPerSecond : 25.0f);
-
-	FLOAT TimeInTicks = frame * TicksPerSecond;
-	FLOAT AnimationTime = fmod(TimeInTicks, (FLOAT)Animation->mDuration);
-
-	//’è”ƒoƒbƒtƒ@‚Öƒf[ƒ^“]‘—
-	ConstBufferDataSkin* constMapSkin = nullptr;
-	result = constBuffSkin_->Map(0, nullptr, (void**)&constMapSkin);
-
-	for (Mesh* mesh : meshes_)
-	{
-		ReadNodeHeirarchy(mesh, Animation, AnimationTime, pNode, mxIdentity);
-
-		UINT nNumBones = (UINT)mesh->bones.size();
-
-		for (UINT i = 0; i < nNumBones; i++)
-		{
-			mesh->vecBones[i].matrix = mesh->bones[mesh->vecBones[i].name]->matrix;
-
-			constMapSkin->bones[i] = mesh->vecBones[i].matrix;
-		}
-	}
-
-
-	constBuffSkin_->Unmap(0, nullptr);
-}
-
-
-void FbxModel::ReadNodeHeirarchy(Mesh* mesh, aiAnimation* pAnimation, FLOAT AnimationTime, Node* pNode, Matrix4& mxParentTransform) {
-
-	Matrix4 mxNodeTransformation = MyMath::MakeIdentity();
-	mxNodeTransformation = pNode->transform;
-
-	Matrix4 mxThisTrans = mxNodeTransformation;
-
-	std::string strNodeName(pNode->name);
-
-	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, strNodeName);
-
-	if (pNodeAnim)
-	{
-		//ƒXƒP[ƒŠƒ“ƒO
-		Vector3 vScaling = {};
-		CalcInterpolatedScaling(vScaling, AnimationTime, pNodeAnim);
-		Matrix4 mxScaling;
-		mxScaling = MyMath::Scale(vScaling);
-
-		//‰ñ“]Šp
-		Vector4 vRotationQ = {};
-		CalcInterpolatedRotation(vRotationQ, AnimationTime, pNodeAnim);
-		Matrix4 mxRotationM = Quaternion(vRotationQ).Rotate();
-
-		//ˆÚ“®
-		Vector3 vTranslation = {};
-		CalcInterpolatedPosition(vTranslation, AnimationTime, pNodeAnim);
-		Matrix4 mxTranslationM;
-		mxTranslationM = MyMath::Translation(vTranslation);
-
-		Matrix4 affin = MyMath::Initialize();
-		/*affin *= mxScaling;
-		affin *= mxRotationM;
-		affin *= mxTranslationM;*/
-
-		affin = mxScaling.MatMul(mxRotationM).MatMul(mxTranslationM);
-
-		mxNodeTransformation = affin;
-	}
-
-	Matrix4 mxGlobalTransformation = mxNodeTransformation.MatMul(mxParentTransform);
-
-	Matrix4 offsetMatirx;
-	Matrix4 matirx;
-
-	if (mesh->bones.find(strNodeName) != mesh->bones.end())
-	{
-		offsetMatirx = mesh->bones[strNodeName]->offsetMatirx;
-
-		matirx = offsetMatirx.MatMul(mxGlobalTransformation).MatMul(globalInverseTransform);
-
-		mesh->bones[strNodeName]->matrix = matirx;
-
-	}
-
-	for (UINT i = 0; i < pNode->childrens.size(); i++)
-	{
-		ReadNodeHeirarchy(mesh
-			, pAnimation
-			, AnimationTime
-			, pNode->childrens[i]
-			, mxGlobalTransformation);
-	}
-
-
-
-}
-
-
-aiNodeAnim* FbxModel::FindNodeAnim(const aiAnimation* pAnimation, const std::string& strNodeName)
+void FBXModel::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	for (UINT i = 0; i < pAnimation->mNumChannels; i++)
-	{
-		if (std::string(pAnimation->mChannels[i]->mNodeName.data) == strNodeName)
-		{
-			return pAnimation->mChannels[i];
-		}
-	}
+    // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ(VBV)
+    cmdList->IASetVertexBuffers(0, 1, &vbView);
+    // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ(IBV)
+    cmdList->IASetIndexBuffer(&ibView);
 
-	return nullptr;
+    // ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ã‚»ãƒƒãƒˆ
+    ID3D12DescriptorHeap* ppHeaps[] = { descHeapSRV.Get() };
+    cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+    // ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
+    cmdList->SetGraphicsRootDescriptorTable(3, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
+
+    // æç”»ã‚³ãƒãƒ³ãƒ‰
+    cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
 }
 
-void FbxModel::CalcInterpolatedScaling(Vector3& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim)
+const DirectX::XMMATRIX& FBXModel::GetModelTransform()
 {
-	if (pNodeAnim->mNumScalingKeys == 1)
-	{
-		mxOut = MyMath::AssimpVector3(pNodeAnim->mScalingKeys[0].mValue);
-		return;
-	}
-
-	UINT ScalingIndex = 0;
-	if (!FindScaling(AnimationTime, pNodeAnim, ScalingIndex))
-	{
-		mxOut = Vector3(1.0f, 1.0f, 1.0f);
-		return;
-	}
-
-	UINT NextScalingIndex = (ScalingIndex + 1);
-	ATLASSERT(NextScalingIndex < pNodeAnim->mNumScalingKeys);
-	float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
-	float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
-	ATLASSERT(Factor >= 0.0f && Factor <= 1.0f);
-
-	mxOut = Vector3::lerp(MyMath::AssimpVector3(pNodeAnim->mScalingKeys[ScalingIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mScalingKeys[NextScalingIndex].mValue), Factor);
-
-}
-
-void FbxModel::CalcInterpolatedRotation(Vector4& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim)
-{
-	if (pNodeAnim->mNumRotationKeys == 1)
-	{
-		mxOut = MyMath::AssimpQuaternionVec4(pNodeAnim->mRotationKeys[0].mValue);
-		return;
-	}
-
-	UINT RotationIndex = 0;
-	if (!FindRotation(AnimationTime, pNodeAnim, RotationIndex))
-	{
-		mxOut = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-		return;
-	}
-
-	UINT NextRotationIndex = (RotationIndex + 1);
-	ATLASSERT(NextRotationIndex < pNodeAnim->mNumRotationKeys);
-	float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime
-		- pNodeAnim->mRotationKeys[RotationIndex].mTime);
-	float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
-	ATLASSERT(Factor >= 0.0f && Factor <= 1.0f);
-
-	mxOut = MyMath::QuaternionSlerp(
-		pNodeAnim->mRotationKeys[RotationIndex].mValue
-		, pNodeAnim->mRotationKeys[NextRotationIndex].mValue
-		, Factor);
-
-}
-
-void FbxModel::CalcInterpolatedPosition(Vector3& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim)
-{
-	if (pNodeAnim->mNumPositionKeys == 1)
-	{
-		mxOut = MyMath::AssimpVector3(pNodeAnim->mPositionKeys[0].mValue);
-		return;
-	}
-
-	UINT PositionIndex = 0;
-	if (!FindPosition(AnimationTime, pNodeAnim, PositionIndex))
-	{
-		mxOut = Vector3(0.0f, 0.0f, 0.0f);
-		return;
-	}
-
-	UINT NextPositionIndex = (PositionIndex + 1);
-
-	ATLASSERT(NextPositionIndex < pNodeAnim->mNumPositionKeys);
-	float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
-	float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
-	ATLASSERT(Factor >= 0.0f && Factor <= 1.0f);
-
-	mxOut = Vector3::lerp(MyMath::AssimpVector3(pNodeAnim->mPositionKeys[PositionIndex].mValue), MyMath::AssimpVector3(pNodeAnim->mPositionKeys[NextPositionIndex].mValue), Factor);
-}
-
-bool FbxModel::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nPosIndex)
-{
-	nPosIndex = 0;
-	if (!(pNodeAnim->mNumPositionKeys > 0))
-	{
-		return FALSE;
-	}
-
-	for (UINT i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++)
-	{
-		if ((AnimationTime >= (float)pNodeAnim->mPositionKeys[i].mTime)
-			&& (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime))
-		{
-			nPosIndex = i;
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-bool FbxModel::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nRotationIndex)
-{
-	nRotationIndex = 0;
-	if (!(pNodeAnim->mNumRotationKeys > 0))
-	{
-		return FALSE;
-	}
-
-	for (UINT i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++)
-	{
-
-		if ((AnimationTime >= (float)pNodeAnim->mRotationKeys[i].mTime)
-			&& (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime))
-		{
-			nRotationIndex = i;
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-bool FbxModel::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nScalingIndex)
-{
-	nScalingIndex = 0;
-	if (!(pNodeAnim->mNumScalingKeys > 0))
-	{
-		return FALSE;
-	}
-
-	for (UINT i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++)
-	{
-		if ((AnimationTime >= (float)pNodeAnim->mScalingKeys[i].mTime)
-			&& (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime))
-		{
-			nScalingIndex = i;
-			return TRUE;
-		}
-	}
-
-	return FALSE;
+    return meshNode->globalTransform;
 }

@@ -3,6 +3,8 @@
 #include <PostEffectManager.h>
 #include <ParticleManager.h>
 #include <Sprite3D.h>
+#include <FbxLoader.h>
+#include <FBXObject3d.h>
 
 
 void Framework::Initialize()
@@ -27,9 +29,12 @@ void Framework::Initialize()
 	TextureManager_->Initialize(directXCore_->GetDevice());
 	TextureManager::Load("white1x1.png");
 
-	//// FBX関連静的初期化
-	//fbxLoader_ = FbxLoader::GetInstance();
-	//fbxLoader_->Initialize(directXCore_->GetDevice());
+	// FBX関連静的初期化
+	FbxLoader::GetInstance()->Initialize(directXCore_->GetDevice());
+	// デバイスをセット
+	FBXObject3d::SetDevice(directXCore_->GetDevice());
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
 
 	// スプライト静的初期化
 	Sprite::StaticInitialize(directXCore_->GetDevice());

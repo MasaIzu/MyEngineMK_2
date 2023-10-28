@@ -275,6 +275,9 @@
   <ItemGroup>
     <ClInclude Include="EnemyHP2DUI.h" />
     <ClInclude Include="EnemyHP3DUI.h" />
+    <ClInclude Include="Engine\3D\FbxLoader.h" />
+    <ClInclude Include="Engine\3D\FbxModel.h" />
+    <ClInclude Include="Engine\3D\FBXObject3d.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="BulletDamage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
@@ -359,6 +362,9 @@
   <ItemGroup>
     <ClCompile Include="EnemyHP2DUI.cpp" />
     <ClCompile Include="EnemyHP3DUI.cpp" />
+    <ClCompile Include="Engine\3D\FbxLoader.cpp" />
+    <ClCompile Include="Engine\3D\FbxModel.cpp" />
+    <ClCompile Include="Engine\3D\FBXObject3d.cpp" />
     <ClCompile Include="Sprite3D.cpp" />
     <ClCompile Include="BulletDamage.cpp" />
     <ClCompile Include="HpUpdate.cpp" />

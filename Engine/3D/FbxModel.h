@@ -1,180 +1,139 @@
-#pragma once
-
+ï»¿#pragma once
 #include <string>
-#include <vector>
 #include <DirectXMath.h>
+#include <vector>
 #include <DirectXTex.h>
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <d3dx12.h>
-
-#include <Mesh.h>
-#include "Material.h"
-#include <Light.h>
-#include <WorldTransform.h>
-#include <ViewProjection.h>
+#include <fbxsdk.h>
 
 
-class FbxModel
+
+
+// ãƒãƒ¼ãƒ‰
+struct WTFormNode
+{
+	// åå‰
+	std::string name;
+	// ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ã‚±ãƒ¼ãƒ«
+	DirectX::XMVECTOR scaling = { 1,1,1,0 };
+	// ãƒ­ãƒ¼ã‚«ãƒ«å›è»¢è§’
+	DirectX::XMVECTOR rotation = { 0,0,0,0 };
+	// ãƒ­ãƒ¼ã‚«ãƒ«ç§»å‹•
+	DirectX::XMVECTOR translation = { 0,0,0,1 };
+	// ãƒ­ãƒ¼ã‚«ãƒ«å¤‰å½¢è¡Œåˆ—
+	DirectX::XMMATRIX transform;
+	// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰å½¢è¡Œåˆ—
+	DirectX::XMMATRIX globalTransform;
+	// è¦ªãƒãƒ¼ãƒ‰
+	WTFormNode* parent = nullptr;
+	
+};
+
+class FBXModel
 {
 public:
-	// ƒtƒŒƒ“ƒhƒNƒ‰ƒX
+	// ãƒ•ãƒ¬ãƒ³ãƒ‰ã‚¯ãƒ©ã‚¹
 	friend class FbxLoader;
 
-public://’è”
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// Microsoft::WRL::ã‚’çœç•¥
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::ã‚’çœç•¥
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+	using TexMetadata = DirectX::TexMetadata;
+	using ScratchImage = DirectX::ScratchImage;
+	// std::ã‚’çœç•¥
+	using string = std::string;
+	template <class T> using vector = std::vector<T>;
+
+
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+	struct Bone
+	{
+		//åå‰
+		std::string name;
+		//åˆæœŸå§¿å‹¢ã®é€†è¡Œåˆ—
+		DirectX::XMMATRIX invInitialPose;
+		//ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼(FBXå´ã®ãƒœãƒ¼ãƒ³æƒ…å ±)
+		FbxCluster* fbxCluster;
+		//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		Bone(const std::string& name) {
+			this->name = name;
+		}
+	};
+
+	//ãƒœãƒ¼ãƒ³ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æœ€å¤§æ•°
 	static const int MAX_BONE_INDICES = 4;
 
 
-public: // ƒTƒuƒNƒ‰ƒX
-	// ’¸“_ƒf[ƒ^\‘¢‘Ì
-	struct VertexPosNormalUvFbxSkin
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
+	struct VertexPosNormalUv
 	{
-		DirectX::XMFLOAT3 pos; // xyzÀ•W
-		DirectX::XMFLOAT3 normal; // –@üƒxƒNƒgƒ‹
-		DirectX::XMFLOAT2 uv;  // uvÀ•W
-
-		UINT boneIndex[MAX_BONE_INDICES];
-		float boneWeight[MAX_BONE_INDICES];
+		DirectX::XMFLOAT3 pos; // xyzåº§æ¨™
+		DirectX::XMFLOAT3 normal; // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+		DirectX::XMFLOAT2 uv;  // uvåº§æ¨™
+		UINT boneIndex[MAX_BONE_INDICES];//ãƒœãƒ¼ãƒ³ ç•ªå·
+		float boneWeight[MAX_BONE_INDICES];//ãƒœãƒ¼ãƒ³ é‡ã¿
+		std::vector<std::pair<UINT, float>> boneData;
 	};
-
-
-private:
-	// Microsoft::WRL::‚ğÈ—ª
-	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
 
 public:
+	//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	~FBXModel();
+	// ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
+	void CreateBuffers(ID3D12Device* device);
+	// æç”»
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+	// ãƒ¢ãƒ‡ãƒ«ã®å¤‰å½¢è¡Œåˆ—å–å¾—
+	const XMMATRIX& GetModelTransform();
+	//getter
+	FbxScene* GetFbxScene() { return fbxScene; }
 
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
-	struct ConstBufferData
-	{
-		Vector4 color;	// F (RGBA)
-		Matrix4 mat;	// ‚R‚c•ÏŠ·s—ñ
-	};
-
-	//1ƒƒbƒVƒ…‚É‚Ä‚éƒ{[ƒ“‚ÌÅ‘åŒÂ”
-	static const int MAX_BONES = 128;
-
-	//’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
-	struct ConstBufferDataSkin {
-		Matrix4 bones[MAX_BONES];
-	};
-
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚È‚¢ê‡
-	struct ConstBufferDataInitialMatrix {
-		Matrix4 InitialMatrix;
-	};
-
-
-	//’è”ƒoƒbƒtƒ@(ƒXƒLƒ“)
-	static Microsoft::WRL::ComPtr<ID3D12Resource> constBuffSkin_;
-	//’è”ƒoƒbƒtƒ@(ƒAƒjƒ[ƒVƒ‡ƒ“‚È‚µ)
-	static Microsoft::WRL::ComPtr<ID3D12Resource> constBuffNothing_;
+	//ãƒœãƒ¼ãƒ³é…åˆ—
+	std::vector<Bone> bones;
+	//getter
+	std::vector<Bone>& GetBones() { return bones; }
 
 private:
-	static const std::string kBaseDirectory;
-	static const std::string kDefaultModelName;
+	// ãƒ¢ãƒ‡ãƒ«å
+	std::string name;
+	// ãƒãƒ¼ãƒ‰é…åˆ—
+	std::vector<WTFormNode> nodes;
+	// ãƒ¡ãƒƒã‚·ãƒ¥ã‚’æŒã¤ãƒãƒ¼ãƒ‰
+	WTFormNode* meshNode = nullptr;
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿é…åˆ—
+	std::vector<VertexPosNormalUv> vertices;
+	// é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é…åˆ—
+	std::vector<unsigned short> indices;
+	// ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆä¿‚æ•°
+	DirectX::XMFLOAT3 ambient = { 1,1,1 };
+	// ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºä¿‚æ•°
+	DirectX::XMFLOAT3 diffuse = { 1,1,1 };
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¡ã‚¿ãƒ‡ãƒ¼ã‚¿
+	DirectX::TexMetadata metadata = {};
+	// ã‚¹ã‚¯ãƒ©ãƒƒãƒã‚¤ãƒ¡ãƒ¼ã‚¸
+	DirectX::ScratchImage scratchImg = {};
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+	ComPtr<ID3D12Resource> vertBuff;
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
+	ComPtr<ID3D12Resource> indexBuff;
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
+	ComPtr<ID3D12Resource> texbuff;
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+	D3D12_VERTEX_BUFFER_VIEW vbView = {};
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+	D3D12_INDEX_BUFFER_VIEW ibView = {};
+	// SRVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
-private: // Ã“Iƒƒ“ƒo•Ï”
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
-	static UINT sDescriptorHandleIncrementSize_;
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg
-	static ID3D12GraphicsCommandList* sCommandList_;
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature_;
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState_;
-	// ƒ‰ƒCƒg
-	static std::unique_ptr<LightGroup> lightGroup;
-
-
-public: // Ã“Iƒƒ“ƒoŠÖ”
-	// Ã“I‰Šú‰»
-	static void StaticInitialize();
-
-	// Ã“II—¹ˆ—
-	static void StaticFainalize();
-
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“‚Ì‰Šú‰»
-	static void InitializeGraphicsPipeline();
-
-	// 3Dƒ‚ƒfƒ‹¶¬
-	static FbxModel* Create();
-
-	// OBJƒtƒ@ƒCƒ‹‚©‚çƒƒbƒVƒ…¶¬
-	static FbxModel* CreateFromFbx(const std::string& modelname, bool smoothing = false);
-
-	// •`‰æ‘Oˆ—
-	static void PreDraw(ID3D12GraphicsCommandList* commandList);
-
-	// •`‰æŒãˆ—
-	static void PostDraw();
-
-public: // ƒƒ“ƒoŠÖ”
-	// ƒfƒXƒgƒ‰ƒNƒ^
-	~FbxModel();
-
-	// ‰Šú‰»
-	void Initialize();
-
-	void FbxUpdate(float frem);
-
-
-	// •`‰æ
-	//void Draw(
-	//	const WorldTransform& worldTransform, const ViewProjection& viewProjection);
-
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
-
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureHadle);
-
-
-	//void ModelAnimation(float frame, aiAnimation* Animation);
-
-	//void ReadNodeHeirarchy(Mesh* mesh, aiAnimation* Animation, FLOAT AnimationTime, Node* pNode, Matrix4& mxIdentity);
-
-	//aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string& strNodeName);
-
-	//void CalcInterpolatedScaling(Vector3& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim);
-
-	//bool FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nScalingIndex);
-
-	//void CalcInterpolatedRotation(Vector4& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim);
-
-	//bool FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nRotationIndex);
-
-	//void CalcInterpolatedPosition(Vector3& mxOut, float AnimationTime, const aiNodeAnim* pNodeAnim);
-
-	//bool FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim, UINT& nPosIndex);
-
-
-	// ƒƒbƒVƒ…ƒRƒ“ƒeƒi‚ğæ“¾
-	inline const std::vector<Mesh*>& GetMeshes() { return meshes_; }
-
-	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
-
-private:
-
-	Matrix4 Test;
-
-
-	// ƒm[ƒh”z—ñ
-	std::vector<Node> nodes;
-
-
-	Matrix4 globalInverseTransform;
-
-	// –¼‘O
-	std::string name_;
-	// ƒƒbƒVƒ…ƒRƒ“ƒeƒi
-	std::vector<Mesh*> meshes_;
-	// ƒ}ƒeƒŠƒAƒ‹ƒRƒ“ƒeƒi
-	std::unordered_map<std::string, Material*> materials_;
-	// ƒfƒtƒHƒ‹ƒgƒ}ƒeƒŠƒAƒ‹
-	Material* defaultMaterial_ = nullptr;
-
-	uint32_t modelTextureHandle = 0;
+	//FBXã‚·ãƒ¼ãƒ³
+	FbxScene* fbxScene = nullptr;
 
 };
 

@@ -14,41 +14,37 @@ void EnemyHP2DUI::Initialize()
 {
 
 	HP = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBackSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	HP->SetAnchorPoint({ 0.0f,0.5f });
+	HP->SetSize(HpSize);
 
-	HP->SetAnchorPoint(Vector2(0.0f,0.5f));
-	HPBackSprite->SetAnchorPoint(Vector2(0.0f,0.5f));
-	HPBarBackBarSprite->SetAnchorPoint(Vector2(0.0f,0.5f));
-	hpUpdate = std::make_unique<HpUpdate>(HpMax);
+	HPBackSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
+	HPBackSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBackSprite->SetSize(HpSize);
+
+	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	HPBarBackBarSprite->SetAnchorPoint({ 0.0f,0.5f });
+
+	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 }
 
 void EnemyHP2DUI::Update()
 {
-	BackHpDownSize = hpUpdate->Update();
-
-	HPBarBackBarSprite->SetScale(BackBarSprite,BackBarSprite);
-	HPBackSprite->SetScale(Vector2(BackHpDownSize,Scale.y),MaxScale);
-	HP->SetScale(Vector2(HpSize,Scale.y),MaxScale);
-
-	ImGui::Begin("EnemyUI");
-
-	ImGui::SliderFloat("ScaleX",&Scale.x,0,MaxScale.x);
-	ImGui::SliderFloat("ScaleY",&Scale.y,0,MaxScale.y);
-	ImGui::Text("Scale:%f,%f",Scale.x,Scale.y);
-
-	ImGui::End();
+	BackHpDownSize.x = hpUpdate->Update();
+	HPBackSprite->SetSize(BackHpDownSize);
 }
 
 void EnemyHP2DUI::EnemyHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp)
 {
-	HpSize = HpMax * ( static_cast< float >( nowHp ) / static_cast< float >( MaxHp ) );
-	hpUpdate->EasingMaterial(HpSize);
+	HpSize.x = HpBarMaxSize * ( static_cast< float >( nowHp ) / static_cast< float >( MaxHp ) );
+	HP->SetSize(HpSize);
+	hpUpdate->EasingMaterial(HpSize.x);
 }
 
-void EnemyHP2DUI::Draw(const Vector3& Position)
+void EnemyHP2DUI::Draw(const Vector2& Position)
 {
-	HPBarBackBarSprite->Draw(Position,Vector4(1,1,1,1));
+	Vector2 HpBarBackBarPosition = Vector2(Position.x - HpBackBarAdjustment,Position.y);
+
+	HPBarBackBarSprite->Draw(HpBarBackBarPosition,WhiteColor);
 	HPBackSprite->Draw(Position,RedColor);
-	HP->Draw(Position,Vector4(1,1,1,1));
+	HP->Draw(Position,WhiteColor);
 }

@@ -9,6 +9,7 @@
 #include "MissileBullet.h"
 #include <Sprite3D.h>
 #include "EnemyHP3DUI.h"
+#include "EnemyHP2DUI.h"
 
 /// <summary>
 /// 中ボス
@@ -95,17 +96,10 @@ private://クラス関連
 	//弾
 	std::unique_ptr<MultiBullet> multiBullet;
 	std::unique_ptr<MissileBullet> missileBullet;
+	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
 	BaseCollider* MiddleBossCollider = nullptr;
-
-	std::unique_ptr<Sprite> HP2D;
-	std::unique_ptr<Sprite> HPBackSprite2D;
-	std::unique_ptr<Sprite> HPBarBackBarSprite2D;
-
-	std::unique_ptr<Sprite3D> HP3D;
-	std::unique_ptr<Sprite3D> HPBackSprite3D;
-	std::unique_ptr<Sprite3D> HPBarBackBarSprite3D;
 
 
 private://イーナムクラス
@@ -162,6 +156,8 @@ private://EnemyBossクラス変数
 	float BackSpeed = 2.0f;
 	float MovePower = 30.0f;
 	float BackBosPower = 50.0f;
+
+	Vector2 HpPosition = { 500,45 };
 
 	Vector3 BonePos;
 	Vector3 EndPos;

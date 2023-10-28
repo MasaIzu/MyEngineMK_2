@@ -535,6 +535,15 @@
     <ClInclude Include="EnemyHP2DUI.h">
       <Filter>UserHeaderFile\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\FbxLoader.h">
+      <Filter>Engine\HeaderFile\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\FbxModel.h">
+      <Filter>Engine\HeaderFile\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\FBXObject3d.h">
+      <Filter>Engine\HeaderFile\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -749,6 +758,15 @@
     </ClCompile>
     <ClCompile Include="EnemyHP2DUI.cpp">
       <Filter>UserSourceFile\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\FbxLoader.cpp">
+      <Filter>Engine\SourceFile\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\FbxModel.cpp">
+      <Filter>Engine\SourceFile\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\FBXObject3d.cpp">
+      <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

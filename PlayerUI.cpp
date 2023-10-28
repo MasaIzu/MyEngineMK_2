@@ -32,6 +32,7 @@ void PlayerUI::Initialize()
 
 	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
 	HPBarBackBarSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBarBackBarSprite->SetSizeX(HpSize.x + HPAdjustment);
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 

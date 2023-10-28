@@ -24,7 +24,7 @@ public:
 	void SetReticlePosition(const Vector2& position);
 
 private:
-	const float HpBarMaxSize = 300.0f;
+	const float HpBarMaxSize = 200.0f;
 
 private:
 
@@ -53,12 +53,13 @@ private:
 	float ReticleLockLerpPower = 0.6f;
 	float ReticleNotLockLerpPower = 0.4f;
 	float HPBarAlpha = 1.0f;
+	float HPAdjustment = 10.0f;
 
 	Vector2 ReticlePosition = { 640,360 };
 	Vector2 KeepReticlePosition;
 	Vector2 ReticleNormalPosition = { 640,360 };
 	Vector2 HpPosition = { 160.0f,580.0f };
-	Vector2 HpBarBackBarPosition = { 153.0f,580.0f };
+	Vector2 HpBarBackBarPosition = { 155.0f,580.0f };
 	Vector2 HpSize = { HpBarMaxSize,6.0f };
 	Vector2 BackHpDownSize = { HpBarMaxSize,6.0f };
 

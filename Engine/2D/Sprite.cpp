@@ -377,6 +377,13 @@ void Sprite::SetSize(const Vector2& size) {
 	TransferVertices();
 }
 
+void Sprite::SetSizeX(const float& size) {
+	size_.x = size;
+
+	// 頂点バッファへのデータ転送
+	TransferVertices();
+}
+
 void Sprite::SetAnchorPoint(const Vector2& anchorpoint) {
 	anchorPoint_ = anchorpoint;
 

@@ -11,9 +11,8 @@ MiddleBossEnemy::MiddleBossEnemy()
 	BossWorldTrans.scale_ = Vector3(5.0f,5.0f,5.0f);
 	BossWorldTrans.Initialize();
 
-	HP2D = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBackSprite2D = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBarBackBarSprite2D = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	enemyHP2DUI = std::make_unique<EnemyHP2DUI>();
+	enemyHP2DUI->Initialize();
 
 	enemyHP3DUI = std::make_unique<EnemyHP3DUI>();
 	enemyHP3DUI->Initialize();
@@ -176,6 +175,7 @@ void MiddleBossEnemy::Update()
 		{
 			MiddleBossCollider->Reset();
 			MiddleBossHp--;
+			enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 			enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 		}
 
@@ -200,8 +200,14 @@ void MiddleBossEnemy::Update()
 	ImGui::Text("Angle = %f",Angle);
 	ImGui::Text("AngleSize = %f",AngleSize);
 	ImGui::Text("RotTime = %d",RotTime);
+
+	ImGui::SliderFloat("HpPositionX",&HpPosition.x,0,static_cast< float >( WinApp::GetInstance()->window_width ));
+	ImGui::SliderFloat("HpPositionY",&HpPosition.y,0,static_cast< float >( WinApp::GetInstance()->window_height ));
+	ImGui::Text("HpPosition:%f,%f",HpPosition.x,HpPosition.y);
+
 	ImGui::End();
 
+	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
 
 }
@@ -218,8 +224,10 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
 {
-	Vector3 aaa = BossWorldTrans.translation_ + Vector3(0,10,0);
-	enemyHP3DUI->Draw(aaa,viewProjection_);
+	Vector3 HPposition = BossWorldTrans.translation_ + Vector3(0,10,0);
+
+	enemyHP2DUI->Draw(HpPosition);
+	enemyHP3DUI->Draw(HPposition,viewProjection_);
 }
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
