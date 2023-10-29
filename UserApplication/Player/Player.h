@@ -9,6 +9,9 @@
 #include <Sprite.h>
 #include "SplinePosition.h"
 #include "PlayerUI.h"
+#include <FbxModel.h>
+#include <FBXObject3d.h>
+
 
 /// <summary>
 /// プレイヤー
@@ -26,6 +29,8 @@ public://基本関数
 	void Update();
 	//描画
 	void Draw();
+	//描画
+	void FbxDraw();
 	//スプライト描画
 	void DrawSprite();
 
@@ -49,7 +54,10 @@ private:
 	void SplineUpdate();
 	//レティクルアップデート
 	void UpdateReticle();
-
+	//スライドブースト方向決め
+	void DeterminationDirection();
+	//スライドブーストアップデート
+	void SlideBoostUpdate();
 	//角度を決める奴
 	float AngleSelect(float& angle,float& selectAngle);
 
@@ -167,14 +175,15 @@ private://プレイヤークラス変数
 	bool isPushD = false;
 
 	uint32_t BulletNumber = 0;
-	uint32_t SlidingTime = 0;
 	uint32_t SlidingNumber = 0;
 	uint32_t PlayerHP = 5000;
 	uint32_t PlayerMaxHP = 5000;
+	uint32_t nowAnmFCount_ = 5;
+	uint32_t nowAnmNum_ = 5;
+	uint32_t maxFcount = 25;
 
 	float Radius = 1.0f;
 	float playerSpeed = 0.9f;
-	float DiagonalPlayerSpeed = 0.7f;
 	float PlayerToCameraDistance = 0.0f;
 	float PlayerToCameraTargetVecDistance = 0.0f;
 	float CameraMaxDistance = 0.0f;
@@ -182,7 +191,7 @@ private://プレイヤークラス変数
 	float PlayerToAimSaiteVecDistance = 0.0f;
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
-	float DownSlidingTimes = 0.0f;
+	float MaxSlidingSpeed = 2.7f;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 TargetPosition;
@@ -191,7 +200,6 @@ private://プレイヤークラス変数
 	Vector3 ShootVec;
 	Vector3 PlayerToAimSaiteVec;
 	Vector3 StartingPoint;
-	Vector3 SlidingVelocity;
 	Vector3 DownSlidingVelocity;
 	//Vector3 angularVelocity;
 
