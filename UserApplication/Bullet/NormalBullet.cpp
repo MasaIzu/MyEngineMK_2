@@ -1,7 +1,8 @@
 #include "NormalBullet.h"
 #include "SphereCollider.h"
+#include "CollisionAttribute.h"
 
-NormalBullet::NormalBullet(const unsigned short Attribute)
+NormalBullet::NormalBullet(const unsigned short Attribute_)
 {
 	BulletWorldTrans.scale_ = Vector3(0.5f,0.5f,0.5f);
 	BulletWorldTrans.Initialize();
@@ -14,7 +15,8 @@ NormalBullet::NormalBullet(const unsigned short Attribute)
 	// コリジョンマネージャに追加
 	BulletCollider = new SphereCollider(Vector4(0,BulletRadius,0,0),BulletRadius);
 	CollisionManager::GetInstance()->AddCollider(BulletCollider);
-	BulletCollider->SetAttribute(Attribute);
+	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+	Attribute = Attribute_;
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 }
 
@@ -31,6 +33,13 @@ void NormalBullet::Update()
 {
 	CheckBulletAlive();
 
+	if ( BulletCollider->GetHit() )
+	{
+		BulletCollider->Reset();
+		isBulletAlive = false;
+		BulletCollider->SphereMeshHitReset();
+		BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+	}
 
 	if ( isBulletAlive == true )
 	{
@@ -66,6 +75,7 @@ void NormalBullet::CheckBulletAlive()
 		else
 		{
 			isBulletAlive = false;
+			BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 		}
 	}
 
@@ -73,13 +83,18 @@ void NormalBullet::CheckBulletAlive()
 
 void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,const float& BulletSpeed)
 {
-
 	if ( isBulletAlive == false )
 	{
 		BulletLifeTime = 100;
 		isBulletAlive = true;
 		BulletWorldTrans.translation_ = pos;
 		EnemyBulletMoveMent = BulletVelocity * BulletSpeed;
+		WorldTransUpdate();
+		BulletCollider->SetAttribute(Attribute);
+		BulletCollider->Update(BulletWorldTrans.matWorld_);
 	}
+}
 
+bool NormalBullet::GetBulletAlive() const {
+	return isBulletAlive;
 }

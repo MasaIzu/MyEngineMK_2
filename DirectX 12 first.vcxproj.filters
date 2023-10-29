@@ -8,56 +8,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="UserSourceFile">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="UserSourceFile\Enemy">
-      <UniqueIdentifier>{e3b8b230-f642-4f8f-9d57-48e59550326b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Player">
-      <UniqueIdentifier>{afe63864-f970-413a-a081-a5d0e58f2a22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Scene">
-      <UniqueIdentifier>{4b65071a-b2c6-453f-b0ce-4978216cf4bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Ground">
-      <UniqueIdentifier>{aa035f86-8a36-4e28-ad26-acd4611a26b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Skydome">
-      <UniqueIdentifier>{cf5de4e4-42a5-49ba-a9e9-0a907c28c62a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\UserCamera">
-      <UniqueIdentifier>{1b6cda0c-96fb-452f-a1d8-54c1c88f1826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Bullet">
-      <UniqueIdentifier>{2d6a7d8b-4c95-47f3-9d82-68590bf43c63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="UserHeaderFile\Enemy">
-      <UniqueIdentifier>{1dac81ab-cda1-46b0-aa7a-bf312e51348b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\Player">
-      <UniqueIdentifier>{dee23e26-c538-4158-9f4d-1d26f3df2143}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\Scene">
-      <UniqueIdentifier>{d745f511-4b53-4767-b070-95e027c7f8b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\Ground">
-      <UniqueIdentifier>{c9cd247b-acbf-40cd-a42d-fe921a7e683e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\Skydome">
-      <UniqueIdentifier>{9cbfaac7-0ca9-439d-8308-4e966b74e7e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\UserCamera">
-      <UniqueIdentifier>{a570b1d3-3326-4228-beca-ef786e914a3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\Bullet">
-      <UniqueIdentifier>{7f33b210-62a5-410d-aa5f-fcd257a19a97}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\SourceFile">
       <UniqueIdentifier>{db406609-45c0-4303-b559-0d12b2ad5288}</UniqueIdentifier>
     </Filter>
@@ -163,20 +113,73 @@
     <Filter Include="ResourceFile\Shaders\Particle">
       <UniqueIdentifier>{700420b6-d2f8-464d-8b1b-7909c8f52dfe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserHeaderFile\Gun">
-      <UniqueIdentifier>{24ccc78e-1e54-47bc-aa64-523497c95b85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\Gun">
-      <UniqueIdentifier>{ecb2c5fa-2c7b-4cab-8ca9-98052e7816de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserSourceFile\HpUpdate">
-      <UniqueIdentifier>{477f7202-09da-4bab-b50a-be2eb5242138}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserHeaderFile\HpUpdate">
-      <UniqueIdentifier>{0227e27e-cc73-4369-852f-0163c9da40ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ResourceFile\Shaders\Sprite">
       <UniqueIdentifier>{b6c6abb0-5b0d-4292-a316-248225f1317b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile">
+      <UniqueIdentifier>{720dbc4f-4eb8-4de5-9002-e961916dd62e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Enemy">
+      <UniqueIdentifier>{1dac81ab-cda1-46b0-aa7a-bf312e51348b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Player">
+      <UniqueIdentifier>{dee23e26-c538-4158-9f4d-1d26f3df2143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Scene">
+      <UniqueIdentifier>{d745f511-4b53-4767-b070-95e027c7f8b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Ground">
+      <UniqueIdentifier>{c9cd247b-acbf-40cd-a42d-fe921a7e683e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Skydome">
+      <UniqueIdentifier>{9cbfaac7-0ca9-439d-8308-4e966b74e7e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\UserCamera">
+      <UniqueIdentifier>{a570b1d3-3326-4228-beca-ef786e914a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Bullet">
+      <UniqueIdentifier>{7f33b210-62a5-410d-aa5f-fcd257a19a97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\Gun">
+      <UniqueIdentifier>{24ccc78e-1e54-47bc-aa64-523497c95b85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\HpUpdate">
+      <UniqueIdentifier>{0227e27e-cc73-4369-852f-0163c9da40ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Enemy">
+      <UniqueIdentifier>{e3b8b230-f642-4f8f-9d57-48e59550326b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Player">
+      <UniqueIdentifier>{afe63864-f970-413a-a081-a5d0e58f2a22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Scene">
+      <UniqueIdentifier>{4b65071a-b2c6-453f-b0ce-4978216cf4bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Ground">
+      <UniqueIdentifier>{aa035f86-8a36-4e28-ad26-acd4611a26b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Skydome">
+      <UniqueIdentifier>{cf5de4e4-42a5-49ba-a9e9-0a907c28c62a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\UserCamera">
+      <UniqueIdentifier>{1b6cda0c-96fb-452f-a1d8-54c1c88f1826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Bullet">
+      <UniqueIdentifier>{2d6a7d8b-4c95-47f3-9d82-68590bf43c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\Gun">
+      <UniqueIdentifier>{ecb2c5fa-2c7b-4cab-8ca9-98052e7816de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\HpUpdate">
+      <UniqueIdentifier>{477f7202-09da-4bab-b50a-be2eb5242138}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -353,7 +356,7 @@
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Player\Player.h">
-      <Filter>UserHeaderFile\Player</Filter>
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameFunction\Mouse.h">
       <Filter>Engine\HeaderFile\GameFunction</Filter>
@@ -407,19 +410,19 @@
       <Filter>Engine\HeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\TitleScene.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\GameScene.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ImGui\ImGuiManager.h">
       <Filter>Engine\HeaderFile\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Ground\Ground.h">
-      <Filter>UserHeaderFile\Ground</Filter>
+      <Filter>UserFile\UserHeaderFile\Ground</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Skydome\Skydome.h">
-      <Filter>UserHeaderFile\Skydome</Filter>
+      <Filter>UserFile\UserHeaderFile\Skydome</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\base\MainGame.h">
       <Filter>Engine\HeaderFile\Scene</Filter>
@@ -440,10 +443,10 @@
       <Filter>Engine\HeaderFile\Math</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
-      <Filter>UserHeaderFile\UserCamera</Filter>
+      <Filter>UserFile\UserHeaderFile\UserCamera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\LevelEditor\LoadLevelEditor.h">
       <Filter>Engine\HeaderFile\LevelEditor</Filter>
@@ -455,22 +458,22 @@
       <Filter>Engine\HeaderFile\Math</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collision\TouchableObject.h">
       <Filter>Engine\HeaderFile\Collision</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\StageSelect.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Enemy\BossEnemy.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\CreateResource.h">
       <Filter>Engine\HeaderFile\MyFunction</Filter>
@@ -488,7 +491,7 @@
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\DebugScene.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\MyStruct.h">
       <Filter>Engine\HeaderFile\MyFunction</Filter>
@@ -497,43 +500,37 @@
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Enemy\MiddleBossEnemy.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Bullet\MissileBullet.h">
-      <Filter>UserHeaderFile\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Bullet\MultiBullet.h">
-      <Filter>UserHeaderFile\Bullet</Filter>
+      <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\ClearScene.h">
-      <Filter>UserHeaderFile\Scene</Filter>
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Base\Defined.h">
       <Filter>Engine\HeaderFile\Base</Filter>
     </ClInclude>
     <ClInclude Include="BulletDamage.h">
-      <Filter>UserHeaderFile\Bullet</Filter>
+      <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="NormalGun.h">
-      <Filter>UserHeaderFile\Gun</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Player\NormalBullet.h">
-      <Filter>UserHeaderFile\Bullet</Filter>
+      <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
     <ClInclude Include="PlayerUI.h">
-      <Filter>UserHeaderFile\Player</Filter>
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
     <ClInclude Include="HpUpdate.h">
-      <Filter>UserHeaderFile\HpUpdate</Filter>
+      <Filter>UserFile\UserHeaderFile\HpUpdate</Filter>
     </ClInclude>
     <ClInclude Include="Sprite3D.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
     <ClInclude Include="EnemyHP3DUI.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyHP2DUI.h">
-      <Filter>UserHeaderFile\Enemy</Filter>
+      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\HeaderFile\3D</Filter>
@@ -544,10 +541,16 @@
     <ClInclude Include="Engine\3D\FBXObject3d.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
+    <ClInclude Include="UserApplication\Bullet\NormalBullet.h">
+      <Filter>UserFile\UserHeaderFile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileGun.h">
+      <Filter>UserFile\UserHeaderFile\Gun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>UserSourceFile</Filter>
+      <Filter>UserFile\UserSourceFile</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Sound\Audio.cpp">
       <Filter>Engine\SourceFile\Sound</Filter>
@@ -601,7 +604,7 @@
       <Filter>Engine\SourceFile\2D</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Player\Player.cpp">
-      <Filter>UserSourceFile\Player</Filter>
+      <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\WinApp.cpp">
       <Filter>Engine\SourceFile\Base</Filter>
@@ -637,19 +640,19 @@
       <Filter>Engine\SourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\TitleScene.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\GameScene.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ImGui\ImGuiManager.cpp">
       <Filter>Engine\SourceFile\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Ground\Ground.cpp">
-      <Filter>UserSourceFile\Ground</Filter>
+      <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Skydome\Skydome.cpp">
-      <Filter>UserSourceFile\Skydome</Filter>
+      <Filter>UserFile\UserSourceFile\Skydome</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\base\MainGame.cpp">
       <Filter>Engine\SourceFile\Scene</Filter>
@@ -667,10 +670,10 @@
       <Filter>Engine\SourceFile\Math</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
-      <Filter>UserSourceFile\UserCamera</Filter>
+      <Filter>UserFile\UserSourceFile\UserCamera</Filter>
     </ClCompile>
     <ClCompile Include="Engine\LevelEditor\LoadLevelEditor.cpp">
       <Filter>Engine\SourceFile\LevelEditor</Filter>
@@ -682,22 +685,22 @@
       <Filter>Engine\SourceFile\Math</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collision\TouchableObject.cpp">
       <Filter>Engine\SourceFile\Collision</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Base\CreateResource.cpp">
       <Filter>Engine\SourceFile\MyFunction</Filter>
@@ -715,7 +718,7 @@
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\DebugScene.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleManager.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
@@ -724,40 +727,34 @@
       <Filter>Engine\SourceFile\2D</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Enemy\MiddleBossEnemy.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Bullet\MissileBullet.cpp">
-      <Filter>UserSourceFile\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Bullet\MultiBullet.cpp">
-      <Filter>UserSourceFile\Bullet</Filter>
+      <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp">
-      <Filter>UserSourceFile\Scene</Filter>
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
     <ClCompile Include="BulletDamage.cpp">
-      <Filter>UserSourceFile\Bullet</Filter>
+      <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="NormalGun.cpp">
-      <Filter>UserSourceFile\Gun</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Player\NormalBullet.cpp">
-      <Filter>UserSourceFile\Bullet</Filter>
+      <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
     <ClCompile Include="PlayerUI.cpp">
-      <Filter>UserSourceFile\Player</Filter>
+      <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
     <ClCompile Include="HpUpdate.cpp">
-      <Filter>UserSourceFile\HpUpdate</Filter>
+      <Filter>UserFile\UserSourceFile\HpUpdate</Filter>
     </ClCompile>
     <ClCompile Include="Sprite3D.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
     <ClCompile Include="EnemyHP3DUI.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyHP2DUI.cpp">
-      <Filter>UserSourceFile\Enemy</Filter>
+      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
@@ -767,6 +764,12 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\FBXObject3d.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\Bullet\NormalBullet.cpp">
+      <Filter>UserFile\UserSourceFile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileGun.cpp">
+      <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

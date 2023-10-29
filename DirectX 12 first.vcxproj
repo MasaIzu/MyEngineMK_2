@@ -278,6 +278,7 @@
     <ClInclude Include="Engine\3D\FbxLoader.h" />
     <ClInclude Include="Engine\3D\FbxModel.h" />
     <ClInclude Include="Engine\3D\FBXObject3d.h" />
+    <ClInclude Include="MissileGun.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="BulletDamage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
@@ -364,6 +365,7 @@
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />
     <ClCompile Include="Engine\3D\FbxModel.cpp" />
     <ClCompile Include="Engine\3D\FBXObject3d.cpp" />
+    <ClCompile Include="MissileGun.cpp" />
     <ClCompile Include="Sprite3D.cpp" />
     <ClCompile Include="BulletDamage.cpp" />
     <ClCompile Include="HpUpdate.cpp" />

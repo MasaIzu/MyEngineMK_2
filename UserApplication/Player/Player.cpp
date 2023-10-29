@@ -270,41 +270,51 @@ void Player::PlayerRot()
 
 void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 {
-	if ( AttackPhase_ == AttackPhase::Nothing )
+
+	if ( LockOn )
 	{
-		AttackPhase_ = AttackPhase::AttackCombo1;
+		playerNormalGun->ShotBullet(EnemyPos);
 	}
-	switch ( AttackPhase_ )
+	else
 	{
-	case Player::AttackPhase::AttackCombo1:
-		if ( LockOn )
-		{
-			playerNormalGun->ShotBullet(EnemyPos);
-		}
-		else
-		{
-			playerNormalGun->ShotBullet(TargetPosition);
-		}
-
-		break;
-	case Player::AttackPhase::AttackCombo2:
-
-		break;
-	case Player::AttackPhase::AttackCombo3:
-
-		break;
-	case Player::AttackPhase::AttackCombo4:
-
-		break;
-	case Player::AttackPhase::AttackUlt:
-
-		break;
-	case Player::AttackPhase::Nothing:
-
-		break;
-	default:
-		break;
+		playerNormalGun->ShotBullet(TargetPosition);
 	}
+
+	//if ( AttackPhase_ == AttackPhase::Nothing )
+	//{
+	//	AttackPhase_ = AttackPhase::AttackCombo1;
+	//}
+	//switch ( AttackPhase_ )
+	//{
+	//case Player::AttackPhase::AttackCombo1:
+	//	if ( LockOn )
+	//	{
+	//		playerNormalGun->ShotBullet(EnemyPos);
+	//	}
+	//	else
+	//	{
+	//		playerNormalGun->ShotBullet(TargetPosition);
+	//	}
+
+	//	break;
+	//case Player::AttackPhase::AttackCombo2:
+
+	//	break;
+	//case Player::AttackPhase::AttackCombo3:
+
+	//	break;
+	//case Player::AttackPhase::AttackCombo4:
+
+	//	break;
+	//case Player::AttackPhase::AttackUlt:
+
+	//	break;
+	//case Player::AttackPhase::Nothing:
+
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void Player::WorldTransUpdate()

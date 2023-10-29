@@ -1,19 +1,19 @@
 #pragma once
-#include "NormalBullet.h"
+#include "MissileBullet.h"
 #include <array>
 #include <stdint.h>
 #include "WorldTransform.h"
 
-class NormalGun
+class MissileGun
 {
 public://基本関数
-	NormalGun(const unsigned short Attribute);
-	~NormalGun();
+	MissileGun(const unsigned short Attribute);
+	~MissileGun();
 
 	//初期化
 	void Initialize(const Vector3& Pos,Model* GunModel,Model* BulletModel);
 	//更新
-	void Update(const Vector3& Pos);
+	void Update(const Vector3& GunPos,const Vector3& inductionPos);
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
 
@@ -34,7 +34,7 @@ private://コンスト
 
 private://クラス関連
 	//バレットの数
-	std::array<std::unique_ptr<NormalBullet>,BulletMaxCount> normalBullet;
+	std::array<std::unique_ptr<MissileBullet>,BulletMaxCount> normalBullet;
 	Model* model_ = nullptr;
 	WorldTransform GunTrans;
 
@@ -43,7 +43,7 @@ private:
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;
 
-	float BulletSpeed = 3.0f;
+	float BulletSpeed = 1.0f;
 
 };
 

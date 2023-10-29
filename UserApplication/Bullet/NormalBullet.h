@@ -16,7 +16,7 @@
 class NormalBullet
 {
 public://基本関数
-	NormalBullet(const unsigned short Attribute);
+	NormalBullet(const unsigned short Attribute_);
 	~NormalBullet();
 
 	//初期化
@@ -41,10 +41,8 @@ private:
 
 public://Getter
 	//Aliveのゲッター
-	bool GetBulletAlive()const {
-		return isBulletAlive;
-	}
-	Vector3 GetEnemyBulletPos()const { return MyMath::GetWorldTransform(BulletWorldTrans.matWorld_); }
+	bool GetBulletAlive() const;
+	Vector3 GetEnemyBulletPos() const { return MyMath::GetWorldTransform(BulletWorldTrans.matWorld_); }
 
 public://Setter
 
@@ -64,6 +62,9 @@ private://別クラスから値をもらう
 
 
 private://クラス変数
+
+	unsigned short Attribute;
+
 	bool isBulletAlive = false;
 	bool isMovingExpandingBullet = false;
 
