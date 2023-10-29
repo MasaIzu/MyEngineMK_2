@@ -4,7 +4,7 @@
 #include "WorldTransform.h"
 #include <Input.h>
 #include "SplinePosition.h"
-#include "MultiBullet.h"
+#include "NormalGun.h"
 #include "Player.h"
 #include "MissileBullet.h"
 #include <Sprite3D.h>
@@ -94,7 +94,7 @@ private://クラス関連
 	std::unique_ptr<SplinePosition> MoveSpline;//途中のスプライン
 
 	//弾
-	std::unique_ptr<MultiBullet> multiBullet;
+	std::unique_ptr<NormalGun> normalGun;
 	std::unique_ptr<MissileBullet> missileBullet;
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;

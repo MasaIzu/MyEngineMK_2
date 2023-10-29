@@ -292,7 +292,7 @@
     <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h" />
     <ClInclude Include="Engine\3DEffect\ParticleManager.h" />
     <ClInclude Include="Engine\Base\CreateResource.h" />
-    <ClInclude Include="UserApplication\Bullet\MultiBullet.h" />
+    <ClInclude Include="UserApplication\Bullet\NormalBullet.h" />
     <ClInclude Include="UserApplication\Enemy\MiddleBossEnemy.h" />
     <ClInclude Include="UserApplication\Bullet\MissileBullet.h" />
     <ClInclude Include="Engine\Base\MyStruct.h" />
@@ -335,7 +335,6 @@
     <ClInclude Include="Engine\2D\MixPostEffect.h" />
     <ClInclude Include="Engine\Math\SplinePosition.h" />
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
-    <ClInclude Include="UserApplication\Player\NormalBullet.h" />
     <ClInclude Include="Engine\2D\PostEffect.h" />
     <ClInclude Include="Engine\2D\PostEffectManager.h" />
     <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h" />
@@ -379,7 +378,7 @@
     <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleManager.cpp" />
     <ClCompile Include="Engine\Base\CreateResource.cpp" />
-    <ClCompile Include="UserApplication\Bullet\MultiBullet.cpp" />
+    <ClCompile Include="UserApplication\Bullet\NormalBullet.cpp" />
     <ClCompile Include="UserApplication\Enemy\MiddleBossEnemy.cpp" />
     <ClCompile Include="UserApplication\Bullet\MissileBullet.cpp" />
     <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp" />
@@ -411,7 +410,6 @@
     <ClCompile Include="Engine\2D\MixPostEffect.cpp" />
     <ClCompile Include="Engine\Math\SplinePosition.cpp" />
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
-    <ClCompile Include="UserApplication\Player\NormalBullet.cpp" />
     <ClCompile Include="Engine\2D\PostEffect.cpp" />
     <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp" />
     <ClCompile Include="Engine\Framework\Framework.cpp" />

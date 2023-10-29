@@ -2,12 +2,11 @@
 #include "WinApp.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
-#include <CollisionAttribute.h>
 #include"ImGuiManager.h"
 //#include <FbxLoader.h>
 #include <SphereCollider.h>
 #include "BulletDamage.h"
-
+#include "CollisionAttribute.h"
 
 Player::Player()
 {
@@ -36,7 +35,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerWorldTransForBullet.Initialize();
 	StartingPointOfGrapple.Initialize();
 
-	playerNormalGun = std::make_unique<NormalGun>();
+	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
 	playerNormalGun->Initialize(Pos,model_.get(),model_.get());
 
 	DebugWorldTrans.Initialize();

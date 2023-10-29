@@ -30,7 +30,8 @@ MiddleBossEnemy::~MiddleBossEnemy()
 
 void MiddleBossEnemy::Initialize(Player* Player)
 {
-	multiBullet = std::make_unique<MultiBullet>();
+	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	normalGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 	missileBullet = std::make_unique<MissileBullet>();
 	this->player = Player;
 
@@ -43,7 +44,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 
 void MiddleBossEnemy::TitleInitialize()
 {
-	multiBullet = std::make_unique<MultiBullet>();
+	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileBullet = std::make_unique<MissileBullet>();
 }
 
@@ -188,7 +189,7 @@ void MiddleBossEnemy::Update()
 			isDead = true;
 		}
 
-		multiBullet->Update();
+		normalGun->Update(BossWorldTrans.translation_);
 		missileBullet->Update(player->GetPlayerPos());
 
 		MiddleBossCollider->Update(BossWorldTrans.matWorld_);
@@ -214,7 +215,7 @@ void MiddleBossEnemy::Update()
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
-	multiBullet->Draw(viewProjection_);
+	normalGun->Draw(viewProjection_);
 	missileBullet->Draw(viewProjection_);
 	if ( isSporn )
 	{
@@ -315,7 +316,7 @@ void MiddleBossEnemy::Attack()
 		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
 		AttackVelocity.normalize();
 
-		multiBullet->MakeBullet(BossWorldTrans.translation_,AttackVelocity,BulletSpeed);
+		normalGun->ShotBullet(AttackVelocity);
 
 	}
 	else if ( attackType == AttackType::Missile )
@@ -334,7 +335,7 @@ void MiddleBossEnemy::Attack()
 		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
 		AttackVelocity.normalize();
 
-		multiBullet->MakeBullet(BossWorldTrans.translation_,AttackVelocity,BulletSpeed);
+		normalGun->ShotBullet(AttackVelocity);
 	}
 }
 

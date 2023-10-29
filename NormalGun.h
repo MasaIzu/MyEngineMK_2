@@ -7,7 +7,7 @@
 class NormalGun
 {
 public://基本関数
-	NormalGun();
+	NormalGun(const unsigned short Attribute);
 	~NormalGun();
 
 	//初期化
@@ -34,7 +34,7 @@ private://コンスト
 
 private://クラス関連
 	//バレットの数
-	std::array<NormalBullet,BulletMaxCount> normalBullet;
+	std::array<std::unique_ptr<NormalBullet>,BulletMaxCount> normalBullet;
 	Model* model_ = nullptr;
 	WorldTransform GunTrans;
 
@@ -42,6 +42,8 @@ private:
 
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;
+
+	float BulletSpeed = 1.0f;
 
 };
 

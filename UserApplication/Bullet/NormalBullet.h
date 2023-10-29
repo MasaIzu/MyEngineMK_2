@@ -8,18 +8,19 @@
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
+#include "CollisionAttribute.h"
 
 /// <summary>
-/// マルチバレットクラス
+/// ノーマルバレットクラス
 /// </summary>
-class MultiBullet {
-
+class NormalBullet
+{
 public://基本関数
-	MultiBullet();
-	~MultiBullet();
+	NormalBullet(const unsigned short Attribute);
+	~NormalBullet();
 
 	//初期化
-	void Initialize();
+	void Initialize(Model* BulletModel);
 	//更新
 	void Update();
 	//描画
@@ -29,7 +30,7 @@ public://基本関数
 public:
 
 	//弾を作り出す
-	void MakeBullet(Vector3& pos, Vector3& BulletVelocity, const float& BulletSpeed);
+	void MakeBullet(const Vector3& pos,const Vector3& BulletVelocity, const float& BulletSpeed);
 
 private:
 
@@ -37,36 +38,36 @@ private:
 	void WorldTransUpdate();
 	//生きているかどうか
 	void CheckBulletAlive();
-	//死んでるときは奥深くに格納
-	void SetNotAlivePosition();
-	//1フレーム前のポジション
-	//void OldPosUpdate();
 
 public://Getter
-	Vector3 GetEnemyBulletPos(const uint32_t& bulletCount)const { return MyMath::GetWorldTransform(EnemyBulletWorldTrans[bulletCount].matWorld_); }
+	//Aliveのゲッター
+	bool GetBulletAlive()const {
+		return isBulletAlive;
+	}
+	Vector3 GetEnemyBulletPos()const { return MyMath::GetWorldTransform(BulletWorldTrans.matWorld_); }
 
 public://Setter
 
 
 private://const関連
-	static const uint32_t AllBulletCount = 100;
+
 
 private://クラス関連
-	std::unique_ptr<Model> model_;
-	WorldTransform EnemyBulletWorldTrans[AllBulletCount];
+	Model* model_ = nullptr;
+	WorldTransform BulletWorldTrans;
 
 	//当たり判定
-	BaseCollider* BulletCollider[AllBulletCount];
+	BaseCollider* BulletCollider;
 	CollisionManager* collisionManager = nullptr;
 
 private://別クラスから値をもらう
 
 
 private://クラス変数
-	bool isBulletAlive[AllBulletCount];
+	bool isBulletAlive = false;
 	bool isMovingExpandingBullet = false;
 
-	uint32_t BulletLifeTime[AllBulletCount];
+	uint32_t BulletLifeTime = 0;
 	uint32_t BulletNum_ = 0;
 	uint32_t MaxBulletLifeTime = 40;
 	uint32_t BulletCoolTime = 0;
@@ -76,11 +77,11 @@ private://クラス変数
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
 
-	float EnemyBulletSpeed[AllBulletCount];
-	float BulletRadius[AllBulletCount];
+	float EnemyBulletSpeed = 0.0f;
+	float BulletRadius = 0.0f;
 
 
-	Vector3 EnemyBulletMoveMent[AllBulletCount];//移動量
-	Vector3 BulletVector[AllBulletCount];//打ち出される方向
-	Vector3 BulletOldPos[AllBulletCount];//1フレーム前のポジション
+	Vector3 EnemyBulletMoveMent;//移動量
+	Vector3 BulletVector;//打ち出される方向
+	Vector3 BulletOldPos;//1フレーム前のポジション
 };
