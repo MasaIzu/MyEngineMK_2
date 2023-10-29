@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <DirectXMath.h>
 #include <vector>
@@ -9,8 +9,7 @@
 #include <d3dx12.h>
 #include <fbxsdk.h>
 
-#include "Vector4.h"
-#include "Matrix4.h"
+
 
 
 // ノード
@@ -19,15 +18,15 @@ struct WTFormNode
 	// 名前
 	std::string name;
 	// ローカルスケール
-	Vector4 scaling = { 1,1,1,0 };
+	DirectX::XMVECTOR scaling = { 1,1,1,0 };
 	// ローカル回転角
-	Vector4 rotation = { 0,0,0,0 };
+	DirectX::XMVECTOR rotation = { 0,0,0,0 };
 	// ローカル移動
-	Vector4 translation = { 0,0,0,1 };
+	DirectX::XMVECTOR translation = { 0,0,0,1 };
 	// ローカル変形行列
-	Matrix4 transform;
+	DirectX::XMMATRIX transform;
 	// グローバル変形行列
-	Matrix4 globalTransform;
+	DirectX::XMMATRIX globalTransform;
 	// 親ノード
 	WTFormNode* parent = nullptr;
 	
@@ -92,7 +91,7 @@ public:
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	// モデルの変形行列取得
-	const Matrix4& GetModelTransform();
+	const XMMATRIX& GetModelTransform();
 	//getter
 	FbxScene* GetFbxScene() { return fbxScene; }
 

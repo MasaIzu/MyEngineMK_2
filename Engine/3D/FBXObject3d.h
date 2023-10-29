@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "FBXModel.h"
 #include"FBXLoader.h"
 #include"WorldTransform.h"
@@ -54,8 +54,8 @@ public: // 静的メンバ関数
 	/// グラフィックパイプラインの生成
 	/// </summary>
 	// setter
-	static void SetDevice(ID3D12Device* device_) { FBXObject3d::device = device_; }
-	static void SetCamera(ViewProjection* camera_) { FBXObject3d::camera = camera_; }
+	static void SetDevice(ID3D12Device* device) { FBXObject3d::device = device; }
+	static void SetCamera(ViewProjection* camera) { FBXObject3d::camera = camera; }
 
 
 private: // 静的メンバ変数
@@ -123,7 +123,7 @@ public: // メンバ関数
 	/// モデルをセット
 	/// </summary>
 	/// <param name="fbxmodel"></param>
-	void SetModel(FBXModel* fbxmodel_) { this->fbxmodel = fbxmodel_; }
+	void SetModel(FBXModel* fbxmodel) { this->fbxmodel = fbxmodel; }
 
 	/// <summary>
 	/// フレームカウント指定
@@ -175,7 +175,7 @@ public: // メンバ関数
 	/// <summary>
 	/// アニメーション開始
 	/// </summary>
-	void PlayAnimation(const uint32_t& animationNum);
+	void PlayAnimation(int animationNum);
 
 	//補間アニメーションカウント
 	void AnimFlameInter(FbxTime nowCount, FbxTime maxCount);

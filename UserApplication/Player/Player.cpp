@@ -24,8 +24,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	model_.reset(Model::CreateFromOBJ("sphere", true));
 	playerWorldTrans.Initialize();
 	playerWorldTrans.translation_ = Pos;
-	playerWorldTrans.scale_ = { 1,1,1 };
-	playerWorldTrans.TransferMatrix();
 	playerWorldTransHed.Initialize();
 	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
 	playerWorldTransHed.parent_ = &playerWorldTrans;
@@ -43,13 +41,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	AttackSprite = Sprite::Create(TextureManager::Load("sprite/shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
-
-	//fbx
-	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("3JamJiki",true));
-	fbxObj3d_ = FBXObject3d::Create();
-	fbxObj3d_->SetModel(fbxModel_.get());
-	fbxObj3d_->PlayAnimation(0);
-	fbxObj3d_->Update();
 
 	// コリジョンマネージャに追加
 	PlayerCollider = new SphereCollider(Vector4(0, Radius, 0, 0), Radius);
@@ -111,10 +102,102 @@ void Player::Update()
 	}
 
 	if (input_->TriggerKey(DIK_LSHIFT)) {
-		DeterminationDirection();
+
+		isSliding = true;
+		SlidingTime = 60;
+		SlidingSpeed = 1.5f;
+		DownSlidingTimes = 90.0f;
+
+		if (isPushW == 1 && isPushA == 0 && isPushD == 0) {
+			SlidingNumber = 1;
+		}
+		else if (isPushW == 0 && isPushS == 0 && isPushA == 1) {
+			SlidingNumber = 2;
+		}
+		else if (isPushS == 1 && isPushA == 0 && isPushD == 0) {
+			SlidingNumber = 3;
+		}
+		else if (isPushW == 0 && isPushS == 0 && isPushD == 1) {
+			SlidingNumber = 4;
+		}
+		else if (isPushW == 1 && isPushA == 1 && isPushD == 0) {
+			SlidingNumber = 5;
+		}
+		else if (isPushW == 1 && isPushA == 0 && isPushD == 1) {
+			SlidingNumber = 6;
+		}
+		else if (isPushS == 1 && isPushA == 1 && isPushD == 0) {
+			SlidingNumber = 7;
+		}
+		else if (isPushS == 1 && isPushA == 0 && isPushD == 1) {
+			SlidingNumber = 8;
+		}
+		else {
+			SlidingNumber = 0;
+		}
 	}
 
-	SlideBoostUpdate();
+	if (isSliding) {
+		if (SlidingTime > 0) {
+			SlidingTime--;
+			if (SlidingNumber == 1) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.look * SlidingSpeed;
+			}
+			else if (SlidingNumber == 2) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookLeft * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.lookLeft * SlidingSpeed;
+			}
+			else if (SlidingNumber == 3) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.lookBack * SlidingSpeed;
+			}
+			else if (SlidingNumber == 4) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookRight * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.lookRight * SlidingSpeed;
+			}
+			else if (SlidingNumber == 5) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookLeft * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.look_lookLeft * SlidingSpeed;
+			}
+			else if (SlidingNumber == 6) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookRight * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.look_lookRight * SlidingSpeed;
+			}
+			else if (SlidingNumber == 7) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookLeft * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.lookBack_lookLeft * SlidingSpeed;
+			}
+			else if (SlidingNumber == 8) {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookRight * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.lookBack_lookRight * SlidingSpeed;
+			}
+			else {
+				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
+				SlidingVelocity = playerWorldTrans.LookVelocity.look * SlidingSpeed;
+			}
+		}
+		else {
+			isSliding = false;
+
+			DownSlidingVelocity = SlidingVelocity / DownSlidingTimes;
+			SlidingVelocity -= DownSlidingVelocity;
+			playerWorldTrans.translation_ += SlidingVelocity;
+		}
+	}
+	else {
+		if (onGround) {
+			SlidingVelocity = { 0,0,0 };
+			DownSlidingVelocity = { 0,0,0 };
+		}
+		else {
+			if (DownSlidingTimes > 0.0f) {
+				DownSlidingTimes -= 1.0f;
+				SlidingVelocity -= DownSlidingVelocity;
+				playerWorldTrans.translation_ += SlidingVelocity;
+			}
+		}
+	}
 
 	//移動の値更新
 	WorldTransUpdate();
@@ -123,6 +206,23 @@ void Player::Update()
 
 	isGrapple = false;
 	if (input_->MouseInputing(1)) {
+		isPressing = true;
+
+		// 範囲レイキャスト
+		Ray GroundRay;
+		GroundRay.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
+		//LookRay.start.y += CameraRayCollisionRadius;
+		PlayerToAimSaiteVec = ShootVec.norm();
+		PlayerToAimSaiteVecDistance = PlayerToCameraTargetVecDistance * 1.5f;
+		GroundRay.dir = MyMath::Vec3ToVec4(PlayerToAimSaiteVec.norm());
+		RaycastHit raycastHit;
+
+		//カメラとの間に地面があれば位置を変える
+		if (CollisionManager::GetInstance()->Raycast(GroundRay, COLLISION_ATTR_LANDSHAPE, &raycastHit, PlayerToAimSaiteVecDistance)) {
+			StartingPointOfGrapple.translation_ = MyMath::Vec4ToVec3(raycastHit.inter);
+		}
+
+		StartingPointOfGrapple.TransferMatrix();
 
 	}
 
@@ -131,23 +231,18 @@ void Player::Update()
 	}
 
 
-	if (input_->MouseInputTrigger(0)) {
-		nowAnmFCount_++;
+	if (input_->MouseInputTrigger(1)) {
+
 	}
-	if ( input_->MouseInputTrigger(1) )
-	{
-		nowAnmFCount_--;
-	}
+
 
 	ImGui::Begin("Player");
 
 
 	ImGui::End();
 
-	uint32_t BoneNumber = 31;
-
-	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoneNumber) * playerWorldTrans.matWorld_);
-	DebugWorldTrans.TransferMatrix();
+	//DebugWorldTrans.translation_ = Distance;
+	//DebugWorldTrans.TransferMatrix();
 
 	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
 	playerNormalGun->Update(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.lookRight);
@@ -155,28 +250,17 @@ void Player::Update()
 	//uiのアプデ
 	playerUI->Update();
 
-
-	fbxObj3d_->Update();
-
-	fbxObj3d_->PlayAnimation(0);
-	fbxObj3d_->AnimFlameInter(nowAnmFCount_,maxFcount);
-
-
 }
 
 void Player::Draw()
 {
-	model_->Draw(DebugWorldTrans, *viewProjection_);
+	//model_->Draw(DebugWorldTrans, viewProjection_);
 	if (isPressing) {
 		model_->Draw(StartingPointOfGrapple, *viewProjection_);
 	}
 	playerNormalGun->Draw(*viewProjection_);
 	model_->Draw(playerWorldTrans,*viewProjection_);
 	model_->Draw(playerWorldTransHed,*viewProjection_);
-}
-
-void Player::FbxDraw() {
-	fbxObj3d_->Draw(playerWorldTrans,*viewProjection_);
 }
 
 void Player::DrawSprite()
@@ -221,19 +305,19 @@ void Player::Move()
 
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * DiagonalPlayerSpeed;
 		}
 		if (input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1) {
 			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * playerSpeed;
+			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * DiagonalPlayerSpeed;
 		}
 		//if (onGround) {
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -242,7 +326,75 @@ void Player::Move()
 			onGround = false;
 			const float jumpVYFist = 0.6f;
 			float SlidingJump = 0.0f;
+			float ChangeSlidingSpeed = 0.7f;
+			float ChangeJump = 1.1f;
+			if (isSliding) {
+				SlidingJump = 1.5f;
 
+				if (isPushW == 1 && isPushA == 0 && isPushD == 0) {
+					if (SlidingNumber != 0 && SlidingNumber != 1) {
+						SlidingNumber = 1;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushW == 0 && isPushS == 0 && isPushA == 1) {
+					if (SlidingNumber != 2) {
+						SlidingNumber = 2;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushS == 1 && isPushA == 0 && isPushD == 0) {
+					if (SlidingNumber != 3) {
+						SlidingNumber = 3;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushW == 0 && isPushS == 0 && isPushD == 1) {
+					if (SlidingNumber != 4) {
+						SlidingNumber = 4;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushW == 1 && isPushA == 1 && isPushD == 0) {
+					if (SlidingNumber != 5) {
+						SlidingNumber = 5;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushW == 1 && isPushA == 0 && isPushD == 1) {
+					if (SlidingNumber != 6) {
+						SlidingNumber = 6;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushS == 1 && isPushA == 1 && isPushD == 0) {
+					if (SlidingNumber != 7) {
+						SlidingNumber = 7;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else if (isPushS == 1 && isPushA == 0 && isPushD == 1) {
+					if (SlidingNumber != 8) {
+						SlidingNumber = 8;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+				else {
+					if (SlidingNumber != 0) {
+						SlidingNumber = 0;
+						SlidingSpeed = ChangeSlidingSpeed;
+						SlidingJump = ChangeJump;
+					}
+				}
+			}
 			fallVec = { 0, jumpVYFist + SlidingJump, 0, 0 };
 
 		}
@@ -528,100 +680,6 @@ void Player::UpdateReticle()
 
 	DebugWorldTrans.translation_ = ReticlePos;
 	DebugWorldTrans.TransferMatrix();
-}
-
-void Player::DeterminationDirection()
-{
-	isSliding = true;
-	SlidingSpeed = MaxSlidingSpeed;
-
-	if ( isPushW == 1 && isPushA == 0 && isPushD == 0 )
-	{
-		SlidingNumber = 1;
-	}
-	else if ( isPushW == 0 && isPushS == 0 && isPushA == 1 )
-	{
-		SlidingNumber = 2;
-	}
-	else if ( isPushS == 1 && isPushA == 0 && isPushD == 0 )
-	{
-		SlidingNumber = 3;
-	}
-	else if ( isPushW == 0 && isPushS == 0 && isPushD == 1 )
-	{
-		SlidingNumber = 4;
-	}
-	else if ( isPushW == 1 && isPushA == 1 && isPushD == 0 )
-	{
-		SlidingNumber = 5;
-	}
-	else if ( isPushW == 1 && isPushA == 0 && isPushD == 1 )
-	{
-		SlidingNumber = 6;
-	}
-	else if ( isPushS == 1 && isPushA == 1 && isPushD == 0 )
-	{
-		SlidingNumber = 7;
-	}
-	else if ( isPushS == 1 && isPushA == 0 && isPushD == 1 )
-	{
-		SlidingNumber = 8;
-	}
-	else
-	{
-		SlidingNumber = 0;
-	}
-}
-
-void Player::SlideBoostUpdate()
-{
-	if ( isSliding )
-	{
-		if ( SlidingSpeed > 0.0f )
-		{
-			if ( SlidingNumber == 1 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 2 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 3 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 4 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookRight * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 5 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 6 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookRight * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 7 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == 8 )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookRight * SlidingSpeed;
-			}
-			else
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
-			}
-			SlidingSpeed -= 0.1f;
-		}
-		else
-		{
-			isSliding = false;
-		}
-	}
 }
 
 float Player::AngleSelect(float& angle_, float& selectAngle)

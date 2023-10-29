@@ -1,4 +1,4 @@
-#include "FBXLoader.h"
+﻿#include "FBXLoader.h"
 #include <algorithm>
 #include<stdlib.h>
 
@@ -7,7 +7,6 @@
 using namespace DirectX;
 #define NOMINMAX
 #include <windows.h>  // or whatever Windows header file you're including
-#include <MyMath.h>
 
 /// <summary>
 /// 静的メンバ変数の実体
@@ -21,13 +20,13 @@ FbxLoader* FbxLoader::GetInstance()
 	return &instance;
 }
 
-void FbxLoader::Initialize(ID3D12Device* device_)
+void FbxLoader::Initialize(ID3D12Device* device)
 {
 	// 再初期化チェック
 	assert(fbxManager == nullptr);
 
 	// 引数からメンバ変数に代入
-	this->device = device_;
+	this->device = device;
 
 	// FBXマネージャの生成
 	fbxManager = FbxManager::Create();
@@ -165,7 +164,7 @@ std::vector<float> FbxLoader::CreateVertexInfo(const std::vector<float>& vertexI
 
 	
 	// 位置座標
-	newVertexInfo.push_back(static_cast<float>(-vertexInfo[0]));
+	newVertexInfo.push_back(static_cast<float>(vertexInfo[0]));
 	newVertexInfo.push_back(static_cast<float>(vertexInfo[1]));
 	newVertexInfo.push_back(static_cast<float>(vertexInfo[2]));
 	// 法線座標
@@ -228,15 +227,15 @@ void FbxLoader::ParseNodeRecursive(FBXModel* fbxmodel, FbxNode* fbxNode, WTFormN
 	node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
 
 	//回転角をDegree(度)からラジアンに変換
-	node.rotation.x = MyMath::GetRadAngle(node.rotation.x);
-	node.rotation.y = MyMath::GetRadAngle(node.rotation.y);
-	node.rotation.z = MyMath::GetRadAngle(node.rotation.z);
+	node.rotation.m128_f32[0] = XMConvertToRadians(node.rotation.m128_f32[0]);
+	node.rotation.m128_f32[1] = XMConvertToRadians(node.rotation.m128_f32[1]);
+	node.rotation.m128_f32[2] = XMConvertToRadians(node.rotation.m128_f32[2]);
 
 	// スケール、回転、平行移動行列の計算
-	Matrix4 matScaling, matRotation, matTranslation;
-	matScaling = MyMath::Scale(MyMath::Vec4ToVec3(node.scaling));
-	matRotation = MyMath::Rotation(MyMath::Vec4ToVec3(node.rotation),6);
-	matTranslation = MyMath::Translation(MyMath::Vec4ToVec3(node.translation));
+	XMMATRIX matScaling, matRotation, matTranslation;
+	matScaling = XMMatrixScalingFromVector(node.scaling);
+	matRotation = XMMatrixRotationRollPitchYawFromVector(node.rotation);
+	matTranslation = XMMatrixTranslationFromVector(node.translation);
 
 	// ローカル変形行列の計算
 	node.transform = XMMatrixIdentity();
@@ -290,6 +289,8 @@ void FbxLoader::ParseMeshVertices(FBXModel* fbxmodel, FbxMesh* fbxMesh)
 	auto& indices = fbxmodel->indices;
 
 	// 頂点座標データの数
+	const int controlPointsCount = fbxMesh->GetControlPointsCount();
+	
 
 	FbxStringList uvSetNameList;
 	fbxMesh->GetUVSetNames(uvSetNameList);
@@ -409,7 +410,7 @@ void FbxLoader::ParseMeshVertices(FBXModel* fbxmodel, FbxMesh* fbxMesh)
 			int controlPointIndex = fbxMesh->GetPolygonVertex(polIndex, polVertexIndex);
 			meshVerticeControlpoints[controlPointIndex].push_back(static_cast<int>(indices.size()));
 			// インデックス座標を設定
-			indices.push_back(static_cast<unsigned short>(forCalc));
+			indices.push_back(forCalc);
 			forCalc++;
 		}
 	}
@@ -496,7 +497,7 @@ void FbxLoader::ParseMeshFaces(FBXModel* fbxmodel, FbxMesh* fbxMesh)
 			// 3頂点目までなら
 			if (j < 3) {
 				// 1点追加し、他の2点と三角形を構築する
-				indices.push_back(static_cast< unsigned short >(index));
+				indices.push_back(index);
 			}
 			// 4頂点目
 			else {
@@ -504,9 +505,9 @@ void FbxLoader::ParseMeshFaces(FBXModel* fbxmodel, FbxMesh* fbxMesh)
 				int index2 = indices[indices.size() - 1];
 				int index3 = index;
 				int index0 = indices[indices.size() - 3];
-				indices.push_back(static_cast< unsigned short >(index2));
-				indices.push_back(static_cast< unsigned short >(index3));
-				indices.push_back(static_cast< unsigned short >(index0));
+				indices.push_back(index2);
+				indices.push_back(index3);
+				indices.push_back(index0);
 			}
 		}
 	}
