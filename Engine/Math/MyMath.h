@@ -65,8 +65,11 @@ namespace MyMath {
 
 	//Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
 
+	//度数法からラジアン
 	float GetAngle(const float& angle);
 	Vector3 GetAngleVec3(const Vector3& angle);
+
+	//ラジアンから度数法
 	float GetRadAngle(float angle);
 
 	void MatrixText(Matrix4& mat);

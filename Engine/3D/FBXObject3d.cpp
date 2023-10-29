@@ -1,4 +1,4 @@
-﻿#include "FBXObject3d.h"
+#include "FBXObject3d.h"
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 //#include"MathFunc.h"
@@ -404,11 +404,11 @@ void FBXObject3d::SetIsBonesWorldMatCalc(bool isCalc)
 	isBonesWorldMatCalc = isCalc;
 }
 
-void FBXObject3d::PlayAnimation(int animationNum)
+void FBXObject3d::PlayAnimation(const uint32_t& animationNum)
 {
 	FbxScene* fbxScene = fbxmodel->GetFbxScene();
 	//0番のアニメーションを取得
-	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(animationNum);
+	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(static_cast<int>(animationNum));
 	// 取得したアニメーションに変更
 	fbxScene->SetCurrentAnimationStack(animstack);
 	//アニメーションの名前取得

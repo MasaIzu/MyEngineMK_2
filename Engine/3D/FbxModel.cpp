@@ -1,4 +1,4 @@
-﻿#include "FBXModel.h"
+#include "FBXModel.h"
 
 
 FBXModel::~FBXModel()
@@ -137,7 +137,7 @@ void FBXModel::Draw(ID3D12GraphicsCommandList* cmdList)
     cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
 }
 
-const DirectX::XMMATRIX& FBXModel::GetModelTransform()
+const Matrix4& FBXModel::GetModelTransform()
 {
     return meshNode->globalTransform;
 }
