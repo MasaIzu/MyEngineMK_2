@@ -32,7 +32,8 @@ void MiddleBossEnemy::Initialize(Player* Player)
 {
 	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	normalGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
-	missileBullet = std::make_unique<MissileBullet>();
+	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 	this->player = Player;
 
 	// コリジョンマネージャに追加
@@ -45,7 +46,9 @@ void MiddleBossEnemy::Initialize(Player* Player)
 void MiddleBossEnemy::TitleInitialize()
 {
 	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	missileBullet = std::make_unique<MissileBullet>();
+	normalGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 }
 
 void MiddleBossEnemy::Update()
@@ -120,11 +123,7 @@ void MiddleBossEnemy::Update()
 					}
 					MoveStartPos = BossWorldTrans.translation_;
 
-					uint32_t MissileShotCount =	9;
-					missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
-						BossWorldTrans.LookVelocity.lookUp_lookLeft,BossWorldTrans.LookVelocity.lookUp_lookRight,
-						BossWorldTrans.LookVelocity.lookDown_lookLeft,BossWorldTrans.LookVelocity.lookDown_lookRight,MissileShotCount);
-
+					missileGun->ShotBullet();
 				}
 				else
 				{
@@ -151,11 +150,7 @@ void MiddleBossEnemy::Update()
 				if ( BulletCoolTime == 0 )
 				{
 					BulletCoolTime = BackMissileCoolTime;
-					uint32_t MissileShotCount = 6;
-					BackMissileTimes++;
-					missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
-						BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
-						BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+					missileGun->ShotBullet();
 				}
 			}
 
@@ -190,7 +185,7 @@ void MiddleBossEnemy::Update()
 		}
 
 		normalGun->Update(BossWorldTrans.translation_);
-		missileBullet->Update(player->GetPlayerPos());
+		missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
 
 		MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 	}
@@ -216,7 +211,7 @@ void MiddleBossEnemy::Update()
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
 	normalGun->Draw(viewProjection_);
-	missileBullet->Draw(viewProjection_);
+	missileGun->Draw(viewProjection_);
 	if ( isSporn )
 	{
 		model_->Draw(BossWorldTrans,viewProjection_);
@@ -268,18 +263,20 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 
 void MiddleBossEnemy::TitleUpdate(const Vector3& TrackingLocation)
 {
-	missileBullet->Update(TrackingLocation);
+	missileGun->Update(TrackingLocation,Vector3(0,0,0));
 }
 
 void MiddleBossEnemy::MakeMissileBullet()
 {
+
+}
+
+void MiddleBossEnemy::MakeTitleMissileBullet()
+{
 	if ( isTitleShot == false )
 	{
 		isTitleShot = true;
-		uint32_t MissileShotCount = 6;
-		missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
-			BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
-			BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+		missileGun->ShotBullet();
 	}
 }
 
@@ -311,31 +308,17 @@ void MiddleBossEnemy::Attack()
 {
 	if ( attackType == AttackType::Nomal )
 	{
-		BulletCoolTime = MaxBulletCoolTime;
-
-		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
-		AttackVelocity.normalize();
-
-		normalGun->ShotBullet(AttackVelocity);
-
+		normalGun->ShotBullet(player->GetPlayerPos());
 	}
 	else if ( attackType == AttackType::Missile )
 	{
 		BulletCoolTime = MaxBulletCoolTime;
-		uint32_t MissileShotCount = 6;
-		missileBullet->MakeSelectMissileBullet(BossWorldTrans.translation_,
-			BossWorldTrans.LookVelocity.lookLeft,BossWorldTrans.LookVelocity.lookUp,
-			BossWorldTrans.LookVelocity.lookRight,MissileShotCount);
+		missileGun->ShotBullet();
 
 	}
 	else if ( attackType == AttackType::MoveingAttack )
 	{
-		BulletCoolTime = MaxBulletCoolTime;
-
-		Vector3 AttackVelocity = player->GetPlayerPos() - BossWorldTrans.translation_;
-		AttackVelocity.normalize();
-
-		normalGun->ShotBullet(AttackVelocity);
+		normalGun->ShotBullet(player->GetPlayerPos());
 	}
 }
 
@@ -393,7 +376,7 @@ void MiddleBossEnemy::CheckAttackType()
 		isAttack = true;
 		MaxBulletCoolTime = 1;
 		AttackCooltime = 50;
-		KeepAttackingTime = 10;
+		KeepAttackingTime = 40;
 	}
 	else if ( attackType == AttackType::Move )
 	{

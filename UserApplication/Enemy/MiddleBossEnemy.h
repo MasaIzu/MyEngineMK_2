@@ -6,7 +6,7 @@
 #include "SplinePosition.h"
 #include "NormalGun.h"
 #include "Player.h"
-#include "MissileBullet.h"
+#include "MissileGun.h"
 #include <Sprite3D.h>
 #include "EnemyHP3DUI.h"
 #include "EnemyHP2DUI.h"
@@ -39,14 +39,14 @@ public://基本関数
 	void Draw(const ViewProjection& viewProjection_);
 	//スプライト描画
 	void DrawSprite(const ViewProjection& viewProjection_);
-
 	//ムービー用更新
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
-
 	//タイトル用アップデート
 	void TitleUpdate(const Vector3& TrackingLocation);
 	//弾を作る
 	void MakeMissileBullet();
+	//タイトルの弾を作る
+	void MakeTitleMissileBullet();
 	//タイトルリセット
 	void ResetTitleMove();
 
@@ -63,6 +63,8 @@ private://関数
 	void CheckAttackType();
 	//タイプのランダム
 	uint32_t RandomType(uint32_t& NoUseType);
+
+	//
 
 public://Setter
 	//スプラインセット
@@ -95,7 +97,7 @@ private://クラス関連
 
 	//弾
 	std::unique_ptr<NormalGun> normalGun;
-	std::unique_ptr<MissileBullet> missileBullet;
+	std::unique_ptr<MissileGun> missileGun;
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
@@ -140,6 +142,7 @@ private://EnemyBossクラス変数
 	uint32_t BackMissileCoolTime = 6;
 	uint32_t BackMissileTimes = 0;
 	uint32_t BackMissileMaxTimes = 10;
+	uint32_t BulletMake = 10;
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;

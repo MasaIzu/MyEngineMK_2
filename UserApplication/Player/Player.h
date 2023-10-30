@@ -119,6 +119,8 @@ public://Getter
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
+	std::unique_ptr<FBXModel> fbxModel_;
+	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	WorldTransform playerWorldTrans;
 	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
@@ -174,12 +176,12 @@ private://プレイヤークラス変数
 	bool isPushS = false;
 	bool isPushD = false;
 
+	bool isAlive = true;
+
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
-	uint32_t PlayerHP = 5000;
-	uint32_t PlayerMaxHP = 5000;
-	uint32_t nowAnmFCount_ = 5;
-	uint32_t nowAnmNum_ = 5;
+	uint32_t nowAnmFCount_ = 0;
+	uint32_t nowAnmNum_ = 7;
 	uint32_t maxFcount = 25;
 
 	float Radius = 1.0f;
@@ -192,6 +194,8 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.7f;
+	float PlayerHP = 5000;
+	float PlayerMaxHP = 5000;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 TargetPosition;

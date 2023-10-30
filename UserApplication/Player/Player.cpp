@@ -43,6 +43,12 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	AttackSprite = Sprite::Create(TextureManager::Load("sprite/shoujuun.png"));
 	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
 
+	//fbx
+	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("3JamJiki",true));
+	fbxObj3d_ = FBXObject3d::Create();
+	fbxObj3d_->SetModel(fbxModel_.get());
+	fbxObj3d_->PlayAnimation(0);
+	fbxObj3d_->Update();
 
 	// コリジョンマネージャに追加
 	PlayerCollider = new SphereCollider(Vector4(0,Radius,0,0),Radius);
@@ -56,6 +62,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize();
+
+	playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 }
 
 void Player::Update()
@@ -153,6 +161,24 @@ void Player::Update()
 	//uiのアプデ
 	playerUI->Update();
 
+	fbxObj3d_->Update();
+
+	if ( input_->TriggerKey(DIK_F5) )
+	{
+		isAlive = true;
+		nowAnmNum_ = 7;
+		nowAnmFCount_ = 0;
+		PlayerHP = 1000;
+		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+	}
+
+	if ( isAlive == false )
+	{
+		nowAnmFCount_++;
+	}
+
+	fbxObj3d_->PlayAnimation(nowAnmNum_);
+	fbxObj3d_->AnimFlameInter(nowAnmFCount_,maxFcount);
 }
 
 void Player::Draw()
@@ -168,8 +194,9 @@ void Player::Draw()
 }
 
 void Player::FbxDraw() {
-	
+	fbxObj3d_->Draw(playerWorldTrans,*viewProjection_);
 }
+
 
 void Player::DrawSprite()
 {
@@ -690,9 +717,21 @@ void Player::HPUpdate()
 {
 	if ( isTakeMissileDamages )
 	{
-		PlayerHP -= BulletDamage::GetInstance()->GetEnemyMissileBulletDamage();
-		playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
+		PlayerHP -= static_cast< float >( BulletDamage::GetInstance()->GetEnemyMissileBulletDamage() );
+		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 		isTakeMissileDamages = false;
+		if ( PlayerHP > 0.0f )
+		{
+
+		}
+		else
+		{
+			PlayerHP = 0.0f;//0固定
+			playerUI->PlayerHpUpdate(static_cast< uint32_t >(PlayerHP),static_cast< uint32_t >(PlayerMaxHP));
+			isAlive = false;
+			nowAnmNum_ = 8;
+			maxFcount = 180;
+		}
 	}
 }
 

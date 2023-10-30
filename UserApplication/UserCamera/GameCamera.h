@@ -115,7 +115,7 @@ private://プレイヤークラス変数
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
-	Vector3 cameraHigh;
+	Vector3 cameraHigh = { 0,13,0 };
 	Vector3 PlayerToCameraVec;
 	//セットされたVec
 	Vector3 SetTargetVec;

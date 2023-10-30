@@ -48,18 +48,33 @@ void MissileGun::Draw(const ViewProjection& viewProjection_)
 	}
 }
 
-void MissileGun::ShotBullet(const Vector3& BulletVec)
+void MissileGun::ShotBullet()
 {
 	if ( CoolTime == 0 )
 	{
-		for ( auto&& Bullet : normalBullet )
+		float lerpPos = 1.0f / static_cast< float >( MissileBulletCountHalf );
+		NowMissileBulletCount = 0;
+		for ( uint32_t i = 0; i < MissileBulletCount; i++ )
 		{
-			if ( !Bullet->GetBulletAlive() )
+			for ( auto&& Bullet : normalBullet )
 			{
-				CoolTime = MaxCoolTime;
-				Vector3 shootVec = BulletVec - GunTrans.translation_;
-				Bullet->MakeMissileBullet(GunTrans.translation_,shootVec.norm(),BulletSpeed);
-				break;
+				if ( !Bullet->GetBulletAlive() )
+				{
+					CoolTime = MaxCoolTime;
+
+					if ( NowMissileBulletCount < MissileBulletCountHalf )
+					{
+						BulletVelocity = MyMath::lerp(GunTrans.LookVelocity.lookLeft.norm(),GunTrans.LookVelocity.lookUp.norm(),lerpPos * static_cast<float>(NowMissileBulletCount)).norm();
+					}
+					else
+					{
+						uint32_t CountReset = NowMissileBulletCount - MissileBulletCountHalf + 1;
+						BulletVelocity = MyMath::lerp(GunTrans.LookVelocity.lookUp.norm(),GunTrans.LookVelocity.lookRight.norm(),lerpPos * static_cast<float>( CountReset )).norm();
+					}
+					Bullet->MakeMissileBullet(GunTrans.translation_,BulletVelocity.norm(),BulletSpeed);
+					NowMissileBulletCount++;
+					break;
+				}
 			}
 		}
 	}

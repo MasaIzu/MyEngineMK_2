@@ -19,7 +19,7 @@ public://基本関数
 
 public:
 	//発射
-	void ShotBullet(const Vector3& BulletVec);
+	void ShotBullet();
 
 private:
 	//ポジションの更新
@@ -29,7 +29,7 @@ private:
 	void TimeUpdate();
 
 private://コンスト
-	const static uint32_t BulletMaxCount = 30;
+	const static uint32_t BulletMaxCount = 200;
 
 
 private://クラス関連
@@ -42,8 +42,13 @@ private:
 
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;
+	uint32_t MissileBulletCount = 6;
+	uint32_t MissileBulletCountHalf = MissileBulletCount / 2;
+	uint32_t NowMissileBulletCount = 0;
 
 	float BulletSpeed = 1.0f;
+
+	Vector3 BulletVelocity;
 
 };
 

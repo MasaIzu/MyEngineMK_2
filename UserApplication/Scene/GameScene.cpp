@@ -210,6 +210,9 @@ void GameScene::Update() {
 			SpriteAlpha += 0.007f;
 		}
 	}
+
+	bool lockon = false;
+	player_->AttackUpdate(Vector3(0,0,0),lockon);
 }
 
 void GameScene::PostEffectDraw()
@@ -282,7 +285,7 @@ void GameScene::Draw() {
 	player_->Draw();
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
-
+	player_->FbxDraw();
 	player_->DrawSprite();
 
 

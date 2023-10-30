@@ -127,7 +127,7 @@ void StageSelect::Draw()
 	player_->Draw();
 	
 	Model::PostDraw();//3Dオブジェクト描画後処理
-
+	player_->FbxDraw();
 	player_->DrawSprite();
 
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });

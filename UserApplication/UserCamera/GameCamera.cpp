@@ -28,7 +28,6 @@ GameCamera::GameCamera(uint32_t window_width, uint32_t window_height)
 	oldMousePos = mousePos;
 	mousePos = input_->GetMousePos();
 
-	cameraHigh = { 0,7,0 };
 }
 
 GameCamera::~GameCamera()
