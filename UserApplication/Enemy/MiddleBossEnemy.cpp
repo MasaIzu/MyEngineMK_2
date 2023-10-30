@@ -255,15 +255,14 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	}
 
 	WorldTransUpdate();
-
-	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
+	missileGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
 
 	return false;
 }
 
 void MiddleBossEnemy::TitleUpdate(const Vector3& TrackingLocation)
 {
-	missileGun->Update(TrackingLocation,Vector3(0,0,0));
+	missileGun->Update(BossWorldTrans.translation_,TrackingLocation);
 }
 
 void MiddleBossEnemy::MakeMissileBullet()

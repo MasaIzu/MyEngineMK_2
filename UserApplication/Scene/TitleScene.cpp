@@ -397,7 +397,7 @@ void TitleScene::CameraUpdate()
 			{
 				if ( EasingTime >= MiddleEnemyBossMakeBulletTime )
 				{
-					middleBossEnemy->MakeMissileBullet();
+					middleBossEnemy->MakeTitleMissileBullet();
 				}
 				EasingTime++;
 			}
