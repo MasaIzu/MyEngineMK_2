@@ -275,18 +275,18 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnemyHP2DUI.h" />
-    <ClInclude Include="EnemyHP3DUI.h" />
+    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h" />
+    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
     <ClInclude Include="Engine\3D\FbxModel.h" />
     <ClInclude Include="Engine\3D\FBXObject3d.h" />
-    <ClInclude Include="MissileGun.h" />
-    <ClInclude Include="Sprite3D.h" />
-    <ClInclude Include="BulletDamage.h" />
+    <ClInclude Include="UserApplication\Bullet\MissileGun.h" />
+    <ClInclude Include="Engine\3D\Sprite3D.h" />
+    <ClInclude Include="UserApplication\Bullet\BulletDamage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
-    <ClInclude Include="HpUpdate.h" />
-    <ClInclude Include="NormalGun.h" />
-    <ClInclude Include="PlayerUI.h" />
+    <ClInclude Include="UserApplication\Player\HpUpdate.h" />
+    <ClInclude Include="UserApplication\Bullet\NormalGun.h" />
+    <ClInclude Include="UserApplication\Bullet\PlayerUI.h" />
     <ClInclude Include="UserApplication\Scene\ClearScene.h" />
     <ClInclude Include="UserApplication\Scene\DebugScene.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
@@ -362,17 +362,17 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EnemyHP2DUI.cpp" />
-    <ClCompile Include="EnemyHP3DUI.cpp" />
+    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
+    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />
     <ClCompile Include="Engine\3D\FbxModel.cpp" />
     <ClCompile Include="Engine\3D\FBXObject3d.cpp" />
-    <ClCompile Include="MissileGun.cpp" />
-    <ClCompile Include="Sprite3D.cpp" />
-    <ClCompile Include="BulletDamage.cpp" />
-    <ClCompile Include="HpUpdate.cpp" />
-    <ClCompile Include="NormalGun.cpp" />
-    <ClCompile Include="PlayerUI.cpp" />
+    <ClCompile Include="UserApplication\Bullet\MissileGun.cpp" />
+    <ClCompile Include="Engine\3D\Sprite3D.cpp" />
+    <ClCompile Include="UserApplication\Bullet\BulletDamage.cpp" />
+    <ClCompile Include="UserApplication\Player\HpUpdate.cpp" />
+    <ClCompile Include="UserApplication\Bullet\NormalGun.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerUI.cpp" />
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp" />
     <ClCompile Include="UserApplication\Scene\DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />

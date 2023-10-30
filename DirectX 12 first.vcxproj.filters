@@ -511,25 +511,25 @@
     <ClInclude Include="Engine\Base\Defined.h">
       <Filter>Engine\HeaderFile\Base</Filter>
     </ClInclude>
-    <ClInclude Include="BulletDamage.h">
+    <ClInclude Include="UserApplication\Bullet\BulletDamage.h">
       <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="NormalGun.h">
+    <ClInclude Include="UserApplication\Bullet\NormalGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerUI.h">
+    <ClInclude Include="UserApplication\Bullet\PlayerUI.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="HpUpdate.h">
+    <ClInclude Include="UserApplication\Player\HpUpdate.h">
       <Filter>UserFile\UserHeaderFile\HpUpdate</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite3D.h">
+    <ClInclude Include="Engine\3D\Sprite3D.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHP3DUI.h">
+    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h">
       <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHP2DUI.h">
+    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h">
       <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\FbxLoader.h">
@@ -544,7 +544,7 @@
     <ClInclude Include="UserApplication\Bullet\NormalBullet.h">
       <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="MissileGun.h">
+    <ClInclude Include="UserApplication\Bullet\MissileGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
   </ItemGroup>
@@ -735,25 +735,25 @@
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="BulletDamage.cpp">
+    <ClCompile Include="UserApplication\Bullet\BulletDamage.cpp">
       <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="NormalGun.cpp">
+    <ClCompile Include="UserApplication\Bullet\NormalGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerUI.cpp">
+    <ClCompile Include="UserApplication\Player\PlayerUI.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
-    <ClCompile Include="HpUpdate.cpp">
+    <ClCompile Include="UserApplication\Player\HpUpdate.cpp">
       <Filter>UserFile\UserSourceFile\HpUpdate</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite3D.cpp">
+    <ClCompile Include="Engine\3D\Sprite3D.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHP3DUI.cpp">
+    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp">
       <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyHP2DUI.cpp">
+    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp">
       <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
@@ -768,7 +768,7 @@
     <ClCompile Include="UserApplication\Bullet\NormalBullet.cpp">
       <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="MissileGun.cpp">
+    <ClCompile Include="UserApplication\Bullet\MissileGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
   </ItemGroup>
