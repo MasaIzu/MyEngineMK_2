@@ -112,6 +112,9 @@ public://Getter
 	bool GetFinishFirstSpline()const {//スプラインが終わったか
 		return FirstMoveSpline->GetFinishSpline();
 	}
+	bool GetFinishMove()const {//スプラインが終わったか
+		return isDieMoveFinish;
+	}
 	Vector3 GetPlayerPos()const {//ポジションゲット
 		return MyMath::GetWorldTransform(playerWorldTrans.matWorld_);
 	}
@@ -177,6 +180,7 @@ private://プレイヤークラス変数
 	bool isPushD = false;
 
 	bool isAlive = true;
+	bool isDieMoveFinish = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
@@ -194,7 +198,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.7f;
-	float PlayerHP = 5000;
+	float PlayerHP = 800;
 	float PlayerMaxHP = 5000;
 
 	Vector3 playerMoveMent;//移動量

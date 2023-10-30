@@ -19,6 +19,8 @@ void MediumBossStage::Initialize()
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
 
+	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
+
 	skydome = std::make_unique<Skydome>();
 	skydome->Initialize();
 
@@ -98,6 +100,25 @@ void MediumBossStage::Update()
 		sceneManager_->ChangeScene("ClearScene");
 	}
 
+	if ( player_->GetFinishMove() == false )
+	{
+		if ( SpriteAlpha > 0 )
+		{
+			SpriteAlpha -= 0.01f;
+		}
+	}
+	else
+	{
+		if ( SpriteAlpha < 1 )
+		{
+			SpriteAlpha += 0.007f;
+		}
+		else
+		{
+			sceneManager_->ChangeScene("STAGE2");
+		}
+	}
+
 	LockOn();
 
 	player_->AttackUpdate(middleBossEnemy->GetPosition(),isLockOn);
@@ -141,6 +162,7 @@ void MediumBossStage::Draw()
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
 
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 
 void MediumBossStage::Finalize()

@@ -174,7 +174,14 @@ void Player::Update()
 
 	if ( isAlive == false )
 	{
-		nowAnmFCount_++;
+		if ( nowAnmFCount_ < maxFcount )
+		{
+			nowAnmFCount_++;
+		}
+		else
+		{
+			isDieMoveFinish = true;
+		}
 	}
 
 	fbxObj3d_->PlayAnimation(nowAnmNum_);
