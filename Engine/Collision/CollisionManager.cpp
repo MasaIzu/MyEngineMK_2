@@ -31,125 +31,165 @@ void CollisionManager::CheckAllCollisions()
 			BaseCollider* colA = *itA;
 			BaseCollider* colB = *itB;
 
-			// ともに球
-			if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
-				colB->GetShapeType() == COLLISIONSHAPE_SPHERE) {
-				Sphere* SphereA = dynamic_cast<Sphere*>(colA);
-				Sphere* SphereB = dynamic_cast<Sphere*>(colB);
-				Vector4 inter;
-				Vector4 reject;
-				if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ALLIES ||
-					colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_ENEMYS) {
-
-					if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter)) {
-						EnemyWorldPos = colA->GetWorldPos();
-						isEnemyHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ENEMYS) {
-					if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter, &reject)) {
-						colA->isEnemyHittingEachOther = true;
-						colA->rejectVec = Vector3(reject.x, reject.y, reject.z);
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS) {
-					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereA, 0)) {
-						HitWorldPos = colA->GetWorldPos();
-						colA->isHitPlayerAttack = true;
-						colB->isHitPlayerAttack = true;
-						//isAttackHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ATTACK) {
-					if (Collision::CheckSphere2SphereFastSpeedVer(*SphereA, *SphereB, *SphereB, 1)) {
-						HitWorldPos = colB->GetWorldPos();
-						colA->isHitPlayerAttack = true;
-						colB->isHitPlayerAttack = true;
-						//isAttackHit = true;
-					}
-				}
-				else if ( colA->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK && colB->attribute == COLLISION_ATTR_ALLIES ||
-					colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK )
+			if ( colA->attribute != COLLISION_ATTR_NOTATTACK && colB->attribute != COLLISION_ATTR_NOTATTACK )
+			{
+				// ともに球
+				if ( colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
+					colB->GetShapeType() == COLLISIONSHAPE_SPHERE )
 				{
+					Sphere* SphereA = dynamic_cast< Sphere* >( colA );
+					Sphere* SphereB = dynamic_cast< Sphere* >( colB );
+					Vector4 inter;
+					Vector4 reject;
+
+					if ( colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ALLIES ||
+						colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_ENEMYS )
+					{
+
+						if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )
+						{
+							EnemyWorldPos = colA->GetWorldPos();
+							isEnemyHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ENEMYS )
+					{
+						if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter,&reject) )
+						{
+							colA->isEnemyHittingEachOther = true;
+							colA->rejectVec = Vector3(reject.x,reject.y,reject.z);
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_ENEMYS )
+					{
+						if ( Collision::CheckSphere2SphereFastSpeedVer(*SphereA,*SphereB,*SphereA,0) )
+						{
+							HitWorldPos = colA->GetWorldPos();
+							colA->isHitPlayerAttack = true;
+							colB->isHitPlayerAttack = true;
+							//isAttackHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_ATTACK )
+					{
+						if ( Collision::CheckSphere2SphereFastSpeedVer(*SphereA,*SphereB,*SphereB,1) )
+						{
+							HitWorldPos = colB->GetWorldPos();
+							colA->isHitPlayerAttack = true;
+							colB->isHitPlayerAttack = true;
+							//isAttackHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK && colB->attribute == COLLISION_ATTR_ALLIES ||
+						colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK )
+					{
+						if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )
+						{
+							HitWorldPos = colB->GetWorldPos();
+							colA->isHitPlayerAttack = true;
+							colB->isHitPlayerAttack = true;
+							//isAttackHit = true;
+						}
+					}
 					if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )
 					{
-						HitWorldPos = colB->GetWorldPos();
-						colA->isHitPlayerAttack = true;
-						colB->isHitPlayerAttack = true;
-						//isAttackHit = true;
+						//isEnemyHit = true;
 					}
 				}
-				if (Collision::CheckSphere2Sphere(*SphereA, *SphereB, &inter)) {
-					//isEnemyHit = true;
-				}
-			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_MESH && colB->GetShapeType() == COLLISIONSHAPE_SPHERE) {
-				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
-				Sphere* sphere = dynamic_cast<Sphere*>(colB);
-				Vector4 inter;
-				if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ATTACK) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isSphereMeshHit = true;
+				else if ( colA->GetShapeType() == COLLISIONSHAPE_MESH && colB->GetShapeType() == COLLISIONSHAPE_SPHERE )
+				{
+					MeshCollider* meshCollider = dynamic_cast< MeshCollider* >( colA );
+					Sphere* sphere = dynamic_cast< Sphere* >( colB );
+					Vector4 inter;
+					if ( colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ATTACK )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isSphereMeshHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isSphereMeshHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_OBJECT && colB->attribute == COLLISION_ATTR_ATTACK )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isSphereMeshHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_RAIL && colB->attribute == COLLISION_ATTR_ALLIES )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isSphereMeshHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_FIRSTRAIL && colB->attribute == COLLISION_ATTR_ALLIES )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isHitFirstSplineRail = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_FINALRAIL && colB->attribute == COLLISION_ATTR_ALLIES )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colB->isHitFinalSplineRail = true;
+						}
 					}
 				}
-				else if (colA->attribute == COLLISION_ATTR_LANDSHAPE && colB->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK ) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isSphereMeshHit = true;
+				else if ( colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH )
+				{
+					MeshCollider* meshCollider = dynamic_cast< MeshCollider* >( colB );
+					Sphere* sphere = dynamic_cast< Sphere* >( colA );
+					Vector4 inter;
+					if ( colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isSphereMeshHit = true;
+						}
 					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_OBJECT && colB->attribute == COLLISION_ATTR_ATTACK) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isSphereMeshHit = true;
+					else if ( colA->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isSphereMeshHit = true;
+						}
 					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_RAIL && colB->attribute == COLLISION_ATTR_ALLIES) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isSphereMeshHit = true;
+					else if ( colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_OBJECT )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isSphereMeshHit = true;
+						}
 					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_FIRSTRAIL && colB->attribute == COLLISION_ATTR_ALLIES) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isHitFirstSplineRail = true;
+					else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_RAIL )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isSphereMeshHit = true;
+						}
 					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_FINALRAIL && colB->attribute == COLLISION_ATTR_ALLIES) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colB->isHitFinalSplineRail = true;
+					else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FIRSTRAIL )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isHitFirstSplineRail = true;
+						}
 					}
-				}
-			}
-			else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH) {
-				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
-				Sphere* sphere = dynamic_cast<Sphere*>(colA);
-				Vector4 inter;
-				if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isSphereMeshHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ENEMY_BULLET_ATTACK && colB->attribute == COLLISION_ATTR_LANDSHAPE) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isSphereMeshHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ATTACK && colB->attribute == COLLISION_ATTR_OBJECT) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isSphereMeshHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_RAIL) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isSphereMeshHit = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FIRSTRAIL) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isHitFirstSplineRail = true;
-					}
-				}
-				else if (colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FINALRAIL) {
-					if (meshCollider->CheckCollisionSphere(*sphere, &inter, nullptr)) {
-						colA->isHitFinalSplineRail = true;
+					else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_FINALRAIL )
+					{
+						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
+						{
+							colA->isHitFinalSplineRail = true;
+						}
 					}
 				}
 			}

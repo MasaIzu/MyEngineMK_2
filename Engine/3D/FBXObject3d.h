@@ -77,6 +77,7 @@ public: // メンバ関数
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
+	void Update(const uint32_t& animationNum,const FbxTime& nowCount,const FbxTime& maxCount);
 
 	/// <summary>
 	/// 描画

@@ -9,9 +9,7 @@
 #include <Sprite.h>
 #include "SplinePosition.h"
 #include "PlayerUI.h"
-#include <FbxModel.h>
-#include <FBXObject3d.h>
-
+#include "PlayerEnum.h"
 
 /// <summary>
 /// プレイヤー
@@ -122,8 +120,6 @@ public://Getter
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
-	std::unique_ptr<FBXModel> fbxModel_;
-	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	WorldTransform playerWorldTrans;
 	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
@@ -145,17 +141,11 @@ private://クラス関連
 	std::unique_ptr<PlayerUI> playerUI;
 
 private://イーナムクラス
-	enum class AttackPhase
-	{
-		AttackCombo1,//
-		AttackCombo2,//
-		AttackCombo3,//
-		AttackCombo4,//
-		AttackUlt,//
-		Nothing,//何もしない
-	};
-	//見つけてないときの動きフェーズ
+
+	//アタックフェーズ
 	AttackPhase AttackPhase_ = AttackPhase::Nothing;
+	//アニメーション
+	PlayerAnimation PlayerAnimation_ = PlayerAnimation::Not;
 
 private://別クラスから値をもらう
 	Vector2 cameraRot;
@@ -184,9 +174,6 @@ private://プレイヤークラス変数
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
-	uint32_t nowAnmFCount_ = 0;
-	uint32_t nowAnmNum_ = 7;
-	uint32_t maxFcount = 25;
 
 	float Radius = 1.0f;
 	float playerSpeed = 0.9f;

@@ -275,6 +275,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PlayerAnimation.h" />
+    <ClInclude Include="PlayerEnum.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
@@ -362,6 +364,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PlayerAnimation.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />
