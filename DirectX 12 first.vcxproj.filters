@@ -207,9 +207,6 @@
     <None Include="Resources\Shaders\Particle.hlsli">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </None>
-    <None Include="MathFunction.hlsli">
-      <Filter>ResourceFile\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\Sprite.hlsli">
       <Filter>ResourceFile\Shaders\Sprite</Filter>
     </None>
@@ -547,6 +544,15 @@
     <ClInclude Include="UserApplication\Bullet\MissileGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEnum.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMove.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -770,6 +776,12 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Bullet\MissileGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMove.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
