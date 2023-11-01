@@ -18,6 +18,20 @@ struct PlayerAnimTime
 	const uint32_t DieMotion = 120;
 };
 
+struct PlayerMoveRot
+{
+	float Front = 0.0f;
+	float Right = 90.0f;
+	float Back = 180.0f;
+	float Left = 270.0f;
+	float FrontDiagonal = 40.0f;
+	float RightDiagonal = 130.0f;
+	float BackDiagonal = 230.0f;
+	float LeftDiagonal = 320.0f;
+	float AllRot = 360.0f;
+	float AddRot = 10.0f;
+};
+
 /// <summary>
 /// プレイヤー
 /// </summary>
@@ -70,6 +84,8 @@ private:
 	//HP処理
 	void HPUpdate();
 
+	//アングルセッター
+	void PlayerAngleSetter(const float& angle);
 public://Setter
 	//カメラの回転,撃つ場所への距離,プレイヤーとカメラの距離,アルファ値を決めるためのカメラ距離のマックス
 	void SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& cameradis,const float& distance,const float& CameraMaxDistance);
@@ -126,7 +142,6 @@ private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
-	WorldTransform playerWorldTransForBullet;
 	WorldTransform StartingPointOfGrapple;
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
@@ -150,6 +165,8 @@ private://クラス関連
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
 	PlayerAnimTime playerAnimTime;
+	//ローテーション
+	PlayerMoveRot playerMoveRot;
 	//アタックフェーズ
 	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 	//アニメーション
@@ -195,8 +212,10 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.7f;
-	float PlayerHP = 800;
+	float PlayerHP = 5000;
 	float PlayerMaxHP = 5000;
+	float PlayerMoveRotation = 0.0f;
+	float RotLimit = 0.1f;
 
 	Vector3 playerMoveMent;//移動量
 	Vector3 TargetPosition;

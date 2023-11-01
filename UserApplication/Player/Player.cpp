@@ -28,7 +28,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	viewProjection_ = viewProjection;
 
-	playerWorldTransForBullet.Initialize();
 	StartingPointOfGrapple.Initialize();
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
@@ -76,16 +75,22 @@ void Player::Update()
 		isHitFirstRail = false;
 	}
 
+	//攻撃
+	if ( input_->MouseInputing(0) )
+	{
+		isAttack = true;
+	}
+
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
 	HPUpdate();
 
-	//回転させる
-	PlayerRot();
-
 	//どう動くか
 	Move();
+
+	//回転させる
+	PlayerRot();
 
 	//落下
 	Fall();
@@ -126,11 +131,6 @@ void Player::Update()
 
 	}
 
-	if ( input_->MouseInputing(0) )
-	{
-		isAttack = true;
-	}
-
 
 	if ( input_->MouseInputTrigger(0) )
 	{
@@ -144,6 +144,7 @@ void Player::Update()
 	ImGui::Begin("Player");
 
 	ImGui::Text("%d",LeftBoneNum);
+	ImGui::Text("PlayerMoveRotation = %f",PlayerMoveRotation);
 
 	ImGui::End();
 
@@ -207,67 +208,56 @@ void Player::Move()
 {
 	playerMoveMent = { 0.0f,0.0f,0.0f };
 
-	if ( isHitRail == false || playerMoveSpline->GetFinishSpline() == true )
+
+	if ( input_->PushKey(DIK_W) )
 	{
-		if ( input_->PushKey(DIK_W) )
-		{
-			isPushW = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-		}
-		if ( input_->PushKey(DIK_S) )
-		{
-			isPushS = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack.norm() * playerSpeed;
-			//playerMoveMent.y -= 0.02f;
-		}
-		if ( input_->PushKey(DIK_A) )
-		{
-			isPushA = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookLeft.norm() * playerSpeed;
-		}
-		if ( input_->PushKey(DIK_D) )
-		{
-			isPushD = true;
-			playerMoveMent += playerWorldTrans.LookVelocity.lookRight.norm() * playerSpeed;
-		}
-
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1 )
-		{
-			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookLeft.norm() * playerSpeed;
-		}
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1 )
-		{
-			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.look_lookRight.norm() * playerSpeed;
-		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1 )
-		{
-			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookLeft.norm() * playerSpeed;
-		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1 )
-		{
-			playerMoveMent = { 0.0f,0.0f,0.0f };
-			playerMoveMent += playerWorldTrans.LookVelocity.lookBack_lookRight.norm() * playerSpeed;
-		}
-		//if (onGround) {
-		if ( input_->TriggerKey(DIK_SPACE) )
-		{
-			playerMoveSpline->ResetNearSplineReset();
-			FirstMoveSpline->ResetNearSplineReset();
-			onGround = false;
-			const float jumpVYFist = 0.6f;
-			float SlidingJump = 0.0f;
-
-			fallVec = { 0, jumpVYFist + SlidingJump, 0, 0 };
-
-		}
-		//}
-
+		isPushW = true;
+		PlayerAngleSetter(playerMoveRot.Front);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_S) )
+	{
+		isPushS = true;
+		PlayerAngleSetter(playerMoveRot.Back);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_A) )
+	{
+		isPushA = true;
+		PlayerAngleSetter(playerMoveRot.Left);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_D) )
+	{
+		isPushD = true;
+		PlayerAngleSetter(playerMoveRot.Right);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
 	}
 
-
+	if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1 )
+	{
+		playerMoveMent = { 0.0f,0.0f,0.0f };
+		PlayerAngleSetter(playerMoveRot.LeftDiagonal);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1 )
+	{
+		playerMoveMent = { 0.0f,0.0f,0.0f };
+		PlayerAngleSetter(playerMoveRot.FrontDiagonal);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1 )
+	{
+		playerMoveMent = { 0.0f,0.0f,0.0f };
+		PlayerAngleSetter(playerMoveRot.BackDiagonal);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
+	if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1 )
+	{
+		playerMoveMent = { 0.0f,0.0f,0.0f };
+		PlayerAngleSetter(playerMoveRot.RightDiagonal);
+		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+	}
 
 	playerWorldTrans.translation_ += playerMoveMent;
 
@@ -276,8 +266,7 @@ void Player::Move()
 void Player::PlayerRot()
 {
 
-	playerWorldTrans.SetRot(Vector3(0.0f,cameraRot.x,0.0f));
-	playerWorldTransForBullet.SetRot(Vector3(cameraRot.y,cameraRot.x,0.0f));
+	playerWorldTrans.SetRot(Vector3(0.0f,cameraRot.x + MyMath::GetAngle(PlayerMoveRotation),0.0f));
 	//値更新
 	WorldTransUpdate();
 }
@@ -334,7 +323,6 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 void Player::WorldTransUpdate()
 {
 	playerWorldTrans.TransferMatrix();
-	playerWorldTransForBullet.TransferMatrix();
 }
 
 void Player::CheckPlayerCollider()
@@ -664,9 +652,40 @@ void Player::HPUpdate()
 		else
 		{
 			PlayerHP = 0.0f;//0固定
-			playerUI->PlayerHpUpdate(static_cast< uint32_t >(PlayerHP),static_cast< uint32_t >(PlayerMaxHP));
+			playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 			isAlive = false;
 		}
+	}
+}
+
+void Player::PlayerAngleSetter(const float& angle)
+{
+	float RotAngle = ( PlayerMoveRotation - angle ) + playerMoveRot.Back;
+	if ( RotAngle >= 0.0f )
+	{
+		if ( PlayerMoveRotation - angle > playerMoveRot.Back )
+		{
+			PlayerMoveRotation += playerMoveRot.AddRot;
+			if ( PlayerMoveRotation >= playerMoveRot.AllRot )
+			{
+				PlayerMoveRotation -= playerMoveRot.AllRot;
+			}
+		}
+		else
+		{
+			if ( PlayerMoveRotation < angle )
+			{
+				PlayerMoveRotation += playerMoveRot.AddRot;
+			}
+			else if ( PlayerMoveRotation > angle )
+			{
+				PlayerMoveRotation -= playerMoveRot.AddRot;
+			}
+		}
+	}
+	else
+	{
+		PlayerMoveRotation = playerMoveRot.AllRot - playerMoveRot.AddRot;
 	}
 }
 

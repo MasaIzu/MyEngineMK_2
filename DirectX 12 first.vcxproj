@@ -114,7 +114,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="MathFunction.hlsli" />
     <None Include="Resources\Shaders\Easing.hlsli" />
     <None Include="Resources\Shaders\FBX.hlsli" />
     <None Include="Resources\Shaders\Obj.hlsli" />
@@ -277,6 +276,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="PlayerEnum.h" />
+    <ClInclude Include="PlayerMove.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
@@ -365,6 +365,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="PlayerMove.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />
