@@ -456,7 +456,7 @@ void FBXObject3d::ResizeBonesMat(std::vector<FBXModel::Bone> bones_)
 
 
 
-Matrix4 FBXObject3d::GetBonesMatPtr(uint32_t& BoneNumber)
+Matrix4 FBXObject3d::GetBonesMatPtr(const uint32_t& BoneNumber)
 {
 	return bonesMat[ BoneNumber ];
 }

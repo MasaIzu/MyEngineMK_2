@@ -15,11 +15,11 @@ enum class PlayerAnimation
 	StartLeftF,
 	StartRightF,
 	Step,
-	Not,
+	Not1,
 	Boost,
 	HandAttack,
 	Idel,
-	Not,
+	Not2,
 	LeftDown,
 	RightDown,
 };

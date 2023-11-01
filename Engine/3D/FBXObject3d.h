@@ -168,7 +168,7 @@ public: // メンバ関数
 	void ResizeBonesMat(std::vector<FBXModel::Bone> bones);	//ボーンのサイズをクラスターボーンに合わせる
 	bool isBonesWorldMatCalc = false;	//ボーンのワールド座標上での計算をするかどうか
 
-	Matrix4 GetBonesMatPtr(uint32_t& BoneNumber);	//ボーンのワールド行列ポインタを渡す
+	Matrix4 GetBonesMatPtr(const uint32_t& BoneNumber);	//ボーンのワールド行列ポインタを渡す
 	void SetIsBonesWorldMatCalc(bool isCalc);	//ボーン計算フラグのセッター
 
 	/// <summary>

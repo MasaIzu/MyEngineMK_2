@@ -25,10 +25,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerWorldTrans.translation_ = Pos;
 	playerWorldTrans.scale_ = { 1,1,1 };
 	playerWorldTrans.TransferMatrix();
-	playerWorldTransHed.Initialize();
-	playerWorldTransHed.translation_ = { 0,Radius * 2,0.0f };
-	playerWorldTransHed.parent_ = &playerWorldTrans;
-	playerWorldTransHed.TransferMatrix();
 
 	viewProjection_ = viewProjection;
 
@@ -57,6 +53,9 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerUI->Initialize();
 
 	playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+
+	animation = std::make_unique<Animation>();
+	animation->Initialize();
 }
 
 void Player::Update()
@@ -98,10 +97,9 @@ void Player::Update()
 
 	if ( isCameraModeNotFree == true )
 	{
-//カメラの位置でアルファが決まる
+		//カメラの位置でアルファが決まる
 		Alpha = 1.0f - ( 1.0f - PlayerToCameraDistance / CameraMaxDistance );
 		playerWorldTrans.alpha = Alpha;
-		playerWorldTransHed.alpha = Alpha;
 	}
 	if ( FinalMoveSpline->GetHowReturnIndex(5) )
 	{
@@ -110,15 +108,17 @@ void Player::Update()
 
 	if ( input_->TriggerKey(DIK_LSHIFT) )
 	{
-		DeterminationDirection();
+		if ( animation->GetNowAnimFinish() )
+		{
+			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),0,playerAnimTime.Step,false);
+			DeterminationDirection();
+		}
 	}
 
 	SlideBoostUpdate();
 
 	//移動の値更新
 	WorldTransUpdate();
-
-	UpdateReticle();
 
 	isGrapple = false;
 	if ( input_->MouseInputing(1) )
@@ -134,22 +134,18 @@ void Player::Update()
 
 	if ( input_->MouseInputTrigger(0) )
 	{
-		nowAnmFCount_++;
+		/*LeftBoneNum++;*/
 	}
 	if ( input_->MouseInputTrigger(1) )
 	{
-		nowAnmFCount_--;
+		/*LeftBoneNum--;*/
 	}
 
 	ImGui::Begin("Player");
 
+	ImGui::Text("%d",LeftBoneNum);
 
 	ImGui::End();
-
-	//uint32_t BoneNumber = 31;
-
-	///playerBullet->UpdateWhileExpanding(GetPlayerPos(), DistanceNolm);
-	playerNormalGun->Update(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.lookRight);
 
 	//uiのアプデ
 	playerUI->Update();
@@ -163,9 +159,14 @@ void Player::Update()
 
 	if ( isAlive == false )
 	{
-		
+		if ( isDieMotion == false )
+		{
+			isDieMotion = true;
+			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::LeftDown ),0,playerAnimTime.DieMotion,false);
+		}
 	}
-
+	animation->Update();
+	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerWorldTrans.matWorld_));
 }
 
 void Player::Draw()
@@ -177,11 +178,10 @@ void Player::Draw()
 	}
 	playerNormalGun->Draw(*viewProjection_);
 	model_->Draw(playerWorldTrans,*viewProjection_);
-	model_->Draw(playerWorldTransHed,*viewProjection_);
 }
 
 void Player::FbxDraw() {
-	
+	animation->FbxDraw(playerWorldTrans,*viewProjection_);
 }
 
 
@@ -335,10 +335,6 @@ void Player::WorldTransUpdate()
 {
 	playerWorldTrans.TransferMatrix();
 	playerWorldTransForBullet.TransferMatrix();
-
-	playerWorldTransHed.parent_ = &playerWorldTrans;
-	playerWorldTransHed.TransferMatrix();
-
 }
 
 void Player::CheckPlayerCollider()
@@ -539,52 +535,6 @@ void Player::SplineUpdate()
 	}
 }
 
-void Player::UpdateReticle()
-{
-	Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
-	//ビューポート行列
-	Matrix4 Viewport =
-	{ windowWH.x / 2,0,0,0,
-	0,-windowWH.y / 2,0,0,
-	0,0,1,0,
-	windowWH.x / 2, windowWH.y / 2,0,1 };
-
-	Matrix4 matView = viewProjection_->matView;
-	Matrix4 matProjection = viewProjection_->matProjection;
-
-	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
-
-	//バレットレイメッシュコライダー
-	Ray wall;
-	wall.start = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(playerWorldTransHed.matWorld_));
-	wall.start.y -= 0.4f;
-	wall.dir = MyMath::Vec3ToVec4(DistanceNolm);
-	RaycastHit wallRaycastHit;
-
-	if ( input_->MouseInputing(2) == false )
-	{
-// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,PlayerToCameraTargetVecDistance) )
-		{
-//playerWorldTrans.translation_.x -= (wallRaycastHit.distance - Radius);
-			ReticlePos = MyMath::Vec4ToVec3(wallRaycastHit.inter);
-			ReticlePos.y += 0.4f;
-			ShootVec = ReticlePos - MyMath::GetWorldTransform(playerWorldTransHed.matWorld_);
-			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-			//ReticlePos = MyMath::DivVecMat(ReticlePos, matViewProjectionViewport);
-		}
-		else
-		{
-	  //ReticlePos = MyMath::DivVecMat(Distance, matViewProjectionViewport);
-			ShootVec = DistanceNolm;
-		}
-	}
-
-	DebugWorldTrans.translation_ = ReticlePos;
-	DebugWorldTrans.TransferMatrix();
-}
-
 void Player::DeterminationDirection()
 {
 	isSliding = true;
@@ -670,7 +620,7 @@ void Player::SlideBoostUpdate()
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
 			}
-			SlidingSpeed -= 0.1f;
+			SlidingSpeed -= MaxSlidingSpeed / playerAnimTime.Step;
 		}
 		else
 		{

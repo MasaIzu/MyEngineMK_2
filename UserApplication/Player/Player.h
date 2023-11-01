@@ -10,6 +10,13 @@
 #include "SplinePosition.h"
 #include "PlayerUI.h"
 #include "PlayerEnum.h"
+#include "Animation.h"
+
+struct PlayerAnimTime
+{
+	const uint32_t Step = 30;
+	const uint32_t DieMotion = 120;
+};
 
 /// <summary>
 /// プレイヤー
@@ -50,8 +57,6 @@ private:
 	void Fall();
 	//スプラインアップデート
 	void SplineUpdate();
-	//レティクルアップデート
-	void UpdateReticle();
 	//スライドブースト方向決め
 	void DeterminationDirection();
 	//スライドブーストアップデート
@@ -121,7 +126,6 @@ private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
-	WorldTransform playerWorldTransHed;
 	WorldTransform playerWorldTransForBullet;
 	WorldTransform StartingPointOfGrapple;
 	WorldTransform DebugWorldTrans;
@@ -140,12 +144,16 @@ private://クラス関連
 	//プレイヤーUIクラス
 	std::unique_ptr<PlayerUI> playerUI;
 
-private://イーナムクラス
+	//アニメーションクラス
+	std::unique_ptr<Animation> animation;
 
+private://ストラクトやイーナムクラス
+	//アニメーションタイム
+	PlayerAnimTime playerAnimTime;
 	//アタックフェーズ
 	AttackPhase AttackPhase_ = AttackPhase::Nothing;
 	//アニメーション
-	PlayerAnimation PlayerAnimation_ = PlayerAnimation::Not;
+	PlayerAnimation PlayerAnimation_ = PlayerAnimation::Not1;
 
 private://別クラスから値をもらう
 	Vector2 cameraRot;
@@ -170,10 +178,12 @@ private://プレイヤークラス変数
 	bool isPushD = false;
 
 	bool isAlive = true;
+	bool isDieMotion = false;
 	bool isDieMoveFinish = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
+	uint32_t LeftBoneNum = 41;
 
 	float Radius = 1.0f;
 	float playerSpeed = 0.9f;
