@@ -151,7 +151,7 @@ private://EnemyBossクラス変数
 	float Radius = 10.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
-	float RotSpeed = 1.0f;
+	float RotSpeed = 0.01f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 100.0f;
 	float jampHeight = 20.0f;

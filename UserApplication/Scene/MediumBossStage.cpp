@@ -78,7 +78,7 @@ void MediumBossStage::Update()
 
 	if ( VsBoss == false )
 	{
-//if (bossEnemy->GetFinishSpline()) {
+	//if (bossEnemy->GetFinishSpline()) {
 		Vector3 end = Vector3(0,10,150);
 		//if (bossEnemy->GetBodyNoAlpha()) {
 		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(),end);
@@ -189,28 +189,35 @@ void MediumBossStage::LockOn()
 
 	float dotProduct = forwardVector.dot(toCameraVector);
 
-	if ( dotProduct > 0 )
+	if ( isLockOn == false )
 	{
-		Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
-
-		//ビューポート行列
-		Matrix4 Viewport =
-		{ windowWH.x / 2,0,0,0,
-		0,-windowWH.y / 2,0,0,
-		0,0,1,0,
-		windowWH.x / 2, windowWH.y / 2,0,1 };
-
-		//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-		Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
-
-		//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-		EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
-
-		if ( (0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x) &&
-			(0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ))
+		if ( dotProduct > 0 )
 		{
-			isLockOn = true;
-			player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+			Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
+
+			//ビューポート行列
+			Matrix4 Viewport =
+			{ windowWH.x / 2,0,0,0,
+			0,-windowWH.y / 2,0,0,
+			0,0,1,0,
+			windowWH.x / 2, windowWH.y / 2,0,1 };
+
+			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+			Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
+
+			if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
+				( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
+			{
+				isLockOn = true;
+				player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+			}
+			else
+			{
+				isLockOn = false;
+			}
 		}
 		else
 		{
@@ -219,7 +226,37 @@ void MediumBossStage::LockOn()
 	}
 	else
 	{
-		isLockOn = false;
-	}
+		if ( dotProduct > 0 )
+		{
+			Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
 
+			//ビューポート行列
+			Matrix4 Viewport =
+			{ windowWH.x / 2,0,0,0,
+			0,-windowWH.y / 2,0,0,
+			0,0,1,0,
+			windowWH.x / 2, windowWH.y / 2,0,1 };
+
+			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+			Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+
+			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
+
+			if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
+				( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
+			{
+				isLockOn = true;
+				player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+			}
+			else
+			{
+				isLockOn = false;
+			}
+		}
+		else
+		{
+			isLockOn = false;
+		}
+	}
 }

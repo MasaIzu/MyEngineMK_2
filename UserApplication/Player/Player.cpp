@@ -193,6 +193,11 @@ void Player::DrawSprite()
 
 void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 {
+	ImGui::Begin("PlayerLockOn");
+
+	ImGui::Text("LockOn = %d",LockOn);
+
+	ImGui::End();
 	if ( isAttack == true )
 	{
 		PlayerAttack(EnemyPos,LockOn);
@@ -218,7 +223,6 @@ void Player::PlayerRot(const bool& Attack)
 
 void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 {
-
 	if ( LockOn )
 	{
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);

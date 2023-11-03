@@ -230,6 +230,7 @@ void GameCamera::PlaySceneCamera() {
 
 	//target = pos;
 	eye = target + (forward * cameraDistance_);
+	eye = MyMath::lerp(eye,target + ( forward * cameraDistance_ ),0.005f);
 	CameraAngle(eye.z - target.z, eye.x - target.x);
 
 }
@@ -325,7 +326,7 @@ void GameCamera::MousePositionReset(Vector2& vector2)
 
 	rot = rotation;
 	CameraRot = cameraRot;
-	target = playerPos_ + cameraHigh;
+	target = MyMath::lerp(target,playerPos_ + cameraHigh,0.005f);
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
