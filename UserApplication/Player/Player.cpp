@@ -55,16 +55,14 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	animation = std::make_unique<Animation>();
 	animation->Initialize();
+
+	playerMovement = std::make_unique<PlayerMovement>();
 }
 
 void Player::Update()
 {
 	isAttack = false;
 	isPressing = false;
-	isPushW = false;
-	isPushA = false;
-	isPushS = false;
-	isPushD = false;
 
 	if ( playerMoveSpline->GetFinishSpline() )
 	{
@@ -86,11 +84,10 @@ void Player::Update()
 	//HPのアップデート
 	HPUpdate();
 
-	//どう動くか
-	Move();
-
 	//回転させる
-	PlayerRot();
+	PlayerRot(isAttack);
+	
+	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans);
 
 	//落下
 	Fall();
@@ -144,7 +141,7 @@ void Player::Update()
 	ImGui::Begin("Player");
 
 	ImGui::Text("%d",LeftBoneNum);
-	ImGui::Text("PlayerMoveRotation = %f",PlayerMoveRotation);
+	ImGui::Text("PlayerMoveRotation = %f",playerMovement->GetPlayerAngle());
 
 	ImGui::End();
 
@@ -204,69 +201,17 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 	playerUI->AttackReticleUpdate(LockOn);
 }
 
-void Player::Move()
+void Player::PlayerRot(const bool& Attack)
 {
-	playerMoveMent = { 0.0f,0.0f,0.0f };
-
-
-	if ( input_->PushKey(DIK_W) )
+	playerMovement->PlayerAngle(Attack);
+	if ( !Attack )
 	{
-		isPushW = true;
-		PlayerAngleSetter(playerMoveRot.Front);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+		playerWorldTrans.SetRot(Vector3(0.0f,cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),0.0f));
 	}
-	if ( input_->PushKey(DIK_S) )
+	else
 	{
-		isPushS = true;
-		PlayerAngleSetter(playerMoveRot.Back);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
+		playerWorldTrans.SetRot(Vector3(0.0f,MyMath::GetAngle(FixedAngle) + MyMath::GetAngle(playerMovement->GetPlayerAngle()),0.0f));
 	}
-	if ( input_->PushKey(DIK_A) )
-	{
-		isPushA = true;
-		PlayerAngleSetter(playerMoveRot.Left);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-	if ( input_->PushKey(DIK_D) )
-	{
-		isPushD = true;
-		PlayerAngleSetter(playerMoveRot.Right);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-
-	if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1 )
-	{
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		PlayerAngleSetter(playerMoveRot.LeftDiagonal);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-	if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1 )
-	{
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		PlayerAngleSetter(playerMoveRot.FrontDiagonal);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-	if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1 )
-	{
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		PlayerAngleSetter(playerMoveRot.BackDiagonal);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-	if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1 )
-	{
-		playerMoveMent = { 0.0f,0.0f,0.0f };
-		PlayerAngleSetter(playerMoveRot.RightDiagonal);
-		playerMoveMent = playerWorldTrans.LookVelocity.look.norm() * playerSpeed;
-	}
-
-	playerWorldTrans.translation_ += playerMoveMent;
-
-}
-
-void Player::PlayerRot()
-{
-
-	playerWorldTrans.SetRot(Vector3(0.0f,cameraRot.x + MyMath::GetAngle(PlayerMoveRotation),0.0f));
 	//値更新
 	WorldTransUpdate();
 }
@@ -276,11 +221,19 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 
 	if ( LockOn )
 	{
-		playerNormalGun->ShotBullet(EnemyPos);
+		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
+		if ( playerMovement->GetIsRotFinish() )
+		{
+			playerNormalGun->ShotBullet(EnemyPos);
+		}
 	}
 	else
 	{
-		playerNormalGun->ShotBullet(TargetPosition);
+		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
+		if ( playerMovement->GetIsRotFinish() )
+		{
+			playerNormalGun->ShotBullet(TargetPosition);
+		}
 	}
 
 	//if ( AttackPhase_ == AttackPhase::Nothing )
@@ -528,35 +481,35 @@ void Player::DeterminationDirection()
 	isSliding = true;
 	SlidingSpeed = MaxSlidingSpeed;
 
-	if ( isPushW == 1 && isPushA == 0 && isPushD == 0 )
+	if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 0 )
 	{
 		SlidingNumber = 1;
 	}
-	else if ( isPushW == 0 && isPushS == 0 && isPushA == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == 0 && playerMovement->GetPushedKey().isPushS == 0 && playerMovement->GetPushedKey().isPushA == 1 )
 	{
 		SlidingNumber = 2;
 	}
-	else if ( isPushS == 1 && isPushA == 0 && isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 0 )
 	{
 		SlidingNumber = 3;
 	}
-	else if ( isPushW == 0 && isPushS == 0 && isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == 0 && playerMovement->GetPushedKey().isPushS == 0 && playerMovement->GetPushedKey().isPushD == 1 )
 	{
 		SlidingNumber = 4;
 	}
-	else if ( isPushW == 1 && isPushA == 1 && isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 1 && playerMovement->GetPushedKey().isPushD == 0 )
 	{
 		SlidingNumber = 5;
 	}
-	else if ( isPushW == 1 && isPushA == 0 && isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 1 )
 	{
 		SlidingNumber = 6;
 	}
-	else if ( isPushS == 1 && isPushA == 1 && isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 1 && playerMovement->GetPushedKey().isPushD == 0 )
 	{
 		SlidingNumber = 7;
 	}
-	else if ( isPushS == 1 && isPushA == 0 && isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 1 )
 	{
 		SlidingNumber = 8;
 	}
@@ -655,37 +608,6 @@ void Player::HPUpdate()
 			playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 			isAlive = false;
 		}
-	}
-}
-
-void Player::PlayerAngleSetter(const float& angle)
-{
-	float RotAngle = ( PlayerMoveRotation - angle ) + playerMoveRot.Back;
-	if ( RotAngle >= 0.0f )
-	{
-		if ( PlayerMoveRotation - angle > playerMoveRot.Back )
-		{
-			PlayerMoveRotation += playerMoveRot.AddRot;
-			if ( PlayerMoveRotation >= playerMoveRot.AllRot )
-			{
-				PlayerMoveRotation -= playerMoveRot.AllRot;
-			}
-		}
-		else
-		{
-			if ( PlayerMoveRotation < angle )
-			{
-				PlayerMoveRotation += playerMoveRot.AddRot;
-			}
-			else if ( PlayerMoveRotation > angle )
-			{
-				PlayerMoveRotation -= playerMoveRot.AddRot;
-			}
-		}
-	}
-	else
-	{
-		PlayerMoveRotation = playerMoveRot.AllRot - playerMoveRot.AddRot;
 	}
 }
 

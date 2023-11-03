@@ -11,25 +11,13 @@
 #include "PlayerUI.h"
 #include "PlayerEnum.h"
 #include "Animation.h"
+#include "PlayerStruct.h"
+#include "PlayerMovement.h"
 
 struct PlayerAnimTime
 {
 	const uint32_t Step = 30;
 	const uint32_t DieMotion = 120;
-};
-
-struct PlayerMoveRot
-{
-	float Front = 0.0f;
-	float Right = 90.0f;
-	float Back = 180.0f;
-	float Left = 270.0f;
-	float FrontDiagonal = 40.0f;
-	float RightDiagonal = 130.0f;
-	float BackDiagonal = 230.0f;
-	float LeftDiagonal = 320.0f;
-	float AllRot = 360.0f;
-	float AddRot = 10.0f;
 };
 
 /// <summary>
@@ -57,10 +45,9 @@ public://基本関数
 	void AttackUpdate(const Vector3& EnemyPos,bool& LockOn);
 
 private:
-	//プレーヤーの移動
-	void Move();
+	
 	//プレイヤーの回転
-	void PlayerRot();
+	void PlayerRot(const bool& Attack);
 	//プレーヤーの攻撃
 	void PlayerAttack(const Vector3& EnemyPos,bool& LockOn);
 	//プレーヤーの移動の値更新
@@ -84,8 +71,6 @@ private:
 	//HP処理
 	void HPUpdate();
 
-	//アングルセッター
-	void PlayerAngleSetter(const float& angle);
 public://Setter
 	//カメラの回転,撃つ場所への距離,プレイヤーとカメラの距離,アルファ値を決めるためのカメラ距離のマックス
 	void SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& cameradis,const float& distance,const float& CameraMaxDistance);
@@ -161,7 +146,8 @@ private://クラス関連
 
 	//アニメーションクラス
 	std::unique_ptr<Animation> animation;
-
+	//移動クラス
+	std::unique_ptr<PlayerMovement> playerMovement;
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
 	PlayerAnimTime playerAnimTime;
@@ -189,11 +175,6 @@ private://プレイヤークラス変数
 	bool isSliding = false;
 	bool isTakeMissileDamages = false;
 
-	bool isPushW = false;
-	bool isPushA = false;
-	bool isPushS = false;
-	bool isPushD = false;
-
 	bool isAlive = true;
 	bool isDieMotion = false;
 	bool isDieMoveFinish = false;
@@ -214,12 +195,12 @@ private://プレイヤークラス変数
 	float MaxSlidingSpeed = 2.7f;
 	float PlayerHP = 5000;
 	float PlayerMaxHP = 5000;
-	float PlayerMoveRotation = 0.0f;
 	float RotLimit = 0.1f;
+	float FixedAngle = 0.0f;
 
-	Vector3 playerMoveMent;//移動量
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
+	Vector3 PlayerMoveMent;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;
 	Vector3 PlayerToAimSaiteVec;

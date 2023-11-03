@@ -276,7 +276,8 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="PlayerEnum.h" />
-    <ClInclude Include="PlayerMove.h" />
+    <ClInclude Include="PlayerMovement.h" />
+    <ClInclude Include="PlayerStruct.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
@@ -365,7 +366,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="PlayerMove.cpp" />
+    <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />

@@ -550,7 +550,10 @@
     <ClInclude Include="PlayerEnum.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerMove.h">
+    <ClInclude Include="PlayerMovement.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStruct.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
   </ItemGroup>
@@ -780,7 +783,7 @@
     <ClCompile Include="Animation.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerMove.cpp">
+    <ClCompile Include="PlayerMovement.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
   </ItemGroup>
