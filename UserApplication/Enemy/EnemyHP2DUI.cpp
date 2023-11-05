@@ -1,6 +1,7 @@
 #include "EnemyHP2DUI.h"
 #include <TextureManager.h>
 #include <imgui.h>
+#include <Numbers.h>
 
 EnemyHP2DUI::EnemyHP2DUI()
 {
@@ -14,15 +15,15 @@ void EnemyHP2DUI::Initialize()
 {
 
 	HP = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HP->SetAnchorPoint({ 0.0f,0.5f });
+	HP->SetAnchorPoint({ FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fPointFive) });
 	HP->SetSize(HpSize);
 
 	HPBackSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBackSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBackSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fPointFive) });
 	HPBackSprite->SetSize(HpSize);
 
 	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
-	HPBarBackBarSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBarBackBarSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fPointFive) });
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 }

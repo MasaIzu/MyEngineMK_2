@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "Numbers.h"
 
 Animation::Animation()
 {
@@ -10,7 +11,7 @@ Animation::~Animation()
 
 void Animation::Initialize()
 {
-	AnmNumNumber_ = 0;
+	AnmNumNumber_ = static_cast<uint32_t>(Numbers::Zero);
 	//fbx
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("3JamJiki",true));
 	fbxObj3d_ = FBXObject3d::Create();
@@ -35,7 +36,7 @@ void Animation::Update()
 			isMotionFinish = true;
 			if ( isLoop )
 			{
-				nowAnmFCount_ = 0;
+				nowAnmFCount_ = static_cast< uint32_t >( Numbers::Zero );;
 				isStart = true;
 			}
 		}

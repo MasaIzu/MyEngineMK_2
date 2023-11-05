@@ -2,17 +2,16 @@
 #include "Easing.h"
 #include "SphereCollider.h"
 #include <CollisionAttribute.h>
+#include <Numbers.h>
 
 MissileBullet::MissileBullet(const unsigned short Attribute_)
 {
-
-	BulletWorldTrans.scale_ = Vector3(0.5f,0.5f,0.5f);
+	BulletWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointFive);
 	BulletWorldTrans.Initialize();
 	isNearPlayer = false;
-	BulletSpeed = 1.5f;
-	BulletRadius = 0.5f;
 	// コリジョンマネージャに追加
-	BulletCollider = new SphereCollider(Vector4(0,BulletRadius,0,0),BulletRadius);
+	float sphereF = FloatNumber(fNumbers::fZero);
+	BulletCollider = new SphereCollider(Vector4(sphereF,BulletRadius,sphereF,sphereF),BulletRadius);
 	CollisionManager::GetInstance()->AddCollider(BulletCollider);
 	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	Attribute = Attribute_;
@@ -66,7 +65,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 				Vector3 tmp;
 				tmp = EndPos - BulletWorldTrans.translation_;
 				float dist = tmp.dot(tmp);
-				float radius2 = 7.0f + 1.0f;
+				float radius2 = NotSearchArea;
 				radius2 *= radius2;
 
 				if ( dist <= radius2 )
@@ -78,7 +77,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 			{
 				Vector3 goPos = EndPos - BulletWorldTrans.translation_;
 				goPos.normalize();
-				BulletVelocity = MyMath::lerp(BulletVelocity.norm(),goPos,0.005f);
+				BulletVelocity = MyMath::lerp(BulletVelocity.norm(),goPos,LerpStrength);
 
 				BulletWorldTrans.translation_ += BulletVelocity.norm() * BulletSpeed;
 			}

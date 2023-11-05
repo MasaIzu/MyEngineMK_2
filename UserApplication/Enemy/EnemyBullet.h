@@ -87,6 +87,7 @@ private://クラス変数
 
 	float EnemyBulletSpeed[AllBulletCount];
 	float BulletRadius[AllBulletCount];
+	float BulletRadiusMax = 0.4f;
 	float EnemyBulletMaxRadius = 5.0f;
 	float EnemyParticleSpeed = 0.02f;
 	float EnemyParticleDieSpeed = 0.2f;

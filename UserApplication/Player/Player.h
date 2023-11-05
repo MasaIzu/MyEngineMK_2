@@ -78,44 +78,12 @@ public://Setter
 	void SetCameraModeNotFree(const bool& mode) {
 		isCameraModeNotFree = mode;
 	}
-	//最初のスプライン
-	void SetFirstMoveSpline(const std::vector<Vector3>& points) {
-		FirstMoveSpline->SetNotSplineVector(points);
-	}
-	//二つ目のスプライン
-	void SetSpline(const std::vector<Vector3>& points) {
-		playerMoveSpline->SetNotSplineVector(points);
-	}
-	//最後のスプライン
-	void SetFinalSpline(const std::vector<Vector3>& points) {
-		FinalMoveSpline->SetNotSplineVector(points);
-	}
 	//レティクルポジションセット
 	void SetReticlePosition(const Vector2& position) {
 		playerUI->SetReticlePosition(position);
 	}
 public://Getter
-	bool GetHitFirstRail()const {//最初のスプラインに当たったか
-		return isHitFirstRail;
-	}
-	bool GetHit2ndRail()const {//二つ目のスプラインに当たったか
-		return isHitRail;
-	}
-	bool GetHitFinalRail()const {//最後のスプラインに当たったか
-		return isHitFinalRail;
-	}
-	bool GetHowReturnSpline(const uint32_t& HowIndex)const {//指定した場所に来たか
-		return FirstMoveSpline->GetHowReturnIndex(HowIndex);
-	}
-	bool GetHowReturnSpline2ndRail(const uint32_t& HowIndex)const {//指定した場所に来たか
-		return playerMoveSpline->GetHowReturnIndex(HowIndex);
-	}
-	bool GetHowReturnFainalSpline(const uint32_t& HowIndex)const {//指定した場所に来たか
-		return FinalMoveSpline->GetHowReturnIndex(HowIndex);
-	}
-	bool GetFinishFirstSpline()const {//スプラインが終わったか
-		return FirstMoveSpline->GetFinishSpline();
-	}
+
 	bool GetFinishMove()const {//スプラインが終わったか
 		return isDieMoveFinish;
 	}
@@ -131,15 +99,9 @@ private://クラス関連
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<NormalGun> playerNormalGun;
-	// 照準スプライト
-	std::unique_ptr<Sprite> AttackSprite;
 
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
-	//スプライン
-	std::unique_ptr<SplinePosition> FirstMoveSpline;//最初のカメラスプライン
-	std::unique_ptr<SplinePosition> playerMoveSpline;//途中のスプライン
-	std::unique_ptr<SplinePosition> FinalMoveSpline;//最後のカメラスプライン
 
 	//プレイヤーUIクラス
 	std::unique_ptr<PlayerUI> playerUI;
@@ -160,6 +122,10 @@ private://ストラクトやイーナムクラス
 
 private://別クラスから値をもらう
 	Vector2 cameraRot;
+
+private://コンスト
+	const float fallAcc = -0.035f;
+	const float fallVYMin = -1.3f;
 
 private://プレイヤークラス変数
 	bool onGround = false;

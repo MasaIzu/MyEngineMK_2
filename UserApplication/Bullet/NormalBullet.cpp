@@ -1,19 +1,18 @@
 #include "NormalBullet.h"
 #include "SphereCollider.h"
 #include "CollisionAttribute.h"
+#include <Numbers.h>
 
 NormalBullet::NormalBullet(const unsigned short Attribute_)
 {
-	BulletWorldTrans.scale_ = Vector3(0.5f,0.5f,0.5f);
+	BulletWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointFive);
 	BulletWorldTrans.Initialize();
 	BulletCollider = nullptr;
-	BulletLifeTime = 0;
-	BulletRadius = 0.5f;
-	EnemyBulletSpeed = 0;
 	isBulletAlive = false;
 
 	// コリジョンマネージャに追加
-	BulletCollider = new SphereCollider(Vector4(0,BulletRadius,0,0),BulletRadius);
+	float sphereF = FloatNumber(fNumbers::fZero);
+	BulletCollider = new SphereCollider(Vector4(sphereF,BulletRadius,sphereF,sphereF),BulletRadius);
 	CollisionManager::GetInstance()->AddCollider(BulletCollider);
 	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	Attribute = Attribute_;
@@ -85,7 +84,7 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 {
 	if ( isBulletAlive == false )
 	{
-		BulletLifeTime = 100;
+		BulletLifeTime = MaxBulletLifeTime;
 		isBulletAlive = true;
 		BulletWorldTrans.translation_ = pos;
 		EnemyBulletMoveMent = BulletVelocity * BulletSpeed;

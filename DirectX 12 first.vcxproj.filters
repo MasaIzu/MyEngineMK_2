@@ -556,6 +556,9 @@
     <ClInclude Include="PlayerStruct.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Numbers.h">
+      <Filter>Engine\HeaderFile\MyFunction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -785,6 +788,9 @@
     </ClCompile>
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Numbers.cpp">
+      <Filter>Engine\SourceFile\MyFunction</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -67,6 +67,10 @@ private://EnemyBossクラス変数
 
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
+	float LerpStrength = 0.1f;
+	float DownAlpha = 0.015f;
+	float AddDownAlpha = 0.0006f;
+	float BobyAppha = 0.15f;
 
 	Vector3 BonePos;
 

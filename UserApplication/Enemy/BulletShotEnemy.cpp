@@ -4,6 +4,7 @@
 #include <CollisionManager.h>
 #include <SphereCollider.h>
 #include <CollisionAttribute.h>
+#include <Numbers.h>
 
 BulletShotEnemy::BulletShotEnemy(const Vector3& BonePos_, Model* model)
 {
@@ -18,13 +19,13 @@ BulletShotEnemy::~BulletShotEnemy()
 
 void BulletShotEnemy::Initialize()
 {
-
+	float sphereF = FloatNumber(fNumbers::fZero);
 	//model_.reset(Model::CreateFromOBJ("sphereColor", true));
 	modelDebug_.reset(Model::CreateFromOBJ("sphere", true));
 	BulletShotEnemyWorldTrans.Initialize();
 	BulletShotEnemyWorldTrans.translation_ = BonePos;
 	BulletShotEnemyWorldTransHed.Initialize();
-	BulletShotEnemyWorldTransHed.translation_ = { 0.0f,EnemyRadius * 2,0.0f };
+	BulletShotEnemyWorldTransHed.translation_ = { sphereF,EnemyRadius * ColliderSphereCount,sphereF };
 	WorldTransUpdate();
 
 	input_ = Input::GetInstance();
@@ -32,11 +33,11 @@ void BulletShotEnemy::Initialize()
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
 	DebugWorldTrans.scale_ = { SearchingAreaRadius,SearchingAreaRadius,SearchingAreaRadius };
-	DebugWorldTrans.alpha = 0.5f;
+	DebugWorldTrans.alpha = FloatNumber(fNumbers::fPointFive);
 	DebugWorldTrans.TransferMatrix();
 
 	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
-		BulletShotEnemyCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		BulletShotEnemyCollider[i] = new SphereCollider(Vector4(sphereF, EnemyRadius,sphereF,sphereF), EnemyRadius);
 		CollisionManager::GetInstance()->AddCollider(BulletShotEnemyCollider[i]);
 		BulletShotEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
 		BulletShotEnemyCollider[i]->Update(BulletShotEnemyWorldTrans.matWorld_);
@@ -69,8 +70,6 @@ void BulletShotEnemy::Update(const Vector3& PlayerPos)
 	// 落下処理
 	if (!onGround) {
 		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
 		// 加速
 		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
 		// 移動
@@ -131,7 +130,7 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 	{
 	case BulletShotEnemy::NotSpottedPhase::Walk:
 
-		if (WalkTime > 0) {
+		if (WalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 			BulletShotEnemyWorldTrans.translation_ += BulletShotEnemyWorldTrans.LookVelocity.look * EnemySpeed;
 
 			//円を作って出ない処理を作る
@@ -141,45 +140,45 @@ void BulletShotEnemy::PlayerNotSpottedMove()
 			radius *= radius;
 
 			if (dist >= radius) {
-				StopTime = Random(150, 240);
+				StopTime = Random(RandomMin,RandomMax);
 				NotSpottedPhase_ = NotSpottedPhase::Interruption;
 			}
 
 			BulletShotEnemyWorldTrans.translation_ += enemyMoveMent;
 		}
 		else {
-			StopTime = Random(150, 240);
+			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
 		break;
 	case BulletShotEnemy::NotSpottedPhase::Stop:
 
-		if (StopTime <= 0) {
-			WalkTime = Random(60, 120);
-			Rot = static_cast<float>(Random(0, 360));
-			BulletShotEnemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+		if (StopTime <= static_cast< uint32_t >( Numbers::Zero ) ) {
+			WalkTime = Random(WalkTimeMin,WalkTimeMax);
+			Rot = static_cast<float>(Random(static_cast<uint32_t>(Numbers::Zero),RandomRotMax) );
+			BulletShotEnemyWorldTrans.SetRot({ static_cast< float >( Numbers::Zero ),MyMath::GetAngle(Rot),static_cast< float >( Numbers::Zero ) });
 			NotSpottedPhase_ = NotSpottedPhase::Walk;
 		}
 
 		break;
 	case BulletShotEnemy::NotSpottedPhase::Interruption:
 
-		if (StopTime <= 0) {
-			WalkTime = Random(80, 140);
+		if (StopTime <= static_cast< uint32_t >( Numbers::Zero ) ) {
+			WalkTime = Random(WalkTimeMin,WalkTimeMax);
 			NotSpottedPhase_ = NotSpottedPhase::ForcedWalking;
 		}
 
 		break;
 	case BulletShotEnemy::NotSpottedPhase::ForcedWalking:
 
-		if (WalkTime > 0) {
+		if (WalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 			BackBonePos = BonePos - BulletShotEnemyWorldTrans.translation_;
 			BackBonePos.normalize();
 			BulletShotEnemyWorldTrans.translation_ += BackBonePos * EnemySpeed;
 		}
 		else {
-			StopTime = Random(150, 240);
+			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
@@ -208,7 +207,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 	{
 	case BulletShotEnemy::SpottedPhase::Intimidation:
 		Rot = EnemyToPlayerAngle;
-		if (AttackStopTime > 0) {
+		if (AttackStopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 
 		}
 		else {
@@ -230,7 +229,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 		}
 		Rot = EnemyToPlayerAngle;
 		if (GetIsAttackArea()) {
-			if (AttackDelayTime > 0) {
+			if (AttackDelayTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 
 			}
 			else {
@@ -269,7 +268,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 	case BulletShotEnemy::SpottedPhase::Turn:
 
 		Rot = EnemyToPlayerAngle;
-		AttackStopTime = Random(10, 20);
+		AttackStopTime = Random(AttackStopTimeMin,AttackStopTimeMax);
 		SpottedPhase_ = SpottedPhase::Intimidation;
 		break;
 	case BulletShotEnemy::SpottedPhase::Nothing:
@@ -279,7 +278,7 @@ void BulletShotEnemy::PlayerSpottedMove()
 	default:
 		break;
 	}
-	BulletShotEnemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+	BulletShotEnemyWorldTrans.SetRot({ static_cast< float >( Numbers::Zero ),MyMath::GetAngle(Rot),static_cast< float >( Numbers::Zero ) });
 
 }
 
@@ -320,26 +319,26 @@ void BulletShotEnemy::Attack()
 
 void BulletShotEnemy::PlayerNotSpottedMoveTimer()
 {
-	if (WalkTime > 0) {
+	if (WalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		WalkTime--;
 	}
-	if (StopTime > 0) {
+	if (StopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		StopTime--;
 	}
 }
 
 void BulletShotEnemy::PlayerSpottedMoveTimer()
 {
-	if (AttackWalkTime > 0) {
+	if (AttackWalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackWalkTime--;
 	}
-	if (AttackStopTime > 0) {
+	if (AttackStopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackStopTime--;
 	}
-	if (RunAttackTime > 0) {
+	if (RunAttackTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		RunAttackTime--;
 	}
-	if (AttackDelayTime > 0) {
+	if (AttackDelayTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackDelayTime--;
 	}
 }
@@ -387,34 +386,34 @@ void BulletShotEnemy::CheckCollider()
 	Ray Groundray;
 	Groundray.start = MyMath::Vec3ToVec4(BulletShotEnemyWorldTrans.translation_);
 	Groundray.start.y += EnemyRadius;
-	Groundray.dir = { 0,-1,0,0 };
+	float sphereF = FloatNumber(fNumbers::fZero);
+	Groundray.dir = { sphereF,-FloatNumber(fNumbers::fOnePointZero),sphereF,sphereF };
 	RaycastHit raycastHit;
 
 
 	// 接地状態
 	if (onGround) {
 		// スムーズに坂を下る為の吸着距離
-		const float adsDistance = 0.2f;
 		// 接地を維持
-		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f + adsDistance)) {
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * HedRadius + adsDistance)) {
 			onGround = true;
-			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
+			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * HedRadius);
 		}
 		// 地面がないので落下
 		else {
 			//onGround = false;
 			fallVec = {};
 			BulletShotEnemyWorldTrans.translation_ = OldTansPos;
-			StopTime = Random(150, 240);
+			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Interruption;
 		}
 	}
 	// 落下状態
 	else {
-		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * 2.0f)) {
+		if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, EnemyRadius * HedRadius)) {
 			// 着地
 			onGround = true;
-			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * 2.0f);
+			BulletShotEnemyWorldTrans.translation_.y -= (raycastHit.distance - EnemyRadius * HedRadius);
 		}
 	}
 
@@ -460,8 +459,9 @@ bool BulletShotEnemy::GetIsAttackArea()
 
 void BulletShotEnemy::WorldTransUpdate()
 {
+	float sphereF = FloatNumber(fNumbers::fZero);
 	BulletShotEnemyWorldTrans.TransferMatrix();
-	BulletShotEnemyWorldTransHed.translation_ = BulletShotEnemyWorldTrans.translation_ + Vector3(0.0f, EnemyRadius * 2, 0.0f);
+	BulletShotEnemyWorldTransHed.translation_ = BulletShotEnemyWorldTrans.translation_ + Vector3(sphereF, EnemyRadius * HedRadius,sphereF);
 	BulletShotEnemyWorldTransHed.TransferMatrix();
 }
 

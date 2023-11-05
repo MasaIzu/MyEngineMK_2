@@ -1,5 +1,6 @@
 #include "HpUpdate.h"
 #include <Easing.h>
+#include <Numbers.h>
 
 HpUpdate::HpUpdate(const float& MaxHp)
 {
@@ -12,8 +13,8 @@ HpUpdate::~HpUpdate()
 
 void HpUpdate::EasingMaterial(const float& end)
 {
-	HpDownEasingTime = 0;
-	EasingTimeInAdvance = 0;
+	HpDownEasingTime = static_cast< uint32_t >( Numbers::Zero );;
+	EasingTimeInAdvance = static_cast< uint32_t >( Numbers::Zero );;
 	EndHpEasingPos = end;
 	isTimeAdvances = false;
 	if ( isFirstBoot )
@@ -24,9 +25,9 @@ void HpUpdate::EasingMaterial(const float& end)
 
 void HpUpdate::EasingMaterial(const float& end,const uint32_t& timeInMaxAdvance,const uint32_t& MaxEasingTime)
 {
-	HpDownEasingTime = 0;
+	HpDownEasingTime = static_cast< uint32_t >( Numbers::Zero );
 	HpDownMaxEasingTime = MaxEasingTime;
-	EasingTimeInAdvance = 0;
+	EasingTimeInAdvance = static_cast< uint32_t >( Numbers::Zero );
 	EasingTimeInMaxAdvance = timeInMaxAdvance;
 
 	EndHpEasingPos = end;

@@ -3,14 +3,15 @@
 #include <CollisionManager.h>
 #include <SphereCollider.h>
 #include <CollisionAttribute.h>
+#include <Numbers.h>
 
 EnemyBullet::EnemyBullet()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
-		isBulletAlive[i] = 0;
+		isBulletAlive[i] = static_cast< uint32_t >( Numbers::Zero );
 		BulletLifeTime[i] = MaxBulletLifeTime;
-		BulletRadius[i] = 0.4f;
-		EnemyBulletSpeed[i] = 0.0f;
+		BulletRadius[i] = FloatNumber(fNumbers::fPointFour);
+		EnemyBulletSpeed[i] = FloatNumber(fNumbers::fZero);
 		BulletCollider[i] = nullptr;
 	}
 }
@@ -29,7 +30,7 @@ void EnemyBullet::Initialize()
 		EnemyBulletWorldTrans[i].scale_ = { BulletRadius[i],BulletRadius[i],BulletRadius[i] };
 		EnemyBulletWorldTrans[i].TransferMatrix();
 
-		isBulletAlive[i] = 0;
+		isBulletAlive[i] = static_cast< uint32_t >( Numbers::Zero );
 	}
 
 
@@ -87,16 +88,6 @@ void EnemyBullet::BulletUpdate()
 		}
 	}
 
-	if (isExpanding) {
-		if (BulletRadius[BulletNum_] < EnemyBulletMaxRadius) {
-			BulletRadius[BulletNum_] += 0.1f;
-			EnemyBulletMoveMent[BulletNum_] = Vector3(0, 0, 0);
-			EnemyBulletWorldTrans[BulletNum_].scale_ = Vector3(BulletRadius[BulletNum_], BulletRadius[BulletNum_], BulletRadius[BulletNum_]);
-		}
-		else {
-			isExpanding = false;
-		}
-	}
 
 	WorldTransUpdate();
 }
@@ -110,7 +101,7 @@ uint32_t EnemyBullet::MakeEnemyBullet(const Vector3& MakeBulletPos, const Vector
 				EnemyBulletWorldTrans[i].translation_ = MakeBulletPos;
 				BulletVector[i] = BulletVec;
 				BulletLifeTime[i] = static_cast<uint32_t>(bulletLife);
-				BulletRadius[i] = 0.4f;
+				BulletRadius[i] = BulletRadiusMax;
 				EnemyBulletSpeed[i] = bulletSpeed;
 				EnemyBulletWorldTrans[i].scale_ = Vector3(BulletRadius[i], BulletRadius[i], BulletRadius[i]);
 				BulletCoolTime = MaxBulletCoolTime;
@@ -133,7 +124,7 @@ void EnemyBullet::MakeExpandingStunBullet()
 			if (isBulletAlive[i] == false) {
 				isBulletAlive[i] = true;
 				BulletLifeTime[i] = MaxBulletLifeTime;
-				BulletRadius[i] = 0.4f;
+				BulletRadius[i] = BulletRadiusMax;
 				isExpanding = true;
 				BulletNum_ = i;
 				break;
@@ -177,7 +168,7 @@ void EnemyBullet::CheckBulletAlive()
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (BulletLifeTime[i] <= 0) {
 			isBulletAlive[i] = false;
-			BulletVector[i] = { 0,0,0 };
+			BulletVector[ i ] = Vec3Number(fNumbers::fZero);
 		}
 	}
 }
@@ -186,7 +177,7 @@ void EnemyBullet::SetNotAlivePosition()
 {
 	for (uint32_t i = 0; i < AllBulletCount; i++) {
 		if (isBulletAlive[i] == false) {
-			EnemyBulletWorldTrans[i].translation_ = Vector3(0, -50, 0);
+			EnemyBulletWorldTrans[i].translation_ = Vector3(FloatNumber(fNumbers::fZero), -50,FloatNumber(fNumbers::fZero));
 			EnemyBulletWorldTrans[i].TransferMatrix();
 		}
 	}

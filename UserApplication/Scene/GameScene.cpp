@@ -59,10 +59,6 @@ void GameScene::Initialize() {
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("tutorialStage",Vector3(0,0,0));
 
-	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
-	player_->SetSpline(levelData->GetSpline());
-	player_->SetFinalSpline(levelData->GetFinalSpline());
-
 	tutorialEnemyList = levelData->GetTutorialEnemyList();
 	bulletShotEnemy = levelData->GetBulletShotEnemyList();
 
@@ -132,51 +128,6 @@ void GameScene::Update() {
 
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
-
-	if (isSpline == false) {
-		if (player_->GetHowReturnSpline(2)) {
-			larpTime = 0.0f;
-			isSpline = true;
-		}
-	}
-	else {
-		if (player_->GetHowReturnSpline(4)) {
-
-			Vector2 Mous(0, -2);
-			gameCamera->MousePositionReset(Mous);
-			gameCamera->SetFreeCamera(false);
-			player_->SetCameraModeNotFree(true);
-			isSpline = false;
-		}
-		if (player_->GetFinishFirstSpline()) {
-			gameCamera->MousePositionReset();
-			gameCamera->SetFreeCamera(false);
-			player_->SetCameraModeNotFree(true);
-			isSpline = false;
-		}
-		Vector3 larp;
-		if (larpTime < 1.0f) {
-			larpTime += 0.01f;
-		}
-		else {
-			larpTime = 1.0f;
-		}
-		
-		//gameCamera->SetCameraTargetAndPos(larp.lerp(levelData->GetFirstSpline()[1] + Vector3(0, 10, 0), player_->GetPlayerPos() + Vector3(0,7,0), larpTime),
-		//	larp.lerp(eye, gameCamera->GetPlayerDistanceEyePos(player_->GetPlayerPos()),larpTime));
-	}
-	if (player_->GetHowReturnFainalSpline(5)) {
-		isFinish = true;
-		sceneManager_->ChangeScene("STAGESELECT");
-	}
-	if (player_->GetPlayerPos().y < -250.0f) {
-		sceneManager_->ChangeScene("GAMEPLAY");
-	}
-	if ( player_->GetHitFinalRail() )
-	{
-		isBlackoutStart = true;
-		gameCamera->SetCameraMode(player_->GetHitFinalRail());
-	}
 
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();

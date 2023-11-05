@@ -229,8 +229,8 @@ void GameCamera::PlaySceneCamera() {
 	forward.normalize();
 
 	//target = pos;
-	eye = target + (forward * cameraDistance_);
-	eye = MyMath::lerp(eye,target + ( forward * cameraDistance_ ),0.005f);
+	//eye = target + (forward * cameraDistance_);
+	eye = MyMath::lerp(eye,target + ( forward * cameraDistance_ ),0.2f);
 	CameraAngle(eye.z - target.z, eye.x - target.x);
 
 }

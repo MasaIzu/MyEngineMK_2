@@ -1,4 +1,5 @@
 #include "PlayerMovement.h"
+#include "Numbers.h"
 
 PlayerMovement::PlayerMovement()
 {
@@ -11,7 +12,7 @@ PlayerMovement::~PlayerMovement()
 
 Vector3 PlayerMovement::Move(const WorldTransform& worldTransform)
 {
-	playerAllMoveMent = { 0.0f,0.0f,0.0f };
+	playerAllMoveMent = Vec3Number(fNumbers::fZero);
 
 	if ( pushKey.isPushMoveKey )
 	{
@@ -49,19 +50,19 @@ Vector3 PlayerMovement::Move(const WorldTransform& worldTransform)
 			playerAllMoveMent = worldTransform.LookVelocity.lookRight.norm();
 		}
 
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1 )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
 		{
 			playerAllMoveMent = worldTransform.LookVelocity.look_lookLeft.norm();
 		}
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1 )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
 		{
 			playerAllMoveMent = worldTransform.LookVelocity.look_lookRight.norm();
 		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1 )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
 		{
 			playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookLeft.norm();
 		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1 )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
 		{
 			playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
 		}
@@ -110,22 +111,22 @@ void PlayerMovement::PlayerAngle(const bool& isAtack)
 			PlayerAngleSetter(playerMoveRot.Right);
 		}
 
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_A) == 1 )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.LeftDiagonal);
 		}
-		if ( input_->PushKey(DIK_W) == 1 && input_->PushKey(DIK_D) == 1 )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.FrontDiagonal);
 		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_A) == 1 )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.BackDiagonal);
 		}
-		if ( input_->PushKey(DIK_S) == 1 && input_->PushKey(DIK_D) == 1 )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.RightDiagonal);
@@ -141,7 +142,7 @@ void PlayerMovement::PlayerAngle(const bool& isAtack)
 void PlayerMovement::PlayerAngleSetter(const float& angle)
 {
 	float RotAngle = ( PlayerMoveRotation - angle ) + playerMoveRot.Back;
-	if ( RotAngle >= 0.0f )
+	if ( RotAngle >= FloatNumber(fNumbers::fZero) )
 	{
 		if ( PlayerMoveRotation - angle > playerMoveRot.Back )
 		{

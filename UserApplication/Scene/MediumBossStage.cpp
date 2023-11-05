@@ -35,7 +35,6 @@ void MediumBossStage::Initialize()
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
 
-	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
 	player_->SetCameraModeNotFree(false);
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width,WinApp::window_height);
@@ -61,10 +60,6 @@ void MediumBossStage::Update()
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
-	if ( player_->GetHitFirstRail() )
-	{
-		gameCamera->SetCameraMode(true);
-	}
 
 	//if (player_->GetHowReturnSpline(5)) {
 

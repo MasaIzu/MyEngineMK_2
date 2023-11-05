@@ -5,7 +5,7 @@ void Skydome::Initialize() {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 
-	worldTransform_.scale_ = Vector3(600, 600, 600);
+	worldTransform_.scale_ = Vector3(Size,Size,Size);
 	//行列の転送
 	worldTransform_.TransferMatrix();
 }

@@ -54,6 +54,8 @@ private:
 	float ReticleNotLockLerpPower = 0.4f;
 	float HPBarAlpha = 1.0f;
 	float HPAdjustment = 10.0f;
+	float ReeticleOutLineSize = 192.0f;
+	float AnchorPointOnePointFive = 0.5f;
 
 	Vector2 ReticlePosition = { 640,360 };
 	Vector2 KeepReticlePosition;

@@ -85,6 +85,15 @@ private://const関連
 
 	static const uint32_t AttackedKeepCount = 5;
 
+	const uint32_t MoveFirstTime = 50;
+	const uint32_t MoveOneMoreTime = 30;
+	const uint32_t MaxAttackCoolTime = 50;
+	const uint32_t MaxNomalTime = 50;
+	const uint32_t MaxNomalBulletCoolTime = 5;
+	const uint32_t MaxMissileTime = 100;
+	const uint32_t MaxMissileBulletCoolTime = 50;
+	const uint32_t MaxMoveingAttackTime = 40;
+	const uint32_t MaxMoveingAttackBulletTime = 1;
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
@@ -144,6 +153,7 @@ private://EnemyBossクラス変数
 	uint32_t BackMissileMaxTimes = 10;
 	uint32_t BulletMake = 10;
 
+	float Scale = 5.0f;
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;

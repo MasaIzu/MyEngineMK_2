@@ -1,4 +1,5 @@
 #include "NormalGun.h"
+#include <Numbers.h>
 
 NormalGun::NormalGun(const unsigned short Attribute)
 {
@@ -50,7 +51,7 @@ void NormalGun::Draw(const ViewProjection& viewProjection_)
 
 void NormalGun::ShotBullet(const Vector3& BulletVec)
 {
-	if ( CoolTime == 0 )
+	if ( CoolTime == static_cast< uint32_t >( Numbers::Zero ) )
 	{
 		for ( auto&& Bullet : normalBullet )
 		{
@@ -72,7 +73,7 @@ void NormalGun::UpdatePosition()
 
 void NormalGun::TimeUpdate()
 {
-	if ( CoolTime > 0 )
+	if ( CoolTime > static_cast< uint32_t >( Numbers::Zero ) )
 	{
 		CoolTime--;
 	}

@@ -34,8 +34,6 @@ void StageSelect::Initialize()
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0, 20, 0), viewProjection_.get());
 
-	player_->SetFirstMoveSpline(levelData->GetFirstSpline());
-	player_->SetSpline(levelData->GetStage2SropSpline());
 	player_->SetCameraModeNotFree(false);
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
@@ -53,24 +51,6 @@ void StageSelect::Update()
 	player_->SetCameraModeNotFree(true);
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
-
-	if (player_->GetHitFirstRail()) {
-		isBlackoutStart = true;
-		gameCamera->SetCameraMode(true);
-	}
-	if (player_->GetHit2ndRail()) {
-		isBlackoutStart = true;
-		gameCamera->SetCameraMode(true);
-	}
-
-	if (player_->GetHowReturnSpline(5)) {
-
-		sceneManager_->ChangeScene("GAMEPLAY");
-	}
-	if (player_->GetHowReturnSpline2ndRail(6)) {
-
-		sceneManager_->ChangeScene("STAGE2");
-	}
 
 	if (player_->GetPlayerPos().y < -250.0f) {
 		sceneManager_->ChangeScene("STAGESELECT");

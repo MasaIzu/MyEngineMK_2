@@ -62,14 +62,14 @@ private://別クラスから値をもらう
 
 private://クラス変数
 
-	unsigned short Attribute;
+	unsigned short Attribute = 0;
 
-	bool isBulletAlive;
+	bool isBulletAlive = false;
 	bool isMovingExpandingBullet = false;
-	bool isStartTracking;
-	bool isNearPlayer;
+	bool isStartTracking = false;
+	bool isNearPlayer = false;
 
-	uint32_t BulletLifeTime;
+	uint32_t BulletLifeTime = 0;
 	uint32_t BulletNum_ = 0;
 	uint32_t MaxBulletLifeTime = 200;
 	uint32_t BulletCoolTime = 0;
@@ -82,21 +82,23 @@ private://クラス変数
 	uint32_t MaxBulletNotTrackingTime = 30;
 
 	//イージング
-	uint32_t BulletEasingTime;
+	uint32_t BulletEasingTime = 80;
 	uint32_t BulletMaxEasingTime = 80;
-	uint32_t BulletLarpEasingTime;
+	uint32_t BulletLarpEasingTime = 60;
 	uint32_t BulletLarpMaxEasingTime = 60;
 
-	float BulletRadius;
+	float BulletRadius = 0.5f;
 	float EnemyBulletMaxRadius = 5.0f;
 	float LarpT = 0.0f;
-	float BulletSpeed;
+	float BulletSpeed = 1.5f;
 	float BulletStartSpeed = 1.0f;
 	float BulletEndSpeed = 3.0f;
-	float BulletLerpSpeed;
+	float BulletLerpSpeed = 0.04f;
 	float BulletLerpStartSpeed = 0.04f;
 	float BulletLrrpEndSpeed = 1.5f;
 	float BulletStartLerpTime = 0.04f;
+	float NotSearchArea = 8.0f;
+	float LerpStrength = 0.005f;
 
 	Vector3 BulletOldPos;
 	Vector3 BulletVelocity;

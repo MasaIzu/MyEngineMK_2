@@ -3,6 +3,7 @@
 #include <MyMath.h>
 #include <imgui.h>
 #include "Easing.h"
+#include "Numbers.h"
 
 PlayerUI::PlayerUI()
 {
@@ -15,23 +16,22 @@ PlayerUI::~PlayerUI()
 void PlayerUI::Initialize()
 {
 	ReticleOutline = Sprite::Create(TextureManager::Load("sprite/circle.png"));
-	ReticleOutline->SetAnchorPoint({ 0.5f,0.5f });
-	ReticleOutline->SetSize(Vector2(192.0f,192.0f));
+	ReticleOutline->SetAnchorPoint({ AnchorPointOnePointFive,AnchorPointOnePointFive });
+	ReticleOutline->SetSize(Vector2(ReeticleOutLineSize,ReeticleOutLineSize));
 
 	Reticle = Sprite::Create(TextureManager::Load("sprite/ReticleV2.png"));
-	Reticle->SetAnchorPoint({ 0.5f,0.5f });
-	//Reticle->SetSize(Vector2(96.0f,64.0f));
+	Reticle->SetAnchorPoint({ AnchorPointOnePointFive,AnchorPointOnePointFive });
 
 	HP = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HP->SetAnchorPoint({ 0.0f,0.5f });
+	HP->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive});
 	HP->SetSize(HpSize);
 
 	HPBackSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HPBackSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBackSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
 	HPBackSprite->SetSize(HpSize);
 
 	HPBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
-	HPBarBackBarSprite->SetAnchorPoint({ 0.0f,0.5f });
+	HPBarBackBarSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
 	HPBarBackBarSprite->SetSizeX(HpSize.x + HPAdjustment);
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);

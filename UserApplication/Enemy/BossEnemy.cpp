@@ -44,13 +44,13 @@ void BossEnemy::StagingUpdate()
 	MoveSpline->Update(EnemySplineUpdate);
 	BossWorldTrans[0].translation_ = MoveSpline->NowPos;
 	for (uint32_t i = 1; i < BossEnemyBodyCount; i++) {
-		BossWorldTrans[i].translation_ = Vector3::lerp(BossWorldTrans[i].translation_, BossWorldTrans[i - 1].translation_, 0.1f);
+		BossWorldTrans[i].translation_ = Vector3::lerp(BossWorldTrans[i].translation_, BossWorldTrans[i - 1].translation_,LerpStrength);
 	}
 
 	if (GetFinishSpline()) {
 		for (uint32_t i = 0; i < BossEnemyBodyCount; i++) {
 			if (BossWorldTrans[i].alpha > 0) {
-				BossWorldTrans[i].alpha += -0.015f + (static_cast<float>(i) * 0.0006f);
+				BossWorldTrans[i].alpha += -DownAlpha + (static_cast<float>(i) * AddDownAlpha );
 			}
 		}
 	}
@@ -67,7 +67,7 @@ void BossEnemy::WorldTransUpdate()
 
 bool BossEnemy::GetBodyNoAlpha() const
 {
-	if (BossWorldTrans[BossEnemyBodyCount - 1].alpha <= 0.15f) {
+	if (BossWorldTrans[BossEnemyBodyCount - 1].alpha <= BobyAppha ) {
 		return true;
 	}
 	return false;

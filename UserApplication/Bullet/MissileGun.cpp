@@ -1,4 +1,5 @@
 #include "MissileGun.h"
+#include <Numbers.h>
 
 MissileGun::MissileGun(const unsigned short Attribute)
 {
@@ -50,11 +51,11 @@ void MissileGun::Draw(const ViewProjection& viewProjection_)
 
 void MissileGun::ShotBullet()
 {
-	if ( CoolTime == 0 )
+	if ( CoolTime == static_cast< uint32_t >( Numbers::Zero ) )
 	{
-		float lerpPos = 1.0f / static_cast< float >( MissileBulletCountHalf );
-		NowMissileBulletCount = 0;
-		for ( uint32_t i = 0; i < MissileBulletCount; i++ )
+		float lerpPos = FloatNumber(fNumbers::fOnePointZero) / static_cast< float >( MissileBulletCountHalf );
+		NowMissileBulletCount = static_cast< uint32_t >( Numbers::Zero );
+		for ( uint32_t i = static_cast< uint32_t >( Numbers::Zero ); i < MissileBulletCount; i++ )
 		{
 			for ( auto&& Bullet : normalBullet )
 			{
@@ -68,7 +69,7 @@ void MissileGun::ShotBullet()
 					}
 					else
 					{
-						uint32_t CountReset = NowMissileBulletCount - MissileBulletCountHalf + 1;
+						uint32_t CountReset = NowMissileBulletCount - MissileBulletCountHalf + static_cast< uint32_t >( Numbers::One );
 						BulletVelocity = MyMath::lerp(GunTrans.LookVelocity.lookUp.norm(),GunTrans.LookVelocity.lookRight.norm(),lerpPos * static_cast<float>( CountReset )).norm();
 					}
 					Bullet->MakeMissileBullet(GunTrans.translation_,BulletVelocity.norm(),BulletSpeed);
@@ -87,7 +88,7 @@ void MissileGun::UpdatePosition()
 
 void MissileGun::TimeUpdate()
 {
-	if ( CoolTime > 0 )
+	if ( CoolTime > static_cast< uint32_t >( Numbers::Zero ) )
 	{
 		CoolTime--;
 	}

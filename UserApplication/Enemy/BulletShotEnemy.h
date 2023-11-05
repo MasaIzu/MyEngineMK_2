@@ -130,6 +130,13 @@ private:
 	uint32_t AttackDelayTime = 0;
 	uint32_t MaxAttackDelayTime = 120;
 	uint32_t bulletNumber = 0;
+	uint32_t RandomMin = 150;
+	uint32_t RandomMax = 240;
+	uint32_t RandomRotMax = 360;
+	uint32_t AttackStopTimeMin = 10;
+	uint32_t AttackStopTimeMax = 20;
+	uint32_t WalkTimeMin = 60;
+	uint32_t WalkTimeMax = 120;
 
 	float TerritoryRadius = 20.0f;
 	float AttackAreaRadius = 5.0f;
@@ -150,6 +157,12 @@ private:
 	float dist = 0.0f;
 	float radius = 0.0f;
 	float NormalAttackSpeed = 0.02f;
+	float HedRadius = 2.0f;
+
+	const float adsDistance = 0.2f;
+
+	const float fallAcc = -0.01f;
+	const float fallVYMin = -0.5f;
 
 	Vector3 ReticlePos;
 	Vector3 DistanceNolm;

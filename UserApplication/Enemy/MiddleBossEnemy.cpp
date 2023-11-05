@@ -3,12 +3,13 @@
 #include <SphereCollider.h>
 #include <imgui.h>
 #include <Easing.h>
+#include <Numbers.h>
 
 MiddleBossEnemy::MiddleBossEnemy()
 {
 	MovieUpdateTimes = MaxMovieUpdateTimes;
 	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy",true));
-	BossWorldTrans.scale_ = Vector3(5.0f,5.0f,5.0f);
+	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
 
 	enemyHP2DUI = std::make_unique<EnemyHP2DUI>();
@@ -37,7 +38,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 	this->player = Player;
 
 	// コリジョンマネージャに追加
-	MiddleBossCollider = new SphereCollider(Vector4(0,Radius,0,0),Radius);
+	MiddleBossCollider = new SphereCollider(Vector4(FloatNumber(fNumbers::fZero),Radius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero)),Radius);
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider);
 	MiddleBossCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
@@ -56,7 +57,7 @@ void MiddleBossEnemy::Update()
 	if ( isTurn )
 	{
 
-		if ( RotTime > 0 )
+		if ( RotTime > static_cast<uint32_t>(Numbers::Zero) )
 		{
 			RotTime--;
 			Angle += RotSpeed;
@@ -67,7 +68,7 @@ void MiddleBossEnemy::Update()
 			isStart = true;
 		}
 
-		BossWorldTrans.SetRot(Vector3(0,MyMath::GetAngle(Angle),0));
+		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
 
 	}
 	if ( isStart )
@@ -76,14 +77,14 @@ void MiddleBossEnemy::Update()
 
 		Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,player->GetPlayerPos());
 
-		BossWorldTrans.SetRot(Vector3(0,MyMath::GetAngle(Angle),0));
-		if ( KeepAttackingTime == 0 )
+		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
+		if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
 		{
 			isAttack = false;
 		}
 		if ( isAttack )
 		{
-			if ( BulletCoolTime == 0 )
+			if ( BulletCoolTime == FloatNumber(fNumbers::fZero) )
 			{
 				Attack();
 			}
@@ -103,21 +104,21 @@ void MiddleBossEnemy::Update()
 				{
 					isOneMoreTime = true;
 					isMoveing = true;
-					MoveingTimer = 0;
-					MaxMoveingTimer = 30;
-					if ( mveType == 0 )
+					MoveingTimer = static_cast<uint32_t>(Numbers::Zero);
+					MaxMoveingTimer = MoveOneMoreTime;
+					if ( mveType == static_cast< uint32_t >( Numbers::Zero ) )
 					{
 						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
 					}
-					else if ( mveType == 1 )
+					else if ( mveType == static_cast< uint32_t >( Numbers::One ) )
 					{
 						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
 					}
-					else if ( mveType == 2 )
+					else if ( mveType == static_cast< uint32_t >( Numbers::Two ) )
 					{
 						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
 					}
-					else if ( mveType == 3 )
+					else if ( mveType == static_cast< uint32_t >( Numbers::Three ) )
 					{
 						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
 					}
@@ -343,10 +344,10 @@ void MiddleBossEnemy::WorldTransUpdate()
 
 void MiddleBossEnemy::CheckAttackType()
 {
-	attackType = static_cast< AttackType >( MyMath::Random(0,AllAttackTypeCount) );
+	attackType = static_cast< AttackType >( MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),AllAttackTypeCount) );
 	if ( attackType != AttackType::Move )
 	{
-		attackType = static_cast< AttackType >( MyMath::Random(0,AllAttackTypeCount) );
+		attackType = static_cast< AttackType >( MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),AllAttackTypeCount) );
 	}
 
 	if ( attackType == oldAttackType[ 0 ] )
@@ -359,36 +360,36 @@ void MiddleBossEnemy::CheckAttackType()
 	if ( attackType == AttackType::Nomal )
 	{
 		isAttack = true;
-		MaxBulletCoolTime = 5;
-		AttackCooltime = 50;
-		KeepAttackingTime = 50;
+		MaxBulletCoolTime = MaxNomalBulletCoolTime;
+		AttackCooltime = MaxAttackCoolTime;
+		KeepAttackingTime = MaxNomalTime;
 	}
 	else if ( attackType == AttackType::Missile )
 	{
 		isAttack = true;
-		MaxBulletCoolTime = 50;
-		AttackCooltime = 50;
-		KeepAttackingTime = 100;
+		MaxBulletCoolTime = MaxMissileBulletCoolTime;
+		AttackCooltime = MaxAttackCoolTime;
+		KeepAttackingTime = MaxMissileTime;
 	}
 	else if ( attackType == AttackType::MoveingAttack )
 	{
 		isAttack = true;
-		MaxBulletCoolTime = 1;
-		AttackCooltime = 50;
-		KeepAttackingTime = 40;
+		MaxBulletCoolTime = MaxMoveingAttackBulletTime;
+		AttackCooltime = MaxAttackCoolTime;
+		KeepAttackingTime = MaxMoveingAttackTime;
 	}
 	else if ( attackType == AttackType::Move )
 	{
 		MoveTimes++;
 		isMoveing = true;
-		isOneMoreTime = MyMath::Random(0,1);
-		MoveingTimer = 0;
-		MaxMoveingTimer = 50;
+		isOneMoreTime = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::One ));
+		MoveingTimer = static_cast< uint32_t >( Numbers::Zero );
+		MaxMoveingTimer = MoveFirstTime;
 		if ( isOneMoreTime == true )
 		{
-			isOneMoreTime = MyMath::Random(0,1);
+			isOneMoreTime = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::One ));
 		}
-		mveType = MyMath::Random(0,3);
+		mveType = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::Three ));
 		/*mveType = 0;*/
 		if ( mveType == 0 )
 		{
@@ -424,24 +425,24 @@ void MiddleBossEnemy::CheckAttackType()
 			}
 			else
 			{
-				MoveTimes = 0;
+				MoveTimes = static_cast< uint32_t >( Numbers::Zero );
 				isBackSponePos = true;
 				isMoveing = false;
-				Velocity = { 0,0,0 };
-				BackPosCounter = 1;
-				BackMissileTimes = 0;
+				Velocity = { Vec3Number(fNumbers::fZero)};
+				BackPosCounter = static_cast< uint32_t >( Numbers::One );
+				BackMissileTimes = static_cast< uint32_t >( Numbers::Zero );
 				BulletCoolTime = BackMissileFirstCoolTime;
-				BackLerpPos = ( tmp / 2.0f ) + BossWorldTrans.translation_;
+				BackLerpPos = ( tmp / static_cast< float >( fNumbers::fTwoPointZero ) ) + BossWorldTrans.translation_;
 				BackPoints.clear();
 				BackPoints.push_back(BossWorldTrans.translation_);
 				float LeftOrLight = MyMath::JudgeLeftorRight(EndPos,player->GetPlayerPos(),BossWorldTrans.translation_);
 				Vector3 EasingWaypoint;
-				if ( LeftOrLight == 1.0f )//左
+				if ( LeftOrLight == static_cast< float >( fNumbers::fOnePointZero ) )//左
 				{
 					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookLeft.norm() * BackBosPower );
 					BackPoints.push_back(EasingWaypoint);
 				}
-				else if ( LeftOrLight == -1.0f )//右
+				else if ( LeftOrLight == -static_cast< float >( fNumbers::fOnePointZero ) )//右
 				{
 					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookRight.norm() * BackBosPower );
 					BackPoints.push_back(EasingWaypoint);
@@ -451,7 +452,7 @@ void MiddleBossEnemy::CheckAttackType()
 
 				}
 				Vector3 waypoint = EndPos - EasingWaypoint;
-				waypoint = ( waypoint / 2.0f ) + EasingWaypoint + Vector3(0,jampHeight,0) + BossWorldTrans.LookVelocity.lookBack * BackStrength;
+				waypoint = ( waypoint / static_cast< float >( fNumbers::fTwoPointZero ) ) + EasingWaypoint + Vector3(static_cast< float >( fNumbers::fOnePointZero ),jampHeight,static_cast< float >( fNumbers::fOnePointZero )) + BossWorldTrans.LookVelocity.lookBack * BackStrength;
 				BackPoints.push_back(waypoint);
 				BackPoints.push_back(EndPos);
 			}
@@ -467,7 +468,7 @@ void MiddleBossEnemy::CheckAttackType()
 
 uint32_t MiddleBossEnemy::RandomType(uint32_t& NoUseType)
 {
-	uint32_t newAttackType = MyMath::Random(0,AllAttackTypeCount);
+	uint32_t newAttackType = MyMath::Random(static_cast< float >( fNumbers::fOnePointZero ),AllAttackTypeCount);
 	if ( NoUseType == newAttackType )
 	{
 		return RandomType(NoUseType);

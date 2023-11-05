@@ -7,6 +7,7 @@
 #include <SphereCollider.h>
 #include "BulletDamage.h"
 #include "CollisionAttribute.h"
+#include "Numbers.h"
 
 Player::Player()
 {
@@ -23,7 +24,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	model_.reset(Model::CreateFromOBJ("sphere",true));
 	playerWorldTrans.Initialize();
 	playerWorldTrans.translation_ = Pos;
-	playerWorldTrans.scale_ = { 1,1,1 };
+	playerWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointZero);
 	playerWorldTrans.TransferMatrix();
 
 	viewProjection_ = viewProjection;
@@ -35,18 +36,12 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	DebugWorldTrans.Initialize();
 
-	AttackSprite = Sprite::Create(TextureManager::Load("sprite/shoujuun.png"));
-	AttackSprite->SetAnchorPoint({ 0.5f,0.5f });
-
 	// コリジョンマネージャに追加
-	PlayerCollider = new SphereCollider(Vector4(0,Radius,0,0),Radius);
+	float sphereF = FloatNumber(fNumbers::fZero);
+	PlayerCollider = new SphereCollider(Vector4(sphereF,Radius,sphereF,sphereF),Radius);
 	CollisionManager::GetInstance()->AddCollider(PlayerCollider);
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
-
-	playerMoveSpline = std::make_unique<SplinePosition>();
-	FirstMoveSpline = std::make_unique<SplinePosition>();
-	FinalMoveSpline = std::make_unique<SplinePosition>();
 
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize();
@@ -64,17 +59,8 @@ void Player::Update()
 	isAttack = false;
 	isPressing = false;
 
-	if ( playerMoveSpline->GetFinishSpline() )
-	{
-		isHitRail = false;
-	}
-	if ( FirstMoveSpline->GetFinishSpline() )
-	{
-		isHitFirstRail = false;
-	}
-
 	//攻撃
-	if ( input_->MouseInputing(0) )
+	if ( input_->MouseInputing(static_cast<int>(Numbers::Zero)) )
 	{
 		isAttack = true;
 	}
@@ -94,25 +80,19 @@ void Player::Update()
 	//当たり判定チェック
 	CheckPlayerCollider();
 
-	//スプラインアップデート
-	SplineUpdate();
-
 	if ( isCameraModeNotFree == true )
 	{
 		//カメラの位置でアルファが決まる
-		Alpha = 1.0f - ( 1.0f - PlayerToCameraDistance / CameraMaxDistance );
+		Alpha = FloatNumber(fNumbers::fOnePointZero) - ( FloatNumber(fNumbers::fOnePointZero) - PlayerToCameraDistance / CameraMaxDistance );
 		playerWorldTrans.alpha = Alpha;
 	}
-	if ( FinalMoveSpline->GetHowReturnIndex(5) )
-	{
-		isStop = true;
-	}
+
 
 	if ( input_->TriggerKey(DIK_LSHIFT) )
 	{
 		if ( animation->GetNowAnimFinish() )
 		{
-			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),0,playerAnimTime.Step,false);
+			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.Step,false);
 			DeterminationDirection();
 		}
 	}
@@ -123,17 +103,17 @@ void Player::Update()
 	WorldTransUpdate();
 
 	isGrapple = false;
-	if ( input_->MouseInputing(1) )
+	if ( input_->MouseInputing(static_cast< uint32_t >( Numbers::One )) )
 	{
 
 	}
 
 
-	if ( input_->MouseInputTrigger(0) )
+	if ( input_->MouseInputTrigger(static_cast< uint32_t >( Numbers::Zero )) )
 	{
 		/*LeftBoneNum++;*/
 	}
-	if ( input_->MouseInputTrigger(1) )
+	if ( input_->MouseInputTrigger(static_cast< uint32_t >( Numbers::One )) )
 	{
 		/*LeftBoneNum--;*/
 	}
@@ -151,7 +131,7 @@ void Player::Update()
 	if ( input_->TriggerKey(DIK_F5) )
 	{
 		isAlive = true;
-		PlayerHP = 1000;
+		PlayerHP = PlayerMaxHP;
 		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 	}
 
@@ -160,7 +140,7 @@ void Player::Update()
 		if ( isDieMotion == false )
 		{
 			isDieMotion = true;
-			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::LeftDown ),0,playerAnimTime.DieMotion,false);
+			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::LeftDown ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.DieMotion,false);
 		}
 	}
 	animation->Update();
@@ -185,10 +165,7 @@ void Player::FbxDraw() {
 
 void Player::DrawSprite()
 {
-	AttackSprite->Draw(Vector2(640,360),Vector4(1,1,1,1),2);
-
 	playerUI->Draw();
-
 }
 
 void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
@@ -211,11 +188,11 @@ void Player::PlayerRot(const bool& Attack)
 	playerMovement->PlayerAngle(Attack);
 	if ( !Attack )
 	{
-		playerWorldTrans.SetRot(Vector3(0.0f,cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),0.0f));
+		playerWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero)));
 	}
 	else
 	{
-		playerWorldTrans.SetRot(Vector3(0.0f,MyMath::GetAngle(FixedAngle) + MyMath::GetAngle(playerMovement->GetPlayerAngle()),0.0f));
+		playerWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(FixedAngle) + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero)));
 	}
 	//値更新
 	WorldTransUpdate();
@@ -296,7 +273,7 @@ void Player::CheckPlayerCollider()
 		Ray Groundray;
 		Groundray.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		Groundray.start.y += Radius;
-		Groundray.dir = { 0,-1.0f,0,0 };
+		Groundray.dir = { FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit raycastHit;
 
 
@@ -304,12 +281,12 @@ void Player::CheckPlayerCollider()
 		if ( onGround )
 		{
 // スムーズに坂を下る為の吸着距離
-			const float adsDistance = 0.2f;
+			const float adsDistance = FloatNumber(fNumbers::fOnePointTwo);
 			// 接地を維持
-			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * 2.0f + adsDistance) )
+			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
 			{
 				onGround = true;
-				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * 2.0f );
+				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
 			}
 			// 地面がないので落下
 			else
@@ -321,11 +298,11 @@ void Player::CheckPlayerCollider()
 		// 落下状態
 		else
 		{
-			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * 2.0f) )
+			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero)) )
 			{
 // 着地
 				onGround = true;
-				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * 2.0f );
+				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
 			}
 		}
 	}
@@ -334,7 +311,7 @@ void Player::CheckPlayerCollider()
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
-		wall.dir = { 0,0,1,0 };
+		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fOnePointZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -350,7 +327,7 @@ void Player::CheckPlayerCollider()
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
-		wall.dir = { 0,0,-1,0 };
+		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -365,7 +342,7 @@ void Player::CheckPlayerCollider()
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
-		wall.dir = { 1,0,0,0 };
+		wall.dir = { FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -381,7 +358,7 @@ void Player::CheckPlayerCollider()
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
 		wall.start.y += Radius;
-		wall.dir = { -1,0,0,0 };
+		wall.dir = { -FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -393,46 +370,16 @@ void Player::CheckPlayerCollider()
 
 	}
 
-	//レールコライダー
-	if ( PlayerCollider->GetFirstSplineHit() )
-	{
-		PlayerCollider->FirstSplineHitReset();
-		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0,Radius,0);
-		FirstMoveSpline->ResetNearSpline(splinePos);
-		isHitFirstRail = true;
-	}
-	//レールコライダー
-	if ( isHitRail == false )
-	{
-		if ( PlayerCollider->GetSphereMeshHit() )
-		{
-			PlayerCollider->SphereMeshHitReset();
-			Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0,Radius,0);
-			playerMoveSpline->ResetNearSpline(splinePos);
-			isHitRail = true;
-		}
-	}
-	//レールコライダー
-	if ( PlayerCollider->GetFinalSplineHit() )
-	{
-		PlayerCollider->FinalSplineHitReset();
-		Vector3 splinePos = playerWorldTrans.translation_ - Vector3(0,Radius,0);
-		FirstMoveSpline->ResetNearSpline(splinePos);
-		isHitFinalRail = true;
-	}
-
 }
 
 void Player::Fall()
 {
 	if ( isHitRail == false/* || isHitFirstRail == false*/ )
 	{
-// 落下処理
+		// 落下処理
 		if ( !onGround )
 		{
-// 下向き加速度
-			const float fallAcc = -0.035f;
-			const float fallVYMin = -1.3f;
+			// 下向き加速度
 			// 加速
 			fallVec.y = max(fallVec.y + fallAcc,fallVYMin);
 			// 移動
@@ -443,83 +390,47 @@ void Player::Fall()
 	}
 }
 
-void Player::SplineUpdate()
-{
-	if ( isHitRail == true && playerMoveSpline->GetFinishSpline() == false )
-	{
-		float speed = 0.02f;
-		playerMoveSpline->Update(speed);
-		playerWorldTrans.translation_ = playerMoveSpline->NowPos + Vector3(0,Radius,0);
-	}
-	else if ( playerMoveSpline->GetFinishSpline() )
-	{
-		isHitRail = false;
-	}
-	if ( isHitFirstRail == true && FirstMoveSpline->GetFinishSpline() == false )
-	{
-		float speed = 0.02f;
-		FirstMoveSpline->Update(speed);
-		playerWorldTrans.translation_ = FirstMoveSpline->NowPos + Vector3(0,Radius,0);
-	}
-	else if ( FirstMoveSpline->GetFinishSpline() )
-	{
-		isHitFirstRail = false;
-	}
-	if ( isHitFinalRail == true && FinalMoveSpline->GetFinishSpline() == false )
-	{
-		if ( isStop == false )
-		{
-			float speed = 0.02f;
-			FinalMoveSpline->Update(speed);
-			playerWorldTrans.translation_ = FinalMoveSpline->NowPos + Vector3(0,Radius,0);
-		}
-	}
-	else if ( FinalMoveSpline->GetFinishSpline() )
-	{
-		isHitFinalRail = false;
-	}
-}
 
 void Player::DeterminationDirection()
 {
 	isSliding = true;
 	SlidingSpeed = MaxSlidingSpeed;
 
-	if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 0 )
+	if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == false )
 	{
-		SlidingNumber = 1;
+		SlidingNumber = static_cast<uint32_t>(Numbers::One);
 	}
-	else if ( playerMovement->GetPushedKey().isPushW == 0 && playerMovement->GetPushedKey().isPushS == 0 && playerMovement->GetPushedKey().isPushA == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == false && playerMovement->GetPushedKey().isPushS == false && playerMovement->GetPushedKey().isPushA == true )
 	{
-		SlidingNumber = 2;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Two );
 	}
-	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == false )
 	{
-		SlidingNumber = 3;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Three );
 	}
-	else if ( playerMovement->GetPushedKey().isPushW == 0 && playerMovement->GetPushedKey().isPushS == 0 && playerMovement->GetPushedKey().isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == false && playerMovement->GetPushedKey().isPushS == false && playerMovement->GetPushedKey().isPushD == true )
 	{
-		SlidingNumber = 4;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Four );
 	}
-	else if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 1 && playerMovement->GetPushedKey().isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == true && playerMovement->GetPushedKey().isPushD == false )
 	{
-		SlidingNumber = 5;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Five );
 	}
-	else if ( playerMovement->GetPushedKey().isPushW == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == true )
 	{
-		SlidingNumber = 6;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Six );
 	}
-	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 1 && playerMovement->GetPushedKey().isPushD == 0 )
+	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == true && playerMovement->GetPushedKey().isPushD == false )
 	{
-		SlidingNumber = 7;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Seven );
 	}
-	else if ( playerMovement->GetPushedKey().isPushS == 1 && playerMovement->GetPushedKey().isPushA == 0 && playerMovement->GetPushedKey().isPushD == 1 )
+	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == true )
 	{
-		SlidingNumber = 8;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Eight );
 	}
 	else
 	{
-		SlidingNumber = 0;
+		SlidingNumber = static_cast< uint32_t >( Numbers::Zero );
 	}
 }
 
@@ -527,37 +438,37 @@ void Player::SlideBoostUpdate()
 {
 	if ( isSliding )
 	{
-		if ( SlidingSpeed > 0.0f )
+		if ( SlidingSpeed > FloatNumber(fNumbers::fZero) )
 		{
-			if ( SlidingNumber == 1 )
+			if ( SlidingNumber == static_cast< uint32_t >( Numbers::One ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 2 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Two ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookLeft * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 3 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Three ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 4 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Four ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookRight * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 5 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Five ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookLeft * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 6 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Six ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookRight * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 7 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Seven ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookLeft * SlidingSpeed;
 			}
-			else if ( SlidingNumber == 8 )
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Eight ) )
 			{
 				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookRight * SlidingSpeed;
 			}
@@ -602,13 +513,13 @@ void Player::HPUpdate()
 		PlayerHP -= static_cast< float >( BulletDamage::GetInstance()->GetEnemyMissileBulletDamage() );
 		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 		isTakeMissileDamages = false;
-		if ( PlayerHP > 0.0f )
+		if ( PlayerHP > FloatNumber(fNumbers::fZero) )
 		{
 
 		}
 		else
 		{
-			PlayerHP = 0.0f;//0固定
+			PlayerHP = FloatNumber(fNumbers::fZero);//0固定
 			playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 			isAlive = false;
 		}

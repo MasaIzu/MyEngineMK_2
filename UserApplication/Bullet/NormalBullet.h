@@ -70,7 +70,7 @@ private://クラス変数
 
 	uint32_t BulletLifeTime = 0;
 	uint32_t BulletNum_ = 0;
-	uint32_t MaxBulletLifeTime = 40;
+	uint32_t MaxBulletLifeTime = 100;
 	uint32_t BulletCoolTime = 0;
 	uint32_t MaxBulletCoolTime = 5;
 	uint32_t ParticleFile = 60;
@@ -78,8 +78,7 @@ private://クラス変数
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
 
-	float EnemyBulletSpeed = 0.0f;
-	float BulletRadius = 0.0f;
+	float BulletRadius = 0.5f;
 
 
 	Vector3 EnemyBulletMoveMent;//移動量

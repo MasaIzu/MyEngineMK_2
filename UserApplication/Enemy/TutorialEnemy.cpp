@@ -4,6 +4,7 @@
 #include <CollisionManager.h>
 #include <SphereCollider.h>
 #include <CollisionAttribute.h>
+#include <Numbers.h>
 
 TutorialEnemy::TutorialEnemy(const Vector3& BonePos_, Model* model)
 {
@@ -30,7 +31,7 @@ void TutorialEnemy::Initialize()
 	enemyWorldTrans.Initialize();
 	enemyWorldTrans.translation_ = BonePos;
 	enemyWorldTransHed.Initialize();
-	enemyWorldTransHed.translation_ = { 0.0f,EnemyRadius * 2,0.0f };
+	enemyWorldTransHed.translation_ = { static_cast< float >( fNumbers::fZero ),EnemyRadius * static_cast< float >( fNumbers::fTwoPointZero ),static_cast< float >( fNumbers::fZero ) };
 	WorldTransUpdate();
 
 	input_ = Input::GetInstance();
@@ -38,11 +39,11 @@ void TutorialEnemy::Initialize()
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.translation_ = BonePos;
 	DebugWorldTrans.scale_ = { SearchingAreaRadius,SearchingAreaRadius,SearchingAreaRadius };
-	DebugWorldTrans.alpha = 0.5f;
+	DebugWorldTrans.alpha = FloatNumber(fNumbers::fPointFive);
 	DebugWorldTrans.TransferMatrix();
 
 	for (uint32_t i = 0; i < ColliderSphereCount; i++) {
-		TutorialEnemyCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		TutorialEnemyCollider[i] = new SphereCollider(Vector4(static_cast< float >( fNumbers::fZero ), EnemyRadius,static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero )), EnemyRadius);
 		CollisionManager::GetInstance()->AddCollider(TutorialEnemyCollider[i]);
 		TutorialEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
 	}
@@ -55,7 +56,7 @@ void TutorialEnemy::Initialize()
 			AttackWorldTrans[i].translation_ = AttackWorldTrans[i - 1].LookVelocity.lookUp;
 		}
 		AttackWorldTrans[i].TransferMatrix();
-		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(0, EnemyRadius, 0, 0), EnemyRadius);
+		TutorialEnemyAttackSpereCollider[i] = new SphereCollider(Vector4(static_cast< float >( fNumbers::fZero ), EnemyRadius,static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero )), EnemyRadius);
 		CollisionManager::GetInstance()->AddCollider(TutorialEnemyAttackSpereCollider[i]);
 		TutorialEnemyAttackSpereCollider[i]->SetAttribute(COLLISION_ATTR_ENEMY_ATTACK);
 	}
@@ -88,8 +89,6 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 	// 落下処理
 	if (!onGround) {
 		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
 		// 加速
 		fallVec.y = max(fallVec.y + fallAcc, fallVYMin);
 		// 移動
@@ -109,7 +108,7 @@ void TutorialEnemy::Update(const Vector3& PlayerPos)
 		TutorialEnemyCollider[i]->SetAttribute(COLLISION_ATTR_ENEMYS);
 	}
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		if (i != 0) {
+		if (i != static_cast< uint32_t >( Numbers::Zero ) ) {
 			//AttackWorldTrans[i].parent_ = &AttackWorldTrans[i - 1];
 		}
 		AttackWorldTrans[i].TransferMatrix();
@@ -162,7 +161,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 	{
 	case TutorialEnemy::NotSpottedPhase::Walk:
 
-		if (WalkTime > 0) {
+		if (WalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 			enemyWorldTrans.translation_ += enemyWorldTrans.LookVelocity.look * EnemySpeed;
 
 			//円を作って出ない処理を作る
@@ -172,24 +171,24 @@ void TutorialEnemy::PlayerNotSpottedMove()
 			radius *= radius;
 
 			if (dist >= radius) {
-				StopTime = Random(150, 240);
+				StopTime = Random(RandomMin,RandomMax);
 				NotSpottedPhase_ = NotSpottedPhase::Interruption;
 			}
 
 			enemyWorldTrans.translation_ += enemyMoveMent;
 		}
 		else {
-			StopTime = Random(150, 240);
+			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
 		break;
 	case TutorialEnemy::NotSpottedPhase::Stop:
 
-		if (StopTime <= 0) {
-			WalkTime = Random(60, 120);
-			Rot = static_cast<float>(Random(0, 360));
-			enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+		if (StopTime <= static_cast< uint32_t >( Numbers::Zero ) ) {
+			WalkTime = Random(WalkTimeMin,WalkTimeMax);
+			Rot = static_cast<float>(Random(static_cast< uint32_t >( Numbers::Zero ),RandomRotMax));
+			enemyWorldTrans.SetRot({ static_cast< uint32_t >( Numbers::Zero ),MyMath::GetAngle(Rot),static_cast< uint32_t >( Numbers::Zero ) });
 			NotSpottedPhase_ = NotSpottedPhase::Walk;
 		}
 
@@ -197,7 +196,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 	case TutorialEnemy::NotSpottedPhase::Interruption:
 
 		if (StopTime <= 0) {
-			WalkTime = Random(80, 140);
+			WalkTime = Random(WalkTimeMin,WalkTimeMax);
 			NotSpottedPhase_ = NotSpottedPhase::ForcedWalking;
 		}
 
@@ -210,7 +209,7 @@ void TutorialEnemy::PlayerNotSpottedMove()
 			enemyWorldTrans.translation_ += BackBonePos * EnemySpeed;
 		}
 		else {
-			StopTime = Random(150, 240);
+			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Stop;
 		}
 
@@ -240,7 +239,7 @@ void TutorialEnemy::PlayerSpottedMove()
 	{
 	case TutorialEnemy::SpottedPhase::Intimidation:
 		Rot = EnemyToPlayerAngle;
-		if (AttackStopTime > 0) {
+		if (AttackStopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 
 		}
 		else {
@@ -265,7 +264,7 @@ void TutorialEnemy::PlayerSpottedMove()
 		}
 		Rot = EnemyToPlayerAngle;
 		if (GetIsAttackArea()) {
-			if (AttackDelayTime > 0) {
+			if (AttackDelayTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 
 			}
 			else {
@@ -313,9 +312,9 @@ void TutorialEnemy::PlayerSpottedMove()
 	default:
 		break;
 	}
-	enemyWorldTrans.SetRot({ 0,MyMath::GetAngle(Rot),0 });
+	enemyWorldTrans.SetRot({ static_cast< uint32_t >( Numbers::Zero ),MyMath::GetAngle(Rot),static_cast< uint32_t >( Numbers::Zero ) });
 	for (uint32_t i = 0; i < AttackSphereCount; i++) {
-		AttackWorldTrans[i].SetRot({ 0,MyMath::GetAngle(Rot),0 });
+		AttackWorldTrans[i].SetRot({ static_cast< uint32_t >( Numbers::Zero ),MyMath::GetAngle(Rot),static_cast< uint32_t >( Numbers::Zero ) });
 	}
 }
 
@@ -337,7 +336,7 @@ void TutorialEnemy::Attack()
 
 		//ボールに追従するボール
 		for (uint32_t i = 0; i < AttackSphereCount; i++) {
-			if (i != 0) {
+			if (i != static_cast< uint32_t >( Numbers::Zero ) ) {
 				start = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp;
 				p1 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.lookUp_look;
 				p2 = AttackWorldTrans[i - 1].translation_ + AttackWorldTrans[i - 1].LookVelocity.look;
@@ -368,7 +367,7 @@ void TutorialEnemy::Attack()
 			IsEnemyHasADestination = true;
 		}
 		else {
-			if (RunAttackTime > 0) {
+			if (RunAttackTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 				enemyWorldTrans.translation_ += EnemyToPlayerVec * RunAttackSpeed;
 			}
 			else {
@@ -388,26 +387,26 @@ void TutorialEnemy::Attack()
 
 void TutorialEnemy::PlayerNotSpottedMoveTimer()
 {
-	if (WalkTime > 0) {
+	if (WalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		WalkTime--;
 	}
-	if (StopTime > 0) {
+	if (StopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		StopTime--;
 	}
 }
 
 void TutorialEnemy::PlayerSpottedMoveTimer()
 {
-	if (AttackWalkTime > 0) {
+	if (AttackWalkTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackWalkTime--;
 	}
-	if (AttackStopTime > 0) {
+	if (AttackStopTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackStopTime--;
 	}
-	if (RunAttackTime > 0) {
+	if (RunAttackTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		RunAttackTime--;
 	}
-	if (AttackDelayTime > 0) {
+	if (AttackDelayTime > static_cast< uint32_t >( Numbers::Zero ) ) {
 		AttackDelayTime--;
 	}
 }
@@ -429,7 +428,7 @@ void TutorialEnemy::CheckCollider()
 		// 衝突時コールバック関数
 		bool OnQueryHit(const QueryHit& info) {
 
-			const Vector4 up = { 0,1,0,0 };
+			const Vector4 up = { static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ) };
 
 			Vector4 rejectDir = info.reject;
 			rejectDir.normalize();
@@ -470,18 +469,17 @@ void TutorialEnemy::CheckCollider()
 		Ray Groundray;
 		Groundray.start = sphereCollider->center;
 		Groundray.start.y += sphereCollider->GetRadius();
-		Groundray.dir = { 0,-1,0,0 };
+		Groundray.dir = { static_cast< float >( fNumbers::fZero ),-static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ) };
 		RaycastHit raycastHit;
 
 
 		// 接地状態
 		if (onGround) {
 			// スムーズに坂を下る為の吸着距離
-			const float adsDistance = 0.2f;
 			// 接地を維持
-			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * HedRadius + adsDistance)) {
 				onGround = true;
-				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * HedRadius );
 			}
 			// 地面がないので落下
 			else {
@@ -491,10 +489,10 @@ void TutorialEnemy::CheckCollider()
 		}
 		// 落下状態
 		else {
-			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
+			if (CollisionManager::GetInstance()->Raycast(Groundray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * HedRadius)) {
 				// 着地
 				onGround = true;
-				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+				enemyWorldTrans.translation_.y -= (raycastHit.distance - sphereCollider->GetRadius() * HedRadius );
 			}
 		}
 	}
@@ -503,7 +501,7 @@ void TutorialEnemy::CheckCollider()
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
-		wall.dir = { 0,0,1,0 };
+		wall.dir = { static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -518,7 +516,7 @@ void TutorialEnemy::CheckCollider()
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
-		wall.dir = { 0,0,-1,0 };
+		wall.dir = { static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ),-static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -532,7 +530,7 @@ void TutorialEnemy::CheckCollider()
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
-		wall.dir = { 1,0,0,0 };
+		wall.dir = { static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -547,7 +545,7 @@ void TutorialEnemy::CheckCollider()
 		Ray wall;
 		wall.start = sphereCollider->center;
 		wall.start.y += sphereCollider->GetRadius();
-		wall.dir = { -1,0,0,0 };
+		wall.dir = { -static_cast< float >( fNumbers::fOnePointZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ),static_cast< float >( fNumbers::fZero ) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
@@ -630,7 +628,7 @@ bool TutorialEnemy::GetIsAttackArea()
 void TutorialEnemy::WorldTransUpdate()
 {
 	enemyWorldTrans.TransferMatrix();
-	enemyWorldTransHed.translation_ = enemyWorldTrans.translation_ + Vector3( 0.0f, EnemyRadius * 2, 0.0f );
+	enemyWorldTransHed.translation_ = enemyWorldTrans.translation_ + Vector3(static_cast< float >( fNumbers::fZero ), EnemyRadius * HedRadius,static_cast< float >( fNumbers::fZero ));
 	enemyWorldTransHed.TransferMatrix();
 }
 
