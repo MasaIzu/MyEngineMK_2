@@ -9,7 +9,7 @@
 #include "BossEnemy.h"
 #include "Skydome.h"
 #include "MiddleBossEnemy.h"
-
+#include "ClearUI.h"
 
 // 中ボスシーン
 class MediumBossStage : public BaseScene
@@ -66,6 +66,7 @@ private:
 	std::unique_ptr<BossEnemy> bossEnemy;
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
+	std::unique_ptr<ClearUI> clearUI;
 
 	bool VsBoss = false;
 	bool isLockOn = false;
@@ -82,6 +83,8 @@ private:
 	float angle = 45.0f;
 	float angle2 = 135.0f;
 	float SpriteAlpha = 1.0f;
+	float AddSpriteAlpha = 0.007f;
+	float DownSpriteAlpha = 0.01f;
 
 	Vector2 center = { 0.5f,0.5f };
 };

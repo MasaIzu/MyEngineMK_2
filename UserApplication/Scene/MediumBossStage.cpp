@@ -52,6 +52,9 @@ void MediumBossStage::Initialize()
 
 	sceneManager_ = SceneManager::GetInstance();
 	collisionManager = CollisionManager::GetInstance();
+
+	clearUI = std::make_unique<ClearUI>();
+	clearUI->Initialize();
 }
 
 void MediumBossStage::Update()
@@ -92,27 +95,44 @@ void MediumBossStage::Update()
 
 	if ( middleBossEnemy->GetIsDead() )
 	{
-		sceneManager_->ChangeScene("ClearScene");
-	}
-
-	if ( player_->GetFinishMove() == false )
-	{
-		if ( SpriteAlpha > 0 )
+		if ( !clearUI->Update() )
 		{
-			SpriteAlpha -= 0.01f;
+
+		}
+		else
+		{
+			if ( SpriteAlpha < 1 )
+			{
+				SpriteAlpha += AddSpriteAlpha;
+			}
+			else
+			{
+				sceneManager_->ChangeScene("ClearScene");
+			}
 		}
 	}
 	else
 	{
-		if ( SpriteAlpha < 1 )
+		if ( player_->GetFinishMove() == false )
 		{
-			SpriteAlpha += 0.007f;
+			if ( SpriteAlpha > 0 )
+			{
+				SpriteAlpha -= DownSpriteAlpha;
+			}
 		}
 		else
 		{
-			sceneManager_->ChangeScene("STAGE2");
+			if ( SpriteAlpha < 1 )
+			{
+				SpriteAlpha += AddSpriteAlpha;
+			}
+			else
+			{
+				sceneManager_->ChangeScene("STAGE2");
+			}
 		}
 	}
+
 
 	LockOn();
 
@@ -156,6 +176,8 @@ void MediumBossStage::Draw()
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
+
+	clearUI->Draw();
 
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }

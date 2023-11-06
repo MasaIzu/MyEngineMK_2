@@ -275,6 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="ClearUI.h" />
     <ClInclude Include="Numbers.h" />
     <ClInclude Include="PlayerEnum.h" />
     <ClInclude Include="PlayerMovement.h" />
@@ -367,6 +368,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ClearUI.cpp" />
     <ClCompile Include="Numbers.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />

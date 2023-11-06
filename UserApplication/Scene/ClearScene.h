@@ -49,9 +49,14 @@ private:
 	Input* input = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
-	uint32_t loserTexture_ = 0;
+	std::unique_ptr<Sprite> Result = nullptr;
+	std::unique_ptr<Sprite> ResultDetail = nullptr;
 
 	bool isFinishGame = false;
+	bool isSceneChange = false;
 
+	float SpriteAlpha = 1.0f;
+	float AddSpriteAlpha = 0.01f;
+	float DownSpriteAlpha = 0.01f;
 };
 

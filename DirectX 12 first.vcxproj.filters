@@ -181,6 +181,12 @@
     <Filter Include="UserFile\UserSourceFile\HpUpdate">
       <UniqueIdentifier>{477f7202-09da-4bab-b50a-be2eb5242138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserFile\UserSourceFile\UI">
+      <UniqueIdentifier>{b10142e9-4935-40d8-9a65-725b157ab72a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\UI">
+      <UniqueIdentifier>{5dbacf1a-34b7-48b6-92f8-88ec6e56ccd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -514,20 +520,11 @@
     <ClInclude Include="UserApplication\Bullet\NormalGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Bullet\PlayerUI.h">
-      <Filter>UserFile\UserHeaderFile\Player</Filter>
-    </ClInclude>
     <ClInclude Include="UserApplication\Player\HpUpdate.h">
       <Filter>UserFile\UserHeaderFile\HpUpdate</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\Sprite3D.h">
       <Filter>Engine\HeaderFile\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\FbxLoader.h">
       <Filter>Engine\HeaderFile\3D</Filter>
@@ -558,6 +555,18 @@
     </ClInclude>
     <ClInclude Include="Numbers.h">
       <Filter>Engine\HeaderFile\MyFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="UserApplication\Bullet\PlayerUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -753,20 +762,11 @@
     <ClCompile Include="UserApplication\Bullet\NormalGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Player\PlayerUI.cpp">
-      <Filter>UserFile\UserSourceFile\Player</Filter>
-    </ClCompile>
     <ClCompile Include="UserApplication\Player\HpUpdate.cpp">
       <Filter>UserFile\UserSourceFile\HpUpdate</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\Sprite3D.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\FbxLoader.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
@@ -791,6 +791,18 @@
     </ClCompile>
     <ClCompile Include="Numbers.cpp">
       <Filter>Engine\SourceFile\MyFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UserApplication\Player\PlayerUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

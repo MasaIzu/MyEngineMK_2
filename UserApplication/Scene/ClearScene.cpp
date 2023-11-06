@@ -4,8 +4,12 @@ void ClearScene::Initialize()
 {
 	input = Input::GetInstance();
 
-	loserTexture_ = TextureManager::Load("sprite/Clear.png");
-	sprite_ = Sprite::Create(loserTexture_);
+	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
+
+	Result = Sprite::Create(TextureManager::Load("sprite/Result.png"));
+
+	ResultDetail = Sprite::Create(TextureManager::Load("sprite/ResultDetail.png"));
+
 	sceneManager_ = SceneManager::GetInstance();
 
 }
@@ -15,8 +19,28 @@ void ClearScene::Update()
 {
 	if (input->TriggerKey(DIK_SPACE))
 	{
-		sceneManager_->ChangeScene("STAGESELECT");
+		isSceneChange = true;
 	}
+
+	if ( !isSceneChange )
+	{
+		if ( SpriteAlpha > 0 )
+		{
+			SpriteAlpha -= DownSpriteAlpha;
+		}
+	}
+	else
+	{
+		if ( SpriteAlpha < 1 )
+		{
+			SpriteAlpha += AddSpriteAlpha;
+		}
+		else
+		{
+			sceneManager_->ChangeScene("STAGE2");
+		}
+	}
+
 }
 
 void ClearScene::PostEffectDraw()
@@ -25,7 +49,9 @@ void ClearScene::PostEffectDraw()
 
 void ClearScene::Draw()
 {
-	sprite_->Draw({ 640,360 }, { 1,1,1,1 });
+	Result->Draw({ 640,360 }, { 1,1,1,1 });
+	ResultDetail->Draw({ 640,400 },{ 1,1,1,1 });
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 
 void ClearScene::Finalize()

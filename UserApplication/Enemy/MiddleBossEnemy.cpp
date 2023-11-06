@@ -57,7 +57,7 @@ void MiddleBossEnemy::Update()
 	if ( isTurn )
 	{
 
-		if ( RotTime > static_cast<uint32_t>(Numbers::Zero) )
+		if ( RotTime > static_cast< uint32_t >( Numbers::Zero ) )
 		{
 			RotTime--;
 			Angle += RotSpeed;
@@ -71,124 +71,125 @@ void MiddleBossEnemy::Update()
 		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
 
 	}
-	if ( isStart )
+	if ( !isDead )
 	{
-		Timer();
-
-		Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,player->GetPlayerPos());
-
-		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
-		if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
+		if ( isStart )
 		{
-			isAttack = false;
-		}
-		if ( isAttack )
-		{
-			if ( BulletCoolTime == FloatNumber(fNumbers::fZero) )
+			Timer();
+
+			Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,player->GetPlayerPos());
+
+			BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
+			if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
 			{
-				Attack();
+				isAttack = false;
 			}
-		}
-		else
-		{
-			ThinkingTime();
-		}
-
-		if ( isMoveing )
-		{
-			BossWorldTrans.translation_ = Easing::EaseOutQuintVec3(MoveStartPos,MovePos,MoveingTimer,MaxMoveingTimer);
-
-			if ( MoveingTimer == MaxMoveingTimer )
+			if ( isAttack )
 			{
-				if ( isOneMoreTime == false )
+				if ( BulletCoolTime == FloatNumber(fNumbers::fZero) )
 				{
-					isOneMoreTime = true;
-					isMoveing = true;
-					MoveingTimer = static_cast<uint32_t>(Numbers::Zero);
-					MaxMoveingTimer = MoveOneMoreTime;
-					if ( mveType == static_cast< uint32_t >( Numbers::Zero ) )
-					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
-					}
-					else if ( mveType == static_cast< uint32_t >( Numbers::One ) )
-					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
-					}
-					else if ( mveType == static_cast< uint32_t >( Numbers::Two ) )
-					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
-					}
-					else if ( mveType == static_cast< uint32_t >( Numbers::Three ) )
-					{
-						MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
-					}
-					MoveStartPos = BossWorldTrans.translation_;
+					Attack();
+				}
+			}
+			else
+			{
+				ThinkingTime();
+			}
 
-					missileGun->ShotBullet();
+			if ( isMoveing )
+			{
+				BossWorldTrans.translation_ = Easing::EaseOutQuintVec3(MoveStartPos,MovePos,MoveingTimer,MaxMoveingTimer);
+
+				if ( MoveingTimer == MaxMoveingTimer )
+				{
+					if ( isOneMoreTime == false )
+					{
+						isOneMoreTime = true;
+						isMoveing = true;
+						MoveingTimer = static_cast< uint32_t >( Numbers::Zero );
+						MaxMoveingTimer = MoveOneMoreTime;
+						if ( mveType == static_cast< uint32_t >( Numbers::Zero ) )
+						{
+							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
+						}
+						else if ( mveType == static_cast< uint32_t >( Numbers::One ) )
+						{
+							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
+						}
+						else if ( mveType == static_cast< uint32_t >( Numbers::Two ) )
+						{
+							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
+						}
+						else if ( mveType == static_cast< uint32_t >( Numbers::Three ) )
+						{
+							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
+						}
+						MoveStartPos = BossWorldTrans.translation_;
+
+						missileGun->ShotBullet();
+					}
+					else
+					{
+						isMoveing = false;
+					}
+				}
+			}
+
+			if ( isBackSponePos == true )
+			{
+				Vector3 goPos = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
+				goPos.normalize();
+				Velocity = MyMath::lerp(Velocity,goPos,0.1f);
+				BossWorldTrans.translation_ += Velocity * BackSpeed;
+				// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
+				Vector3 tmp;
+				tmp = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
+				float dist = tmp.dot(tmp);
+				float radius2 = 5.0f;
+				radius2 *= radius2;
+
+				if ( BackMissileTimes < BackMissileMaxTimes )
+				{
+					if ( BulletCoolTime == 0 )
+					{
+						BulletCoolTime = BackMissileCoolTime;
+						missileGun->ShotBullet();
+					}
+				}
+
+				if ( dist <= radius2 )
+				{
+					if ( BackPosCounter < BackPoints.size() - 1 )
+					{
+						BackPosCounter++;
+					}
+					else
+					{
+						isBackSponePos = false;
+					}
+				}
+			}
+
+
+			if ( MiddleBossCollider->GetHit() )
+			{
+				MiddleBossCollider->Reset();
+				MiddleBossHp--;
+				if ( MiddleBossHp > 0 )
+				{
+
 				}
 				else
 				{
-					isMoveing = false;
+					isDead = true;
+					MiddleBossHp = static_cast< uint32_t >( Numbers::Zero );//0固定;
 				}
-			}
-		}
-
-		if ( isBackSponePos == true )
-		{
-			Vector3 goPos = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
-			goPos.normalize();
-			Velocity = MyMath::lerp( Velocity, goPos, 0.1f);
-			BossWorldTrans.translation_ += Velocity * BackSpeed;
-			// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
-			Vector3 tmp;
-			tmp = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
-			float dist = tmp.dot(tmp);
-			float radius2 = 5.0f;
-			radius2 *= radius2;
-
-			if ( BackMissileTimes < BackMissileMaxTimes )
-			{
-				if ( BulletCoolTime == 0 )
-				{
-					BulletCoolTime = BackMissileCoolTime;
-					missileGun->ShotBullet();
-				}
+				enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
+				enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 			}
 
-			if ( dist <= radius2 )
-			{
-				if ( BackPosCounter < BackPoints.size() - 1 )
-				{
-					BackPosCounter++;
-				}
-				else
-				{
-					isBackSponePos = false;
-				}
-			}
+			MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 		}
-
-		if ( MiddleBossCollider->GetHit() )
-		{
-			MiddleBossCollider->Reset();
-			MiddleBossHp--;
-			enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
-			enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
-		}
-
-		if ( MiddleBossHp > 0 )
-		{
-
-		}
-		else
-		{
-			isDead = true;
-		}
-
-		normalGun->Update(BossWorldTrans.translation_);
-		missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
-
-		MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 	}
 
 	WorldTransUpdate();
@@ -203,6 +204,9 @@ void MiddleBossEnemy::Update()
 	ImGui::Text("HpPosition:%f,%f",HpPosition.x,HpPosition.y);
 
 	ImGui::End();
+
+	normalGun->Update(BossWorldTrans.translation_);
+	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
 
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
@@ -428,7 +432,7 @@ void MiddleBossEnemy::CheckAttackType()
 				MoveTimes = static_cast< uint32_t >( Numbers::Zero );
 				isBackSponePos = true;
 				isMoveing = false;
-				Velocity = { Vec3Number(fNumbers::fZero)};
+				Velocity = { Vec3Number(fNumbers::fZero) };
 				BackPosCounter = static_cast< uint32_t >( Numbers::One );
 				BackMissileTimes = static_cast< uint32_t >( Numbers::Zero );
 				BulletCoolTime = BackMissileFirstCoolTime;
@@ -468,7 +472,7 @@ void MiddleBossEnemy::CheckAttackType()
 
 uint32_t MiddleBossEnemy::RandomType(uint32_t& NoUseType)
 {
-	uint32_t newAttackType = MyMath::Random(static_cast< float >( fNumbers::fOnePointZero ),AllAttackTypeCount);
+	uint32_t newAttackType = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),AllAttackTypeCount);
 	if ( NoUseType == newAttackType )
 	{
 		return RandomType(NoUseType);

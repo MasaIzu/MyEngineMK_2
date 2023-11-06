@@ -487,10 +487,7 @@ void Player::SlideBoostUpdate()
 
 float Player::AngleSelect(float& angle_,float& selectAngle)
 {
-	//float sprt = std::sqrt(angle * angle);
-	int intOverAngle = static_cast< int >( angle_ / selectAngle );
-
-	float floatOverAngle = static_cast< float >( intOverAngle );
+	float floatOverAngle = static_cast< float >( angle_ / selectAngle );
 
 	float Angle = angle_ - ( selectAngle * floatOverAngle );
 
