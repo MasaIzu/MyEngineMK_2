@@ -396,42 +396,7 @@ void Player::DeterminationDirection()
 	isSliding = true;
 	SlidingSpeed = MaxSlidingSpeed;
 
-	if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == false )
-	{
-		SlidingNumber = static_cast<uint32_t>(Numbers::One);
-	}
-	else if ( playerMovement->GetPushedKey().isPushW == false && playerMovement->GetPushedKey().isPushS == false && playerMovement->GetPushedKey().isPushA == true )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Two );
-	}
-	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == false )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Three );
-	}
-	else if ( playerMovement->GetPushedKey().isPushW == false && playerMovement->GetPushedKey().isPushS == false && playerMovement->GetPushedKey().isPushD == true )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Four );
-	}
-	else if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == true && playerMovement->GetPushedKey().isPushD == false )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Five );
-	}
-	else if ( playerMovement->GetPushedKey().isPushW == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == true )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Six );
-	}
-	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == true && playerMovement->GetPushedKey().isPushD == false )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Seven );
-	}
-	else if ( playerMovement->GetPushedKey().isPushS == true && playerMovement->GetPushedKey().isPushA == false && playerMovement->GetPushedKey().isPushD == true )
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Eight );
-	}
-	else
-	{
-		SlidingNumber = static_cast< uint32_t >( Numbers::Zero );
-	}
+	playerMovement->SlidingMaterial(playerWorldTrans);
 }
 
 void Player::SlideBoostUpdate()
@@ -440,43 +405,7 @@ void Player::SlideBoostUpdate()
 	{
 		if ( SlidingSpeed > FloatNumber(fNumbers::fZero) )
 		{
-			if ( SlidingNumber == static_cast< uint32_t >( Numbers::One ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Two ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Three ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Four ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookRight * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Five ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Six ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look_lookRight * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Seven ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookLeft * SlidingSpeed;
-			}
-			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Eight ) )
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.lookBack_lookRight * SlidingSpeed;
-			}
-			else
-			{
-				playerWorldTrans.translation_ += playerWorldTrans.LookVelocity.look * SlidingSpeed;
-			}
-			SlidingSpeed -= MaxSlidingSpeed / playerAnimTime.Step;
+			playerWorldTrans.translation_ += playerMovement->SlidingUpdate(SlidingSpeed,MaxSlidingSpeed,playerAnimTime.Step);
 		}
 		else
 		{

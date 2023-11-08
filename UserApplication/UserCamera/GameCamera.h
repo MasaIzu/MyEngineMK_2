@@ -85,7 +85,7 @@ private://プレイヤークラス変数
 	float scaleX_ = 1.0f;// スケーリング
 	float scaleY_ = 1.0f;
 	float angleAroundPlayer = 0.0f; // プレイヤーの周りを回転する角度
-	float cameraDistance_ = 30.0f;
+	float cameraDistance_ = 35.0f;
 	float angle = 0.0f;
 	float cameraSpeed_ = 3;// カメラの速度
 	float cameraDelay = 0.1f;// カメラが追跡する際の遅延量
@@ -101,6 +101,7 @@ private://プレイヤークラス変数
 	float CameraCollisionRadius = 0.1f;
 	float CameraRayCollisionRadius = 0.2f;
 	float PlayerToCameraVecDistance = 0.0f;
+	float LerpStrength = 0.085f;
 
 	Uint32Vector2 windowWH;
 
@@ -115,11 +116,13 @@ private://プレイヤークラス変数
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
-	Vector3 cameraHigh = { 0,13,0 };
+	Vector3 cameraHigh = { 0,10,0 };
 	Vector3 PlayerToCameraVec;
 	//セットされたVec
 	Vector3 SetTargetVec;
 	Vector3 SetEyeVec;
+	//遅延カメラ
+	Vector3 LerpPlayerPosition;
 
 	Matrix4 CameraRot;
 	Matrix4 matRot;// 回転行列

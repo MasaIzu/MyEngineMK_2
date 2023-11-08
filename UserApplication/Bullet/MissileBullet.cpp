@@ -12,7 +12,7 @@ MissileBullet::MissileBullet(const unsigned short Attribute_)
 	// コリジョンマネージャに追加
 	float sphereF = FloatNumber(fNumbers::fZero);
 	BulletCollider = new SphereCollider(Vector4(sphereF,BulletRadius,sphereF,sphereF),BulletRadius);
-	CollisionManager::GetInstance()->AddCollider(BulletCollider);
+	//CollisionManager::GetInstance()->AddCollider(BulletCollider);
 	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	Attribute = Attribute_;
 }
@@ -20,7 +20,7 @@ MissileBullet::MissileBullet(const unsigned short Attribute_)
 MissileBullet::~MissileBullet()
 {
 
-	CollisionManager::GetInstance()->RemoveCollider(BulletCollider);
+	//CollisionManager::GetInstance()->RemoveCollider(BulletCollider);
 
 }
 

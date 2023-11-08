@@ -221,7 +221,8 @@ void GameCamera::PlaySceneCamera() {
 
 	rot = rotation;
 	CameraRot = cameraRot;
-	target = playerPos_ + cameraHigh;
+	LerpPlayerPosition = MyMath::lerp(LerpPlayerPosition,playerPos_,LerpStrength);
+	target = LerpPlayerPosition + cameraHigh;
 
 	//ワールド前方ベクトル
 	Vector3 forward(0, 0, cameraDistance_);
@@ -230,7 +231,7 @@ void GameCamera::PlaySceneCamera() {
 
 	//target = pos;
 	//eye = target + (forward * cameraDistance_);
-	eye = MyMath::lerp(eye,target + ( forward * cameraDistance_ ),0.2f);
+	eye = target + ( forward * cameraDistance_ );
 	CameraAngle(eye.z - target.z, eye.x - target.x);
 
 }
