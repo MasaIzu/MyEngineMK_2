@@ -18,7 +18,7 @@ public://基本関数
 	//Angle
 	void PlayerAngle(const bool& isAtack);
 	//スライディングマテリアル
-	void SlidingMaterial(const WorldTransform& worldTransform);
+	bool SlidingMaterial(const WorldTransform& worldTransform);
 	//スライディングアップデート
 	Vector3 SlidingUpdate(float& slidingSpeed,const float& maxSlidingSpeed,const uint32_t& Step);
 
@@ -61,6 +61,7 @@ private://クラス変数
 	bool isPlayerAttack = false;
 	bool isBoost = false;
 	bool isBoostCoolTimeFinish = false;
+	bool isBoostSuccess = false;
 
 	uint32_t SlidingNumber = 0;
 	uint32_t BoostCoolTime = 0;

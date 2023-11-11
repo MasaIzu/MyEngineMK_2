@@ -92,7 +92,6 @@ void Player::Update()
 	{
 		if ( animation->GetNowAnimFinish() )
 		{
-			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.Step,false);
 			DeterminationDirection();
 		}
 	}
@@ -378,10 +377,12 @@ void Player::CheckPlayerCollider()
 
 void Player::DeterminationDirection()
 {
-	isSliding = true;
-	SlidingSpeed = MaxSlidingSpeed;
-
-	playerMovement->SlidingMaterial(playerWorldTrans);
+	if ( playerMovement->SlidingMaterial(playerWorldTrans) )
+	{
+		isSliding = true;
+		SlidingSpeed = MaxSlidingSpeed;
+		animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.Step,false);
+	}
 }
 
 void Player::SlideBoostUpdate()

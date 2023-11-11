@@ -291,12 +291,14 @@ void PlayerMovement::BoostFuelUpdate(const bool& onGround)
 	}
 }
 
-void PlayerMovement::SlidingMaterial(const WorldTransform& worldTransform)
+bool PlayerMovement::SlidingMaterial(const WorldTransform& worldTransform)
 {
 	DirectionOfMovement = Vec3Number(fNumbers::fZero);
+	isBoostSuccess = false;
 	if ( FuelUsedBoost <= Fuel )
 	{
 		isBoostCoolTimeFinish = true;
+		isBoostSuccess = true;
 		BoostCoolTime = MaxBoostCoolTime;
 		Fuel -= FuelUsedBoost;
 		if ( isPlayerAttack )
@@ -343,6 +345,7 @@ void PlayerMovement::SlidingMaterial(const WorldTransform& worldTransform)
 			DirectionOfMovement = worldTransform.LookVelocity.look;
 		}
 	}
+	return isBoostSuccess;
 }
 
 Vector3 PlayerMovement::SlidingUpdate(float& slidingSpeed,const float& maxSlidingSpeed,const uint32_t& Step)
