@@ -54,10 +54,6 @@ private:
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
 	void CheckPlayerCollider();
-	//落下
-	void Fall();
-	//スプラインアップデート
-	void SplineUpdate();
 	//スライドブースト方向決め
 	void DeterminationDirection();
 	//スライドブーストアップデート
@@ -95,6 +91,7 @@ private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
+	WorldTransform playerRotWorldTrans;
 	WorldTransform StartingPointOfGrapple;
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
@@ -124,8 +121,6 @@ private://別クラスから値をもらう
 	Vector2 cameraRot;
 
 private://コンスト
-	const float fallAcc = -0.035f;
-	const float fallVYMin = -1.3f;
 
 private://プレイヤークラス変数
 	bool onGround = false;
@@ -158,7 +153,7 @@ private://プレイヤークラス変数
 	float PlayerToAimSaiteVecDistance = 0.0f;
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
-	float MaxSlidingSpeed = 2.7f;
+	float MaxSlidingSpeed = 2.0f;
 	float PlayerHP = 5000;
 	float PlayerMaxHP = 5000;
 	float RotLimit = 0.1f;

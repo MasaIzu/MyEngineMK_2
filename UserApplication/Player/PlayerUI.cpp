@@ -13,7 +13,7 @@ PlayerUI::~PlayerUI()
 {
 }
 
-void PlayerUI::Initialize()
+void PlayerUI::Initialize(const float& playerFuel)
 {
 	ReticleOutline = Sprite::Create(TextureManager::Load("sprite/circle.png"));
 	ReticleOutline->SetAnchorPoint({ AnchorPointOnePointFive,AnchorPointOnePointFive });
@@ -34,11 +34,22 @@ void PlayerUI::Initialize()
 	HPBarBackBarSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
 	HPBarBackBarSprite->SetSizeX(HpSize.x + HPAdjustment);
 
+	BoostBarSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
+	BoostBarSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
+
+	BoostBarBackBarSprite = Sprite::Create(TextureManager::Load("sprite/HpBarBackBar.png"));
+	BoostBarBackBarSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
+
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 
+	MaxBoostFuel = playerFuel;
+
+	BoostFuelSize.x = BoostBarMaxSize;
+	BoostBarSprite->SetSize(BoostFuelSize);
+	BoostBarBackBarSprite->SetSizeX(BoostFuelSize.x + BoostAdjustment);
 }
 
-void PlayerUI::Update()
+void PlayerUI::Update(const float& nowBoost)
 {
 	BackHpDownSize.x = hpUpdate->Update();
 	HPBackSprite->SetSize(BackHpDownSize);
@@ -47,6 +58,18 @@ void PlayerUI::Update()
 	HPDownBarColor.w = HPBarAlpha;
 	HPBarColor = WhiteColor;
 	HPBarColor.w = HPBarAlpha;
+
+
+	BoostFuelSize.x = BoostBarMaxSize * ( nowBoost / MaxBoostFuel );
+	BoostBarSprite->SetSize(BoostFuelSize);
+
+
+	ImGui::Begin("UI");
+
+	ImGui::SliderFloat("BoostBarPositionX",&BoostBarPosition.x,0,1280);
+	ImGui::SliderFloat("BoostBarPositionY",&BoostBarPosition.y,0,720);
+	ImGui::End();
+
 }
 
 void PlayerUI::AttackReticleUpdate(const bool& LockOn)
@@ -61,19 +84,6 @@ void PlayerUI::AttackReticleUpdate(const bool& LockOn)
 		ReticleColor = NotLockOnColor;
 		ReticlePosition = MyMath::lerpVec2(ReticlePosition,ReticleNormalPosition,ReticleNotLockLerpPower);
 	}
-
-
-	ImGui::Begin("PlayerUI");
-
-	ImGui::SliderFloat("HpPositionX",&HpPosition.x,0,static_cast<float>(WinApp::GetInstance()->window_width));
-	ImGui::SliderFloat("HpPositionY",&HpPosition.y,0,static_cast< float >(WinApp::GetInstance()->window_height));
-	ImGui::Text("HpPosition:%f,%f",HpPosition.x,HpPosition.y);
-
-	ImGui::SliderFloat("HpSizeX",&HpSize.x,0,static_cast< float >( WinApp::GetInstance()->window_width ));
-	ImGui::SliderFloat("HpSizeY",&HpSize.y,0,static_cast< float >( WinApp::GetInstance()->window_height ));
-	ImGui::Text("HpSize:%f,%f",HpSize.x,HpSize.y);
-
-	ImGui::End();
 
 	HP->SetSize(HpSize);
 }
@@ -93,6 +103,8 @@ void PlayerUI::Draw()
 	HPBarBackBarSprite->Draw(HpBarBackBarPosition,WhiteColor);
 	HPBackSprite->Draw(HpPosition,HPDownBarColor);
 	HP->Draw(HpPosition,HPBarColor);
+	BoostBarBackBarSprite->Draw(BoostBarBackBarPosition,WhiteColor);
+	BoostBarSprite->Draw(BoostBarPosition,WhiteColor);
 }
 
 void PlayerUI::SetReticlePosition(const Vector2& position)

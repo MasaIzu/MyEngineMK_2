@@ -194,17 +194,6 @@ void MiddleBossEnemy::Update()
 
 	WorldTransUpdate();
 
-	ImGui::Begin("MiddleBoss");
-	ImGui::Text("Angle = %f",Angle);
-	ImGui::Text("AngleSize = %f",AngleSize);
-	ImGui::Text("RotTime = %d",RotTime);
-
-	ImGui::SliderFloat("HpPositionX",&HpPosition.x,0,static_cast< float >( WinApp::GetInstance()->window_width ));
-	ImGui::SliderFloat("HpPositionY",&HpPosition.y,0,static_cast< float >( WinApp::GetInstance()->window_height ));
-	ImGui::Text("HpPosition:%f,%f",HpPosition.x,HpPosition.y);
-
-	ImGui::End();
-
 	normalGun->Update(BossWorldTrans.translation_);
 	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
 

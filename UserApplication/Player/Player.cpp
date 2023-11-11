@@ -27,6 +27,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointZero);
 	playerWorldTrans.TransferMatrix();
 
+	playerRotWorldTrans.Initialize();
+
 	viewProjection_ = viewProjection;
 
 	StartingPointOfGrapple.Initialize();
@@ -36,6 +38,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	DebugWorldTrans.Initialize();
 
+	playerMovement = std::make_unique<PlayerMovement>();
+
 	// コリジョンマネージャに追加
 	float sphereF = FloatNumber(fNumbers::fZero);
 	PlayerCollider = new SphereCollider(Vector4(sphereF,Radius,sphereF,sphereF),Radius);
@@ -44,14 +48,12 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
 	playerUI = std::make_unique<PlayerUI>();
-	playerUI->Initialize();
+	playerUI->Initialize(playerMovement->GetFuel());
 
 	playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
 
 	animation = std::make_unique<Animation>();
 	animation->Initialize();
-
-	playerMovement = std::make_unique<PlayerMovement>();
 }
 
 void Player::Update()
@@ -73,10 +75,8 @@ void Player::Update()
 	//回転させる
 	PlayerRot(isAttack);
 	
-	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans);
+	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround);
 
-	//落下
-	Fall();
 	//当たり判定チェック
 	CheckPlayerCollider();
 
@@ -126,7 +126,7 @@ void Player::Update()
 	ImGui::End();
 
 	//uiのアプデ
-	playerUI->Update();
+	playerUI->Update(playerMovement->GetFuel());
 
 	if ( input_->TriggerKey(DIK_F5) )
 	{
@@ -280,19 +280,22 @@ void Player::CheckPlayerCollider()
 		// 接地状態
 		if ( onGround )
 		{
-// スムーズに坂を下る為の吸着距離
-			const float adsDistance = FloatNumber(fNumbers::fOnePointTwo);
-			// 接地を維持
-			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
+			if ( !playerMovement->GetIsBoost() )
 			{
-				onGround = true;
-				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
-			}
-			// 地面がないので落下
-			else
-			{
-				onGround = false;
-				fallVec = {};
+				// スムーズに坂を下る為の吸着距離
+				const float adsDistance = FloatNumber(fNumbers::fOnePointTwo);
+				// 接地を維持
+				if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
+				{
+					onGround = true;
+					playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
+				}
+				// 地面がないので落下
+				else
+				{
+					onGround = false;
+					fallVec = {};
+				}
 			}
 		}
 		// 落下状態
@@ -370,24 +373,6 @@ void Player::CheckPlayerCollider()
 
 	}
 
-}
-
-void Player::Fall()
-{
-	if ( isHitRail == false/* || isHitFirstRail == false*/ )
-	{
-		// 落下処理
-		if ( !onGround )
-		{
-			// 下向き加速度
-			// 加速
-			fallVec.y = max(fallVec.y + fallAcc,fallVYMin);
-			// 移動
-			playerWorldTrans.translation_.x += fallVec.x;
-			playerWorldTrans.translation_.y += fallVec.y;
-			playerWorldTrans.translation_.z += fallVec.z;
-		}
-	}
 }
 
 

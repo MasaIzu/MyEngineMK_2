@@ -66,6 +66,9 @@ private://クラス関連
 	BaseCollider* CameraCollider = nullptr;
 
 private://プレイヤークラス変数
+
+	const float LerpStrength = 0.09f;
+
 	bool cameraMode = false;
 	bool isShake = false;
 	bool cameraDown = false;
@@ -101,7 +104,6 @@ private://プレイヤークラス変数
 	float CameraCollisionRadius = 0.1f;
 	float CameraRayCollisionRadius = 0.2f;
 	float PlayerToCameraVecDistance = 0.0f;
-	float LerpStrength = 0.085f;
 
 	Uint32Vector2 windowWH;
 

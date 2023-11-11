@@ -12,9 +12,9 @@ public:
 	~PlayerUI();
 
 	//初期化
-	void Initialize();
+	void Initialize(const float& playerFuel);
 	//更新
-	void Update();
+	void Update(const float& nowBoost);
 	void AttackReticleUpdate(const bool& LockOn);
 	void PlayerHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp);
 	//描画
@@ -25,7 +25,7 @@ public:
 
 private:
 	const float HpBarMaxSize = 200.0f;
-
+	const float BoostBarMaxSize = 400.0f;
 private:
 
 	std::unique_ptr<Sprite> ReticleOutline;
@@ -33,8 +33,8 @@ private:
 	std::unique_ptr<Sprite> HP;
 	std::unique_ptr<Sprite> HPBackSprite;
 	std::unique_ptr<Sprite> HPBarBackBarSprite;
-
-
+	std::unique_ptr<Sprite> BoostBarSprite;
+	std::unique_ptr<Sprite> BoostBarBackBarSprite;
 
 	std::unique_ptr<HpUpdate> hpUpdate;
 
@@ -54,16 +54,21 @@ private:
 	float ReticleNotLockLerpPower = 0.4f;
 	float HPBarAlpha = 1.0f;
 	float HPAdjustment = 10.0f;
+	float BoostAdjustment = 17.0f;
 	float ReeticleOutLineSize = 192.0f;
 	float AnchorPointOnePointFive = 0.5f;
+	float MaxBoostFuel = 0.0f;
 
 	Vector2 ReticlePosition = { 640,360 };
 	Vector2 KeepReticlePosition;
 	Vector2 ReticleNormalPosition = { 640,360 };
-	Vector2 HpPosition = { 160.0f,580.0f };
-	Vector2 HpBarBackBarPosition = { 155.0f,580.0f };
+	Vector2 BoostBarPosition = { 640 - (BoostBarMaxSize / 2),620 };
+	Vector2 BoostBarBackBarPosition = { 632 - ( BoostBarMaxSize / 2 ),620 };
+	Vector2 HpPosition = { 140.0f,580.0f };
+	Vector2 HpBarBackBarPosition = { 135.0f,580.0f };
 	Vector2 HpSize = { HpBarMaxSize,6.0f };
 	Vector2 BackHpDownSize = { HpBarMaxSize,6.0f };
+	Vector2 BoostFuelSize = { HpBarMaxSize,6.0f };
 
 	Vector4 WhiteColor = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 ReticleColor;

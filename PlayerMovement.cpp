@@ -11,7 +11,7 @@ PlayerMovement::~PlayerMovement()
 {
 }
 
-Vector3 PlayerMovement::Move(const WorldTransform& worldTransform)
+Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround)
 {
 	playerAllMoveMent = Vec3Number(fNumbers::fZero);
 
@@ -68,8 +68,54 @@ Vector3 PlayerMovement::Move(const WorldTransform& worldTransform)
 			playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
 		}
 	}
+	playerAllMoveMent += UpBoost(onGround);
 
+	BoostFuelUpdate(onGround);
 	return playerAllMoveMent;
+}
+
+Vector3 PlayerMovement::UpBoost(const bool& onGround)
+{
+	isBoost = false;
+	if ( input_->PushKey(DIK_SPACE) )
+	{
+		if ( FuelUsedUpBoost <= Fuel )
+		{
+			isBoost = true;
+			FallSpeed = FloatNumber(fNumbers::fZero);
+			UpBoostSpeed = max(FallVec.y + UpAcc,UpVYMax);
+
+			isBoostCoolTimeFinish = true;
+			BoostCoolTime = MaxBoostCoolTime;
+			Fuel -= FuelUsedUpBoost;
+		}
+	}
+	if ( !onGround )
+	{
+		if ( !isBoost )
+		{
+			if ( UpBoostSpeed > 0 )
+			{
+				UpBoostSpeed = max(UpBoostSpeed + FallAcc,FallVYMin);
+			}
+			else
+			{
+				UpBoostSpeed = FloatNumber(fNumbers::fZero);
+				FallSpeed = max(FallSpeed + FallAcc,FallVYMin);
+			}
+		}
+	}
+
+	FallVec.y = UpBoostSpeed + FallSpeed;
+
+	ImGui::Begin("Movement");
+
+	ImGui::Text("upBoostSpeed = %f",UpBoostSpeed);
+	ImGui::Text("fallSpeed = %f",FallSpeed);
+	ImGui::Text("FallVec = %f",FallVec.y);
+	ImGui::End();
+
+	return FallVec;
 }
 
 void PlayerMovement::PlayerAngle(const bool& isAtack)
@@ -205,52 +251,97 @@ void PlayerMovement::CheckSliding()
 	}
 }
 
+void PlayerMovement::BoostFuelUpdate(const bool& onGround)
+{
+	if ( isBoostCoolTimeFinish )
+	{
+		if ( BoostCoolTime > 0 )
+		{
+			BoostCoolTime--;
+		}
+		else
+		{
+			isBoostCoolTimeFinish = false;
+		}
+	}
+	else
+	{
+		if ( onGround )
+		{
+			if ( Fuel < FuelMax )
+			{
+				Fuel += FuelRecoveryOnGround;
+				if ( Fuel > FuelMax )
+				{
+					Fuel = FuelMax;
+				}
+			}
+		}
+		else
+		{
+			if ( Fuel < FuelMax )
+			{
+				Fuel += FuelRecoveryInTheSky;
+				if ( Fuel > FuelMax )
+				{
+					Fuel = FuelMax;
+				}
+			}
+		}
+	}
+}
+
 void PlayerMovement::SlidingMaterial(const WorldTransform& worldTransform)
 {
 	DirectionOfMovement = Vec3Number(fNumbers::fZero);
-
-	if ( isPlayerAttack )
+	if ( FuelUsedBoost <= Fuel )
 	{
-		if ( SlidingNumber == static_cast< uint32_t >( Numbers::One ) )
+		isBoostCoolTimeFinish = true;
+		BoostCoolTime = MaxBoostCoolTime;
+		Fuel -= FuelUsedBoost;
+		if ( isPlayerAttack )
 		{
-			DirectionOfMovement = worldTransform.LookVelocity.look;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Two ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.lookLeft;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Three ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.lookBack;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Four ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.lookRight;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Five ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.look_lookLeft;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Six ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.look_lookRight;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Seven ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.lookBack_lookLeft;
-		}
-		else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Eight ) )
-		{
-			DirectionOfMovement = worldTransform.LookVelocity.lookBack_lookRight;
+			if ( SlidingNumber == static_cast< uint32_t >( Numbers::One ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.look;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Two ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.lookLeft;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Three ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.lookBack;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Four ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.lookRight;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Five ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.look_lookLeft;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Six ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.look_lookRight;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Seven ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.lookBack_lookLeft;
+			}
+			else if ( SlidingNumber == static_cast< uint32_t >( Numbers::Eight ) )
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.lookBack_lookRight;
+			}
+			else
+			{
+				DirectionOfMovement = worldTransform.LookVelocity.look;
+			}
 		}
 		else
 		{
 			DirectionOfMovement = worldTransform.LookVelocity.look;
 		}
-	}
-	else
-	{
-		DirectionOfMovement = worldTransform.LookVelocity.look;
 	}
 }
 
@@ -310,9 +401,19 @@ bool PlayerMovement::GetIsPushMoveKey()
 	return pushKey.isPushMoveKey;
 }
 
+bool PlayerMovement::GetIsBoost()
+{
+	return isBoost;
+}
+
 float PlayerMovement::GetPlayerAngle()
 {
 	return PlayerMoveRotation;
+}
+
+float PlayerMovement::GetFuel()
+{
+	return Fuel;
 }
 
 PushKey PlayerMovement::GetPushedKey()
