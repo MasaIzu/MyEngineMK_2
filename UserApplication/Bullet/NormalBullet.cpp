@@ -91,6 +91,7 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		WorldTransUpdate();
 		BulletCollider->SetAttribute(Attribute);
 		BulletCollider->Update(BulletWorldTrans.matWorld_);
+		BulletCollider->Reset();
 	}
 }
 

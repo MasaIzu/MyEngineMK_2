@@ -249,6 +249,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	}
 
 	WorldTransUpdate();
+	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 	missileGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
 
 	return false;
