@@ -146,7 +146,7 @@ void Player::Update()
 	playerRotWorldTrans.translation_ = playerWorldTrans.translation_;
 	playerRotWorldTrans.TransferMatrix();
 	animation->Update();
-	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerWorldTrans.matWorld_),RotKeep);
+	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
 }
 
 void Player::Draw()
@@ -161,6 +161,7 @@ void Player::Draw()
 }
 
 void Player::FbxDraw() {
+	playerNormalGun->FbxDraw(*viewProjection_);
 	animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
 }
 
