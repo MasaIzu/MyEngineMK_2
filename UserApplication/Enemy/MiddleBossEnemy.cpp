@@ -32,7 +32,7 @@ MiddleBossEnemy::~MiddleBossEnemy()
 void MiddleBossEnemy::Initialize(Player* Player)
 {
 	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+	normalGun->Initialize(BossWorldTrans.translation_,model_.get());
 	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 	this->player = Player;
@@ -47,7 +47,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 void MiddleBossEnemy::TitleInitialize()
 {
 	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+	normalGun->Initialize(BossWorldTrans.translation_,model_.get());
 	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 }
@@ -194,7 +194,7 @@ void MiddleBossEnemy::Update()
 
 	WorldTransUpdate();
 
-	normalGun->Update(BossWorldTrans.translation_);
+	normalGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
 	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
 
 	enemyHP2DUI->Update();

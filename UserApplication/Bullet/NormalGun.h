@@ -11,9 +11,9 @@ public://基本関数
 	~NormalGun();
 
 	//初期化
-	void Initialize(const Vector3& Pos,Model* GunModel,Model* BulletModel);
+	void Initialize(const Vector3& Pos,Model* BulletModel);
 	//更新
-	void Update(const Vector3& Pos);
+	void Update(const Vector3& Pos,const Vector3& rot);
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
 
@@ -35,7 +35,7 @@ private://コンスト
 private://クラス関連
 	//バレットの数
 	std::array<std::unique_ptr<NormalBullet>,BulletMaxCount> normalBullet;
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_;
 	WorldTransform GunTrans;
 
 private:

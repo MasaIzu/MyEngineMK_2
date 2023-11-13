@@ -34,7 +34,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	StartingPointOfGrapple.Initialize();
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
-	playerNormalGun->Initialize(Pos,model_.get(),model_.get());
+	playerNormalGun->Initialize(Pos,model_.get());
 
 	DebugWorldTrans.Initialize();
 
@@ -142,8 +142,11 @@ void Player::Update()
 			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::LeftDown ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.DieMotion,false);
 		}
 	}
+
+	playerRotWorldTrans.translation_ = playerWorldTrans.translation_;
+	playerRotWorldTrans.TransferMatrix();
 	animation->Update();
-	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerWorldTrans.matWorld_));
+	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerWorldTrans.matWorld_),RotKeep);
 }
 
 void Player::Draw()
@@ -154,11 +157,11 @@ void Player::Draw()
 		model_->Draw(StartingPointOfGrapple,*viewProjection_);
 	}
 	playerNormalGun->Draw(*viewProjection_);
-	model_->Draw(playerWorldTrans,*viewProjection_);
+	model_->Draw(playerRotWorldTrans,*viewProjection_);
 }
 
 void Player::FbxDraw() {
-	animation->FbxDraw(playerWorldTrans,*viewProjection_);
+	animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
 }
 
 
@@ -185,13 +188,18 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 void Player::PlayerRot(const bool& Attack)
 {
 	playerMovement->PlayerAngle(Attack);
+	RotKeep = Vec3Number(fNumbers::fZero);
 	if ( !Attack )
 	{
+		RotKeep = Vector3(FloatNumber(fNumbers::fZero),cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero));
+		playerRotWorldTrans.SetRot(RotKeep);
 		playerWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero)));
 	}
 	else
 	{
-		playerWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(FixedAngle) + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero)));
+		RotKeep = Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(FixedAngle) + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero));
+		playerRotWorldTrans.SetRot(RotKeep);
+		playerWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),cameraRot.x,FloatNumber(fNumbers::fZero)));
 	}
 	//値更新
 	WorldTransUpdate();

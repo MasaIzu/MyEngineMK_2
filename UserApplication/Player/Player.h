@@ -167,7 +167,7 @@ private://プレイヤークラス変数
 	Vector3 PlayerToAimSaiteVec;
 	Vector3 StartingPoint;
 	Vector3 DownSlidingVelocity;
-	//Vector3 angularVelocity;
+	Vector3 RotKeep;
 
 	Vector4 fallVec;
 

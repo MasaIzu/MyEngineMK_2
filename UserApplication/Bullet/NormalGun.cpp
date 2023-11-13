@@ -13,9 +13,9 @@ NormalGun::~NormalGun()
 {
 }
 
-void NormalGun::Initialize(const Vector3& Pos,Model* GunModel,Model* BulletModel)
+void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel)
 {
-	model_ = GunModel;
+	model_.reset(Model::CreateFromOBJ("NormalGun",true));
 
 	GunTrans.Initialize();
 	GunTrans.translation_ = Pos;
@@ -27,9 +27,10 @@ void NormalGun::Initialize(const Vector3& Pos,Model* GunModel,Model* BulletModel
 	}
 }
 
-void NormalGun::Update(const Vector3& Pos)
+void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
 {
 	GunTrans.translation_ = Pos;
+	GunTrans.SetRot(rot);
 	UpdatePosition();
 
 	TimeUpdate();
