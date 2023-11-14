@@ -9,6 +9,7 @@ MiddleBossEnemy::MiddleBossEnemy()
 {
 	MovieUpdateTimes = MaxMovieUpdateTimes;
 	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
+	HeriHaneModel_.reset(Model::CreateFromOBJ("HeriHane",true));
 	//fbx
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("HeriFbx",true));
 	fbxObj3d_ = FBXObject3d::Create();
@@ -16,6 +17,11 @@ MiddleBossEnemy::MiddleBossEnemy()
 	fbxObj3d_->Update();
 	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
+
+	HeriHaneLeftTrans.scale_ = Vector3(Scale,Scale,Scale);
+	HeriHaneLeftTrans.Initialize();
+	HeriHaneRightTrans.scale_ = Vector3(Scale,Scale,Scale);
+	HeriHaneRightTrans.Initialize();
 
 	enemyHP2DUI = std::make_unique<EnemyHP2DUI>();
 	enemyHP2DUI->Initialize();
@@ -237,6 +243,15 @@ void MiddleBossEnemy::Update()
 
 
 	WorldTransUpdate();
+	HeriHaneRotYLeft += HeriHaneRotSpeed;
+	HeriHaneLeftTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
+	HeriHaneLeftTrans.SetRot(Vector3(0,HeriHaneRotYLeft + MyMath::GetAngle(Angle),0));
+	HeriHaneLeftTrans.TransferMatrix();
+
+	HeriHaneRotYRight -= HeriHaneRotSpeed;
+	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One )) * BossWorldTrans.matWorld_);
+	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
+	HeriHaneRightTrans.TransferMatrix();
 
 	normalGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
 	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
@@ -250,6 +265,8 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
 	normalGun->Draw(viewProjection_);
 	missileGun->Draw(viewProjection_);
+	HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
+	HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
 }
 
 void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_)

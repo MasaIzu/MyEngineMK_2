@@ -102,7 +102,10 @@ private://クラス関連
 	std::unique_ptr<FBXModel> fbxModel_;
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> HeriHaneModel_;
 	WorldTransform BossWorldTrans;
+	WorldTransform HeriHaneLeftTrans;
+	WorldTransform HeriHaneRightTrans;
 
 	WorldTransform DebugWorldTrans;
 
@@ -162,7 +165,7 @@ private://EnemyBossクラス変数
 	uint32_t DownCount = 0;
 	uint32_t MaxDownCount = 60;
 
-	float Scale = 5.0f;
+	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;
@@ -178,6 +181,9 @@ private://EnemyBossクラス変数
 	float BackSpeed = 2.0f;
 	float MovePower = 70.0f;
 	float BackBosPower = 50.0f;
+	float HeriHaneRotYLeft = 0.0f;
+	float HeriHaneRotYRight = 0.0f;
+	float HeriHaneRotSpeed = 0.1f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 
