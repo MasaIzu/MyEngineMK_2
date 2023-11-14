@@ -8,7 +8,7 @@
 MiddleBossEnemy::MiddleBossEnemy()
 {
 	MovieUpdateTimes = MaxMovieUpdateTimes;
-	model_.reset(Model::CreateFromOBJ("sphereNormalEnemy",true));
+	model_.reset(Model::CreateFromOBJ("Heri",true));
 	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
 

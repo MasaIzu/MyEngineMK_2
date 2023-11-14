@@ -71,7 +71,7 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 			{
 				CoolTime = MaxCoolTime;
 				Vector3 shootVec = BulletVec - GunTrans.translation_;
-				Bullet->MakeBullet(GunTrans.translation_,shootVec.norm(),BulletSpeed);
+				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
 				break;
 			}
 		}
