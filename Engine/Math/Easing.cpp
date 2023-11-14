@@ -1,5 +1,6 @@
 #include "Easing.h"
 #include"math.h"
+#include <MyMath.h>
 //追加
 double Easing::In(double start, double end, double time, double max_time)
 {
@@ -186,6 +187,13 @@ float Easing::EaseOutQuint(float& start, float& end, float& time, float& max_tim
 	return start + (end - start) * x;
 }
 
+float Easing::EaseInSine(float& start,float& end,uint32_t& time,uint32_t& max_time)
+{
+	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
+	float x = 1.0f - cosf(( Time * MyMath::PI ) / 2.0f);
+	return start + ( end - start ) * x;
+}
+
 Vector3 Easing::EaseInBackVec3(Vector3& start,Vector3& end,uint32_t& time,uint32_t& max_time)
 {
 	Vector3 easeInBackVec3;
@@ -232,4 +240,15 @@ Vector3 Easing::EaseOutQuintVec3(Vector3& start, Vector3& end, uint32_t& time, u
 	easeOutQuintVec3.z = EaseOutQuint(start.z, end.z, timef, max_timef);
 
 	return easeOutQuintVec3;
+}
+
+Vector3 Easing::EaseInSineVec3(Vector3& start,Vector3& end,uint32_t& time,uint32_t& max_time)
+{
+	Vector3 easeInSineVec3;
+
+	easeInSineVec3.x = EaseInSine(start.x,end.x,time,max_time);
+	easeInSineVec3.y = EaseInSine(start.y,end.y,time,max_time);
+	easeInSineVec3.z = EaseInSine(start.z,end.z,time,max_time);
+
+	return easeInSineVec3;
 }

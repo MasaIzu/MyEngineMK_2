@@ -8,7 +8,12 @@
 MiddleBossEnemy::MiddleBossEnemy()
 {
 	MovieUpdateTimes = MaxMovieUpdateTimes;
-	model_.reset(Model::CreateFromOBJ("Heri",true));
+	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
+	//fbx
+	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("HeriFbx",true));
+	fbxObj3d_ = FBXObject3d::Create();
+	fbxObj3d_->SetModel(fbxModel_.get());
+	fbxObj3d_->Update();
 	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
 
@@ -98,43 +103,75 @@ void MiddleBossEnemy::Update()
 
 			if ( isMoveing )
 			{
-				BossWorldTrans.translation_ = Easing::EaseOutQuintVec3(MoveStartPos,MovePos,MoveingTimer,MaxMoveingTimer);
+				if ( isDownSpeed == false )
+				{
+					BossWorldTrans.translation_ = Easing::EaseInSineVec3(MoveStartPos,MovePos,MoveingTimer,MaxMoveingTimer);
+				}
 
 				if ( MoveingTimer == MaxMoveingTimer )
 				{
-					if ( isOneMoreTime == false )
+					if ( isDownSpeed == false )
 					{
-						isOneMoreTime = true;
-						isMoveing = true;
-						MoveingTimer = static_cast< uint32_t >( Numbers::Zero );
-						MaxMoveingTimer = MoveOneMoreTime;
-						if ( mveType == static_cast< uint32_t >( Numbers::Zero ) )
-						{
-							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
-						}
-						else if ( mveType == static_cast< uint32_t >( Numbers::One ) )
-						{
-							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
-						}
-						else if ( mveType == static_cast< uint32_t >( Numbers::Two ) )
-						{
-							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
-						}
-						else if ( mveType == static_cast< uint32_t >( Numbers::Three ) )
-						{
-							MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
-						}
-						MoveStartPos = BossWorldTrans.translation_;
-
-						missileGun->ShotBullet();
+						isDownSpeed = true;
+						DownCount = static_cast< uint32_t >( Numbers::Zero );
+						DownVelocity = BossWorldTrans.translation_ - OldPos;
+						Velocity = DownVelocity / static_cast<float>(MaxDownCount);
 					}
 					else
 					{
-						isMoveing = false;
+						if ( isDownSpeedFinish == false )
+						{
+							if ( DownCount < MaxDownCount )
+							{
+								DownCount++;
+								DownVelocity -= Velocity;
+								BossWorldTrans.translation_ += DownVelocity;
+							}
+							else
+							{
+								isDownSpeedFinish = true;
+							}
+						}
+						else
+						{
+							if ( isOneMoreTime == true )
+							{
+								isOneMoreTime = false;
+								isDownSpeed = false;
+								isDownSpeedFinish = false;
+								isMoveing = true;
+								MoveingTimer = static_cast< uint32_t >( Numbers::Zero );
+								MaxMoveingTimer = MoveOneMoreTime;
+								if ( mveType == static_cast< uint32_t >( Numbers::Zero ) )
+								{
+									MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
+								}
+								else if ( mveType == static_cast< uint32_t >( Numbers::One ) )
+								{
+									MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
+								}
+								else if ( mveType == static_cast< uint32_t >( Numbers::Two ) )
+								{
+									MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookLeft.norm() * MovePower );
+								}
+								else if ( mveType == static_cast< uint32_t >( Numbers::Three ) )
+								{
+									MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.look_lookRight.norm() * MovePower );
+								}
+								MoveStartPos = BossWorldTrans.translation_;
+
+								missileGun->ShotBullet();
+							}
+							else
+							{
+								isMoveing = false;
+							}
+						}
 					}
 				}
+				OldPos = BossWorldTrans.translation_;
 			}
-
+			
 			if ( isBackSponePos == true )
 			{
 				Vector3 goPos = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
@@ -192,6 +229,13 @@ void MiddleBossEnemy::Update()
 		}
 	}
 
+	ImGui::Begin("EnemyBosssss");
+
+	ImGui::Text("DownVelocity = %f,%f,%f",DownVelocity.x,DownVelocity.y,DownVelocity.z);
+
+	ImGui::End();
+
+
 	WorldTransUpdate();
 
 	normalGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
@@ -206,9 +250,13 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
 	normalGun->Draw(viewProjection_);
 	missileGun->Draw(viewProjection_);
+}
+
+void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_)
+{
 	if ( isSporn )
 	{
-		model_->Draw(BossWorldTrans,viewProjection_);
+		fbxObj3d_->Draw(BossWorldTrans,viewProjection_);
 	}
 }
 
@@ -376,6 +424,8 @@ void MiddleBossEnemy::CheckAttackType()
 	{
 		MoveTimes++;
 		isMoveing = true;
+		isDownSpeed = false;
+		isDownSpeedFinish = false;
 		isOneMoreTime = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::One ));
 		MoveingTimer = static_cast< uint32_t >( Numbers::Zero );
 		MaxMoveingTimer = MoveFirstTime;
@@ -384,7 +434,6 @@ void MiddleBossEnemy::CheckAttackType()
 			isOneMoreTime = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::One ));
 		}
 		mveType = MyMath::Random(static_cast< uint32_t >( Numbers::Zero ),static_cast< uint32_t >( Numbers::Three ));
-		/*mveType = 0;*/
 		if ( mveType == 0 )
 		{
 			MovePos = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookLeft.norm() * MovePower );
@@ -431,12 +480,12 @@ void MiddleBossEnemy::CheckAttackType()
 				BackPoints.push_back(BossWorldTrans.translation_);
 				float LeftOrLight = MyMath::JudgeLeftorRight(EndPos,player->GetPlayerPos(),BossWorldTrans.translation_);
 				Vector3 EasingWaypoint;
-				if ( LeftOrLight == static_cast< float >( fNumbers::fOnePointZero ) )//左
+				if ( LeftOrLight == static_cast< float >( Numbers::One ) )//左
 				{
 					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookLeft.norm() * BackBosPower );
 					BackPoints.push_back(EasingWaypoint);
 				}
-				else if ( LeftOrLight == -static_cast< float >( fNumbers::fOnePointZero ) )//右
+				else if ( LeftOrLight == -static_cast< float >( Numbers::One ) )//右
 				{
 					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookRight.norm() * BackBosPower );
 					BackPoints.push_back(EasingWaypoint);

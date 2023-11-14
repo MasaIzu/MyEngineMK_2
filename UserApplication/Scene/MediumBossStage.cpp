@@ -77,7 +77,7 @@ void MediumBossStage::Update()
 	if ( VsBoss == false )
 	{
 	//if (bossEnemy->GetFinishSpline()) {
-		Vector3 end = Vector3(0,10,150);
+		Vector3 end = Vector3(0,50,150);
 		//if (bossEnemy->GetBodyNoAlpha()) {
 		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(),end);
 		/*}
@@ -172,6 +172,7 @@ void MediumBossStage::Draw()
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
+	middleBossEnemy->FbxDraw(*viewProjection_.get());
 	player_->FbxDraw();
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());

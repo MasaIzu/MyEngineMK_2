@@ -11,6 +11,7 @@
 #include "EnemyHP3DUI.h"
 #include "EnemyHP2DUI.h"
 
+
 /// <summary>
 /// 中ボス
 /// </summary>
@@ -37,6 +38,8 @@ public://基本関数
 	void Update();
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
+	//描画
+	void FbxDraw(const ViewProjection& viewProjection_);
 	//スプライト描画
 	void DrawSprite(const ViewProjection& viewProjection_);
 	//ムービー用更新
@@ -85,8 +88,8 @@ private://const関連
 
 	static const uint32_t AttackedKeepCount = 5;
 
-	const uint32_t MoveFirstTime = 50;
-	const uint32_t MoveOneMoreTime = 30;
+	const uint32_t MoveFirstTime = 120;
+	const uint32_t MoveOneMoreTime = 120;
 	const uint32_t MaxAttackCoolTime = 50;
 	const uint32_t MaxNomalTime = 50;
 	const uint32_t MaxNomalBulletCoolTime = 5;
@@ -96,6 +99,8 @@ private://const関連
 	const uint32_t MaxMoveingAttackBulletTime = 1;
 private://クラス関連
 	Input* input_ = nullptr;
+	std::unique_ptr<FBXModel> fbxModel_;
+	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	std::unique_ptr<Model> model_;
 	WorldTransform BossWorldTrans;
 
@@ -131,6 +136,8 @@ private://EnemyBossクラス変数
 	bool isOneMoreTime = false;
 	bool isBackSponePos = false;
 	bool isTitleShot = false;
+	bool isDownSpeed = false;
+	bool isDownSpeedFinish = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -152,6 +159,8 @@ private://EnemyBossクラス変数
 	uint32_t BackMissileTimes = 0;
 	uint32_t BackMissileMaxTimes = 10;
 	uint32_t BulletMake = 10;
+	uint32_t DownCount = 0;
+	uint32_t MaxDownCount = 60;
 
 	float Scale = 5.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -163,14 +172,14 @@ private://EnemyBossクラス変数
 	float AngleSize = 0.0f;
 	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
-	float MoveSafeRadius = 100.0f;
-	float jampHeight = 20.0f;
+	float MoveSafeRadius = 150.0f;
+	float jampHeight = 30.0f;
 	float BackStrength = 30.0f;
 	float BackSpeed = 2.0f;
-	float MovePower = 30.0f;
+	float MovePower = 70.0f;
 	float BackBosPower = 50.0f;
 
-	Vector2 HpPosition = { 500,45 };
+	Vector2 HpPosition = { 500.0f,45.0f };
 
 	Vector3 BonePos;
 	Vector3 EndPos;
@@ -178,6 +187,8 @@ private://EnemyBossクラス変数
 	Vector3 MovePos;
 	Vector3 MoveStartPos;
 	Vector3 BackLerpPos;
+	Vector3 OldPos;
+	Vector3 DownVelocity;
 
 	AttackType attackType = AttackType::NotAttack;
 	std::array<AttackType,AttackedKeepCount>oldAttackType;

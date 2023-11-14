@@ -25,11 +25,12 @@ namespace Easing
 	float easeOutCubic(float& start, float& end, uint32_t& time, uint32_t& max_time);
 	float EaseOutQuart(float& start, float& end,uint32_t& time,uint32_t& max_time);
 	float EaseOutQuint(float& start, float& end, float& time, float& max_time);
+	float EaseInSine(float& start,float& end,uint32_t& time,uint32_t& max_time);
 
 	//Vector3にしただけ
 	Vector3 EaseInBackVec3(Vector3& start,Vector3& end,uint32_t& time,uint32_t& max_time);
 	Vector3 EaseOutCubicVec3(Vector3& start, Vector3& end, double& time, double& max_time);
 	Vector3 EaseOutQuartVec3(Vector3& start, Vector3& end, uint32_t& time, uint32_t& max_time);
 	Vector3 EaseOutQuintVec3(Vector3& start, Vector3& end, uint32_t& time, uint32_t& max_time);
-
+	Vector3 EaseInSineVec3(Vector3& start,Vector3& end,uint32_t& time,uint32_t& max_time);
 };
