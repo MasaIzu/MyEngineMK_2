@@ -70,7 +70,7 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 			if ( !Bullet->GetBulletAlive() )
 			{
 				CoolTime = MaxCoolTime;
-				Vector3 shootVec = BulletVec - GunTrans.translation_;
+				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
 				break;
 			}

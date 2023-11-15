@@ -32,8 +32,6 @@ public://基本関数
 
 	//初期化
 	void Initialize(Player* player);
-	//タイトル用初期化
-	void TitleInitialize();
 	//更新
 	void Update();
 	//描画
@@ -113,7 +111,8 @@ private://クラス関連
 	std::unique_ptr<SplinePosition> MoveSpline;//途中のスプライン
 
 	//弾
-	std::unique_ptr<NormalGun> normalGun;
+	std::unique_ptr<NormalGun> normalGunLeft;
+	std::unique_ptr<NormalGun> normalGunRight;
 	std::unique_ptr<MissileGun> missileGun;
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
@@ -173,7 +172,7 @@ private://EnemyBossクラス変数
 	float Radius = 10.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
-	float RotSpeed = 1.0f;
+	float RotSpeed = 10.0f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 150.0f;
 	float jampHeight = 30.0f;

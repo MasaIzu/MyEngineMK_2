@@ -41,7 +41,6 @@ void TitleScene::Initialize()
 	SecondCameraPoints = levelData_->GetCameraSpline();
 
 	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
-	middleBossEnemy->TitleInitialize();
 	for ( TutorialEnemy* enemy : tutorialEnemyList )
 	{
 		enemy->Initialize();

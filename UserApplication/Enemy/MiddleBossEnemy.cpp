@@ -18,6 +18,14 @@ MiddleBossEnemy::MiddleBossEnemy()
 	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
 
+	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get());
+	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get());
+
+	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+
 	HeriHaneLeftTrans.scale_ = Vector3(Scale,Scale,Scale);
 	HeriHaneLeftTrans.Initialize();
 	HeriHaneRightTrans.scale_ = Vector3(Scale,Scale,Scale);
@@ -42,10 +50,6 @@ MiddleBossEnemy::~MiddleBossEnemy()
 
 void MiddleBossEnemy::Initialize(Player* Player)
 {
-	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGun->Initialize(BossWorldTrans.translation_,model_.get());
-	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 	this->player = Player;
 
 	// コリジョンマネージャに追加
@@ -53,14 +57,6 @@ void MiddleBossEnemy::Initialize(Player* Player)
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider);
 	MiddleBossCollider->SetAttribute(COLLISION_ATTR_ENEMYS);
 	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
-}
-
-void MiddleBossEnemy::TitleInitialize()
-{
-	normalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGun->Initialize(BossWorldTrans.translation_,model_.get());
-	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 }
 
 void MiddleBossEnemy::Update()
@@ -88,9 +84,6 @@ void MiddleBossEnemy::Update()
 		{
 			Timer();
 
-			Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,player->GetPlayerPos());
-
-			BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
 			if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
 			{
 				isAttack = false;
@@ -231,6 +224,9 @@ void MiddleBossEnemy::Update()
 				enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 			}
 
+			Angle = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,player->GetPlayerPos());
+
+			BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
 			MiddleBossCollider->Update(BossWorldTrans.matWorld_);
 		}
 	}
@@ -253,7 +249,8 @@ void MiddleBossEnemy::Update()
 	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
 	HeriHaneRightTrans.TransferMatrix();
 
-	normalGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
+	normalGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
+	normalGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
 	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
 
 	enemyHP2DUI->Update();
@@ -263,7 +260,8 @@ void MiddleBossEnemy::Update()
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
-	normalGun->Draw(viewProjection_);
+	normalGunLeft->Draw(viewProjection_);
+	normalGunRight->Draw(viewProjection_);
 	missileGun->Draw(viewProjection_);
 	HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
 	HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
@@ -367,7 +365,8 @@ void MiddleBossEnemy::Attack()
 {
 	if ( attackType == AttackType::Nomal )
 	{
-		normalGun->ShotBullet(player->GetPlayerPos());
+		normalGunLeft->ShotBullet(player->GetPlayerPos());
+		normalGunRight->ShotBullet(player->GetPlayerPos());
 	}
 	else if ( attackType == AttackType::Missile )
 	{
@@ -377,7 +376,8 @@ void MiddleBossEnemy::Attack()
 	}
 	else if ( attackType == AttackType::MoveingAttack )
 	{
-		normalGun->ShotBullet(player->GetPlayerPos());
+		normalGunLeft->ShotBullet(player->GetPlayerPos());
+		normalGunRight->ShotBullet(player->GetPlayerPos());
 	}
 }
 
