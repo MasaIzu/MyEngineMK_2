@@ -113,7 +113,8 @@ private://クラス関連
 	//弾
 	std::unique_ptr<NormalGun> normalGunLeft;
 	std::unique_ptr<NormalGun> normalGunRight;
-	std::unique_ptr<MissileGun> missileGun;
+	std::unique_ptr<MissileGun> missileGunLeft;
+	std::unique_ptr<MissileGun> missileGunRight;
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
@@ -157,7 +158,7 @@ private://EnemyBossクラス変数
 	uint32_t MaxMoveTimes = 3;
 	uint32_t BackPosCounter = 1;
 	uint32_t BackMissileFirstCoolTime = 20;
-	uint32_t BackMissileCoolTime = 6;
+	uint32_t BackMissileCoolTime = 60;
 	uint32_t BackMissileTimes = 0;
 	uint32_t BackMissileMaxTimes = 10;
 	uint32_t BulletMake = 10;
@@ -177,12 +178,14 @@ private://EnemyBossクラス変数
 	float MoveSafeRadius = 150.0f;
 	float jampHeight = 30.0f;
 	float BackStrength = 30.0f;
-	float BackSpeed = 2.0f;
-	float MovePower = 70.0f;
+	float BackSpeed = 1.0f;
+	float MovePower = 50.0f;
 	float BackBosPower = 50.0f;
 	float HeriHaneRotYLeft = 0.0f;
 	float HeriHaneRotYRight = 0.0f;
 	float HeriHaneRotSpeed = 0.1f;
+	float BackLarpStrength = 0.1f;
+	float BackPosRadius = 5.0f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 

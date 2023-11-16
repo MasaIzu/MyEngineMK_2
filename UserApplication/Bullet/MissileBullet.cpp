@@ -96,12 +96,10 @@ void MissileBullet::Update(const Vector3& EndPos)
 
 void MissileBullet::Draw(const ViewProjection& viewProjection_)
 {
-
 	if ( isBulletAlive == true )
 	{
 		model_->Draw(BulletWorldTrans,viewProjection_);
 	}
-
 }
 
 void MissileBullet::MakeMissileBullet(const Vector3& pos,const Vector3& velocity,const float& speed)

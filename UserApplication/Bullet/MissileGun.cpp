@@ -3,7 +3,7 @@
 
 MissileGun::MissileGun(const unsigned short Attribute)
 {
-	for ( auto&& Bullet : normalBullet )
+	for ( auto&& Bullet : missileBullet )
 	{
 		Bullet = std::make_unique<MissileBullet>(Attribute);
 	}
@@ -21,20 +21,21 @@ void MissileGun::Initialize(const Vector3& Pos,Model* GunModel,Model* BulletMode
 	GunTrans.translation_ = Pos;
 	UpdatePosition();
 
-	for ( auto&& Bullet : normalBullet )
+	for ( auto&& Bullet : missileBullet )
 	{
 		Bullet->Initialize(BulletModel);
 	}
 }
 
-void MissileGun::Update(const Vector3& GunPos,const Vector3& inductionPos)
+void MissileGun::Update(const Vector3& GunPos,const Vector3& inductionPos,const Vector3& rot)
 {
 	GunTrans.translation_ = GunPos;
+	GunTrans.SetRot(rot);
 	UpdatePosition();
 
 	TimeUpdate();
 
-	for ( auto&& Bullet : normalBullet )
+	for ( auto&& Bullet : missileBullet )
 	{
 		Bullet->Update(inductionPos);
 	}
@@ -42,8 +43,8 @@ void MissileGun::Update(const Vector3& GunPos,const Vector3& inductionPos)
 
 void MissileGun::Draw(const ViewProjection& viewProjection_)
 {
-	model_->Draw(GunTrans,viewProjection_);
-	for ( auto&& Bullet : normalBullet )
+	//model_->Draw(GunTrans,viewProjection_);
+	for ( auto&& Bullet : missileBullet )
 	{
 		Bullet->Draw(viewProjection_);
 	}
@@ -57,7 +58,7 @@ void MissileGun::ShotBullet()
 		NowMissileBulletCount = static_cast< uint32_t >( Numbers::Zero );
 		for ( uint32_t i = static_cast< uint32_t >( Numbers::Zero ); i < MissileBulletCount; i++ )
 		{
-			for ( auto&& Bullet : normalBullet )
+			for ( auto&& Bullet : missileBullet )
 			{
 				if ( !Bullet->GetBulletAlive() )
 				{

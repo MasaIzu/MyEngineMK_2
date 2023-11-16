@@ -23,8 +23,11 @@ MiddleBossEnemy::MiddleBossEnemy()
 	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get());
 
-	missileGun = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	missileGun->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	missileGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
+
+	missileGunRight = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	missileGunRight->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
 
 	HeriHaneLeftTrans.scale_ = Vector3(Scale,Scale,Scale);
 	HeriHaneLeftTrans.Initialize();
@@ -115,6 +118,8 @@ void MiddleBossEnemy::Update()
 						DownCount = static_cast< uint32_t >( Numbers::Zero );
 						DownVelocity = BossWorldTrans.translation_ - OldPos;
 						Velocity = DownVelocity / static_cast<float>(MaxDownCount);
+						DownVelocity.y = static_cast< float >( Numbers::Zero );
+						Velocity.y = static_cast< float >( Numbers::Zero );
 					}
 					else
 					{
@@ -159,7 +164,8 @@ void MiddleBossEnemy::Update()
 								}
 								MoveStartPos = BossWorldTrans.translation_;
 
-								missileGun->ShotBullet();
+								missileGunLeft->ShotBullet();
+								missileGunRight->ShotBullet();
 							}
 							else
 							{
@@ -175,13 +181,14 @@ void MiddleBossEnemy::Update()
 			{
 				Vector3 goPos = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
 				goPos.normalize();
-				Velocity = MyMath::lerp(Velocity,goPos,0.1f);
+				OldPos = BossWorldTrans.translation_;
+				Velocity = MyMath::lerp(Velocity,goPos,BackLarpStrength);
 				BossWorldTrans.translation_ += Velocity * BackSpeed;
 				// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
 				Vector3 tmp;
 				tmp = BackPoints[ BackPosCounter ] - BossWorldTrans.translation_;
 				float dist = tmp.dot(tmp);
-				float radius2 = 5.0f;
+				float radius2 = BackPosRadius;
 				radius2 *= radius2;
 
 				if ( BackMissileTimes < BackMissileMaxTimes )
@@ -189,7 +196,8 @@ void MiddleBossEnemy::Update()
 					if ( BulletCoolTime == 0 )
 					{
 						BulletCoolTime = BackMissileCoolTime;
-						missileGun->ShotBullet();
+						missileGunLeft->ShotBullet();
+						missileGunRight->ShotBullet();
 					}
 				}
 
@@ -202,6 +210,11 @@ void MiddleBossEnemy::Update()
 					else
 					{
 						isBackSponePos = false;
+						isMoveing = true;
+						isDownSpeed = false;
+						MoveingTimer = MaxMoveingTimer;
+						MoveStartPos = BossWorldTrans.translation_;
+						MovePos = BossWorldTrans.translation_;
 					}
 				}
 			}
@@ -240,18 +253,19 @@ void MiddleBossEnemy::Update()
 
 	WorldTransUpdate();
 	HeriHaneRotYLeft += HeriHaneRotSpeed;
-	HeriHaneLeftTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
+	HeriHaneLeftTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One )) * BossWorldTrans.matWorld_);
 	HeriHaneLeftTrans.SetRot(Vector3(0,HeriHaneRotYLeft + MyMath::GetAngle(Angle),0));
 	HeriHaneLeftTrans.TransferMatrix();
 
 	HeriHaneRotYRight -= HeriHaneRotSpeed;
-	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One )) * BossWorldTrans.matWorld_);
+	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
 	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
 	HeriHaneRightTrans.TransferMatrix();
 
-	normalGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
-	normalGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
-	missileGun->Update(BossWorldTrans.translation_,player->GetPlayerPos());
+	normalGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Two ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
+	normalGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Four ))* BossWorldTrans.matWorld_),Vector3(0,0,0));
+	missileGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three ))* BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five ))* BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
@@ -262,7 +276,8 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
 	normalGunLeft->Draw(viewProjection_);
 	normalGunRight->Draw(viewProjection_);
-	missileGun->Draw(viewProjection_);
+	missileGunLeft->Draw(viewProjection_);
+	missileGunRight->Draw(viewProjection_);
 	HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
 	HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
 }
@@ -313,14 +328,16 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 
 	WorldTransUpdate();
 	MiddleBossCollider->Update(BossWorldTrans.matWorld_);
-	missileGun->Update(BossWorldTrans.translation_,Vector3(0,0,0));
+	missileGunLeft->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
+	missileGunRight->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
 
 	return false;
 }
 
 void MiddleBossEnemy::TitleUpdate(const Vector3& TrackingLocation)
 {
-	missileGun->Update(BossWorldTrans.translation_,TrackingLocation);
+	missileGunLeft->Update(BossWorldTrans.translation_,TrackingLocation,Vector3(0,0,0));
+	missileGunRight->Update(BossWorldTrans.translation_,TrackingLocation,Vector3(0,0,0));
 }
 
 void MiddleBossEnemy::MakeMissileBullet()
@@ -333,7 +350,8 @@ void MiddleBossEnemy::MakeTitleMissileBullet()
 	if ( isTitleShot == false )
 	{
 		isTitleShot = true;
-		missileGun->ShotBullet();
+		missileGunLeft->ShotBullet();
+		missileGunRight->ShotBullet();
 	}
 }
 
@@ -371,8 +389,8 @@ void MiddleBossEnemy::Attack()
 	else if ( attackType == AttackType::Missile )
 	{
 		BulletCoolTime = MaxBulletCoolTime;
-		missileGun->ShotBullet();
-
+		missileGunLeft->ShotBullet();
+		missileGunRight->ShotBullet();
 	}
 	else if ( attackType == AttackType::MoveingAttack )
 	{

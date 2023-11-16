@@ -13,7 +13,7 @@ public://基本関数
 	//初期化
 	void Initialize(const Vector3& Pos,Model* GunModel,Model* BulletModel);
 	//更新
-	void Update(const Vector3& GunPos,const Vector3& inductionPos);
+	void Update(const Vector3& GunPos,const Vector3& inductionPos,const Vector3& rot);
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
 
@@ -29,12 +29,12 @@ private:
 	void TimeUpdate();
 
 private://コンスト
-	const static uint32_t BulletMaxCount = 200;
+	const static uint32_t BulletMaxCount = 80;
 
 
 private://クラス関連
 	//バレットの数
-	std::array<std::unique_ptr<MissileBullet>,BulletMaxCount> normalBullet;
+	std::array<std::unique_ptr<MissileBullet>,BulletMaxCount> missileBullet;
 	Model* model_ = nullptr;
 	WorldTransform GunTrans;
 
