@@ -83,9 +83,8 @@ public://Getter
 	bool GetFinishMove()const {//スプラインが終わったか
 		return isDieMoveFinish;
 	}
-	Vector3 GetPlayerPos()const {//ポジションゲット
-		return MyMath::GetWorldTransform(playerWorldTrans.matWorld_);
-	}
+	Vector3 GetPlayerPos()const; //ポジションゲット
+
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -144,7 +143,8 @@ private://プレイヤークラス変数
 	uint32_t SlidingNumber = 0;
 	uint32_t LeftBoneNum = 41;
 
-	float Radius = 1.0f;
+	float PlayerRadius = 3.5f;
+	float FlontRadius = 1.0f;
 	float playerSpeed = 0.9f;
 	float PlayerToCameraDistance = 0.0f;
 	float PlayerToCameraTargetVecDistance = 0.0f;

@@ -118,7 +118,7 @@ private://プレイヤークラス変数
 	Vector3 vUp;
 	Vector3 playerPos_;
 	Vector3 target;
-	Vector3 cameraHigh = { 0,10,0 };
+	Vector3 cameraHigh = { 0,4,0 };
 	Vector3 PlayerToCameraVec;
 	//セットされたVec
 	Vector3 SetTargetVec;
@@ -128,6 +128,5 @@ private://プレイヤークラス変数
 
 	Matrix4 CameraRot;
 	Matrix4 matRot;// 回転行列
-
 
 };

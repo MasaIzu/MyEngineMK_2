@@ -94,3 +94,8 @@ void MissileGun::TimeUpdate()
 		CoolTime--;
 	}
 }
+
+WorldTarnsLook MissileGun::GetLook() const
+{
+	return GunTrans.LookVelocity;
+}

@@ -23,13 +23,17 @@ public://基本関数
 public:
 	//発射
 	void ShotBullet(const Vector3& BulletVec);
-
+	
 private:
 	//ポジションの更新
 	void UpdatePosition();
 
 	//タイムの更新
 	void TimeUpdate();
+
+public:
+	//見てる方向のゲット
+	WorldTarnsLook GetLook()const;
 
 private://コンスト
 	const static uint32_t BulletMaxCount = 30;

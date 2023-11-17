@@ -37,12 +37,13 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerNormalGun->Initialize(Pos,model_.get());
 
 	DebugWorldTrans.Initialize();
+	DebugWorldTrans.scale_ = Vector3(PlayerRadius,PlayerRadius,PlayerRadius);
 
 	playerMovement = std::make_unique<PlayerMovement>();
 
 	// コリジョンマネージャに追加
 	float sphereF = FloatNumber(fNumbers::fZero);
-	PlayerCollider = new SphereCollider(Vector4(sphereF,Radius,sphereF,sphereF),Radius);
+	PlayerCollider = new SphereCollider(Vector4(sphereF,PlayerRadius,sphereF,sphereF),PlayerRadius);
 	CollisionManager::GetInstance()->AddCollider(PlayerCollider);
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
@@ -77,8 +78,6 @@ void Player::Update()
 	
 	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround);
 
-	//当たり判定チェック
-	CheckPlayerCollider();
 
 	if ( isCameraModeNotFree == true )
 	{
@@ -100,6 +99,9 @@ void Player::Update()
 
 	//移動の値更新
 	WorldTransUpdate();
+
+	//当たり判定チェック
+	CheckPlayerCollider();
 
 	isGrapple = false;
 	if ( input_->MouseInputing(static_cast< uint32_t >( Numbers::One )) )
@@ -147,17 +149,16 @@ void Player::Update()
 	playerRotWorldTrans.TransferMatrix();
 	animation->Update();
 	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
+
+	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_);
+	DebugWorldTrans.TransferMatrix();
 }
 
 void Player::Draw()
 {
 	model_->Draw(DebugWorldTrans,*viewProjection_);
-	if ( isPressing )
-	{
-		model_->Draw(StartingPointOfGrapple,*viewProjection_);
-	}
+
 	playerNormalGun->Draw(*viewProjection_);
-	model_->Draw(playerRotWorldTrans,*viewProjection_);
 }
 
 void Player::FbxDraw() {
@@ -273,14 +274,14 @@ void Player::CheckPlayerCollider()
 	//isHitFirstRail = false;
 	// ワールド行列更新
 	playerWorldTrans.TransferMatrix();
-	PlayerCollider->Update(playerWorldTrans.matWorld_);
+	PlayerCollider->Update(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_);
 
 	//地面メッシュコライダー
 	{
 		// 球の上端から球の下端までのレイキャスト
 		Ray Groundray;
 		Groundray.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		Groundray.start.y += Radius;
+		Groundray.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
 		Groundray.dir = { FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit raycastHit;
 
@@ -293,10 +294,10 @@ void Player::CheckPlayerCollider()
 				// スムーズに坂を下る為の吸着距離
 				const float adsDistance = FloatNumber(fNumbers::fOnePointTwo);
 				// 接地を維持
-				if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
+				if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,FlontRadius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
 				{
 					onGround = true;
-					playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
+					playerWorldTrans.translation_.y -= ( raycastHit.distance - FlontRadius * FloatNumber(fNumbers::fTwoPointZero) );
 				}
 				// 地面がないので落下
 				else
@@ -309,11 +310,11 @@ void Player::CheckPlayerCollider()
 		// 落下状態
 		else
 		{
-			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,Radius * FloatNumber(fNumbers::fTwoPointZero)) )
+			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,FlontRadius * FloatNumber(fNumbers::fTwoPointZero)) )
 			{
 // 着地
 				onGround = true;
-				playerWorldTrans.translation_.y -= ( raycastHit.distance - Radius * FloatNumber(fNumbers::fTwoPointZero) );
+				playerWorldTrans.translation_.y -= ( raycastHit.distance - FlontRadius * FloatNumber(fNumbers::fTwoPointZero) );
 			}
 		}
 	}
@@ -321,15 +322,15 @@ void Player::CheckPlayerCollider()
 		//横メッシュコライダー
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += Radius;
+		wall.start.y += FlontRadius;
 		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fOnePointZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,Radius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
 		{
-			playerWorldTrans.translation_.z += ( wallRaycastHit.distance - Radius );
+			playerWorldTrans.translation_.z += ( wallRaycastHit.distance - FlontRadius );
 		}
 
 	}
@@ -337,30 +338,30 @@ void Player::CheckPlayerCollider()
 		//横メッシュコライダー
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += Radius;
+		wall.start.y += FlontRadius;
 		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,Radius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
 		{
-			playerWorldTrans.translation_.z -= ( wallRaycastHit.distance - Radius );
+			playerWorldTrans.translation_.z -= ( wallRaycastHit.distance - FlontRadius );
 		}
 	}
 	{
 		//横メッシュコライダー
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += Radius;
+		wall.start.y += FlontRadius;
 		wall.dir = { FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,Radius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
 		{
-			playerWorldTrans.translation_.x += ( wallRaycastHit.distance - Radius );
+			playerWorldTrans.translation_.x += ( wallRaycastHit.distance - FlontRadius );
 		}
 
 	}
@@ -368,15 +369,15 @@ void Player::CheckPlayerCollider()
 		//横メッシュコライダー
 		Ray wall;
 		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += Radius;
+		wall.start.y += FlontRadius;
 		wall.dir = { -FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,Radius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
 		{
-			playerWorldTrans.translation_.x -= ( wallRaycastHit.distance - Radius );
+			playerWorldTrans.translation_.x -= ( wallRaycastHit.distance - FlontRadius );
 		}
 
 	}
@@ -455,3 +456,7 @@ void Player::SetCameraNeedInformation(const Vector2& CameraRot,const Vector3& ta
 	CameraMaxDistance = cameraMaxDistance;
 }
 
+Vector3 Player::GetPlayerPos() const
+{
+	return MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_);
+}

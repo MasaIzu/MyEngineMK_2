@@ -44,8 +44,6 @@ public://基本関数
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
 	//タイトル用アップデート
 	void TitleUpdate(const Vector3& TrackingLocation);
-	//弾を作る
-	void MakeMissileBullet();
 	//タイトルの弾を作る
 	void MakeTitleMissileBullet();
 	//タイトルリセット
@@ -54,6 +52,8 @@ public://基本関数
 private://関数
 	//タイマー
 	void Timer();
+	//生きてる時のアップデート
+	void AliveUpdate();
 	//アタック
 	void Attack();
 	//考える時間
@@ -64,9 +64,10 @@ private://関数
 	void CheckAttackType();
 	//タイプのランダム
 	uint32_t RandomType(uint32_t& NoUseType);
-
-	//
-
+	//当たり判定の場所のアップデート
+	void ColTransUpdate();
+	//当たり判定のアップデート
+	void ColUpdate();
 public://Setter
 	//スプラインセット
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }
@@ -95,6 +96,9 @@ private://const関連
 	const uint32_t MaxMissileBulletCoolTime = 50;
 	const uint32_t MaxMoveingAttackTime = 40;
 	const uint32_t MaxMoveingAttackBulletTime = 1;
+
+	static const uint32_t ColCount = 8;
+
 private://クラス関連
 	Input* input_ = nullptr;
 	std::unique_ptr<FBXModel> fbxModel_;
@@ -104,6 +108,16 @@ private://クラス関連
 	WorldTransform BossWorldTrans;
 	WorldTransform HeriHaneLeftTrans;
 	WorldTransform HeriHaneRightTrans;
+
+	//当たり判定Position
+	WorldTransform EnemyCenterWorldTrans;
+	WorldTransform EnemyLeftHaneWorldTrans;
+	WorldTransform EnemyRightHaneWorldTrans;
+	WorldTransform EnemyLeftNormalWorldTrans;
+	WorldTransform EnemyRightNormalWorldTrans;
+	WorldTransform EnemyLeftMissileWorldTrans;
+	WorldTransform EnemyRightMissileWorldTrans;
+	WorldTransform EnemyHedWorldTrans;
 
 	WorldTransform DebugWorldTrans;
 
@@ -118,8 +132,7 @@ private://クラス関連
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
-	BaseCollider* MiddleBossCollider = nullptr;
-
+	std::array<BaseCollider*,ColCount> MiddleBossCollider;
 
 private://イーナムクラス
 
@@ -146,7 +159,7 @@ private://EnemyBossクラス変数
 	uint32_t MoveingTimer = 0;
 	uint32_t MaxMoveingTimer = 0;
 	uint32_t MaxBulletCoolTime = 0;
-	uint32_t MaxMiddleBossHp = 1000;
+	uint32_t MaxMiddleBossHp = 100;
 	uint32_t MiddleBossHp = MaxMiddleBossHp;
 	uint32_t AttackCooltime = 0;
 	uint32_t AttackTypeCount = static_cast<uint32_t>(AttackType::Move);
@@ -170,7 +183,7 @@ private://EnemyBossクラス変数
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;
 	float MaxMovieUpdateTimes = 120.0f;
-	float Radius = 10.0f;
+	float Radius = 12.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
 	float RotSpeed = 10.0f;
@@ -186,6 +199,8 @@ private://EnemyBossクラス変数
 	float HeriHaneRotSpeed = 0.1f;
 	float BackLarpStrength = 0.1f;
 	float BackPosRadius = 5.0f;
+	float BoneColRadius = 7.0f;
+	float NormalGunBackCol = 10.0f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 
@@ -197,6 +212,8 @@ private://EnemyBossクラス変数
 	Vector3 BackLerpPos;
 	Vector3 OldPos;
 	Vector3 DownVelocity;
+	Vector3 Coladjustment = { 0,3,0 };
+	Vector3 HaneColadjustment = { 0,7,0 };
 
 	AttackType attackType = AttackType::NotAttack;
 	std::array<AttackType,AttackedKeepCount>oldAttackType;

@@ -90,3 +90,8 @@ void NormalGun::TimeUpdate()
 		CoolTime--;
 	}
 }
+
+WorldTarnsLook NormalGun::GetLook() const
+{
+	return GunTrans.LookVelocity;
+}
