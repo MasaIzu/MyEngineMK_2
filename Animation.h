@@ -24,7 +24,7 @@ private://メンバ関数
 public://Setter
 
 	void SetAnimation(const uint32_t& animNumber,const uint32_t& startCount,const uint32_t& maxCount,const bool& loop);
-
+	void SetKeepAnimation(const uint32_t& animNumber,const uint32_t& Count,const uint32_t& maxCount);
 public://Getter
 	bool GetNowAnimFinish();
 	Matrix4 GetBonePos(const uint32_t& boneNum);

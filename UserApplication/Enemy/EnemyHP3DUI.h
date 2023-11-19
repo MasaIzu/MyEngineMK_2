@@ -39,7 +39,7 @@ private:
 	Vector2 Scale = { HpMax,YSize };
 	Vector2 MaxScale = { HpMax,YSize };
 
-	Vector2 BackBarSprite = { 20.8f,16.0f };
+	Vector2 BackBarSprite = { HpMax + 1.0f,16.0f };
 
 	Vector4 RedColor = { 1.0f,0.1f,0.1f,1.0f };
 };

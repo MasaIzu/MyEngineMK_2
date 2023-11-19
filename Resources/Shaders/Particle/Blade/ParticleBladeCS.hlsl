@@ -1,6 +1,4 @@
-#include "Particle.hlsli"
-#include "Easing.hlsli"
-
+#include "ParticleBlade.hlsli"
 
 struct GpuParticleElement
 {
@@ -14,11 +12,10 @@ struct GpuParticleElement
     float4 velocity;
 };
 
-
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
 
-[numthreads(32, 1, 1)]
+[numthreads(128, 1, 1)]
 void initParticle(uint3 id : SV_DispatchThreadID)
 {
     if (id.x < MaxParticleCount)
@@ -30,7 +27,7 @@ void initParticle(uint3 id : SV_DispatchThreadID)
     }
 }
 
-[numthreads(32, 1, 1)]
+[numthreads(128, 1, 1)]
 void main(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
@@ -58,36 +55,10 @@ void main(uint3 id : SV_DispatchThreadID)
 
     float3 gravity = float3(0, -98.0, 0);
     position += velocity;
-    //velocity += gravity * dt;
 
-    //if (position.y < 0)
-    //{
-    //    velocity.y *= -1;
-    //    velocity *= 0.6;
-    //    position.y = 0;
-
-    //    if (length(velocity) < 0.001)
-    //    {
-    //        velocity = 0;
-    //    }
-    //}
-#if 0
-  // フォースの処理.
-  float3 center = forceCenter1.xyz;
-  float  radius = forceCenter1.w;
-
-  float3 toCenter = center - position.xyz;
-  float L = length(toCenter);
-  if (L < radius) {
-    float velocityLen = length(velocity);
-    velocity = reflect(normalize(velocity), -normalize(toCenter));
-    velocity *= velocityLen;
-
-    position = radius * -normalize(toCenter) + center;
-  }
-#endif
-
-    gParticles[index].position.xyz = position;
+    
+    
+    gParticles[index].position.xyz = position.xyz;
     //gParticles[index].velocity.xyz = velocity;
 }
 
@@ -95,15 +66,17 @@ void main(uint3 id : SV_DispatchThreadID)
 ConsumeStructuredBuffer<uint> gFreeIndexList : register(u1);
 
 
-[numthreads(32, 1, 1)]
+[numthreads(128, 1, 1)]
 void emitParticle(uint3 id : SV_DispatchThreadID)
 {
-    uint index = gFreeIndexList.Consume();
+    uint index = id.x;
     if (gParticles[index].isActive > 0)
     {
         return;
     }
 
+    
+    
     float a = index;
     
     uint seed = id.x + index * 1235;
@@ -116,11 +89,16 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     velocity.z = nextRand(seed) / 16;
     velocity.y = (nextRand1(seed) / 16) + 0.2;
 
+    float4 BladeEndPos = normalize(EndPos - StartPos);
+    BladeEndPos = (BladeEndPos * 10);
+    
+    float LifeTime = Rand1(seed,10,7) * 5;
+    
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(StartPos.xyz);
-    gParticles[index].scale = 0.3f;
-    gParticles[index].velocity.xyz = velocity;
-    gParticles[index].lifeTime = 50;
+    gParticles[index].scale = 0.8f;
+    gParticles[index].velocity.xyz = BladeEndPos.xyz / LifeTime;
+    gParticles[index].lifeTime = LifeTime;
     gParticles[index].color = float4(1, 0.05, 0.05, 0.5);
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }

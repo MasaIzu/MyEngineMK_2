@@ -13,11 +13,13 @@
 #include "Animation.h"
 #include "PlayerStruct.h"
 #include "PlayerMovement.h"
+#include <ParticleHandHanabi.h>
 
 struct PlayerAnimTime
 {
 	const uint32_t Step = 30;
 	const uint32_t DieMotion = 120;
+	const uint32_t BladeAttack = 60;
 };
 
 /// <summary>
@@ -44,12 +46,18 @@ public://基本関数
 	//アタックアップデート
 	void AttackUpdate(const Vector3& EnemyPos,bool& LockOn);
 
+	//パーティクルを出す用
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void ParticleDraw();
+
 private:
 	
 	//プレイヤーの回転
-	void PlayerRot(const bool& Attack);
+	void PlayerRot(const bool& Attack,const bool& BladeAttack);
 	//プレーヤーの攻撃
 	void PlayerAttack(const Vector3& EnemyPos,bool& LockOn);
+	//プレーヤーの攻撃
+	void PlayerBladeAttack(const Vector3& EnemyPos,bool& LockOn);
 	//プレーヤーの移動の値更新
 	void WorldTransUpdate();
 	// プレイヤーの当たり判定
@@ -98,6 +106,7 @@ private://クラス関連
 
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
+	BaseCollider* PlayerBladeAttackCollider = nullptr;
 
 	//プレイヤーUIクラス
 	std::unique_ptr<PlayerUI> playerUI;
@@ -106,6 +115,7 @@ private://クラス関連
 	std::unique_ptr<Animation> animation;
 	//移動クラス
 	std::unique_ptr<PlayerMovement> playerMovement;
+	std::unique_ptr<ParticleHandHanabi> Particle;
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
 	PlayerAnimTime playerAnimTime;
@@ -134,16 +144,23 @@ private://プレイヤークラス変数
 	bool firstPush = false;
 	bool isSliding = false;
 	bool isTakeMissileDamages = false;
-
+	bool isBladeAttack = false;
 	bool isAlive = true;
 	bool isDieMotion = false;
 	bool isDieMoveFinish = false;
+	bool isBladeAttacking = false;
+	bool isPreparation = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
 	uint32_t LeftBoneNum = 41;
+	uint32_t RightBoneNum = 28;
+	uint32_t BladeAttackTime = 30;
+	uint32_t BladeAttackEndPos = 31;
+	uint32_t BladeMaxAttackTime = 40;
 
 	float PlayerRadius = 3.5f;
+	float PlayerBladeRadius = 2.0f;
 	float FlontRadius = 1.0f;
 	float playerSpeed = 0.9f;
 	float PlayerToCameraDistance = 0.0f;
@@ -158,6 +175,8 @@ private://プレイヤークラス変数
 	float PlayerMaxHP = 5000;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;
+	float BladeAttackBoostSpeed = 1.2f;
+	float BladeAttackSpeed = 0.15f;
 
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
@@ -168,6 +187,7 @@ private://プレイヤークラス変数
 	Vector3 StartingPoint;
 	Vector3 DownSlidingVelocity;
 	Vector3 RotKeep;
+	Vector3 BladeAttackVelocity;
 
 	Vector4 fallVec;
 

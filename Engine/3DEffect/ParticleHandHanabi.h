@@ -77,8 +77,11 @@ public: // サブクラス
 		Vector4 StartPos;
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
-		UINT maxParticleCount;
-		UINT particleCount;
+		UINT maxParticleCount = 0;
+		UINT particleCount = 0;
+		uint32_t Shot = 0;
+		uint32_t pad = 0;
+		Vector4 EndPos;
 	};
 	ShaderParameters shaderParameters;
 
@@ -191,7 +194,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,Vector4 StartPos);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& StartPos,const Vector4& EndPos);
 
 	/// <summary>
 	/// 描画

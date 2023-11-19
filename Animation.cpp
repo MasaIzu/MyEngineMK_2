@@ -36,7 +36,7 @@ void Animation::Update()
 			isMotionFinish = true;
 			if ( isLoop )
 			{
-				nowAnmFCount_ = static_cast< uint32_t >( Numbers::Zero );;
+				nowAnmFCount_ = static_cast< uint32_t >( Numbers::Zero );
 				isStart = true;
 			}
 		}
@@ -60,6 +60,15 @@ void Animation::SetAnimation(const uint32_t& animNumber,const uint32_t& startCou
 	isMotionFinish = false;
 	isLoop = loop;
 	AnmNumNumber_ = animNumber;
+	maxFcount = maxCount;
+}
+
+void Animation::SetKeepAnimation(const uint32_t& animNumber,const uint32_t& Count,const uint32_t& maxCount)
+{
+	isStart = false;
+	isMotionFinish = false;
+	AnmNumNumber_ = animNumber;
+	nowAnmFCount_ = Count;
 	maxFcount = maxCount;
 }
 

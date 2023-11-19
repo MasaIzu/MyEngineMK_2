@@ -37,7 +37,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerNormalGun->Initialize(Pos,model_.get());
 
 	DebugWorldTrans.Initialize();
-	DebugWorldTrans.scale_ = Vector3(PlayerRadius,PlayerRadius,PlayerRadius);
+	DebugWorldTrans.scale_ = Vector3(PlayerBladeRadius,PlayerBladeRadius,PlayerBladeRadius);
 
 	playerMovement = std::make_unique<PlayerMovement>();
 
@@ -48,6 +48,11 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
+	PlayerBladeAttackCollider = new SphereCollider(Vector4(sphereF,PlayerBladeRadius,sphereF,sphereF),PlayerBladeRadius);
+	CollisionManager::GetInstance()->AddCollider(PlayerBladeAttackCollider);
+	PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_ATTACK);
+	PlayerBladeAttackCollider->Update(playerWorldTrans.matWorld_);
+
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize(playerMovement->GetFuel());
 
@@ -55,17 +60,29 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	animation = std::make_unique<Animation>();
 	animation->Initialize();
+
+	Particle = std::make_unique<ParticleHandHanabi>();
+	int MaxParticleCount = 15000;
+	Particle->Initialize(MaxParticleCount);
+	Particle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 void Player::Update()
 {
 	isAttack = false;
 	isPressing = false;
-
+	isBladeAttack = false;
 	//攻撃
-	if ( input_->MouseInputing(static_cast<int>(Numbers::Zero)) )
+	if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) )
 	{
 		isAttack = true;
+	}
+	if ( isBladeAttacking == false )
+	{
+		if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) )
+		{
+			isBladeAttack = true;
+		}
 	}
 
 	//当たり判定チェック
@@ -74,9 +91,9 @@ void Player::Update()
 	HPUpdate();
 
 	//回転させる
-	PlayerRot(isAttack);
-	
-	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround);
+	PlayerRot(isAttack,isBladeAttacking);
+
+	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking);
 
 
 	if ( isCameraModeNotFree == true )
@@ -99,25 +116,6 @@ void Player::Update()
 
 	//移動の値更新
 	WorldTransUpdate();
-
-	//当たり判定チェック
-	CheckPlayerCollider();
-
-	isGrapple = false;
-	if ( input_->MouseInputing(static_cast< uint32_t >( Numbers::One )) )
-	{
-
-	}
-
-
-	if ( input_->MouseInputTrigger(static_cast< uint32_t >( Numbers::Zero )) )
-	{
-		/*LeftBoneNum++;*/
-	}
-	if ( input_->MouseInputTrigger(static_cast< uint32_t >( Numbers::One )) )
-	{
-		/*LeftBoneNum--;*/
-	}
 
 	ImGui::Begin("Player");
 
@@ -150,13 +148,13 @@ void Player::Update()
 	animation->Update();
 	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
 
-	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_);
+	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_);
 	DebugWorldTrans.TransferMatrix();
 }
 
 void Player::Draw()
 {
-	model_->Draw(DebugWorldTrans,*viewProjection_);
+	//model_->Draw(DebugWorldTrans,*viewProjection_);
 
 	playerNormalGun->Draw(*viewProjection_);
 }
@@ -179,19 +177,83 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 	ImGui::Text("LockOn = %d",LockOn);
 
 	ImGui::End();
+
+	if ( isBladeAttacking == true )
+	{
+		if ( isPreparation == false )
+		{
+			if ( BladeAttackTime < BladeMaxAttackTime )
+			{
+				BladeAttackTime++;
+				if ( EnemyPos.y < MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerWorldTrans.matWorld_).y )
+				{
+					BladeAttackVelocity.y = FloatNumber(fNumbers::fZero);
+				}
+				playerWorldTrans.translation_ += BladeAttackVelocity;
+				animation->SetKeepAnimation(static_cast< uint32_t >( PlayerAnimation::HandAttack ),static_cast< uint32_t >( Numbers::Ten ),playerAnimTime.BladeAttack);
+				if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) )
+				{
+					BladeAttackTime = BladeMaxAttackTime;
+					animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::HandAttack ),static_cast< uint32_t >( Numbers::Ten ),playerAnimTime.BladeAttack,false);
+				}
+			}
+			else
+			{
+				isPreparation = true;
+				BladeAttackVelocity.y = FloatNumber(fNumbers::fZero);
+				animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::HandAttack ),static_cast< uint32_t >( Numbers::Ten ),playerAnimTime.BladeAttack,false);
+				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_ATTACK);
+				PlayerBladeAttackCollider->Reset();
+			}
+		}
+		else
+		{
+			if ( animation->GetNowAnimFinish() )
+			{
+				isBladeAttacking = false;
+				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+			}
+			else
+			{
+				playerWorldTrans.translation_ += BladeAttackVelocity * BladeAttackSpeed;
+			}
+		}
+	}
+
+
 	if ( isAttack == true )
 	{
 		PlayerAttack(EnemyPos,LockOn);
 	}
+	else if ( isBladeAttack == true )
+	{
+		PlayerBladeAttack(EnemyPos,LockOn);
+	}
 
 	playerUI->AttackReticleUpdate(LockOn);
+	WorldTransUpdate();
+
+	//当たり判定チェック
+	CheckPlayerCollider();
 }
 
-void Player::PlayerRot(const bool& Attack)
+void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
-	playerMovement->PlayerAngle(Attack);
+	Vector4 StartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
+	Vector4 EndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
+	Particle->CSUpdate(cmdList,StartPos,EndPos);
+}
+
+void Player::ParticleDraw()
+{
+	Particle->Draw(*viewProjection_);
+}
+
+void Player::PlayerRot(const bool& Attack,const bool& BladeAttack)
+{
+	playerMovement->PlayerAngle(Attack,BladeAttack);
 	RotKeep = Vec3Number(fNumbers::fZero);
-	if ( !Attack )
+	if ( !Attack && !BladeAttack )
 	{
 		RotKeep = Vector3(FloatNumber(fNumbers::fZero),cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero));
 		playerRotWorldTrans.SetRot(RotKeep);
@@ -225,42 +287,24 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 			playerNormalGun->ShotBullet(TargetPosition);
 		}
 	}
+}
 
-	//if ( AttackPhase_ == AttackPhase::Nothing )
-	//{
-	//	AttackPhase_ = AttackPhase::AttackCombo1;
-	//}
-	//switch ( AttackPhase_ )
-	//{
-	//case Player::AttackPhase::AttackCombo1:
-	//	if ( LockOn )
-	//	{
-	//		playerNormalGun->ShotBullet(EnemyPos);
-	//	}
-	//	else
-	//	{
-	//		playerNormalGun->ShotBullet(TargetPosition);
-	//	}
+void Player::PlayerBladeAttack(const Vector3& EnemyPos,bool& LockOn)
+{
+	isBladeAttacking = true;
+	isPreparation = false;
+	BladeAttackTime = static_cast< uint32_t >( Numbers::Zero );
+	if ( LockOn )
+	{
+		FixedAngle = MyMath::Get2VecAngle(MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_),EnemyPos);
+		BladeAttackVelocity = EnemyPos - playerWorldTrans.translation_;
+		BladeAttackVelocity = BladeAttackVelocity.norm() * BladeAttackBoostSpeed;
+	}
+	else
+	{
+		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
 
-	//	break;
-	//case Player::AttackPhase::AttackCombo2:
-
-	//	break;
-	//case Player::AttackPhase::AttackCombo3:
-
-	//	break;
-	//case Player::AttackPhase::AttackCombo4:
-
-	//	break;
-	//case Player::AttackPhase::AttackUlt:
-
-	//	break;
-	//case Player::AttackPhase::Nothing:
-
-	//	break;
-	//default:
-	//	break;
-	//}
+	}
 }
 
 void Player::WorldTransUpdate()
@@ -270,12 +314,8 @@ void Player::WorldTransUpdate()
 
 void Player::CheckPlayerCollider()
 {
-	//isHitRail = false;
-	//isHitFirstRail = false;
-	// ワールド行列更新
-	playerWorldTrans.TransferMatrix();
-	PlayerCollider->Update(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_);
-
+	PlayerCollider->Update(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerWorldTrans.matWorld_);
+	PlayerBladeAttackCollider->Update(DebugWorldTrans.matWorld_);
 	//地面メッシュコライダー
 	{
 		// 球の上端から球の下端までのレイキャスト
@@ -285,13 +325,12 @@ void Player::CheckPlayerCollider()
 		Groundray.dir = { FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit raycastHit;
 
-
-		// 接地状態
-		if ( onGround )
+		if ( !playerMovement->GetIsBoost() && !isBladeAttacking )
 		{
-			if ( !playerMovement->GetIsBoost() )
+			// 接地状態
+			if ( onGround )
 			{
-				// スムーズに坂を下る為の吸着距離
+					// スムーズに坂を下る為の吸着距離
 				const float adsDistance = FloatNumber(fNumbers::fOnePointTwo);
 				// 接地を維持
 				if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,FlontRadius * FloatNumber(fNumbers::fTwoPointZero) + adsDistance) )
@@ -306,15 +345,15 @@ void Player::CheckPlayerCollider()
 					fallVec = {};
 				}
 			}
-		}
-		// 落下状態
-		else
-		{
-			if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,FlontRadius * FloatNumber(fNumbers::fTwoPointZero)) )
+			// 落下状態
+			else
 			{
-// 着地
-				onGround = true;
-				playerWorldTrans.translation_.y -= ( raycastHit.distance - FlontRadius * FloatNumber(fNumbers::fTwoPointZero) );
+				if ( CollisionManager::GetInstance()->Raycast(Groundray,COLLISION_ATTR_LANDSHAPE,&raycastHit,FlontRadius * FloatNumber(fNumbers::fTwoPointZero)) )
+				{
+					// 着地
+					onGround = true;
+					playerWorldTrans.translation_.y -= ( raycastHit.distance - FlontRadius * FloatNumber(fNumbers::fTwoPointZero) );
+				}
 			}
 		}
 	}
@@ -381,7 +420,7 @@ void Player::CheckPlayerCollider()
 		}
 
 	}
-
+	WorldTransUpdate();
 }
 
 
@@ -426,6 +465,17 @@ void Player::CheckHitCollision()
 		isTakeMissileDamages = true;
 		PlayerCollider->Reset();
 	}
+	if ( PlayerBladeAttackCollider->GetHit() )
+	{
+		PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+		PlayerBladeAttackCollider->Reset();
+	}
+	if ( PlayerCollider->GetHitSphere() )
+	{
+		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
+		PlayerCollider->ResetSphere();
+	}
+	
 }
 
 void Player::HPUpdate()

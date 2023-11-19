@@ -48,6 +48,10 @@ public://メンバ関数
 	//QuerySphereの判定
 	void QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute = static_cast<unsigned short>(0xffffffff));
 
+	bool DetectCollision(const Sphere& sphereA,const Sphere& sphereB,Vector3& out_collision_depth_direction);
+
+	Vector3 ResolveCollision(const Sphere& sphereA,const Sphere& sphereB);
+
 	//敵に当たった
 	bool GetIsEnemyHit() { return isEnemyHit; }
 	//攻撃が当たった

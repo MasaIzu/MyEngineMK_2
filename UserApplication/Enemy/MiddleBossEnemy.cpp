@@ -58,6 +58,9 @@ MiddleBossEnemy::MiddleBossEnemy()
 	EnemyRightMissileWorldTrans.scale_ = Vector3(BoneColRadius,BoneColRadius,BoneColRadius);
 	EnemyRightMissileWorldTrans.Initialize();
 
+	EnemyNecWorldTrans.scale_ = Vector3(BoneColRadius,BoneColRadius,BoneColRadius);
+	EnemyNecWorldTrans.Initialize();
+
 	EnemyHedWorldTrans.scale_ = Vector3(BoneColRadius,BoneColRadius,BoneColRadius);
 	EnemyHedWorldTrans.Initialize();
 
@@ -153,6 +156,10 @@ void MiddleBossEnemy::Update()
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
+	//model_->Draw(DebugWorldTrans,viewProjection_);
+	//model_->Draw(EnemyNecWorldTrans,viewProjection_);
+	//model_->Draw(EnemyHedWorldTrans,viewProjection_);
+
 	normalGunLeft->Draw(viewProjection_);
 	normalGunRight->Draw(viewProjection_);
 	missileGunLeft->Draw(viewProjection_);
@@ -617,7 +624,10 @@ void MiddleBossEnemy::ColTransUpdate()
 	EnemyRightMissileWorldTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_) + ( missileGunRight->GetLook().lookBack.norm() * NormalGunBackCol );
 	EnemyRightMissileWorldTrans.TransferMatrix();
 
-	EnemyHedWorldTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Six )) * BossWorldTrans.matWorld_);
+	EnemyNecWorldTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Six )) * BossWorldTrans.matWorld_);
+	EnemyNecWorldTrans.TransferMatrix();
+
+	EnemyHedWorldTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Seven )) * BossWorldTrans.matWorld_);
 	EnemyHedWorldTrans.TransferMatrix();
 }
 
@@ -630,7 +640,8 @@ void MiddleBossEnemy::ColUpdate()
 	MiddleBossCollider[ 4 ]->Update(EnemyRightNormalWorldTrans.matWorld_);
 	MiddleBossCollider[ 5 ]->Update(EnemyLeftMissileWorldTrans.matWorld_);
 	MiddleBossCollider[ 6 ]->Update(EnemyRightMissileWorldTrans.matWorld_);
-	MiddleBossCollider[ 7 ]->Update(EnemyHedWorldTrans.matWorld_);
+	MiddleBossCollider[ 7 ]->Update(EnemyNecWorldTrans.matWorld_);
+	MiddleBossCollider[ 8 ]->Update(EnemyHedWorldTrans.matWorld_);
 }
 
 Vector3 MiddleBossEnemy::GetPosition() const

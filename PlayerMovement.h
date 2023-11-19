@@ -12,11 +12,11 @@ public://基本関数
 	~PlayerMovement();
 
 	//Move
-	Vector3 Move(const WorldTransform& worldTransform,const bool& onGround);
+	Vector3 Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack);
 	//ブースト
-	Vector3 UpBoost(const bool& onGround);
+	Vector3 UpBoost(const bool& onGround,const bool& isBladeAttack);
 	//Angle
-	void PlayerAngle(const bool& isAtack);
+	void PlayerAngle(const bool& isAtack,const bool& isBladeAtack);
 	//スライディングマテリアル
 	bool SlidingMaterial(const WorldTransform& worldTransform);
 	//スライディングアップデート

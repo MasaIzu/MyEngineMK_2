@@ -11,88 +11,95 @@ PlayerMovement::~PlayerMovement()
 {
 }
 
-Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround)
+Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack)
 {
 	playerAllMoveMent = Vec3Number(fNumbers::fZero);
 
-	if ( pushKey.isPushMoveKey )
+	if ( !isBladeAttack )
 	{
-		playerAllMoveMent = worldTransform.LookVelocity.look.norm();
-
-		if ( !isRotFinish )
+		if ( pushKey.isPushMoveKey )
 		{
-			playerAllMoveMent = worldTransform.LookVelocity.look.norm() * PlayerTrunSpeed;
-		}
-	}
-	else
-	{
-		if ( input_->PushKey(DIK_W) )
-		{
-			pushKey.isPushW = true;
-			pushKey.isPushMoveKey = true;
 			playerAllMoveMent = worldTransform.LookVelocity.look.norm();
-		}
-		if ( input_->PushKey(DIK_S) )
-		{
-			pushKey.isPushS = true;
-			pushKey.isPushMoveKey = true;
-			playerAllMoveMent = worldTransform.LookVelocity.lookBack.norm();
-		}
-		if ( input_->PushKey(DIK_A) )
-		{
-			pushKey.isPushA = true;
-			pushKey.isPushMoveKey = true;
-			playerAllMoveMent = worldTransform.LookVelocity.lookLeft.norm();
-		}
-		if ( input_->PushKey(DIK_D) )
-		{
-			pushKey.isPushD = true;
-			pushKey.isPushMoveKey = true;
-			playerAllMoveMent = worldTransform.LookVelocity.lookRight.norm();
-		}
 
-		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
-		{
-			playerAllMoveMent = worldTransform.LookVelocity.look_lookLeft.norm();
+			if ( !isRotFinish )
+			{
+				playerAllMoveMent = worldTransform.LookVelocity.look.norm() * PlayerTrunSpeed;
+			}
 		}
-		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
+		else
 		{
-			playerAllMoveMent = worldTransform.LookVelocity.look_lookRight.norm();
-		}
-		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
-		{
-			playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookLeft.norm();
-		}
-		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
-		{
-			playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
+			if ( input_->PushKey(DIK_W) )
+			{
+				pushKey.isPushW = true;
+				pushKey.isPushMoveKey = true;
+				playerAllMoveMent = worldTransform.LookVelocity.look.norm();
+			}
+			if ( input_->PushKey(DIK_S) )
+			{
+				pushKey.isPushS = true;
+				pushKey.isPushMoveKey = true;
+				playerAllMoveMent = worldTransform.LookVelocity.lookBack.norm();
+			}
+			if ( input_->PushKey(DIK_A) )
+			{
+				pushKey.isPushA = true;
+				pushKey.isPushMoveKey = true;
+				playerAllMoveMent = worldTransform.LookVelocity.lookLeft.norm();
+			}
+			if ( input_->PushKey(DIK_D) )
+			{
+				pushKey.isPushD = true;
+				pushKey.isPushMoveKey = true;
+				playerAllMoveMent = worldTransform.LookVelocity.lookRight.norm();
+			}
+
+			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
+			{
+				playerAllMoveMent = worldTransform.LookVelocity.look_lookLeft.norm();
+			}
+			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
+			{
+				playerAllMoveMent = worldTransform.LookVelocity.look_lookRight.norm();
+			}
+			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
+			{
+				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookLeft.norm();
+			}
+			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
+			{
+				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
+			}
 		}
 	}
-	playerAllMoveMent += UpBoost(onGround);
+	
+	playerAllMoveMent += UpBoost(onGround,isBladeAttack);
 
 	BoostFuelUpdate(onGround);
 	return playerAllMoveMent;
 }
 
-Vector3 PlayerMovement::UpBoost(const bool& onGround)
+Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack)
 {
 	isBoost = false;
-	if ( input_->PushKey(DIK_SPACE) )
+	if ( !isBladeAttack )
 	{
-		if ( FuelUsedUpBoost <= Fuel )
+		if ( input_->PushKey(DIK_SPACE) )
 		{
-			isBoost = true;
-			FallSpeed = FloatNumber(fNumbers::fZero);
-			UpBoostSpeed = max(FallVec.y + UpAcc,UpVYMax);
+			if ( FuelUsedUpBoost <= Fuel )
+			{
+				isBoost = true;
+				FallSpeed = FloatNumber(fNumbers::fZero);
+				UpBoostSpeed = max(FallVec.y + UpAcc,UpVYMax);
 
-			isBoostCoolTimeFinish = true;
-			BoostCoolTime = MaxBoostCoolTime;
-			Fuel -= FuelUsedUpBoost;
+				isBoostCoolTimeFinish = true;
+				BoostCoolTime = MaxBoostCoolTime;
+				Fuel -= FuelUsedUpBoost;
+			}
 		}
 	}
 	if ( !onGround )
 	{
-		if ( !isBoost )
+		if ( !isBoost && !isBladeAttack )
 		{
 			if ( UpBoostSpeed > 0 )
 			{
@@ -104,6 +111,11 @@ Vector3 PlayerMovement::UpBoost(const bool& onGround)
 				FallSpeed = max(FallSpeed + FallAcc,FallVYMin);
 			}
 		}
+	}
+	if ( isBladeAttack )
+	{
+		FallSpeed = FloatNumber(fNumbers::fZero);
+		UpBoostSpeed = FloatNumber(fNumbers::fZero);
 	}
 
 	FallVec.y = UpBoostSpeed + FallSpeed;
@@ -118,7 +130,7 @@ Vector3 PlayerMovement::UpBoost(const bool& onGround)
 	return FallVec;
 }
 
-void PlayerMovement::PlayerAngle(const bool& isAtack)
+void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack)
 {
 	pushKey.isPushW = false;
 	pushKey.isPushA = false;
@@ -128,7 +140,7 @@ void PlayerMovement::PlayerAngle(const bool& isAtack)
 	isRotFinish = false;
 	isPlayerAttack = isAtack;
 
-	if ( !isAtack )
+	if ( !isAtack && !isBladeAtack )
 	{
 		if ( input_->PushKey(DIK_W) )
 		{

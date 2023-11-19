@@ -187,6 +187,9 @@
     <Filter Include="UserFile\UserHeaderFile\UI">
       <UniqueIdentifier>{5dbacf1a-34b7-48b6-92f8-88ec6e56ccd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\Blade">
+      <UniqueIdentifier>{a24fc987-7552-481f-84cf-6c79e6889f46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -218,6 +221,9 @@
     </None>
     <None Include="Resources\Shaders\Sprite3D.hlsli">
       <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\Blade\ParticleBlade.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +272,6 @@
     <FxCompile Include="Resources\Shaders\MeshParticleCS.hlsl">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleHandHanabi.hlsl">
-      <Filter>ResourceFile\Shaders\Particle</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\ParticleComputeShader.hlsl">
       <Filter>ResourceFile\Shaders\Particle</Filter>
     </FxCompile>
@@ -292,6 +295,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Sprite3DPS.hlsl">
       <Filter>ResourceFile\Shaders\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Blade\ParticleBladeCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Blade\ParticleBladeGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Blade\ParticleBladePS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Blade\ParticleBladeVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

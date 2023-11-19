@@ -97,7 +97,7 @@ private://const関連
 	const uint32_t MaxMoveingAttackTime = 40;
 	const uint32_t MaxMoveingAttackBulletTime = 1;
 
-	static const uint32_t ColCount = 8;
+	static const uint32_t ColCount = 9;
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -117,6 +117,7 @@ private://クラス関連
 	WorldTransform EnemyRightNormalWorldTrans;
 	WorldTransform EnemyLeftMissileWorldTrans;
 	WorldTransform EnemyRightMissileWorldTrans;
+	WorldTransform EnemyNecWorldTrans;
 	WorldTransform EnemyHedWorldTrans;
 
 	WorldTransform DebugWorldTrans;
@@ -199,7 +200,7 @@ private://EnemyBossクラス変数
 	float HeriHaneRotSpeed = 0.1f;
 	float BackLarpStrength = 0.1f;
 	float BackPosRadius = 5.0f;
-	float BoneColRadius = 7.0f;
+	float BoneColRadius = 9.0f;
 	float NormalGunBackCol = 10.0f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };

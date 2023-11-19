@@ -175,6 +175,14 @@ void MediumBossStage::Draw()
 	middleBossEnemy->FbxDraw(*viewProjection_.get());
 	player_->FbxDraw();
 
+
+	ParticleHandHanabi::PreDraw(commandList);
+
+	player_->ParticleDraw();
+
+	ParticleHandHanabi::PostDraw();
+
+
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
 
@@ -190,7 +198,7 @@ void MediumBossStage::Finalize()
 
 void MediumBossStage::CSUpdate()
 {
-
+	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 }
 
 bool MediumBossStage::IsBreak()

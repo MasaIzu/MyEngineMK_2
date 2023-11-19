@@ -33,6 +33,8 @@ public:
 	inline unsigned short GetAttribute() { return attribute; }
 	//プレイヤーの攻撃が当たった
 	inline bool GetHit() { return isHitPlayerAttack; }
+	//スフィア衝突
+	inline bool GetHitSphere() { return isHitSphere; }
 	//敵同士が接触した
 	inline bool GetHitEnemyEachOtherHit() { return isEnemyHittingEachOther; }
 	//スフィアに当たった
@@ -91,6 +93,14 @@ public:
 	}
 
 	/// <summary>
+	/// ヒットしたのをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void ResetSphere() {
+		isHitSphere = false;
+	}
+
+	/// <summary>
 	/// 排斥ベクトルのヒットをリセット
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
@@ -128,6 +138,7 @@ protected:
 	unsigned short attributeWakeEnemy = 0b1111111111111111;
 
 	bool isHitPlayerAttack = false;//プレーヤーの弾が当たっている場合
+	bool isHitSphere = false;
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
 	bool isSphereMeshHit = false;
 	bool isHitFirstSplineRail = false;

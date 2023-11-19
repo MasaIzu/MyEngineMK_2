@@ -94,7 +94,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticleVS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Blade/ParticleBladeVS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -117,7 +117,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 
 	// ジオメトリシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticleGS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Blade/ParticleBladeGS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "gs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -141,7 +141,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticlePS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Blade/ParticleBladePS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -294,7 +294,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleHandHanabi.hlsl",
+		L"Resources/Shaders/Particle/Blade/ParticleBladeCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"initParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -302,7 +302,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 		&csBlobInit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleHandHanabi.hlsl",
+		L"Resources/Shaders/Particle/Blade/ParticleBladeCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"emitParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -310,7 +310,7 @@ void ParticleHandHanabi::InitializeGraphicsPipeline()
 		&csBlobEmit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/ParticleHandHanabi.hlsl",
+		L"Resources/Shaders/Particle/Blade/ParticleBladeCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -435,24 +435,9 @@ void ParticleHandHanabi::SetTextureHandle(uint32_t textureHandle) {
 
 void ParticleHandHanabi::Initialize(uint32_t ParticleCount)
 {
-	HRESULT result;
-
 	particleCount = ParticleCount;
 
 	InitializeVerticeBuff();
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff);
-
-	// 定数バッファの生成
-	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // アップロード可能
-		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&constBuff));
-	assert(SUCCEEDED(result));
 
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 	heapDesc.NumDescriptors = 1;
@@ -475,23 +460,6 @@ void ParticleHandHanabi::Initialize(uint32_t ParticleCount)
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES UploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC UploadResourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(particleCount * sizeof(GpuParticleElement));
-
-	// アップロードバッファの作成
-	device->CreateCommittedResource(
-		&UploadHeapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&UploadResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&uploadBuffer)
-	);
-
 }
 
 void ParticleHandHanabi::Update()
@@ -509,19 +477,8 @@ void ParticleHandHanabi::Update()
 
 void ParticleHandHanabi::Draw(const ViewProjection& view)
 {
-	HRESULT result;
-	// 定数バッファへデータ転送
-	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
-	constMap->mat = constMatToSend;	// 行列の合成
-	constMap->matBillboard = view.matBillboard;
-	constMap->maxParticleCount = static_cast<UINT>(particleCount);
-	constMap->particleCount = 1;
-	constBuff->Unmap(0, nullptr);
 
 	shaderParameters.mat = constMatToSend;
 	shaderParameters.matBillboard = view.matBillboard;
@@ -548,17 +505,17 @@ void ParticleHandHanabi::Draw(const ViewProjection& view)
 
 }
 
-void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
+void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
+	shaderParameters.StartPos = StartPos;
+	shaderParameters.EndPos = EndPos;
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;
 		shaderParameters.particleCount = 0;
-		shaderParameters.StartPos = StartPos;
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
@@ -571,17 +528,16 @@ void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4
 		// Particle の初期化コード.
 		commandList->SetComputeRootSignature(rootSignature.Get());
 
-
 		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
 		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
-		UINT invokeCount = particleCount / 32 + 1;
+		UINT invokeCount = particleCount / 128 + 1;
 		commandList->Dispatch(invokeCount, 1, 1);
 	}
 
-
+	MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(),sizeof(ShaderParameters),&shaderParameters);
 	{
 		// Particle の発生.
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
@@ -592,9 +548,9 @@ void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4
 		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
-		UINT invokeCount = particleCount / 32 + 1;
+		UINT invokeCount = particleCount / 128 + 1;
 		{
-			commandList->Dispatch(2, 1, 1);
+			commandList->Dispatch(invokeCount,1,1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
