@@ -64,10 +64,12 @@ private: // メンバ変数
 
 	WorldTransform worldTransform_;//ワールド変換データ
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
-	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<Ground> ground;
 	std::unique_ptr<Model> model;
 	std::unique_ptr<Model> model1;
+	std::unique_ptr<LoadLevelEditor> levelData;
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<GameCamera> gameCamera;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

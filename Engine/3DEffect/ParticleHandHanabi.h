@@ -69,8 +69,9 @@ public: // サブクラス
 		UINT  isActive;	// 生存フラグ.
 		float lifeTime;
 		float elapsed;
-		UINT  colorIndex;
+		float  maxLifeTime;
 		Vector4 velocity;
+		Vector4 endPos;
 	};
 
 	struct ShaderParameters {
@@ -194,7 +195,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& StartPos,const Vector4& EndPos);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& shot);
 
 	/// <summary>
 	/// 描画

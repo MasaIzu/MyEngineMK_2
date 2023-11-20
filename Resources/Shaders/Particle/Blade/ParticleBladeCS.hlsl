@@ -1,17 +1,5 @@
 #include "ParticleBlade.hlsli"
 
-struct GpuParticleElement
-{
-    float4 position;
-    float scale;
-    float4 color;
-    uint isActive; // 生存フラグ.
-    float lifeTime;
-    float elapsed;
-    uint colorIndex;
-    float4 velocity;
-};
-
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
 
@@ -50,16 +38,20 @@ void main(uint3 id : SV_DispatchThreadID)
     }
 
   // 生き残っているパーティクルを動かす.
+    float4 BladeEndPos = normalize(EndPos - StartPos);
+    BladeEndPos = normalize((StartPos + (BladeEndPos * 15)) - gParticles[index].position);
     float3 velocity = gParticles[index].velocity.xyz;
+    velocity = lerp(velocity, BladeEndPos.xyz, 0.3f);
+    
+    
     float3 position = gParticles[index].position.xyz;
 
-    float3 gravity = float3(0, -98.0, 0);
     position += velocity;
 
-    
-    
-    gParticles[index].position.xyz = position.xyz;
-    //gParticles[index].velocity.xyz = velocity;
+    float scale = 0.8f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
+    gParticles[index].scale = scale;
+    gParticles[index].position.xyz = position;
+    gParticles[index].velocity.xyz = velocity;
 }
 
 
@@ -70,12 +62,16 @@ ConsumeStructuredBuffer<uint> gFreeIndexList : register(u1);
 void emitParticle(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
+    
+    if (Shot == 0)
+    {
+        return;
+    }
+    
     if (gParticles[index].isActive > 0)
     {
         return;
     }
-
-    
     
     float a = index;
     
@@ -85,20 +81,25 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float r = nextRand(seed) * 50;
     float theta = nextRand(seed) * 3.14192 * 2.0;
-    velocity.x = nextRand(seed) / 8;
-    velocity.z = nextRand(seed) / 16;
-    velocity.y = (nextRand1(seed) / 16) + 0.2;
-
-    float4 BladeEndPos = normalize(EndPos - StartPos);
-    BladeEndPos = (BladeEndPos * 10);
+    velocity.x = nextRand(seed) * 2;
+    velocity.z = nextRand(seed) * 2;
+    velocity.y = nextRand(seed) * 2;
     
-    float LifeTime = Rand1(seed,10,7) * 5;
+    float4 BladeEndPos = normalize(EndPos - StartPos);
+    BladeEndPos = (BladeEndPos * 15);
+    
+    float LifeTime = Rand1(seed,6,5) * 3;
+    
+    //velocity = velocity / LifeTime;
+    //velocity += BladeEndPos.xyz / LifeTime;
     
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(StartPos.xyz);
     gParticles[index].scale = 0.8f;
-    gParticles[index].velocity.xyz = BladeEndPos.xyz / LifeTime;
+    gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = LifeTime;
+    gParticles[index].maxLifeTime = LifeTime;
     gParticles[index].color = float4(1, 0.05, 0.05, 0.5);
+    gParticles[index].endPos = StartPos + BladeEndPos;
     //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
 }

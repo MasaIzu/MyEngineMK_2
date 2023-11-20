@@ -229,7 +229,10 @@ void MediumBossStage::LockOn()
 			windowWH.x / 2, windowWH.y / 2,0,1 };
 
 			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-			Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+			Matrix4 matView = viewProjection_->matView;
+			Matrix4 matProjection = viewProjection_->matProjection;
+
+			Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
 
 			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
@@ -264,7 +267,10 @@ void MediumBossStage::LockOn()
 			windowWH.x / 2, windowWH.y / 2,0,1 };
 
 			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-			Matrix4 matViewProjectionViewport = viewProjection_->matView * viewProjection_->matProjection * Viewport;
+			Matrix4 matView = viewProjection_->matView;
+			Matrix4 matProjection = viewProjection_->matProjection;
+
+			Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
 
 			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);

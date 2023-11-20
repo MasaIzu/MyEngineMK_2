@@ -505,13 +505,14 @@ void ParticleHandHanabi::Draw(const ViewProjection& view)
 
 }
 
-void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
+void ParticleHandHanabi::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& shot)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	shaderParameters.StartPos = StartPos;
 	shaderParameters.EndPos = EndPos;
+	shaderParameters.Shot = shot;
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;

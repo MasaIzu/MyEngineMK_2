@@ -241,7 +241,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	Vector4 StartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
 	Vector4 EndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
-	Particle->CSUpdate(cmdList,StartPos,EndPos);
+	Particle->CSUpdate(cmdList,StartPos,EndPos,static_cast<uint32_t>( isBladeAttacking ));
 }
 
 void Player::ParticleDraw()
@@ -303,7 +303,8 @@ void Player::PlayerBladeAttack(const Vector3& EnemyPos,bool& LockOn)
 	else
 	{
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
-
+		BladeAttackVelocity = playerRotWorldTrans.LookVelocity.look;
+		BladeAttackVelocity = BladeAttackVelocity.norm() * BladeAttackBoostSpeed;
 	}
 }
 

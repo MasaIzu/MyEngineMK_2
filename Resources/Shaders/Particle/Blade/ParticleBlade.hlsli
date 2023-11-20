@@ -16,11 +16,10 @@ cbuffer ShaderParameters : register(b0)
 struct VSOutput
 {
     float4 position : Position;
-    float scale : Scale;
     float4 color : Color;
     float4 DownColor : DownColor;
     float4 velocity : Velocity;
-    float3 FinalVelocity : FinalVelocity;
+    float scale : Scale;
     int Frame : Frame; // このパーティクルが生まれたフレーム
     int MaxFrame : MaxFrame; //このパーティクルの寿命
     bool alive : Alive; // このパーティクルが生きているかどうか
@@ -34,6 +33,19 @@ struct GSOutput
 	//float3 normal:NORMAL;//法線ベクトル
     float2 uv : TEXCOORD; //uv値
     float4 color : COLOR;
+};
+
+struct GpuParticleElement
+{
+    float4 position;
+    float scale;
+    float4 color;
+    uint isActive; // 生存フラグ.
+    float lifeTime;
+    float elapsed;
+    float maxLifeTime;
+    float4 velocity;
+    float4 endPos;
 };
 
 uint wang_hash(uint seed)
@@ -76,4 +88,14 @@ float nextRand1(inout uint s)
 {
     s = (1664525u * s + 1013904223u);
     return saturate(float(s & 0x00FFFFFF) / float(0x01000000));
+}
+
+float3 lerp(const float3 start, const float3 end, const float t)
+{
+    return start * (1.0f - t) + end * t;
+}
+
+float4 lerp(const float4 start, const float4 end, const float t)
+{
+    return start * (1.0f - t) + end * t;
 }

@@ -1,18 +1,5 @@
 #include "ParticleBlade.hlsli"
 
-
-struct GpuParticleElement
-{
-    float4 position;
-    float scale;
-    float4 color;
-    uint isActive; // 生存フラグ.
-    float lifeTime;
-    float elapsed;
-    uint colorIndex;
-    float4 velocity;
-};
-
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 
 struct PSInput
@@ -34,7 +21,6 @@ VSOutput main(uint vertexId : SV_VertexId)
     }
 
     float4 position = gParticles[vertexId].position;
-    uint colorIndex = gParticles[vertexId].colorIndex;
     position.w = 1;
     output.position = position;
     output.scale = gParticles[vertexId].scale;

@@ -33,19 +33,32 @@ void DebugScene::Initialize() {
 	model.reset(Model::CreateFromOBJ("sphere", true));
 	//model1.reset(Model::CreateFromOBJ("Ground", true));
 
+	levelData = std::make_unique<LoadLevelEditor>();
+	levelData->Initialize("stage2",Vector3(0,0,0));
 
+	player_ = std::make_unique<Player>();
+	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
+
+	player_->SetCameraModeNotFree(false);
+
+	gameCamera = std::make_unique<GameCamera>(WinApp::window_width,WinApp::window_height);
+	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f),player_->GetPlayerPos());
+
+	gameCamera->SetFreeCamera(false);
+	gameCamera->SetCameraMode(false);
 
 }
 
 void DebugScene::Update() {
 
+	player_->SetCameraModeNotFree(true);
+	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
+	player_->Update();
+
+	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
+	gameCamera->Update();
 
 	worldTransform_.TransferMatrix();
-
-	viewProjection_->target.y = -250.0f;
-	viewProjection_->UpdateMatrix();
-
-
 	ImGui::Begin("XXXXX");
 
 
@@ -93,19 +106,8 @@ void DebugScene::Update() {
 		ImGui::End();
 	}
 
-	if (input_->PushKey(DIK_W)) {
-		CameraPos += {0, 0, 0.5f};
-	}
-	if (input_->PushKey(DIK_S)) {
-		CameraPos -= {0, 0, 0.5f};
-	}
-	if (input_->PushKey(DIK_D)) {
-		CameraPos += {0.5f, 0, 0};
-	}
-	if (input_->PushKey(DIK_A)) {
-		CameraPos -= {0.5f, 0, 0};
-	}
-
+	bool fal = false;
+	player_->AttackUpdate(Vector3(0,0,0),fal);
 }
 
 void DebugScene::PostEffectDraw()
@@ -134,7 +136,7 @@ void DebugScene::PostEffectDraw()
 void DebugScene::CSUpdate()
 {
 
-
+	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 }
 
 bool DebugScene::IsBreak()
@@ -165,11 +167,17 @@ void DebugScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 	//ground->Draw(*viewProjection_);
-	model->Draw(worldTransform_, *viewProjection_.get());
-	
+	levelData->Draw(*viewProjection_.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 
+	player_->FbxDraw();
+
+	ParticleHandHanabi::PreDraw(commandList);
+
+	player_->ParticleDraw();
+
+	ParticleHandHanabi::PostDraw();
 
 #pragma endregion
 
