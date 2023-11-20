@@ -86,6 +86,8 @@ namespace MyMath {
 	const Vector2 lerpVec2(const Vector2& start,const Vector2& end,const float t);
 	const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
 
+	float Uint32ToFloat(const uint32_t& convert);
+
 	//ランダム関係
 	uint32_t Random(const uint32_t& low, const uint32_t& high);
 	Vector3 RandomVec3(const Uint32Vector2& RLowAndHigh, const Uint32Vector2& GLowAndHigh, const Uint32Vector2& BLowAndHigh);

@@ -764,6 +764,12 @@ const Vector3 MyMath::lerp(const Vector3& start, const Vector3& end, const float
 	return start * (1.0f - t) + end * t;
 }
 
+float MyMath::Uint32ToFloat(const uint32_t& convert)
+{
+	float con = static_cast< float >( convert );
+	return con;
+}
+
 uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;

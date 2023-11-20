@@ -296,6 +296,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="ClearUI.h" />
     <ClInclude Include="Numbers.h" />
+    <ClInclude Include="PlayerDamageHitUI.h" />
     <ClInclude Include="PlayerEnum.h" />
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="PlayerStruct.h" />
@@ -389,6 +390,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ClearUI.cpp" />
     <ClCompile Include="Numbers.cpp" />
+    <ClCompile Include="PlayerDamageHitUI.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />

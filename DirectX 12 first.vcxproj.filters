@@ -583,6 +583,9 @@
     <ClInclude Include="ClearUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerDamageHitUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -817,6 +820,9 @@
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
     <ClCompile Include="ClearUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDamageHitUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
   </ItemGroup>

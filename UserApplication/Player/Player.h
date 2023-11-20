@@ -14,6 +14,7 @@
 #include "PlayerStruct.h"
 #include "PlayerMovement.h"
 #include <ParticleHandHanabi.h>
+#include "PlayerDamageHitUI.h"
 
 struct PlayerAnimTime
 {
@@ -116,6 +117,10 @@ private://クラス関連
 	//移動クラス
 	std::unique_ptr<PlayerMovement> playerMovement;
 	std::unique_ptr<ParticleHandHanabi> Particle;
+
+	//ダメージUI
+	std::unique_ptr<PlayerDamageHitUI> DamageUI;
+
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
 	PlayerAnimTime playerAnimTime;

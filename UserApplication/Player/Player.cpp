@@ -65,6 +65,9 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	int MaxParticleCount = 15000;
 	Particle->Initialize(MaxParticleCount);
 	Particle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	DamageUI = std::make_unique<PlayerDamageHitUI>();
+	DamageUI->Initialize();
 }
 
 void Player::Update()
@@ -150,6 +153,8 @@ void Player::Update()
 
 	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_);
 	DebugWorldTrans.TransferMatrix();
+
+	DamageUI->Update();
 }
 
 void Player::Draw()
@@ -168,6 +173,7 @@ void Player::FbxDraw() {
 void Player::DrawSprite()
 {
 	playerUI->Draw();
+	DamageUI->Draw();
 }
 
 void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
@@ -465,6 +471,7 @@ void Player::CheckHitCollision()
 	{
 		isTakeMissileDamages = true;
 		PlayerCollider->Reset();
+		DamageUI->MakeNoise();
 	}
 	if ( PlayerBladeAttackCollider->GetHit() )
 	{
