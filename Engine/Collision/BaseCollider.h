@@ -33,6 +33,8 @@ public:
 	inline unsigned short GetAttribute() { return attribute; }
 	//プレイヤーの攻撃が当たった
 	inline bool GetHit() { return isHitPlayerAttack; }
+	//プレイヤーの近接攻撃が当たった
+	inline bool GetMeleeHit() { return isHitPlayerMeleeAttack; }
 	//スフィア衝突
 	inline bool GetHitSphere() { return isHitSphere; }
 	//敵同士が接触した
@@ -90,6 +92,14 @@ public:
 	/// <param name="attribute">当たり判定属性</param>
 	inline void Reset() {
 		isHitPlayerAttack = false;
+	}
+
+	/// <summary>
+	/// ヒットしたのをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void ResetMeleeHit() {
+		isHitPlayerMeleeAttack = false;
 	}
 
 	/// <summary>

@@ -19,6 +19,8 @@ void CollisionManager::CheckAllCollisions()
 	hitNumber = 0;
 	isWakeEnemyAttackHit = false;
 
+	bool isMeleeAttackHit = false;
+
 	std::forward_list<BaseCollider*>::iterator itA;
 	std::forward_list<BaseCollider*>::iterator itB;
 
@@ -98,6 +100,28 @@ void CollisionManager::CheckAllCollisions()
 							colA->isHitPlayerAttack = true;
 							colB->isHitPlayerAttack = true;
 							//isAttackHit = true;
+						}
+					}
+					else if ( colA->attribute == COLLISION_ATTR_MELEEATTACK && colB->attribute == COLLISION_ATTR_ENEMYS ||
+						colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_MELEEATTACK )
+					{
+						if ( isMeleeAttackHit == false )
+						{
+							if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )
+							{
+								isMeleeAttackHit = false;
+								HitWorldPos = colB->GetWorldPos();
+								if ( colB->attribute == COLLISION_ATTR_MELEEATTACK )
+								{
+									colA->isHitPlayerMeleeAttack = true;
+									colB->attribute = COLLISION_ATTR_NOTATTACK;
+								}
+								else if ( colA->attribute == COLLISION_ATTR_MELEEATTACK )
+								{
+									colA->attribute = COLLISION_ATTR_NOTATTACK;
+									colB->isHitPlayerMeleeAttack = true;
+								}
+							}
 						}
 					}
 					if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )

@@ -16,7 +16,7 @@ public:
 	//更新
 	void Update(const float& nowBoost);
 	void AttackReticleUpdate(const bool& LockOn);
-	void PlayerHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp);
+	void PlayerHpUpdate(const float& nowHp,const float& MaxHp);
 	//描画
 	void Draw();
 

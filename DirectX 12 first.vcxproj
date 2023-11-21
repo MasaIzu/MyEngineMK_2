@@ -307,7 +307,7 @@
     <ClInclude Include="Engine\3D\FBXObject3d.h" />
     <ClInclude Include="UserApplication\Bullet\MissileGun.h" />
     <ClInclude Include="Engine\3D\Sprite3D.h" />
-    <ClInclude Include="UserApplication\Bullet\BulletDamage.h" />
+    <ClInclude Include="UserApplication\Bullet\Damage.h" />
     <ClInclude Include="Engine\Base\Defined.h" />
     <ClInclude Include="UserApplication\Player\HpUpdate.h" />
     <ClInclude Include="UserApplication\Bullet\NormalGun.h" />
@@ -399,7 +399,6 @@
     <ClCompile Include="Engine\3D\FBXObject3d.cpp" />
     <ClCompile Include="UserApplication\Bullet\MissileGun.cpp" />
     <ClCompile Include="Engine\3D\Sprite3D.cpp" />
-    <ClCompile Include="UserApplication\Bullet\BulletDamage.cpp" />
     <ClCompile Include="UserApplication\Player\HpUpdate.cpp" />
     <ClCompile Include="UserApplication\Bullet\NormalGun.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerUI.cpp" />

@@ -5,7 +5,6 @@
 #include"ImGuiManager.h"
 //#include <FbxLoader.h>
 #include <SphereCollider.h>
-#include "BulletDamage.h"
 #include "CollisionAttribute.h"
 #include "Numbers.h"
 
@@ -50,13 +49,13 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	PlayerBladeAttackCollider = new SphereCollider(Vector4(sphereF,PlayerBladeRadius,sphereF,sphereF),PlayerBladeRadius);
 	CollisionManager::GetInstance()->AddCollider(PlayerBladeAttackCollider);
-	PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_ATTACK);
+	PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	PlayerBladeAttackCollider->Update(playerWorldTrans.matWorld_);
 
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize(playerMovement->GetFuel());
 
-	playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+	playerUI->PlayerHpUpdate( PlayerHP , PlayerMaxHP );
 
 	animation = std::make_unique<Animation>();
 	animation->Initialize();
@@ -134,7 +133,7 @@ void Player::Update()
 	{
 		isAlive = true;
 		PlayerHP = PlayerMaxHP;
-		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+		playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 	}
 
 	if ( isAlive == false )
@@ -208,7 +207,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 				isPreparation = true;
 				BladeAttackVelocity.y = FloatNumber(fNumbers::fZero);
 				animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::HandAttack ),static_cast< uint32_t >( Numbers::Ten ),playerAnimTime.BladeAttack,false);
-				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_ATTACK);
+				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_MELEEATTACK);
 				PlayerBladeAttackCollider->Reset();
 			}
 		}
@@ -484,11 +483,6 @@ void Player::CheckHitCollision()
 		PlayerCollider->Reset();
 		DamageUI->MakeNoise();
 	}
-	if ( PlayerBladeAttackCollider->GetHit() )
-	{
-		PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
-		PlayerBladeAttackCollider->Reset();
-	}
 	if ( PlayerCollider->GetHitSphere() )
 	{
 		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
@@ -501,8 +495,8 @@ void Player::HPUpdate()
 {
 	if ( isTakeMissileDamages )
 	{
-		PlayerHP -= static_cast< float >( BulletDamage::GetInstance()->GetEnemyMissileBulletDamage() );
-		playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+		PlayerHP -= Damege.MissileAttack;
+		playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 		isTakeMissileDamages = false;
 		if ( PlayerHP > FloatNumber(fNumbers::fZero) )
 		{
@@ -511,7 +505,7 @@ void Player::HPUpdate()
 		else
 		{
 			PlayerHP = FloatNumber(fNumbers::fZero);//0固定
-			playerUI->PlayerHpUpdate(static_cast< uint32_t >( PlayerHP ),static_cast< uint32_t >( PlayerMaxHP ));
+			playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 			isAlive = false;
 		}
 	}

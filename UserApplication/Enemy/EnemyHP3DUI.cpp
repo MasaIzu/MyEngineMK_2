@@ -33,9 +33,9 @@ void EnemyHP3DUI::Update()
 	HP->SetScale(Vector2(HpSize,Scale.y),MaxScale);
 }
 
-void EnemyHP3DUI::EnemyHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp)
+void EnemyHP3DUI::EnemyHpUpdate(const float& nowHp,const float& MaxHp)
 {
-	HpSize = HpMax * ( static_cast< float >( nowHp ) / static_cast< float >( MaxHp ) );
+	HpSize = HpMax * ( nowHp  / MaxHp );
 	hpUpdate->EasingMaterial(HpSize);
 }
 

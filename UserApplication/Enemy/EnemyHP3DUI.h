@@ -16,7 +16,7 @@ public:
 	void Initialize();
 	//更新
 	void Update();
-	void EnemyHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp);
+	void EnemyHpUpdate(const float& nowHp,const float& MaxHp);
 	//描画
 	void Draw(const Vector3& Position,const ViewProjection& viewProjection);
 

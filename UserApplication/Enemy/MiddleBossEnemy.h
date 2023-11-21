@@ -10,7 +10,7 @@
 #include <Sprite3D.h>
 #include "EnemyHP3DUI.h"
 #include "EnemyHP2DUI.h"
-
+#include "Damage.h"
 
 /// <summary>
 /// 中ボス
@@ -135,6 +135,9 @@ private://クラス関連
 	// コライダー
 	std::array<BaseCollider*,ColCount> MiddleBossCollider;
 
+	//プレイヤーのダメージ
+	PlayerAttackDamage Damage;
+
 private://イーナムクラス
 
 
@@ -160,8 +163,6 @@ private://EnemyBossクラス変数
 	uint32_t MoveingTimer = 0;
 	uint32_t MaxMoveingTimer = 0;
 	uint32_t MaxBulletCoolTime = 0;
-	uint32_t MaxMiddleBossHp = 100;
-	uint32_t MiddleBossHp = MaxMiddleBossHp;
 	uint32_t AttackCooltime = 0;
 	uint32_t AttackTypeCount = static_cast<uint32_t>(AttackType::Move);
 	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack) + 1;
@@ -202,6 +203,8 @@ private://EnemyBossクラス変数
 	float BackPosRadius = 5.0f;
 	float BoneColRadius = 9.0f;
 	float NormalGunBackCol = 10.0f;
+	float MaxMiddleBossHp = 100.0f;
+	float MiddleBossHp = MaxMiddleBossHp;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 

@@ -88,9 +88,9 @@ void PlayerUI::AttackReticleUpdate(const bool& LockOn)
 	HP->SetSize(HpSize);
 }
 
-void PlayerUI::PlayerHpUpdate(const uint32_t& nowHp,const uint32_t& MaxHp)
+void PlayerUI::PlayerHpUpdate(const float& nowHp,const float& MaxHp)
 {
-	HpSize.x = HpBarMaxSize * ( static_cast< float >( nowHp ) / static_cast< float >( MaxHp ));
+	HpSize.x = HpBarMaxSize * ( nowHp / MaxHp );
 	HP->SetSize(HpSize);
 	hpUpdate->EasingMaterial(HpSize.x);
 }

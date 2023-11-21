@@ -529,7 +529,7 @@
     <ClInclude Include="Engine\Base\Defined.h">
       <Filter>Engine\HeaderFile\Base</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Bullet\BulletDamage.h">
+    <ClInclude Include="UserApplication\Bullet\Damage.h">
       <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Bullet\NormalGun.h">
@@ -773,9 +773,6 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Bullet\BulletDamage.cpp">
-      <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Bullet\NormalGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>

@@ -401,15 +401,31 @@ void MiddleBossEnemy::AliveUpdate()
 			if ( col->GetHit() )
 			{
 				col->Reset();
-				MiddleBossHp--;
-				if ( MiddleBossHp > 0 )
+				MiddleBossHp -= Damage.NormalAttack;
+				if ( MiddleBossHp > 0.0f )
 				{
 
 				}
 				else
 				{
 					isDead = true;
-					MiddleBossHp = static_cast< uint32_t >( Numbers::Zero );//0固定;
+					MiddleBossHp = static_cast< float >( Numbers::Zero );//0固定;
+				}
+				enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
+				enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
+			}
+			if ( col->GetMeleeHit() )
+			{
+				col->ResetMeleeHit();
+				MiddleBossHp -= Damage.BladeAttack;
+				if ( MiddleBossHp > 0.0f )
+				{
+
+				}
+				else
+				{
+					isDead = true;
+					MiddleBossHp = static_cast< float >( Numbers::Zero );//0固定;
 				}
 				enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
 				enemyHP3DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
