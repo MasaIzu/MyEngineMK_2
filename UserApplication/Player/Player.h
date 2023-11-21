@@ -181,7 +181,7 @@ private://プレイヤークラス変数
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;
 	float BladeAttackBoostSpeed = 1.2f;
-	float BladeAttackSpeed = 0.15f;
+	float BladeAttackSpeed = 0.7f;
 
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;

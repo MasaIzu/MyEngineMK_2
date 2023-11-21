@@ -242,7 +242,6 @@ void MiddleBossEnemy::ResetTitleMove()
 	MovieUpdateTimes = MaxMovieUpdateTimes;
 }
 
-
 void MiddleBossEnemy::Timer()
 {
 	if ( BulletCoolTime > 0 )

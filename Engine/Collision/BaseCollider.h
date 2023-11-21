@@ -138,6 +138,7 @@ protected:
 	unsigned short attributeWakeEnemy = 0b1111111111111111;
 
 	bool isHitPlayerAttack = false;//プレーヤーの弾が当たっている場合
+	bool isHitPlayerMeleeAttack = false;//プレーヤーの弾が当たっている場合
 	bool isHitSphere = false;
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
 	bool isSphereMeshHit = false;

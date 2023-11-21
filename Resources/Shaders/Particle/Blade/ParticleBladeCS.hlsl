@@ -41,7 +41,7 @@ void main(uint3 id : SV_DispatchThreadID)
     float4 BladeEndPos = normalize(EndPos - StartPos);
     BladeEndPos = normalize((StartPos + (BladeEndPos * 15)) - gParticles[index].position);
     float3 velocity = gParticles[index].velocity.xyz;
-    velocity = lerp(velocity, BladeEndPos.xyz, 0.3f);
+    velocity = lerp(velocity, BladeEndPos.xyz, 0.4f);
     
     
     float3 position = gParticles[index].position.xyz;

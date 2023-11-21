@@ -221,7 +221,18 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 			}
 			else
 			{
-				playerWorldTrans.translation_ += BladeAttackVelocity * BladeAttackSpeed;
+				if ( LockOn )
+				{
+					FixedAngle = MyMath::Get2VecAngle(MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_),EnemyPos);
+					BladeAttackVelocity = EnemyPos - playerWorldTrans.translation_;
+					playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
+				}
+				else
+				{
+					FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
+					BladeAttackVelocity = playerRotWorldTrans.LookVelocity.look;
+					playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
+				}
 			}
 		}
 	}
