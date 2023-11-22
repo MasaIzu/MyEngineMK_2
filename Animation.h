@@ -27,6 +27,7 @@ public://Setter
 	void SetKeepAnimation(const uint32_t& animNumber,const uint32_t& Count,const uint32_t& maxCount);
 public://Getter
 	bool GetNowAnimFinish();
+	bool GetAnimAlmostOver(const float& count);
 	Matrix4 GetBonePos(const uint32_t& boneNum);
 
 private://クラス関連

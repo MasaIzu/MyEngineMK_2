@@ -190,6 +190,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\Blade">
       <UniqueIdentifier>{a24fc987-7552-481f-84cf-6c79e6889f46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\Boost">
+      <UniqueIdentifier>{22a42838-b43a-4842-a93f-2256f098c211}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -224,6 +227,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\Blade\ParticleBlade.hlsli">
       <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\Boost\ParticleBoost.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\Boost</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +313,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Blade\ParticleBladeVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\Blade</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Boost\ParticleBoostCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Boost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Boost\ParticleBoostGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Boost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Boost\ParticleBoostPS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Boost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Boost\ParticleBoostVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Boost</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,6 +604,9 @@
     <ClInclude Include="PlayerDamageHitUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3DEffect\ParticleBoost.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -821,6 +842,9 @@
     </ClCompile>
     <ClCompile Include="PlayerDamageHitUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@
 
 NormalBullet::NormalBullet(const unsigned short Attribute_)
 {
-	BulletWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointFive);
+	BulletWorldTrans.scale_ = Vector3(BulletRadius,BulletRadius,BulletRadius);
 	BulletWorldTrans.Initialize();
 	BulletCollider = nullptr;
 	isBulletAlive = false;

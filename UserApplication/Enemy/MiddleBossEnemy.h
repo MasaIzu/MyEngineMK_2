@@ -203,7 +203,7 @@ private://EnemyBossクラス変数
 	float BackPosRadius = 5.0f;
 	float BoneColRadius = 9.0f;
 	float NormalGunBackCol = 10.0f;
-	float MaxMiddleBossHp = 100.0f;
+	float MaxMiddleBossHp = 7000.0f;
 	float MiddleBossHp = MaxMiddleBossHp;
 
 	Vector2 HpPosition = { 500.0f,45.0f };

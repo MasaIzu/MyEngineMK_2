@@ -16,6 +16,7 @@
 #include <ParticleHandHanabi.h>
 #include "PlayerDamageHitUI.h"
 #include "Damage.h"
+#include <ParticleBoost.h>
 
 struct PlayerAnimTime
 {
@@ -122,13 +123,16 @@ private://クラス関連
 	std::unique_ptr<Animation> animation;
 	//移動クラス
 	std::unique_ptr<PlayerMovement> playerMovement;
-	std::unique_ptr<ParticleHandHanabi> Particle;
 
 	//敵のダメージ
 	EnemyAttackDamage Damege;
 
 	//ダメージUI
 	std::unique_ptr<PlayerDamageHitUI> DamageUI;
+
+	//パーティクルズ
+	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
+	std::unique_ptr<ParticleBoost> ParticleBooster;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -167,12 +171,13 @@ private://プレイヤークラス変数
 	uint32_t SlidingNumber = 0;
 	uint32_t LeftBoneNum = 41;
 	uint32_t RightBoneNum = 28;
+	uint32_t kataLeftBoneNumber = 50;
 	uint32_t BladeAttackTime = 30;
 	uint32_t BladeAttackEndPos = 31;
 	uint32_t BladeMaxAttackTime = 40;
 
 	float PlayerRadius = 3.5f;
-	float PlayerBladeRadius = 2.0f;
+	float PlayerBladeRadius = 1.0f;
 	float FlontRadius = 1.0f;
 	float playerSpeed = 0.9f;
 	float PlayerToCameraDistance = 0.0f;
@@ -184,11 +189,12 @@ private://プレイヤークラス変数
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
 	float PlayerHP = 5000;
-	float PlayerMaxHP = 5000;
+	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;
 	float BladeAttackBoostSpeed = 1.2f;
 	float BladeAttackSpeed = 0.7f;
+	float BladeColEndHasten = 15.0f;
 
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
@@ -205,5 +211,6 @@ private://プレイヤークラス変数
 	Vector4 fallVec;
 	Vector4 ParticleStartPos;
 	Vector4 ParticleEndPos;
+	Vector4 BoostStartPos;
 
 };

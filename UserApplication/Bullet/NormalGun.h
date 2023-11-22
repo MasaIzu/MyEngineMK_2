@@ -52,7 +52,7 @@ private:
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;
 
-	float BulletSpeed = 3.0f;
+	float BulletSpeed = 4.5f;
 
 };
 

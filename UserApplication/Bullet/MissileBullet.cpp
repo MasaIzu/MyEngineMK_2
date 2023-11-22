@@ -6,7 +6,7 @@
 
 MissileBullet::MissileBullet(const unsigned short Attribute_)
 {
-	BulletWorldTrans.scale_ = Vec3Number(fNumbers::fOnePointFive);
+	BulletWorldTrans.scale_ = Vector3(BulletRadius,BulletRadius,BulletRadius);
 	BulletWorldTrans.Initialize();
 	isNearPlayer = false;
 	// コリジョンマネージャに追加

@@ -47,8 +47,9 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
-	for(uint32_t i = 0; i < AttackColSphereCount; i++ )
+	for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
 	{
+		BladeColWorldTrans[ i ].scale_ = Vector3(PlayerBladeRadius,PlayerBladeRadius,PlayerBladeRadius);
 		BladeColWorldTrans[ i ].Initialize();
 		PlayerBladeAttackCollider[ i ] = new SphereCollider(Vector4(sphereF,PlayerBladeRadius,sphereF,sphereF),PlayerBladeRadius);
 		CollisionManager::GetInstance()->AddCollider(PlayerBladeAttackCollider[ i ]);
@@ -59,15 +60,22 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize(playerMovement->GetFuel());
 
-	playerUI->PlayerHpUpdate( PlayerHP , PlayerMaxHP );
+	playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 
 	animation = std::make_unique<Animation>();
 	animation->Initialize();
 
-	Particle = std::make_unique<ParticleHandHanabi>();
+	ParticleHanabi = std::make_unique<ParticleHandHanabi>();
+	int MaxParticleCountA = 20000;
+	ParticleHanabi->Initialize(MaxParticleCountA);
+	ParticleHanabi->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	ParticleBooster = std::make_unique<ParticleBoost>();
 	int MaxParticleCount = 15000;
-	Particle->Initialize(MaxParticleCount);
-	Particle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+	ParticleBooster->Initialize(MaxParticleCount);
+	ParticleBooster->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
@@ -157,8 +165,10 @@ void Player::Update()
 	ParticleStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
 	ParticleEndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
 
+	BoostStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(kataLeftBoneNumber) * playerRotWorldTrans.matWorld_));
+
 	BladeColRatio = MyMath::Vec4ToVec3(ParticleEndPos) - MyMath::Vec4ToVec3(ParticleStartPos);
-	BladeColRatio = (BladeColRatio.norm() * MaxBladeColDetection) / AttackColSphereCount;
+	BladeColRatio = ( BladeColRatio.norm() * MaxBladeColDetection ) / AttackColSphereCount;
 
 	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_);
 	DebugWorldTrans.TransferMatrix();
@@ -175,10 +185,11 @@ void Player::Update()
 
 void Player::Draw()
 {
-	for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
-	{
-		model_->Draw(BladeColWorldTrans[ i ],*viewProjection_);
-	}
+	//for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
+	//{
+	//	model_->Draw(BladeColWorldTrans[ i ],*viewProjection_);
+	//}
+
 	//model_->Draw(DebugWorldTrans,*viewProjection_);
 
 	playerNormalGun->Draw(*viewProjection_);
@@ -233,26 +244,23 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 		}
 		else
 		{
-			if ( animation->GetNowAnimFinish() )
+			if ( animation->GetAnimAlmostOver(BladeColEndHasten) )
 			{
 				isBladeAttacking = false;
 				BladeAttributeSet(COLLISION_ATTR_NOTATTACK);
 				CollisionManager::GetInstance()->ResetMeleeAttack();
 			}
+			if ( LockOn )
+			{
+				FixedAngle = MyMath::Get2VecAngle(MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_),EnemyPos);
+				BladeAttackVelocity = EnemyPos - playerWorldTrans.translation_;
+				playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
+			}
 			else
 			{
-				if ( LockOn )
-				{
-					FixedAngle = MyMath::Get2VecAngle(MyMath::GetWorldTransform(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerRotWorldTrans.matWorld_),EnemyPos);
-					BladeAttackVelocity = EnemyPos - playerWorldTrans.translation_;
-					playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
-				}
-				else
-				{
-					FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
-					BladeAttackVelocity = playerRotWorldTrans.LookVelocity.look;
-					playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
-				}
+				FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
+				BladeAttackVelocity = playerRotWorldTrans.LookVelocity.look;
+				playerWorldTrans.translation_ += BladeAttackVelocity.norm() * BladeAttackSpeed;
 			}
 		}
 	}
@@ -276,12 +284,22 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
-	Particle->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast<uint32_t>( isBladeAttacking ));
+	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
+	ParticleBooster->CSUpdate(cmdList,BoostStartPos,BoostStartPos,static_cast< uint32_t >( isBladeAttacking ));
+
 }
 
 void Player::ParticleDraw()
 {
-	Particle->Draw(*viewProjection_);
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
+	ParticleHandHanabi::PreDraw(commandList);
+	ParticleHanabi->Draw(*viewProjection_);
+	ParticleHandHanabi::PostDraw();
+
+	ParticleBoost::PreDraw(commandList);
+	//ParticleBooster->Draw(*viewProjection_);
+	ParticleBoost::PostDraw();
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack)
@@ -510,7 +528,7 @@ void Player::CheckHitCollision()
 		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
 		PlayerCollider->ResetSphere();
 	}
-	
+
 }
 
 void Player::HPUpdate()

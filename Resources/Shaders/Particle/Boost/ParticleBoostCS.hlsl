@@ -1,4 +1,4 @@
-#include "ParticleBlade.hlsli"
+#include "ParticleBoost.hlsli"
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
@@ -37,11 +37,11 @@ void main(uint3 id : SV_DispatchThreadID)
         return;
     }
 
-    // 生き残っているパーティクルを動かす.
+  // 生き残っているパーティクルを動かす.
     float4 BladeEndPos = normalize(EndPos - StartPos);
     BladeEndPos = normalize((StartPos + (BladeEndPos * 15)) - gParticles[index].position);
     float3 velocity = gParticles[index].velocity.xyz;
-    velocity = lerp(velocity, BladeEndPos.xyz, 0.4f);
+    //velocity = lerp(velocity, BladeEndPos.xyz, 0.4f);
     
     
     float3 position = gParticles[index].position.xyz;
@@ -72,21 +72,23 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
-        
+    
+    float a = index;
+    
     uint seed = id.x + index * 1235;
 
-    uint indexAdd = index * 1222;
-    
     float3 velocity;
-
-    velocity.x = nextRand(indexAdd) + nextRand1(seed) * 2;
-    velocity.z = nextRand(indexAdd) + nextRand1(seed) * 2;
-    velocity.y = nextRand(indexAdd) + nextRand1(seed) * 2;
+    
+    float r = nextRand(seed) * 50;
+    float theta = nextRand(seed) * 3.14192 * 2.0;
+    velocity.x = nextRand(seed) * 2;
+    velocity.z = nextRand(seed) * 2;
+    velocity.y = nextRand(seed) * 2;
     
     float4 BladeEndPos = normalize(EndPos - StartPos);
     BladeEndPos = (BladeEndPos * 15);
     
-    float LifeTime = Rand1(seed,19,10);
+    float LifeTime = Rand1(seed,6,5) * 3;
     
     //velocity = velocity / LifeTime;
     //velocity += BladeEndPos.xyz / LifeTime;
@@ -99,5 +101,5 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].maxLifeTime = LifeTime;
     gParticles[index].color = float4(1, 0.05, 0.05, 0.5);
     gParticles[index].endPos = StartPos + BladeEndPos;
-    //gParticles[index].colorIndex = floor(nextRand(seed) * 8) % 8;;
+    
 }

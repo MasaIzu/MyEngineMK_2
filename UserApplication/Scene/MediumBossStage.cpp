@@ -176,11 +176,7 @@ void MediumBossStage::Draw()
 	player_->FbxDraw();
 
 
-	ParticleHandHanabi::PreDraw(commandList);
-
 	player_->ParticleDraw();
-
-	ParticleHandHanabi::PostDraw();
 
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());

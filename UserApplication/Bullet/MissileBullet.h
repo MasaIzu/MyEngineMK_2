@@ -92,12 +92,12 @@ private://クラス変数
 	float LarpT = 0.0f;
 	float BulletSpeed = 1.5f;
 	float BulletStartSpeed = 1.0f;
-	float BulletEndSpeed = 3.0f;
+	float BulletEndSpeed = 4.0f;
 	float BulletLerpSpeed = 0.04f;
 	float BulletLerpStartSpeed = 0.04f;
-	float BulletLrrpEndSpeed = 1.5f;
+	float BulletLrrpEndSpeed = 1.0f;
 	float BulletStartLerpTime = 0.04f;
-	float NotSearchArea = 8.0f;
+	float NotSearchArea = 14.0f;
 	float LerpStrength = 0.005f;
 
 	Vector3 BulletOldPos;

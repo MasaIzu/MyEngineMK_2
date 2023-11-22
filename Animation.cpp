@@ -77,6 +77,14 @@ bool Animation::GetNowAnimFinish()
 	return isMotionFinish;
 }
 
+bool Animation::GetAnimAlmostOver(const float& count)
+{
+	if (nowAnmFCount_ >= (maxFcount - count)) {
+		return true;
+	}
+	return false;
+}
+
 Matrix4 Animation::GetBonePos(const uint32_t& boneNum)
 {
 	return fbxObj3d_->GetBonesMatPtr(boneNum);
