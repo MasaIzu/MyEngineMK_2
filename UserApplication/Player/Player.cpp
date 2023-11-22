@@ -47,10 +47,14 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	PlayerCollider->SetAttribute(COLLISION_ATTR_ALLIES);
 	PlayerCollider->Update(playerWorldTrans.matWorld_);
 
-	PlayerBladeAttackCollider = new SphereCollider(Vector4(sphereF,PlayerBladeRadius,sphereF,sphereF),PlayerBladeRadius);
-	CollisionManager::GetInstance()->AddCollider(PlayerBladeAttackCollider);
-	PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
-	PlayerBladeAttackCollider->Update(playerWorldTrans.matWorld_);
+	for(uint32_t i = 0; i < AttackColSphereCount; i++ )
+	{
+		BladeColWorldTrans[ i ].Initialize();
+		PlayerBladeAttackCollider[ i ] = new SphereCollider(Vector4(sphereF,PlayerBladeRadius,sphereF,sphereF),PlayerBladeRadius);
+		CollisionManager::GetInstance()->AddCollider(PlayerBladeAttackCollider[ i ]);
+		PlayerBladeAttackCollider[ i ]->SetAttribute(COLLISION_ATTR_NOTATTACK);
+		PlayerBladeAttackCollider[ i ]->Update(playerWorldTrans.matWorld_);
+	}
 
 	playerUI = std::make_unique<PlayerUI>();
 	playerUI->Initialize(playerMovement->GetFuel());
@@ -150,14 +154,31 @@ void Player::Update()
 	animation->Update();
 	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
 
+	ParticleStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
+	ParticleEndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
+
+	BladeColRatio = MyMath::Vec4ToVec3(ParticleEndPos) - MyMath::Vec4ToVec3(ParticleStartPos);
+	BladeColRatio = (BladeColRatio.norm() * MaxBladeColDetection) / AttackColSphereCount;
+
 	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_);
 	DebugWorldTrans.TransferMatrix();
+
+	for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
+	{
+		BladeColWorldTrans[ i ].translation_ = MyMath::Vec4ToVec3(ParticleStartPos) + ( BladeColRatio * static_cast< float >( i ) );
+		BladeColWorldTrans[ i ].TransferMatrix();
+	}
+
 
 	DamageUI->Update();
 }
 
 void Player::Draw()
 {
+	for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
+	{
+		model_->Draw(BladeColWorldTrans[ i ],*viewProjection_);
+	}
 	//model_->Draw(DebugWorldTrans,*viewProjection_);
 
 	playerNormalGun->Draw(*viewProjection_);
@@ -207,8 +228,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 				isPreparation = true;
 				BladeAttackVelocity.y = FloatNumber(fNumbers::fZero);
 				animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::HandAttack ),static_cast< uint32_t >( Numbers::Ten ),playerAnimTime.BladeAttack,false);
-				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_MELEEATTACK);
-				PlayerBladeAttackCollider->Reset();
+				BladeAttributeSet(COLLISION_ATTR_MELEEATTACK);
 			}
 		}
 		else
@@ -216,7 +236,8 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 			if ( animation->GetNowAnimFinish() )
 			{
 				isBladeAttacking = false;
-				PlayerBladeAttackCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+				BladeAttributeSet(COLLISION_ATTR_NOTATTACK);
+				CollisionManager::GetInstance()->ResetMeleeAttack();
 			}
 			else
 			{
@@ -255,9 +276,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
-	Vector4 StartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
-	Vector4 EndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
-	Particle->CSUpdate(cmdList,StartPos,EndPos,static_cast<uint32_t>( isBladeAttacking ));
+	Particle->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast<uint32_t>( isBladeAttacking ));
 }
 
 void Player::ParticleDraw()
@@ -332,7 +351,10 @@ void Player::WorldTransUpdate()
 void Player::CheckPlayerCollider()
 {
 	PlayerCollider->Update(animation->GetBonePos(static_cast< uint32_t >( Numbers::Three )) * playerWorldTrans.matWorld_);
-	PlayerBladeAttackCollider->Update(DebugWorldTrans.matWorld_);
+	for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
+	{
+		PlayerBladeAttackCollider[ i ]->Update(BladeColWorldTrans[ i ].matWorld_);
+	}
 	//地面メッシュコライダー
 	{
 		// 球の上端から球の下端までのレイキャスト
@@ -508,6 +530,14 @@ void Player::HPUpdate()
 			playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 			isAlive = false;
 		}
+	}
+}
+
+void Player::BladeAttributeSet(const unsigned short Attribute_)
+{
+	for ( auto&& col : PlayerBladeAttackCollider )
+	{
+		col->SetAttribute(Attribute_);
 	}
 }
 

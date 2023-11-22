@@ -19,10 +19,14 @@ void PlayerDamageHitUI::Initialize()
 
 	for ( auto&& sprite : DrawSprite )
 	{
-		sprite = Sprite::Create(TextureManager::Load("sprite/yokoNoise.png"));
+		sprite = Sprite::Create(TextureManager::Load("sprite/yokoNoiseWhite.png"));
 	}
+	BlackSprite = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
+	BlackPos = MaxSize / static_cast<float>(FloatNumber(fNumbers::fTwoPointZero));
 	SpriteSizeMax = DrawSprite[ 0 ]->GetSize();
+	SpriteSizeMax.y *= SpriteRatio;
 	SpriteSizeMin = SpriteSizeMax * SpriteRatio;
+	SpriteSizeMin.y *= SpriteY;
 }
 
 void PlayerDamageHitUI::Update()
@@ -35,6 +39,10 @@ void PlayerDamageHitUI::Update()
 	if ( isUpdateNoise )
 	{
 		isCleaningFinish = true;
+		if ( 0.0f < BlackSpriteAlpha )
+		{
+			BlackSpriteAlpha -= BlackAlphaDown;
+		}
 		if ( DrawTime < MaxDrawTime )
 		{
 			DrawTime++;
@@ -53,7 +61,7 @@ void PlayerDamageHitUI::Update()
 				}
 				else
 				{
-					if ( SpriteAlpha[ i ] < 1.0f )
+					if ( SpriteAlpha[ i ] < SpriteAlphaMax )
 					{
 						SpriteAlpha[ i ] += OperationWidth[ i ];
 					}
@@ -96,8 +104,9 @@ void PlayerDamageHitUI::Draw()
 	{
 		for ( uint32_t i = 0; i < MaxNoiseCount;i++ )
 		{
-			DrawSprite[ i ]->Draw(NoisePos[ i ],Vector4(1,1,1,SpriteAlpha[ i ]),2);
+			DrawSprite[ i ]->Draw(NoisePos[ i ],Vector4(1,1,1,SpriteAlpha[ i ]));
 		}
+		BlackSprite->Draw(BlackPos,Vector4(1,1,1,BlackSpriteAlpha));
 	}
 }
 
@@ -108,7 +117,7 @@ void PlayerDamageHitUI::MakeNoise()
 	DrawTime = static_cast< uint32_t >( Numbers::Zero );
 
 	Vector2 Pos;
-
+	BlackSpriteAlpha = BlackSpriteMaxAlpha;
 	for ( uint32_t i = 0; i < MaxNoiseCount; i++ )
 	{
 		isAlphaDownFinish[ i ] = false;

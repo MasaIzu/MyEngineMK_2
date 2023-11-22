@@ -31,13 +31,14 @@ public://Setter
 public://Getter
 
 private://コンスト
-	static const uint32_t MaxNoiseCount = 4;
+	static const uint32_t MaxNoiseCount = 6;
 	const uint32_t MaxDrawTime = 20;
 
-	const float SpriteAlphaMax = 1.0f;
-
+	const float SpriteAlphaMax = 0.4f;
+	const float BlackSpriteMaxAlpha = 0.1f;
 private://クラス関連
 	std::array <std::unique_ptr<Sprite>,MaxNoiseCount> DrawSprite;
+	std::unique_ptr<Sprite> BlackSprite;
 
 private://イーナムクラス
 
@@ -50,18 +51,22 @@ private://クラス変数
 	bool isCleaningFinish = false;
 
 	uint32_t DrawTime = 0;
-	uint32_t RandMinAlphaSize = 8;
-	uint32_t RandMaxAlphaSize = 33;
+	uint32_t RandMinAlphaSize = 3;
+	uint32_t RandMaxAlphaSize = 19;
 
-	float SpriteRatio = 0.5f;
+	float SpriteRatio = 0.7f;
 	float AlphaDiv = 100.0f;
 	float CleanAlpha = 0.05f;
+	float BlackSpriteAlpha = 0.0f;
+	float BlackAlphaDown = 0.05f;
+	float SpriteY = 0.5f;
 
 	Vector2 SpriteSizeMin;
 	Vector2 SpriteSizeMax;
 	Vector2 NotDrawPosMin = { 300,100 };
 	Vector2 NotDrawPosMax;
 	Vector2 MaxSize;
+	Vector2 BlackPos;
 	
 	std::array<bool,MaxNoiseCount> isAlphaDownFinish;
 	std::array<bool,MaxNoiseCount> isCleaning;

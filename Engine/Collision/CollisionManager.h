@@ -65,6 +65,10 @@ public://メンバ関数
 	//ヒットしたもののポジションをゲット
 	Matrix4 GetAttackHitWorldPos() { return HitWorldPos; }
 
+	void ResetMeleeAttack() {
+		isMeleeAttackHit = false;
+	}
+
 private:
 	CollisionManager() = default;
 	CollisionManager(const CollisionManager&) = delete;
@@ -76,6 +80,7 @@ private:
 
 	bool isEnemyHit = false;
 	bool isAttackHit = false;
+	bool isMeleeAttackHit = false;
 	int hitNumber = 0;
 	bool isWakeEnemyAttackHit = false;
 	Matrix4 EnemyWorldPos;

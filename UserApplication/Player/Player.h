@@ -70,12 +70,12 @@ private:
 	void SlideBoostUpdate();
 	//角度を決める奴
 	float AngleSelect(float& angle,float& selectAngle);
-
 	//当たり判定チェック
 	void CheckHitCollision();
-
 	//HP処理
 	void HPUpdate();
+	//剣の当たり判定属性更新
+	void BladeAttributeSet(const unsigned short Attribute_);
 
 public://Setter
 	//カメラの回転,撃つ場所への距離,プレイヤーとカメラの距離,アルファ値を決めるためのカメラ距離のマックス
@@ -95,6 +95,10 @@ public://Getter
 	}
 	Vector3 GetPlayerPos()const; //ポジションゲット
 
+private://コンスト
+	static const uint32_t AttackColSphereCount = 4;
+
+	const float MaxBladeColDetection = 7.0f;
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -102,13 +106,14 @@ private://クラス関連
 	WorldTransform playerWorldTrans;
 	WorldTransform playerRotWorldTrans;
 	WorldTransform StartingPointOfGrapple;
+	std::array<WorldTransform,AttackColSphereCount> BladeColWorldTrans;
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<NormalGun> playerNormalGun;
 
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
-	BaseCollider* PlayerBladeAttackCollider = nullptr;
+	std::array<BaseCollider*,AttackColSphereCount> PlayerBladeAttackCollider;
 
 	//プレイヤーUIクラス
 	std::unique_ptr<PlayerUI> playerUI;
@@ -137,8 +142,6 @@ private://ストラクトやイーナムクラス
 
 private://別クラスから値をもらう
 	Vector2 cameraRot;
-
-private://コンスト
 
 private://プレイヤークラス変数
 	bool onGround = false;
@@ -197,7 +200,10 @@ private://プレイヤークラス変数
 	Vector3 DownSlidingVelocity;
 	Vector3 RotKeep;
 	Vector3 BladeAttackVelocity;
+	Vector3 BladeColRatio;
 
 	Vector4 fallVec;
+	Vector4 ParticleStartPos;
+	Vector4 ParticleEndPos;
 
 };
