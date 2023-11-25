@@ -13,8 +13,7 @@ cbuffer ShaderParameters : register(b0)
     uint ParticleCount : packoffset(c8.y);
     uint Shot : packoffset(c8.z);
     uint pad : packoffset(c8.w);
-    float4 movement : packoffset(c9);
-    BoostPos boostPos : packoffset(c10);
+    BoostPos boostPos : packoffset(c9);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
@@ -43,14 +42,14 @@ struct GSOutput
 struct GpuParticleElement
 {
     float4 position;
-    float scale;
     float4 color;
-    uint isActive; // 生存フラグ.
-    float lifeTime;
-    uint boostNumber;
-    float maxLifeTime;
     float4 velocity;
-    float4 keepVelocity;
+    float4 keepParticleVelocity;
+    uint isActive; // 生存フラグ.
+    uint boostNumber;
+    float lifeTime;
+    float maxLifeTime;
+    float scale;
     float speed;
 };
 

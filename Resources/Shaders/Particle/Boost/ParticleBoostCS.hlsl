@@ -46,12 +46,12 @@ void main(uint3 id : SV_DispatchThreadID)
     velocity = lerp(velocity, BladeEndPos.xyz, 0.4f);
     velocity *= speed;
     
-    float3 position = boostPos.EndPos[number].xyz + gParticles[index].keepVelocity.xyz;
+    float3 position = boostPos.EndPos[number].xyz + gParticles[index].keepParticleVelocity.xyz;
 
     position += velocity;
 
     float scale = 0.8f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
-    gParticles[index].keepVelocity.xyz += velocity;
+    gParticles[index].keepParticleVelocity.xyz += velocity;
     gParticles[index].scale = scale;
     gParticles[index].position.xyz = position;
     gParticles[index].velocity.xyz = velocity;
@@ -115,7 +115,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(boostPos.EndPos[gParticles[index].boostNumber].xyz);
     gParticles[index].scale = 0.8f;
-    gParticles[index].keepVelocity = float4(0, 0, 0, 0);
+    gParticles[index].keepParticleVelocity = float4(0, 0, 0, 0);
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = LifeTime;
     gParticles[index].maxLifeTime = LifeTime;

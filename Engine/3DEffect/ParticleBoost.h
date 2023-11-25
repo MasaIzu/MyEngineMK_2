@@ -54,16 +54,16 @@ public: // サブクラス
 	};
 
 	struct GpuParticleElement {
-		Vector3 position;
-		float scale = 1;
-		Vector4 color = { 1,1,1,1 };
-		UINT  isActive;	// 生存フラグ.
-		float lifeTime;
-		uint32_t boostNumber;
-		float  maxLifeTime;
+		Vector4 position;
+		Vector4 color;
 		Vector4 velocity;
 		Vector4 keepVelocity;
-		float speed = 0;
+		uint32_t  isActive;	// 生存フラグ.
+		uint32_t boostNumber;
+		float lifeTime;
+		float maxLifeTime;
+		float scale;
+		float speed;
 	};
 
 	struct ShaderParameters {
@@ -73,7 +73,6 @@ public: // サブクラス
 		UINT particleCount = 0;
 		uint32_t Shot = 0;
 		uint32_t pad = 0;
-		Vector4 movement;
 		MyStruct::BoostPos boostPos;
 	};
 	ShaderParameters shaderParameters;
@@ -172,7 +171,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos, const Vector4& movement, const uint32_t& shot);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos, const uint32_t& shot);
 
 	/// <summary>
 	/// 描画

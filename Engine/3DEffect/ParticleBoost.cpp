@@ -493,7 +493,7 @@ void ParticleBoost::Draw(const ViewProjection& view)
 
 }
 
-void ParticleBoost::CSUpdate(ID3D12GraphicsCommandList* commandList,const MyStruct::BoostPos& boostPos,const Vector4& movement, const uint32_t& shot)
+void ParticleBoost::CSUpdate(ID3D12GraphicsCommandList* commandList,const MyStruct::BoostPos& boostPos, const uint32_t& shot)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
@@ -504,7 +504,6 @@ void ParticleBoost::CSUpdate(ID3D12GraphicsCommandList* commandList,const MyStru
 		shaderParameters.boostPos.BoostEndPos[ i ] = boostPos.BoostEndPos[ i ];
 	}
 	shaderParameters.Shot = shot;
-	shaderParameters.movement = movement;
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;

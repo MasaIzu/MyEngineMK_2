@@ -297,7 +297,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
-	ParticleBooster->CSUpdate(cmdList,bonePos,MyMath::Vec3ToVec4(Moved),static_cast< uint32_t >( isAttack ));
+	ParticleBooster->CSUpdate(cmdList,bonePos,static_cast< uint32_t >( isAttack ));
 
 }
 
