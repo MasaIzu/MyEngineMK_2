@@ -1,4 +1,9 @@
 
+struct BoostPos
+{
+    float4 StartPos[4];
+    float4 EndPos[4];
+};
 
 cbuffer ShaderParameters : register(b0)
 {
@@ -8,8 +13,8 @@ cbuffer ShaderParameters : register(b0)
     uint ParticleCount : packoffset(c8.y);
     uint Shot : packoffset(c8.z);
     uint pad : packoffset(c8.w);
-    float4 StartPos : packoffset(c9);
-    float4 EndPos : packoffset(c10);
+    float4 movement : packoffset(c9);
+    BoostPos boostPos : packoffset(c10);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
@@ -42,10 +47,11 @@ struct GpuParticleElement
     float4 color;
     uint isActive; // 生存フラグ.
     float lifeTime;
-    float elapsed;
+    uint boostNumber;
     float maxLifeTime;
     float4 velocity;
-    float4 endPos;
+    float4 keepVelocity;
+    float speed;
 };
 
 uint wang_hash(uint seed)

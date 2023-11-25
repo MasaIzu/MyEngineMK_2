@@ -30,8 +30,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	viewProjection_ = viewProjection;
 
-	StartingPointOfGrapple.Initialize();
-
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
 	playerNormalGun->Initialize(Pos,model_.get());
 
@@ -86,6 +84,9 @@ void Player::Update()
 	isAttack = false;
 	isPressing = false;
 	isBladeAttack = false;
+
+	Moved = playerWorldTrans.translation_;
+
 	//攻撃
 	if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) )
 	{
@@ -179,6 +180,14 @@ void Player::Update()
 		BladeColWorldTrans[ i ].TransferMatrix();
 	}
 
+	bonePos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightStart) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightEnd) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(CenterRightStart) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(CenterRightEnd) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostStartPos[ 2 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(CenterLeftStart) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostEndPos[ 2 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(CenterLeftEnd) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostStartPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftStart) * playerRotWorldTrans.matWorld_));
+	bonePos.BoostEndPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftEnd) * playerRotWorldTrans.matWorld_));
 
 	DamageUI->Update();
 }
@@ -209,12 +218,6 @@ void Player::DrawSprite()
 
 void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 {
-	ImGui::Begin("PlayerLockOn");
-
-	ImGui::Text("LockOn = %d",LockOn);
-
-	ImGui::End();
-
 	if ( isBladeAttacking == true )
 	{
 		if ( isPreparation == false )
@@ -280,12 +283,21 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 	//当たり判定チェック
 	CheckPlayerCollider();
+
+	ImGui::Begin("PlayerLockOn");
+
+	ImGui::Text("Moved = %f,%f,%f",Moved.x,Moved.y,Moved.z);
+	ImGui::Text("playerWorldTrans = %f,%f,%f",playerWorldTrans.translation_.x,playerWorldTrans.translation_.y,playerWorldTrans.translation_.z);
+	ImGui::End();
+
+	Moved = playerWorldTrans.translation_ - Moved;
+
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
-	ParticleBooster->CSUpdate(cmdList,BoostStartPos,BoostStartPos,static_cast< uint32_t >( isBladeAttacking ));
+	ParticleBooster->CSUpdate(cmdList,bonePos,MyMath::Vec3ToVec4(Moved),static_cast< uint32_t >( isAttack ));
 
 }
 
@@ -298,7 +310,7 @@ void Player::ParticleDraw()
 	ParticleHandHanabi::PostDraw();
 
 	ParticleBoost::PreDraw(commandList);
-	//ParticleBooster->Draw(*viewProjection_);
+	ParticleBooster->Draw(*viewProjection_);
 	ParticleBoost::PostDraw();
 }
 

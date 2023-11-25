@@ -12,6 +12,8 @@
 #include "Matrix4.h"
 
 #include "Defined.h"
+#include "MyStruct.h"
+
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <string>
 #include <unordered_map>
@@ -19,7 +21,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// 上に撃ちあがるパーティクル
+/// ブーストパーティクル
 /// </summary>
 class ParticleBoost
 {
@@ -57,10 +59,11 @@ public: // サブクラス
 		Vector4 color = { 1,1,1,1 };
 		UINT  isActive;	// 生存フラグ.
 		float lifeTime;
-		float elapsed;
+		uint32_t boostNumber;
 		float  maxLifeTime;
 		Vector4 velocity;
-		Vector4 endPos;
+		Vector4 keepVelocity;
+		float speed = 0;
 	};
 
 	struct ShaderParameters {
@@ -70,8 +73,8 @@ public: // サブクラス
 		UINT particleCount = 0;
 		uint32_t Shot = 0;
 		uint32_t pad = 0;
-		Vector4 StartPos;
-		Vector4 EndPos;
+		Vector4 movement;
+		MyStruct::BoostPos boostPos;
 	};
 	ShaderParameters shaderParameters;
 
@@ -169,7 +172,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& shot);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos, const Vector4& movement, const uint32_t& shot);
 
 	/// <summary>
 	/// 描画

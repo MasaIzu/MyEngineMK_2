@@ -17,6 +17,7 @@
 #include "PlayerDamageHitUI.h"
 #include "Damage.h"
 #include <ParticleBoost.h>
+#include "MyStruct.h"
 
 struct PlayerAnimTime
 {
@@ -106,7 +107,6 @@ private://クラス関連
 	std::unique_ptr<Model> model_;
 	WorldTransform playerWorldTrans;
 	WorldTransform playerRotWorldTrans;
-	WorldTransform StartingPointOfGrapple;
 	std::array<WorldTransform,AttackColSphereCount> BladeColWorldTrans;
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
@@ -169,12 +169,20 @@ private://プレイヤークラス変数
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
-	uint32_t LeftBoneNum = 41;
-	uint32_t RightBoneNum = 28;
+	uint32_t LeftBoneNum = 52;
+	uint32_t RightBoneNum = 34;
 	uint32_t kataLeftBoneNumber = 50;
 	uint32_t BladeAttackTime = 30;
-	uint32_t BladeAttackEndPos = 31;
+	uint32_t BladeAttackEndPos = 39;
 	uint32_t BladeMaxAttackTime = 40;
+	uint32_t RightStart = 65;//ブースト
+	uint32_t RightEnd = 66;
+	uint32_t CenterRightStart = 75;
+	uint32_t CenterRightEnd = 76;
+	uint32_t CenterLeftStart = 72;
+	uint32_t CenterLeftEnd = 73;
+	uint32_t LeftStart = 69;
+	uint32_t LeftEnd = 70;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;
@@ -198,7 +206,7 @@ private://プレイヤークラス変数
 
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
-	Vector3 PlayerMoveMent;
+	Vector3 Moved;
 	Vector3 ReticlePos;
 	Vector3 ShootVec;
 	Vector3 PlayerToAimSaiteVec;
@@ -213,4 +221,5 @@ private://プレイヤークラス変数
 	Vector4 ParticleEndPos;
 	Vector4 BoostStartPos;
 
+	MyStruct::BoostPos bonePos;
 };
