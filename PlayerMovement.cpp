@@ -1,6 +1,7 @@
 #include "PlayerMovement.h"
 #include "Numbers.h"
 #include <imgui.h>
+#include <Easing.h>
 
 PlayerMovement::PlayerMovement()
 {
@@ -311,6 +312,8 @@ bool PlayerMovement::SlidingMaterial(const WorldTransform& worldTransform)
 	{
 		isBoostCoolTimeFinish = true;
 		isBoostSuccess = true;
+		BoostPowerTime = static_cast<uint32_t>(Numbers::Zero);
+		BoostPower = BoostStartPower;
 		BoostCoolTime = MaxBoostCoolTime;
 		Fuel -= FuelUsedBoost;
 		if ( isPlayerAttack )
@@ -368,6 +371,12 @@ Vector3 PlayerMovement::SlidingUpdate(float& slidingSpeed,const float& maxSlidin
 
 	slidingSpeed -= maxSlidingSpeed / static_cast< float >( Step );
 
+	if (BoostPowerTime < BoostPowerMaxTime) {
+		BoostPowerTime++;
+	}
+
+	BoostPower = Easing::EaseInQuint(BoostStartPower, BoostEndPower, BoostPowerTime, BoostPowerMaxTime);
+
 	return playerSlidingMoveMent;
 }
 
@@ -421,6 +430,52 @@ bool PlayerMovement::GetIsBoost()
 	return isBoost;
 }
 
+uint32_t PlayerMovement::GetPushBoostKey(const bool& isBladeAttack)
+{
+	if (isBladeAttack) {
+		BoostNumber = static_cast<uint32_t>(Numbers::Nine);
+		return BoostNumber;
+	}
+	if (pushKey.isPushW == true && pushKey.isPushA == false && pushKey.isPushD == false)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::One);
+	}
+	else if (pushKey.isPushW == false && pushKey.isPushS == false && pushKey.isPushA == true)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Two);
+	}
+	else if (pushKey.isPushS == true && pushKey.isPushA == false && pushKey.isPushD == false)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Three);
+	}
+	else if (pushKey.isPushW == false && pushKey.isPushS == false && pushKey.isPushD == true)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Four);
+	}
+	else if (pushKey.isPushW == true && pushKey.isPushA == true && pushKey.isPushD == false)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Five);
+	}
+	else if (pushKey.isPushW == true && pushKey.isPushA == false && pushKey.isPushD == true)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Six);
+	}
+	else if (pushKey.isPushS == true && pushKey.isPushA == true && pushKey.isPushD == false)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Seven);
+	}
+	else if (pushKey.isPushS == true && pushKey.isPushA == false && pushKey.isPushD == true)
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Eight);
+	}
+	else
+	{
+		BoostNumber = static_cast<uint32_t>(Numbers::Zero);
+	}
+
+	return BoostNumber;
+}
+
 float PlayerMovement::GetPlayerAngle()
 {
 	return PlayerMoveRotation;
@@ -429,6 +484,14 @@ float PlayerMovement::GetPlayerAngle()
 float PlayerMovement::GetFuel()
 {
 	return Fuel;
+}
+
+float PlayerMovement::GetBoostPower(const bool& isBladeAttack)
+{
+	if (isBladeAttack) {
+		return BoostStartPower;
+	}
+	return BoostPower;
 }
 
 PushKey PlayerMovement::GetPushedKey()

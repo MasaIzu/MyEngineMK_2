@@ -187,10 +187,31 @@ float Easing::EaseOutQuint(float& start, float& end, float& time, float& max_tim
 	return start + (end - start) * x;
 }
 
+float Easing::EaseOutQuint(float& start,float& end,uint32_t& time,uint32_t& max_time)
+{
+	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
+	float x = 1 - powf(1 - Time,5);
+	return start + ( end - start ) * x;
+}
+
 float Easing::EaseInSine(float& start,float& end,uint32_t& time,uint32_t& max_time)
 {
 	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
 	float x = 1.0f - cosf(( Time * MyMath::PI ) / 2.0f);
+	return start + ( end - start ) * x;
+}
+
+float Easing::EaseInCubic(float& start,float& end,uint32_t& time,uint32_t& max_time)
+{
+	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
+	float x = Time * Time * Time;
+	return start + ( end - start ) * x;
+}
+
+float Easing::EaseInQuint(float& start,float& end,uint32_t& time,uint32_t& max_time)
+{
+	float Time = static_cast< float >( time ) / static_cast< float >( max_time );
+	float x = Time * Time * Time * Time * Time;
 	return start + ( end - start ) * x;
 }
 

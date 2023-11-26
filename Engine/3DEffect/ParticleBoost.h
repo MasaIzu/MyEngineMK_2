@@ -70,7 +70,7 @@ public: // サブクラス
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
 		UINT maxParticleCount = 0;
-		UINT particleCount = 0;
+		float boostPower;
 		uint32_t Shot = 0;
 		uint32_t pad = 0;
 		MyStruct::BoostPos boostPos;
@@ -171,7 +171,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos, const uint32_t& shot);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos,const float& boostPower, const uint32_t& shot);
 
 	/// <summary>
 	/// 描画

@@ -66,51 +66,206 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
     
-    if (Shot == 0)
-    {
-        return;
-    }
-    
     if (gParticles[index].isActive > 0)
     {
         return;
     }
-    
     uint ParticleCounter = MaxParticleCount / 4;
+    if (Shot == 0)
+    {
+        return;
+    }
+    else if (Shot == 1)
+    {
+        if (ParticleCounter > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            return;
+        }
+    }
+    else if (Shot == 2)
+    {
+        if (ParticleCounter > index)
+        {
+            gParticles[index].boostNumber = 0;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            return;
+        }
+    }
+    else if (Shot == 3)
+    {
+        if (ParticleCounter > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            return;
+        }
+    }
+    else if (Shot == 4)
+    {
+        if (ParticleCounter > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            gParticles[index].boostNumber = 3;
+        }
+    }
+    else if (Shot == 5)
+    {
+        if (ParticleCounter > index)
+        {
+            gParticles[index].boostNumber = 0;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            return;
+        }
+    }
+    else if (Shot == 6)
+    {
+        if (ParticleCounter > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            gParticles[index].boostNumber = 3;
+        }
+    }
+    else if (Shot == 7)
+    {
+        if (ParticleCounter > index)
+        {
+            gParticles[index].boostNumber = 0;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            return;
+        }
+    }
+    else if (Shot == 8)
+    {
+        if (ParticleCounter > index)
+        {
+            return;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            gParticles[index].boostNumber = 3;
+        }
+    }
+    else if (Shot == 9)
+    {
+        if (ParticleCounter > index)
+        {
+            gParticles[index].boostNumber = 0;
+        }
+        else if (ParticleCounter * 2 > index)
+        {
+            gParticles[index].boostNumber = 1;
+        }
+        else if (ParticleCounter * 3 > index)
+        {
+            gParticles[index].boostNumber = 2;
+        }
+        else if (ParticleCounter * 4 > index)
+        {
+            gParticles[index].boostNumber = 3;
+        }
+    }
     
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
     
-    float velSize = 0.05f;
+    float velSize = 0.5f;
+    float particleBoostSize = velSize + (boostPower - 0.1f) * 2.0f;
     
     float3 velocity;
-    velocity.x = nextRand(indexAdd) + nextRand1(seed) * velSize;
-    velocity.z = nextRand(indexAdd) + nextRand1(seed) * velSize;
-    velocity.y = nextRand(indexAdd) + nextRand1(seed) * velSize;
+    velocity.x = nextRand(indexAdd) * (nextRand1(seed) * particleBoostSize);
+    velocity.z = nextRand(indexAdd) * (nextRand1(seed) * particleBoostSize);
+    velocity.y = nextRand(indexAdd) * (nextRand1(seed) * particleBoostSize);
     
     float4 BladeEndPos;
-    if (ParticleCounter > index)
-    {
-        gParticles[index].boostNumber = 0;
-    }
-    else if (ParticleCounter * 2 > index)
-    {
-        gParticles[index].boostNumber = 1;
-    }
-    else if (ParticleCounter * 3 > index)
-    {
-        gParticles[index].boostNumber = 2;
-    }
-    else if (ParticleCounter * 4 > index)
-    {
-        gParticles[index].boostNumber = 3;
-    }
+    
     float TimerMax = 30.0f;
     float TimerMin = 10.0f;
     
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
-    float speed = (TimerMax / LifeTime) * 0.1f;
+    float speed = (TimerMax / LifeTime) * boostPower;
     
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(boostPos.EndPos[gParticles[index].boostNumber].xyz);

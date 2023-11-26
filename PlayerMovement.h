@@ -39,8 +39,10 @@ public://Getter
 	bool GetIsRotFinish();
 	bool GetIsPushMoveKey();
 	bool GetIsBoost();
+	uint32_t GetPushBoostKey(const bool& isBladeAttack);
 	float GetPlayerAngle();
 	float GetFuel();
+	float GetBoostPower(const bool& isBladeAttack);
 	PushKey GetPushedKey();
 private://クラス関連
 	Input* input_ = nullptr;
@@ -48,6 +50,7 @@ private://クラス関連
 	PlayerMoveRot playerMoveRot;
 	PushKey pushKey;
 private://コンスト
+
 	const float FallAcc = -0.035f;
 	const float FallVYMin = -1.0f;
 
@@ -65,17 +68,23 @@ private://クラス変数
 
 	uint32_t SlidingNumber = 0;
 	uint32_t BoostCoolTime = 0;
-	uint32_t MaxBoostCoolTime = 90;
+	uint32_t MaxBoostCoolTime = 50;
+	uint32_t BoostNumber = 0;
+	uint32_t BoostPowerMaxTime = 25;
+	uint32_t BoostPowerTime = BoostPowerMaxTime;
 
 	float PlayerMoveRotation = 0.0f;
 	float PlayerTrunSpeed = 0.4f;
 	float UpBoostSpeed = 0.0f;
 	float FallSpeed = 0.0f;
 	float Fuel = FuelMax;
-	float FuelUsedBoost = 200.0f;
+	float FuelUsedBoost = 150.0f;
 	float FuelUsedUpBoost = 5.0f;
-	float FuelRecoveryOnGround = 10.0f;
+	float FuelRecoveryOnGround = 15.0f;
 	float FuelRecoveryInTheSky = 1.0f;
+	float BoostPower = 0.1f;
+	float BoostStartPower = 0.3f;
+	float BoostEndPower = 0.1f;
 
 	Vector3 playerAllMoveMent;//移動量
 	Vector3 playerSlidingMoveMent;//スライディング移動量
