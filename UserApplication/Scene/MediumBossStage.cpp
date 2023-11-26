@@ -162,7 +162,7 @@ void MediumBossStage::Draw()
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	//skydome->Draw(*viewProjection_.get());
+	skydome->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
 
 	bossEnemy->Draw();

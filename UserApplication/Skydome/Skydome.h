@@ -32,6 +32,6 @@ private:
 	//モデル
 	std::unique_ptr<Model> model_;
 
-	float Size = 600.0f;
+	float Size = 1000.0f;
 
 };

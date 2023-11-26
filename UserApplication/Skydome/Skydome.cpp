@@ -1,7 +1,7 @@
 #include "Skydome.h"
 
 void Skydome::Initialize() {
-	model_.reset(Model::CreateFromOBJ("YoRuDoom", true));
+	model_.reset(Model::CreateFromOBJ("skydome", true));
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 
