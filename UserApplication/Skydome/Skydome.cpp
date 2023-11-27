@@ -8,6 +8,7 @@ void Skydome::Initialize() {
 	worldTransform_.scale_ = Vector3(Size,Size,Size);
 	//行列の転送
 	worldTransform_.TransferMatrix();
+
 }
 
 void Skydome::Update() {

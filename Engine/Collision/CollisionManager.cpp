@@ -283,15 +283,6 @@ bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, Raycast
 
 			float tempDistance;
 			Vector4 tempInter;
-			/// <summary>
-			/// //たぶんここ
-			/// </summary>
-			/// <param name="ray"></param>
-			/// <param name="attribute"></param>
-			/// <param name="hitInfo"></param>
-			/// <param name="maxDistance"></param>
-			/// <param name="MatWorldPos"></param>
-			/// <returns></returns>
 			if (!meshCollider->CheckCollisionRay(ray, &tempDistance, &tempInter)) continue;
 			if (tempDistance >= distance) continue;
 

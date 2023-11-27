@@ -30,7 +30,7 @@ void MediumBossStage::Initialize()
 	viewProjection_->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("stage2",Vector3(0,0,0));
+	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
@@ -42,10 +42,6 @@ void MediumBossStage::Initialize()
 
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
-
-	bossEnemy = std::make_unique<BossEnemy>();
-	bossEnemy->Initialize(levelData->GetBossSpline()[ 0 ],viewProjection_.get());
-	bossEnemy->SetStageMoveSpline(levelData->GetBossSpline());
 
 	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
 	middleBossEnemy->Initialize(player_.get());
@@ -72,16 +68,9 @@ void MediumBossStage::Update()
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
-	bossEnemy->StagingUpdate();
-
 	if ( VsBoss == false )
 	{
-	//if (bossEnemy->GetFinishSpline()) {
-		Vector3 end = Vector3(0,50,150);
-		//if (bossEnemy->GetBodyNoAlpha()) {
-		VsBoss = middleBossEnemy->MovieUpdate(bossEnemy->GetSplinePos(),end);
-		/*}
-	}*/
+		VsBoss = middleBossEnemy->MovieUpdate(start,end);
 	}
 	else
 	{
@@ -164,8 +153,6 @@ void MediumBossStage::Draw()
 
 	skydome->Draw(*viewProjection_.get());
 	levelData->Draw(*viewProjection_.get());
-
-	bossEnemy->Draw();
 
 	middleBossEnemy->Draw(*viewProjection_.get());
 	player_->Draw();

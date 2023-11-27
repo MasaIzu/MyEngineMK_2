@@ -384,11 +384,12 @@ void Player::CheckPlayerCollider()
 	{
 		PlayerBladeAttackCollider[ i ]->Update(BladeColWorldTrans[ i ].matWorld_);
 	}
+	Vector3 playerPos = playerWorldTrans.translation_;
 	//地面メッシュコライダー
 	{
 		// 球の上端から球の下端までのレイキャスト
 		Ray Groundray;
-		Groundray.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
+		Groundray.start = MyMath::Vec3ToVec4(playerPos);
 		Groundray.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
 		Groundray.dir = { FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit raycastHit;
@@ -428,63 +429,67 @@ void Player::CheckPlayerCollider()
 	{
 		//横メッシュコライダー
 		Ray wall;
-		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += FlontRadius;
-		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fOnePointZero) };
+		Vector3 startPos = playerPos - Vector3(FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),PlayerRadius);
+		wall.start = MyMath::Vec3ToVec4(startPos);
+		wall.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
+		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fOnePointOne),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,PlayerRadius * FloatNumber(fNumbers::fTwoPointZero)) )
 		{
-			playerWorldTrans.translation_.z += ( wallRaycastHit.distance - FlontRadius );
+			playerWorldTrans.translation_.z += ( wallRaycastHit.distance - PlayerRadius * FloatNumber(fNumbers::fTwoPointZero) );
 		}
 
 	}
 	{
 		//横メッシュコライダー
 		Ray wall;
-		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += FlontRadius;
-		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointZero) };
+		Vector3 startPos = playerPos - Vector3(FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),-PlayerRadius);
+		wall.start = MyMath::Vec3ToVec4(startPos);
+		wall.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
+		wall.dir = { FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),-FloatNumber(fNumbers::fOnePointOne),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,PlayerRadius * FloatNumber(fNumbers::fTwoPointZero)) )
 		{
-			playerWorldTrans.translation_.z -= ( wallRaycastHit.distance - FlontRadius );
+			playerWorldTrans.translation_.z -= ( wallRaycastHit.distance - PlayerRadius * FloatNumber(fNumbers::fTwoPointZero) );
 		}
 	}
 	{
 		//横メッシュコライダー
 		Ray wall;
-		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += FlontRadius;
-		wall.dir = { FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
+		Vector3 startPos = playerPos - Vector3(PlayerRadius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero));
+		wall.start = MyMath::Vec3ToVec4(startPos);
+		wall.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
+		wall.dir = { FloatNumber(fNumbers::fOnePointOne),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,PlayerRadius * FloatNumber(fNumbers::fTwoPointZero)) )
 		{
-			playerWorldTrans.translation_.x += ( wallRaycastHit.distance - FlontRadius );
+			playerWorldTrans.translation_.x += ( wallRaycastHit.distance - PlayerRadius * FloatNumber(fNumbers::fTwoPointZero) );
 		}
 
 	}
 	{
 		//横メッシュコライダー
 		Ray wall;
-		wall.start = MyMath::Vec3ToVec4(playerWorldTrans.translation_);
-		wall.start.y += FlontRadius;
-		wall.dir = { -FloatNumber(fNumbers::fOnePointZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
+		Vector3 startPos = playerPos - Vector3(-PlayerRadius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero));
+		wall.start = MyMath::Vec3ToVec4(startPos);
+		wall.start.y += FlontRadius * FloatNumber(fNumbers::fTwoPointZero);
+		wall.dir = { -FloatNumber(fNumbers::fOnePointOne),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero) };
 		RaycastHit wallRaycastHit;
 		// スムーズに坂を下る為の吸着距離
 
 		// 接地を維持
-		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,FlontRadius) )
+		if ( CollisionManager::GetInstance()->Raycast(wall,COLLISION_ATTR_LANDSHAPE,&wallRaycastHit,PlayerRadius * FloatNumber(fNumbers::fTwoPointZero)) )
 		{
-			playerWorldTrans.translation_.x -= ( wallRaycastHit.distance - FlontRadius );
+			playerWorldTrans.translation_.x -= ( wallRaycastHit.distance - PlayerRadius * FloatNumber(fNumbers::fTwoPointZero) );
 		}
 
 	}

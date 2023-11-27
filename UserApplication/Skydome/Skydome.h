@@ -29,8 +29,10 @@ public:
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
+	WorldTransform worldTransformG_;
 	//モデル
 	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> modelG_;
 
 	float Size = 1000.0f;
 

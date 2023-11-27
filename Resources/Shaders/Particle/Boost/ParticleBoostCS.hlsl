@@ -274,7 +274,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = LifeTime;
     gParticles[index].maxLifeTime = LifeTime;
-    gParticles[index].color = float4(1, 0.05, 0.05, 0.5);
+    gParticles[index].color = float4(0.05, 0.05, 0.8, 0.5);
     gParticles[index].speed = speed;
     
 }

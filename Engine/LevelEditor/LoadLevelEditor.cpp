@@ -96,8 +96,8 @@ LevelData* LoadLevelEditor::LoadFile(const std::string& fileName,const Vector3& 
 				objectData.translation.z = static_cast<float>(transform["translation"][1] + vec3.z);
 
 				// 回転角
-				objectData.rotation.x = -static_cast<float>(transform["rotation"][1]);
-				objectData.rotation.y = -static_cast<float>(transform["rotation"][2]);
+				objectData.rotation.x = static_cast<float>(transform["rotation"][1]);
+				objectData.rotation.y = static_cast<float>(transform["rotation"][2]);
 				objectData.rotation.z = static_cast<float>(transform["rotation"][0]);
 				// スケーリング
 				objectData.scaling.x = static_cast<float>(transform["scaling"][1]);
@@ -277,6 +277,14 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			}
 			else if (fileName == "shahei") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
+			}
+			else if ( fileName == "jimen" )
+			{
+				TouchableObject::Create(model,Data.worldTrans,COLLISION_ATTR_LANDSHAPE);
+			}
+			else if ( fileName == "Manshon" )
+			{
+				TouchableObject::Create(model,Data.worldTrans,COLLISION_ATTR_LANDSHAPE);
 			}
 			else if (fileName == "srop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);

@@ -63,7 +63,6 @@ private:
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
-	std::unique_ptr<BossEnemy> bossEnemy;
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 	std::unique_ptr<ClearUI> clearUI;
@@ -87,4 +86,7 @@ private:
 	float DownSpriteAlpha = 0.01f;
 
 	Vector2 center = { 0.5f,0.5f };
+
+	Vector3 start = Vector3(0,50,-1000);
+	Vector3 end = Vector3(0,50,150);
 };

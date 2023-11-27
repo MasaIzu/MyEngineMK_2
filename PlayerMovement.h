@@ -83,8 +83,8 @@ private://クラス変数
 	float FuelRecoveryOnGround = 15.0f;
 	float FuelRecoveryInTheSky = 1.0f;
 	float BoostPower = 0.1f;
-	float BoostStartPower = 0.3f;
-	float BoostEndPower = 0.1f;
+	float BoostStartPower = 0.35f;
+	float BoostEndPower = 0.15f;
 
 	Vector3 playerAllMoveMent;//移動量
 	Vector3 playerSlidingMoveMent;//スライディング移動量

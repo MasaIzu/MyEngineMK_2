@@ -31,7 +31,7 @@ public://Setter
 public://Getter
 
 private://コンスト
-	static const uint32_t MaxNoiseCount = 6;
+	static const uint32_t MaxNoiseCount = 2;
 	const uint32_t MaxDrawTime = 20;
 
 	const float SpriteAlphaMax = 0.4f;

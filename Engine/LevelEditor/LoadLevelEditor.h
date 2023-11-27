@@ -101,6 +101,7 @@ private:
 	std::vector<Vector3> stage2SropSplineVec;
 	std::vector<Vector3> CameraSplineVec;
 	Vector3 BossBonePos;
+	Vector3 JimenScale = { 200,200,200 };
 
 	//最初から読み込むやつ
 	std::unique_ptr<Model> modelSrop;
