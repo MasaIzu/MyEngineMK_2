@@ -1,4 +1,4 @@
-#include "Explosion.h"
+#include "ExplosionParticleSmoke.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -6,16 +6,16 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
+#include "d3dx12.h"
 #include <CreateResource.h>
 #include <combaseapi.h>
+#include "Numbers.h"
 #pragma comment(lib, "d3dcompiler.lib")
 
-#include "Defined.h"
-
-MY_SUPPRESS_WARNINGS_BEGIN
+#pragma warning(push)
+#pragma warning(disable: 4820)
 #include <d3d12.h>
-#include <d3dx12.h>
-MY_SUPPRESS_WARNINGS_END
+#pragma warning(pop)
 
 using namespace std;
 using namespace Microsoft::WRL;
@@ -23,33 +23,33 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-ID3D12Device* Explosion::device = nullptr;
-ID3D12GraphicsCommandList* Explosion::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> Explosion::rootsignature;
-ComPtr<ID3D12RootSignature> Explosion::rootSignature;//コンピュートシェーダー用
-ComPtr<ID3D12PipelineState> Explosion::pipelinestate;
-ComPtr<ID3D12PipelineState> Explosion::pipelineState;//コンピュートシェーダー用
+ID3D12Device* ExplosionParticleSmoke::device = nullptr;
+ID3D12GraphicsCommandList* ExplosionParticleSmoke::cmdList = nullptr;
+ComPtr<ID3D12RootSignature> ExplosionParticleSmoke::rootsignature;
+ComPtr<ID3D12RootSignature> ExplosionParticleSmoke::rootSignature;//コンピュートシェーダー用
+ComPtr<ID3D12PipelineState> ExplosionParticleSmoke::pipelinestate;
+ComPtr<ID3D12PipelineState> ExplosionParticleSmoke::pipelineState;//コンピュートシェーダー用
 
-std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> Explosion::m_pipelines;
-ComPtr<ID3D12DescriptorHeap> Explosion::m_cbvSrvUavHeap;
+std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> ExplosionParticleSmoke::m_pipelines;
+ComPtr<ID3D12DescriptorHeap> ExplosionParticleSmoke::m_cbvSrvUavHeap;
 
-const std::string Explosion::PSO_DEFAULT = "PSO_DEFAULT";
-const std::string Explosion::PSO_CS_INIT = "PSO_CS_INIT";
-const std::string Explosion::PSO_CS_EMIT = "PSO_CS_EMIT";
-const std::string Explosion::PSO_CS_UPDATE = "PSO_CS_UPDATE";
-const std::string Explosion::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
-const std::string Explosion::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
+const std::string ExplosionParticleSmoke::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string ExplosionParticleSmoke::PSO_CS_INIT = "PSO_CS_INIT";
+const std::string ExplosionParticleSmoke::PSO_CS_EMIT = "PSO_CS_EMIT";
+const std::string ExplosionParticleSmoke::PSO_CS_UPDATE = "PSO_CS_UPDATE";
+const std::string ExplosionParticleSmoke::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
+const std::string ExplosionParticleSmoke::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
-UINT Explosion::m_incrementSize;
+UINT ExplosionParticleSmoke::m_incrementSize;
 
-UINT Explosion::m_cbvSrvUavDescriptorSize = 0;
+UINT ExplosionParticleSmoke::m_cbvSrvUavDescriptorSize = 0;
 
-void Explosion::StaticInitialize(ID3D12Device* Device)
+void ExplosionParticleSmoke::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
 	assert(Device);
 
-	Explosion::device = Device;
+	ExplosionParticleSmoke::device = Device;
 
 	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -58,18 +58,18 @@ void Explosion::StaticInitialize(ID3D12Device* Device)
 
 }
 
-void Explosion::StaticFinalize()
+void ExplosionParticleSmoke::StaticFinalize()
 {
 
 }
 
-void Explosion::PreDraw(ID3D12GraphicsCommandList* commandList)
+void ExplosionParticleSmoke::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Explosion::cmdList == nullptr);
+	assert(ExplosionParticleSmoke::cmdList == nullptr);
 
 	// コマンドリストをセット
-	Explosion::cmdList = commandList;
+	ExplosionParticleSmoke::cmdList = commandList;
 
 	// パイプラインステートの設定
 	commandList->SetPipelineState(m_pipelines[PSO_DEFAULT].Get());
@@ -79,13 +79,13 @@ void Explosion::PreDraw(ID3D12GraphicsCommandList* commandList)
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
-void Explosion::PostDraw()
+void ExplosionParticleSmoke::PostDraw()
 {
 	// コマンドリストを解除
-	Explosion::cmdList = nullptr;
+	ExplosionParticleSmoke::cmdList = nullptr;
 }
 
-void Explosion::InitializeGraphicsPipeline()
+void ExplosionParticleSmoke::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -95,7 +95,7 @@ void Explosion::InitializeGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticleVS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Boost/ParticleBoostVS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -118,7 +118,7 @@ void Explosion::InitializeGraphicsPipeline()
 
 	// ジオメトリシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticleGS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Boost/ParticleBoostGS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "gs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -142,7 +142,7 @@ void Explosion::InitializeGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/ParticlePS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Boost/ParticleBoostPS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -206,9 +206,9 @@ void Explosion::InitializeGraphicsPipeline()
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
 	//加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
+	blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
 	////減算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//デストからソースを減算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
@@ -218,9 +218,9 @@ void Explosion::InitializeGraphicsPipeline()
 	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
 	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
 	////半透明合成
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
+	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
@@ -295,7 +295,7 @@ void Explosion::InitializeGraphicsPipeline()
 	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/Explosion.hlsl",
+		L"Resources/Shaders/Particle/Boost/ParticleBoostCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"initParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -303,7 +303,7 @@ void Explosion::InitializeGraphicsPipeline()
 		&csBlobInit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/Explosion.hlsl",
+		L"Resources/Shaders/Particle/Boost/ParticleBoostCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"emitParticle", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -311,7 +311,7 @@ void Explosion::InitializeGraphicsPipeline()
 		&csBlobEmit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/Explosion.hlsl",
+		L"Resources/Shaders/Particle/Boost/ParticleBoostCS.hlsl",
 		nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main", "cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -352,7 +352,7 @@ void Explosion::InitializeGraphicsPipeline()
 	m_incrementSize = device->GetDescriptorHandleIncrementSize(cbvSrvUavHeapDesc.Type);
 }
 
-void Explosion::InitializeVerticeBuff()
+void ExplosionParticleSmoke::InitializeVerticeBuff()
 {
 
 	HRESULT result;
@@ -430,30 +430,15 @@ void Explosion::InitializeVerticeBuff()
 
 }
 
-void Explosion::SetTextureHandle(uint32_t textureHandle) {
+void ExplosionParticleSmoke::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void Explosion::Initialize(uint32_t ParticleCount)
+void ExplosionParticleSmoke::Initialize(uint32_t ParticleCount)
 {
-	HRESULT result;
-
 	particleCount = ParticleCount;
 
 	InitializeVerticeBuff();
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC resourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff);
-
-	// 定数バッファの生成
-	result = DirectXCore::GetInstance()->GetDevice()->CreateCommittedResource(
-		&heapProps, // アップロード可能
-		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&constBuff));
-	assert(SUCCEEDED(result));
 
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 	heapDesc.NumDescriptors = 1;
@@ -476,53 +461,12 @@ void Explosion::Initialize(uint32_t ParticleCount)
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
-
-	// ヒーププロパティ
-	CD3DX12_HEAP_PROPERTIES UploadHeapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// リソース設定
-	CD3DX12_RESOURCE_DESC UploadResourceDesc =
-		CD3DX12_RESOURCE_DESC::Buffer(particleCount * sizeof(GpuParticleElement));
-
-	// アップロードバッファの作成
-	device->CreateCommittedResource(
-		&UploadHeapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&UploadResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&uploadBuffer)
-	);
-
 }
 
-void Explosion::Update()
+void ExplosionParticleSmoke::Draw(const ViewProjection& view)
 {
-
-	// 死んでいるパーティクルを削除
-	Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
-		[](const VertexPos& p) { return !p.alive; }), Particles.end());
-
-	//// スケールが0以下になったものを削除
-	//Particles.erase(std::remove_if(Particles.begin(), Particles.end(),
-	//	[](const VertexPos& p) { return !p.scale; }), Particles.end());
-
-}
-
-void Explosion::Draw(const ViewProjection& view)
-{
-	HRESULT result;
-	// 定数バッファへデータ転送
-	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
-	constMap->mat = constMatToSend;	// 行列の合成
-	constMap->matBillboard = view.matBillboard;
-	constMap->maxParticleCount = static_cast<UINT>(particleCount);
-	constMap->particleCount = 1;
-	constBuff->Unmap(0, nullptr);
 
 	shaderParameters.mat = constMatToSend;
 	shaderParameters.matBillboard = view.matBillboard;
@@ -530,7 +474,7 @@ void Explosion::Draw(const ViewProjection& view)
 
 	// nullptrチェック
 	assert(device);
-	assert(Explosion::cmdList);
+	assert(ExplosionParticleSmoke::cmdList);
 
 
 	// 頂点バッファの設定
@@ -549,17 +493,21 @@ void Explosion::Draw(const ViewProjection& view)
 
 }
 
-void Explosion::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos)
+void ExplosionParticleSmoke::CSUpdate(ID3D12GraphicsCommandList* commandList, const MyStruct::BoostPos& boostPos, const float& boostPower, const uint32_t& shot)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
+	for (uint32_t i = 0; i < static_cast<uint32_t>(Numbers::Four); i++)
+	{
+		shaderParameters.boostPos.BoostStartPos[i] = boostPos.BoostStartPos[i];
+		shaderParameters.boostPos.BoostEndPos[i] = boostPos.BoostEndPos[i];
+	}
+	shaderParameters.Shot = shot;
+	shaderParameters.boostPower = boostPower;
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;
-		shaderParameters.particleCount = 0;
-		shaderParameters.StartPos = StartPos;
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 
@@ -572,17 +520,16 @@ void Explosion::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos
 		// Particle の初期化コード.
 		commandList->SetComputeRootSignature(rootSignature.Get());
 
-
 		commandList->SetComputeRootConstantBufferView(0, m_sceneParameterCB->GetGPUVirtualAddress());
 		commandList->SetComputeRootUnorderedAccessView(1, m_gpuParticleElement->GetGPUVirtualAddress());
 		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[PSO_CS_INIT].Get());
 
-		UINT invokeCount = particleCount / 32 + 1;
+		UINT invokeCount = particleCount / 128 + 1;
 		commandList->Dispatch(invokeCount, 1, 1);
 	}
 
-
+	MyFunction::WriteToUploadHeapMemory(m_sceneParameterCB.Get(), sizeof(ShaderParameters), &shaderParameters);
 	{
 		// Particle の発生.
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
@@ -593,9 +540,9 @@ void Explosion::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos
 		commandList->SetComputeRootDescriptorTable(2, m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[PSO_CS_EMIT].Get());
 
-		UINT invokeCount = particleCount / 32 + 1;
+		UINT invokeCount = particleCount / 128 + 1;
 		{
-			commandList->Dispatch(2, 1, 1);
+			commandList->Dispatch(invokeCount, 1, 1);
 		}
 
 		CD3DX12_RESOURCE_BARRIER barriers[] = {
@@ -616,7 +563,7 @@ void Explosion::CSUpdate(ID3D12GraphicsCommandList* commandList,Vector4 StartPos
 
 
 
-void Explosion::CopyData()
+void ExplosionParticleSmoke::CopyData()
 {
 
 	VertexPos* outPutDeta = nullptr;

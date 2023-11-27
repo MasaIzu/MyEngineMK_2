@@ -1,4 +1,5 @@
 #pragma once
+
 #include "TextureManager.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -11,6 +12,8 @@
 #include "Matrix4.h"
 
 #include "Defined.h"
+#include "MyStruct.h"
+
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <string>
 #include <unordered_map>
@@ -18,22 +21,21 @@ MY_SUPPRESS_WARNINGS_BEGIN
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
-/// 爆発パーティクル
+/// ブーストパーティクル
 /// </summary>
-class Explosion
+class ExplosionParticleSmoke
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // サブクラス
-	//// 頂点データ構造体
-	//struct VertexPosNormalUv
-	//{
-	//	Vector3 pos; // xyz座標
-	//	Vector3 normal; // 法線ベクトル
-	//	vextor2 uv;  // uv座標
-	//};
+
+	struct BoostPos
+	{
+		Vector4 StartPos;
+
+	};
 
 	// 頂点データ構造体
 	struct VertexPos
@@ -51,47 +53,31 @@ public: // サブクラス
 		float DownScale = 0;
 	};
 
-	// 定数バッファ用データ構造体
-	struct ConstBufferData
+	struct GpuParticleElement
+	{
+		Vector4 position;
+		Vector4 color;
+		Vector4 velocity;
+		Vector4 keepVelocity;
+		uint32_t  isActive;	// 生存フラグ.
+		uint32_t boostNumber;
+		float lifeTime;
+		float maxLifeTime;
+		float scale;
+		float speed;
+	};
+
+	struct ShaderParameters
 	{
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
-		UINT maxParticleCount;
-		UINT particleCount;
-		Vector3 StartPos;
-	};
-
-	struct GpuParticleElement {
-		Vector3 position;
-		float scale = 1;
-		Vector4 color = { 1,1,1,1 };
-		UINT  isActive;	// 生存フラグ.
-		float lifeTime;
-		float elapsed;
-		UINT  colorIndex;
-		Vector4 velocity;
-	};
-
-	struct ShaderParameters {
-		Vector4 StartPos;
-		Matrix4 mat;	// 3D変換行列
-		Matrix4 matBillboard;//ビルボード行列
-		UINT maxParticleCount;
-		UINT particleCount;
+		UINT maxParticleCount = 0;
+		float boostPower;
+		uint32_t Shot = 0;
+		uint32_t pad = 0;
+		MyStruct::BoostPos boostPos;
 	};
 	ShaderParameters shaderParameters;
-
-	//// パーティクルの定義
-	//struct Particle {
-	//	Vector3 position;
-	//	Vector3 velocity;
-	//	int Frame; // このパーティクルが生まれたフレーム
-	//	int MaxFrame;//このパーティクルの寿命
-	//	bool alive; // このパーティクルが生きているかどうか
-	//	float scale = 1;
-	//	int a = 0;
-	//	Vector4 color = { 1,1,1,1 };
-	//};
 
 
 public: // 静的メンバ関数
@@ -134,7 +120,7 @@ private: // 静的メンバ変数
 	// コンピュートシェーダー用パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelineState;
 
-	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> m_pipelines;
+	static std::unordered_map<std::string,ComPtr<ID3D12PipelineState>> m_pipelines;
 
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
@@ -183,14 +169,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="ParticleCount">どのくらい作るのか</param>
 	void Initialize(uint32_t ParticleCount);
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
-	void Update();
+
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList ,Vector4 StartPos);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos,const float& boostPower,const uint32_t& shot);
 
 	/// <summary>
 	/// 描画
@@ -205,7 +188,9 @@ public: // メンバ関数
 	/// <summary>
 	/// 全体のサイズ
 	/// </summary>
-	size_t GetParticlesListSize() { return Particles.size(); }
+	size_t GetParticlesListSize() {
+		return Particles.size();
+	}
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();

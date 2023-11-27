@@ -120,6 +120,7 @@
     <None Include="Resources\Shaders\Obj.hlsli" />
     <None Include="Resources\Shaders\Particle.hlsli" />
     <None Include="Resources\Shaders\Particle\Boost\ParticleBoost.hlsli" />
+    <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli" />
     <None Include="Resources\Shaders\PostEffectGlow.hlsli" />
     <None Include="Resources\Shaders\Primitive.hlsli" />
     <None Include="Resources\Shaders\Shape.hlsli" />
@@ -244,6 +245,30 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -318,6 +343,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="UserApplication\Player\Animation.h" />
     <ClInclude Include="UserApplication\UI\ClearUI.h" />
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h" />
@@ -340,7 +366,7 @@
     <ClInclude Include="UserApplication\UI\PlayerUI.h" />
     <ClInclude Include="UserApplication\Scene\ClearScene.h" />
     <ClInclude Include="UserApplication\Scene\DebugScene.h" />
-    <ClInclude Include="Engine\3DEffect\Explosion.h" />
+    <ClInclude Include="Engine\3DEffect\ExplosionParticleSmoke.h" />
     <ClInclude Include="Engine\3DEffect\MeshParticle.h" />
     <ClInclude Include="Engine\3DEffect\ParticleCS.h" />
     <ClInclude Include="Engine\3DEffect\ParticleHandHanabi.h" />
@@ -413,6 +439,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="UserApplication\Player\Animation.cpp" />
     <ClCompile Include="UserApplication\UI\ClearUI.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp" />
@@ -432,7 +459,7 @@
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp" />
     <ClCompile Include="UserApplication\Scene\DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />
-    <ClCompile Include="Engine\3DEffect\Explosion.cpp" />
+    <ClCompile Include="Engine\3DEffect\ExplosionParticleSmoke.cpp" />
     <ClCompile Include="Engine\3DEffect\MeshParticle.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleCS.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleHandHanabi.cpp" />
