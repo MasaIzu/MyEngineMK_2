@@ -39,7 +39,11 @@ void NormalBullet::Update()
 		BulletCollider->SphereMeshHitReset();
 		BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	}
-
+	if ( BulletCollider->GetSphereMeshHit() )
+	{
+		isBulletAlive = false;
+		BulletCollider->SphereMeshHitReset();
+	}
 	if ( isBulletAlive == true )
 	{
 		BulletWorldTrans.translation_ += EnemyBulletMoveMent;

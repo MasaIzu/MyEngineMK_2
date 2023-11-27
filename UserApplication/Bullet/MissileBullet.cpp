@@ -36,6 +36,11 @@ void MissileBullet::Update(const Vector3& EndPos)
 
 	if ( isBulletAlive == true )
 	{
+		if ( BulletCollider->GetSphereMeshHit() )
+		{
+			isBulletAlive = false;
+			BulletCollider->SphereMeshHitReset();
+		}
 		if ( isStartTracking == false )
 		{
 
