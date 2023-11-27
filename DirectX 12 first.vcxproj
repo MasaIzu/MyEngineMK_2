@@ -64,7 +64,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -318,16 +318,16 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="ClearUI.h" />
+    <ClInclude Include="UserApplication\Player\Animation.h" />
+    <ClInclude Include="UserApplication\UI\ClearUI.h" />
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h" />
-    <ClInclude Include="Numbers.h" />
-    <ClInclude Include="PlayerDamageHitUI.h" />
-    <ClInclude Include="PlayerEnum.h" />
-    <ClInclude Include="PlayerMovement.h" />
-    <ClInclude Include="PlayerStruct.h" />
-    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h" />
-    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h" />
+    <ClInclude Include="Engine\GameFunction\Numbers.h" />
+    <ClInclude Include="UserApplication\UI\PlayerDamageHitUI.h" />
+    <ClInclude Include="UserApplication\Player\PlayerEnum.h" />
+    <ClInclude Include="UserApplication\Player\PlayerMovement.h" />
+    <ClInclude Include="UserApplication\Player\PlayerStruct.h" />
+    <ClInclude Include="UserApplication\UI\EnemyHP2DUI.h" />
+    <ClInclude Include="UserApplication\UI\EnemyHP3DUI.h" />
     <ClInclude Include="Engine\3D\FbxLoader.h" />
     <ClInclude Include="Engine\3D\FbxModel.h" />
     <ClInclude Include="Engine\3D\FBXObject3d.h" />
@@ -337,7 +337,7 @@
     <ClInclude Include="Engine\Base\Defined.h" />
     <ClInclude Include="UserApplication\Player\HpUpdate.h" />
     <ClInclude Include="UserApplication\Bullet\NormalGun.h" />
-    <ClInclude Include="UserApplication\Bullet\PlayerUI.h" />
+    <ClInclude Include="UserApplication\UI\PlayerUI.h" />
     <ClInclude Include="UserApplication\Scene\ClearScene.h" />
     <ClInclude Include="UserApplication\Scene\DebugScene.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
@@ -413,14 +413,14 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="ClearUI.cpp" />
+    <ClCompile Include="UserApplication\Player\Animation.cpp" />
+    <ClCompile Include="UserApplication\UI\ClearUI.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp" />
-    <ClCompile Include="Numbers.cpp" />
-    <ClCompile Include="PlayerDamageHitUI.cpp" />
-    <ClCompile Include="PlayerMovement.cpp" />
-    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp" />
-    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp" />
+    <ClCompile Include="Engine\GameFunction\Numbers.cpp" />
+    <ClCompile Include="UserApplication\UI\PlayerDamageHitUI.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerMovement.cpp" />
+    <ClCompile Include="UserApplication\UI\EnemyHP2DUI.cpp" />
+    <ClCompile Include="UserApplication\UI\EnemyHP3DUI.cpp" />
     <ClCompile Include="Engine\3D\FbxLoader.cpp" />
     <ClCompile Include="Engine\3D\FbxModel.cpp" />
     <ClCompile Include="Engine\3D\FBXObject3d.cpp" />
@@ -428,7 +428,7 @@
     <ClCompile Include="Engine\3D\Sprite3D.cpp" />
     <ClCompile Include="UserApplication\Player\HpUpdate.cpp" />
     <ClCompile Include="UserApplication\Bullet\NormalGun.cpp" />
-    <ClCompile Include="UserApplication\Player\PlayerUI.cpp" />
+    <ClCompile Include="UserApplication\UI\PlayerUI.cpp" />
     <ClCompile Include="UserApplication\Scene\ClearScene.cpp" />
     <ClCompile Include="UserApplication\Scene\DebugScene.cpp" />
     <ClCompile Include="Engine\2D\PostEffectManager.cpp" />

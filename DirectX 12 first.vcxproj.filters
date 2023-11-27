@@ -574,34 +574,34 @@
     <ClInclude Include="UserApplication\Bullet\MissileGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
+    <ClInclude Include="UserApplication\Player\Animation.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerEnum.h">
+    <ClInclude Include="UserApplication\Player\PlayerEnum.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerMovement.h">
+    <ClInclude Include="UserApplication\Player\PlayerMovement.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStruct.h">
+    <ClInclude Include="UserApplication\Player\PlayerStruct.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Numbers.h">
+    <ClInclude Include="Engine\GameFunction\Numbers.h">
       <Filter>Engine\HeaderFile\MyFunction</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Bullet\PlayerUI.h">
+    <ClInclude Include="UserApplication\UI\PlayerUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\EnemyHP3DUI.h">
+    <ClInclude Include="UserApplication\UI\EnemyHP3DUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\EnemyHP2DUI.h">
+    <ClInclude Include="UserApplication\UI\EnemyHP2DUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
-    <ClInclude Include="ClearUI.h">
+    <ClInclude Include="UserApplication\UI\ClearUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerDamageHitUI.h">
+    <ClInclude Include="UserApplication\UI\PlayerDamageHitUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h">
@@ -819,28 +819,28 @@
     <ClCompile Include="UserApplication\Bullet\MissileGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
+    <ClCompile Include="UserApplication\Player\Animation.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerMovement.cpp">
+    <ClCompile Include="UserApplication\Player\PlayerMovement.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Numbers.cpp">
+    <ClCompile Include="Engine\GameFunction\Numbers.cpp">
       <Filter>Engine\SourceFile\MyFunction</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\EnemyHP3DUI.cpp">
+    <ClCompile Include="UserApplication\UI\EnemyHP3DUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\EnemyHP2DUI.cpp">
+    <ClCompile Include="UserApplication\UI\EnemyHP2DUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Player\PlayerUI.cpp">
+    <ClCompile Include="UserApplication\UI\PlayerUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
-    <ClCompile Include="ClearUI.cpp">
+    <ClCompile Include="UserApplication\UI\ClearUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerDamageHitUI.cpp">
+    <ClCompile Include="UserApplication\UI\PlayerDamageHitUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp">
