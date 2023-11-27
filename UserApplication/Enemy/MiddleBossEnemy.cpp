@@ -213,8 +213,20 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	}
 
 	WorldTransUpdate();
+	HeriHaneRotYLeft += HeriHaneRotSpeed;
+	HeriHaneLeftTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One )) * BossWorldTrans.matWorld_);
+	HeriHaneLeftTrans.SetRot(Vector3(0,HeriHaneRotYLeft + MyMath::GetAngle(Angle),0));
+	HeriHaneLeftTrans.TransferMatrix();
+
+	HeriHaneRotYRight -= HeriHaneRotSpeed;
+	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
+	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
+	HeriHaneRightTrans.TransferMatrix();
 	missileGunLeft->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
 	missileGunRight->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
+
+	ColTransUpdate();//当たり判定の場所アップデート
+	ColUpdate();//当たり判定のアップデート
 
 	return false;
 }

@@ -39,6 +39,7 @@ void MissileBullet::Update(const Vector3& EndPos)
 		if ( BulletCollider->GetSphereMeshHit() )
 		{
 			isBulletAlive = false;
+			BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 			BulletCollider->SphereMeshHitReset();
 		}
 		if ( isStartTracking == false )
@@ -125,7 +126,7 @@ void MissileBullet::MakeMissileBullet(const Vector3& pos,const Vector3& velocity
 		BulletWorldTrans.translation_ = pos;
 		BulletVelocity = velocity.norm();
 		BulletCollider->SetAttribute(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-
+		BulletCollider->SphereMeshHitReset();
 	}
 }
 

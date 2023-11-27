@@ -42,6 +42,7 @@ void NormalBullet::Update()
 	if ( BulletCollider->GetSphereMeshHit() )
 	{
 		isBulletAlive = false;
+		BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 		BulletCollider->SphereMeshHitReset();
 	}
 	if ( isBulletAlive == true )
@@ -96,6 +97,7 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		BulletCollider->SetAttribute(Attribute);
 		BulletCollider->Update(BulletWorldTrans.matWorld_);
 		BulletCollider->Reset();
+		BulletCollider->SphereMeshHitReset();
 	}
 }
 
