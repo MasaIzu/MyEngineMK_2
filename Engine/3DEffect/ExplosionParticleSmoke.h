@@ -60,7 +60,7 @@ public: // サブクラス
 		Vector4 velocity;
 		Vector4 keepVelocity;
 		uint32_t  isActive;	// 生存フラグ.
-		uint32_t boostNumber;
+		uint32_t Number;
 		float lifeTime;
 		float maxLifeTime;
 		float scale;
@@ -71,11 +71,11 @@ public: // サブクラス
 	{
 		Matrix4 mat;	// 3D変換行列
 		Matrix4 matBillboard;//ビルボード行列
-		UINT maxParticleCount = 0;
-		float boostPower;
+		uint32_t maxParticleCount = 0;
 		uint32_t Shot = 0;
-		uint32_t pad = 0;
-		MyStruct::BoostPos boostPos;
+		uint32_t pad1 = 0;
+		uint32_t pad2 = 0;
+		Vector4 StartPos;
 	};
 	ShaderParameters shaderParameters;
 
@@ -173,7 +173,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const MyStruct::BoostPos& boostPos,const float& boostPower,const uint32_t& shot);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const uint32_t& isExp);
 
 	/// <summary>
 	/// 描画
@@ -219,9 +219,6 @@ private: // メンバ変数
 	std::vector<VertexPos>Particles;
 
 	UINT textureHandle_ = 0;
-
-	uint32_t numParticles = 50000;
-	uint32_t MaxParticleCount = 50000;
 
 	// パーティクルデータをアップロードバッファにコピー
 	void* mappedData = nullptr;

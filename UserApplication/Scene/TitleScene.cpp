@@ -199,20 +199,6 @@ void TitleScene::PostEffectDraw()
 	PostEffect::SetRadialBlur(center,intensity,samples);
 	PostEffect::SetAngle(angle,angle2);
 
-	Model::PreDraw(commandList);
-
-
-	Model::PostDraw();
-
-	////パーティクル
-	Explosion::PreDraw(commandList);
-
-	Explosion::PostDraw();
-
-
-	Model::PreDraw(commandList);
-
-	Model::PostDraw();
 
 	MeshParticle::PreDraw(commandList);
 	MeshParticle::PostDraw();

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ExplosionParticleSmoke.h"
 
 class Explosion
 {
@@ -11,9 +11,9 @@ public://基本関数
 	//初期化
 	void Initialize();
 	//更新
-	void CSUpdate();
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 	//描画
-	void Draw();
+	void Draw(const ViewProjection& view);
 
 public:
 	void MakeParticle();
@@ -25,11 +25,15 @@ public://Setter
 public://Getter
 
 private://クラス関連
+	std::unique_ptr<ExplosionParticleSmoke> Smoke;
 
 private://イーナムクラス
 
 private://別クラスから値をもらう
 
 private://クラス変数
+	bool isExp = false;
+
+	uint32_t MaxParticle = 10000;
 
 };

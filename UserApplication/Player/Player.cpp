@@ -73,7 +73,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleBooster->Initialize(MaxParticleCount);
 	ParticleBooster->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
-
+	ParticleExplosion = std::make_unique<Explosion>();
+	ParticleExplosion->Initialize();
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
@@ -156,6 +157,11 @@ void Player::Update()
 			isDieMotion = true;
 			animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::LeftDown ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.DieMotion,false);
 		}
+	}
+
+	if ( input_->TriggerKey(DIK_N) )
+	{
+		ParticleExplosion->MakeParticle();
 	}
 
 	playerRotWorldTrans.translation_ = playerWorldTrans.translation_;
@@ -298,6 +304,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isBladeAttacking));
+	ParticleExplosion->CSUpdate(cmdList);
 }
 
 void Player::ParticleDraw()
@@ -311,6 +318,8 @@ void Player::ParticleDraw()
 	ParticleBoost::PreDraw(commandList);
 	ParticleBooster->Draw(*viewProjection_);
 	ParticleBoost::PostDraw();
+
+	ParticleExplosion->Draw(*viewProjection_);
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack)

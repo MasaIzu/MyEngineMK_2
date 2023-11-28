@@ -1,4 +1,4 @@
-#include "ParticleBoost.hlsli"
+#include "ParticleExplosion.hlsli"
 
 static const int vnum = 4;
 

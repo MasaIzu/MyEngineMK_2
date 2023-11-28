@@ -1,4 +1,4 @@
-#include "ParticleBoost.hlsli"
+#include "ParticleExplosion.hlsli"
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 

@@ -1,19 +1,13 @@
 
-struct BoostPos
-{
-    float4 StartPos[4];
-    float4 EndPos[4];
-};
-
 cbuffer ShaderParameters : register(b0)
 {
     matrix mat : packoffset(c0); // 3D変換行列
     matrix matBillboard : packoffset(c4); //ビルボード行列
     uint MaxParticleCount : packoffset(c8);
-    float boostPower : packoffset(c8.y);
-    uint Shot : packoffset(c8.z);
-    uint pad : packoffset(c8.w);
-    BoostPos boostPos : packoffset(c9);
+    uint Shot : packoffset(c8.y);
+    uint pad1 : packoffset(c8.z);
+    uint pad2 : packoffset(c8.w);
+    float4 pos : packoffset(c9);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

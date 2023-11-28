@@ -10,6 +10,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	//ParticleCS::StaticInitialize(device);
 	ParticleHandHanabi::StaticInitialize(device);
 	ParticleBoost::StaticInitialize(device);
+	ExplosionParticleSmoke::StaticInitialize(device);
 	//Explosion::StaticInitialize(device);
 	//MeshParticle::StaticInitialize(device);
 }
