@@ -18,9 +18,9 @@ void Explosion::Initialize()
 	Smoke->SetTextureHandle(TextureManager::Load("sprite/smoke1.png"));
 }
 
-void Explosion::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+void Explosion::CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& Pos)
 {
-	Smoke->CSUpdate(cmdList,static_cast<uint32_t>(isExp));
+	Smoke->CSUpdate(cmdList,static_cast<uint32_t>(isExp),Pos);
 	isExp = false;
 }
 

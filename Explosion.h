@@ -11,7 +11,7 @@ public://基本関数
 	//初期化
 	void Initialize();
 	//更新
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& Pos);
 	//描画
 	void Draw(const ViewProjection& view);
 

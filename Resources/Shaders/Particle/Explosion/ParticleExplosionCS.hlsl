@@ -39,18 +39,32 @@ void main(uint3 id : SV_DispatchThreadID)
 
     uint number = gParticles[index].boostNumber;
     float speed = gParticles[index].speed;
+    
+    float Div = 1.0f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
+    
     // 生き残っているパーティクルを動かす.
     float3 velocity = gParticles[index].velocity.xyz;
-    
     float3 position = gParticles[index].position.xyz;
-
+    
+    speed = speed * Div;
+    
+    velocity *= speed;
+    
     position += velocity;
-
+    float4 color = gParticles[index].color;
+    
+    
+    color.x = color.x * Div + 0.01f;
+    color.y = color.y * Div - 0.02f;
+    color.z = color.z * Div - 0.02f;
+    color.w = Div;
+    
     //float scale = 0.8f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
     //gParticles[index].keepParticleVelocity.xyz += velocity;
     //gParticles[index].scale = scale;
     gParticles[index].position.xyz = position;
-    gParticles[index].velocity.xyz = velocity;
+    gParticles[index].color = color;
+
 }
 
 
@@ -75,7 +89,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
     
-    float velSize = 0.2f;
+    float velSize = 5.0f;
     float particleBoostSize = velSize;
     
     float3 velocity;
@@ -83,23 +97,52 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     velocity.z = nextRand(indexAdd) * (nextRand1(seed) * particleBoostSize);
     velocity.y = nextRand(indexAdd) * (nextRand1(seed) * particleBoostSize);
     
+    velocity = normalize(velocity);
+    
     float4 BladeEndPos;
     
-    float TimerMax = 400.0f;
-    float TimerMin = 300.0f;
+    float TimerMax = 30.0f;
+    float TimerMin = 20.0f;
     
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
-    float speed = (TimerMax / LifeTime);
+    
+    float speedMax = 5.0f;
+    float speedMin = 1.0f;
+    float speed = Rand1(indexAdd, speedMax, speedMin);
+    
+    float ScaleMax = 40.0f;
+    float ScaleMin = 10.0f;
+    float scale = Rand1(indexAdd, ScaleMax, ScaleMin);
+    
+    float4 Position = pos;
+    
+    uint PosRandMax = 3;
+    uint PosRandMin = 1;
+    uint PosRand = Rand1(indexAdd, PosRandMax, PosRandMin);
+    
+    if (PosRand == 1)
+    {
+        Position.x += 10.0f;
+        Position.y += 10.0f;
+        Position.y += 5.0f;
+    }
+    else if (PosRand == 2)
+    {
+        Position.x -= 5.0f;
+        Position.y += 20.0f;
+        Position.z -= 10.0f;
+    }
+    
     
     gParticles[index].isActive = 1;
-    gParticles[index].position.xyz = pos.xyz;
-    gParticles[index].scale = 2.0f;
+    gParticles[index].position.xyz = Position.xyz;
+    gParticles[index].scale = scale;
     gParticles[index].keepParticleVelocity = float4(0, 0, 0, 0);
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = LifeTime;
     gParticles[index].maxLifeTime = LifeTime;
-    gParticles[index].color = float4(1, 1, 1, 1);
+    gParticles[index].color = float4(0.9f, 0.9f, 0.9f, 1);
     gParticles[index].speed = speed;
     
 }

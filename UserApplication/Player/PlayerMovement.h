@@ -39,7 +39,7 @@ public://Getter
 	bool GetIsRotFinish();
 	bool GetIsPushMoveKey();
 	bool GetIsBoost();
-	uint32_t GetPushBoostKey(const bool& isBladeAttack);
+	uint32_t GetPushBoostKey(const bool& isAttack,const bool& isBladeAttack);
 	float GetPlayerAngle();
 	float GetFuel();
 	float GetBoostPower(const bool& isBladeAttack);

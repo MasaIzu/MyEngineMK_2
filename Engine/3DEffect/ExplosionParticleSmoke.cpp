@@ -493,12 +493,13 @@ void ExplosionParticleSmoke::Draw(const ViewProjection& view)
 
 }
 
-void ExplosionParticleSmoke::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp)
+void ExplosionParticleSmoke::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp,const Vector4& Pos)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	shaderParameters.Shot = isExp;
+	shaderParameters.StartPos = Pos;
 	//初期化
 	if (m_frameCount == 0) {
 		shaderParameters.maxParticleCount = particleCount;
