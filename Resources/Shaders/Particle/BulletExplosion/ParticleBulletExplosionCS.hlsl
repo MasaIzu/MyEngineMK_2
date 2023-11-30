@@ -28,6 +28,12 @@ void main(uint3 id : SV_DispatchThreadID)
         return;
     }
     const float dt = 1;
+    
+    if (gParticles[index].keepTime >= 0)
+    {
+        gParticles[index].keepTime -= dt;
+        return;
+    }
 
     gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
     if (gParticles[index].lifeTime <= 0)
@@ -37,7 +43,6 @@ void main(uint3 id : SV_DispatchThreadID)
         return;
     }
 
-    uint number = gParticles[index].boostNumber;
     float speed = gParticles[index].speed;
     
     float Div = 1.0f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
@@ -55,8 +60,8 @@ void main(uint3 id : SV_DispatchThreadID)
     
     
     color.x = color.x * Div + 0.01f;
-    color.y = color.y * Div - 0.02f;
-    color.z = color.z * Div - 0.02f;
+    color.y = color.y * Div;
+    color.z = color.z * Div;
     color.w = Div;
     
     //float scale = 0.8f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
@@ -80,14 +85,18 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
-    uint ParticleCounter = MaxParticleCount / 4;
     if (Shot == 0)
     {
         return;
     }
-   
+    if (makePermissionCount < index)
+    {
+        return;
+    }
+    
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
+    uint indexDiv = index / 2;
     
     float velSize = 5.0f;
     float particleBoostSize = velSize;
@@ -101,8 +110,8 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float4 BladeEndPos;
     
-    float TimerMax = 30.0f;
-    float TimerMin = 20.0f;
+    float TimerMax = 120.0f;
+    float TimerMin = 100.0f;
     
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
@@ -113,28 +122,17 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float ScaleMax = 40.0f;
     float ScaleMin = 10.0f;
-    float scale = Rand1(indexAdd, ScaleMax, ScaleMin);
+    float scale = 2.0f;
+    
+    float colorMax = 100.0f;
+    float colorMin = 1.0f;
+    float red = Rand1(seed, colorMax, colorMin) / 100.0f;
+    float green = Rand1(indexAdd, colorMax, colorMin) / 100.0f;
+    float blue = Rand1(indexDiv, colorMax, colorMin) / 50.0f;
     
     float4 Position = pos;
     
-    uint PosRandMax = 3;
-    uint PosRandMin = 1;
-    uint PosRand = Rand1(indexAdd, PosRandMax, PosRandMin);
-    
-    if (PosRand == 1)
-    {
-        Position.x += 10.0f;
-        Position.y += 10.0f;
-        Position.y += 5.0f;
-    }
-    else if (PosRand == 2)
-    {
-        Position.x -= 5.0f;
-        Position.y += 20.0f;
-        Position.z -= 10.0f;
-    }
-    
-    
+    gParticles[index].keepTime = 60;
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = Position.xyz;
     gParticles[index].scale = scale;
@@ -142,7 +140,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].velocity.xyz = velocity;
     gParticles[index].lifeTime = LifeTime;
     gParticles[index].maxLifeTime = LifeTime;
-    gParticles[index].color = float4(0.9f, 0.9f, 0.9f, 1);
+    gParticles[index].color = float4(red, green, blue, 1);
     gParticles[index].speed = speed;
     
 }

@@ -18,7 +18,6 @@ ExplosionBullet::ExplosionBullet(const unsigned short Attribute_)
 	Attribute = Attribute_;
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 
-	uint32_t particleCount = 10000;
 	ParticleExplosion = std::make_unique<BulletExplosionParticle>();
 	ParticleExplosion->Initialize(particleCount);
 	ParticleExplosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
@@ -53,6 +52,7 @@ void ExplosionBullet::Update()
 	if ( isBulletAlive == true )
 	{
 		BulletWorldTrans.translation_ += EnemyBulletMoveMent;
+		particlePermissionCount += particleCount / MaxBulletLifeTime;
 	}
 
 	WorldTransUpdate();
@@ -69,10 +69,10 @@ void ExplosionBullet::Draw(const ViewProjection& viewProjection_)
 
 void ExplosionBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
 {
-	ParticleExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_));
+	ParticleExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_),particlePermissionCount);
 }
 
-void ExplosionBullet::PatricleDraw(const ViewProjection& viewProjection_)
+void ExplosionBullet::ParticleDraw(const ViewProjection& viewProjection_)
 {
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
 	BulletExplosionParticle::PreDraw(commandList);
@@ -116,6 +116,8 @@ void ExplosionBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocit
 		BulletCollider->Update(BulletWorldTrans.matWorld_);
 		BulletCollider->Reset();
 		BulletCollider->SphereMeshHitReset();
+		particlePermissionCount = 0;
+		particlePermissionCount += particleCount / MaxBulletLifeTime;
 	}
 }
 

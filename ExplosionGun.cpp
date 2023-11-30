@@ -1,9 +1,9 @@
-#include "NormalGun.h"
+#include "ExplosionGun.h"
 #include <Numbers.h>
 #include <FbxLoader.h>
 #include "ExplosionGun.h"
 
-NormalGun::NormalGun(const unsigned short Attribute)
+ExplosionGun::ExplosionGun(const unsigned short Attribute)
 {
 	for ( auto&& Bullet : explosionBullet )
 	{
@@ -11,14 +11,12 @@ NormalGun::NormalGun(const unsigned short Attribute)
 	}
 }
 
-NormalGun::~NormalGun()
+ExplosionGun::~ExplosionGun()
 {
 }
 
-void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel)
+void ExplosionGun::Initialize(const Vector3& Pos,Model* BulletModel)
 {
-	model_.reset(Model::CreateFromOBJ("NormalGun",true));
-
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("NormalGunFbx",true));
 	fbxObj3d_ = FBXObject3d::Create();
 	fbxObj3d_->SetModel(fbxModel_.get());
@@ -34,7 +32,7 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel)
 	}
 }
 
-void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
+void ExplosionGun::Update(const Vector3& Pos,const Vector3& rot)
 {
 	GunTrans.translation_ = Pos;
 	GunTrans.SetRot(rot);
@@ -48,21 +46,20 @@ void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
 	}
 }
 
-void NormalGun::Draw(const ViewProjection& viewProjection_)
+void ExplosionGun::Draw(const ViewProjection& viewProjection_)
 {
-	//model_->Draw(GunTrans,viewProjection_);
 	for ( auto&& Bullet : explosionBullet )
 	{
 		Bullet->Draw(viewProjection_);
 	}
 }
 
-void NormalGun::FbxDraw(const ViewProjection& viewProjection_)
+void ExplosionGun::FbxDraw(const ViewProjection& viewProjection_)
 {
 	fbxObj3d_->Draw(GunTrans,viewProjection_);
 }
 
-void NormalGun::ShotBullet(const Vector3& BulletVec)
+void ExplosionGun::ShotBullet(const Vector3& BulletVec)
 {
 	if ( CoolTime == static_cast< uint32_t >( Numbers::Zero ) )
 	{
@@ -79,12 +76,12 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 	}
 }
 
-void NormalGun::UpdatePosition()
+void ExplosionGun::UpdatePosition()
 {
 	GunTrans.TransferMatrix();
 }
 
-void NormalGun::TimeUpdate()
+void ExplosionGun::TimeUpdate()
 {
 	if ( CoolTime > static_cast< uint32_t >( Numbers::Zero ) )
 	{
@@ -92,12 +89,12 @@ void NormalGun::TimeUpdate()
 	}
 }
 
-WorldTarnsLook NormalGun::GetLook() const
+WorldTarnsLook ExplosionGun::GetLook() const
 {
 	return GunTrans.LookVelocity;
 }
 
-void NormalGun::CSUpdate(ID3D12GraphicsCommandList* commandList)
+void ExplosionGun::CSUpdate(ID3D12GraphicsCommandList* commandList)
 {
 	for ( auto&& Bullet : explosionBullet )
 	{
@@ -105,10 +102,10 @@ void NormalGun::CSUpdate(ID3D12GraphicsCommandList* commandList)
 	}
 }
 
-void NormalGun::ParticleDraw(const ViewProjection& viewProjection_)
+void ExplosionGun::ParticleDraw(const ViewProjection& viewProjection_)
 {
 	for ( auto&& Bullet : explosionBullet )
 	{
-		Bullet->Draw(viewProjection_);
+		Bullet->ParticleDraw(viewProjection_);
 	}
 }

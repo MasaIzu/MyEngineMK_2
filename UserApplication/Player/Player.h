@@ -19,6 +19,7 @@
 #include <ParticleBoost.h>
 #include "MyStruct.h"
 #include "Explosion.h"
+#include "ExplosionGun.h"
 
 struct PlayerAnimTime
 {
@@ -112,6 +113,7 @@ private://クラス関連
 	WorldTransform DebugWorldTrans;
 	const ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<NormalGun> playerNormalGun;
+	std::unique_ptr<ExplosionGun> playerExplosionGun;
 
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;

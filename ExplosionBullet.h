@@ -28,7 +28,7 @@ public://基本関数
 	void Draw(const ViewProjection& viewProjection_);
 
 	void CSUpadate(ID3D12GraphicsCommandList* commandList);
-	void PatricleDraw(const ViewProjection& viewProjection_);
+	void ParticleDraw(const ViewProjection& viewProjection_);
 
 public:
 
@@ -84,6 +84,8 @@ private://クラス変数
 	uint32_t MackPaticleMax = 1;
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
+	uint32_t particleCount = 100000;
+	uint32_t particlePermissionCount = 0;
 
 	float BulletRadius = 0.5f;
 

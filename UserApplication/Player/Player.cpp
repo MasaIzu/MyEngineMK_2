@@ -32,6 +32,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
 	playerNormalGun->Initialize(Pos,model_.get());
+	playerExplosionGun = std::make_unique<ExplosionGun>(COLLISION_ATTR_ATTACK);
+	playerExplosionGun->Initialize(Pos,model_.get());
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.scale_ = Vector3(PlayerBladeRadius,PlayerBladeRadius,PlayerBladeRadius);
@@ -168,6 +170,7 @@ void Player::Update()
 	playerRotWorldTrans.TransferMatrix();
 	animation->Update();
 	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
+	playerExplosionGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
 
 	ParticleStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));
 	ParticleEndPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(BladeAttackEndPos) * playerRotWorldTrans.matWorld_));
@@ -208,10 +211,12 @@ void Player::Draw()
 	//model_->Draw(DebugWorldTrans,*viewProjection_);
 
 	playerNormalGun->Draw(*viewProjection_);
+	playerExplosionGun->Draw(*viewProjection_);
 }
 
 void Player::FbxDraw() {
 	playerNormalGun->FbxDraw(*viewProjection_);
+	playerExplosionGun->FbxDraw(*viewProjection_);
 	animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
 }
 
@@ -305,6 +310,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,0,0)));
+	playerExplosionGun->CSUpdate(cmdList);
 }
 
 void Player::ParticleDraw()
@@ -320,6 +326,8 @@ void Player::ParticleDraw()
 	ParticleBoost::PostDraw();
 
 	ParticleExplosion->Draw(*viewProjection_);
+
+	playerExplosionGun->ParticleDraw(*viewProjection_);
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack)
@@ -350,6 +358,7 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			playerNormalGun->ShotBullet(EnemyPos);
+			playerExplosionGun->ShotBullet(EnemyPos);
 		}
 	}
 	else
@@ -358,6 +367,7 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			playerNormalGun->ShotBullet(TargetPosition);
+			playerExplosionGun->ShotBullet(TargetPosition);
 		}
 	}
 }

@@ -16,8 +16,6 @@ NormalGun::~NormalGun()
 
 void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel)
 {
-	model_.reset(Model::CreateFromOBJ("NormalGun",true));
-
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("NormalGunFbx",true));
 	fbxObj3d_ = FBXObject3d::Create();
 	fbxObj3d_->SetModel(fbxModel_.get());
@@ -49,7 +47,6 @@ void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
 
 void NormalGun::Draw(const ViewProjection& viewProjection_)
 {
-	//model_->Draw(GunTrans,viewProjection_);
 	for ( auto&& Bullet : normalBullet )
 	{
 		Bullet->Draw(viewProjection_);

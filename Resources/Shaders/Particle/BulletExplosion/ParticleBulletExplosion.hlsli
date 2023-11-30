@@ -5,7 +5,7 @@ cbuffer ShaderParameters : register(b0)
     matrix matBillboard : packoffset(c4); //ビルボード行列
     uint MaxParticleCount : packoffset(c8);
     uint Shot : packoffset(c8.y);
-    uint pad1 : packoffset(c8.z);
+    uint makePermissionCount : packoffset(c8.z);
     uint pad2 : packoffset(c8.w);
     float4 pos : packoffset(c9);
 };
@@ -40,7 +40,7 @@ struct GpuParticleElement
     float4 velocity;
     float4 keepParticleVelocity;
     uint isActive; // 生存フラグ.
-    uint boostNumber;
+    float keepTime;
     float lifeTime;
     float maxLifeTime;
     float scale;

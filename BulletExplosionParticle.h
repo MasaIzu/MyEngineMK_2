@@ -60,7 +60,7 @@ public: // サブクラス
 		Vector4 velocity;
 		Vector4 keepVelocity;
 		uint32_t  isActive;	// 生存フラグ.
-		uint32_t Number;
+		float keepTime;
 		float lifeTime;
 		float maxLifeTime;
 		float scale;
@@ -73,7 +73,7 @@ public: // サブクラス
 		Matrix4 matBillboard;//ビルボード行列
 		uint32_t maxParticleCount = 0;
 		uint32_t Shot = 0;
-		uint32_t pad1 = 0;
+		uint32_t makePermissionCount = 0;
 		uint32_t pad2 = 0;
 		Vector4 StartPos;
 	};
@@ -173,7 +173,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const uint32_t& isExp,const Vector4& Pos);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const uint32_t& isExp,const Vector4& Pos,const uint32_t& makeCount);
 
 	/// <summary>
 	/// 描画

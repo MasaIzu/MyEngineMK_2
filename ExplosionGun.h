@@ -7,11 +7,11 @@
 #include <FBXObject3d.h>
 #include "ExplosionBullet.h"
 
-class NormalGun
+class ExplosionGun
 {
 public://基本関数
-	NormalGun(const unsigned short Attribute);
-	~NormalGun();
+	ExplosionGun(const unsigned short Attribute);
+	~ExplosionGun();
 
 	//初期化
 	void Initialize(const Vector3& Pos,Model* BulletModel);

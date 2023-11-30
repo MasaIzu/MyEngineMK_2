@@ -208,10 +208,10 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;//加算
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
-	////加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
+	//加算合成
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
+	blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
 	////減算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//デストからソースを減算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
@@ -220,10 +220,10 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
 	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
 	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
-	//半透明合成
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
+	////半透明合成
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//ソースのアルファ値
+	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//1.0f-ソースのアルファ値
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[ 0 ] = blenddesc;
@@ -496,13 +496,14 @@ void BulletExplosionParticle::Draw(const ViewProjection& view)
 
 }
 
-void BulletExplosionParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp,const Vector4& Pos)
+void BulletExplosionParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp,const Vector4& Pos,const uint32_t& makeCount)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[ ] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps),ppHeaps);
 	shaderParameters.Shot = isExp;
 	shaderParameters.StartPos = Pos;
+	shaderParameters.makePermissionCount = makeCount;
 	//初期化
 	if ( m_frameCount == 0 )
 	{
