@@ -202,6 +202,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\Explosion">
       <UniqueIdentifier>{ab428f48-9d62-4ff2-b539-5f1ee4369255}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\BulletExplosion">
+      <UniqueIdentifier>{53a48465-ef6b-4f8e-b20f-70f24b57d53e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -242,6 +245,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosion.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +355,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionPS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -634,6 +652,15 @@
     <ClInclude Include="Explosion.h">
       <Filter>UserFile\UserHeaderFile\Explosion</Filter>
     </ClInclude>
+    <ClInclude Include="ExplosionBullet.h">
+      <Filter>UserFile\UserHeaderFile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletExplosionParticle.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionGun.h">
+      <Filter>UserFile\UserHeaderFile\Gun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -875,6 +902,15 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>UserFile\UserSourceFile\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionBullet.cpp">
+      <Filter>UserFile\UserSourceFile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletExplosionParticle.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionGun.cpp">
+      <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
