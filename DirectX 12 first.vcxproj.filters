@@ -205,6 +205,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\BulletExplosion">
       <UniqueIdentifier>{53a48465-ef6b-4f8e-b20f-70f24b57d53e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\Hanabi">
+      <UniqueIdentifier>{7bc7e9e7-cc33-48e4-8fd8-e4ecebb234e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -248,6 +251,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosion.hlsli">
       <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosion.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\Hanabi</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +373,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\BulletExplosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Hanabi</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Hanabi</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionPS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Hanabi</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Hanabi</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -661,6 +679,9 @@
     <ClInclude Include="ExplosionGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleHanabiExplosion.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -911,6 +932,9 @@
     </ClCompile>
     <ClCompile Include="ExplosionGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleHanabiExplosion.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

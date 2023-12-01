@@ -21,6 +21,10 @@ ExplosionBullet::ExplosionBullet(const unsigned short Attribute_)
 	ParticleExplosion = std::make_unique<BulletExplosionParticle>();
 	ParticleExplosion->Initialize(particleCount);
 	ParticleExplosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	HanabiExplosion = std::make_unique<ParticleHanabiExplosion>();
+	HanabiExplosion->Initialize(particleCount);
+	HanabiExplosion->SetTextureHandle(TextureManager::Load("sprite/smoke1.png"));
 }
 
 ExplosionBullet::~ExplosionBullet()
@@ -34,18 +38,21 @@ void ExplosionBullet::Initialize(Model* BulletModel)
 
 void ExplosionBullet::Update()
 {
+	isBulletNotAlive = false;
 	CheckBulletAlive();
 
 	if ( BulletCollider->GetHit() )
 	{
 		BulletCollider->Reset();
 		isBulletAlive = false;
+		isBulletNotAlive = true;
 		BulletCollider->SphereMeshHitReset();
 		BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	}
 	if ( BulletCollider->GetSphereMeshHit() )
 	{
 		isBulletAlive = false;
+		isBulletNotAlive = true;
 		BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 		BulletCollider->SphereMeshHitReset();
 	}
@@ -70,6 +77,7 @@ void ExplosionBullet::Draw(const ViewProjection& viewProjection_)
 void ExplosionBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
 {
 	ParticleExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_),particlePermissionCount);
+	HanabiExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletNotAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_));
 }
 
 void ExplosionBullet::ParticleDraw(const ViewProjection& viewProjection_)
@@ -78,6 +86,9 @@ void ExplosionBullet::ParticleDraw(const ViewProjection& viewProjection_)
 	BulletExplosionParticle::PreDraw(commandList);
 	ParticleExplosion->Draw(viewProjection_);
 	BulletExplosionParticle::PostDraw();
+	ParticleHanabiExplosion::PreDraw(commandList);
+	HanabiExplosion->Draw(viewProjection_);
+	ParticleHanabiExplosion::PostDraw();
 }
 
 void ExplosionBullet::WorldTransUpdate()
@@ -97,6 +108,7 @@ void ExplosionBullet::CheckBulletAlive()
 		else
 		{
 			isBulletAlive = false;
+			isBulletNotAlive = true;
 			BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 		}
 	}

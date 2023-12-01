@@ -122,6 +122,7 @@
     <None Include="Resources\Shaders\Particle\Boost\ParticleBoost.hlsli" />
     <None Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosion.hlsli" />
     <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli" />
+    <None Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosion.hlsli" />
     <None Include="Resources\Shaders\PostEffectGlow.hlsli" />
     <None Include="Resources\Shaders\Primitive.hlsli" />
     <None Include="Resources\Shaders\Shape.hlsli" />
@@ -294,6 +295,30 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -372,6 +397,7 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ExplosionBullet.h" />
     <ClInclude Include="ExplosionGun.h" />
+    <ClInclude Include="ParticleHanabiExplosion.h" />
     <ClInclude Include="UserApplication\Player\Animation.h" />
     <ClInclude Include="UserApplication\UI\ClearUI.h" />
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h" />
@@ -471,6 +497,7 @@
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />
+    <ClCompile Include="ParticleHanabiExplosion.cpp" />
     <ClCompile Include="UserApplication\Player\Animation.cpp" />
     <ClCompile Include="UserApplication\UI\ClearUI.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp" />

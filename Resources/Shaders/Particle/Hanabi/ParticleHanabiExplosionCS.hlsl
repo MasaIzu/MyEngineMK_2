@@ -1,4 +1,4 @@
-#include "ParticleBulletExplosion.hlsli"
+#include "ParticleHanabiExplosion.hlsli"
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
@@ -29,11 +29,11 @@ void main(uint3 id : SV_DispatchThreadID)
     }
     const float dt = 1;
     
-    if (gParticles[index].keepTime >= 0)
-    {
-        gParticles[index].keepTime -= dt;
-        return;
-    }
+    //if (gParticles[index].keepTime >= 0)
+    //{
+    //    gParticles[index].keepTime -= dt;
+    //    return;
+    //}
 
     gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
     if (gParticles[index].lifeTime <= 0)
@@ -89,10 +89,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
-    if (makePermissionCount < index)
-    {
-        return;
-    }
+
     
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
@@ -116,13 +113,13 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
     
-    float speedMax = 5.0f;
-    float speedMin = 1.0f;
-    float speed = Rand1(indexAdd, speedMax, speedMin) / 30.0f;
+    float speedMax = 6.0f;
+    float speedMin = 3.0f;
+    float speed = Rand1(indexAdd, speedMax, speedMin);
     
     float ScaleMax = 40.0f;
     float ScaleMin = 10.0f;
-    float scale = 2.0f;
+    float scale = 10.0f;
     
     float colorMax = 100.0f;
     float colorMin = 1.0f;
@@ -132,7 +129,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float4 Position = pos;
     
-    gParticles[index].keepTime = 5;
+    gParticles[index].keepTime = 60;
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = Position.xyz;
     gParticles[index].scale = scale;

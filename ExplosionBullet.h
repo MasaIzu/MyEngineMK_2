@@ -10,6 +10,7 @@
 #include "Uint32Vector2.h"
 #include "CollisionAttribute.h"
 #include <BulletExplosionParticle.h>
+#include "ParticleHanabiExplosion.h"
 
 /// <summary>
 /// ノーマルバレットクラス
@@ -64,7 +65,7 @@ private://クラス関連
 	CollisionManager* collisionManager = nullptr;
 
 	std::unique_ptr<BulletExplosionParticle> ParticleExplosion;
-
+	std::unique_ptr<ParticleHanabiExplosion> HanabiExplosion;
 private://別クラスから値をもらう
 
 
@@ -73,6 +74,7 @@ private://クラス変数
 	unsigned short Attribute;
 
 	bool isBulletAlive = false;
+	bool isBulletNotAlive = false;
 	bool isMovingExpandingBullet = false;
 
 	uint32_t BulletLifeTime = 0;
