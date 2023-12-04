@@ -71,7 +71,7 @@ public: // 静的メンバ関数
 	static Model* Create();
 
 	// OBJファイルからメッシュ生成
-	static Model* CreateFromOBJ(const std::string& modelname, bool smoothing = false);
+	static Model* CreateFromOBJ(const std::string& modelname,const bool& smoothing = false);
 
 	// 描画前処理
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
@@ -91,7 +91,7 @@ public: // メンバ関数
 		const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 	void Draw(
 		const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-		uint32_t textureHadle);
+		const uint32_t& textureHadle);
 
 
 	// メッシュコンテナを取得
@@ -113,7 +113,7 @@ public: // メンバ関数
 	/// テクスチャのセット
 	/// </summary>
 	/// <param name="textureHandle">テクスチャ</param>
-	void SetTextureHandle(uint32_t textureHandle) { modelTextureHandle = textureHandle; }
+	void SetTextureHandle(const uint32_t& textureHandle) { modelTextureHandle = textureHandle; }
 
 	/// <summary>
 	/// 三角形頂点だけ算出

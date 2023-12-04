@@ -5,7 +5,7 @@ Uint32Vector2::Uint32Vector2() :x(0), y(0)
 {
 }
 
-Uint32Vector2::Uint32Vector2(uint32_t x, uint32_t y) {
+Uint32Vector2::Uint32Vector2(const uint32_t& x,const uint32_t& y) {
 	this->x = x;
 	this->y = y;
 }

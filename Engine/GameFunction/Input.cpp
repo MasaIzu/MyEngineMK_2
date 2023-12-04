@@ -88,7 +88,7 @@ void Input::Update()
 	mouse->Update();
 }
 
-bool Input::PushKey(BYTE keyNumber)
+bool Input::PushKey(const BYTE& keyNumber)
 {
 	// 指定したキーを押していればtrueを返す
 	if (key[keyNumber]) {
@@ -99,7 +99,7 @@ bool Input::PushKey(BYTE keyNumber)
 	return false;
 }
 
-bool Input::TriggerKey(BYTE keyNumber)
+bool Input::TriggerKey(const BYTE& keyNumber)
 {
 	// 指定キーを前フレームで押していなく、今のフレームで押していればtrueを返す
 	if (!keyPre[keyNumber] && key[keyNumber]) {
@@ -110,7 +110,7 @@ bool Input::TriggerKey(BYTE keyNumber)
 	return false;
 }
 
-bool Input::ReleasedKey(BYTE keyNumber)
+bool Input::ReleasedKey(const BYTE& keyNumber)
 {
 	// 指定キーを前フレームで押していて、今のフレームで押していなければtrueを返す
 	if (keyPre[keyNumber] && !key[keyNumber]) {
@@ -121,17 +121,17 @@ bool Input::ReleasedKey(BYTE keyNumber)
 	return false;
 }
 
-bool Input::MouseInputTrigger(int button)
+bool Input::MouseInputTrigger(const int& button)
 {
 	return mouse->MouseInputTrigger(button);
 }
 
-bool Input::MouseInputing(int button)
+bool Input::MouseInputing(const int& button)
 {
 	return mouse->MouseInput(button);
 }
 
-bool Input::MouseOffTrigger(int button)
+bool Input::MouseOffTrigger(const int& button)
 {
 	return mouse->MouseOffTrigger(button);
 }

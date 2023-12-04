@@ -96,7 +96,7 @@ public: // メンバ関数
 	/// 頂点インデックスの追加
 	/// </summary>
 	/// <param name="index">インデックス</param>
-	void AddIndex(unsigned short index);
+	void AddIndex(const unsigned short& index);
 
 	/// <summary>
 	/// 頂点データの数を取得
@@ -109,7 +109,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="indexPosition">座標インデックス</param>
 	/// <param name="indexVertex">頂点インデックス</param>
-	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex);
+	void AddSmoothData(const unsigned short& indexPosition,const unsigned short& indexVertex);
 
 	/// <summary>
 	/// 平滑化された頂点法線の計算
@@ -131,7 +131,7 @@ public: // メンバ関数
 
 	//void SetLight(float alpha);
 
-	void SetLight(Vector3 ambient, Vector3 diffuse, Vector3 specular, float alpha);
+	void SetLight(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,const float& alpha);
 
 	/// <summary>
 	/// バッファの生成
@@ -157,8 +157,8 @@ public: // メンバ関数
 	/// <param name="rooParameterIndexMaterial">マテリアルのルートパラメータ番号</param>
 	/// <param name="rooParameterIndexTexture">テクスチャのルートパラメータ番号</param>
 	void Draw(
-		ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-		UINT rooParameterIndexTexture, uint32_t textureIndex);
+		ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+		const UINT& rooParameterIndexTexture,const uint32_t& textureIndex);
 
 	/// <summary>
 	/// 描画（テクスチャ差し替え版）

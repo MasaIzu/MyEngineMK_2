@@ -128,14 +128,14 @@ public: // メンバ関数
 	/// フレームカウント指定
 	/// </summary>
 	/// <param name="flame"></param>
-	void SetFlame(int flame);
+	void SetFlame(const int& flame);
 
 	/// <summary>
 	/// アニメーション再生用
 	/// </summary>
 	void AnimPlay();
 	void AnimStop();
-	void AnimIsRotateChange(bool isRotate);
+	void AnimIsRotateChange(const bool& isRotate);
 
 	/// <summary>
 	/// カメラのゲッター
@@ -150,8 +150,8 @@ public: // メンバ関数
 	FbxTime GetCurrentTimer();
 	FbxTime GetEndTime();
 	bool GetIsAnimRot();
-	int ConvertFbxTimeToInt(FbxTime time);	//FbxTime型変数をintに変換
-	void ResetCurrentTime(int animNum);
+	int ConvertFbxTimeToInt(const FbxTime& time);	//FbxTime型変数をintに変換
+	void ResetCurrentTime(const int& animNum);
 	ID3D12Resource* GetConstBuff() { return constBuffTransform.Get(); };
 
 	/// <summary>
@@ -165,19 +165,19 @@ public: // メンバ関数
 	/// ボーン用
 	/// </summary>
 	std::vector<Matrix4> bonesMat;
-	void ResizeBonesMat(std::vector<FBXModel::Bone> bones);	//ボーンのサイズをクラスターボーンに合わせる
+	void ResizeBonesMat(const std::vector<FBXModel::Bone>& bones);	//ボーンのサイズをクラスターボーンに合わせる
 	bool isBonesWorldMatCalc = false;	//ボーンのワールド座標上での計算をするかどうか
 
 	Matrix4 GetBonesMatPtr(const uint32_t& BoneNumber);	//ボーンのワールド行列ポインタを渡す
-	void SetIsBonesWorldMatCalc(bool isCalc);	//ボーン計算フラグのセッター
+	void SetIsBonesWorldMatCalc(const bool& isCalc);	//ボーン計算フラグのセッター
 
 	/// <summary>
 	/// アニメーション開始
 	/// </summary>
-	void PlayAnimation(int animationNum);
+	void PlayAnimation(const int& animationNum);
 
 	//補間アニメーションカウント
-	void AnimFlameInter(FbxTime nowCount, FbxTime maxCount);
+	void AnimFlameInter(const FbxTime& nowCount,const FbxTime& maxCount);
 
 	WorldTransform wtf;
 

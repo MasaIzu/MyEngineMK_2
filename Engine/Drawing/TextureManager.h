@@ -55,7 +55,7 @@ public:
 	/// システム初期化
 	/// </summary>
 	/// <param name="device">デバイス</param>
-	void Initialize(ID3D12Device* device, std::string directoryPath = "Resources/");
+	void Initialize(ID3D12Device* device,const std::string& directoryPath = "Resources/");
 
 	/// <summary>
 	/// 全テクスチャリセット
@@ -67,7 +67,7 @@ public:
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <returns>リソース情報</returns>
-	const D3D12_RESOURCE_DESC GetResoureDesc(uint32_t textureHandle);
+	const D3D12_RESOURCE_DESC GetResoureDesc(const uint32_t& textureHandle);
 
 	/// <summary>
 	/// デスクリプタテーブルをセット
@@ -76,7 +76,7 @@ public:
 	/// <param name="rootParamIndex">ルートパラメータ番号</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void SetGraphicsRootDescriptorTable(
-		ID3D12GraphicsCommandList* commandList, UINT rootParamIndex, uint32_t textureHandle);
+		ID3D12GraphicsCommandList* commandList,const UINT& rootParamIndex,const uint32_t& textureHandle);
 
 private:
 	static TextureManager* TextureManager_;

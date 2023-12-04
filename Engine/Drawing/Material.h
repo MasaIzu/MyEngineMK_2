@@ -65,8 +65,8 @@ public:
 	/// <param name="rooParameterIndexMaterial">マテリアルのルートパラメータ番号</param>
 	/// <param name="rooParameterIndexTexture">テクスチャのルートパラメータ番号</param>
 	void SetGraphicsCommand(
-		ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-		UINT rooParameterIndexTexture);
+		ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+		const UINT& rooParameterIndexTexture);
 
 	/// <summary>
 	/// グラフィックスコマンドのセット（テクスチャ差し替え版）
@@ -76,16 +76,16 @@ public:
 	/// <param name="rooParameterIndexTexture">テクスチャのルートパラメータ番号</param>
 	/// <param name="textureHandle">差し替えるテクスチャハンドル</param>
 	void SetGraphicsCommand(
-		ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-		UINT rooParameterIndexTexture, uint32_t textureHandle);
+		ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+		const UINT& rooParameterIndexTexture,const uint32_t& textureHandle);
 
 	// セットテクスチャハンドル
-	void SetTextureHadle(uint32_t& textureHandles) { textureHandle_ = textureHandles; }
+	void SetTextureHadle(const uint32_t& textureHandles) { textureHandle_ = textureHandles; }
 
 	// テクスチャハンドル
 	uint32_t GetTextureHadle() { return textureHandle_; }
 
-	void SetLight(Vector3 ambient, Vector3 diffuse, Vector3 specular, float alpha);
+	void SetLight(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,const float& alpha);
 
 private:
 	// 定数バッファ

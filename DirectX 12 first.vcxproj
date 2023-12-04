@@ -489,7 +489,7 @@
     <ClInclude Include="UserApplication\Scene\SceneManager.h" />
     <ClInclude Include="UserApplication\Scene\GameScene.h" />
     <ClInclude Include="UserApplication\Skydome\Skydome.h" />
-    <ClInclude Include="Engine\Sound\Audio.h" />
+    <ClInclude Include="Engine\Sound\AudioManager.h" />
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -575,7 +575,7 @@
     <ClCompile Include="UserApplication\Scene\SceneManager.cpp" />
     <ClCompile Include="UserApplication\Scene\GameScene.cpp" />
     <ClCompile Include="UserApplication\Skydome\Skydome.cpp" />
-    <ClCompile Include="Engine\Sound\Audio.cpp" />
+    <ClCompile Include="Engine\Sound\AudioManager.cpp" />
     <ClCompile Include="UserApplication\Scene\TitleScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

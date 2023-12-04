@@ -159,7 +159,7 @@ Quaternion& WorldTransform::GetQuaternion()
 	return quaternion;
 }
 
-Vector3 WorldTransform::GetLook(Matrix4 MatRot,Vector3 at)
+Vector3 WorldTransform::GetLook(const Matrix4& MatRot,const Vector3& at)
 {
 	Vector3 Pos = MyMath::GetWorldTransform(matWorld_);
 	Vector3 look_ = MyMath::MatVector(MatRot, at);

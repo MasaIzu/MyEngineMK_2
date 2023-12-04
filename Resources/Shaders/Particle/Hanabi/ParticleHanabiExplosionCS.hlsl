@@ -113,13 +113,13 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
     
-    float speedMax = 6.0f;
-    float speedMin = 3.0f;
+    float speedMax = 2.0f;
+    float speedMin = 1.0f;
     float speed = Rand1(indexAdd, speedMax, speedMin);
     
     float ScaleMax = 40.0f;
     float ScaleMin = 10.0f;
-    float scale = 10.0f;
+    float scale = 5.0f;
     
     float colorMax = 100.0f;
     float colorMin = 1.0f;

@@ -29,24 +29,24 @@ public: // メンバ関数
 	void Update();
 
 	// キーの押したかをチェック(長押し)
-	bool PushKey(BYTE keyNumber);
+	bool PushKey(const BYTE& keyNumber);
 
 	// キーのトリガーをチェック(押した瞬間)
-	bool TriggerKey(BYTE keyNumber);
+	bool TriggerKey(const BYTE& keyNumber);
 
 	// キーのトリガーをチェック(離した瞬間)
-	bool ReleasedKey(BYTE keyNumber);
+	bool ReleasedKey(const BYTE& keyNumber);
 
 	// マウスボタンのトリガー入力
-	bool MouseInputTrigger(int button);
+	bool MouseInputTrigger(const int& button);
 
 
 	// マウスボタンの入力
-	bool MouseInputing(int button);
+	bool MouseInputing(const int& button);
 
 
 	// マウスボタンの離した瞬間
-	bool MouseOffTrigger(int button);
+	bool MouseOffTrigger(const int& button);
 
 	// マウスの位置
 	const Vector2 GetMousePos()const;

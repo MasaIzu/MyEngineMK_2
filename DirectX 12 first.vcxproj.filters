@@ -388,7 +388,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Sound\Audio.h">
+    <ClInclude Include="Engine\Sound\AudioManager.h">
       <Filter>Engine\HeaderFile\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Matrix4.h">
@@ -687,7 +687,7 @@
     <ClCompile Include="main.cpp">
       <Filter>UserFile\UserSourceFile</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Sound\Audio.cpp">
+    <ClCompile Include="Engine\Sound\AudioManager.cpp">
       <Filter>Engine\SourceFile\Sound</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Matrix4.cpp">

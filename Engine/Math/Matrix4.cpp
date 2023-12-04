@@ -30,10 +30,10 @@ Matrix4::Matrix4(const DirectX::XMMATRIX& Matrix4)
 	}
 }
 
-Matrix4::Matrix4(float m00, float m01, float m02, float m03,
-	float m10, float m11, float m12, float m13,
-	float m20, float m21, float m22, float m23,
-	float m30, float m31, float m32, float m33)
+Matrix4::Matrix4(const float& m00,const float& m01,const float& m02,const float& m03,
+	const float& m10,const float& m11,const float& m12,const float& m13,
+	const float& m20,const float& m21,const float& m22,const float& m23,
+	const float& m30,const float& m31,const float& m32,const float& m33)
 {
 	m[0][0] = m00, m[0][1] = m01, m[0][2] = m02, m[0][3] = m03,
 		m[1][0] = m10, m[1][1] = m11, m[1][2] = m12, m[1][3] = m13,
@@ -77,7 +77,7 @@ Matrix4 Matrix4::scale(const Vector3& s)
 }
 
 // x 軸周りの回転行列を求める
-Matrix4 Matrix4::rotateX(float angle)
+Matrix4 Matrix4::rotateX(const float& angle)
 {
 	float sin = std::sin(angle);
 	float cos = std::cos(angle);
@@ -101,7 +101,7 @@ Matrix4 Matrix4::rotateX(float angle)
 }
 
 // y 軸周りの回転行列を求める
-Matrix4 Matrix4::rotateY(float angle)
+Matrix4 Matrix4::rotateY(const float& angle)
 {
 	float sin = std::sin(angle);
 	float cos = std::cos(angle);
@@ -125,7 +125,7 @@ Matrix4 Matrix4::rotateY(float angle)
 }
 
 // z 軸周りの回転行列を求める
-Matrix4 Matrix4::rotateZ(float angle)
+Matrix4 Matrix4::rotateZ(const float& angle)
 {
 	float sin = std::sin(angle);
 	float cos = std::cos(angle);

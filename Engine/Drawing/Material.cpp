@@ -70,8 +70,8 @@ void Material::Update() {
 }
 
 void Material::SetGraphicsCommand(
-	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-	UINT rooParameterIndexTexture) {
+	ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+	const UINT& rooParameterIndexTexture) {
 
 	// SRVをセット
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(
@@ -83,8 +83,8 @@ void Material::SetGraphicsCommand(
 }
 
 void Material::SetGraphicsCommand(
-	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-	UINT rooParameterIndexTexture, uint32_t textureHandle) {
+	ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+	const UINT& rooParameterIndexTexture,const uint32_t& textureHandle) {
 
 	// SRVをセット
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(
@@ -95,7 +95,7 @@ void Material::SetGraphicsCommand(
 		rooParameterIndexMaterial, constBuff_->GetGPUVirtualAddress());
 }
 
-void Material::SetLight(Vector3 ambient, Vector3 diffuse, Vector3 specular, float alpha)
+void Material::SetLight(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,const float& alpha)
 {
 	ambient_ = ambient;
 	diffuse_ = diffuse;

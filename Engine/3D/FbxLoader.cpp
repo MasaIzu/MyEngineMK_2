@@ -47,7 +47,7 @@ void FbxLoader::Finalize()
 	fbxManager->Destroy();
 }
 
-FBXModel* FbxLoader::LoadModelFromFile(const string& modelName, bool isSmooth)
+FBXModel* FbxLoader::LoadModelFromFile(const string& modelName,const bool& isSmooth)
 {
 	// スムージング設定
 	smoothing = isSmooth;

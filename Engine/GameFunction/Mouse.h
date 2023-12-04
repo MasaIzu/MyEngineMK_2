@@ -42,21 +42,21 @@ public:
 	/// </summary>
 	/// <param name="button">チェックしたいボタン</param>
 	/// <returns>押したか</returns>
-	bool MouseInputTrigger(int button);
+	bool MouseInputTrigger(const int& button);
 
 	/// <summary>
 	/// マウスボタンの入力
 	/// </summary>
 	/// <param name="button">チェックしたいボタン</param>
 	/// <returns>押したか</returns>
-	bool MouseInput(int button);
+	bool MouseInput(const int& button);
 
 	/// <summary>
 	/// マウスボタンの離した瞬間
 	/// </summary>
 	/// <param name="button">チェックしたいボタン</param>
 	/// <returns>離したか</returns>
-	bool MouseOffTrigger(int button);
+	bool MouseOffTrigger(const int& button);
 
 	/// <summary>
 	/// マウスの位置

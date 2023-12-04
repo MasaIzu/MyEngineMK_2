@@ -24,11 +24,11 @@ public:
     void Initialize();
 
     // 描画の関数
-    void Draw(int num, Vector2 pos);
+    void Draw(const int& num,const Vector2& pos);
 	//描画スピード
-    void DrawSpeed(int num, Vector2 pos);
+    void DrawSpeed(const int& num,const Vector2& pos);
 	//サイズのセット
-    void SetSize(Vector2 size);
+    void SetSize(const Vector2& size);
 
 private:
     // スプライト

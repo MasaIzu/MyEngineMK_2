@@ -75,22 +75,22 @@ public:
 	/// <summary>
 	/// シェーダーナンバーセット
 	/// </summary>
-	static void SetShadeNumber(int SetShadeNumber);
+	static void SetShadeNumber(const int& SetShadeNumber);
 
 	/// <summary>
 	/// レンジの大きさ
 	/// </summary>
-	static void SetKernelSize(int range);
+	static void SetKernelSize(const int& range);
 
 	/// <summary>
 	/// ラジアルブラー
 	/// </summary>
-	static void SetRadialBlur(Vector2 senter,float intensity,int sample);
+	static void SetRadialBlur(const Vector2& senter,const float& intensity,const int& sample);
 
 	/// <summary>
 	/// アングル変更
 	/// </summary>
-	static void SetAngle(float angle1,float angle2);
+	static void SetAngle(const float& angle1,const float& angle2);
 
 
 

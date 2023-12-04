@@ -25,7 +25,7 @@ public://基本関数
 	/// <param name="p1">制御点その1</param>
 	/// <param name="p2">制御点その2</param>
 	/// <param name="end">ゴール地点</param>
-	SplinePosition(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end);
+	SplinePosition(const Vector3& Start,const Vector3& p1,const Vector3& p2,const Vector3& end);
 
 	/// <summary>
 	/// スタート地点,制御点,ゴール地点を好きに決められる方
@@ -38,25 +38,25 @@ public://基本関数
 	/// スプライン曲線アップデート
 	/// </summary>
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
-	void Update(float& time);
+	void Update(const float& time);
 
 	/// <summary>
 	/// スプライン曲線アップデート4つ打ち込むVer
 	/// </summary>
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
-	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end, float& time);
+	void Update(const Vector3& Start,const Vector3& p1,const Vector3& p2,const Vector3& end,const float& time);
 
 	/// <summary>
 	/// スプライン曲線アップデート5つ打ち込むVer(5個までなら手打ちでいける)
 	/// </summary>
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
-	void Update(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& p3, Vector3& end, float& time);
+	void Update(const Vector3& Start,const Vector3& p1,const Vector3& p2,const Vector3& p3,const Vector3& end,const float& time);
 
 	/// <summary>
 	/// スプライン曲線アップデートpointsもアプデVer
 	/// </summary>
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
-	void Update(const std::vector<Vector3>& points, float& time);
+	void Update(const std::vector<Vector3>& points,const float& time);
 
 	/// <summary>
 	/// スタートに戻すVer
@@ -68,12 +68,12 @@ public://基本関数
 	/// </summary>
 	/// <param name="ResetIndex">Indexはスタートに戻したい場合は1にする(0は無理)</param>
 	/// <param name="time">MaxTime=1でtimeが0.5なら半分から始まる</param>
-	void Reset(const size_t& ResetIndex, float& time);
+	void Reset(const size_t& ResetIndex,const float& time);
 
 	/// <summary>
 	/// 近くの曲線にする//今のところ当たったのなら限定
 	/// </summary>
-	void ResetNearSpline(Vector3& Pos);
+	void ResetNearSpline(const Vector3& Pos);
 
 	/// <summary>
 	/// ResetNearSplineで使ったフラグのリセット

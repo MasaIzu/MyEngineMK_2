@@ -246,7 +246,7 @@ bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDis
 	return Raycast(ray, 0xffff, hitInfo, maxDistance);
 }
 
-bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance)
+bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo,const float& maxDistance)
 {
 	bool result = false;
 	std::forward_list<BaseCollider*>::iterator it;

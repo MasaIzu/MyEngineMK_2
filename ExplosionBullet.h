@@ -87,6 +87,7 @@ private://クラス変数
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
 	uint32_t particleCount = 100000;
+	uint32_t particleExCount = 50000;
 	uint32_t particlePermissionCount = 0;
 
 	float BulletRadius = 0.5f;

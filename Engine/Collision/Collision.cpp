@@ -149,7 +149,7 @@ bool Collision::CheckSphere2SphereFastSpeedVer(const Sphere& sphereA, const Sphe
 }
 
 
-bool Collision::CheckSphere2Plane(Sphere& sphere, Plane& plane, Vector4* inter)
+bool Collision::CheckSphere2Plane(const Sphere& sphere,const Plane& plane, Vector4* inter)
 {
 
 	float distV = sphere.center.Vector3Dot(plane.normal);

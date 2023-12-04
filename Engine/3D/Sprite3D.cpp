@@ -238,7 +238,7 @@ void Sprite3D::StaticFinalize()
 
 }
 
-void Sprite3D::PreDraw(ID3D12GraphicsCommandList* commandList,int blendMode) {
+void Sprite3D::PreDraw(ID3D12GraphicsCommandList* commandList,const int& blendMode) {
 
 	// コマンドリストをセット
 	CommandList_ = commandList;
@@ -256,7 +256,7 @@ void Sprite3D::PostDraw() {
 	Sprite3D::CommandList_ = nullptr;
 }
 
-std::unique_ptr<Sprite3D> Sprite3D::Create(uint32_t textureHandle) {
+std::unique_ptr<Sprite3D> Sprite3D::Create(const uint32_t& textureHandle) {
 	// 仮サイズ
 	Vector2 size = { 100.0f, 100.0f };
 
@@ -289,7 +289,7 @@ std::unique_ptr<Sprite3D> Sprite3D::Create(uint32_t textureHandle) {
 Sprite3D::Sprite3D() {}
 
 Sprite3D::Sprite3D(
-	uint32_t textureHandle,Vector2 size) {
+	const uint32_t& textureHandle,const Vector2& size) {
 	size_ = size;
 	anchorPoint_ = Vector2(0.0f,0.5f);
 	matWorld_ = MyMath::MakeIdentity();
@@ -352,12 +352,12 @@ bool Sprite3D::Initialize() {
 	return true;
 }
 
-void Sprite3D::SetTextureHandle(uint32_t textureHandle) {
+void Sprite3D::SetTextureHandle(const uint32_t& textureHandle) {
 	textureHandle_ = textureHandle;
 	resourceDesc_ = TextureManager::GetInstance()->GetResoureDesc(textureHandle_);
 }
 
-void Sprite3D::SetRotation(float rotation) {
+void Sprite3D::SetRotation(const float& rotation) {
 	rotation_ = rotation;
 }
 
@@ -373,12 +373,12 @@ void Sprite3D::SetAnchorPoint(const Vector2& anchorpoint) {
 	anchorPoint_ = anchorpoint;
 }
 
-void Sprite3D::SetIsFlipX(bool isFlipX) {
+void Sprite3D::SetIsFlipX(const bool& isFlipX) {
 	isFlipX_ = isFlipX;
 
 }
 
-void Sprite3D::SetIsFlipY(bool isFlipY) {
+void Sprite3D::SetIsFlipY(const bool& isFlipY) {
 	isFlipY_ = isFlipY;
 
 }
@@ -388,7 +388,7 @@ void Sprite3D::SetTextureRect(const Vector2& texBase,const Vector2& texSize) {
 	texSize_ = texSize;
 }
 
-void Sprite3D::SetDrawUpdate(Vector4 Color) {
+void Sprite3D::SetDrawUpdate(const Vector4& Color) {
 
 	color_ = Color;
 }
@@ -405,7 +405,7 @@ void Sprite3D::SetScale(const Vector2& nowScale,const Vector2& maxScale)
 	MaxScaleVec2 = maxScale;
 }
 
-void Sprite3D::Draw(const Vector3& Position,const Vector4& Color,const ViewProjection& viewProjection,int blendMode) {
+void Sprite3D::Draw(const Vector3& Position,const Vector4& Color,const ViewProjection& viewProjection,const int& blendMode) {
 
 	TransferVertices(viewProjection);
 	// ワールド行列の更新

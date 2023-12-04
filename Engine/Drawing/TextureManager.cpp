@@ -29,7 +29,7 @@ void TextureManager::Delete()
 	delete TextureManager_;
 }
 
-void TextureManager::Initialize(ID3D12Device* device, std::string directoryPath) {
+void TextureManager::Initialize(ID3D12Device* device,const std::string& directoryPath) {
 	assert(device);
 
 	device_ = device;
@@ -65,7 +65,7 @@ void TextureManager::ResetAll() {
 	}
 }
 
-const D3D12_RESOURCE_DESC TextureManager::GetResoureDesc(uint32_t textureHandle) {
+const D3D12_RESOURCE_DESC TextureManager::GetResoureDesc(const uint32_t& textureHandle) {
 
 	assert(textureHandle < textures_.size());
 	Texture& texture = textures_.at(textureHandle);
@@ -73,8 +73,8 @@ const D3D12_RESOURCE_DESC TextureManager::GetResoureDesc(uint32_t textureHandle)
 }
 
 void TextureManager::SetGraphicsRootDescriptorTable(
-  ID3D12GraphicsCommandList* commandList, UINT rootParamIndex,
-  uint32_t textureHandle) { // デスクリプタヒープの配列
+  ID3D12GraphicsCommandList* commandList,const UINT& rootParamIndex,
+  const uint32_t& textureHandle) { // デスクリプタヒープの配列
 	assert(textureHandle < textures_.size());
 	ID3D12DescriptorHeap* ppHeaps[] = {descriptorHeap_.Get()};
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);

@@ -474,25 +474,25 @@ void PostEffect::PostDrawScene()
 	}
 }
 
-void PostEffect::SetShadeNumber(int SetShadeNumber)
+void PostEffect::SetShadeNumber(const int& SetShadeNumber)
 {
 	dataMap->shadeNumber = SetShadeNumber;
 }
 
-void PostEffect::SetKernelSize(int range) {
+void PostEffect::SetKernelSize(const int& range) {
 
 	dataMap->kernelSize = range;
 
 }
 
-void PostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
+void PostEffect::SetRadialBlur(const Vector2& center,const float& intensity,const int& sample)
 {
 	dataMap->center = center;
 	dataMap->intensity = intensity;
 	dataMap->samples = sample;
 }
 
-void PostEffect::SetAngle(float angle,float angle2)
+void PostEffect::SetAngle(const float& angle,const float& angle2)
 {
 	dataMap->_AngleDeg = angle;
 	dataMap->_AngleDeg2 = angle2;

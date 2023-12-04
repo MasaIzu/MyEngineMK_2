@@ -19,10 +19,10 @@ namespace MyFunction {
     // リソース生成
     ComPtr<ID3D12Resource1> CreateResource(
         const CD3DX12_RESOURCE_DESC& desc,
-        D3D12_RESOURCE_STATES resourceStates,
+		const D3D12_RESOURCE_STATES& resourceStates,
         const D3D12_CLEAR_VALUE* clearValue,
-        D3D12_HEAP_TYPE heapType
+		const D3D12_HEAP_TYPE& heapType
     );
 	//Mapする
-    void WriteToUploadHeapMemory(ID3D12Resource1* resource, uint32_t size, const void* data);
+    void WriteToUploadHeapMemory(ID3D12Resource1* resource,const uint32_t& size, const void* data);
 }

@@ -43,7 +43,7 @@ public://メンバ関数
 
 
 	//レイキャストオーバーロード
-	bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
+	bool Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo = nullptr,const float& maxDistance = D3D12_FLOAT32_MAX);
 
 	//QuerySphereの判定
 	void QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute = static_cast<unsigned short>(0xffffffff));

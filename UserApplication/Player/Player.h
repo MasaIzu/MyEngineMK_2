@@ -170,6 +170,7 @@ private://プレイヤークラス変数
 	bool isDieMoveFinish = false;
 	bool isBladeAttacking = false;
 	bool isPreparation = false;
+	bool isShotRightShoulder = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;

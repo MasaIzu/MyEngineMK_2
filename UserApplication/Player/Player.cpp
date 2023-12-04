@@ -37,7 +37,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.scale_ = Vector3(PlayerBladeRadius,PlayerBladeRadius,PlayerBladeRadius);
-
 	playerMovement = std::make_unique<PlayerMovement>();
 
 	// コリジョンマネージャに追加

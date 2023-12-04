@@ -53,11 +53,7 @@ private:
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
-	CollisionManager* collisionManager = nullptr;//当たり判定
-	std::unique_ptr<LoadLevelEditor> levelData;
-	std::unique_ptr<Player> player_;
-	std::unique_ptr<GameCamera> gameCamera;
-	std::unique_ptr<Skydome> skydome;
+
 
 	bool isFinishGame = false;
 	bool isBlackoutStart = false;

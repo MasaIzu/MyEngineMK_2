@@ -474,25 +474,25 @@ void MixPostEffect::PostDrawScene()
 	}
 }
 
-void MixPostEffect::SetShadeNumber(int SetShadeNumber)
+void MixPostEffect::SetShadeNumber(const int& SetShadeNumber)
 {
 	dataMap->shadeNumber = SetShadeNumber;
 }
 
-void MixPostEffect::SetKernelSize(int range) {
+void MixPostEffect::SetKernelSize(const int& range) {
 
 	dataMap->kernelSize = range;
 
 }
 
-void MixPostEffect::SetRadialBlur(Vector2 center, float intensity, int sample)
+void MixPostEffect::SetRadialBlur(const Vector2& center,const float& intensity,const int& sample)
 {
 	dataMap->center = center;
 	dataMap->intensity = intensity;
 	dataMap->samples = sample;
 }
 
-void MixPostEffect::SetAngle(float angle, float angle2)
+void MixPostEffect::SetAngle(const float& angle,const float& angle2)
 {
 	dataMap->_AngleDeg = angle;
 	dataMap->_AngleDeg2 = angle2;

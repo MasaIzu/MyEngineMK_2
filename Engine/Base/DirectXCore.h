@@ -23,7 +23,7 @@ public://メンバ関数
 	// シングルトンインスタンスの取得
 	static DirectXCore* GetInstance();
 
-	void DirectXCoreInitialize(HWND hwnd, const float& window_width, const float& window_height);
+	void DirectXCoreInitialize(const HWND& hwnd, const float& window_width, const float& window_height);
 
 
 	/// <summary>

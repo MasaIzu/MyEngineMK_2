@@ -191,7 +191,7 @@ Model* Model::Create() {
 	return instance;
 }
 
-Model* Model::CreateFromOBJ(const std::string& modelname, bool smoothing) {
+Model* Model::CreateFromOBJ(const std::string& modelname,const bool& smoothing) {
 	// メモリ確保
 	Model* instance = new Model;
 	instance->Initialize(modelname, smoothing);
@@ -613,7 +613,7 @@ void Model::Draw(
 
 void Model::Draw(
 	const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-	uint32_t textureHadle) {
+	const uint32_t& textureHadle) {
 
 	// ライトの描画
 	lightGroup->Draw(sCommandList_, 4);

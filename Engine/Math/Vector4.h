@@ -13,7 +13,7 @@ public:
 public:
 	//コンストラクタ
 	Vector4();								//零ベクトルとする
-	Vector4(float x, float y, float z, float w);		//x成分,y成分,z成分 を指定して生成
+	Vector4(const float& x,const float& y,const float& z,const float& w);		//x成分,y成分,z成分 を指定して生成
 
 	//メンバ関数
 	float length() const;					//ノルム(長さ)を求める

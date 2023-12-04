@@ -123,7 +123,7 @@ struct WorldTransform {
 	/// <summary>
 	/// 見てる方向のゲット
 	/// </summary>
-	Vector3 GetLook(Matrix4 matRot,Vector3 at);
+	Vector3 GetLook(const Matrix4& matRot,const Vector3& at);
 
 	/// <summary>
 	/// 見る方向のセット

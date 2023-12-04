@@ -372,7 +372,7 @@ std::unique_ptr<FBXObject3d> FBXObject3d::Create()
 }
 
 
-void FBXObject3d::SetFlame(int flame)
+void FBXObject3d::SetFlame(const int& flame)
 {
 	isChangeFlame = true;
 	currentTime = frameTime * flame;
@@ -389,7 +389,7 @@ void FBXObject3d::AnimStop()
 	isAnim = false;
 }
 
-void FBXObject3d::AnimIsRotateChange(bool isRotate)
+void FBXObject3d::AnimIsRotateChange(const bool& isRotate)
 {
 	animRot = isRotate;
 }
@@ -414,13 +414,13 @@ bool FBXObject3d::GetIsAnimRot()
 	return animRot;
 }
 
-int FBXObject3d::ConvertFbxTimeToInt(FbxTime time)
+int FBXObject3d::ConvertFbxTimeToInt(const FbxTime& time)
 {
 	FbxLongLong frameCount = time.GetFrameCount();
 	return static_cast< int >( frameCount );
 }
 
-void FBXObject3d::ResetCurrentTime(int animNum)
+void FBXObject3d::ResetCurrentTime(const int& animNum)
 {
 	FbxScene* fbxScene = fbxmodel->GetFbxScene();
 	//0番のアニメーションを取得
@@ -449,7 +449,7 @@ WorldTransform* FBXObject3d::GetWorldTransformPtr()
 	return &wtf;
 }
 
-void FBXObject3d::ResizeBonesMat(std::vector<FBXModel::Bone> bones_)
+void FBXObject3d::ResizeBonesMat(const std::vector<FBXModel::Bone>& bones_)
 {
 	bonesMat.resize(bones_.size());
 }
@@ -461,12 +461,12 @@ Matrix4 FBXObject3d::GetBonesMatPtr(const uint32_t& BoneNumber)
 	return bonesMat[ BoneNumber ];
 }
 
-void FBXObject3d::SetIsBonesWorldMatCalc(bool isCalc)
+void FBXObject3d::SetIsBonesWorldMatCalc(const bool& isCalc)
 {
 	isBonesWorldMatCalc = isCalc;
 }
 
-void FBXObject3d::PlayAnimation(int animationNum)
+void FBXObject3d::PlayAnimation(const int& animationNum)
 {
 	FbxScene* fbxScene = fbxmodel->GetFbxScene();
 	//0番のアニメーションを取得
@@ -490,7 +490,7 @@ void FBXObject3d::PlayAnimation(int animationNum)
 
 //今のアニメーションのcurrentTimeを無理やり変更する。
 //PlayAnimationを呼び出すとリセットされる
-void FBXObject3d::AnimFlameInter(FbxTime nowCount,FbxTime maxCount)
+void FBXObject3d::AnimFlameInter(const FbxTime& nowCount,const FbxTime& maxCount)
 {
 	FbxTime pDiv = endTime * 1 / maxCount;
 	currentTime = pDiv * nowCount;

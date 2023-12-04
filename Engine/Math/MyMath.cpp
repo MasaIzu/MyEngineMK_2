@@ -142,7 +142,7 @@ Vector3 MyMath::vector3Normalize(const Vector3& v)
 }
 
 //ベクトルと行列の掛け算(出力Vector3)
-Vector3 MyMath::MatVector(Matrix4 matrix4, Vector3 vector3) {
+Vector3 MyMath::MatVector(const Matrix4& matrix4,const Vector3& vector3) {
 	Vector3 matVector = { 0,0,0 };
 
 	matVector.x = vector3.x * matrix4.m[0][0] + vector3.y * matrix4.m[1][0] + vector3.z * matrix4.m[2][0];
@@ -150,26 +150,6 @@ Vector3 MyMath::MatVector(Matrix4 matrix4, Vector3 vector3) {
 	matVector.z = vector3.x * matrix4.m[0][2] + vector3.y * matrix4.m[1][2] + vector3.z * matrix4.m[2][2];
 
 	return matVector;
-}
-
-Vector3 MyMath::MulVector3(Vector3 vector3, Vector3 s) {
-	Vector3 M = vector3;
-
-	M.x *= s.x;
-	M.y *= s.y;
-	M.z *= s.z;
-
-	return M;
-}
-
-const Vector3 MyMath::SubVec(Vector3 v, Vector3 v2) {
-	Vector3 V3 = v;
-
-	V3.x -= v2.x;
-	V3.y -= v2.y;
-	V3.z -= v2.z;
-
-	return V3;
 }
 
 Vector3 MyMath::GetWorldTransform(const Matrix4& matrix4) {
@@ -269,7 +249,7 @@ Vector4 MyMath::Vec4AddPs(const Vector4& v4_1,const Vector4& v4_2)
 	return result;
 }
 
-Matrix4 MyMath::MatrixInverse(Matrix4 pOut)
+Matrix4 MyMath::MatrixInverse(Matrix4& pOut)
 {
 	Matrix4 mat;
 	int i, j, loop;
@@ -458,7 +438,7 @@ Matrix4 MyMath::MakeInverse(const Matrix4* mat)
 	return retMat;
 }
 
-Matrix4 MyMath::ConvertXMMATtoMat4(DirectX::XMMATRIX XMMatrix) {
+Matrix4 MyMath::ConvertXMMATtoMat4(const DirectX::XMMATRIX& XMMatrix) {
 	Matrix4 result;
 	for (int i = 0; i < 4; i++) {
 
@@ -473,8 +453,10 @@ Matrix4 MyMath::ConvertXMMATtoMat4(DirectX::XMMATRIX XMMatrix) {
 }
 
 
-Matrix4 MyMath::LookAtLH(Vector3 eye, Vector3 target, Vector3 up) {
-	Vector3 zaxis = target - eye;
+Matrix4 MyMath::LookAtLH(const Vector3& eye,const Vector3& target,const Vector3& up) {
+	Vector3 tar = target;
+	Vector3 ey = eye;
+	Vector3 zaxis = tar - ey;
 	zaxis.normalize();
 	Vector3 xaxis = up.cross(zaxis);
 	xaxis.normalize();
@@ -491,7 +473,7 @@ Matrix4 MyMath::LookAtLH(Vector3 eye, Vector3 target, Vector3 up) {
 	return LookAt;
 }
 
-Matrix4 MyMath::PerspectiveFovLH(float fovAngleY, float aspectRatio, float nearZ, float farZ) {
+Matrix4 MyMath::PerspectiveFovLH(const float& fovAngleY,const float& aspectRatio,const float& nearZ,const float& farZ) {
 
 	double h = 1 / tan(fovAngleY * 0.5);
 	double w = h / aspectRatio;
@@ -516,23 +498,25 @@ Matrix4 MyMath::MakeIdentity()
 }
 
 // 値を範囲内に納める
-float MyMath::Clamp(float Value, const float low, const float high)
+float MyMath::Clamp(const float& Value, const float& low, const float& high)
 {
+	float val;
+	val = Value;
 	if (high < Value)
 	{
-		Value = high;
+		val = high;
 	}
 
 	if (Value < low)
 	{
-		Value = low;
+		val = low;
 	}
 
-	return Value;
+	return val;
 }
 
 Matrix4 MyMath::Matrix4Orthographic(
-	float viewLeft, float viewRight, float viewBottom, float viewTop, float nearZ, float farZ) {
+	const float& viewLeft,const float& viewRight,const float& viewBottom,const float& viewTop,const float& nearZ,const float& farZ) {
 	assert(fabsf(viewRight - viewLeft) > 0.00001f);
 	assert(fabsf(viewTop - viewBottom) > 0.00001f);
 	assert(fabsf(farZ - nearZ) > 0.00001f);
@@ -675,12 +659,12 @@ float MyMath::JudgeLeftorRight(const Vector3& A,const Vector3& B,const Vector3& 
 	}
 }
 
-float MyMath::GetRadAngle(float angle)
+float MyMath::GetRadAngle(const float& angle)
 {
 	return angle * (180 / PI);
 }
 
-void MyMath::MatrixText(Matrix4& mat)
+void MyMath::MatrixText(const Matrix4& mat)
 {
 
 	for (int i = 0; i < 4; i++) {

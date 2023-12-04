@@ -17,7 +17,7 @@ public:
 public:
 	//コンストラクタ
 	Uint32Vector2();							//零ベクトルとして生成
-	Uint32Vector2(uint32_t x, uint32_t y);			//x成分,y成分を指定して生成
+	Uint32Vector2(const uint32_t& x,const uint32_t& y);			//x成分,y成分を指定して生成
 
 
 	//代入演算子オーバーロード

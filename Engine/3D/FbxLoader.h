@@ -44,7 +44,7 @@ public:
 	/// ファイルからFBXモデル読込
 	/// </summary>
 	/// <param name="modelName">モデル名</param>
-	FBXModel* LoadModelFromFile(const string& modelName, bool isSmooth);
+	FBXModel* LoadModelFromFile(const string& modelName,const bool& isSmooth);
 
 	/// <summary>
 	/// FBXの行列XMMatrixに変換
@@ -62,7 +62,6 @@ public:
 	static int CreateNewVertexIndex(const std::vector<float>& vertexInfo, const FbxVector4& normalVec4, const FbxVector2& uvVec2,
 		std::vector<std::vector<float>>& vertexInfoList, int oldIndex, std::vector<std::array<int, 2>>& oldNewIndexPairList);
 	static bool IsSetNormalUV(const std::vector<float> vertexInfo, const FbxVector4& normalVec4, const FbxVector2& uvVec2);
-	unsigned int FindJointIndex(const std::string& jointname);
 
 	std::vector<std::vector<int>> meshVertice;
 	std::unordered_map<int, std::vector<int>> meshVerticeControlpoints;

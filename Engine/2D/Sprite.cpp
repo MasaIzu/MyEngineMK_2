@@ -238,7 +238,7 @@ void Sprite::StaticFinalize()
 
 }
 
-void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList, int blendMode) {
+void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList,const int& blendMode) {
 
 	// コマンドリストをセット
 	CommandList_ = commandList;
@@ -256,7 +256,7 @@ void Sprite::PostDraw() {
 	Sprite::CommandList_ = nullptr;
 }
 
-std::unique_ptr<Sprite> Sprite::Create(uint32_t textureHandle) {
+std::unique_ptr<Sprite> Sprite::Create(const uint32_t& textureHandle) {
 	// 仮サイズ
 	Vector2 size = { 100.0f, 100.0f };
 
@@ -288,7 +288,7 @@ std::unique_ptr<Sprite> Sprite::Create(uint32_t textureHandle) {
 Sprite::Sprite() {}
 
 Sprite::Sprite(
-	uint32_t textureHandle,Vector2 size) {
+	const uint32_t& textureHandle,const Vector2& size) {
 	size_ = size;
 	anchorPoint_ = Vector2(0.5f,0.5f);
 	matWorld_ = MyMath::MakeIdentity();
@@ -351,7 +351,7 @@ bool Sprite::Initialize() {
 	return true;
 }
 
-void Sprite::SetTextureHandle(uint32_t textureHandle) {
+void Sprite::SetTextureHandle(const uint32_t& textureHandle) {
 	textureHandle_ = textureHandle;
 	resourceDesc_ = TextureManager::GetInstance()->GetResoureDesc(textureHandle_);
 }
@@ -391,7 +391,7 @@ void Sprite::SetAnchorPoint(const Vector2& anchorpoint) {
 	TransferVertices();
 }
 
-void Sprite::SetIsFlipX(bool isFlipX) {
+void Sprite::SetIsFlipX(const bool& isFlipX) {
 	isFlipX_ = isFlipX;
 
 	// 頂点バッファへのデータ転送
@@ -413,14 +413,14 @@ void Sprite::SetTextureRect(const Vector2& texBase, const Vector2& texSize) {
 	TransferVertices();
 }
 
-void Sprite::SetDrawUpdate(Vector2 Position, Vector4 Color){
+void Sprite::SetDrawUpdate(const Vector2& Position,const Vector4& Color){
 
 	color_ = Color;
 
 	SetPosition(Position);
 }
 
-void Sprite::Draw(Vector2 Position, Vector4 Color, int blendMode) {
+void Sprite::Draw(const Vector2& Position,const Vector4& Color,const int& blendMode) {
 
 	SetDrawUpdate(Position, Color);
 

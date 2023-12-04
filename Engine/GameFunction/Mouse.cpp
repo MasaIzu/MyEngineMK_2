@@ -34,17 +34,17 @@ void Mouse::Update()
 	mousePos.y = MyMath::Clamp(mousePos.y, 0.0f, static_cast<float>(WinApp::GetInstance()->window_height));
 }
 
-bool Mouse::MouseInputTrigger(int button)
+bool Mouse::MouseInputTrigger(const int& button)
 {
 	return (!oldMouseState.rgbButtons[button] && mouseState.rgbButtons[button]);
 }
 
-bool Mouse::MouseInput(int button)
+bool Mouse::MouseInput(const int& button)
 {
 	return static_cast<bool>(mouseState.rgbButtons[button]);
 }
 
-bool Mouse::MouseOffTrigger(int button)
+bool Mouse::MouseOffTrigger(const int& button)
 {
 	return (oldMouseState.rgbButtons[button] && !mouseState.rgbButtons[button]);
 }

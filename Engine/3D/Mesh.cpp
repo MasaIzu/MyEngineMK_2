@@ -10,9 +10,9 @@ void Mesh::SetName(const std::string& Name_) { this->name_ = Name_; }
 
 void Mesh::AddVertex(const VertexPosNormalUv& vertex) { vertices_.emplace_back(vertex); }
 
-void Mesh::AddIndex(unsigned short index) { indices_.emplace_back(index); }
+void Mesh::AddIndex(const unsigned short& index) { indices_.emplace_back(index); }
 
-void Mesh::AddSmoothData(unsigned short indexPosition, unsigned short indexVertex) {
+void Mesh::AddSmoothData(const unsigned short& indexPosition,const unsigned short& indexVertex) {
 	smoothData_[indexPosition].emplace_back(indexVertex);
 }
 
@@ -116,8 +116,8 @@ void Mesh::CreateBuffers() {
 }
 
 void Mesh::Draw(
-	ID3D12GraphicsCommandList* commandList, UINT rooParameterIndexMaterial,
-	UINT rooParameterIndexTexture, uint32_t textureIndex) {
+	ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+	const UINT& rooParameterIndexTexture,const uint32_t& textureIndex) {
 	// 頂点バッファをセット
 	commandList->IASetVertexBuffers(0, 1, &vbView_);
 	// インデックスバッファをセット
@@ -145,6 +145,6 @@ void Mesh::Draw(
 //	commandList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);
 //}
 
-void Mesh::SetLight(Vector3 ambient, Vector3 diffuse, Vector3 specular, float alpha) {
+void Mesh::SetLight(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,const float& alpha) {
 	material_->SetLight(ambient, diffuse, specular, alpha);
 }

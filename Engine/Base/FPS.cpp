@@ -27,6 +27,6 @@ void FPS::FpsControlEnd() {
 	fps = 1 / elapsedFrame;
 }
 
-void FPS::SetFrameRate(float fps_) { frameTime = 1.0f / fps_; }
+void FPS::SetFrameRate(const float& fps_) { frameTime = 1.0f / fps_; }
 
 float FPS::GetFrameRate() { return fps; }

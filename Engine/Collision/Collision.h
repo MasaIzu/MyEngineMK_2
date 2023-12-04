@@ -35,7 +35,7 @@ public:
 	/// <param name="plane">平面</param>
 	/// <param name="inter">交点（平面上の最近接点）</param>
 	/// <returns>交差しているか否か</returns>
-	static bool CheckSphere2Plane(Sphere& sphere, Plane& plane, Vector4* inter = nullptr);
+	static bool CheckSphere2Plane(const Sphere& sphere,const Plane& plane, Vector4* inter = nullptr);
 
 	/// <summary>
 	/// 球と法線付き三角形の当たり判定
