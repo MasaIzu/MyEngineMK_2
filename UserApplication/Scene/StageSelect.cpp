@@ -17,13 +17,21 @@ void StageSelect::Initialize()
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
-
+	sceneManager_ = SceneManager::GetInstance();
 
 	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
+	StageSelectSprite_ = Sprite::Create(TextureManager::Load("sprite/StageSelect1.png"));
+	OneToOneSprite_ = Sprite::Create(TextureManager::Load("sprite/1-1_1.png"));
+	OneToTwoSprite_ = Sprite::Create(TextureManager::Load("sprite/1-1_2.png"));
+	SelectBarSprite_ = Sprite::Create(TextureManager::Load("sprite/SelectBar.png"));
+	NowLoadingSprite_ = Sprite::Create(TextureManager::Load("sprite/NowLoading.png"));
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
-	
+
+	isSelectBarTop = false;
+	isSelectBarDown = true;
+	SelectBarPos = OneToTwoPos;
 }
 
 void StageSelect::Update()
@@ -42,8 +50,63 @@ void StageSelect::Update()
 		{
 			SpriteAlpha += 0.008f;
 		}
+		else
+		{
+			if ( isTop )
+			{
+
+			}
+			else
+			{
+				NowLoadingAlpha = 1.0f;
+				if ( isNext )
+				{
+					sceneManager_->ChangeScene("STAGE2");
+				}
+				else
+				{
+					isNext = true;
+				}
+			}
+		}
 	}
 
+	if ( isSelectBarTop == false )
+	{
+		//if ( input_->TriggerKey(DIK_W) )
+		//{
+		//	isSelectBarTop = true;
+		//	isSelectBarDown = false;
+		//	SelectBarPos = OneToOnePos;
+		//}
+	}
+	else
+	{
+		if ( input_->TriggerKey(DIK_S) )
+		{
+			isSelectBarTop = false;
+			isSelectBarDown = true;
+			SelectBarPos = OneToTwoPos;
+		}
+	}
+
+	if ( input_->TriggerKey(DIK_SPACE) )
+	{
+		isBlackoutStart = true;
+		if ( isSelectBarTop == false )
+		{
+			isTop = false;
+		}
+		else
+		{
+			isTop = true;
+		}
+	}
+
+	ImGui::Begin("AAA");
+	ImGui::SliderFloat("OneToTwoPosX",&OneToTwoPos.x,0,1200);
+	ImGui::SliderFloat("OneToTwoPosY",&OneToTwoPos.y,0,1200);
+	ImGui::End();
 }
 
 void StageSelect::PostEffectDraw()
@@ -69,7 +132,12 @@ void StageSelect::Draw()
 	
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
+	StageSelectSprite_->Draw({ 640,360 },{ 1,1,1,1 });
+	SelectBarSprite_->Draw(SelectBarPos,{ 1,1,1,1 });
+	//OneToOneSprite_->Draw(OneToOnePos,{ 1,1,1,1 });
+	OneToTwoSprite_->Draw(OneToTwoPos,{ 1,1,1,1 });
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	NowLoadingSprite_->Draw({ 640,360 },{ 1,1,1,NowLoadingAlpha });
 }
 
 void StageSelect::Finalize()

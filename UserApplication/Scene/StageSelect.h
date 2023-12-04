@@ -52,11 +52,20 @@ private:
 	Input* input_ = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
+	std::unique_ptr<Sprite> StageSelectSprite_ = nullptr;
+	std::unique_ptr<Sprite> OneToOneSprite_ = nullptr;
+	std::unique_ptr<Sprite> OneToTwoSprite_ = nullptr;
+	std::unique_ptr<Sprite> SelectBarSprite_ = nullptr;
+	std::unique_ptr<Sprite> NowLoadingSprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
 
 
 	bool isFinishGame = false;
 	bool isBlackoutStart = false;
+	bool isSelectBarTop = true;
+	bool isSelectBarDown = true;
+	bool isTop = false;
+	bool isNext = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
@@ -68,6 +77,10 @@ private:
 	float angle = 45.0f;
 	float angle2 = 135.0f;
 	float SpriteAlpha = 1.0f;
+	float NowLoadingAlpha = 0.0f;
 
 	Vector2 center = { 0.5f,0.5f };
+	Vector2 OneToOnePos = {300.0f,145.0f};
+	Vector2 OneToTwoPos = { 300.0f,180.0f };
+	Vector2 SelectBarPos = { 300.0f,145.0f };
 };
