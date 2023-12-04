@@ -288,6 +288,26 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 		PlayerBladeAttack(EnemyPos,LockOn);
 	}
 
+	if ( input_->TriggerKey(DIK_E) )
+	{
+		if ( LockOn )
+		{
+			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
+			if ( playerMovement->GetIsRotFinish() )
+			{
+				playerExplosionGun->ShotBullet(EnemyPos);
+			}
+		}
+		else
+		{
+			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
+			if ( playerMovement->GetIsRotFinish() )
+			{
+				playerExplosionGun->ShotBullet(TargetPosition);
+			}
+		}
+	}
+
 	playerUI->AttackReticleUpdate(LockOn);
 	WorldTransUpdate();
 
@@ -357,7 +377,6 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			playerNormalGun->ShotBullet(EnemyPos);
-			playerExplosionGun->ShotBullet(EnemyPos);
 		}
 	}
 	else
@@ -366,7 +385,6 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			playerNormalGun->ShotBullet(TargetPosition);
-			playerExplosionGun->ShotBullet(TargetPosition);
 		}
 	}
 }

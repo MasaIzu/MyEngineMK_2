@@ -37,7 +37,7 @@ void ClearScene::Update()
 		}
 		else
 		{
-			sceneManager_->ChangeScene("STAGE2");
+			sceneManager_->ChangeScene("STAGESELECT");
 		}
 	}
 

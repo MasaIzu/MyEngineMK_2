@@ -124,7 +124,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     float colorMax = 100.0f;
     float colorMin = 1.0f;
     float red = Rand1(seed, colorMax, colorMin) / 100.0f;
-    float green = Rand1(indexAdd, colorMax, colorMin) / 100.0f;
+    float green = Rand1(indexAdd, colorMax, colorMin) / 1000.0f;
     float blue = Rand1(indexDiv, colorMax, colorMin) / 50.0f;
     
     float4 Position = pos;

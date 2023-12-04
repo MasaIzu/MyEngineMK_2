@@ -673,5 +673,5 @@ void MiddleBossEnemy::ColUpdate()
 
 Vector3 MiddleBossEnemy::GetPosition() const
 {
-	return MyMath::GetWorldTransform(BossWorldTrans.matWorld_);
+	return MyMath::GetWorldTransform(EnemyHedWorldTrans.matWorld_);
 }
