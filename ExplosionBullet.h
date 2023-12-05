@@ -9,7 +9,7 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 #include "CollisionAttribute.h"
-#include <BulletExplosionParticle.h>
+#include <BulletSmokeParticle.h>
 #include "ParticleHanabiExplosion.h"
 
 /// <summary>
@@ -64,7 +64,7 @@ private://クラス関連
 	BaseCollider* BulletCollider;
 	CollisionManager* collisionManager = nullptr;
 
-	std::unique_ptr<BulletExplosionParticle> ParticleExplosion;
+	std::unique_ptr<BulletSmokeParticle> ParticleBulletSmoke;
 	std::unique_ptr<ParticleHanabiExplosion> HanabiExplosion;
 private://別クラスから値をもらう
 

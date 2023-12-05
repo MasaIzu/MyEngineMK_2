@@ -1,4 +1,3 @@
-
 cbuffer ShaderParameters : register(b0)
 {
     matrix mat : packoffset(c0); // 3D•ÏŠ·s—ñ

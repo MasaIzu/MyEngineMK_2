@@ -23,7 +23,7 @@ MY_SUPPRESS_WARNINGS_END
 /// <summary>
 /// ブーストパーティクル
 /// </summary>
-class BulletExplosionParticle
+class BulletSmokeParticle
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略

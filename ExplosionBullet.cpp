@@ -18,9 +18,9 @@ ExplosionBullet::ExplosionBullet(const unsigned short Attribute_)
 	Attribute = Attribute_;
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 
-	ParticleExplosion = std::make_unique<BulletExplosionParticle>();
-	ParticleExplosion->Initialize(particleCount);
-	ParticleExplosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+	ParticleBulletSmoke = std::make_unique<BulletSmokeParticle>();
+	ParticleBulletSmoke->Initialize(particleCount);
+	ParticleBulletSmoke->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	HanabiExplosion = std::make_unique<ParticleHanabiExplosion>();
 	HanabiExplosion->Initialize(particleExCount);
@@ -76,16 +76,16 @@ void ExplosionBullet::Draw(const ViewProjection& viewProjection_)
 
 void ExplosionBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
 {
-	ParticleExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_),particlePermissionCount);
+	ParticleBulletSmoke->CSUpdate(commandList,static_cast< uint32_t >( isBulletAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_),particlePermissionCount);
 	HanabiExplosion->CSUpdate(commandList,static_cast< uint32_t >( isBulletNotAlive ),MyMath::Vec3ToVec4(BulletWorldTrans.translation_));
 }
 
 void ExplosionBullet::ParticleDraw(const ViewProjection& viewProjection_)
 {
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	BulletExplosionParticle::PreDraw(commandList);
-	ParticleExplosion->Draw(viewProjection_);
-	BulletExplosionParticle::PostDraw();
+	BulletSmokeParticle::PreDraw(commandList);
+	ParticleBulletSmoke->Draw(viewProjection_);
+	BulletSmokeParticle::PostDraw();
 	ParticleHanabiExplosion::PreDraw(commandList);
 	HanabiExplosion->Draw(viewProjection_);
 	ParticleHanabiExplosion::PostDraw();

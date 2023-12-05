@@ -31,12 +31,6 @@ private: // エイリアス
 
 public: // サブクラス
 
-	struct BoostPos
-	{
-		Vector4 StartPos;
-
-	};
-
 	// 頂点データ構造体
 	struct VertexPos
 	{

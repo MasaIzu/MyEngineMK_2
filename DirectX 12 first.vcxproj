@@ -120,7 +120,7 @@
     <None Include="Resources\Shaders\Obj.hlsli" />
     <None Include="Resources\Shaders\Particle.hlsli" />
     <None Include="Resources\Shaders\Particle\Boost\ParticleBoost.hlsli" />
-    <None Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosion.hlsli" />
+    <None Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticle.hlsli" />
     <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli" />
     <None Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosion.hlsli" />
     <None Include="Resources\Shaders\PostEffectGlow.hlsli" />
@@ -247,25 +247,25 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionCS.hlsl">
+    <FxCompile Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticleCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionGS.hlsl">
+    <FxCompile Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticleGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionPS.hlsl">
+    <FxCompile Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticlePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\BulletExplosion\ParticleBulletExplosionVS.hlsl">
+    <FxCompile Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticleVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
@@ -393,7 +393,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletExplosionParticle.h" />
+    <ClInclude Include="BulletSmokeParticle.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ExplosionBullet.h" />
     <ClInclude Include="ExplosionGun.h" />
@@ -493,7 +493,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BulletExplosionParticle.cpp" />
+    <ClCompile Include="BulletSmokeParticle.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />

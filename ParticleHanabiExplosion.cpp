@@ -95,7 +95,7 @@ void ParticleHanabiExplosion::InitializeGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionVS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/Hanabi/ParticleHanabiExplosionVS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main","vs_5_0",	// エントリーポイント名、シェーダーモデル指定

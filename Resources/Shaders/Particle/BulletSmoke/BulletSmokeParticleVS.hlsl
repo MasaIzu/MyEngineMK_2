@@ -1,4 +1,4 @@
-#include "ParticleBulletExplosion.hlsli"
+#include "BulletSmokeParticle.hlsli"
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 

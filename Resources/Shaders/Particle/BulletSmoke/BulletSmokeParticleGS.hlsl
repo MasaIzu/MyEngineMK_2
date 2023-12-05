@@ -1,4 +1,4 @@
-#include "ParticleBulletExplosion.hlsli"
+#include "BulletSmokeParticle.hlsli"
 
 static const int vnum = 4;
 

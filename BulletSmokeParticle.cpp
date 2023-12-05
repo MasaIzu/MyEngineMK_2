@@ -1,4 +1,4 @@
-#include "BulletExplosionParticle.h"
+#include "BulletSmokeParticle.h"
 #include "DirectXCore.h"
 #include "Model.h"
 #include <algorithm>
@@ -23,33 +23,33 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-ID3D12Device* BulletExplosionParticle::device = nullptr;
-ID3D12GraphicsCommandList* BulletExplosionParticle::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> BulletExplosionParticle::rootsignature;
-ComPtr<ID3D12RootSignature> BulletExplosionParticle::rootSignature;//コンピュートシェーダー用
-ComPtr<ID3D12PipelineState> BulletExplosionParticle::pipelinestate;
-ComPtr<ID3D12PipelineState> BulletExplosionParticle::pipelineState;//コンピュートシェーダー用
+ID3D12Device* BulletSmokeParticle::device = nullptr;
+ID3D12GraphicsCommandList* BulletSmokeParticle::cmdList = nullptr;
+ComPtr<ID3D12RootSignature> BulletSmokeParticle::rootsignature;
+ComPtr<ID3D12RootSignature> BulletSmokeParticle::rootSignature;//コンピュートシェーダー用
+ComPtr<ID3D12PipelineState> BulletSmokeParticle::pipelinestate;
+ComPtr<ID3D12PipelineState> BulletSmokeParticle::pipelineState;//コンピュートシェーダー用
 
-std::unordered_map<std::string,ComPtr<ID3D12PipelineState>> BulletExplosionParticle::m_pipelines;
-ComPtr<ID3D12DescriptorHeap> BulletExplosionParticle::m_cbvSrvUavHeap;
+std::unordered_map<std::string,ComPtr<ID3D12PipelineState>> BulletSmokeParticle::m_pipelines;
+ComPtr<ID3D12DescriptorHeap> BulletSmokeParticle::m_cbvSrvUavHeap;
 
-const std::string BulletExplosionParticle::PSO_DEFAULT = "PSO_DEFAULT";
-const std::string BulletExplosionParticle::PSO_CS_INIT = "PSO_CS_INIT";
-const std::string BulletExplosionParticle::PSO_CS_EMIT = "PSO_CS_EMIT";
-const std::string BulletExplosionParticle::PSO_CS_UPDATE = "PSO_CS_UPDATE";
-const std::string BulletExplosionParticle::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
-const std::string BulletExplosionParticle::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
+const std::string BulletSmokeParticle::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string BulletSmokeParticle::PSO_CS_INIT = "PSO_CS_INIT";
+const std::string BulletSmokeParticle::PSO_CS_EMIT = "PSO_CS_EMIT";
+const std::string BulletSmokeParticle::PSO_CS_UPDATE = "PSO_CS_UPDATE";
+const std::string BulletSmokeParticle::PSO_DRAW_PARTICLE = "PSO_DRAW_PARTICLE";
+const std::string BulletSmokeParticle::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE_USE_TEX";
 
-UINT BulletExplosionParticle::m_incrementSize;
+UINT BulletSmokeParticle::m_incrementSize;
 
-UINT BulletExplosionParticle::m_cbvSrvUavDescriptorSize = 0;
+UINT BulletSmokeParticle::m_cbvSrvUavDescriptorSize = 0;
 
-void BulletExplosionParticle::StaticInitialize(ID3D12Device* Device)
+void BulletSmokeParticle::StaticInitialize(ID3D12Device* Device)
 {
 	// nullptrチェック
 	assert(Device);
 
-	BulletExplosionParticle::device = Device;
+	BulletSmokeParticle::device = Device;
 
 	m_cbvSrvUavDescriptorSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -58,18 +58,18 @@ void BulletExplosionParticle::StaticInitialize(ID3D12Device* Device)
 
 }
 
-void BulletExplosionParticle::StaticFinalize()
+void BulletSmokeParticle::StaticFinalize()
 {
 
 }
 
-void BulletExplosionParticle::PreDraw(ID3D12GraphicsCommandList* commandList)
+void BulletSmokeParticle::PreDraw(ID3D12GraphicsCommandList* commandList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(BulletExplosionParticle::cmdList == nullptr);
+	assert(BulletSmokeParticle::cmdList == nullptr);
 
 	// コマンドリストをセット
-	BulletExplosionParticle::cmdList = commandList;
+	BulletSmokeParticle::cmdList = commandList;
 
 	// パイプラインステートの設定
 	commandList->SetPipelineState(m_pipelines[ PSO_DEFAULT ].Get());
@@ -79,13 +79,13 @@ void BulletExplosionParticle::PreDraw(ID3D12GraphicsCommandList* commandList)
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 }
 
-void BulletExplosionParticle::PostDraw()
+void BulletSmokeParticle::PostDraw()
 {
 	// コマンドリストを解除
-	BulletExplosionParticle::cmdList = nullptr;
+	BulletSmokeParticle::cmdList = nullptr;
 }
 
-void BulletExplosionParticle::InitializeGraphicsPipeline()
+void BulletSmokeParticle::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -95,7 +95,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionVS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticleVS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main","vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -119,7 +119,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 
 	// ジオメトリシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionGS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticleGS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main","gs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -144,7 +144,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionPS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticlePS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main","ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -298,7 +298,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 	ComPtr<ID3DBlob> csBlobUpdate;
 	// コンピュートシェーダーのコンパイル
 	D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionCS.hlsl",
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticleCS.hlsl",
 		nullptr,D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"initParticle","cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -306,7 +306,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 		&csBlobInit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionCS.hlsl",
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticleCS.hlsl",
 		nullptr,D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"emitParticle","cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -314,7 +314,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 		&csBlobEmit,
 		nullptr);
 	D3DCompileFromFile(
-		L"Resources/Shaders/Particle/BulletExplosion/ParticleBulletExplosionCS.hlsl",
+		L"Resources/Shaders/Particle/BulletSmoke/BulletSmokeParticleCS.hlsl",
 		nullptr,D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main","cs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_OPTIMIZATION_LEVEL3,
@@ -355,7 +355,7 @@ void BulletExplosionParticle::InitializeGraphicsPipeline()
 	m_incrementSize = device->GetDescriptorHandleIncrementSize(cbvSrvUavHeapDesc.Type);
 }
 
-void BulletExplosionParticle::InitializeVerticeBuff()
+void BulletSmokeParticle::InitializeVerticeBuff()
 {
 
 	HRESULT result;
@@ -433,11 +433,11 @@ void BulletExplosionParticle::InitializeVerticeBuff()
 
 }
 
-void BulletExplosionParticle::SetTextureHandle(uint32_t textureHandle) {
+void BulletSmokeParticle::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void BulletExplosionParticle::Initialize(uint32_t ParticleCount)
+void BulletSmokeParticle::Initialize(uint32_t ParticleCount)
 {
 	particleCount = ParticleCount;
 
@@ -466,7 +466,7 @@ void BulletExplosionParticle::Initialize(uint32_t ParticleCount)
 
 }
 
-void BulletExplosionParticle::Draw(const ViewProjection& view)
+void BulletSmokeParticle::Draw(const ViewProjection& view)
 {
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
@@ -477,7 +477,7 @@ void BulletExplosionParticle::Draw(const ViewProjection& view)
 
 	// nullptrチェック
 	assert(device);
-	assert(BulletExplosionParticle::cmdList);
+	assert(BulletSmokeParticle::cmdList);
 
 
 	// 頂点バッファの設定
@@ -496,7 +496,7 @@ void BulletExplosionParticle::Draw(const ViewProjection& view)
 
 }
 
-void BulletExplosionParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp,const Vector4& Pos,const uint32_t& makeCount)
+void BulletSmokeParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isExp,const Vector4& Pos,const uint32_t& makeCount)
 {
 
 	ID3D12DescriptorHeap* ppHeaps[ ] = { m_cbvSrvUavHeap.Get() };
@@ -563,7 +563,7 @@ void BulletExplosionParticle::CSUpdate(ID3D12GraphicsCommandList* commandList,co
 
 
 
-void BulletExplosionParticle::CopyData()
+void BulletSmokeParticle::CopyData()
 {
 
 	VertexPos* outPutDeta = nullptr;

@@ -63,7 +63,7 @@ public: // サブクラス
 	};
 
 	struct GpuParticleElement {
-		Vector3 position;
+		Vector4 position;
 		float scale = 1;
 		Vector4 color = { 1,1,1,1 };
 		UINT  isActive;	// 生存フラグ.

@@ -5,7 +5,7 @@
 /// </summary>
 struct PlayerAttackDamage
 {
-	const float NormalAttack = 30;
+	const float NormalAttack = 600;
 	const float MissileAttack = 120;
 	const float BladeAttack = 200;
 };
