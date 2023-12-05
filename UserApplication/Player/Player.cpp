@@ -293,18 +293,12 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 		if ( LockOn )
 		{
 			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
-			if ( playerMovement->GetIsRotFinish() )
-			{
-				playerExplosionGun->ShotBullet(EnemyPos);
-			}
+			playerExplosionGun->ShotBullet(EnemyPos);
 		}
 		else
 		{
 			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
-			if ( playerMovement->GetIsRotFinish() )
-			{
-				playerExplosionGun->ShotBullet(TargetPosition);
-			}
+			playerExplosionGun->ShotBullet(TargetPosition);
 		}
 	}
 

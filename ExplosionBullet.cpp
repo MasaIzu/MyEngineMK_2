@@ -20,7 +20,7 @@ ExplosionBullet::ExplosionBullet(const unsigned short Attribute_)
 
 	ParticleBulletSmoke = std::make_unique<BulletSmokeParticle>();
 	ParticleBulletSmoke->Initialize(particleCount);
-	ParticleBulletSmoke->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+	ParticleBulletSmoke->SetTextureHandle(TextureManager::Load("sprite/smoke1.png"));
 
 	HanabiExplosion = std::make_unique<ParticleHanabiExplosion>();
 	HanabiExplosion->Initialize(particleExCount);

@@ -59,7 +59,7 @@ void main(uint3 id : SV_DispatchThreadID)
     float4 color = gParticles[index].color;
     
     
-    color.x = color.x * Div + 0.01f;
+    color.x = color.x * Div;
     color.y = color.y * Div;
     color.z = color.z * Div;
     color.w = Div;
@@ -126,9 +126,9 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float colorMax = 100.0f;
     float colorMin = 1.0f;
-    float red = Rand1(seed, colorMax, colorMin) / 100.0f;
-    float green = Rand1(indexAdd, colorMax, colorMin) / 100.0f;
-    float blue = Rand1(indexDiv, colorMax, colorMin) / 20.0f;
+    float red = 1.0f;
+    float green = 1.0f;
+    float blue = 1.0f;
     
     float4 Position = pos;
     
