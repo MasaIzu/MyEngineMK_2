@@ -117,7 +117,7 @@ void Player::Update()
 		//回転させる
 		PlayerRot(isAttack,isBladeAttacking,isMissileAttack);
 
-		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking);
+		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
 
 
 		if ( isCameraModeNotFree == true )
@@ -141,7 +141,12 @@ void Player::Update()
 		//移動の値更新
 		WorldTransUpdate();
 	}
-	
+	else
+	{
+		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
+		//移動の値更新
+		WorldTransUpdate();
+	}
 
 	ImGui::Begin("Player");
 
@@ -314,6 +319,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 	//当たり判定チェック
 	CheckPlayerCollider();
+	
 
 	ImGui::Begin("PlayerLockOn");
 
@@ -614,6 +620,7 @@ void Player::HPUpdate()
 			PlayerHP = FloatNumber(fNumbers::fZero);//0固定
 			playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 			isAlive = false;
+			PlayerCollider->SetAttribute(COLLISION_ATTR_INVINCIBLE);
 		}
 	}
 }

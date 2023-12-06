@@ -12,11 +12,11 @@ PlayerMovement::~PlayerMovement()
 {
 }
 
-Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack)
+Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack,const bool& isAlive)
 {
 	playerAllMoveMent = Vec3Number(fNumbers::fZero);
 
-	if ( !isBladeAttack )
+	if ( !isBladeAttack && isAlive )
 	{
 		if ( pushKey.isPushMoveKey )
 		{
@@ -73,16 +73,16 @@ Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& on
 		}
 	}
 	
-	playerAllMoveMent += UpBoost(onGround,isBladeAttack);
+	playerAllMoveMent += UpBoost(onGround,isBladeAttack,isAlive);
 
 	BoostFuelUpdate(onGround);
 	return playerAllMoveMent;
 }
 
-Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack)
+Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack,const bool& isAlive)
 {
 	isBoost = false;
-	if ( !isBladeAttack )
+	if ( !isBladeAttack && isAlive )
 	{
 		if ( input_->PushKey(DIK_SPACE) )
 		{

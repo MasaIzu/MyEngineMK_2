@@ -12,9 +12,9 @@ public://基本関数
 	~PlayerMovement();
 
 	//Move
-	Vector3 Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack);
+	Vector3 Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack,const bool& isAlive);
 	//ブースト
-	Vector3 UpBoost(const bool& onGround,const bool& isBladeAttack);
+	Vector3 UpBoost(const bool& onGround,const bool& isBladeAttack,const bool& isAlive);
 	//Angle
 	void PlayerAngle(const bool& isAtack,const bool& isBladeAtack,const bool& isMissileAttack);
 	//スライディングマテリアル
