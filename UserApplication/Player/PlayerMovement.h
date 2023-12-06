@@ -16,7 +16,7 @@ public://基本関数
 	//ブースト
 	Vector3 UpBoost(const bool& onGround,const bool& isBladeAttack);
 	//Angle
-	void PlayerAngle(const bool& isAtack,const bool& isBladeAtack);
+	void PlayerAngle(const bool& isAtack,const bool& isBladeAtack,const bool& isMissileAttack);
 	//スライディングマテリアル
 	bool SlidingMaterial(const WorldTransform& worldTransform);
 	//スライディングアップデート

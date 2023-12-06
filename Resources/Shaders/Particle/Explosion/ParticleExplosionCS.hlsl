@@ -33,7 +33,6 @@ void main(uint3 id : SV_DispatchThreadID)
     if (gParticles[index].lifeTime <= 0)
     {
         gParticles[index].isActive = 0;
-        gDeadIndexList.Append(index);
         return;
     }
 
@@ -54,9 +53,9 @@ void main(uint3 id : SV_DispatchThreadID)
     float4 color = gParticles[index].color;
     
     
-    color.x = color.x * Div + 0.01f;
-    color.y = color.y * Div - 0.02f;
-    color.z = color.z * Div - 0.02f;
+    color.x = color.x - 0.07f;
+    color.y = color.y * Div;
+    color.z = color.z * Div;
     color.w = Div;
     
     //float scale = 0.8f * (gParticles[index].lifeTime / gParticles[index].maxLifeTime);
@@ -124,13 +123,13 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     if (PosRand == 1)
     {
         Position.x += 10.0f;
-        Position.y += 10.0f;
+        Position.y += 3.0f;
         Position.y += 5.0f;
     }
     else if (PosRand == 2)
     {
         Position.x -= 5.0f;
-        Position.y += 20.0f;
+        Position.y += 10.0f;
         Position.z -= 10.0f;
     }
     

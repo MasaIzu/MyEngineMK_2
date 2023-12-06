@@ -124,6 +124,7 @@ public: // メンバ関数
 
 	void SetDrawUpdate(const Vector2& Position,const Vector4& Color);
 
+	void SetRatio(const float& xRatio,const float& yRatio);
 
 	/// <summary>
 	/// 描画
@@ -147,6 +148,7 @@ private: // メンバ変数
 	bool isFlipY_ = false;//上下入れ替え
 	Vector2 texBase_ = { 0, 0 };
 	Vector2 texSize_ = { 100.0f, 100.0f };
+	Vector2 ratio = { 1.0f,1.0f };
 	D3D12_RESOURCE_DESC resourceDesc_ = {};
 
 private: // メンバ関数

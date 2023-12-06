@@ -86,53 +86,62 @@ void Player::Update()
 	isAttack = false;
 	isPressing = false;
 	isBladeAttack = false;
+	isMissileAttack = false;
 
 	Moved = playerWorldTrans.translation_;
-
-	//攻撃
-	if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) )
-	{
-		isAttack = true;
-	}
-	if ( isBladeAttacking == false )
-	{
-		if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) )
-		{
-			isBladeAttack = true;
-		}
-	}
 
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
 	HPUpdate();
 
-	//回転させる
-	PlayerRot(isAttack,isBladeAttacking);
-
-	playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking);
-
-
-	if ( isCameraModeNotFree == true )
+	if ( isAlive )
 	{
-		//カメラの位置でアルファが決まる
-		Alpha = FloatNumber(fNumbers::fOnePointZero) - ( FloatNumber(fNumbers::fOnePointZero) - PlayerToCameraDistance / CameraMaxDistance );
-		playerWorldTrans.alpha = Alpha;
-	}
-
-
-	if ( input_->TriggerKey(DIK_LSHIFT) )
-	{
-		if ( animation->GetNowAnimFinish() )
+		//攻撃
+		if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) )
 		{
-			DeterminationDirection();
+			isAttack = true;
 		}
+		if ( isBladeAttacking == false )
+		{
+			if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) )
+			{
+				isBladeAttack = true;
+			}
+		}
+		if ( input_->PushKey(DIK_E) )
+		{
+			isMissileAttack = true;
+		}
+
+		//回転させる
+		PlayerRot(isAttack,isBladeAttacking,isMissileAttack);
+
+		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking);
+
+
+		if ( isCameraModeNotFree == true )
+		{
+			//カメラの位置でアルファが決まる
+			Alpha = FloatNumber(fNumbers::fOnePointZero) - ( FloatNumber(fNumbers::fOnePointZero) - PlayerToCameraDistance / CameraMaxDistance );
+			playerWorldTrans.alpha = Alpha;
+		}
+
+
+		if ( input_->TriggerKey(DIK_LSHIFT) )
+		{
+			if ( animation->GetNowAnimFinish() )
+			{
+				DeterminationDirection();
+			}
+		}
+
+		SlideBoostUpdate();
+
+		//移動の値更新
+		WorldTransUpdate();
 	}
-
-	SlideBoostUpdate();
-
-	//移動の値更新
-	WorldTransUpdate();
+	
 
 	ImGui::Begin("Player");
 
@@ -142,7 +151,7 @@ void Player::Update()
 	ImGui::End();
 
 	//uiのアプデ
-	playerUI->Update(playerMovement->GetFuel());
+	playerUI->Update(playerMovement->GetFuel(),isAlive);
 
 	if ( input_->TriggerKey(DIK_F5) )
 	{
@@ -163,6 +172,15 @@ void Player::Update()
 	if ( input_->TriggerKey(DIK_N) )
 	{
 		ParticleExplosion->MakeParticle();
+	}
+
+	if ( playerUI->GetIsDieDirection() )
+	{
+		if ( isPlayerExplosion == false )
+		{
+			isPlayerExplosion = true;
+			ParticleExplosion->MakeParticle();
+		}
 	}
 
 	playerRotWorldTrans.translation_ = playerWorldTrans.translation_;
@@ -214,9 +232,12 @@ void Player::Draw()
 }
 
 void Player::FbxDraw() {
-	playerNormalGun->FbxDraw(*viewProjection_);
-	playerExplosionGun->FbxDraw(*viewProjection_);
-	animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
+	if ( !isPlayerExplosion )
+	{
+		playerNormalGun->FbxDraw(*viewProjection_);
+		playerExplosionGun->FbxDraw(*viewProjection_);
+		animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
+	}
 }
 
 
@@ -279,27 +300,13 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 	}
 
 
-	if ( isAttack == true )
+	if ( isAttack == true || isMissileAttack == true )
 	{
 		PlayerAttack(EnemyPos,LockOn);
 	}
 	else if ( isBladeAttack == true )
 	{
 		PlayerBladeAttack(EnemyPos,LockOn);
-	}
-
-	if ( input_->TriggerKey(DIK_E) )
-	{
-		if ( LockOn )
-		{
-			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
-			playerExplosionGun->ShotBullet(EnemyPos);
-		}
-		else
-		{
-			FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
-			playerExplosionGun->ShotBullet(TargetPosition);
-		}
 	}
 
 	playerUI->AttackReticleUpdate(LockOn);
@@ -322,7 +329,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	ParticleHanabi->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
-	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,0,0)));
+	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
 }
 
@@ -343,11 +350,11 @@ void Player::ParticleDraw()
 	playerExplosionGun->ParticleDraw(*viewProjection_);
 }
 
-void Player::PlayerRot(const bool& Attack,const bool& BladeAttack)
+void Player::PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& MissileAttack)
 {
-	playerMovement->PlayerAngle(Attack,BladeAttack);
+	playerMovement->PlayerAngle(Attack,BladeAttack,MissileAttack);
 	RotKeep = Vec3Number(fNumbers::fZero);
-	if ( !Attack && !BladeAttack )
+	if ( !Attack && !BladeAttack && !MissileAttack )
 	{
 		RotKeep = Vector3(FloatNumber(fNumbers::fZero),cameraRot.x + MyMath::GetAngle(playerMovement->GetPlayerAngle()),FloatNumber(fNumbers::fZero));
 		playerRotWorldTrans.SetRot(RotKeep);
@@ -370,7 +377,14 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
 		if ( playerMovement->GetIsRotFinish() )
 		{
-			playerNormalGun->ShotBullet(EnemyPos);
+			if ( isAttack )
+			{
+				playerNormalGun->ShotBullet(EnemyPos);
+			}
+			if ( isMissileAttack )
+			{
+				playerExplosionGun->ShotBullet(EnemyPos);
+			}
 		}
 	}
 	else
@@ -378,7 +392,14 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
 		if ( playerMovement->GetIsRotFinish() )
 		{
-			playerNormalGun->ShotBullet(TargetPosition);
+			if ( isAttack )
+			{
+				playerNormalGun->ShotBullet(TargetPosition);
+			}
+			if ( isMissileAttack )
+			{
+				playerExplosionGun->ShotBullet(TargetPosition);
+			}
 		}
 	}
 }

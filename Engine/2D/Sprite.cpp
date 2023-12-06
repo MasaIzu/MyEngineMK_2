@@ -420,6 +420,15 @@ void Sprite::SetDrawUpdate(const Vector2& Position,const Vector4& Color){
 	SetPosition(Position);
 }
 
+void Sprite::SetRatio(const float& xRatio,const float& yRatio)
+{
+	ratio.x = xRatio;
+	ratio.y = yRatio;
+
+	// 頂点バッファへのデータ転送
+	TransferVertices();
+}
+
 void Sprite::Draw(const Vector2& Position,const Vector4& Color,const int& blendMode) {
 
 	SetDrawUpdate(Position, Color);
@@ -461,10 +470,10 @@ void Sprite::TransferVertices() {
 	// 左下、左上、右下、右上
 	enum { LB, LT, RB, RT };
 
-	float left = (0.0f - anchorPoint_.x) * size_.x;
-	float right = (1.0f - anchorPoint_.x) * size_.x;
-	float top = (0.0f - anchorPoint_.y) * size_.y;
-	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+	float left = ( 0.0f - anchorPoint_.x ) * ( size_.x * ratio.x );
+	float right = (1.0f - anchorPoint_.x) * ( size_.x * ratio.x );
+	float top = ( 0.0f - anchorPoint_.y ) * ( size_.y * ratio.y );
+	float bottom = (1.0f - anchorPoint_.y) * ( size_.y * ratio.y );
 	if (isFlipX_) { // 左右入れ替え
 		left = -left;
 		right = -right;

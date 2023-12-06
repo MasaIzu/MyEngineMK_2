@@ -34,6 +34,6 @@ private://別クラスから値をもらう
 private://クラス変数
 	bool isExp = false;
 
-	uint32_t MaxParticle = 10000;
+	uint32_t MaxParticle = 5000;
 
 };

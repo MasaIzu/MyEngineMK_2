@@ -59,7 +59,7 @@ public://基本関数
 private:
 	
 	//プレイヤーの回転
-	void PlayerRot(const bool& Attack,const bool& BladeAttack);
+	void PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& isMissileAttack);
 	//プレーヤーの攻撃
 	void PlayerAttack(const Vector3& EnemyPos,bool& LockOn);
 	//プレーヤーの攻撃
@@ -171,6 +171,8 @@ private://プレイヤークラス変数
 	bool isBladeAttacking = false;
 	bool isPreparation = false;
 	bool isShotRightShoulder = false;
+	bool isMissileAttack = false;
+	bool isPlayerExplosion = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
@@ -201,7 +203,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 5000;
+	float PlayerHP = 500;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;

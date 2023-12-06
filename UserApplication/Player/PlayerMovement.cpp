@@ -131,7 +131,7 @@ Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack)
 	return FallVec;
 }
 
-void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack)
+void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack,const bool& isMissileAttack)
 {
 	pushKey.isPushW = false;
 	pushKey.isPushA = false;
@@ -141,7 +141,7 @@ void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack)
 	isRotFinish = false;
 	isPlayerAttack = isAtack;
 
-	if ( !isAtack && !isBladeAtack )
+	if ( !isAtack && !isBladeAtack && !isMissileAttack )
 	{
 		if ( input_->PushKey(DIK_W) )
 		{

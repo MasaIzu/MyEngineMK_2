@@ -14,7 +14,7 @@ public:
 	//初期化
 	void Initialize(const float& playerFuel);
 	//更新
-	void Update(const float& nowBoost);
+	void Update(const float& nowBoost,const bool& isAlive);
 	void AttackReticleUpdate(const bool& LockOn);
 	void PlayerHpUpdate(const float& nowHp,const float& MaxHp);
 	//描画
@@ -22,6 +22,8 @@ public:
 
 public:
 	void SetReticlePosition(const Vector2& position);
+
+	bool GetIsDieDirection();
 
 private:
 	const float HpBarMaxSize = 200.0f;
@@ -35,17 +37,24 @@ private:
 	std::unique_ptr<Sprite> HPBarBackBarSprite;
 	std::unique_ptr<Sprite> BoostBarSprite;
 	std::unique_ptr<Sprite> BoostBarBackBarSprite;
+	std::unique_ptr<Sprite> DieOutLineSprite;
+	std::unique_ptr<Sprite> DestroySprite;
 
 	std::unique_ptr<HpUpdate> hpUpdate;
 
 private:
 
 	bool isTimeAdvances = false;
+	bool isPlayerDieDisplay = false;
+	bool isMaxRatio = false;
+	bool isDieDirection = false;
 
 	uint32_t HpDownEasingTime = 0;
 	uint32_t HpDownMaxEasingTime = 60;
 	uint32_t EasingTimeInAdvance = 0;
 	uint32_t EasingTimeInMaxAdvance = 40;
+	uint32_t DieUIMaxDisplayTime = 60;
+	uint32_t DieUIDisplayTime = 0;
 
 	float HpDownBar = 0.0f;
 	float StartHpEasingPos = 0.0f;
@@ -58,6 +67,17 @@ private:
 	float ReeticleOutLineSize = 192.0f;
 	float AnchorPointOnePointFive = 0.5f;
 	float MaxBoostFuel = 0.0f;
+	float DieOutLineRatioX = 1.0f;
+	float DieOutLineRatioY = 0.0f;
+	float DieOutLineRatioYMaxRatio = 1.0f;
+	float DieOutLineRatioYMinRatio = 0.0f;
+	float AddRatio = 0.06f;
+	float SubRatio = 0.04f;
+	float SubAlpha = 0.06f;
+	float DieRed = 0.8f;
+	float DieGreen = 0.8f;
+	float DieBlue = 0.8f;
+	float DieAlpha = 0.0f;
 
 	Vector2 ReticlePosition = { 640,360 };
 	Vector2 KeepReticlePosition;
@@ -69,6 +89,7 @@ private:
 	Vector2 HpSize = { HpBarMaxSize,6.0f };
 	Vector2 BackHpDownSize = { HpBarMaxSize,6.0f };
 	Vector2 BoostFuelSize = { HpBarMaxSize,6.0f };
+	Vector2 DieBackLinePos = { 640,360 };
 
 	Vector4 WhiteColor = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 ReticleColor;
@@ -76,5 +97,6 @@ private:
 	Vector4 NotLockOnColor = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 HPDownBarColor;
 	Vector4 HPBarColor;
+	Vector4 DestroyColor = { 1.0f,1.0f,1.0f,1.0f };
 
 };
