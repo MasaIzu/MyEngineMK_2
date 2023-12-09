@@ -146,6 +146,15 @@ void Player::Update()
 		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
 		//移動の値更新
 		WorldTransUpdate();
+
+		if ( DieDirectionTimer < DieDirectionMaxTimer )
+		{
+			DieDirectionTimer++;
+		}
+		else
+		{
+			isDieDirectionFinish = true;
+		}
 	}
 
 	ImGui::Begin("Player");

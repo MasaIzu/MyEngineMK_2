@@ -394,6 +394,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BulletSmokeParticle.h" />
+    <ClInclude Include="DieScene.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ExplosionBullet.h" />
     <ClInclude Include="ExplosionGun.h" />
@@ -494,6 +495,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletSmokeParticle.cpp" />
+    <ClCompile Include="DieScene.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />

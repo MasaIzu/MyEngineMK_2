@@ -94,8 +94,8 @@ public://Setter
 	}
 public://Getter
 
-	bool GetFinishMove()const {//スプラインが終わったか
-		return isDieMoveFinish;
+	bool GetFinishDieDirection()const {
+		return isDieDirectionFinish;
 	}
 	Vector3 GetPlayerPos()const; //ポジションゲット
 
@@ -167,12 +167,12 @@ private://プレイヤークラス変数
 	bool isBladeAttack = false;
 	bool isAlive = true;
 	bool isDieMotion = false;
-	bool isDieMoveFinish = false;
 	bool isBladeAttacking = false;
 	bool isPreparation = false;
 	bool isShotRightShoulder = false;
 	bool isMissileAttack = false;
 	bool isPlayerExplosion = false;
+	bool isDieDirectionFinish = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
@@ -190,6 +190,8 @@ private://プレイヤークラス変数
 	uint32_t CenterLeftEnd = 73;
 	uint32_t LeftStart = 69;
 	uint32_t LeftEnd = 70;
+	uint32_t DieDirectionTimer = 0;
+	uint32_t DieDirectionMaxTimer = 80;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;

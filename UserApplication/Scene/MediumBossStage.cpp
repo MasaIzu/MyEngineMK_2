@@ -102,7 +102,7 @@ void MediumBossStage::Update()
 	}
 	else
 	{
-		if ( player_->GetFinishMove() == false )
+		if ( player_->GetFinishDieDirection() == false )
 		{
 			if ( SpriteAlpha > 0 )
 			{
@@ -117,7 +117,7 @@ void MediumBossStage::Update()
 			}
 			else
 			{
-				sceneManager_->ChangeScene("STAGE2");
+				sceneManager_->ChangeScene("STAGESELECT");
 			}
 		}
 	}

@@ -682,6 +682,9 @@
     <ClInclude Include="BulletSmokeParticle.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
+    <ClInclude Include="DieScene.h">
+      <Filter>UserFile\UserHeaderFile\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -935,6 +938,9 @@
     </ClCompile>
     <ClCompile Include="BulletSmokeParticle.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DieScene.cpp">
+      <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
