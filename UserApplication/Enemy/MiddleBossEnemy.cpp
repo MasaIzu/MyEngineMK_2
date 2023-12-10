@@ -64,6 +64,11 @@ MiddleBossEnemy::MiddleBossEnemy()
 	EnemyHedWorldTrans.scale_ = Vector3(BoneColRadius,BoneColRadius,BoneColRadius);
 	EnemyHedWorldTrans.Initialize();
 
+	enemyBoostParticle = std::make_unique<EnemyBoostParticle>();
+	int MaxParticleCountA = 50000;
+	enemyBoostParticle->Initialize(MaxParticleCountA);
+	enemyBoostParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -144,6 +149,11 @@ void MiddleBossEnemy::Update()
 	missileGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
+	EnemyBoostPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
+	EnemyBoostPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
+	EnemyBoostPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
 
@@ -174,6 +184,15 @@ void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_)
 	{
 		fbxObj3d_->Draw(BossWorldTrans,viewProjection_);
 	}
+}
+
+void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
+{
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
+	EnemyBoostParticle::PreDraw(commandList);
+	enemyBoostParticle->Draw(viewProjection_);
+	EnemyBoostParticle::PostDraw();
 }
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
@@ -252,6 +271,11 @@ void MiddleBossEnemy::ResetTitleMove()
 	isTitleShot = false;
 	isSporn = false;
 	MovieUpdateTimes = MaxMovieUpdateTimes;
+}
+
+void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+	enemyBoostParticle->CSUpdate(cmdList,EnemyBoostPos,BoostEndPower);
 }
 
 void MiddleBossEnemy::Timer()

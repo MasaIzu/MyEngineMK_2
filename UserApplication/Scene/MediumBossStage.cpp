@@ -59,7 +59,6 @@ void MediumBossStage::Update()
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
-
 	//if (player_->GetHowReturnSpline(5)) {
 
 	//	sceneManager_->ChangeScene("GAMEPLAY");
@@ -162,7 +161,7 @@ void MediumBossStage::Draw()
 	middleBossEnemy->FbxDraw(*viewProjection_.get());
 	player_->FbxDraw();
 
-
+	middleBossEnemy->ParticleDraw(*viewProjection_.get());
 	player_->ParticleDraw();
 
 
@@ -181,6 +180,7 @@ void MediumBossStage::Finalize()
 
 void MediumBossStage::CSUpdate()
 {
+	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 }
 

@@ -16,4 +16,12 @@ namespace MyStruct {
 		Vector4 BoostStartPos[ 4 ];
 		Vector4 BoostEndPos[ 4 ];
 	};
+
+	//敵のブースト用のパーティクル
+	struct EnemyBoostPos
+	{
+		Vector4 BoostStartPos[ 2 ];
+		Vector4 BoostEndPos[ 2 ];
+	};
+
 }

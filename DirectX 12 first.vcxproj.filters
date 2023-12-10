@@ -208,6 +208,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\Explosion">
       <UniqueIdentifier>{c13f0884-04ca-4404-b437-df27bd2867fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\EnemyBoost">
+      <UniqueIdentifier>{ca216ba1-817a-41fa-b659-46527536b6f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -254,6 +257,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticle.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +391,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticleCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticleGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticlePS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticleVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -685,6 +703,9 @@
     <ClInclude Include="DieScene.h">
       <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBoostParticle.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -941,6 +962,9 @@
     </ClCompile>
     <ClCompile Include="DieScene.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBoostParticle.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

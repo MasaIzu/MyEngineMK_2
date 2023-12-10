@@ -229,6 +229,8 @@ void Player::Update()
 	bonePos.BoostStartPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftStart) * playerRotWorldTrans.matWorld_));
 	bonePos.BoostEndPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftEnd) * playerRotWorldTrans.matWorld_));
 
+
+
 	DamageUI->Update();
 }
 

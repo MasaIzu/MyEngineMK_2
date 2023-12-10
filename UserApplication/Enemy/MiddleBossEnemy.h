@@ -11,6 +11,7 @@
 #include "EnemyHP3DUI.h"
 #include "EnemyHP2DUI.h"
 #include "Damage.h"
+#include "EnemyBoostParticle.h"
 
 /// <summary>
 /// 中ボス
@@ -38,6 +39,8 @@ public://基本関数
 	void Draw(const ViewProjection& viewProjection_);
 	//描画
 	void FbxDraw(const ViewProjection& viewProjection_);
+	//パーティクル描画
+	void ParticleDraw(const ViewProjection& viewProjection_);
 	//スプライト描画
 	void DrawSprite(const ViewProjection& viewProjection_);
 	//ムービー用更新
@@ -48,6 +51,8 @@ public://基本関数
 	void MakeTitleMissileBullet();
 	//タイトルリセット
 	void ResetTitleMove();
+	//CSアップデート
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 
 private://関数
 	//タイマー
@@ -105,6 +110,7 @@ private://クラス関連
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> HeriHaneModel_;
+	std::unique_ptr<EnemyBoostParticle> enemyBoostParticle;
 	WorldTransform BossWorldTrans;
 	WorldTransform HeriHaneLeftTrans;
 	WorldTransform HeriHaneRightTrans;
@@ -179,6 +185,10 @@ private://EnemyBossクラス変数
 	uint32_t BulletMake = 10;
 	uint32_t DownCount = 0;
 	uint32_t MaxDownCount = 60;
+	uint32_t BoostPosLeftStart = 8;
+	uint32_t BoostPosLeftEnd = 9;
+	uint32_t BoostPosRightStart = 10;
+	uint32_t BoostPosRightEnd = 11;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -205,6 +215,7 @@ private://EnemyBossクラス変数
 	float NormalGunBackCol = 10.0f;
 	float MaxMiddleBossHp = 7000.0f;
 	float MiddleBossHp = MaxMiddleBossHp;
+	float BoostEndPower = 0.7f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 
@@ -223,4 +234,6 @@ private://EnemyBossクラス変数
 	std::array<AttackType,AttackedKeepCount>oldAttackType;
 
 	std::vector<Vector3> BackPoints{};
+	MyStruct::EnemyBoostPos EnemyBoostPos;
+
 };
