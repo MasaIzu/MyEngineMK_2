@@ -45,7 +45,7 @@ void main(uint3 id : SV_DispatchThreadID)
     BoostEndPos = boostPos.StartPos[number] + BoostEndPos;
     float3 LookVelocity = normalize(BoostEndPos.xyz - position);
     float3 velocity = gParticles[index].velocity.xyz;
-    velocity = lerp(velocity, LookVelocity, 0.19f);
+    velocity = lerp(velocity, LookVelocity, 0.2f);
     
     velocity *= speed;
     position += velocity;
@@ -111,7 +111,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     float TimerMin = 60.0f;
     float LifeTime = Rand1(indexAdd, TimerMax, TimerMin) * nextRand1(seed);
     
-    float speed = (1.1f - (LifeTime / TimerMax)) * 1.0f;
+    float speed = (1.1f - (LifeTime / TimerMax)) * 0.9f;
     
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = float3(boostPos.StartPos[gParticles[index].boostNumber].xyz);

@@ -64,10 +64,14 @@ MiddleBossEnemy::MiddleBossEnemy()
 	EnemyHedWorldTrans.scale_ = Vector3(BoneColRadius,BoneColRadius,BoneColRadius);
 	EnemyHedWorldTrans.Initialize();
 
-	enemyBoostParticle = std::make_unique<EnemyBoostParticle>();
+	enemyBoostParticleLeft = std::make_unique<EnemyBoostParticle>();
 	int MaxParticleCountA = 50000;
-	enemyBoostParticle->Initialize(MaxParticleCountA);
-	enemyBoostParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+	enemyBoostParticleLeft->Initialize(MaxParticleCountA);
+	enemyBoostParticleLeft->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	enemyBoostParticleRight = std::make_unique<EnemyBoostParticle>();
+	enemyBoostParticleRight->Initialize(MaxParticleCountA);
+	enemyBoostParticleRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	for ( auto&& old : oldAttackType )
 	{
@@ -149,10 +153,15 @@ void MiddleBossEnemy::Update()
 	missileGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
-	EnemyBoostPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
-	EnemyBoostPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
-	EnemyBoostPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
-	EnemyBoostPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackEnd) * BossWorldTrans.matWorld_));
+
+	EnemyBoostRightPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackEnd) * BossWorldTrans.matWorld_));
 
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
@@ -191,7 +200,8 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
 	EnemyBoostParticle::PreDraw(commandList);
-	enemyBoostParticle->Draw(viewProjection_);
+	enemyBoostParticleLeft->Draw(viewProjection_);
+	enemyBoostParticleRight->Draw(viewProjection_);
 	EnemyBoostParticle::PostDraw();
 }
 
@@ -275,7 +285,8 @@ void MiddleBossEnemy::ResetTitleMove()
 
 void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
-	enemyBoostParticle->CSUpdate(cmdList,EnemyBoostPos,BoostEndPower);
+	enemyBoostParticleLeft->CSUpdate(cmdList,EnemyBoostLeftPos,BoostEndPower);
+	enemyBoostParticleRight->CSUpdate(cmdList,EnemyBoostRightPos,BoostEndPower);
 }
 
 void MiddleBossEnemy::Timer()

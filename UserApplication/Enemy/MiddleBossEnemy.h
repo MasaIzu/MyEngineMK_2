@@ -110,7 +110,8 @@ private://クラス関連
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> HeriHaneModel_;
-	std::unique_ptr<EnemyBoostParticle> enemyBoostParticle;
+	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleLeft;
+	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleRight;
 	WorldTransform BossWorldTrans;
 	WorldTransform HeriHaneLeftTrans;
 	WorldTransform HeriHaneRightTrans;
@@ -187,8 +188,12 @@ private://EnemyBossクラス変数
 	uint32_t MaxDownCount = 60;
 	uint32_t BoostPosLeftStart = 8;
 	uint32_t BoostPosLeftEnd = 9;
-	uint32_t BoostPosRightStart = 10;
-	uint32_t BoostPosRightEnd = 11;
+	uint32_t BoostPosLeftBackStart = 10;
+	uint32_t BoostPosLeftBackEnd = 11;
+	uint32_t BoostPosRightStart = 12;
+	uint32_t BoostPosRightEnd = 13;
+	uint32_t BoostPosRightBackStart = 14;
+	uint32_t BoostPosRightBackEnd = 15;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -234,6 +239,6 @@ private://EnemyBossクラス変数
 	std::array<AttackType,AttackedKeepCount>oldAttackType;
 
 	std::vector<Vector3> BackPoints{};
-	MyStruct::EnemyBoostPos EnemyBoostPos;
-
+	MyStruct::EnemyBoostPos EnemyBoostLeftPos;
+	MyStruct::EnemyBoostPos EnemyBoostRightPos;
 };
