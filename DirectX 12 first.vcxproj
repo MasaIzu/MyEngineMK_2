@@ -64,7 +64,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI;$(ProjectDir)Engine\Light</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\2D;$(ProjectDir)Engine\3D;$(ProjectDir)Engine\Base;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine\Collision;$(ProjectDir)Engine\Drawing;$(ProjectDir)Engine\Framework;$(ProjectDir)Engine\GameFunction;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Scene;$(ProjectDir)Engine\Sound;$(ProjectDir)Engine\ImGui;$(ProjectDir)UserApplication\Ground;$(ProjectDir)UserApplication\Base;$(ProjectDir)UserApplication\Enemy;$(ProjectDir)UserApplication\Scene;$(ProjectDir)UserApplication\Skydome;$(ProjectDir)UserApplication\Player;$(ProjectDir);$(ProjectDir)External\imgui;$(ProjectDir)Engine\LevelEditor;$(ProjectDir)UserApplication\UserCamera;$(ProjectDir)Engine\3DEffect;$(ProjectDir)UserApplication\Bullet;$(ProjectDir)UserApplication\UI;$(ProjectDir)Engine\Light</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -421,6 +421,11 @@
     <ClInclude Include="BulletSmokeParticle.h" />
     <ClInclude Include="DieScene.h" />
     <ClInclude Include="EnemyBoostParticle.h" />
+    <ClInclude Include="Engine\Light\CircleShadow.h" />
+    <ClInclude Include="Engine\Light\DirectionalLight.h" />
+    <ClInclude Include="Engine\Light\LightGroup.h" />
+    <ClInclude Include="Engine\Light\PointLight.h" />
+    <ClInclude Include="Engine\Light\SpotLight.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ExplosionBullet.h" />
     <ClInclude Include="ExplosionGun.h" />
@@ -464,7 +469,6 @@
     <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
     <ClInclude Include="UserApplication\Enemy\EnemyBullet.h" />
     <ClInclude Include="Engine\Math\Easing.h" />
-    <ClInclude Include="Engine\3D\Light.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\Model.h" />
     <ClInclude Include="Engine\3D\WorldTransform.h" />
@@ -523,6 +527,7 @@
     <ClCompile Include="BulletSmokeParticle.cpp" />
     <ClCompile Include="DieScene.cpp" />
     <ClCompile Include="EnemyBoostParticle.cpp" />
+    <ClCompile Include="Engine\Light\LightGroup.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />
@@ -562,7 +567,6 @@
     <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />
     <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Engine\Math\Easing.cpp" />
-    <ClCompile Include="Engine\3D\Light.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\Model.cpp" />
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />

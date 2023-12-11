@@ -4,7 +4,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Mesh.h"
-#include "Light.h"
+#include "LightGroup.h"
 
 #include "Vector2.h"
 #include "Vector3.h"

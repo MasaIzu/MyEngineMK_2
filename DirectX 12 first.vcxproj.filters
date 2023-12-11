@@ -211,6 +211,12 @@
     <Filter Include="ResourceFile\Shaders\Particle\EnemyBoost">
       <UniqueIdentifier>{ca216ba1-817a-41fa-b659-46527536b6f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\HeaderFile\Light">
+      <UniqueIdentifier>{332373b1-8279-4fe7-8454-ec15e0ebe8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\SourceFile\Light">
+      <UniqueIdentifier>{7a7cb620-9bda-4594-9bc3-ab1236f6fceb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -450,9 +456,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\WinApp.h">
       <Filter>Engine\HeaderFile\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3D\Light.h">
-      <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\Mesh.h">
       <Filter>Engine\HeaderFile\3D</Filter>
@@ -706,6 +709,21 @@
     <ClInclude Include="EnemyBoostParticle.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Light\CircleShadow.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\LightGroup.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\PointLight.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\SpotLight.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\DirectionalLight.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -743,9 +761,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\FPS.cpp">
       <Filter>Engine\SourceFile\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3D\Light.cpp">
-      <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3D\Mesh.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
@@ -965,6 +980,9 @@
     </ClCompile>
     <ClCompile Include="EnemyBoostParticle.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\LightGroup.cpp">
+      <Filter>Engine\SourceFile\Light</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
