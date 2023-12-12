@@ -29,6 +29,9 @@ void Framework::Initialize()
 	TextureManager_->Initialize(directXCore_->GetDevice());
 	TextureManager::Load("white1x1.png");
 
+	//ライト静的初期化
+	LightGroup::StaticInitialize(directXCore_->GetDevice());
+
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(directXCore_->GetDevice());
 	// デバイスをセット

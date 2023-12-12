@@ -2,100 +2,68 @@
 #include <DirectXMath.h>
 #include <d3d12.h>
 #include <wrl.h>
+#include "Vector4.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 class DirectionalLight {
-private: //Ã“Iƒƒ“ƒo•Ï”
-//ƒfƒoƒCƒX
+private: //é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
+//ãƒ‡ãƒã‚¤ã‚¹
 	static ID3D12Device* device;
 
-private://ƒGƒCƒŠƒAƒX
-		//Microsoft::WRL::‚ğÈ—ª
-	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-	//DirecX::‚ğÈ—ª
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMVECTOR = DirectX::XMVECTOR;
-	using XMMATRIX = DirectX::XMMATRIX;
-
-public://ƒTƒuƒNƒ‰ƒX@
-	//’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢
+public://ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã€€
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
 	struct ConstBufferData
 	{
-		XMVECTOR lightv; //ƒ‰ƒCƒg‚Ö‚Ì•ûŒü‚ğ•\‚·ƒxƒNƒgƒ‹
-		XMFLOAT3 lightcolor; //ƒ‰ƒCƒg‚ÌF
+		Vector4 lightv; //ãƒ©ã‚¤ãƒˆã¸ã®æ–¹å‘ã‚’è¡¨ã™ãƒ™ã‚¯ãƒˆãƒ«
+		Vector3 lightcolor; //ãƒ©ã‚¤ãƒˆã®è‰²
 		unsigned int active;
 	};
 
-	HRESULT result;
-
-public://Ã“IƒƒCƒoŠÖ”
-	/// <summary>
-	/// Ã“I‰Šú‰»
-	/// </summary>
-	static void StaticInitialize(ID3D12Device* device);
+public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// ãƒ©ã‚¤ãƒˆæ–¹å‘ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
-	void Initialize();
+	void SetLightDir(const Vector4& lightdir_)
+	{
+		//æ­£è¦åŒ–ã—ã¦ã‚»ãƒƒãƒˆ
+		this->lightdir = lightdir_.Vector3Normalization();
+	}
 
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@“]‘—
+	/// ãƒ©ã‚¤ãƒˆè‰²ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
-	void TransferConstBuffer();
+	void SetLightColor(const Vector3& lightcolor_)
+	{
+		this->lightcolor = lightcolor_;
+	}
 
 	/// <summary>
-	/// ƒ‰ƒCƒg•ûŒü‚ğƒZƒbƒg
+	/// æœ‰åŠ¹ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
-	void SetLightDir(const XMVECTOR& lightdir);
-
-	/// <summary>
-	/// ƒ‰ƒCƒgF‚ğƒZƒbƒg
-	/// </summary>
-	void SetLightColor(const XMFLOAT3& lightcolor);
-
-	/// <summary>
-	/// XV
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// •`‰æ
-	/// </summary>
-	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
-
-	/// <summary>
-	/// —LŒøƒtƒ‰ƒO‚ğƒZƒbƒg
-	/// </summary>
-	/// <param name="active">—LŒøƒtƒ‰ƒO</param>
-	inline void SetActive(bool active) { this->active = active; }
+	/// <param name="active">æœ‰åŠ¹ãƒ•ãƒ©ã‚°</param>
+	inline void SetActive(bool active_) { this->active = active_; }
 
 	
 	/// <summary>
-	/// —LŒøƒ`ƒFƒbƒN
+	/// æœ‰åŠ¹ãƒã‚§ãƒƒã‚¯
 	/// </summary>
-	/// <returns>—LŒøƒtƒ‰ƒO</returns>
+	/// <returns>æœ‰åŠ¹ãƒ•ãƒ©ã‚°</returns>
 	inline bool IsActive() { return active; }
 
-	XMVECTOR GetLightDir() { return lightdir; }
-	XMFLOAT3 GetLightColor() { return lightcolor; }
+	Vector4 GetLightDir() { return lightdir; }
+	Vector3 GetLightColor() { return lightcolor; }
 
-	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬
-	/// </summary>
-	static DirectionalLight* Create();
-private://ƒƒ“ƒo•Ï”
-	//’è”ƒoƒbƒtƒ@
-	ComPtr<ID3D12Resource> constBuff;
-	//ƒ‰ƒCƒgŒõü•ûŒü
-	XMVECTOR lightdir = { 1,0,0,0 };
-	//ƒ‰ƒCƒgF
-	XMFLOAT3 lightcolor = { 1,1,1, };
-	//ƒ_[ƒeƒBƒtƒ‰ƒO
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
+	//ãƒ©ã‚¤ãƒˆå…‰ç·šæ–¹å‘
+	Vector4 lightdir = { 1,0,0,0 };
+	//ãƒ©ã‚¤ãƒˆè‰²
+	Vector3 lightcolor = { 1,1,1 };
+	//ãƒ€ãƒ¼ãƒ†ã‚£ãƒ•ãƒ©ã‚°
 	bool dirty = false;
 
-	//—LŒøƒtƒ‰ƒO
-	bool active = false;
+	//æœ‰åŠ¹ãƒ•ãƒ©ã‚°
+	bool active = true;
 };
 

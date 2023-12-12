@@ -429,6 +429,7 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ExplosionBullet.h" />
     <ClInclude Include="ExplosionGun.h" />
+    <ClInclude Include="LightData.h" />
     <ClInclude Include="ParticleHanabiExplosion.h" />
     <ClInclude Include="UserApplication\Player\Animation.h" />
     <ClInclude Include="UserApplication\UI\ClearUI.h" />
@@ -531,6 +532,7 @@
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />
+    <ClCompile Include="LightData.cpp" />
     <ClCompile Include="ParticleHanabiExplosion.cpp" />
     <ClCompile Include="UserApplication\Player\Animation.cpp" />
     <ClCompile Include="UserApplication\UI\ClearUI.cpp" />

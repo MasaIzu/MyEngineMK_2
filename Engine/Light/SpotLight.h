@@ -1,72 +1,62 @@
 #pragma once
-
-#include <DirectXMath.h>
+#include "Vector4.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 /// <summary>
-/// ƒXƒ|ƒbƒgƒ‰ƒCƒg
+/// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
 /// </summary>
 class SpotLight {
-private://ƒGƒCƒŠƒAƒX
-	//Microsoft::WRL::‚ğÈ—ª
-	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-	//DirecX::‚ğÈ—ª
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMVECTOR = DirectX::XMVECTOR;
-	using XMMATRIX = DirectX::XMMATRIX;
 
-
-public://ƒTƒuƒNƒ‰ƒX
+public://ã‚µãƒ–ã‚¯ãƒ©ã‚¹
 	struct ConstBufferData
 	{
-		XMVECTOR lightv;
-		XMFLOAT3 lightpos;
+		Vector4 lightv;
+		Vector3 lightpos;
 		float pad1;
-		XMFLOAT3 lightcolor;
+		Vector3 lightcolor;
 		float pad2;
-		XMFLOAT3 lightatten;
+		Vector3 lightatten;
 		float pad3;
-		XMFLOAT2 lightfactoranglecos;
+		Vector2 lightfactoranglecos;
 		unsigned int active;
 		float pad4;
 		
 	};
 
 public:
-	//ƒƒ“ƒoŠÖ”
-
-	inline void SetLightDir(const XMVECTOR& lightdir) { this->lightdir = DirectX::XMVector3Normalize(lightdir); }
-	inline const XMVECTOR& GetLightDir() { return lightdir; }
-	inline void SetLightPos(const XMFLOAT3& lightpos) { this->lightpos = lightpos; }
-	inline const XMFLOAT3& GetLightPos() { return lightpos; }
-	inline void SetLightColor(const XMFLOAT3& lightcolor) { this->lightcolor = lightcolor; }
-	inline const XMFLOAT3& GetLightColor() { return lightcolor; }
-	inline void SetLightAtten(const XMFLOAT3& lightAtten) { this->lightAtten = lightAtten; }
-	inline const XMFLOAT3& GetLightAtten() { return lightAtten; }
-	inline void SetLightFactorAngle(const XMFLOAT2& lightFactorAngle) {
-		this->lightFactorAngleCos.x = cosf(DirectX::XMConvertToRadians(lightFactorAngle.x));
-		this->lightFactorAngleCos.y = cosf(DirectX::XMConvertToRadians(lightFactorAngle.y));
+	//ãƒ¡ãƒ³ãƒé–¢æ•°
+	inline void SetLightDir(const Vector4& lightdir_) { this->lightdir = lightdir_.Vector3Normalization(); }
+	inline const Vector4& GetLightDir() { return lightdir; }
+	inline void SetLightPos(const Vector3& lightpos_) { this->lightpos = lightpos_; }
+	inline const Vector3& GetLightPos() { return lightpos; }
+	inline void SetLightColor(const Vector3& lightcolor_) { this->lightcolor = lightcolor_; }
+	inline const Vector3& GetLightColor() { return lightcolor; }
+	inline void SetLightAtten(const Vector3& lightAtten_) { this->lightAtten = lightAtten_; }
+	inline const Vector3& GetLightAtten() { return lightAtten; }
+	inline void SetLightFactorAngle(const Vector2& lightFactorAngle_) {
+		this->lightFactorAngleCos.x = cosf(DirectX::XMConvertToRadians(lightFactorAngle_.x));
+		this->lightFactorAngleCos.y = cosf(DirectX::XMConvertToRadians(lightFactorAngle_.y));
 	}
-	inline const XMFLOAT2& GetLightFactorAngleCos() { return lightFactorAngleCos; }
-	inline void SetActive(bool active) { this->active = active; }
+	inline const Vector2& GetLightFactorAngleCos() { return lightFactorAngleCos; }
+	inline void SetActive(bool active_) { this->active = active_; }
 	inline bool IsActive() { return active; }
 
 
 private:
 
-	//ƒ‰ƒCƒg‚Ì•ûŒü
-	XMVECTOR lightdir = { 1,0,0,0 };
-	//ƒ‰ƒCƒgÀ•W
-	XMFLOAT3 lightpos = { 0,0,0 };
-	//ƒ‰ƒCƒg‚ÌF
-	XMFLOAT3 lightcolor = { 1,1,1 };
-	//ƒ‰ƒCƒg‚Ì‹——£Œ¸ŠŒW”
-	XMFLOAT3 lightAtten = { 1.0f,1.0f,1.0f };
-	//ƒ‰ƒCƒgŒ¸ŠŠp“x
-	XMFLOAT2 lightFactorAngleCos = { 0.5f,0.2f };
-	//—LŒøƒtƒ‰ƒO
-	bool active = false;
+	//ãƒ©ã‚¤ãƒˆã®æ–¹å‘
+	Vector4 lightdir = { 1,0,0,0 };
+	//ãƒ©ã‚¤ãƒˆåº§æ¨™
+	Vector3 lightpos = { 0,0,0 };
+	//ãƒ©ã‚¤ãƒˆã®è‰²
+	Vector3 lightcolor = { 1,1,1 };
+	//ãƒ©ã‚¤ãƒˆã®è·é›¢æ¸›è¡°ä¿‚æ•°
+	Vector3 lightAtten = { 1.0f,1.0f,1.0f };
+	//ãƒ©ã‚¤ãƒˆæ¸›è¡°è§’åº¦
+	Vector2 lightFactorAngleCos = { 0.5f,0.2f };
+	//æœ‰åŠ¹ãƒ•ãƒ©ã‚°
+	bool active = true;
 
 
 };

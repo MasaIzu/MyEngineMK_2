@@ -20,25 +20,10 @@ float4 main(GSOutput input) : SV_TARGET
 	// シェーディングによる色
 	float4 shadecolor = float4(ambientColor * ambient, m_alpha);
 
-	// 平行光源
-	for (int i = 0; i < DIRLIGHT_NUM; i++) {
-		if (dirLights[i].active) {
-			// ライトに向かうベクトルと法線の内積
-			float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
-			// 反射光ベクトル
-			float3 reflect = normalize(-dirLights[i].lightv + 2 * dotlightnormal * input.normal);
-			// 拡散反射光
-			float3 diffuse = dotlightnormal * m_diffuse;
-			// 鏡面反射光
-			float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
-
-			// 全て加算する
-			shadecolor.rgb += (diffuse + specular) * dirLights[i].lightcolor;
-		}
-	}
 
 	// 点光源
-	for (i = 0; i < POINTLIGHT_NUM; i++) {
+    for (int i = 0; i < pointLightCount; i++)
+    {
 		if (pointLights[i].active) {
 			// ライトへの方向ベクトル
 			float3 lightv = pointLights[i].lightpos - input.worldpos.xyz;
@@ -63,7 +48,8 @@ float4 main(GSOutput input) : SV_TARGET
 	}
 
 	// スポットライト
-	for (i = 0; i < SPOTLIGHT_NUM; i++) {
+    for (int i = 0; i < spotLightCount; i++)
+    {
 		if (spotLights[i].active) {
 			// ライトへの方向ベクトル
 			float3 lightv = spotLights[i].lightpos - input.worldpos.xyz;
@@ -96,7 +82,8 @@ float4 main(GSOutput input) : SV_TARGET
 	}
 
 	// 丸影
-	for (i = 0; i < CIRCLESHADOW_NUM; i++) {
+    for (int i = 0; i < circleShadowCount; i++)
+    {
 		if (circleShadows[i].active) {
 			// オブジェクト表面からキャスターへのベクトル
 			float3 casterv = circleShadows[i].casterPos - input.worldpos.xyz;

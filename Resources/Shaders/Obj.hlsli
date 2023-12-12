@@ -16,18 +16,8 @@ cbuffer Material : register(b2) {
 	float3 m_specular : packoffset(c2); // スペキュラー係数
 }
 
-// 平行光源の数
-static const int DIRLIGHT_NUM = 3;
-
-struct DirLight
-{
-	float3 lightv;    // ライトへの方向の単位ベクトル
-	float3 lightcolor;    // ライトの色(RGB)
-	uint active;
-};
-
 // 点光源の数
-static const int POINTLIGHT_NUM = 3;
+static const int POINTLIGHT_MAXNUM = 30;
 
 struct PointLight
 {
@@ -38,7 +28,7 @@ struct PointLight
 };
 
 // スポットライトの数
-static const int SPOTLIGHT_NUM = 3;
+static const int SPOTLIGHT_MAXNUM = 30;
 
 struct SpotLight
 {
@@ -51,7 +41,7 @@ struct SpotLight
 };
 
 // 丸影の数
-static const int CIRCLESHADOW_NUM = 3;
+static const int CIRCLESHADOW_MAXNUM = 3;
 
 struct CircleShadow
 {
@@ -66,10 +56,16 @@ struct CircleShadow
 cbuffer LightGroup : register(b3)
 {
 	float3 ambientColor;
-	DirLight dirLights[DIRLIGHT_NUM];
-	PointLight pointLights[POINTLIGHT_NUM];
-	SpotLight spotLights[SPOTLIGHT_NUM];
-	CircleShadow circleShadows[CIRCLESHADOW_NUM];
+    float pad;
+	
+    uint pointLightCount;
+    uint spotLightCount;
+    uint circleShadowCount;
+    float pad2;
+	
+    PointLight pointLights[POINTLIGHT_MAXNUM];
+    SpotLight spotLights[SPOTLIGHT_MAXNUM];
+    CircleShadow circleShadows[CIRCLESHADOW_MAXNUM];
 }
 
 cbuffer PolygonExplosion: register(b4)

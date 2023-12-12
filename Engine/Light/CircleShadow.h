@@ -1,70 +1,61 @@
 #pragma once
-
-#include<DirectXMath.h>
+#include "Vector4.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 /// <summary>
-/// ä€âe
+/// ‰∏∏ÂΩ±
 /// </summary>
 class CircleShadow {
 
-private://ÉGÉCÉäÉAÉX
-	//Microsoft::WRL::Çè»ó™
-	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-	//DirecX::Çè»ó™
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMVECTOR = DirectX::XMVECTOR;
-	using XMMATRIX = DirectX::XMMATRIX;
-
 public:
-	//ÉTÉuÉNÉâÉX
+	//„Çµ„Éñ„ÇØ„É©„Çπ
 	struct ConstBufferData {
-		XMVECTOR dir;
-		XMFLOAT3 casterPos;
+		Vector4 dir;
+		Vector3 casterPos;
 		float distanceCasterLight;
-		XMFLOAT3 atten;
+		Vector3 atten;
 		float pad3;
-		XMFLOAT2 factorAngleCos;
+		Vector2 factorAngleCos;
 		unsigned int active;
 		float pad4;
 	};
 	
 public:
-	//ÉÅÉìÉoä÷êî
+	//„É°„É≥„ÉêÈñ¢Êï∞
 
-	inline void SetDir(const XMVECTOR& dir) { this->dir = DirectX::XMVector3Normalize(dir); }
-	inline const XMVECTOR& GetDir() { return dir; }
+	inline void SetDir(const Vector4& dir_) { this->dir = dir_.Vector3Normalization(); }
+	inline const Vector4& GetDir() { return dir; }
 
-	inline void SetCasterPos(const XMFLOAT3& casterPos) { this->casterPos = casterPos; }
-	inline const XMFLOAT3& GetCasterPos() { return casterPos; }
+	inline void SetCasterPos(const Vector3& casterPos_) { this->casterPos = casterPos_; }
+	inline const Vector3& GetCasterPos() { return casterPos; }
 
-	inline void SetDistanceCasterLight(float distanceCasterLight) { this->distanceCasterLight = distanceCasterLight; }
+	inline void SetDistanceCasterLight(const float& distanceCasterLight_) { this->distanceCasterLight = distanceCasterLight_; }
 	inline float GetDistanceCasterLight() { return distanceCasterLight; }
+	
+	inline void SetAtten(const Vector3& atten_) { this->atten = atten_; }
+	inline const Vector3& GetAtten() { return atten; }
 
-	inline void SetAtten(const XMFLOAT3& atten) { this->atten = atten; }
-	inline const XMFLOAT3& GetAtten() { return atten; }
-
-	inline void SetFactorAngle(const XMFLOAT2& factorAngle) {
-		this->factorAngleCos.x = cosf(DirectX::XMConvertToRadians(factorAngle.x));
-		this->factorAngleCos.y = cosf(DirectX::XMConvertToRadians(factorAngle.y));
+	inline void SetFactorAngle(const Vector2& factorAngle_) {
+		this->factorAngleCos.x = cosf(DirectX::XMConvertToRadians(factorAngle_.x));
+		this->factorAngleCos.y = cosf(DirectX::XMConvertToRadians(factorAngle_.y));
 	}
 
-	inline const XMFLOAT2& GetFactorAngleCos() { return factorAngleCos; }
-	inline void SetActive(bool active) { this->active = active; }
+	inline const Vector2& GetFactorAngleCos() { return factorAngleCos; }
+	inline void SetActive(const bool& active_) { this->active = active_; }
 	inline bool IsActive() { return active; }
 
 private:
-	//ï˚å¸
-	XMVECTOR dir = { 1,0,0,0 };
+	//ÊñπÂêë
+	Vector4 dir = { 1,0,0,0 };
 
 	float distanceCasterLight = 100.0f;
 
-	XMFLOAT3 casterPos = { 0,0,0 };
+	Vector3 casterPos = { 0,0,0 };
 
-	XMFLOAT3 atten = { 0.5f,0.6f,0.0f };
+	Vector3 atten = { 0.5f,0.6f,0.0f };
 
-	XMFLOAT2 factorAngleCos = { 0.2f,0.5f };
+	Vector2 factorAngleCos = { 0.2f,0.5f };
 
 	bool active = false;
 

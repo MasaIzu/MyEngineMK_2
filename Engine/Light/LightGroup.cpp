@@ -7,15 +7,15 @@ using namespace DirectX;
 /// </summary>
 ID3D12Device* LightGroup::device = nullptr;
 
-void LightGroup::StaticInitialize(ID3D12Device* device)
+void LightGroup::StaticInitialize(ID3D12Device* device_)
 {
 	//最初期化チェック
 	assert(!LightGroup::device);
 
 	//nullチェック
-	assert(device);
+	assert(device_);
 
-	LightGroup::device = device;
+	LightGroup::device = device_;
 
 }
 
@@ -30,7 +30,6 @@ LightGroup* LightGroup::Create()
 
 void LightGroup::Initialize()
 {
-	DefaultLightSetting();
 	// ヒープ設定
 	D3D12_HEAP_PROPERTIES cbHeapProp{};
 	cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
@@ -74,15 +73,19 @@ void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterInde
 
 void LightGroup::TransferConstBuffer()
 {
-	HRESULT result;
 	//定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->ambientColor = ambientColor;
 
+		constMap->dirLightCount = static_cast< uint32_t >( dirLights.size() );
+		constMap->pointLightCount = static_cast< uint32_t >( pointLights.size() );
+		constMap->spotLightCount = static_cast< uint32_t >( spotLights.size() );
+		constMap->circleShadowCount = static_cast< uint32_t >( circleShadows.size() );
+
 		//平行ライト
-		for (int i = 0; i < DirLightNum; i++) {
+		for (int i = 0; i < dirLights.size(); i++) {
 			//ライトが有効なら設定を転送
 			if (dirLights[i].IsActive()) {
 				constMap->dirLights[i].active = 1;
@@ -95,7 +98,7 @@ void LightGroup::TransferConstBuffer()
 
 		}
 		//点ライト
-		for (int i = 0; i < PointLightNum; i++) {
+		for (int i = 0; i < pointLights.size(); i++) {
 			if (pointLights[i].IsActive()) {
 				constMap->pointLights[i].active = 1;
 				constMap->pointLights[i].lightpos = pointLights[i].GetLightPos();
@@ -107,7 +110,7 @@ void LightGroup::TransferConstBuffer()
 			}
 		}
 		//スポットライト
-		for (int i = 0; i < SpotLightNum; i++) {
+		for (int i = 0; i < spotLights.size(); i++) {
 			//ライトが有効なら設定を転送
 			if (spotLights[i].IsActive()) {
 				constMap->spotLights[i].active = 1;
@@ -122,7 +125,7 @@ void LightGroup::TransferConstBuffer()
 			}
 		}
 		//丸影
-		for (int i = 0; i < CircleShadowNum; i++) {
+		for (int i = 0; i < circleShadows.size(); i++) {
 			//有効なら設定を転送
 			if (circleShadows[i].IsActive()) {
 				constMap->circleShadows[i].active = 1;
@@ -139,22 +142,5 @@ void LightGroup::TransferConstBuffer()
 
 		constBuff->Unmap(0, nullptr);
 	}
-
-}
-
-void LightGroup::DefaultLightSetting()
-{
-
-	dirLights[0].SetActive(true);
-	dirLights[0].SetLightColor({ 1.0f,1.0f,1.0f });
-	dirLights[0].SetLightDir({ 0.0f,-1.0f,0.0f,0 });
-
-	dirLights[1].SetActive(true);
-	dirLights[1].SetLightColor({ 1.0f,1.0f,1.0f });
-	dirLights[1].SetLightDir({ +0.5f,+0.1f,+0.2f,0 });
-
-	dirLights[2].SetActive(true);
-	dirLights[2].SetLightColor({ 1.0f,1.0f,1.0f });
-	dirLights[2].SetLightDir({ -0.5f,+0.1f,-0.2f,0 });
 
 }
