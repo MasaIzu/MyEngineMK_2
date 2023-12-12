@@ -79,24 +79,10 @@ void LightGroup::TransferConstBuffer()
 	if (SUCCEEDED(result)) {
 		constMap->ambientColor = ambientColor;
 
-		constMap->dirLightCount = static_cast< uint32_t >( dirLights.size() );
 		constMap->pointLightCount = static_cast< uint32_t >( pointLights.size() );
 		constMap->spotLightCount = static_cast< uint32_t >( spotLights.size() );
 		constMap->circleShadowCount = static_cast< uint32_t >( circleShadows.size() );
 
-		//平行ライト
-		for (int i = 0; i < dirLights.size(); i++) {
-			//ライトが有効なら設定を転送
-			if (dirLights[i].IsActive()) {
-				constMap->dirLights[i].active = 1;
-				constMap->dirLights[i].lightv = -dirLights[i].GetLightDir();
-				constMap->dirLights[i].lightcolor = dirLights[i].GetLightColor();
-			}
-			else {
-				constMap->dirLights[i].active = 0;
-			}
-
-		}
 		//点ライト
 		for (int i = 0; i < pointLights.size(); i++) {
 			if (pointLights[i].IsActive()) {
