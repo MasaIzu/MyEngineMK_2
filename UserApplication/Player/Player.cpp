@@ -7,6 +7,7 @@
 #include <SphereCollider.h>
 #include "CollisionAttribute.h"
 #include "Numbers.h"
+#include "LightData.h"
 
 Player::Player()
 {
@@ -79,6 +80,8 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
+
+	LightData::GetInstance()->AddPointLight(playerWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
 }
 
 void Player::Update()

@@ -724,6 +724,9 @@
     <ClInclude Include="Engine\Light\DirectionalLight.h">
       <Filter>Engine\HeaderFile\Light</Filter>
     </ClInclude>
+    <ClInclude Include="LightData.h">
+      <Filter>Engine\HeaderFile\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -982,6 +985,9 @@
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Light\LightGroup.cpp">
+      <Filter>Engine\SourceFile\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LightData.cpp">
       <Filter>Engine\SourceFile\Light</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,6 +10,7 @@
 #include "Skydome.h"
 #include "MiddleBossEnemy.h"
 #include "ClearUI.h"
+#include "LightData.h"
 
 // 中ボスシーン
 class MediumBossStage : public BaseScene

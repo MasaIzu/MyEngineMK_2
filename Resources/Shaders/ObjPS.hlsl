@@ -48,7 +48,7 @@ float4 main(GSOutput input) : SV_TARGET
 	}
 
 	// スポットライト
-    for (int i = 0; i < spotLightCount; i++)
+    for (i = 0; i < spotLightCount; i++)
     {
 		if (spotLights[i].active) {
 			// ライトへの方向ベクトル
@@ -82,7 +82,7 @@ float4 main(GSOutput input) : SV_TARGET
 	}
 
 	// 丸影
-    for (int i = 0; i < circleShadowCount; i++)
+    for (i = 0; i < circleShadowCount; i++)
     {
 		if (circleShadows[i].active) {
 			// オブジェクト表面からキャスターへのベクトル

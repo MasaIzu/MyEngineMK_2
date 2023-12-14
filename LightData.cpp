@@ -19,10 +19,17 @@ void LightData::Destroy() {
 void LightData::Initialize()
 {
 	lightGroup = std::make_unique<LightGroup>();
+	lightGroup->Initialize();
 }
 
 void LightData::Update()
 {
+	lightGroup->Update();
+}
+
+LightData::~LightData()
+{
+
 }
 
 uint32_t LightData::AddPointLight(const Vector3& lightpos_,const Vector3& lightcolor_,const Vector3& lightAtten_,const bool& active_)

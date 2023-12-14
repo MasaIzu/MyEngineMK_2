@@ -21,6 +21,14 @@ public://基本関数
 	//更新
 	void Update();
 
+private:
+	LightData() = default;
+	~LightData();
+	LightData(const LightData&) = delete;
+	const LightData& operator=(const LightData&) = delete;
+
+	static LightData* LightData_;
+
 private://メンバ関数
 
 public://Setter
@@ -60,16 +68,12 @@ public://Getter
 private://クラス関連
 	std::unique_ptr<LightGroup> lightGroup;
 
-	static LightData* LightData_;
 private://イーナムクラス
 
 private://別クラスから値をもらう
 
 private://クラス変数
-	LightData() = default;
-	~LightData();
-	LightData(const LightData&) = delete;
-	const LightData& operator=(const LightData&) = delete;
+	
 	
 
 };

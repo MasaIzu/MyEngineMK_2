@@ -10,6 +10,7 @@ MediumBossStage::MediumBossStage()
 
 MediumBossStage::~MediumBossStage()
 {
+	LightData::GetInstance()->Destroy();
 	collisionManager->AllClearCollider();
 }
 
@@ -18,6 +19,8 @@ void MediumBossStage::Initialize()
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
+
+	LightData::GetInstance()->Initialize();
 
 	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
 
@@ -128,6 +131,9 @@ void MediumBossStage::Update()
 
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
+
+	LightData::GetInstance()->Update();
+
 }
 
 void MediumBossStage::PostEffectDraw()
