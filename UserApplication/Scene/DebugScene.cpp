@@ -9,11 +9,12 @@
 #include "Collision.h"
 #include"PostEffect.h"
 #include"WinApp.h"
+#include <LightData.h>
 
 
 DebugScene::DebugScene() {}
 DebugScene::~DebugScene() {
-
+	LightData::GetInstance()->Destroy();
 }
 
 void DebugScene::Initialize() {
@@ -30,11 +31,11 @@ void DebugScene::Initialize() {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
-	model.reset(Model::CreateFromOBJ("sphere", true));
-	//model1.reset(Model::CreateFromOBJ("Ground", true));
+	model.reset(Model::CreateFromOBJ("Ground", true));
+	model1.reset(Model::CreateFromOBJ("Ground", true));
 
 	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("stage2",Vector3(0,0,0));
+	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
@@ -108,6 +109,8 @@ void DebugScene::Update() {
 
 	bool fal = false;
 	player_->AttackUpdate(Vector3(0,0,0),fal);
+
+	LightData::GetInstance()->Update();
 }
 
 void DebugScene::PostEffectDraw()
@@ -158,14 +161,10 @@ void DebugScene::Draw() {
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
-	ParticleCS::PreDraw(commandList);
-
-
-
-	ParticleCS::PostDraw();
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
+	//model->Draw(worldTransform_,*viewProjection_.get());
 	//ground->Draw(*viewProjection_);
 	levelData->Draw(*viewProjection_.get());
 	//3Dオブジェクト描画後処理
@@ -173,11 +172,6 @@ void DebugScene::Draw() {
 
 	player_->FbxDraw();
 
-	ParticleHandHanabi::PreDraw(commandList);
-
-	player_->ParticleDraw();
-
-	ParticleHandHanabi::PostDraw();
 
 #pragma endregion
 

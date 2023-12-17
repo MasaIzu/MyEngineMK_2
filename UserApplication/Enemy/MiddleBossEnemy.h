@@ -194,6 +194,12 @@ private://EnemyBossクラス変数
 	uint32_t BoostPosRightEnd = 13;
 	uint32_t BoostPosRightBackStart = 14;
 	uint32_t BoostPosRightBackEnd = 15;
+	uint32_t LightLeftOne = 0;
+	uint32_t LightLeftTwo = 0;
+	uint32_t LightRightOne = 0;
+	uint32_t LightRightTwo = 0;
+	uint32_t LightBoostLeft = 0;
+	uint32_t LightBoostRight = 0;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -234,6 +240,12 @@ private://EnemyBossクラス変数
 	Vector3 DownVelocity;
 	Vector3 Coladjustment = { 0,3,0 };
 	Vector3 HaneColadjustment = { 0,7,0 };
+	Vector3 normalGunLeftPos;
+	Vector3 normalGunRightPos;
+	Vector3 missileGunLeftPos;
+	Vector3 missileGunRightPos;
+	Vector3 EnemyBoostLeftPosLight;
+	Vector3 EnemyBoostRightPosLight;
 
 	AttackType attackType = AttackType::NotAttack;
 	std::array<AttackType,AttackedKeepCount>oldAttackType;

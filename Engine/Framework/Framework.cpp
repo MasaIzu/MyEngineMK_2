@@ -5,7 +5,7 @@
 #include <Sprite3D.h>
 #include <FbxLoader.h>
 #include <FBXObject3d.h>
-
+#include "LightData.h"
 
 void Framework::Initialize()
 {
@@ -31,6 +31,7 @@ void Framework::Initialize()
 
 	//ライト静的初期化
 	LightGroup::StaticInitialize(directXCore_->GetDevice());
+	LightData::GetInstance()->StaticInitialize();
 
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(directXCore_->GetDevice());

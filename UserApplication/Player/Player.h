@@ -192,6 +192,7 @@ private://プレイヤークラス変数
 	uint32_t LeftEnd = 70;
 	uint32_t DieDirectionTimer = 0;
 	uint32_t DieDirectionMaxTimer = 80;
+	uint32_t PointLightCount = 0;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;

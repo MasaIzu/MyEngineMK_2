@@ -20,8 +20,6 @@ void MediumBossStage::Initialize()
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
 
-	LightData::GetInstance()->Initialize();
-
 	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
 
 	skydome = std::make_unique<Skydome>();

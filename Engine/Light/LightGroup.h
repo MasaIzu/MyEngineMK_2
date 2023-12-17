@@ -10,10 +10,13 @@
 #include "Vector3.h"
 #include "Vector2.h"
 #include <vector>
+#include <memory>
 
 class LightGroup
 {
 public://サブクラス
+	const static uint32_t lightCount = 30;
+	const static uint32_t shadowCount = 3;
 	struct ConstBufferData
 	{
 		Vector3 ambientColor;
@@ -25,11 +28,11 @@ public://サブクラス
 		float pad2;
 
 		//点光源用
-		std::vector<PointLight::ConstBufferData> pointLights;
+		PointLight::ConstBufferData pointLights[ lightCount ];
 		//スポットライト用
-		std::vector<SpotLight::ConstBufferData> spotLights;
+		SpotLight::ConstBufferData spotLights[ lightCount ];
 		//丸影用
-		std::vector<CircleShadow::ConstBufferData> circleShadows;
+		CircleShadow::ConstBufferData circleShadows[ shadowCount ];
 	};
 	HRESULT result;
 
@@ -93,12 +96,28 @@ public:
 		return static_cast< uint32_t >( circleShadows.size() - 1 );
 	}
 
+	void SetPointLightUpdate(const PointLight& pointLight,const uint32_t& lightNumbar) {
+		dirty = true;
+		pointLights[ lightNumbar ] = pointLight;
+	}
+
+	void SetSpotLightUpdate(const SpotLight& spotLight,const uint32_t& lightNumbar) {
+		dirty = true;
+		spotLights[ lightNumbar ] = spotLight;
+	}
+
+	void SetCircleShadowUpdate(const CircleShadow& circleShadow,const uint32_t& shadowNumbar) {
+		dirty = true;
+		circleShadows[ shadowNumbar ] = circleShadow;
+	}
+
+
 private:
 	//メンバ変数
 	//定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff;
 	//環境光の色
-	Vector3 ambientColor = { 0.3f,0.3f,0.3f };
+	Vector3 ambientColor = { 0.8f,0.8f,0.8f };
 
 	//点光源の配列
 	std::vector<PointLight> pointLights;

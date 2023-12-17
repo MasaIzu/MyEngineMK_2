@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <Easing.h>
 #include <Numbers.h>
+#include "LightData.h"
 
 MiddleBossEnemy::MiddleBossEnemy()
 {
@@ -73,6 +74,14 @@ MiddleBossEnemy::MiddleBossEnemy()
 	enemyBoostParticleRight->Initialize(MaxParticleCountA);
 	enemyBoostParticleRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	LightLeftOne = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+	LightLeftTwo = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+	LightRightOne = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+	LightRightTwo = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+
+	LightBoostLeft = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+	LightBoostRight = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -103,7 +112,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 		MiddleBossCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYS);
 		MiddleBossCollider[ i ]->Update(BossWorldTrans.matWorld_);
 	}
-	
+
 }
 
 void MiddleBossEnemy::Update()
@@ -148,10 +157,15 @@ void MiddleBossEnemy::Update()
 	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
 	HeriHaneRightTrans.TransferMatrix();
 
-	normalGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Two )) * BossWorldTrans.matWorld_),Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Four )) * BossWorldTrans.matWorld_),Vector3(0,MyMath::GetAngle(Angle),0));
-	missileGunLeft->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
-	missileGunRight->Update(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_),player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Two )) * BossWorldTrans.matWorld_);
+	normalGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Four )) * BossWorldTrans.matWorld_);
+	missileGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_);
+	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
+
+	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunLeft->Update(missileGunLeftPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunRight->Update(missileGunRightPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
 	EnemyBoostLeftPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
 	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
@@ -165,6 +179,13 @@ void MiddleBossEnemy::Update()
 
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
+
+	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
 
 	ColTransUpdate();//当たり判定の場所アップデート
 	ColUpdate();//当たり判定のアップデート

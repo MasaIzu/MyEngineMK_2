@@ -5,6 +5,7 @@
 #include <d3dcompiler.h>
 #include <fstream>
 #include <sstream>
+#include <LightData.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -597,7 +598,7 @@ void Model::Draw(
 	const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
 	// ライトの描画
-	lightGroup->Draw(sCommandList_, 4);
+	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,4);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
@@ -616,7 +617,7 @@ void Model::Draw(
 	const uint32_t& textureHadle) {
 
 	// ライトの描画
-	lightGroup->Draw(sCommandList_, 4);
+	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,4);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());

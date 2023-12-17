@@ -81,7 +81,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
-	LightData::GetInstance()->AddPointLight(playerWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
 }
 
 void Player::Update()
@@ -231,7 +230,6 @@ void Player::Update()
 	bonePos.BoostEndPos[ 2 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(CenterLeftEnd) * playerRotWorldTrans.matWorld_));
 	bonePos.BoostStartPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftStart) * playerRotWorldTrans.matWorld_));
 	bonePos.BoostEndPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftEnd) * playerRotWorldTrans.matWorld_));
-
 
 
 	DamageUI->Update();
