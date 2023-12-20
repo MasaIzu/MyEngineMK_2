@@ -332,7 +332,6 @@ void MiddleBossEnemy::TitleMovieUpdate(const Vector3& startPos,Vector3& endPos)
 	
 	if ( isTurn )
 	{
-
 		if ( RotTime > static_cast< uint32_t >( Numbers::Zero ) )
 		{
 			RotTime--;
@@ -411,6 +410,7 @@ void MiddleBossEnemy::ResetTitleMove()
 {
 	isTitleShot = false;
 	isSporn = false;
+	Angle = FloatNumber(fNumbers::fZero);
 	MovieUpdateTimes = MaxMovieUpdateTimes;
 }
 
