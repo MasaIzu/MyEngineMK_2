@@ -18,6 +18,11 @@ void LightData::Destroy() {
 	delete lightGroup;
 }
 
+void LightData::ClearLight()
+{
+	lightGroup->ClearLight();
+}
+
 void LightData::StaticInitialize()
 {
 	lightGroup = new LightGroup;
@@ -57,10 +62,11 @@ uint32_t LightData::AddSpotLight(const Vector3& lightpos_,const Vector4& lightdi
 	return lightGroup->SetSpotLight(spotLight);
 }
 
-uint32_t LightData::AddCircleShadow(const Vector3& casterPos_,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_)
+uint32_t LightData::AddCircleShadow(const Vector3& casterPos_,const float& distanceCasterLight, const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_)
 {
 	CircleShadow circleShadow;
 	circleShadow.SetCasterPos(casterPos_);
+	circleShadow.SetDistanceCasterLight(distanceCasterLight);
 	circleShadow.SetDir(dir_);
 	circleShadow.SetAtten(atten_);
 	circleShadow.SetFactorAngle(factorAngle_);
@@ -92,10 +98,11 @@ void LightData::UpdateSpotLight(const uint32_t& LightNumbar,const Vector3& light
 	lightGroup->SetSpotLightUpdate(spotLight,LightNumbar);
 }
 
-void LightData::UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& casterPos_,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_)
+void LightData::UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& casterPos_,const float& distanceCasterLight,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_)
 {
 	CircleShadow circleShadow;
 	circleShadow.SetCasterPos(casterPos_);
+	circleShadow.SetDistanceCasterLight(distanceCasterLight);
 	circleShadow.SetDir(dir_);
 	circleShadow.SetAtten(atten_);
 	circleShadow.SetFactorAngle(factorAngle_);

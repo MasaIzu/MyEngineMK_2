@@ -4,6 +4,7 @@
 #include "Vector4.h"
 #include <Sprite.h>
 #include "HpUpdate.h"
+#include "PlayerOperationUI.h"
 
 class PlayerUI
 {
@@ -41,7 +42,7 @@ private:
 	std::unique_ptr<Sprite> DestroySprite;
 
 	std::unique_ptr<HpUpdate> hpUpdate;
-
+	std::unique_ptr<PlayerOperationUI> playerOperationUI;
 private:
 
 	bool isTimeAdvances = false;

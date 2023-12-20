@@ -139,12 +139,6 @@ void MiddleBossEnemy::Update()
 		AliveUpdate();
 	}
 
-	ImGui::Begin("EnemyBosssss");
-
-	ImGui::Text("DownVelocity = %f,%f,%f",DownVelocity.x,DownVelocity.y,DownVelocity.z);
-
-	ImGui::End();
-
 
 	WorldTransUpdate();
 	HeriHaneRotYLeft += HeriHaneRotSpeed;
@@ -272,13 +266,129 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
 	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
 	HeriHaneRightTrans.TransferMatrix();
-	missileGunLeft->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
-	missileGunRight->Update(BossWorldTrans.translation_,Vector3(0,0,0),Vector3(0,0,0));
+
+	normalGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Two )) * BossWorldTrans.matWorld_);
+	normalGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Four )) * BossWorldTrans.matWorld_);
+	missileGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_);
+	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
+
+	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
+
+	EnemyBoostLeftPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackEnd) * BossWorldTrans.matWorld_));
+
+	EnemyBoostRightPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackEnd) * BossWorldTrans.matWorld_));
+
+	enemyHP2DUI->Update();
+	enemyHP3DUI->Update();
+
+	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
 
 	ColTransUpdate();//当たり判定の場所アップデート
-	ColUpdate();//当たり判定のアップデート
 
 	return false;
+}
+
+void MiddleBossEnemy::TitleMovieUpdate(const Vector3& startPos,Vector3& endPos)
+{
+	if ( isSporn == false )
+	{
+		isSporn = true;
+		BossWorldTrans.translation_ = startPos;
+		EndPos = endPos;
+		Vector3 startToEnd = endPos - startPos;
+		Velocity = startToEnd / MaxMovieUpdateTimes;
+		isTurn = true;
+	}
+	else
+	{
+		if ( MovieUpdateTimes > 0.0f )
+		{
+
+			MovieUpdateTimes -= 1.0f;
+			BossWorldTrans.translation_ += Velocity;
+			AngleSize = MyMath::Get2VecAngle(BossWorldTrans.translation_ + BossWorldTrans.LookVelocity.look,Vector3(0,0,0));
+
+			RotTime = static_cast< uint32_t >( AngleSize / RotSpeed );
+		}
+		else
+		{
+			isTurn = true;
+		}
+	}
+	
+	if ( isTurn )
+	{
+
+		if ( RotTime > static_cast< uint32_t >( Numbers::Zero ) )
+		{
+			RotTime--;
+			Angle += RotSpeed;
+		}
+		else
+		{
+			isTurn = false;
+		}
+
+		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
+
+	}
+
+	WorldTransUpdate();
+	HeriHaneRotYLeft += HeriHaneRotSpeed;
+	HeriHaneLeftTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::One )) * BossWorldTrans.matWorld_);
+	HeriHaneLeftTrans.SetRot(Vector3(0,HeriHaneRotYLeft + MyMath::GetAngle(Angle),0));
+	HeriHaneLeftTrans.TransferMatrix();
+
+	HeriHaneRotYRight -= HeriHaneRotSpeed;
+	HeriHaneRightTrans.translation_ = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Zero )) * BossWorldTrans.matWorld_);
+	HeriHaneRightTrans.SetRot(Vector3(0,HeriHaneRotYRight + MyMath::GetAngle(Angle),0));
+	HeriHaneRightTrans.TransferMatrix();
+
+	normalGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Two )) * BossWorldTrans.matWorld_);
+	normalGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Four )) * BossWorldTrans.matWorld_);
+	missileGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_);
+	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
+
+	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
+	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
+
+	EnemyBoostLeftPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackEnd) * BossWorldTrans.matWorld_));
+
+	EnemyBoostRightPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackStart) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackEnd) * BossWorldTrans.matWorld_));
+
+	enemyHP2DUI->Update();
+	enemyHP3DUI->Update();
+
+	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+
+	ColTransUpdate();//当たり判定の場所アップデート
 }
 
 void MiddleBossEnemy::TitleUpdate(const Vector3& TrackingLocation)

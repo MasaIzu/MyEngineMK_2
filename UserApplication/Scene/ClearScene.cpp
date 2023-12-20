@@ -10,6 +10,14 @@ void ClearScene::Initialize()
 
 	ResultDetail = Sprite::Create(TextureManager::Load("sprite/ResultDetail.png"));
 
+	PushSprite = Sprite::Create(TextureManager::Load("sprite/Push.png"));
+	PushSprite->SetSize(PushSpriteSize);
+	SpaceSprite = Sprite::Create(TextureManager::Load("sprite/Spacekey.png"));
+	SpaceSprite->SetSize(SpaceSpriteSize);
+
+	ASprite = Sprite::Create(TextureManager::Load("sprite/ABotan.png"));
+	ASprite->SetSize(ASpriteSize);
+
 	sceneManager_ = SceneManager::GetInstance();
 
 }
@@ -17,7 +25,7 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
-	if (input->TriggerKey(DIK_SPACE))
+	if (input->TriggerKey(DIK_SPACE) || input->ButtonInput(A) )
 	{
 		isSceneChange = true;
 	}
@@ -51,6 +59,15 @@ void ClearScene::Draw()
 {
 	Result->Draw({ 640,360 }, { 1,1,1,1 });
 	ResultDetail->Draw({ 640,400 },{ 1,1,1,1 });
+	PushSprite->Draw(PushSpritePos,{ 1,1,1,1 });
+	if ( Input::GetInstance()->GetIsControllerConnection() )
+	{
+		ASprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
+	else
+	{
+		SpaceSprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 

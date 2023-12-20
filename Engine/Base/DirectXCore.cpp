@@ -37,13 +37,6 @@ DirectXCore::~DirectXCore() {
 	dsvHeap.Reset();
 	fence.Reset();
 
-	//ID3D12DebugDevice* debugInterface;
-
-	//if (SUCCEEDED(device->QueryInterface(&debugInterface))) {
-	//	debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
-	//	debugInterface->Release();
-	//}
-
 	device.Reset();
 
 }

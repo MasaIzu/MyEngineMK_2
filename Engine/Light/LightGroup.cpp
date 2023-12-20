@@ -71,6 +71,13 @@ void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterInde
 		constBuff->GetGPUVirtualAddress());
 }
 
+void LightGroup::ClearLight()
+{
+	pointLights.clear();
+	spotLights.clear();
+	circleShadows.clear();
+}
+
 void LightGroup::TransferConstBuffer()
 {
 	//定数バッファへデータ転送

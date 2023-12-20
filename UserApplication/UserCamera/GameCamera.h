@@ -112,6 +112,7 @@ private://プレイヤークラス変数
 	Vector2 Mous_UP_DOWN;
 	Vector2 MouseMove;
 	Vector2 mouseMoved{ 0, MyMath::PI };
+	Vector2 ConVec;
 
 	Vector3 rot;
 	Vector3 eye;

@@ -43,6 +43,11 @@ void Input::Destroy()
 	delete Input_;
 }
 
+bool Input::GetIsControllerConnection()
+{
+	return controller->GetIsControllerConnection();
+}
+
 void Input::Initialize()
 {
 	WinApp* winApp = WinApp::GetInstance();
@@ -71,6 +76,8 @@ void Input::Initialize()
 	//マウスデバイスの初期化
 	mouse = std::make_unique<Mouse>();
 	mouse->Initialize(dInput_.Get());
+
+	controller = std::make_unique<Controller>();
 }
 
 void Input::Update()
@@ -86,6 +93,9 @@ void Input::Update()
 
 	//マウス更新
 	mouse->Update();
+
+	//コントローラーデバイスの更新
+	controller->Update();
 }
 
 bool Input::PushKey(const BYTE& keyNumber)
@@ -144,4 +154,53 @@ const Vector2 Input::GetMousePos()const
 const Vector3 Input::GetMouseMove()
 {
 	return mouse->GetMouseMove();
+}
+
+bool Input::PButtonTrigger(ControllerButton button)
+{
+	return controller->ButtonTrigger(button);
+}
+
+bool Input::PStickTrigger(ControllerStick stickInput,const float& deadRange,const Vector2& deadRate)
+{
+	return controller->StickTrigger(stickInput,deadRange,deadRate);
+}
+
+bool Input::ButtonInput(ControllerButton button)
+{
+	return controller->ButtonInput(button);
+}
+
+bool Input::StickInput(ControllerStick stickInput,const float& deadRange,const Vector2& deadRate)
+{
+	return controller->StickInput(stickInput,deadRange,deadRate);
+}
+
+bool Input::LeftStickInput(const float& deadRange) {
+	return controller->LeftStickInput(deadRange);
+}
+
+bool Input::ButtonOffTrigger(ControllerButton button)
+{
+	return controller->ButtonOffTrigger(button);
+}
+
+bool Input::StickOffTrigger(ControllerStick stickInput,const float& deadRange,const Vector2& deadRate)
+{
+	return controller->StickOffTrigger(stickInput,deadRange,deadRate);
+}
+
+Vector2 Input::GetLeftStickVec(const Vector2& deadRate)
+{
+	return  controller->GetLeftStickVec(deadRate);
+}
+
+Vector2 Input::GetRightStickVec(const Vector2& deadRate)
+{
+	return controller->GetRightStickVec(deadRate);
+}
+
+void Input::ShakeController(const float& power,const int& span)
+{
+	controller->ShakeController(power,span);
 }

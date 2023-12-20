@@ -421,6 +421,7 @@
     <ClInclude Include="BulletSmokeParticle.h" />
     <ClInclude Include="DieScene.h" />
     <ClInclude Include="EnemyBoostParticle.h" />
+    <ClInclude Include="Engine\GameFunction\Controller.h" />
     <ClInclude Include="Engine\Light\CircleShadow.h" />
     <ClInclude Include="Engine\Light\DirectionalLight.h" />
     <ClInclude Include="Engine\Light\LightGroup.h" />
@@ -431,6 +432,7 @@
     <ClInclude Include="ExplosionGun.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="ParticleHanabiExplosion.h" />
+    <ClInclude Include="PlayerOperationUI.h" />
     <ClInclude Include="UserApplication\Player\Animation.h" />
     <ClInclude Include="UserApplication\UI\ClearUI.h" />
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h" />
@@ -528,12 +530,14 @@
     <ClCompile Include="BulletSmokeParticle.cpp" />
     <ClCompile Include="DieScene.cpp" />
     <ClCompile Include="EnemyBoostParticle.cpp" />
+    <ClCompile Include="Engine\GameFunction\Controller.cpp" />
     <ClCompile Include="Engine\Light\LightGroup.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="ExplosionBullet.cpp" />
     <ClCompile Include="ExplosionGun.cpp" />
     <ClCompile Include="LightData.cpp" />
     <ClCompile Include="ParticleHanabiExplosion.cpp" />
+    <ClCompile Include="PlayerOperationUI.cpp" />
     <ClCompile Include="UserApplication\Player\Animation.cpp" />
     <ClCompile Include="UserApplication\UI\ClearUI.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp" />

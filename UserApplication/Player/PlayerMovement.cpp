@@ -29,44 +29,44 @@ Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& on
 		}
 		else
 		{
-			if ( input_->PushKey(DIK_W) )
+			if ( input_->PushKey(DIK_W) || input_->StickInput(L_UP) )
 			{
 				pushKey.isPushW = true;
 				pushKey.isPushMoveKey = true;
 				playerAllMoveMent = worldTransform.LookVelocity.look.norm();
 			}
-			if ( input_->PushKey(DIK_S) )
+			if ( input_->PushKey(DIK_S) || input_->StickInput(L_DOWN) )
 			{
 				pushKey.isPushS = true;
 				pushKey.isPushMoveKey = true;
 				playerAllMoveMent = worldTransform.LookVelocity.lookBack.norm();
 			}
-			if ( input_->PushKey(DIK_A) )
+			if ( input_->PushKey(DIK_A) || input_->StickInput(L_LEFT) )
 			{
 				pushKey.isPushA = true;
 				pushKey.isPushMoveKey = true;
 				playerAllMoveMent = worldTransform.LookVelocity.lookLeft.norm();
 			}
-			if ( input_->PushKey(DIK_D) )
+			if ( input_->PushKey(DIK_D) || input_->StickInput(L_RIGHT) )
 			{
 				pushKey.isPushD = true;
 				pushKey.isPushMoveKey = true;
 				playerAllMoveMent = worldTransform.LookVelocity.lookRight.norm();
 			}
 
-			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
+			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_UP) && input_->StickInput(L_LEFT) )
 			{
 				playerAllMoveMent = worldTransform.LookVelocity.look_lookLeft.norm();
 			}
-			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
+			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_UP) && input_->StickInput(L_RIGHT) )
 			{
 				playerAllMoveMent = worldTransform.LookVelocity.look_lookRight.norm();
 			}
-			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
+			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_LEFT) )
 			{
 				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookLeft.norm();
 			}
-			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
+			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_RIGHT) )
 			{
 				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
 			}
@@ -84,7 +84,7 @@ Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack,c
 	isBoost = false;
 	if ( !isBladeAttack && isAlive )
 	{
-		if ( input_->PushKey(DIK_SPACE) )
+		if ( input_->PushKey(DIK_SPACE) || input_->ButtonInput(A) )
 		{
 			if ( FuelUsedUpBoost <= Fuel )
 			{
@@ -121,13 +121,6 @@ Vector3 PlayerMovement::UpBoost(const bool& onGround,const bool& isBladeAttack,c
 
 	FallVec.y = UpBoostSpeed + FallSpeed;
 
-	ImGui::Begin("Movement");
-
-	ImGui::Text("upBoostSpeed = %f",UpBoostSpeed);
-	ImGui::Text("fallSpeed = %f",FallSpeed);
-	ImGui::Text("FallVec = %f",FallVec.y);
-	ImGui::End();
-
 	return FallVec;
 }
 
@@ -143,28 +136,28 @@ void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack,co
 
 	if ( !isAtack && !isBladeAtack && !isMissileAttack )
 	{
-		if ( input_->PushKey(DIK_W) )
+		if ( input_->PushKey(DIK_W) || input_->StickInput(L_UP) )
 		{
 			pushKey.isPushW = true;
 			pushKey.isPushMoveKey = true;
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.Front);
 		}
-		if ( input_->PushKey(DIK_S) )
+		if ( input_->PushKey(DIK_S) || input_->StickInput(L_DOWN) )
 		{
 			pushKey.isPushS = true;
 			pushKey.isPushMoveKey = true;
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.Back);
 		}
-		if ( input_->PushKey(DIK_A) )
+		if ( input_->PushKey(DIK_A) || input_->StickInput(L_LEFT) )
 		{
 			pushKey.isPushA = true;
 			pushKey.isPushMoveKey = true;
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.Left);
 		}
-		if ( input_->PushKey(DIK_D) )
+		if ( input_->PushKey(DIK_D) || input_->StickInput(L_RIGHT) )
 		{
 			pushKey.isPushD = true;
 			pushKey.isPushMoveKey = true;
@@ -172,22 +165,22 @@ void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack,co
 			PlayerAngleSetter(playerMoveRot.Right);
 		}
 
-		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_UP) && input_->StickInput(L_LEFT) )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.LeftDiagonal);
 		}
-		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true )
+		if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_UP) && input_->StickInput(L_RIGHT) )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.FrontDiagonal);
 		}
-		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_LEFT) )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.BackDiagonal);
 		}
-		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true )
+		if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_RIGHT) )
 		{
 			isRotFinish = true;
 			PlayerAngleSetter(playerMoveRot.RightDiagonal);
@@ -196,31 +189,25 @@ void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack,co
 	else
 	{
 		isRotFinish = true;
-		if ( input_->PushKey(DIK_W) )
+		if ( input_->PushKey(DIK_W) || input_->StickInput(L_UP) )
 		{
 			pushKey.isPushW = true;
 		}
-		if ( input_->PushKey(DIK_S) )
+		if ( input_->PushKey(DIK_S) || input_->StickInput(L_DOWN) )
 		{
 			pushKey.isPushS = true;
 		}
-		if ( input_->PushKey(DIK_A) )
+		if ( input_->PushKey(DIK_A) || input_->StickInput(L_LEFT) )
 		{
 			pushKey.isPushA = true;
 		}
-		if ( input_->PushKey(DIK_D) )
+		if ( input_->PushKey(DIK_D) || input_->StickInput(L_RIGHT) )
 		{
 			pushKey.isPushD = true;
 		}
 		PlayerAngleSetter(playerMoveRot.Front);
 	}
 	CheckSliding();
-
-	ImGui::Begin("Movement");
-
-	ImGui::Text("%d",SlidingNumber);
-
-	ImGui::End();
 
 }
 

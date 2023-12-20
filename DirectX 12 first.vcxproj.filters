@@ -727,6 +727,12 @@
     <ClInclude Include="LightData.h">
       <Filter>Engine\HeaderFile\Light</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerOperationUI.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameFunction\Controller.h">
+      <Filter>Engine\HeaderFile\GameFunction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -989,6 +995,12 @@
     </ClCompile>
     <ClCompile Include="LightData.cpp">
       <Filter>Engine\SourceFile\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOperationUI.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameFunction\Controller.cpp">
+      <Filter>Engine\SourceFile\GameFunction</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

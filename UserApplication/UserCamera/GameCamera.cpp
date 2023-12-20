@@ -121,6 +121,13 @@ void GameCamera::Update() {
 		eye = SetEyeVec;
 	}
 
+
+	ImGui::Begin("CameraS");
+
+	ImGui::Text("ConVec:%f %f",ConVec.x,ConVec.y);
+	
+	ImGui::End();
+
 	viewProjection->target = target;
 	viewProjection->eye = eye;
 	viewProjection->UpdateMatrix();

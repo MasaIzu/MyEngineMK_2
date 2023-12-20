@@ -81,6 +81,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
+	CircleShadowCount = LightData::GetInstance()->AddCircleShadow(playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
 }
 
 void Player::Update()
@@ -100,18 +101,18 @@ void Player::Update()
 	if ( isAlive )
 	{
 		//攻撃
-		if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) )
+		if ( input_->MouseInputing(static_cast< int >( Numbers::One )) || input_->ButtonInput(LT) )
 		{
 			isAttack = true;
 		}
 		if ( isBladeAttacking == false )
 		{
-			if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) )
+			if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) || input_->ButtonInput(RT) )
 			{
 				isBladeAttack = true;
 			}
 		}
-		if ( input_->PushKey(DIK_E) )
+		if ( input_->PushKey(DIK_E) || input_->PButtonTrigger(LB) )
 		{
 			isMissileAttack = true;
 		}
@@ -130,7 +131,7 @@ void Player::Update()
 		}
 
 
-		if ( input_->TriggerKey(DIK_LSHIFT) )
+		if ( input_->TriggerKey(DIK_LSHIFT) || input_->PButtonTrigger(X) )
 		{
 			if ( animation->GetNowAnimFinish() )
 			{
@@ -331,16 +332,23 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 	//当たり判定チェック
 	CheckPlayerCollider();
-	
 
-	ImGui::Begin("PlayerLockOn");
+	ImGui::Begin("PlayerShadow");
 
-	ImGui::Text("Moved = %f,%f,%f",Moved.x,Moved.y,Moved.z);
-	ImGui::Text("playerWorldTrans = %f,%f,%f",playerWorldTrans.translation_.x,playerWorldTrans.translation_.y,playerWorldTrans.translation_.z);
+	ImGui::SliderFloat("LightDistance",&LightDistance,0,1280);
+	ImGui::SliderFloat("LightDirX",&LightDir.x,0,10);
+	ImGui::SliderFloat("LightDirY",&LightDir.y,0,10);
+	ImGui::SliderFloat("LightDirZ",&LightDir.z,0,10);
+	ImGui::SliderFloat("LightAttenX",&LightAtten.x,0,10);
+	ImGui::SliderFloat("LightAttenY",&LightAtten.y,0,10);
+	ImGui::SliderFloat("LightAttenZ",&LightAtten.z,0,10);
+	ImGui::SliderFloat("LightAngleX",&LightAngle.x,0,5);
+	ImGui::SliderFloat("LightAngleY",&LightAngle.y,0,5);
 	ImGui::End();
 
 	Moved = playerWorldTrans.translation_ - Moved;
 
+	LightData::GetInstance()->UpdateCircleShadow(CircleShadowCount,playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
@@ -453,7 +461,7 @@ void Player::CheckPlayerCollider()
 	{
 		PlayerBladeAttackCollider[ i ]->Update(BladeColWorldTrans[ i ].matWorld_);
 	}
-	Vector3 playerPos = playerWorldTrans.translation_;
+	Vector3 playerPos = playerWorldTrans.translation_ - Vector3(0,1,0);
 	//地面メッシュコライダー
 	{
 		// 球の上端から球の下端までのレイキャスト

@@ -11,14 +11,15 @@
 #include <LoadLevelEditor.h>
 #include "Player.h"
 #include <MiddleBossEnemy.h>
+#include <Skydome.h>
 
 // タイトルシーン
 class TitleScene : public BaseScene
 {
 public: // メンバ関数
 
-	TitleScene() = default;
-	~TitleScene() = default;
+	TitleScene();
+	~TitleScene();
 
 	/// <summary>
 	/// 初期化
@@ -74,7 +75,7 @@ private:
 	std::unique_ptr<Sprite> StartSprite_ = nullptr;
 	std::unique_ptr<Sprite> EndSprite_ = nullptr;
 	std::unique_ptr<Sprite> OutLineSprite_ = nullptr;
-
+	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
 	std::unique_ptr<Model> model;
 	std::unique_ptr<Model> model_;
@@ -86,6 +87,9 @@ private:
 	std::unique_ptr<Player> player_;
 	WorldTransform DebugTrans;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
+	std::unique_ptr<Sprite> PushSprite;
+	std::unique_ptr<Sprite> SpaceSprite;
+	std::unique_ptr<Sprite> ASprite;
 
 	MovieCameraCount movieCameraCount = MovieCameraCount::FirstCamera;
 
@@ -119,6 +123,11 @@ private:
 	float OutLinePosition2 = 550.0f;
 
 	Vector2 center = { 0.5f,0.5f };
+	Vector2 PushSpritePos = { 617,609 };
+	Vector2 PushSpriteSize = { 45,22 };
+	Vector2 SpaceSpritePos = { 673,609 };
+	Vector2 SpaceSpriteSize = { 55,30 };
+	Vector2 ASpriteSize = { 30,30 };
 
 	Vector3 CameraPos;
 	Vector3 CameraVelocity;

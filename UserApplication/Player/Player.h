@@ -192,7 +192,7 @@ private://プレイヤークラス変数
 	uint32_t LeftEnd = 70;
 	uint32_t DieDirectionTimer = 0;
 	uint32_t DieDirectionMaxTimer = 80;
-	uint32_t PointLightCount = 0;
+	uint32_t CircleShadowCount = 0;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;
@@ -206,13 +206,16 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 5000;
+	float PlayerHP = 50000;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;
 	float BladeAttackBoostSpeed = 1.2f;
 	float BladeAttackSpeed = 0.7f;
 	float BladeColEndHasten = 15.0f;
+	float LightDistance = 100.0f;
+
+	Vector2 LightAngle = { 0.0f,2.0f };
 
 	Vector3 TargetPosition;
 	Vector3 DistanceNolm;
@@ -225,11 +228,13 @@ private://プレイヤークラス変数
 	Vector3 RotKeep;
 	Vector3 BladeAttackVelocity;
 	Vector3 BladeColRatio;
+	Vector3 LightAtten = { 0.0f,0.1f,0.0f };
 
 	Vector4 fallVec;
 	Vector4 ParticleStartPos;
 	Vector4 ParticleEndPos;
 	Vector4 BoostStartPos;
+	Vector4 LightDir = { 0,1,0,0 };
 
 	MyStruct::BoostPos bonePos;
 };

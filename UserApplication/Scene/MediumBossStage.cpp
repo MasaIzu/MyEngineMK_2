@@ -10,7 +10,7 @@ MediumBossStage::MediumBossStage()
 
 MediumBossStage::~MediumBossStage()
 {
-	LightData::GetInstance()->Destroy();
+	LightData::GetInstance()->ClearLight();
 	collisionManager->AllClearCollider();
 }
 

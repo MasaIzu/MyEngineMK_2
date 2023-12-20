@@ -45,7 +45,11 @@ void PlayerUI::Initialize(const float& playerFuel)
 
 	DestroySprite = Sprite::Create(TextureManager::Load("sprite/Destroy.png"));
 
+
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
+	playerOperationUI = std::make_unique<PlayerOperationUI>();
+	playerOperationUI->Initialize();
+
 
 	MaxBoostFuel = playerFuel;
 
@@ -107,13 +111,7 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 		DieOutLineSprite->SetRatio(DieOutLineRatioX,DieOutLineRatioY);
 		DestroySprite->SetRatio(DieOutLineRatioX,DieOutLineRatioY);
 	}
-
-	ImGui::Begin("UI");
-
-	ImGui::SliderFloat("BoostBarPositionX",&BoostBarPosition.x,0,1280);
-	ImGui::SliderFloat("BoostBarPositionY",&BoostBarPosition.y,0,720);
-	ImGui::End();
-
+	playerOperationUI->Update();
 }
 
 void PlayerUI::AttackReticleUpdate(const bool& LockOn)
@@ -149,6 +147,7 @@ void PlayerUI::Draw()
 	HP->Draw(HpPosition,HPBarColor);
 	BoostBarBackBarSprite->Draw(BoostBarBackBarPosition,WhiteColor);
 	BoostBarSprite->Draw(BoostBarPosition,WhiteColor);
+	playerOperationUI->Draw();
 	if ( isPlayerDieDisplay )
 	{
 		DieOutLineSprite->Draw(DieBackLinePos,WhiteColor);

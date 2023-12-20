@@ -113,7 +113,7 @@ void Framework::Finalize()
 	Sprite::StaticFinalize();
 	Sprite3D::StaticFinalize();
 	/*fbxLoader_->Finalize();*/
-
+	LightData::GetInstance()->Destroy();
 	TextureManager_->Delete();
 
 	input_->Destroy();

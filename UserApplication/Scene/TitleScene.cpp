@@ -3,7 +3,17 @@
 #include"PostEffect.h"
 #include <Explosion.h>
 #include <Easing.h>
+#include <LightData.h>
 
+
+TitleScene::TitleScene()
+{
+}
+
+TitleScene::~TitleScene()
+{
+	LightData::GetInstance()->ClearLight();
+}
 
 void TitleScene::Initialize()
 {
@@ -16,7 +26,13 @@ void TitleScene::Initialize()
 	StartSprite_ = Sprite::Create(TextureManager::Load("sprite/start.png"));
 	EndSprite_ = Sprite::Create(TextureManager::Load("sprite/Exit.png"));
 	OutLineSprite_ = Sprite::Create(TextureManager::Load("sprite/OutLine.png"));
+	PushSprite = Sprite::Create(TextureManager::Load("sprite/Push.png"));
+	PushSprite->SetSize(PushSpriteSize);
+	SpaceSprite = Sprite::Create(TextureManager::Load("sprite/Spacekey.png"));
+	SpaceSprite->SetSize(SpaceSpriteSize);
 
+	ASprite = Sprite::Create(TextureManager::Load("sprite/ABotan.png"));
+	ASprite->SetSize(ASpriteSize);
 	StartSprite_->SetSize(Vector2(100,50));
 	EndSprite_->SetSize(Vector2(100,50));
 	OutLineSprite_->SetSize(Vector2(100,50));
@@ -59,7 +75,7 @@ void TitleScene::Initialize()
 	BlackoutPreliminaryTime = MaxBlackoutPreliminaryTime;
 
 	EnemyStartPos = levelData_->GetBossBonePos() + Vector3(0,100,0);
-	EnemyEndPos = levelData_->GetBossBonePos();
+	EnemyEndPos = levelData_->GetBossBonePos() + Vector3(0,10,0);
 
 	viewProjection_->UpdateMatrix();
 
@@ -76,7 +92,8 @@ void TitleScene::Initialize()
 		viewProjection_->target = levelData_->GetBossBonePos();
 		viewProjection_->eye = SecondCameraPoints[ 0 ];
 	}
-
+	skydome = std::make_unique<Skydome>();
+	skydome->Initialize();
 }
 
 void TitleScene::Update()
@@ -127,13 +144,16 @@ void TitleScene::Update()
 		ImGui::SetCursorPos(ImVec2(0,20));
 		ImGui::End();
 	}
-	ImGui::Begin("CloseFilta");
-
-	ImGui::Text("CameraPosCount %d",CameraPosCount);
+	ImGui::Begin("AAAAAAAAAAAAAAAA");
+	ImGui::SliderFloat("SpaceSpritePosX",&SpaceSpritePos.x,0,1280);
+	ImGui::SliderFloat("SpaceSpritePosY",&SpaceSpritePos.y,0,720);
+	ImGui::SliderFloat("ASpriteSizeX",&ASpriteSize.x,0,1280);
+	ImGui::SliderFloat("ASpriteSizeY",&ASpriteSize.y,0,720);
 
 	ImGui::End();
-
-
+	PushSprite->SetSize(PushSpriteSize);
+	SpaceSprite->SetSize(SpaceSpriteSize);
+	ASprite->SetSize(ASpriteSize);
 	//if (input_->TriggerKey(DIK_SPACE))
 	//{
 	//	sceneManager_->ChangeScene("STAGESELECT");
@@ -163,7 +183,7 @@ void TitleScene::Update()
 		OutLinePos = OutLinePosition2;
 	}
 
-	if ( input_->TriggerKey(DIK_SPACE) )
+	if ( input_->TriggerKey(DIK_SPACE) || input_->ButtonInput(A) )
 	{
 		if ( OutLinePos == OutLinePosition1 )
 		{
@@ -187,6 +207,7 @@ void TitleScene::Update()
 		}
 	}
 
+	LightData::GetInstance()->Update();
 }
 
 void TitleScene::PostEffectDraw()
@@ -198,10 +219,6 @@ void TitleScene::PostEffectDraw()
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetRadialBlur(center,intensity,samples);
 	PostEffect::SetAngle(angle,angle2);
-
-
-	MeshParticle::PreDraw(commandList);
-	MeshParticle::PostDraw();
 
 	PostEffect::PostDrawScene();
 }
@@ -217,7 +234,7 @@ void TitleScene::Draw()
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
+	skydome->Draw(*viewProjection_.get());
 	if ( movieCameraCount == MovieCameraCount::FirstCamera )
 	{
 		levelData->Draw(*viewProjection_.get());
@@ -238,18 +255,31 @@ void TitleScene::Draw()
 
 	}
 
-	//model_->Draw(DebugTrans,*viewProjection_.get());
 
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
+
+	if ( movieCameraCount == MovieCameraCount::SecondCamera )
+	{
+		middleBossEnemy->FbxDraw(*viewProjection_.get());
+		middleBossEnemy->ParticleDraw(*viewProjection_.get());
+	}
 
 	TitleSprite_->Draw({ 640,200 },{ 1,1,1,1 });
 	StartSprite_->Draw({ 640,500 },{ 1,1,1,1 });
 	EndSprite_->Draw({ 640,550 },{ 1,1,1,1 });
 	OutLineSprite_->Draw({ 640,OutLinePos },{ 1,1,1,1 });
 
+	PushSprite->Draw(PushSpritePos,{ 1,1,1,1 });
+	if ( Input::GetInstance()->GetIsControllerConnection() )
+	{
+		ASprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
+	else
+	{
+		SpaceSprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
-
 }
 
 void TitleScene::Finalize()
@@ -258,7 +288,7 @@ void TitleScene::Finalize()
 
 void TitleScene::CSUpdate()
 {
-
+	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 }
 
 bool TitleScene::IsBreak()
@@ -344,8 +374,8 @@ void TitleScene::CameraUpdate()
 				}
 			}
 
-			middleBossEnemy->MovieUpdate(EnemyStartPos,EnemyEndPos);
-
+			middleBossEnemy->TitleMovieUpdate(EnemyStartPos,EnemyEndPos);
+			
 			Vector3 goPos = SecondCameraPoints[ CameraPosCount ] - viewProjection_->eye;
 			goPos.normalize();
 			CameraVelocity = MyMath::lerp(CameraVelocity,goPos,0.04f);
@@ -374,6 +404,7 @@ void TitleScene::CameraUpdate()
 		}
 		else
 		{
+			middleBossEnemy->TitleMovieUpdate(EnemyStartPos,EnemyEndPos);
 			Vector3 EasingPos;
 			Vector3 EasingEndPos = SecondCameraPoints[ 1 ] + Vector3(0,0,20);
 			EasingPos = Easing::EaseInBackVec3(EasingStartPos,EasingEndPos,EasingTime,MaxEasingTime);
@@ -406,6 +437,6 @@ void TitleScene::CameraUpdate()
 			}
 		}
 	}
-	middleBossEnemy->TitleUpdate(SecondCameraPoints[ 1 ]);
+	//middleBossEnemy->TitleUpdate(SecondCameraPoints[ 1 ]);
 
 }

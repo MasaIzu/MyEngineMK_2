@@ -45,6 +45,8 @@ public://基本関数
 	void DrawSprite(const ViewProjection& viewProjection_);
 	//ムービー用更新
 	bool MovieUpdate(const Vector3& StartPos, Vector3& EndPos);
+	//タイトルムービー用更新
+	void TitleMovieUpdate(const Vector3& startPos,Vector3& endPos);
 	//タイトル用アップデート
 	void TitleUpdate(const Vector3& TrackingLocation);
 	//タイトルの弾を作る
@@ -165,6 +167,7 @@ private://EnemyBossクラス変数
 	bool isTitleShot = false;
 	bool isDownSpeed = false;
 	bool isDownSpeedFinish = false;
+	bool isTitleBoss = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -200,6 +203,7 @@ private://EnemyBossクラス変数
 	uint32_t LightRightTwo = 0;
 	uint32_t LightBoostLeft = 0;
 	uint32_t LightBoostRight = 0;
+	uint32_t CircleShadowCount = 0;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -209,7 +213,7 @@ private://EnemyBossクラス変数
 	float Radius = 12.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
-	float RotSpeed = 10.0f;
+	float RotSpeed = 1.0f;
 	float BulletSpeed = 6.0f;
 	float MoveSafeRadius = 150.0f;
 	float jampHeight = 30.0f;
@@ -227,8 +231,10 @@ private://EnemyBossクラス変数
 	float MaxMiddleBossHp = 7000.0f;
 	float MiddleBossHp = MaxMiddleBossHp;
 	float BoostEndPower = 0.7f;
+	float LightDistance = 100.0f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
+	Vector2 LightAngle = { 0.0f,2.0f };
 
 	Vector3 BonePos;
 	Vector3 EndPos;
@@ -246,6 +252,9 @@ private://EnemyBossクラス変数
 	Vector3 missileGunRightPos;
 	Vector3 EnemyBoostLeftPosLight;
 	Vector3 EnemyBoostRightPosLight;
+	Vector3 LightAtten = { 0.0f,0.1f,0.0f };
+
+	Vector4 LightDir = { 0,1,0,0 };
 
 	AttackType attackType = AttackType::NotAttack;
 	std::array<AttackType,AttackedKeepCount>oldAttackType;

@@ -51,6 +51,9 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<Sprite> Result = nullptr;
 	std::unique_ptr<Sprite> ResultDetail = nullptr;
+	std::unique_ptr<Sprite> PushSprite;
+	std::unique_ptr<Sprite> SpaceSprite;
+	std::unique_ptr<Sprite> ASprite;
 
 	bool isFinishGame = false;
 	bool isSceneChange = false;
@@ -58,5 +61,11 @@ private:
 	float SpriteAlpha = 1.0f;
 	float AddSpriteAlpha = 0.01f;
 	float DownSpriteAlpha = 0.01f;
+
+	Vector2 PushSpritePos = { 617,679 };
+	Vector2 PushSpriteSize = { 45,22 };
+	Vector2 SpaceSpritePos = { 673,679 };
+	Vector2 SpaceSpriteSize = { 55,30 };
+	Vector2 ASpriteSize = { 30,30 };
 };
 

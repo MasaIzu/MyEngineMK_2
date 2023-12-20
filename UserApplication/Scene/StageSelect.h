@@ -58,7 +58,9 @@ private:
 	std::unique_ptr<Sprite> SelectBarSprite_ = nullptr;
 	std::unique_ptr<Sprite> NowLoadingSprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
-
+	std::unique_ptr<Sprite> PushSprite;
+	std::unique_ptr<Sprite> SpaceSprite;
+	std::unique_ptr<Sprite> ASprite;
 
 	bool isFinishGame = false;
 	bool isBlackoutStart = false;
@@ -83,4 +85,9 @@ private:
 	Vector2 OneToOnePos = {300.0f,145.0f};
 	Vector2 OneToTwoPos = { 300.0f,180.0f };
 	Vector2 SelectBarPos = { 300.0f,145.0f };
+	Vector2 PushSpritePos = { 617,609 };
+	Vector2 PushSpriteSize = { 45,22 };
+	Vector2 SpaceSpritePos = { 673,609 };
+	Vector2 SpaceSpriteSize = { 55,30 };
+	Vector2 ASpriteSize = { 30,30 };
 };

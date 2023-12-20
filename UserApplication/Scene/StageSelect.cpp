@@ -25,6 +25,13 @@ void StageSelect::Initialize()
 	OneToTwoSprite_ = Sprite::Create(TextureManager::Load("sprite/1-1_2.png"));
 	SelectBarSprite_ = Sprite::Create(TextureManager::Load("sprite/SelectBar.png"));
 	NowLoadingSprite_ = Sprite::Create(TextureManager::Load("sprite/NowLoading.png"));
+	PushSprite = Sprite::Create(TextureManager::Load("sprite/Push.png"));
+	PushSprite->SetSize(PushSpriteSize);
+	SpaceSprite = Sprite::Create(TextureManager::Load("sprite/Spacekey.png"));
+	SpaceSprite->SetSize(SpaceSpriteSize);
+
+	ASprite = Sprite::Create(TextureManager::Load("sprite/ABotan.png"));
+	ASprite->SetSize(ASpriteSize);
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
@@ -90,7 +97,7 @@ void StageSelect::Update()
 		}
 	}
 
-	if ( input_->TriggerKey(DIK_SPACE) )
+	if ( input_->TriggerKey(DIK_SPACE) || input_->ButtonInput(A) )
 	{
 		isBlackoutStart = true;
 		if ( isSelectBarTop == false )
@@ -136,6 +143,15 @@ void StageSelect::Draw()
 	SelectBarSprite_->Draw(SelectBarPos,{ 1,1,1,1 });
 	//OneToOneSprite_->Draw(OneToOnePos,{ 1,1,1,1 });
 	OneToTwoSprite_->Draw(OneToTwoPos,{ 1,1,1,1 });
+	PushSprite->Draw(PushSpritePos,{ 1,1,1,1 });
+	if ( Input::GetInstance()->GetIsControllerConnection() )
+	{
+		ASprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
+	else
+	{
+		SpaceSprite->Draw(SpaceSpritePos,{ 1,1,1,1 });
+	}
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 	NowLoadingSprite_->Draw({ 640,360 },{ 1,1,1,NowLoadingAlpha });
 }

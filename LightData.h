@@ -15,6 +15,8 @@ public://基本関数
 	static LightData* GetInstance();
 	// 終了処理
 	void Destroy();
+	// シーン終了時処理
+	void ClearLight();
 
 	//初期化
 	void StaticInitialize();
@@ -62,7 +64,7 @@ public://Setter
 	/// <param name="factorAngle_">減衰角度</param>
 	/// <param name="active_">フラグ</param>
 	/// <returns></returns>
-	uint32_t AddCircleShadow(const Vector3& casterPos_,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_ = true);
+	uint32_t AddCircleShadow(const Vector3& casterPos_,const float& distanceCasterLight,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_ = true);
 
 	/// <summary>
 	/// ポイントライト
@@ -95,7 +97,7 @@ public://Setter
 	/// <param name="factorAngle_">減衰角度</param>
 	/// <param name="active_">フラグ</param>
 	/// <returns></returns>
-	void UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& casterPos_,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_ = true);
+	void UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& casterPos_,const float& distanceCasterLight,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_ = true);
 
 
 

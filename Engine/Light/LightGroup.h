@@ -72,6 +72,11 @@ public:
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
 
+	/// <summary>
+	/// ライトのクリア
+	/// </summary>
+	void ClearLight();
+
 	//平行
 	void SetAmbientColor(const Vector3& color) {
 		ambientColor = color;
