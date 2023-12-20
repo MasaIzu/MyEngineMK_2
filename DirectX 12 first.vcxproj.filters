@@ -688,25 +688,25 @@
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Explosion.h">
+    <ClInclude Include="Engine\3DEffect\Explosion.h">
       <Filter>UserFile\UserHeaderFile\Explosion</Filter>
     </ClInclude>
-    <ClInclude Include="ExplosionBullet.h">
+    <ClInclude Include="UserApplication\Bullet\ExplosionBullet.h">
       <Filter>UserFile\UserHeaderFile\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="ExplosionGun.h">
+    <ClInclude Include="UserApplication\Bullet\ExplosionGun.h">
       <Filter>UserFile\UserHeaderFile\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleHanabiExplosion.h">
+    <ClInclude Include="Engine\3DEffect\ParticleHanabiExplosion.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="BulletSmokeParticle.h">
+    <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="DieScene.h">
+    <ClInclude Include="UserApplication\Scene\DieScene.h">
       <Filter>UserFile\UserHeaderFile\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBoostParticle.h">
+    <ClInclude Include="Engine\3DEffect\EnemyBoostParticle.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Light\CircleShadow.h">
@@ -724,10 +724,10 @@
     <ClInclude Include="Engine\Light\DirectionalLight.h">
       <Filter>Engine\HeaderFile\Light</Filter>
     </ClInclude>
-    <ClInclude Include="LightData.h">
+    <ClInclude Include="Engine\Light\LightData.h">
       <Filter>Engine\HeaderFile\Light</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerOperationUI.h">
+    <ClInclude Include="UserApplication\UI\PlayerOperationUI.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameFunction\Controller.h">
@@ -969,34 +969,34 @@
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Explosion.cpp">
+    <ClCompile Include="Engine\3DEffect\Explosion.cpp">
       <Filter>UserFile\UserSourceFile\Explosion</Filter>
     </ClCompile>
-    <ClCompile Include="ExplosionBullet.cpp">
+    <ClCompile Include="UserApplication\Bullet\ExplosionBullet.cpp">
       <Filter>UserFile\UserSourceFile\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="ExplosionGun.cpp">
+    <ClCompile Include="UserApplication\Bullet\ExplosionGun.cpp">
       <Filter>UserFile\UserSourceFile\Gun</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleHanabiExplosion.cpp">
+    <ClCompile Include="Engine\3DEffect\ParticleHanabiExplosion.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="BulletSmokeParticle.cpp">
+    <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="DieScene.cpp">
+    <ClCompile Include="UserApplication\Scene\DieScene.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBoostParticle.cpp">
+    <ClCompile Include="Engine\3DEffect\EnemyBoostParticle.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Light\LightGroup.cpp">
       <Filter>Engine\SourceFile\Light</Filter>
     </ClCompile>
-    <ClCompile Include="LightData.cpp">
+    <ClCompile Include="Engine\Light\LightData.cpp">
       <Filter>Engine\SourceFile\Light</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerOperationUI.cpp">
+    <ClCompile Include="UserApplication\UI\PlayerOperationUI.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GameFunction\Controller.cpp">

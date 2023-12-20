@@ -13,6 +13,7 @@ TitleScene::TitleScene()
 TitleScene::~TitleScene()
 {
 	LightData::GetInstance()->ClearLight();
+	CollisionManager::GetInstance()->AllClearCollider();
 }
 
 void TitleScene::Initialize()
@@ -98,66 +99,10 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	if ( shadeNumber == 0 )
-	{
-		ImGui::Begin("Not");
-		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
 
-		ImGui::End();
-	}
-	else if ( shadeNumber == 1 )
-	{
-		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
-
-		ImGui::SliderInt("range",&range,0,20);
-		ImGui::SetCursorPos(ImVec2(0,20));
-		ImGui::End();
-	}
-	else if ( shadeNumber == 2 )
-	{
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
-
-		ImGui::SliderFloat("centerX",&center.x,0,1);
-		ImGui::SliderFloat("centerY",&center.y,0,1);
-		ImGui::SliderFloat("intensity",&intensity,0,1);
-		ImGui::SliderInt("samples",&samples,0,20);
-		ImGui::SetCursorPos(ImVec2(0,20));
-		ImGui::End();
-	}
-	else if ( shadeNumber == 3 )
-	{
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
-
-		ImGui::SetCursorPos(ImVec2(0,20));
-		ImGui::End();
-	}
-	else if ( shadeNumber == 4 )
-	{
-		ImGui::Begin("CloseFilta");
-		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
-		ImGui::SliderFloat("angle",&angle,0.0f,180.0f);
-		ImGui::SliderFloat("angle2",&angle2,0.0f,180.0f);
-
-		ImGui::SetCursorPos(ImVec2(0,20));
-		ImGui::End();
-	}
-	ImGui::Begin("AAAAAAAAAAAAAAAA");
-	ImGui::SliderFloat("SpaceSpritePosX",&SpaceSpritePos.x,0,1280);
-	ImGui::SliderFloat("SpaceSpritePosY",&SpaceSpritePos.y,0,720);
-	ImGui::SliderFloat("ASpriteSizeX",&ASpriteSize.x,0,1280);
-	ImGui::SliderFloat("ASpriteSizeY",&ASpriteSize.y,0,720);
-
-	ImGui::End();
 	PushSprite->SetSize(PushSpriteSize);
 	SpaceSprite->SetSize(SpaceSpriteSize);
 	ASprite->SetSize(ASpriteSize);
-	//if (input_->TriggerKey(DIK_SPACE))
-	//{
-	//	sceneManager_->ChangeScene("STAGESELECT");
-	//}
 
 	CameraPos.z = 5.0f;
 

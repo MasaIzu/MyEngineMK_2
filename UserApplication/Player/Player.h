@@ -206,7 +206,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 5000;
+	float PlayerHP = 3000;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;

@@ -101,7 +101,7 @@ void Player::Update()
 	if ( isAlive )
 	{
 		//攻撃
-		if ( input_->MouseInputing(static_cast< int >( Numbers::One )) || input_->ButtonInput(LT) )
+		if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
 		{
 			isAttack = true;
 		}
@@ -159,13 +159,6 @@ void Player::Update()
 			isDieDirectionFinish = true;
 		}
 	}
-
-	ImGui::Begin("Player");
-
-	ImGui::Text("%d",LeftBoneNum);
-	ImGui::Text("PlayerMoveRotation = %f",playerMovement->GetPlayerAngle());
-
-	ImGui::End();
 
 	//uiのアプデ
 	playerUI->Update(playerMovement->GetFuel(),isAlive);
@@ -332,19 +325,6 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 	//当たり判定チェック
 	CheckPlayerCollider();
-
-	ImGui::Begin("PlayerShadow");
-
-	ImGui::SliderFloat("LightDistance",&LightDistance,0,1280);
-	ImGui::SliderFloat("LightDirX",&LightDir.x,0,10);
-	ImGui::SliderFloat("LightDirY",&LightDir.y,0,10);
-	ImGui::SliderFloat("LightDirZ",&LightDir.z,0,10);
-	ImGui::SliderFloat("LightAttenX",&LightAtten.x,0,10);
-	ImGui::SliderFloat("LightAttenY",&LightAtten.y,0,10);
-	ImGui::SliderFloat("LightAttenZ",&LightAtten.z,0,10);
-	ImGui::SliderFloat("LightAngleX",&LightAngle.x,0,5);
-	ImGui::SliderFloat("LightAngleY",&LightAngle.y,0,5);
-	ImGui::End();
 
 	Moved = playerWorldTrans.translation_ - Moved;
 

@@ -57,19 +57,7 @@ void PlayerOperationUI::Initialize()
 
 void PlayerOperationUI::Update()
 {
-	ImGui::Begin("UI");
 
-	ImGui::SliderFloat("XBotanPosX",&XBotanPos.x,0,1280);
-	ImGui::SliderFloat("XBotanPosY",&XBotanPos.y,0,720);
-	ImGui::SliderFloat("ABotanPosX",&ABotanPos.x,0,1280);
-	ImGui::SliderFloat("ABotanPosY",&ABotanPos.y,0,720);
-	ImGui::End();
-
-	AttackUISprite->SetSize(UISize);
-	MouseLeftSprite->SetSize(MousUISize);
-	OrUISprite->SetSize(OrUISize);
-	ShiftKeySprite->SetSize(ShiftkeySize);
-	SpaceSprite->SetSize(SpacekeySize);
 }
 
 void PlayerOperationUI::Draw()

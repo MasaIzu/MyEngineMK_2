@@ -3,50 +3,6 @@
     "objects": [
         {
             "type": "MESH",
-            "name": "srop",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": ""
-        },
-        {
-            "type": "MESH",
-            "name": "srop1",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": ""
-        },
-        {
-            "type": "MESH",
             "name": "shahei",
             "transform": {
                 "translation": [
@@ -510,28 +466,6 @@
         {
             "type": "MESH",
             "name": "goalCube",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": ""
-        },
-        {
-            "type": "MESH",
-            "name": "goalSrop",
             "transform": {
                 "translation": [
                     0.0,

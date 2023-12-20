@@ -110,10 +110,6 @@ void StageSelect::Update()
 		}
 	}
 
-	ImGui::Begin("AAA");
-	ImGui::SliderFloat("OneToTwoPosX",&OneToTwoPos.x,0,1200);
-	ImGui::SliderFloat("OneToTwoPosY",&OneToTwoPos.y,0,1200);
-	ImGui::End();
 }
 
 void StageSelect::PostEffectDraw()
