@@ -12,7 +12,7 @@ struct PlayerAttackDamage
 
 struct EnemyAttackDamage
 {
-	const float NormalAttack = 200;
-	const float MissileAttack = 100;
+	const float NormalAttack = 203;
+	const float MissileAttack = 102;
 	const float BladeAttack = 1;
 };

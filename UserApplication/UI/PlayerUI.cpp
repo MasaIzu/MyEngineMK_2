@@ -45,6 +45,8 @@ void PlayerUI::Initialize(const float& playerFuel)
 
 	DestroySprite = Sprite::Create(TextureManager::Load("sprite/Destroy.png"));
 
+	serialNumber = std::make_unique<SerialNumber>();
+	serialNumber->Initialize(4);
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 	playerOperationUI = std::make_unique<PlayerOperationUI>();
@@ -62,7 +64,6 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 {
 	BackHpDownSize.x = hpUpdate->Update();
 	HPBackSprite->SetSize(BackHpDownSize);
-
 	HPDownBarColor = LockOnColor;
 	HPDownBarColor.w = HPBarAlpha;
 	HPBarColor = WhiteColor;
@@ -135,6 +136,7 @@ void PlayerUI::PlayerHpUpdate(const float& nowHp,const float& MaxHp)
 	HpSize.x = HpBarMaxSize * ( nowHp / MaxHp );
 	HP->SetSize(HpSize);
 	hpUpdate->EasingMaterial(HpSize.x);
+	serialNumber->Update(nowHp);
 }
 
 
@@ -148,6 +150,7 @@ void PlayerUI::Draw()
 	BoostBarBackBarSprite->Draw(BoostBarBackBarPosition,WhiteColor);
 	BoostBarSprite->Draw(BoostBarPosition,WhiteColor);
 	playerOperationUI->Draw();
+	serialNumber->Draw();
 	if ( isPlayerDieDisplay )
 	{
 		DieOutLineSprite->Draw(DieBackLinePos,WhiteColor);

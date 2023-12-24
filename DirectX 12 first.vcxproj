@@ -419,6 +419,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h" />
+    <ClInclude Include="SerialNumber.h" />
+    <ClInclude Include="NumbersSprite.h" />
     <ClInclude Include="UserApplication\Scene\DieScene.h" />
     <ClInclude Include="Engine\3DEffect\EnemyBoostParticle.h" />
     <ClInclude Include="Engine\GameFunction\Controller.h" />
@@ -509,7 +511,6 @@
     <ClInclude Include="Engine\Framework\Framework.h" />
     <ClInclude Include="Engine\GameFunction\Input.h" />
     <ClInclude Include="Engine\GameFunction\Mouse.h" />
-    <ClInclude Include="Engine\GameFunction\ScoreSprite.h" />
     <ClInclude Include="UserApplication\Ground\Ground.h" />
     <ClInclude Include="Engine\ImGui\ImGuiManager.h" />
     <ClInclude Include="Engine\Math\Matrix4.h" />
@@ -528,6 +529,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp" />
+    <ClCompile Include="SerialNumber.cpp" />
+    <ClCompile Include="NumbersSprite.cpp" />
     <ClCompile Include="UserApplication\Scene\DieScene.cpp" />
     <ClCompile Include="Engine\3DEffect\EnemyBoostParticle.cpp" />
     <ClCompile Include="Engine\GameFunction\Controller.cpp" />
@@ -599,7 +602,6 @@
     <ClCompile Include="Engine\Framework\Framework.cpp" />
     <ClCompile Include="Engine\GameFunction\Input.cpp" />
     <ClCompile Include="Engine\GameFunction\Mouse.cpp" />
-    <ClCompile Include="Engine\GameFunction\ScoreSprite.cpp" />
     <ClCompile Include="UserApplication\Ground\Ground.cpp" />
     <ClCompile Include="Engine\ImGui\ImGuiManager.cpp" />
     <ClCompile Include="main.cpp" />

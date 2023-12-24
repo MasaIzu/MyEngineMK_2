@@ -5,6 +5,7 @@
 #include <Sprite.h>
 #include "HpUpdate.h"
 #include "PlayerOperationUI.h"
+#include "SerialNumber.h"
 
 class PlayerUI
 {
@@ -40,7 +41,8 @@ private:
 	std::unique_ptr<Sprite> BoostBarBackBarSprite;
 	std::unique_ptr<Sprite> DieOutLineSprite;
 	std::unique_ptr<Sprite> DestroySprite;
-
+	
+	std::unique_ptr<SerialNumber> serialNumber;
 	std::unique_ptr<HpUpdate> hpUpdate;
 	std::unique_ptr<PlayerOperationUI> playerOperationUI;
 private:

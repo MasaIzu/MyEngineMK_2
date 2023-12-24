@@ -6,6 +6,7 @@
 #include <FbxLoader.h>
 #include <FBXObject3d.h>
 #include "LightData.h"
+#include "NumbersSprite.h"
 
 void Framework::Initialize()
 {
@@ -59,6 +60,8 @@ void Framework::Initialize()
 	//ポストエフェクトの初期化処理
 	PostEffectManager::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
 
+	NumbersSprite::GetInstance()->Initialize();
+
 #pragma endregion
 
 	//シーンマネージャーの生成
@@ -99,6 +102,8 @@ void Framework::Finalize()
 {
 	// 各種解放
 	sceneManager_->Finalize();
+
+	NumbersSprite::GetInstance()->Destroy();
 
 	PostEffectManager::Finalize();
 

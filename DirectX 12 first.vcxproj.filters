@@ -466,9 +466,6 @@
     <ClInclude Include="Engine\3D\WorldTransform.h">
       <Filter>Engine\HeaderFile\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameFunction\ScoreSprite.h">
-      <Filter>Engine\HeaderFile\GameFunction</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\2D\Sprite.h">
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
@@ -733,6 +730,12 @@
     <ClInclude Include="Engine\GameFunction\Controller.h">
       <Filter>Engine\HeaderFile\GameFunction</Filter>
     </ClInclude>
+    <ClInclude Include="NumbersSprite.h">
+      <Filter>Engine\HeaderFile\GameFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialNumber.h">
+      <Filter>UserFile\UserHeaderFile\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -779,9 +782,6 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\WorldTransform.cpp">
       <Filter>Engine\SourceFile\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GameFunction\ScoreSprite.cpp">
-      <Filter>Engine\SourceFile\GameFunction</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2D\Sprite.cpp">
       <Filter>Engine\SourceFile\2D</Filter>
@@ -1001,6 +1001,12 @@
     </ClCompile>
     <ClCompile Include="Engine\GameFunction\Controller.cpp">
       <Filter>Engine\SourceFile\GameFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="NumbersSprite.cpp">
+      <Filter>Engine\SourceFile\GameFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="SerialNumber.cpp">
+      <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
