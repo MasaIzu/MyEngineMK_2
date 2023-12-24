@@ -22,9 +22,9 @@ void PlayerUI::Initialize(const float& playerFuel)
 	Reticle = Sprite::Create(TextureManager::Load("sprite/ReticleV2.png"));
 	Reticle->SetAnchorPoint({ AnchorPointOnePointFive,AnchorPointOnePointFive });
 
-	HP = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
-	HP->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive});
-	HP->SetSize(HpSize);
+	HPBar = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
+	HPBar->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive});
+	HPBar->SetSize(HpSize);
 
 	HPBackSprite = Sprite::Create(TextureManager::Load("sprite/WhiteBar.png"));
 	HPBackSprite->SetAnchorPoint({ FloatNumber(fNumbers::fZero),AnchorPointOnePointFive });
@@ -45,6 +45,8 @@ void PlayerUI::Initialize(const float& playerFuel)
 
 	DestroySprite = Sprite::Create(TextureManager::Load("sprite/Destroy.png"));
 
+	HP = Sprite::Create(TextureManager::Load("sprite/HP.png"));
+	HP->SetSize(HPSpriteSize);
 	serialNumber = std::make_unique<SerialNumber>();
 	serialNumber->Initialize(4);
 
@@ -113,6 +115,14 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 		DestroySprite->SetRatio(DieOutLineRatioX,DieOutLineRatioY);
 	}
 	playerOperationUI->Update();
+
+	//ImGui::Begin("HPSPRITE");
+
+	//ImGui::SliderFloat("ReferencePointPosX",&HPSpritePos.x,0,1000);
+	//ImGui::SliderFloat("ReferencePointPosY",&HPSpritePos.y,0,1000);
+	//ImGui::SliderFloat("HPSpriteSizeeX",&HPSpriteSize.x,0,100);
+	//ImGui::SliderFloat("HPSpriteSizeY",&HPSpriteSize.y,0,100);
+	//ImGui::End();
 }
 
 void PlayerUI::AttackReticleUpdate(const bool& LockOn)
@@ -128,13 +138,13 @@ void PlayerUI::AttackReticleUpdate(const bool& LockOn)
 		ReticlePosition = MyMath::lerpVec2(ReticlePosition,ReticleNormalPosition,ReticleNotLockLerpPower);
 	}
 
-	HP->SetSize(HpSize);
+	HPBar->SetSize(HpSize);
 }
 
 void PlayerUI::PlayerHpUpdate(const float& nowHp,const float& MaxHp)
 {
 	HpSize.x = HpBarMaxSize * ( nowHp / MaxHp );
-	HP->SetSize(HpSize);
+	HPBar->SetSize(HpSize);
 	hpUpdate->EasingMaterial(HpSize.x);
 	serialNumber->Update(nowHp);
 }
@@ -146,11 +156,12 @@ void PlayerUI::Draw()
 	Reticle->Draw(ReticlePosition,ReticleColor);
 	HPBarBackBarSprite->Draw(HpBarBackBarPosition,WhiteColor);
 	HPBackSprite->Draw(HpPosition,HPDownBarColor);
-	HP->Draw(HpPosition,HPBarColor);
+	HPBar->Draw(HpPosition,HPBarColor);
 	BoostBarBackBarSprite->Draw(BoostBarBackBarPosition,WhiteColor);
 	BoostBarSprite->Draw(BoostBarPosition,WhiteColor);
 	playerOperationUI->Draw();
 	serialNumber->Draw();
+	HP->Draw(HPSpritePos,WhiteColor);
 	if ( isPlayerDieDisplay )
 	{
 		DieOutLineSprite->Draw(DieBackLinePos,WhiteColor);

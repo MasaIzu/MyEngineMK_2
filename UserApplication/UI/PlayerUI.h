@@ -34,14 +34,15 @@ private:
 
 	std::unique_ptr<Sprite> ReticleOutline;
 	std::unique_ptr<Sprite> Reticle;
-	std::unique_ptr<Sprite> HP;
+	std::unique_ptr<Sprite> HPBar;
 	std::unique_ptr<Sprite> HPBackSprite;
 	std::unique_ptr<Sprite> HPBarBackBarSprite;
 	std::unique_ptr<Sprite> BoostBarSprite;
 	std::unique_ptr<Sprite> BoostBarBackBarSprite;
 	std::unique_ptr<Sprite> DieOutLineSprite;
 	std::unique_ptr<Sprite> DestroySprite;
-	
+	std::unique_ptr<Sprite> HP;
+
 	std::unique_ptr<SerialNumber> serialNumber;
 	std::unique_ptr<HpUpdate> hpUpdate;
 	std::unique_ptr<PlayerOperationUI> playerOperationUI;
@@ -93,6 +94,8 @@ private:
 	Vector2 BackHpDownSize = { HpBarMaxSize,6.0f };
 	Vector2 BoostFuelSize = { HpBarMaxSize,6.0f };
 	Vector2 DieBackLinePos = { 640,360 };
+	Vector2 HPSpritePos = { 157,555 };
+	Vector2 HPSpriteSize = { 45,29 };
 
 	Vector4 WhiteColor = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 ReticleColor;

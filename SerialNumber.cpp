@@ -34,15 +34,6 @@ void SerialNumber::Update(const float& nowNumber)
 {
 	Discriminant(nowNumber);
 
-	ImGui::Begin("HPSPRITE");
-
-	ImGui::SliderFloat("ReferencePointPosX",&ReferencePointPos.x,0,1000);
-	ImGui::SliderFloat("ReferencePointPosY",&ReferencePointPos.y,0,1000);
-	ImGui::SliderFloat("SpriteSizeX",&SpriteSize.x,0,100);
-	ImGui::SliderFloat("SpriteSizeY",&SpriteSize.y,0,100);
-	ImGui::SliderFloat("Territory",&Territory,0,100);
-	ImGui::End();
-
 	for ( uint32_t i = 0; i < DiscriminantCount; i++ )
 	{
 		for ( uint32_t j = 0; j < SpriteNumberCount; j++ )
