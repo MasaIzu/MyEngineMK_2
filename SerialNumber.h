@@ -26,7 +26,10 @@ private://メンバ関数
 	uint32_t ReturnNumber(const float& nowNumber,const uint32_t& place);
 
 public://Setter
-
+	void SetAllContent(const float& TerritorySize,const Vector2& referencePointPos,const Vector2& spriteSize);
+	void SetTerritory(const float& TerritorySize);
+	void SetReferencePointPos(const Vector2& referencePointPos);
+	void SetSpriteSize(const Vector2& spriteSize);
 public://Getter
 
 private://コンスト
@@ -40,6 +43,8 @@ private://別クラスから値をもらう
 
 private://クラス変数
 
+	bool isChange = false;
+
 	uint32_t One = 0;
 	uint32_t Ten = 0;
 	uint32_t Hundred = 0;
@@ -51,7 +56,7 @@ private://クラス変数
 	float HundredNumber = 100.0f;
 	float TenNumber = 10.0f;
 
-	Vector2 ReferencePointPos = { 330,554 };
+	Vector2 ReferencePointPos = { 640,320 };
 	Vector2 SpriteSize = { 28,27 };
 	Vector2 FirstPos;
 

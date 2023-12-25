@@ -321,6 +321,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 	}
 
 	playerUI->AttackReticleUpdate(LockOn);
+	playerUI->GunUpdate(static_cast<float>(playerNormalGun->GetBulletCount()),playerNormalGun->GetIsReload());
 	WorldTransUpdate();
 
 	//当たり判定チェック

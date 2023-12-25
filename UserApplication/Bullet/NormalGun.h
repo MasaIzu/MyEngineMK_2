@@ -34,7 +34,8 @@ private:
 public:
 	//見てる方向のゲット
 	WorldTarnsLook GetLook()const;
-
+	bool GetIsReload();
+	uint32_t GetBulletCount();
 private://コンスト
 	const static uint32_t BulletMaxCount = 30;
 
@@ -48,9 +49,12 @@ private://クラス関連
 	std::unique_ptr<FBXModel> fbxModel_;
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 private:
+	bool isReload = false;
 
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;
+	uint32_t MaxReloadCoolTime = 200;
+	uint32_t UseBulletCount = 0;
 
 	float BulletSpeed = 4.5f;
 

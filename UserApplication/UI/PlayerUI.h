@@ -19,6 +19,7 @@ public:
 	void Update(const float& nowBoost,const bool& isAlive);
 	void AttackReticleUpdate(const bool& LockOn);
 	void PlayerHpUpdate(const float& nowHp,const float& MaxHp);
+	void GunUpdate(const float& gunBullet,const bool& isReload);
 	//描画
 	void Draw();
 
@@ -42,8 +43,12 @@ private:
 	std::unique_ptr<Sprite> DieOutLineSprite;
 	std::unique_ptr<Sprite> DestroySprite;
 	std::unique_ptr<Sprite> HP;
+	std::unique_ptr<Sprite> NormalSprite;
+	std::unique_ptr<Sprite> YokoBouSprite;
+	std::unique_ptr<Sprite> ReloadSprite;
 
-	std::unique_ptr<SerialNumber> serialNumber;
+	std::unique_ptr<SerialNumber> serialHPNumber;
+	std::unique_ptr<SerialNumber> serialGunWeaponNumber;
 	std::unique_ptr<HpUpdate> hpUpdate;
 	std::unique_ptr<PlayerOperationUI> playerOperationUI;
 private:
@@ -52,6 +57,7 @@ private:
 	bool isPlayerDieDisplay = false;
 	bool isMaxRatio = false;
 	bool isDieDirection = false;
+	bool isReload = false;
 
 	uint32_t HpDownEasingTime = 0;
 	uint32_t HpDownMaxEasingTime = 60;
@@ -82,6 +88,8 @@ private:
 	float DieGreen = 0.8f;
 	float DieBlue = 0.8f;
 	float DieAlpha = 0.0f;
+	float Territory = 25.0f;
+	float GunWeaponTerritory = 16.0f;
 
 	Vector2 ReticlePosition = { 640,360 };
 	Vector2 KeepReticlePosition;
@@ -96,8 +104,19 @@ private:
 	Vector2 DieBackLinePos = { 640,360 };
 	Vector2 HPSpritePos = { 157,555 };
 	Vector2 HPSpriteSize = { 45,29 };
+	Vector2 ReferencePointPos = { 330,554 };
+	Vector2 SpriteSize = { 28,27 };
+	Vector2 GunBulletUIPos = { 1028,540 };
+	Vector2 GunBulletUISize = { 16,16 };
+	Vector2 NormalPos = { 1016,580 };
+	Vector2 NormalSize = { 84,20 };
+	Vector2 BouPos = { 1014,563 };
+	Vector2 BouSize = { 120,1 };
+	Vector2 ReloadUIPos = { 1016,540 };
+	Vector2 ReloadUISize = { 111,22 };
 
 	Vector4 WhiteColor = { 1.0f,1.0f,1.0f,1.0f };
+	Vector4 RedColor = { 1.0f,0.1f,0.1f,1.0f };
 	Vector4 ReticleColor;
 	Vector4 LockOnColor = { 1.0f,0.1f,0.1f,1.0f };
 	Vector4 NotLockOnColor = { 1.0f,1.0f,1.0f,1.0f };

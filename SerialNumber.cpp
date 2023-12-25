@@ -33,14 +33,17 @@ void SerialNumber::Initialize(const uint32_t& makeCount)
 void SerialNumber::Update(const float& nowNumber)
 {
 	Discriminant(nowNumber);
-
-	for ( uint32_t i = 0; i < DiscriminantCount; i++ )
+	if ( isChange )
 	{
-		for ( uint32_t j = 0; j < SpriteNumberCount; j++ )
+		isChange = false;
+		for ( uint32_t i = 0; i < DiscriminantCount; i++ )
 		{
-			HpSprite[ i ][ j ]->SetSize(SpriteSize);
+			for ( uint32_t j = 0; j < SpriteNumberCount; j++ )
+			{
+				HpSprite[ i ][ j ]->SetSize(SpriteSize);
+			}
+			SpritePos[ i ] = { ReferencePointPos.x - ( Territory * i ),ReferencePointPos.y };
 		}
-		SpritePos[ i ] = { ReferencePointPos.x - ( Territory * i ),ReferencePointPos.y };
 	}
 }
 
@@ -72,4 +75,30 @@ uint32_t SerialNumber::ReturnNumber(const float& nowNumber,const uint32_t& place
 	uint32_t number = static_cast< uint32_t >( nowNumber / std::pow(10,place) );
 
 	return number % 10;
+}
+
+void SerialNumber::SetAllContent(const float& TerritorySize,const Vector2& referencePointPos,const Vector2& spriteSize)
+{
+	isChange = true;
+	Territory = TerritorySize;
+	ReferencePointPos = referencePointPos;
+	SpriteSize = spriteSize;
+}
+
+void SerialNumber::SetTerritory(const float& TerritorySize)
+{
+	isChange = true;
+	Territory = TerritorySize;
+}
+
+void SerialNumber::SetReferencePointPos(const Vector2& referencePointPos)
+{
+	isChange = true;
+	ReferencePointPos = referencePointPos;
+}
+
+void SerialNumber::SetSpriteSize(const Vector2& spriteSize)
+{
+	isChange = true;
+	SpriteSize = spriteSize;
 }

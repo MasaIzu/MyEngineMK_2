@@ -45,10 +45,22 @@ void PlayerUI::Initialize(const float& playerFuel)
 
 	DestroySprite = Sprite::Create(TextureManager::Load("sprite/Destroy.png"));
 
+	NormalSprite = Sprite::Create(TextureManager::Load("sprite/Normal.png"));
+	NormalSprite->SetSize(NormalSize);
 	HP = Sprite::Create(TextureManager::Load("sprite/HP.png"));
 	HP->SetSize(HPSpriteSize);
-	serialNumber = std::make_unique<SerialNumber>();
-	serialNumber->Initialize(4);
+
+	YokoBouSprite = Sprite::Create(TextureManager::Load("sprite/yokoBou.png"));
+	YokoBouSprite->SetSize(BouSize);
+	ReloadSprite = Sprite::Create(TextureManager::Load("sprite/Reload.png"));
+	YokoBouSprite->SetSize(BouSize);
+	serialHPNumber = std::make_unique<SerialNumber>();
+	serialHPNumber->SetAllContent(Territory,ReferencePointPos,SpriteSize);
+	serialHPNumber->Initialize(4);
+
+	serialGunWeaponNumber = std::make_unique<SerialNumber>();
+	serialGunWeaponNumber->SetAllContent(Territory,GunBulletUIPos,SpriteSize);
+	serialGunWeaponNumber->Initialize(2);
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 	playerOperationUI = std::make_unique<PlayerOperationUI>();
@@ -116,13 +128,14 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 	}
 	playerOperationUI->Update();
 
-	//ImGui::Begin("HPSPRITE");
+	ImGui::Begin("HPSPRITE");
 
-	//ImGui::SliderFloat("ReferencePointPosX",&HPSpritePos.x,0,1000);
-	//ImGui::SliderFloat("ReferencePointPosY",&HPSpritePos.y,0,1000);
-	//ImGui::SliderFloat("HPSpriteSizeeX",&HPSpriteSize.x,0,100);
-	//ImGui::SliderFloat("HPSpriteSizeY",&HPSpriteSize.y,0,100);
-	//ImGui::End();
+	ImGui::SliderFloat("BouPosX",&BouPos.x,0,1300);
+	ImGui::SliderFloat("BouPosY",&BouPos.y,0,1000);
+	ImGui::SliderFloat("ReloadUISizeX",&ReloadUISize.x,0,200);
+	ImGui::SliderFloat("ReloadUISizeY",&ReloadUISize.y,0,100);
+	ImGui::End();
+	ReloadSprite->SetSize(ReloadUISize);
 }
 
 void PlayerUI::AttackReticleUpdate(const bool& LockOn)
@@ -146,7 +159,13 @@ void PlayerUI::PlayerHpUpdate(const float& nowHp,const float& MaxHp)
 	HpSize.x = HpBarMaxSize * ( nowHp / MaxHp );
 	HPBar->SetSize(HpSize);
 	hpUpdate->EasingMaterial(HpSize.x);
-	serialNumber->Update(nowHp);
+	serialHPNumber->Update(nowHp);
+}
+
+void PlayerUI::GunUpdate(const float& gunBullet,const bool& isReload_)
+{
+	isReload = isReload_;
+	serialGunWeaponNumber->Update(gunBullet);
 }
 
 
@@ -160,8 +179,18 @@ void PlayerUI::Draw()
 	BoostBarBackBarSprite->Draw(BoostBarBackBarPosition,WhiteColor);
 	BoostBarSprite->Draw(BoostBarPosition,WhiteColor);
 	playerOperationUI->Draw();
-	serialNumber->Draw();
+	serialHPNumber->Draw();
+	NormalSprite->Draw(NormalPos,WhiteColor);
 	HP->Draw(HPSpritePos,WhiteColor);
+	YokoBouSprite->Draw(BouPos,WhiteColor);
+	if ( isReload )
+	{
+		ReloadSprite->Draw(ReloadUIPos,RedColor);
+	}
+	else
+	{
+		serialGunWeaponNumber->Draw();
+	}
 	if ( isPlayerDieDisplay )
 	{
 		DieOutLineSprite->Draw(DieBackLinePos,WhiteColor);
