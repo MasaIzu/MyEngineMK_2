@@ -52,8 +52,17 @@ void PlayerUI::Initialize(const float& playerFuel)
 
 	YokoBouSprite = Sprite::Create(TextureManager::Load("sprite/yokoBou.png"));
 	YokoBouSprite->SetSize(BouSize);
-	ReloadSprite = Sprite::Create(TextureManager::Load("sprite/Reload.png"));
-	YokoBouSprite->SetSize(BouSize);
+	YokoBouExplosionSprite = Sprite::Create(TextureManager::Load("sprite/yokoBou.png"));
+	YokoBouExplosionSprite->SetSize(BouSize);
+
+	ReloadNormalSprite = Sprite::Create(TextureManager::Load("sprite/Reload.png"));
+	ReloadNormalSprite->SetSize(ReloadUISize);
+	ReloadExplosionSprite = Sprite::Create(TextureManager::Load("sprite/Reload.png"));
+	ReloadExplosionSprite->SetSize(ReloadUISize);
+
+	ExplosionESprite = Sprite::Create(TextureManager::Load("sprite/ExplosionE.png"));
+	ExplosionESprite->SetSize(ExplosionUISize);
+
 	serialHPNumber = std::make_unique<SerialNumber>();
 	serialHPNumber->SetAllContent(Territory,ReferencePointPos,SpriteSize);
 	serialHPNumber->Initialize(4);
@@ -61,6 +70,10 @@ void PlayerUI::Initialize(const float& playerFuel)
 	serialGunWeaponNumber = std::make_unique<SerialNumber>();
 	serialGunWeaponNumber->SetAllContent(Territory,GunBulletUIPos,SpriteSize);
 	serialGunWeaponNumber->Initialize(2);
+
+	serialExplosionGunWeaponNumber = std::make_unique<SerialNumber>();
+	serialExplosionGunWeaponNumber->SetAllContent(Territory,ReloadExplosionUIPos,SpriteSize);
+	serialExplosionGunWeaponNumber->Initialize(1);
 
 	hpUpdate = std::make_unique<HpUpdate>(HpBarMaxSize);
 	playerOperationUI = std::make_unique<PlayerOperationUI>();
@@ -130,12 +143,12 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 
 	ImGui::Begin("HPSPRITE");
 
-	ImGui::SliderFloat("BouPosX",&BouPos.x,0,1300);
-	ImGui::SliderFloat("BouPosY",&BouPos.y,0,1000);
-	ImGui::SliderFloat("ReloadUISizeX",&ReloadUISize.x,0,200);
-	ImGui::SliderFloat("ReloadUISizeY",&ReloadUISize.y,0,100);
+	ImGui::SliderFloat("BouPosX",&ExplosionUIPos.x,0,1300);
+	ImGui::SliderFloat("BouPosY",&ExplosionUIPos.y,0,1000);
+	ImGui::SliderFloat("ExplosionUISizeX",&ExplosionUISize.x,0,200);
+	ImGui::SliderFloat("ExplosionUISizeY",&ExplosionUISize.y,0,100);
 	ImGui::End();
-	ReloadSprite->SetSize(ReloadUISize);
+	ExplosionESprite->SetSize(ExplosionUISize);
 }
 
 void PlayerUI::AttackReticleUpdate(const bool& LockOn)
@@ -168,6 +181,12 @@ void PlayerUI::GunUpdate(const float& gunBullet,const bool& isReload_)
 	serialGunWeaponNumber->Update(gunBullet);
 }
 
+void PlayerUI::ExplosionGunUpdate(const float& gunBullet,const bool& isReload_)
+{
+	isExplosionReload = isReload_;
+	serialExplosionGunWeaponNumber->Update(gunBullet);
+}
+
 
 void PlayerUI::Draw()
 {
@@ -183,13 +202,23 @@ void PlayerUI::Draw()
 	NormalSprite->Draw(NormalPos,WhiteColor);
 	HP->Draw(HPSpritePos,WhiteColor);
 	YokoBouSprite->Draw(BouPos,WhiteColor);
+	YokoBouExplosionSprite->Draw(BouExplosionPos,WhiteColor);
+	ExplosionESprite->Draw(ExplosionUIPos,WhiteColor);
 	if ( isReload )
 	{
-		ReloadSprite->Draw(ReloadUIPos,RedColor);
+		ReloadNormalSprite->Draw(ReloadUIPos,RedColor);
 	}
 	else
 	{
 		serialGunWeaponNumber->Draw();
+	}
+	if ( isExplosionReload )
+	{
+		ReloadExplosionSprite->Draw(ReloadExplosionUIPos,RedColor);
+	}
+	else
+	{
+		serialExplosionGunWeaponNumber->Draw();
 	}
 	if ( isPlayerDieDisplay )
 	{

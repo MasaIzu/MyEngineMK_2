@@ -429,7 +429,7 @@
     <ClInclude Include="Engine\Light\LightGroup.h" />
     <ClInclude Include="Engine\Light\PointLight.h" />
     <ClInclude Include="Engine\Light\SpotLight.h" />
-    <ClInclude Include="Engine\3DEffect\Explosion.h" />
+    <ClInclude Include="Engine\3DEffect\ExplosionParticleSmokeManager.h" />
     <ClInclude Include="UserApplication\Bullet\ExplosionBullet.h" />
     <ClInclude Include="UserApplication\Bullet\ExplosionGun.h" />
     <ClInclude Include="Engine\Light\LightData.h" />
@@ -535,7 +535,7 @@
     <ClCompile Include="Engine\3DEffect\EnemyBoostParticle.cpp" />
     <ClCompile Include="Engine\GameFunction\Controller.cpp" />
     <ClCompile Include="Engine\Light\LightGroup.cpp" />
-    <ClCompile Include="Engine\3DEffect\Explosion.cpp" />
+    <ClCompile Include="Engine\3DEffect\ExplosionParticleSmokeManager.cpp" />
     <ClCompile Include="UserApplication\Bullet\ExplosionBullet.cpp" />
     <ClCompile Include="UserApplication\Bullet\ExplosionGun.cpp" />
     <ClCompile Include="Engine\Light\LightData.cpp" />

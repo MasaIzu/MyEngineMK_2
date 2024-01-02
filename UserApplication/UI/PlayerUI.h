@@ -20,6 +20,7 @@ public:
 	void AttackReticleUpdate(const bool& LockOn);
 	void PlayerHpUpdate(const float& nowHp,const float& MaxHp);
 	void GunUpdate(const float& gunBullet,const bool& isReload);
+	void ExplosionGunUpdate(const float& gunBullet,const bool& isReload);
 	//描画
 	void Draw();
 
@@ -45,10 +46,14 @@ private:
 	std::unique_ptr<Sprite> HP;
 	std::unique_ptr<Sprite> NormalSprite;
 	std::unique_ptr<Sprite> YokoBouSprite;
-	std::unique_ptr<Sprite> ReloadSprite;
+	std::unique_ptr<Sprite> YokoBouExplosionSprite;
+	std::unique_ptr<Sprite> ReloadNormalSprite;
+	std::unique_ptr<Sprite> ReloadExplosionSprite;
+	std::unique_ptr<Sprite> ExplosionESprite;
 
 	std::unique_ptr<SerialNumber> serialHPNumber;
 	std::unique_ptr<SerialNumber> serialGunWeaponNumber;
+	std::unique_ptr<SerialNumber> serialExplosionGunWeaponNumber;
 	std::unique_ptr<HpUpdate> hpUpdate;
 	std::unique_ptr<PlayerOperationUI> playerOperationUI;
 private:
@@ -58,6 +63,7 @@ private:
 	bool isMaxRatio = false;
 	bool isDieDirection = false;
 	bool isReload = false;
+	bool isExplosionReload = false;
 
 	uint32_t HpDownEasingTime = 0;
 	uint32_t HpDownMaxEasingTime = 60;
@@ -107,13 +113,18 @@ private:
 	Vector2 ReferencePointPos = { 330,554 };
 	Vector2 SpriteSize = { 28,27 };
 	Vector2 GunBulletUIPos = { 1028,540 };
+	Vector2 ExplosionGunBulletUIPos = { 1165,540 };
 	Vector2 GunBulletUISize = { 16,16 };
 	Vector2 NormalPos = { 1016,580 };
 	Vector2 NormalSize = { 84,20 };
 	Vector2 BouPos = { 1014,563 };
+	Vector2 BouExplosionPos = { 1164,563 };
 	Vector2 BouSize = { 120,1 };
 	Vector2 ReloadUIPos = { 1016,540 };
 	Vector2 ReloadUISize = { 111,22 };
+	Vector2 ReloadExplosionUIPos = { 1164,540 };
+	Vector2 ExplosionUIPos = { 1164,581 };
+	Vector2 ExplosionUISize = { 110,29 };
 
 	Vector4 WhiteColor = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 RedColor = { 1.0f,0.1f,0.1f,1.0f };

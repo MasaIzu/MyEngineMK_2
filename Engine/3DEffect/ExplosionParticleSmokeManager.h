@@ -1,12 +1,12 @@
 #pragma once
 #include "ExplosionParticleSmoke.h"
 
-class Explosion
+class ExplosionParticleSmokeManager
 {
 
 public://基本関数
-	Explosion( );
-	~Explosion( );
+	ExplosionParticleSmokeManager( );
+	~ExplosionParticleSmokeManager( );
 
 	//初期化
 	void Initialize();

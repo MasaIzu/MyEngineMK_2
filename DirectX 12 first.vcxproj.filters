@@ -193,12 +193,6 @@
     <Filter Include="ResourceFile\Shaders\Particle\Boost">
       <UniqueIdentifier>{22a42838-b43a-4842-a93f-2256f098c211}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserFile\UserSourceFile\Explosion">
-      <UniqueIdentifier>{0dc89e07-f97c-44ac-85e0-2d5e6f1aa59c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserFile\UserHeaderFile\Explosion">
-      <UniqueIdentifier>{9d04cfdc-ea32-4716-b964-17128b6ead99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ResourceFile\Shaders\Particle\Hanabi">
       <UniqueIdentifier>{7bc7e9e7-cc33-48e4-8fd8-e4ecebb234e5}</UniqueIdentifier>
     </Filter>
@@ -216,6 +210,12 @@
     </Filter>
     <Filter Include="Engine\SourceFile\Light">
       <UniqueIdentifier>{7a7cb620-9bda-4594-9bc3-ab1236f6fceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserSourceFile\ExplosionParticleSmokeManager">
+      <UniqueIdentifier>{0dc89e07-f97c-44ac-85e0-2d5e6f1aa59c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserFile\UserHeaderFile\ExplosionParticleSmokeManager">
+      <UniqueIdentifier>{9d04cfdc-ea32-4716-b964-17128b6ead99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -685,8 +685,8 @@
     <ClInclude Include="Engine\3DEffect\ParticleBoost.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3DEffect\Explosion.h">
-      <Filter>UserFile\UserHeaderFile\Explosion</Filter>
+    <ClInclude Include="Engine\3DEffect\ExplosionParticleSmokeManager.h">
+      <Filter>UserFile\UserHeaderFile\ExplosionParticleSmokeManager</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Bullet\ExplosionBullet.h">
       <Filter>UserFile\UserHeaderFile\Bullet</Filter>
@@ -969,8 +969,8 @@
     <ClCompile Include="Engine\3DEffect\ParticleBoost.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3DEffect\Explosion.cpp">
-      <Filter>UserFile\UserSourceFile\Explosion</Filter>
+    <ClCompile Include="Engine\3DEffect\ExplosionParticleSmokeManager.cpp">
+      <Filter>UserFile\UserSourceFile\ExplosionParticleSmokeManager</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Bullet\ExplosionBullet.cpp">
       <Filter>UserFile\UserSourceFile\Bullet</Filter>

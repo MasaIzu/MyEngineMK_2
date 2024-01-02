@@ -40,6 +40,11 @@ void ExplosionGun::Update(const Vector3& Pos,const Vector3& rot)
 	fbxObj3d_->Update();
 	TimeUpdate();
 
+	if ( CoolTime == static_cast< uint32_t >( Numbers::Zero ) )
+	{
+		isReload = false;
+	}
+
 	for ( auto&& Bullet : explosionBullet )
 	{
 		Bullet->Update();
@@ -68,8 +73,15 @@ void ExplosionGun::ShotBullet(const Vector3& BulletVec)
 			if ( !Bullet->GetBulletAlive() )
 			{
 				CoolTime = MaxCoolTime;
+				UseBulletCount++;
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
+				if ( UseBulletCount >= BulletMaxCount )
+				{
+					isReload = true;
+					UseBulletCount = 0;
+					CoolTime = MaxReloadCoolTime;
+				}
 				break;
 			}
 		}
@@ -109,3 +121,15 @@ void ExplosionGun::ParticleDraw(const ViewProjection& viewProjection_)
 		Bullet->ParticleDraw(viewProjection_);
 	}
 }
+
+bool ExplosionGun::GetIsReload()
+{
+	return isReload;
+}
+
+uint32_t ExplosionGun::GetBulletCount()
+{
+	uint32_t ExpendedBullets = BulletMaxCount - UseBulletCount;
+	return ExpendedBullets;
+}
+
