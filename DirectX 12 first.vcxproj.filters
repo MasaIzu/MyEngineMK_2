@@ -217,6 +217,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\ParticleExplosionSmoke">
       <UniqueIdentifier>{c13f0884-04ca-4404-b437-df27bd2867fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\Explosion">
+      <UniqueIdentifier>{4b660fd9-c6bb-420b-8a1b-52c2d72e9005}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -266,6 +269,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmoke.hlsli">
       <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\Explosion\Explosion.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +415,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionPS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

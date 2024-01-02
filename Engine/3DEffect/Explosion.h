@@ -172,7 +172,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const uint32_t& isExp,const Vector4& Pos);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const bool& isExp,const Vector4& Pos);
 
 	/// <summary>
 	/// 描画

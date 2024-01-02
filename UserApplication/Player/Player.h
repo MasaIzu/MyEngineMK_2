@@ -20,6 +20,7 @@
 #include "MyStruct.h"
 #include "ExplosionParticleSmokeManager.h"
 #include "ExplosionGun.h"
+#include "Explosion.h"
 
 struct PlayerAnimTime
 {
@@ -133,10 +134,11 @@ private://クラス関連
 	//ダメージUI
 	std::unique_ptr<PlayerDamageHitUI> DamageUI;
 
-	//パーティクルズ
+	//パーティクル
 	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
 	std::unique_ptr<ParticleBoost> ParticleBooster;
 	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
+	std::unique_ptr<Explosion> explosion;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -173,6 +175,7 @@ private://プレイヤークラス変数
 	bool isMissileAttack = false;
 	bool isPlayerExplosion = false;
 	bool isDieDirectionFinish = false;
+	bool isG = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;

@@ -78,6 +78,9 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleExplosion = std::make_unique<ExplosionParticleSmokeManager>();
 	ParticleExplosion->Initialize();
 
+	explosion = std::make_unique<Explosion>();
+	explosion->Initialize(MaxParticleCountA);
+
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
@@ -97,6 +100,15 @@ void Player::Update()
 	CheckHitCollision();
 	//HPのアップデート
 	HPUpdate();
+
+	if ( input_->PushKey(DIK_G) )
+	{
+		isG = true;
+	}
+	else
+	{
+		isG = false;
+	}
 
 	if ( isAlive )
 	{
@@ -339,6 +351,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
+	explosion->CSUpdate(cmdList,isG,Vector4(0,0,0,0));
 }
 
 void Player::ParticleDraw()
@@ -356,6 +369,10 @@ void Player::ParticleDraw()
 	ParticleExplosion->Draw(*viewProjection_);
 
 	playerExplosionGun->ParticleDraw(*viewProjection_);
+
+	Explosion::PreDraw(commandList);
+	explosion->Draw(*viewProjection_);
+	Explosion::PostDraw();
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& MissileAttack)
