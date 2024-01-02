@@ -267,11 +267,11 @@
     <None Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticle.hlsli">
       <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
     </None>
-    <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmoke.hlsli">
-      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
-    </None>
     <None Include="Resources\Shaders\Particle\Explosion\Explosion.hlsli">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmoke.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -404,18 +404,6 @@
     <FxCompile Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticleVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\EnemyBoost</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeCS.hlsl">
-      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeGS.hlsl">
-      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokePS.hlsl">
-      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeVS.hlsl">
-      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionCS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
     </FxCompile>
@@ -427,6 +415,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\Explosion\ExplosionVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\Explosion</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmokeCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmokeGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmokePS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmokeVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -754,7 +754,7 @@
     <ClInclude Include="SerialNumber.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Explosion.h">
+    <ClInclude Include="Engine\3DEffect\Explosion.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1029,7 +1029,7 @@
     <ClCompile Include="SerialNumber.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Explosion.cpp">
+    <ClCompile Include="Engine\3DEffect\Explosion.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>

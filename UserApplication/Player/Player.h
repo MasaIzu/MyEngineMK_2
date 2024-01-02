@@ -20,7 +20,7 @@
 #include "MyStruct.h"
 #include "ExplosionParticleSmokeManager.h"
 #include "ExplosionGun.h"
-#include "Explosion.h"
+//#include "Explosion.h"
 
 struct PlayerAnimTime
 {
@@ -138,7 +138,7 @@ private://クラス関連
 	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
 	std::unique_ptr<ParticleBoost> ParticleBooster;
 	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
-	std::unique_ptr<Explosion> explosion;
+	//std::unique_ptr<Explosion> explosion;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム

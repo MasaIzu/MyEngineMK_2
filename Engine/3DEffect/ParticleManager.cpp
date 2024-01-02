@@ -18,14 +18,14 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	BulletSmokeParticle::StaticInitialize(device);
 	ParticleHanabiExplosion::StaticInitialize(device);
 	EnemyBoostParticle::StaticInitialize(device);
-	Explosion::StaticInitialize(device);
+	//Explosion::StaticInitialize(device);
 	//MeshParticle::StaticInitialize(device);
 }
 
 void ParticleManager::Finalize()
 {
 	//MeshParticle::StaticFinalize();
-	Explosion::StaticFinalize();
+	//Explosion::StaticFinalize();
 	ParticleBoost::StaticFinalize();
 	ParticleHandHanabi::StaticFinalize();
 	//ParticleCS::StaticFinalize();
