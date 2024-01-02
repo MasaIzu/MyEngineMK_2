@@ -122,7 +122,7 @@
     <None Include="Resources\Shaders\Particle\Boost\ParticleBoost.hlsli" />
     <None Include="Resources\Shaders\Particle\BulletSmoke\BulletSmokeParticle.hlsli" />
     <None Include="Resources\Shaders\Particle\EnemyBoost\EnemyBoostParticle.hlsli" />
-    <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosion.hlsli" />
+    <None Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmoke.hlsli" />
     <None Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosion.hlsli" />
     <None Include="Resources\Shaders\PostEffectGlow.hlsli" />
     <None Include="Resources\Shaders\Primitive.hlsli" />
@@ -296,30 +296,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionCS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionGS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeCS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeGS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokePS.hlsl" />
+    <FxCompile Include="Resources\Shaders\Particle\Explosion\ParticleExplosionSmokeVS.hlsl" />
     <FxCompile Include="Resources\Shaders\Particle\Hanabi\ParticleHanabiExplosionCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>

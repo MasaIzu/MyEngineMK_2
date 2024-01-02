@@ -1,4 +1,4 @@
-#include "ParticleExplosion.hlsli"
+#include "ParticleExplosionSmoke.hlsli"
 
 RWStructuredBuffer<GpuParticleElement> gParticles : register(u0);
 AppendStructuredBuffer<uint> gDeadIndexList : register(u1);
