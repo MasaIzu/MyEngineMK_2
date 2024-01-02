@@ -18,7 +18,7 @@
 #include "Damage.h"
 #include <ParticleBoost.h>
 #include "MyStruct.h"
-#include "Explosion.h"
+#include "ExplosionParticleSmokeManager.h"
 #include "ExplosionGun.h"
 
 struct PlayerAnimTime
@@ -136,7 +136,7 @@ private://クラス関連
 	//パーティクルズ
 	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
 	std::unique_ptr<ParticleBoost> ParticleBooster;
-	std::unique_ptr<Explosion> ParticleExplosion;
+	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム

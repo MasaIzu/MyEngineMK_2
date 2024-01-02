@@ -736,6 +736,9 @@
     <ClInclude Include="SerialNumber.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1007,6 +1010,9 @@
     </ClCompile>
     <ClCompile Include="SerialNumber.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

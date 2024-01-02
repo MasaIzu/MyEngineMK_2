@@ -75,7 +75,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleBooster->Initialize(MaxParticleCount);
 	ParticleBooster->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
-	ParticleExplosion = std::make_unique<Explosion>();
+	ParticleExplosion = std::make_unique<ExplosionParticleSmokeManager>();
 	ParticleExplosion->Initialize();
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();

@@ -419,6 +419,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="SerialNumber.h" />
     <ClInclude Include="NumbersSprite.h" />
     <ClInclude Include="UserApplication\Scene\DieScene.h" />
@@ -529,6 +530,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="SerialNumber.cpp" />
     <ClCompile Include="NumbersSprite.cpp" />
     <ClCompile Include="UserApplication\Scene\DieScene.cpp" />
