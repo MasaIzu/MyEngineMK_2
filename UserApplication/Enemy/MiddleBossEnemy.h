@@ -75,6 +75,8 @@ private://関数
 	void ColTransUpdate();
 	//当たり判定のアップデート
 	void ColUpdate();
+	//死んだときの爆発までのアップデート
+	void DieMotionUpdate();
 public://Setter
 	//スプラインセット
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }
@@ -159,6 +161,7 @@ private://EnemyBossクラス変数
 	bool isTurn = false;
 	bool isSporn = false;
 	bool isDead = false;
+	bool isDeadMotion = false;
 	bool isAttack = false;
 	bool isMoveing = false;
 	bool isAngleGet = false;

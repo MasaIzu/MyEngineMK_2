@@ -45,15 +45,15 @@ void main(uint3 id : SV_DispatchThreadID)
     float3 velocity = gParticles[index].velocity.xyz;
     float3 position = gParticles[index].position.xyz;
     
-    speed = speed * Div;
+    //speed = speed * Div;
     
     velocity *= speed;
     
     position += velocity;
-    float4 color = gParticles[index].color;
+    float4 color = (1,1,1,1);
     
     
-    color.x = color.x * Div + 0.01;
+    color.x = color.x * Div;
     color.y = color.y * Div;
     color.z = color.z * Div;
     color.w = Div;
@@ -100,18 +100,20 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     float4 BladeEndPos;
     
-    float TimerMax = 120.0f;
-    float TimerMin = 70.0f;
+    
+    float AddTime = 100.0f;
+    float TimerMax = 120.0f + AddTime;
+    float TimerMin = 70.0f + AddTime;
     
     float LifeTime = Rand1(seed, TimerMax, TimerMin);
     
     
-    float speedMax = 5.0f;
-    float speedMin = 1.0f;
-    float speed = Rand1(indexAdd, speedMax, speedMin);
+    float speedMax = 10.0f;
+    float speedMin = 2.0f;
+    float speed = Rand1(indexAdd, speedMax, speedMin) * 0.8f;
     
-    float ScaleMax = 40.0f;
-    float ScaleMin = 10.0f;
+    float ScaleMax = 12.0f;
+    float ScaleMin = 2.0f;
     float scale = Rand1(indexAdd, ScaleMax, ScaleMin);
     
     float4 Position = pos;

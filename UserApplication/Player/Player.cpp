@@ -71,15 +71,16 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleHanabi->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	ParticleBooster = std::make_unique<ParticleBoost>();
-	int MaxParticleCount = 15000;
-	ParticleBooster->Initialize(MaxParticleCount);
+	int MaxParticleCountB = 15000;
+	ParticleBooster->Initialize(MaxParticleCountB);
 	ParticleBooster->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	ParticleExplosion = std::make_unique<ExplosionParticleSmokeManager>();
 	ParticleExplosion->Initialize();
-
-	//explosion = std::make_unique<Explosion>();
-	//explosion->Initialize(MaxParticleCountA);
+	int MaxParticleCountC = 400000;
+	explosion = std::make_unique<Explosion>();
+	explosion->Initialize(MaxParticleCountC);
+	explosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
@@ -351,7 +352,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
-	//explosion->CSUpdate(cmdList,isG,Vector4(0,0,0,0));
+	explosion->CSUpdate(cmdList,isG,Vector4(0,0,0,0));
 }
 
 void Player::ParticleDraw()
@@ -370,9 +371,9 @@ void Player::ParticleDraw()
 
 	playerExplosionGun->ParticleDraw(*viewProjection_);
 
-	//Explosion::PreDraw(commandList);
-	//explosion->Draw(*viewProjection_);
-	//Explosion::PostDraw();
+	Explosion::PreDraw(commandList);
+	explosion->Draw(*viewProjection_);
+	Explosion::PostDraw();
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& MissileAttack)

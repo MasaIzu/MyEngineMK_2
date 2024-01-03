@@ -134,9 +134,13 @@ void MiddleBossEnemy::Update()
 		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),FloatNumber(fNumbers::fZero)));
 
 	}
-	if ( !isDead )
+	if ( !isDeadMotion )
 	{
 		AliveUpdate();
+	}
+	else
+	{
+
 	}
 
 
@@ -586,7 +590,7 @@ void MiddleBossEnemy::AliveUpdate()
 				}
 				else
 				{
-					isDead = true;
+					isDeadMotion = true;
 					MiddleBossHp = static_cast< float >( Numbers::Zero );//0固定;
 				}
 				enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
@@ -602,7 +606,7 @@ void MiddleBossEnemy::AliveUpdate()
 				}
 				else
 				{
-					isDead = true;
+					isDeadMotion = true;
 					MiddleBossHp = static_cast< float >( Numbers::Zero );//0固定;
 				}
 				enemyHP2DUI->EnemyHpUpdate(MiddleBossHp,MaxMiddleBossHp);
@@ -835,6 +839,11 @@ void MiddleBossEnemy::ColUpdate()
 	MiddleBossCollider[ 6 ]->Update(EnemyRightMissileWorldTrans.matWorld_);
 	MiddleBossCollider[ 7 ]->Update(EnemyNecWorldTrans.matWorld_);
 	MiddleBossCollider[ 8 ]->Update(EnemyHedWorldTrans.matWorld_);
+}
+
+void MiddleBossEnemy::DieMotionUpdate()
+{
+
 }
 
 Vector3 MiddleBossEnemy::GetPosition() const
