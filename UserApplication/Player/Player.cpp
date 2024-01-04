@@ -77,10 +77,6 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 
 	ParticleExplosion = std::make_unique<ExplosionParticleSmokeManager>();
 	ParticleExplosion->Initialize();
-	int MaxParticleCountC = 400000;
-	explosion = std::make_unique<Explosion>();
-	explosion->Initialize(MaxParticleCountC);
-	explosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
@@ -202,6 +198,7 @@ void Player::Update()
 		if ( isPlayerExplosion == false )
 		{
 			isPlayerExplosion = true;
+			isLightActive = false;
 			ParticleExplosion->MakeParticle();
 		}
 	}
@@ -251,8 +248,11 @@ void Player::Draw()
 
 	//model_->Draw(DebugWorldTrans,*viewProjection_);
 
-	playerNormalGun->Draw(*viewProjection_);
-	playerExplosionGun->Draw(*viewProjection_);
+	if ( !isPlayerExplosion )
+	{
+		playerNormalGun->Draw(*viewProjection_);
+		playerExplosionGun->Draw(*viewProjection_);
+	}
 }
 
 void Player::FbxDraw() {
@@ -343,7 +343,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 
 	Moved = playerWorldTrans.translation_ - Moved;
 
-	LightData::GetInstance()->UpdateCircleShadow(CircleShadowCount,playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
+	LightData::GetInstance()->UpdateCircleShadow(CircleShadowCount,playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle,isLightActive);
 }
 
 void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
@@ -352,28 +352,26 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
-	explosion->CSUpdate(cmdList,isG,Vector4(0,0,0,0));
 }
 
 void Player::ParticleDraw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	ParticleHandHanabi::PreDraw(commandList);
-	ParticleHanabi->Draw(*viewProjection_);
-	ParticleHandHanabi::PostDraw();
 
-	ParticleBoost::PreDraw(commandList);
-	ParticleBooster->Draw(*viewProjection_);
-	ParticleBoost::PostDraw();
+	if ( !isPlayerExplosion )
+	{
+		ParticleHandHanabi::PreDraw(commandList);
+		ParticleHanabi->Draw(*viewProjection_);
+		ParticleHandHanabi::PostDraw();
 
+		ParticleBoost::PreDraw(commandList);
+		ParticleBooster->Draw(*viewProjection_);
+		ParticleBoost::PostDraw();
+
+		playerExplosionGun->ParticleDraw(*viewProjection_);
+	}
 	ParticleExplosion->Draw(*viewProjection_);
-
-	playerExplosionGun->ParticleDraw(*viewProjection_);
-
-	Explosion::PreDraw(commandList);
-	explosion->Draw(*viewProjection_);
-	Explosion::PostDraw();
 }
 
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& MissileAttack)

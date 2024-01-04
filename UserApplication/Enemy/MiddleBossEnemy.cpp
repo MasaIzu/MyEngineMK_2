@@ -113,6 +113,10 @@ void MiddleBossEnemy::Initialize(Player* Player)
 		MiddleBossCollider[ i ]->Update(BossWorldTrans.matWorld_);
 	}
 
+	explosion = std::make_unique<Explosion>();
+	explosion->Initialize(MaxParticleCountC);
+	explosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 }
 
 void MiddleBossEnemy::Update()
@@ -140,7 +144,7 @@ void MiddleBossEnemy::Update()
 	}
 	else
 	{
-
+		DieMotionUpdate();
 	}
 
 
@@ -178,12 +182,12 @@ void MiddleBossEnemy::Update()
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
 
-	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
 
 	ColTransUpdate();//当たり判定の場所アップデート
 	ColUpdate();//当たり判定のアップデート
@@ -198,19 +202,25 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 	//model_->Draw(EnemyNecWorldTrans,viewProjection_);
 	//model_->Draw(EnemyHedWorldTrans,viewProjection_);
 
-	normalGunLeft->Draw(viewProjection_);
-	normalGunRight->Draw(viewProjection_);
-	missileGunLeft->Draw(viewProjection_);
-	missileGunRight->Draw(viewProjection_);
-	HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
-	HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
+	if ( !isDead )
+	{
+		normalGunLeft->Draw(viewProjection_);
+		normalGunRight->Draw(viewProjection_);
+		missileGunLeft->Draw(viewProjection_);
+		missileGunRight->Draw(viewProjection_);
+		HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
+		HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
+	}
 }
 
 void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_)
 {
 	if ( isSporn )
 	{
-		fbxObj3d_->Draw(BossWorldTrans,viewProjection_);
+		if ( !isDead )
+		{
+			fbxObj3d_->Draw(BossWorldTrans,viewProjection_);
+		}
 	}
 }
 
@@ -218,18 +228,29 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	EnemyBoostParticle::PreDraw(commandList);
-	enemyBoostParticleLeft->Draw(viewProjection_);
-	enemyBoostParticleRight->Draw(viewProjection_);
-	EnemyBoostParticle::PostDraw();
+	if ( !isDead )
+	{
+		EnemyBoostParticle::PreDraw(commandList);
+		enemyBoostParticleLeft->Draw(viewProjection_);
+		enemyBoostParticleRight->Draw(viewProjection_);
+		EnemyBoostParticle::PostDraw();
+	}
+
+	Explosion::PreDraw(commandList);
+	explosion->Draw(viewProjection_);
+	Explosion::PostDraw();
+
 }
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
 {
 	Vector3 HPposition = BossWorldTrans.translation_ + Vector3(0,10,0);
 
-	enemyHP2DUI->Draw(HpPosition);
-	enemyHP3DUI->Draw(HPposition,viewProjection_);
+	if ( !isDead )
+	{
+		enemyHP2DUI->Draw(HpPosition);
+		enemyHP3DUI->Draw(HPposition,viewProjection_);
+	}
 }
 
 bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
@@ -294,12 +315,12 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
 
-	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
-	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f));
+	LightData::GetInstance()->UpdatePointLight(LightLeftOne,normalGunLeftPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightLeftTwo,missileGunLeftPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightRightOne,normalGunRightPos,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightRightTwo,missileGunRightPos,Vector3(1,0.2f,0.2f),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightBoostLeft,MyMath::Vec4ToVec3(EnemyBoostLeftPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
+	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
 
 	ColTransUpdate();//当たり判定の場所アップデート
 
@@ -422,6 +443,8 @@ void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 {
 	enemyBoostParticleLeft->CSUpdate(cmdList,EnemyBoostLeftPos,BoostEndPower);
 	enemyBoostParticleRight->CSUpdate(cmdList,EnemyBoostRightPos,BoostEndPower);
+
+	explosion->CSUpdate(cmdList,isExplosion,MyMath::Vec3ToVec4(BossWorldTrans.translation_));
 }
 
 void MiddleBossEnemy::Timer()
@@ -843,7 +866,31 @@ void MiddleBossEnemy::ColUpdate()
 
 void MiddleBossEnemy::DieMotionUpdate()
 {
+	if ( DieMotionCount < DieMaxMotionCount )
+	{
+		DieMotionCount++;
+		RotY += RotAddY;
+		BossWorldTrans.SetRot(Vector3(FloatNumber(fNumbers::fZero),MyMath::GetAngle(Angle),RotY));
 
+		BossWorldTrans.translation_ -= DieMotionDown;
+	}
+	else
+	{
+		isDead = true;
+		isLightActive = false;
+		if ( !isAllReadyExplosion )
+		{
+			if ( !isExplosion )
+			{
+				isExplosion = true;
+			}
+			else
+			{
+				isExplosion = false;
+				isAllReadyExplosion = true;
+			}
+		}
+	}
 }
 
 Vector3 MiddleBossEnemy::GetPosition() const

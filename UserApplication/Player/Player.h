@@ -138,7 +138,6 @@ private://クラス関連
 	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
 	std::unique_ptr<ParticleBoost> ParticleBooster;
 	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
-	std::unique_ptr<Explosion> explosion;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -176,6 +175,7 @@ private://プレイヤークラス変数
 	bool isPlayerExplosion = false;
 	bool isDieDirectionFinish = false;
 	bool isG = false;
+	bool isLightActive = true;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;

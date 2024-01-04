@@ -202,33 +202,40 @@ void MediumBossStage::LockOn()
 
 	float dotProduct = forwardVector.dot(toCameraVector);
 
-	if ( isLockOn == false )
+	if ( !middleBossEnemy->GetIsDead() )
 	{
-		if ( dotProduct > 0 )
+		if ( isLockOn == false )
 		{
-			Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
-
-			//ビューポート行列
-			Matrix4 Viewport =
-			{ windowWH.x / 2,0,0,0,
-			0,-windowWH.y / 2,0,0,
-			0,0,1,0,
-			windowWH.x / 2, windowWH.y / 2,0,1 };
-
-			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-			Matrix4 matView = viewProjection_->matView;
-			Matrix4 matProjection = viewProjection_->matProjection;
-
-			Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
-
-			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
-
-			if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
-				( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
+			if ( dotProduct > 0 )
 			{
-				isLockOn = true;
-				player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+				Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
+
+				//ビューポート行列
+				Matrix4 Viewport =
+				{ windowWH.x / 2,0,0,0,
+				0,-windowWH.y / 2,0,0,
+				0,0,1,0,
+				windowWH.x / 2, windowWH.y / 2,0,1 };
+
+				//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+				Matrix4 matView = viewProjection_->matView;
+				Matrix4 matProjection = viewProjection_->matProjection;
+
+				Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
+
+				//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+				EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
+
+				if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
+					( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
+				{
+					isLockOn = true;
+					player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+				}
+				else
+				{
+					isLockOn = false;
+				}
 			}
 			else
 			{
@@ -237,45 +244,46 @@ void MediumBossStage::LockOn()
 		}
 		else
 		{
-			isLockOn = false;
+			if ( dotProduct > 0 )
+			{
+				Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
+
+				//ビューポート行列
+				Matrix4 Viewport =
+				{ windowWH.x / 2,0,0,0,
+				0,-windowWH.y / 2,0,0,
+				0,0,1,0,
+				windowWH.x / 2, windowWH.y / 2,0,1 };
+
+				//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+				Matrix4 matView = viewProjection_->matView;
+				Matrix4 matProjection = viewProjection_->matProjection;
+
+				Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
+
+				//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+				EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
+
+				if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
+					( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
+				{
+					isLockOn = true;
+					player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
+				}
+				else
+				{
+					isLockOn = false;
+				}
+			}
+			else
+			{
+				isLockOn = false;
+			}
 		}
 	}
 	else
 	{
-		if ( dotProduct > 0 )
-		{
-			Vector2 windowWH = Vector2(WinApp::GetInstance()->GetWindowSize().x,WinApp::GetInstance()->GetWindowSize().y);
-
-			//ビューポート行列
-			Matrix4 Viewport =
-			{ windowWH.x / 2,0,0,0,
-			0,-windowWH.y / 2,0,0,
-			0,0,1,0,
-			windowWH.x / 2, windowWH.y / 2,0,1 };
-
-			//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-			Matrix4 matView = viewProjection_->matView;
-			Matrix4 matProjection = viewProjection_->matProjection;
-
-			Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
-
-			//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-			EnemyPos = MyMath::DivVecMat(EnemyPos,matViewProjectionViewport);
-
-			if ( ( 0 < EnemyPos.x && EnemyPos.x < WinApp::GetInstance()->GetWindowSize().x ) &&
-				( 0 < EnemyPos.y && EnemyPos.y < WinApp::GetInstance()->GetWindowSize().y ) )
-			{
-				isLockOn = true;
-				player_->SetReticlePosition(Vector2(EnemyPos.x,EnemyPos.y));
-			}
-			else
-			{
-				isLockOn = false;
-			}
-		}
-		else
-		{
-			isLockOn = false;
-		}
+		isLockOn = false;
+		player_->SetReticlePosition(Vector2(WinApp::GetInstance()->GetWindowSize().x / 2,WinApp::GetInstance()->GetWindowSize().y / 2));
 	}
 }

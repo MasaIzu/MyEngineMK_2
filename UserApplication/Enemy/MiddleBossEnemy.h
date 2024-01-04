@@ -114,8 +114,6 @@ private://クラス関連
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> HeriHaneModel_;
-	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleLeft;
-	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleRight;
 	WorldTransform BossWorldTrans;
 	WorldTransform HeriHaneLeftTrans;
 	WorldTransform HeriHaneRightTrans;
@@ -149,6 +147,11 @@ private://クラス関連
 	//プレイヤーのダメージ
 	PlayerAttackDamage Damage;
 
+	//パーティクル
+	std::unique_ptr<Explosion> explosion;
+	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleLeft;
+	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleRight;
+
 private://イーナムクラス
 
 
@@ -161,6 +164,8 @@ private://EnemyBossクラス変数
 	bool isTurn = false;
 	bool isSporn = false;
 	bool isDead = false;
+	bool isExplosion = false;
+	bool isAllReadyExplosion = false;
 	bool isDeadMotion = false;
 	bool isAttack = false;
 	bool isMoveing = false;
@@ -171,6 +176,7 @@ private://EnemyBossクラス変数
 	bool isDownSpeed = false;
 	bool isDownSpeedFinish = false;
 	bool isTitleBoss = false;
+	bool isLightActive = true;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -207,6 +213,9 @@ private://EnemyBossクラス変数
 	uint32_t LightBoostLeft = 0;
 	uint32_t LightBoostRight = 0;
 	uint32_t CircleShadowCount = 0;
+	uint32_t DieMotionCount = 0;
+	uint32_t DieMaxMotionCount = 150;
+	uint32_t MaxParticleCountC = 300000;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -231,10 +240,12 @@ private://EnemyBossクラス変数
 	float BackPosRadius = 5.0f;
 	float BoneColRadius = 9.0f;
 	float NormalGunBackCol = 10.0f;
-	float MaxMiddleBossHp = 7000.0f;
+	float MaxMiddleBossHp = 1000.0f;
 	float MiddleBossHp = MaxMiddleBossHp;
 	float BoostEndPower = 0.7f;
 	float LightDistance = 100.0f;
+	float RotY = 0.0f;
+	float RotAddY = 0.004f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 	Vector2 LightAngle = { 0.0f,2.0f };
@@ -255,7 +266,8 @@ private://EnemyBossクラス変数
 	Vector3 missileGunRightPos;
 	Vector3 EnemyBoostLeftPosLight;
 	Vector3 EnemyBoostRightPosLight;
-	Vector3 LightAtten = { 0.0f,0.1f,0.0f };
+	Vector3 DieMotionDown = { 0.0f,0.15f,0.0f };
+	Vector3 LightAtten = { 0.0f,0.0f,0.1f };
 
 	Vector4 LightDir = { 0,1,0,0 };
 
