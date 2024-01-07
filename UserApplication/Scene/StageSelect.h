@@ -46,6 +46,9 @@ public: // メンバ関数
 	//ブレイクするか
 	bool IsBreak() override;
 
+	//スロウ
+	bool IsSlow() override;
+
 private:
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -68,6 +71,7 @@ private:
 	bool isSelectBarDown = true;
 	bool isTop = false;
 	bool isNext = false;
+	bool isSlowGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

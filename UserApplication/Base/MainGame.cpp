@@ -42,6 +42,10 @@ void MainGame::CSUpdate()
 
 bool MainGame::IsBreak()
 {
-	// ゲームシーンの描画
 	return sceneManager_->IsBreak();
+}
+
+bool MainGame::IsSlow()
+{
+	return sceneManager_->IsSlow();
 }

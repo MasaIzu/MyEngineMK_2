@@ -121,7 +121,12 @@ void MediumBossStage::Update()
 			}
 		}
 	}
-
+	isSlowGame = false;
+	if ( middleBossEnemy->GetIsDieMotion() )
+	{
+		//isSlowGame = true;
+	}
+	
 
 	LockOn();
 
@@ -191,6 +196,11 @@ void MediumBossStage::CSUpdate()
 bool MediumBossStage::IsBreak()
 {
 	return isFinishGame;
+}
+
+bool MediumBossStage::IsSlow()
+{
+	return isSlowGame;
 }
 
 void MediumBossStage::LockOn()

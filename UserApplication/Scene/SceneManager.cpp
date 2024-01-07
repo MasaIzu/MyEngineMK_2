@@ -53,6 +53,11 @@ void SceneManager::CSUpdate()
 	scene_->CSUpdate();
 }
 
+bool SceneManager::IsSlow()
+{
+	return scene_->IsSlow();
+}
+
 void SceneManager::SetSceneFactory(AbstractSceneFactory* sceneFactory)
 {
 	sceneFactory_ = sceneFactory;

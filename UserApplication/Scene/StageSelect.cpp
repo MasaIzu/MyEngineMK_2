@@ -165,3 +165,8 @@ bool StageSelect::IsBreak()
 {
 	return isFinishGame;
 }
+
+bool StageSelect::IsSlow()
+{
+	return isSlowGame;
+}

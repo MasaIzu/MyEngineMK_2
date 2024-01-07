@@ -8,6 +8,7 @@
 #include "ParticleHanabiExplosion.h"
 #include "EnemyBoostParticle.h"
 #include "Explosion.h"
+#include "ParticleEditor.h"
 
 void ParticleManager::Initialize(ID3D12Device* device)
 {
@@ -19,6 +20,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	ParticleHanabiExplosion::StaticInitialize(device);
 	EnemyBoostParticle::StaticInitialize(device);
 	Explosion::StaticInitialize(device);
+	ParticleEditor::StaticInitialize(device);
 	//MeshParticle::StaticInitialize(device);
 }
 

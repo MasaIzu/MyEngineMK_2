@@ -78,6 +78,10 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleExplosion = std::make_unique<ExplosionParticleSmokeManager>();
 	ParticleExplosion->Initialize();
 
+	particleEditor = std::make_unique<ParticleEditor>();
+	particleEditor->Initialize(MaxParticleCountB);
+	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
@@ -92,6 +96,8 @@ void Player::Update()
 	isMissileAttack = false;
 
 	Moved = playerWorldTrans.translation_;
+
+	particleEditor->EditUpdate();
 
 	//当たり判定チェック
 	CheckHitCollision();
@@ -352,6 +358,8 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleBooster->CSUpdate(cmdList,bonePos,playerMovement->GetBoostPower(isBladeAttacking),playerMovement->GetPushBoostKey(isAttack,isBladeAttacking));
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
+
+	particleEditor->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,0,0)));
 }
 
 void Player::ParticleDraw()
@@ -370,6 +378,9 @@ void Player::ParticleDraw()
 		ParticleBoost::PostDraw();
 
 		playerExplosionGun->ParticleDraw(*viewProjection_);
+
+
+		particleEditor->Draw(*viewProjection_);
 	}
 	ParticleExplosion->Draw(*viewProjection_);
 }

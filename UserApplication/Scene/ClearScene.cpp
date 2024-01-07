@@ -83,3 +83,8 @@ bool ClearScene::IsBreak()
 {
 	return isFinishGame;
 }
+
+bool ClearScene::IsSlow()
+{
+	return isSlowGame;
+}

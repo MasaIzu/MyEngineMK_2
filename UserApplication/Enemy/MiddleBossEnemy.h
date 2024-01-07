@@ -88,6 +88,10 @@ public://Getter
 	bool GetFinishSpline()const { return MoveSpline->GetFinishSpline(); }
 	//死んだか
 	bool GetIsDead()const { return isDead; }
+	//死んだか
+	bool GetIsDieMotion()const {
+		return isDeadMotion;
+	}
 	//ポジションリターン
 	Vector3 GetPosition() const;
 
@@ -240,7 +244,7 @@ private://EnemyBossクラス変数
 	float BackPosRadius = 5.0f;
 	float BoneColRadius = 9.0f;
 	float NormalGunBackCol = 10.0f;
-	float MaxMiddleBossHp = 1000.0f;
+	float MaxMiddleBossHp = 7000.0f;
 	float MiddleBossHp = MaxMiddleBossHp;
 	float BoostEndPower = 0.7f;
 	float LightDistance = 100.0f;

@@ -21,6 +21,7 @@
 #include "ExplosionParticleSmokeManager.h"
 #include "ExplosionGun.h"
 #include "Explosion.h"
+#include "ParticleEditor.h"
 
 struct PlayerAnimTime
 {
@@ -138,6 +139,7 @@ private://クラス関連
 	std::unique_ptr<ParticleHandHanabi> ParticleHanabi;
 	std::unique_ptr<ParticleBoost> ParticleBooster;
 	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
+	std::unique_ptr<ParticleEditor> particleEditor;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -209,7 +211,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 5000;
+	float PlayerHP = 500000;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;

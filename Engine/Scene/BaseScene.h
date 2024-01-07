@@ -31,6 +31,9 @@ public:
 	//ブレイクするかどうか
 	virtual bool IsBreak() = 0;
 
+	//ブレイクするかどうか
+	virtual bool IsSlow() = 0;
+
 public://メンバ関数
 
 	virtual ~BaseScene() = default;

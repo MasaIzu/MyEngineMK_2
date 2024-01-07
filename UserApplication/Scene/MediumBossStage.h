@@ -49,6 +49,9 @@ public: // メンバ関数
 	//ブレイクするか
 	bool IsBreak() override;
 
+	//スロウ
+	bool IsSlow() override;
+
 	//レティクル内に敵がいたらロックオンする
 	void LockOn();
 
@@ -72,6 +75,9 @@ private:
 	bool isLockOn = false;
 	bool isFinishGame = false;
 	bool isBlackoutStart = false;
+	bool isSlowGame = false;
+	bool Jiken = false;
+
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

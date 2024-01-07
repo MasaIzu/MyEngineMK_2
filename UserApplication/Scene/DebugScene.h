@@ -57,6 +57,9 @@ public: // メンバ関数
 	//ブレイクするか
 	bool IsBreak() override;
 
+	//スロウ
+	bool IsSlow() override;
+
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -75,6 +78,7 @@ private: // メンバ変数
 	int range = 0;//ぼかし強度
 	int samples = 5;
 	bool isFinishGame = false;
+	bool isSlowGame = false;
 
 	uint32_t MaxFream = 60;
 

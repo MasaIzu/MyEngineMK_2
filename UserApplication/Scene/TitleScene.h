@@ -55,6 +55,9 @@ public: // メンバ関数
 	/// <returns>ブレイク</returns>
 	bool IsBreak() override;
 
+	//スロウ
+	bool IsSlow() override;
+
 	//カメラアップデート
 	void CameraUpdate();
 
@@ -97,6 +100,7 @@ private:
 	bool isStart = false;
 	bool isFinishGame = false;
 	bool isStartChangeScene = false;
+	bool isSlowGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

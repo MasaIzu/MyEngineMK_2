@@ -241,6 +241,11 @@ bool TitleScene::IsBreak()
 	return isFinishGame;
 }
 
+bool TitleScene::IsSlow()
+{
+	return isSlowGame;
+}
+
 void TitleScene::CameraUpdate()
 {
 	if ( movieCameraCount == MovieCameraCount::FirstCamera )

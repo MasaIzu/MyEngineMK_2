@@ -26,7 +26,12 @@ public: // メンバ関数
 	//ブレイクするかどうか
 	bool IsBreak() override;
 
+	//ブレイクするかどうか
+	bool IsSlow() override;
+
 private:
 	// ゲーム終了フラグ
 	bool endRequest_ = false;
+
+	bool isSlow = false;
 };

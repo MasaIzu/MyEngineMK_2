@@ -877,6 +877,7 @@ void MiddleBossEnemy::DieMotionUpdate()
 	else
 	{
 		isDead = true;
+		isDeadMotion = false;
 		isLightActive = false;
 		if ( !isAllReadyExplosion )
 		{

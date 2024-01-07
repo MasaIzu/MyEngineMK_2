@@ -45,6 +45,9 @@ public: // メンバ関数
 	//ブレイクするか
 	bool IsBreak() override;
 
+	//スロウ
+	bool IsSlow() override;
+
 private:
 	Input* input = nullptr;
 	SceneManager* sceneManager_ = nullptr;
@@ -56,6 +59,7 @@ private:
 	std::unique_ptr<Sprite> ASprite;
 
 	bool isFinishGame = false;
+	bool isSlowGame = false;
 	bool isSceneChange = false;
 
 	float SpriteAlpha = 1.0f;

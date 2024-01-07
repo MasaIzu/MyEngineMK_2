@@ -220,6 +220,9 @@
     <Filter Include="ResourceFile\Shaders\Particle\Explosion">
       <UniqueIdentifier>{4b660fd9-c6bb-420b-8a1b-52c2d72e9005}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Particle\ParticleEditor">
+      <UniqueIdentifier>{d434e0c2-fb53-4b39-8609-54c4b8720121}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Obj.hlsli">
@@ -272,6 +275,9 @@
     </None>
     <None Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmoke.hlsli">
       <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditor.hlsli">
+      <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -427,6 +433,18 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\ParticleExplosionSmoke\ParticleExplosionSmokeVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\ParticleExplosionSmoke</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditorCS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditorGS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditorPS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditorVS.hlsl">
+      <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -757,6 +775,12 @@
     <ClInclude Include="Engine\3DEffect\Explosion.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
+    <ClInclude Include="FileFunction.h">
+      <Filter>Engine\HeaderFile\GameFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3DEffect\ParticleEditor.h">
+      <Filter>Engine\HeaderFile\3DEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1030,6 +1054,12 @@
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\Explosion.cpp">
+      <Filter>Engine\SourceFile\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFunction.cpp">
+      <Filter>Engine\SourceFile\GameFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3DEffect\ParticleEditor.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
     </ClCompile>
   </ItemGroup>

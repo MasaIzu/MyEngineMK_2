@@ -59,6 +59,9 @@ public: // メンバ関数
 	//レティクルチェック
 	bool CheckReticle();
 
+	//スロウ
+	bool IsSlow() override;
+
 private: // メンバ変数
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
@@ -86,6 +89,7 @@ private: // メンバ変数
 	bool isFinish = false;
 	bool isFinishGame = false;
 	bool isBlackoutStart = false;
+	bool isSlowGame = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

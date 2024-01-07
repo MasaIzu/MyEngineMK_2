@@ -37,6 +37,11 @@ public: // メンバ関数
 	/// </summary>
 	bool IsBreak();
 
+	/// <summary>
+	/// 終了させるかどうか
+	/// </summary>
+	bool IsSlow();
+
 	// 次のシーン予約
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory);
 	//シーンを変更

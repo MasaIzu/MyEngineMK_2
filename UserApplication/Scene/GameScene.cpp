@@ -284,3 +284,8 @@ bool GameScene::CheckReticle()
 
 	return false;
 }
+
+bool GameScene::IsSlow()
+{
+	return isSlowGame;
+}

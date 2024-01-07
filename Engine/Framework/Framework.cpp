@@ -137,6 +137,11 @@ bool Framework::isPlayMyGame()
 	return isEndRequst;
 }
 
+bool Framework::isGameSlow()
+{
+	return isSlow;
+}
+
 void Framework::Run()
 {
 
@@ -145,8 +150,33 @@ void Framework::Run()
 
 	while (true) {//ゲームループ
 
-		//毎フレーム更新
-		Update();
+		if ( isFirstUpdate )
+		{
+			isFirstUpdate = false;
+			//毎フレーム更新
+			Update();
+		}
+		else
+		{
+			if ( !IsSlow() )
+			{
+				//毎フレーム更新
+				Update();
+			}
+			else
+			{
+				if ( NotUpdateTime < MaxNotUpdateTime )
+				{
+					NotUpdateTime++;
+				}
+				else
+				{
+					NotUpdateTime = 0;
+					Update();
+				}
+			}
+		}
+		
 		//終了リクエストが来たら抜ける
 		if (isPlayMyGame()) {
 			break;

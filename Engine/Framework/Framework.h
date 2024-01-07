@@ -39,11 +39,17 @@ public:
 	//終了チェック
 	virtual bool isPlayMyGame();
 
+	//スロウ
+	virtual bool isGameSlow();
+
 	//CSアップデート
 	virtual void CSUpdate() = 0;
 
 	//ブレイクするかどうか
 	virtual bool IsBreak() = 0;
+
+	//ブレイクするかどうか
+	virtual bool IsSlow() = 0;
 
 public://デストラクタ
 	virtual ~Framework() = default;
@@ -74,4 +80,12 @@ protected:
 
 
 	bool isEndRequst = false;
+
+	bool isSlow = false;
+	bool isFirstUpdate = true;
+
+	uint32_t NotUpdateTime = 0;
+	uint32_t MaxNotUpdateTime = 3;
+
+
 };

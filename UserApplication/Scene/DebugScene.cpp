@@ -147,6 +147,11 @@ bool DebugScene::IsBreak()
 	return isFinishGame;
 }
 
+bool DebugScene::IsSlow()
+{
+	return isSlowGame;
+}
+
 void DebugScene::Draw() {
 
 	// コマンドリストの取得
