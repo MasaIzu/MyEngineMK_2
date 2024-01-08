@@ -46,10 +46,16 @@ void main(uint3 id : SV_DispatchThreadID)
         return;
     }
 
+
     float3 Position = gParticles[index].position.xyz;
     float3 Velocity = gParticles[index].velocity.xyz;
     Position += Velocity * gParticles[index].Speed;
     
+    float4 Color = EndColor - StartColor;
+    float Life = gParticles[index].MaxLifeTime - gParticles[index].lifeTime;
+    float Ratio = Life / gParticles[index].MaxLifeTime;
+    Color *= Ratio;
+    gParticles[index].color = StartColor + Color;
     gParticles[index].position.xyz = Position;
     gParticles[index].scale += ScaleTinker;
 }
@@ -124,6 +130,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         gParticles[index].scale = Scale;
     }
     
+    gParticles[index].MaxLifeTime = gParticles[index].lifeTime;
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = StartPos.xyz;
     gParticles[index].color = StartColor;

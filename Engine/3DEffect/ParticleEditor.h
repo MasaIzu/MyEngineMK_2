@@ -10,10 +10,15 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
-#include "Defined.h"
 #include "MyStruct.h"
 
+#include "Defined.h"
 MY_SUPPRESS_WARNINGS_BEGIN
+#include <cereal/types/string.hpp>
+#include <cereal/archives/json.hpp>
+#include <fstream>
+#include <iostream>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -59,6 +64,7 @@ public: // サブクラス
 		Vector4 velocity;
 		uint32_t isActive;
 		float lifeTime;
+		float MaxLifeTime;
 		float scale;
 		float Speed;
 		float graceOfTime;
@@ -90,6 +96,26 @@ public: // サブクラス
 		uint32_t MaxParticleCount = 0;
 	};
 	ShaderDetailParameters shaderDetailParameters;
+
+	struct SendParameters
+	{
+		float StartPos[ 4 ] = { 0,0,0,0 };
+		float EndPos[ 4 ] = { 0,50,0,0 };
+		float StartColor[ 4 ] = { 1,1,1,1 };
+		float EndColor[ 4 ] = { 1,1,1,1 };
+		float Angle[ 4 ] = { 0,0,0,0 };
+		uint32_t Shot = 0;
+		uint32_t EndPointActive = 0;
+		uint32_t RandomLife = 0;
+		uint32_t RandomSpeed = 0;
+		uint32_t RandomScale = 0;
+		float Speed = 1.0f;
+		float Scale = 1.0f;
+		float ScaleTinker = 0.0f;
+		float MaxLife = 60.0f;
+		uint32_t MaxParticleCount = 0;
+	};
+	SendParameters sendParameters;
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -180,7 +206,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="ParticleCount">どのくらい作るのか</param>
-	void Initialize(uint32_t ParticleCount);
+	void Initialize(const uint32_t& ParticleCount,const std::string& filename);
 
 	/// <summary>
 	/// エディターアップデート
@@ -213,7 +239,10 @@ public: // メンバ関数
 	void CopyData();
 
 
-
+	// ファイルが存在するかどうかを確認する関数
+	bool FileExists() {
+		return std::filesystem::exists(FileName + ".json");
+	}
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
@@ -251,11 +280,17 @@ private: // メンバ変数
 	bool RandomLife = false;
 	bool RandomSpeed = false;
 	bool RandomScale = false;
+	bool isPushSave = false;
+	bool isPushLoad = false;
 
 	uint32_t particleCount;
 
-	float EndPos[ 3 ] = { 0,1,0 };
+	float StartPos[ 4 ] = { 0,0,0,0 };
+	float EndPos[ 4 ] = { 0,1,0,0 };
 
 	float StartColor[ 4 ] = { 1,1,1,1 };
 	float EndColor[ 4 ] = { 1,1,1,1 };
+	float Angle[ 4 ] = { 0,0,0,0 };
+
+	std::string FileName;
 };

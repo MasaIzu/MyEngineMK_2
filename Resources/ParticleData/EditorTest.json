@@ -1,0 +1,44 @@
+{
+    "Resources/ParticleData/EditorTest": {
+        "StartPos": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "EndPos": {
+            "value0": 0.0,
+            "value1": 1.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "StartColor": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 0.006000000052154064
+        },
+        "EndColor": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 0.0
+        },
+        "Angle": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "Shot": 1,
+        "EndPointActive": 0,
+        "RandomLife": 1,
+        "RandomSpeed": 1,
+        "RandomScale": 1,
+        "Speed": 1.0,
+        "Scale": 0.6460000276565552,
+        "ScaleTinker": 0.5320000052452087,
+        "MaxLife": 60.0,
+        "MaxParticleCount": 15000
+    }
+}

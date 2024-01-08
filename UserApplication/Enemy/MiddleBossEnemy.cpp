@@ -121,6 +121,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 
 void MiddleBossEnemy::Update()
 {
+	isExplosion = false;
 	if ( isTurn )
 	{
 

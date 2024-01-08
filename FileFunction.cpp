@@ -1,38 +1,28 @@
 #include "FileFunction.h"
 
-FileFunction::FileFunction()
+FileFunction::FileFunction(const std::string& filename) : FileName(filename),JsonName(".json")
 {
 }
 
 FileFunction::~FileFunction()
 {
 }
-
-bool FileFunction::IsFileExist(const std::string& name)
-{
-	return std::filesystem::is_regular_file(name);
-}
-
-template<typename T>
-void FileFunction::WriteToFile(const T& data,const std::string& filename)
-{
-	std::ofstream file(filename,std::ios::binary);
-	if ( file.is_open() )
-	{
-		data.writeToStream(file);
-		file.close();
-	}
-}
-
-template<typename T>
-T FileFunction::ReadFromFile(const std::string& filename)
-{
-	T data;
-	std::ifstream file(filename);
-	if ( file.is_open() )
-	{
-		data.readFromStream(file);
-		file.close();
-	}
-	return data;
-}
+//template<typename T>
+//void FileFunction::WriteToFile(const T& data)
+//{
+//	std::ofstream os(FileName + JsonName);
+//	cereal::JSONOutputArchive archive(os);
+//	archive(cereal::make_nvp(FileName,data));
+//}
+//
+//template<typename T>
+//T FileFunction::ReadFromFile() {
+//	T data;
+//	std::ifstream is(FileName + JsonName);
+//	if ( is )
+//	{
+//		cereal::JSONInputArchive archive(is);
+//		archive(cereal::make_nvp(FileName,data));
+//	}
+//	return data;
+//}

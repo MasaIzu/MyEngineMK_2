@@ -54,6 +54,7 @@ struct GpuParticleElement
     float4 velocity;
     uint isActive; // ¶‘¶ƒtƒ‰ƒO.
     float lifeTime;
+    float MaxLifeTime;
     float scale;
     float Speed;
     float graceOfTime;
