@@ -503,6 +503,9 @@ void ParticleEditor::EditUpdate()
 	ImGui::SliderFloat("EndColorAlpha",&EndColor[ 3 ],0.0f,1.0f);
 	ImGui::SliderFloat("Scale",&shaderDetailParameters.Scale,0.01f,30.0f);
 	ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-2.0f,2.0f);
+	ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
+	ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
+	ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
 	ImGui::Checkbox("Shot",&Shot);
 	ImGui::Checkbox("EndPointActive",&EndPointActive);
 	ImGui::Checkbox("RandomLife",&RandomLife);
@@ -515,6 +518,7 @@ void ParticleEditor::EditUpdate()
 	}
 	isPushSave = ImGui::Button("save");
 	isPushLoad = ImGui::Button("load");
+	isPushReset = ImGui::Button("reset");
 	ImGui::End();
 	
 	shaderDetailParameters.StartColor = { StartColor[ 0 ],StartColor[ 1 ],StartColor[ 2 ],StartColor[ 3 ] };
@@ -525,6 +529,7 @@ void ParticleEditor::EditUpdate()
 	shaderDetailParameters.RandomSpeed = RandomSpeed;
 	shaderDetailParameters.RandomScale = RandomScale;
 	shaderDetailParameters.EndPos = { EndPos[ 0 ],EndPos[ 1 ],EndPos[ 2 ], 0 };
+	shaderDetailParameters.Angle = Vector4(AngleX_,AngleY_,AngleZ_,0);
 	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
 	if ( isPushSave )
@@ -559,6 +564,29 @@ void ParticleEditor::EditUpdate()
 		std::ifstream is(FileName + ".json");
 		cereal::JSONInputArchive archive(is);
 		archive(cereal::make_nvp(FileName,ReadParameters));
+		for ( uint32_t i = 0; i < 4; i++ )
+		{
+			StartPos[ i ] = ReadParameters.StartPos[ i ];
+			EndPos[ i ] = ReadParameters.EndPos[ i ];
+			EndColor[ i ] = ReadParameters.EndColor[ i ];
+			StartColor[ i ] = ReadParameters.StartColor[ i ];
+			Angle[ i ] = ReadParameters.Angle[ i ];
+		}
+		Shot = ReadParameters.Shot;
+		EndPointActive = ReadParameters.EndPointActive;
+		RandomLife = ReadParameters.RandomLife;
+		RandomSpeed = ReadParameters.RandomSpeed;
+		RandomScale = ReadParameters.RandomScale;
+		shaderDetailParameters.Speed = ReadParameters.Speed;
+		shaderDetailParameters.Scale = ReadParameters.Scale;
+		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
+		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
+		shaderDetailParameters.MaxParticleCount = ReadParameters.MaxParticleCount;
+	}
+
+	if ( isPushReset )
+	{
+		SendParameters ReadParameters;
 		for ( uint32_t i = 0; i < 4; i++ )
 		{
 			StartPos[ i ] = ReadParameters.StartPos[ i ];

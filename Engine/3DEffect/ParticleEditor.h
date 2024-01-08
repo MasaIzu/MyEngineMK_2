@@ -282,8 +282,13 @@ private: // メンバ変数
 	bool RandomScale = false;
 	bool isPushSave = false;
 	bool isPushLoad = false;
+	bool isPushReset = false;
 
 	uint32_t particleCount;
+
+	float AngleX_ = 0.0f;
+	float AngleY_ = 0.0f;
+	float AngleZ_ = 0.0f;
 
 	float StartPos[ 4 ] = { 0,0,0,0 };
 	float EndPos[ 4 ] = { 0,1,0,0 };

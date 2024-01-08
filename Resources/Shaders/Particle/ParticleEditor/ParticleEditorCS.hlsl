@@ -83,7 +83,22 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     if (EndPointActive)
     {
         velocity = normalize(EndPos.xyz - StartPos.xyz);
-        gParticles[index].velocity.xyz = velocity;
+        
+        float RandomAngleMin = 0.0f;
+        float RandomAngleX = Rand1(seed, Angle.x, RandomAngleMin);
+        float4 rotationX = QuaternionFromAxisAngle(float3(1, 0, 0), RandomAngleX);
+        
+        float RandomAngleY = Rand1(seed, Angle.y, RandomAngleMin);
+        float4 rotationY = QuaternionFromAxisAngle(float3(0, 1, 0), RandomAngleY);
+        
+        float RandomAngleZ = Rand1(seed, Angle.z, RandomAngleMin);
+        float4 rotationZ = QuaternionFromAxisAngle(float3(0, 0, 1), RandomAngleZ);
+        
+        float3 RotVelocity = RotateVectorByQuaternion(velocity, rotationX);
+        RotVelocity = RotateVectorByQuaternion(RotVelocity, rotationY);
+        RotVelocity = RotateVectorByQuaternion(RotVelocity, rotationZ);
+        
+        gParticles[index].velocity.xyz = RotVelocity;
     }
     else
     {

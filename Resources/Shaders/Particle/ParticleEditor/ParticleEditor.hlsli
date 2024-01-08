@@ -122,3 +122,22 @@ float4 QuaternionFromAxisAngle(float3 axis, float angle)
     quaternion.xyz = axis * s;
     return quaternion;
 }
+
+// 四元数の積を計算する関数
+float4 QuaternionMultiply(float4 q1, float4 q2)
+{
+    return float4(q1.w * q2.xyz + q2.w * q1.xyz + cross(q1.xyz, q2.xyz),
+                  q1.w * q2.w - dot(q1.xyz, q2.xyz));
+}
+
+// 四元数によるベクトルの回転
+float3 RotateVectorByQuaternion(float3 v, float4 q)
+{
+    float4 vQuat = float4(v, 0.0); // ベクトルを四元数に拡張
+    float4 qConj = float4(-q.xyz, q.w); // 四元数の共役
+
+    // 四元数の積を計算してベクトルに回転を適用
+    float4 rotatedQuat = QuaternionMultiply(QuaternionMultiply(q, vQuat), qConj);
+
+    return rotatedQuat.xyz; // 回転されたベクトルを返す
+}
