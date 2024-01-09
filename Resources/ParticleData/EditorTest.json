@@ -16,13 +16,13 @@
             "value0": 1.0,
             "value1": 1.0,
             "value2": 1.0,
-            "value3": 0.006000000052154064
+            "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
             "value1": 1.0,
             "value2": 1.0,
-            "value3": 0.0
+            "value3": 1.0
         },
         "Angle": {
             "value0": 0.0,
@@ -32,12 +32,12 @@
         },
         "Shot": 1,
         "EndPointActive": 0,
-        "RandomLife": 1,
-        "RandomSpeed": 1,
-        "RandomScale": 1,
+        "RandomLife": 0,
+        "RandomSpeed": 0,
+        "RandomScale": 0,
         "Speed": 1.0,
-        "Scale": 0.6460000276565552,
-        "ScaleTinker": 0.5320000052452087,
+        "Scale": 1.0,
+        "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000
     }

@@ -506,7 +506,7 @@ void ParticleEditor::EditUpdate()
 	ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
 	ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
 	ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
-	ImGui::Checkbox("Shot",&Shot);
+	ImGui::Checkbox("ParticleActive",&Shot);
 	ImGui::Checkbox("EndPointActive",&EndPointActive);
 	ImGui::Checkbox("RandomLife",&RandomLife);
 	ImGui::Checkbox("RandomSpeed",&RandomSpeed);
@@ -520,7 +520,11 @@ void ParticleEditor::EditUpdate()
 	isPushLoad = ImGui::Button("load");
 	isPushReset = ImGui::Button("reset");
 	ImGui::End();
-	
+
+	Angle[ 0 ] = AngleX_;
+	Angle[ 1 ] = AngleY_;
+	Angle[ 2 ] = AngleZ_;
+
 	shaderDetailParameters.StartColor = { StartColor[ 0 ],StartColor[ 1 ],StartColor[ 2 ],StartColor[ 3 ] };
 	shaderDetailParameters.EndColor = { EndColor[ 0 ],EndColor[ 1 ],EndColor[ 2 ],EndColor[ 3 ] };
 	shaderDetailParameters.Shot = Shot;
@@ -572,6 +576,9 @@ void ParticleEditor::EditUpdate()
 			StartColor[ i ] = ReadParameters.StartColor[ i ];
 			Angle[ i ] = ReadParameters.Angle[ i ];
 		}
+		AngleX_ = Angle[ 0 ];
+		AngleY_ = Angle[ 1 ];
+		AngleZ_ = Angle[ 2 ];
 		Shot = ReadParameters.Shot;
 		EndPointActive = ReadParameters.EndPointActive;
 		RandomLife = ReadParameters.RandomLife;
@@ -595,6 +602,9 @@ void ParticleEditor::EditUpdate()
 			StartColor[ i ] = ReadParameters.StartColor[ i ];
 			Angle[ i ] = ReadParameters.Angle[ i ];
 		}
+		AngleX_ = Angle[ 0 ];
+		AngleY_ = Angle[ 1 ];
+		AngleZ_ = Angle[ 2 ];
 		Shot = ReadParameters.Shot;
 		EndPointActive = ReadParameters.EndPointActive;
 		RandomLife = ReadParameters.RandomLife;

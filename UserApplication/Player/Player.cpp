@@ -359,7 +359,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
 
-	particleEditor->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,0,0)));
+	particleEditor->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,5,0)));
 }
 
 void Player::ParticleDraw()
