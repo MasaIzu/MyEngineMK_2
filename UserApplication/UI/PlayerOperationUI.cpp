@@ -34,7 +34,7 @@ void PlayerOperationUI::Initialize()
 	EKeySprite->SetSize(EkeySize);
 
 	ShiftKeySprite = Sprite::Create(TextureManager::Load("sprite/Shift.png"));
-	ShiftKeySprite->SetSize(EkeySize);
+	ShiftKeySprite->SetSize(ShiftkeySize);
 
 	UpBoostSprite = Sprite::Create(TextureManager::Load("sprite/UpBoost.png"));
 	UpBoostSprite->SetSize(UISize);
