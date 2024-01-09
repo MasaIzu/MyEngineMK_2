@@ -502,7 +502,7 @@ void ParticleEditor::EditUpdate()
 	ImGui::ColorEdit4("EndColor",EndColor,ImGuiColorEditFlags_Float);
 	ImGui::SliderFloat("EndColorAlpha",&EndColor[ 3 ],0.0f,1.0f);
 	ImGui::SliderFloat("Scale",&shaderDetailParameters.Scale,0.01f,30.0f);
-	ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-2.0f,2.0f);
+	ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-1.0f,1.0f);
 	ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
 	ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
 	ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
@@ -614,7 +614,7 @@ void ParticleEditor::EditUpdate()
 		shaderDetailParameters.Scale = ReadParameters.Scale;
 		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
 		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
-		shaderDetailParameters.MaxParticleCount = ReadParameters.MaxParticleCount;
+		shaderDetailParameters.MaxParticleCount = particleCount;
 	}
 
 }

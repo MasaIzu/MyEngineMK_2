@@ -291,7 +291,7 @@ private: // メンバ変数
 	float AngleZ_ = 0.0f;
 
 	float StartPos[ 4 ] = { 0,0,0,0 };
-	float EndPos[ 4 ] = { 0,1,0,0 };
+	float EndPos[ 4 ] = { 0,50,0,0 };
 
 	float StartColor[ 4 ] = { 1,1,1,1 };
 	float EndColor[ 4 ] = { 1,1,1,1 };

@@ -14,7 +14,7 @@
 
 DebugScene::DebugScene() {}
 DebugScene::~DebugScene() {
-	LightData::GetInstance()->Destroy();
+	LightData::GetInstance()->ClearLight();
 }
 
 void DebugScene::Initialize() {
@@ -48,6 +48,8 @@ void DebugScene::Initialize() {
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
 
+	skydome = std::make_unique<Skydome>();
+	skydome->Initialize();
 }
 
 void DebugScene::Update() {
@@ -60,52 +62,6 @@ void DebugScene::Update() {
 	gameCamera->Update();
 
 	worldTransform_.TransferMatrix();
-	ImGui::Begin("XXXXX");
-
-
-	ImGui::End();
-
-	if (shadeNumber == 0) {
-		ImGui::Begin("Not");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-
-		ImGui::End();
-	}
-	else if (shadeNumber == 1) {
-		ImGui::Begin("averageBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-
-		ImGui::SliderInt("range", &range, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 2) {
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-
-		ImGui::SliderFloat("centerX", &center.x, 0, 1);
-		ImGui::SliderFloat("centerY", &center.y, 0, 1);
-		ImGui::SliderFloat("intensity", &intensity, 0, 1);
-		ImGui::SliderInt("samples", &samples, 0, 20);
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 3) {
-		ImGui::Begin("RadialBlurBlur");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
-	else if (shadeNumber == 4) {
-		ImGui::Begin("CloseFilta");
-		ImGui::SliderInt("shadeNumber", &shadeNumber, 0, 4);
-		ImGui::SliderFloat("angle", &angle, 0.0f, 180.0f);
-		ImGui::SliderFloat("angle2", &angle2, 0.0f, 180.0f);
-
-		ImGui::SetCursorPos(ImVec2(0, 20));
-		ImGui::End();
-	}
 
 	bool fal = false;
 	player_->AttackUpdate(Vector3(0,0,0),fal);
@@ -169,6 +125,7 @@ void DebugScene::Draw() {
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
+	skydome->Draw(*viewProjection_.get());
 	//model->Draw(worldTransform_,*viewProjection_.get());
 	//ground->Draw(*viewProjection_);
 	levelData->Draw(*viewProjection_.get());
@@ -177,6 +134,7 @@ void DebugScene::Draw() {
 
 	player_->FbxDraw();
 
+	player_->ParticleDraw();
 
 #pragma endregion
 

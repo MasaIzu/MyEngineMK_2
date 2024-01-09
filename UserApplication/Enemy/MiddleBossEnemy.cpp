@@ -74,6 +74,10 @@ MiddleBossEnemy::MiddleBossEnemy()
 	enemyBoostParticleRight->Initialize(MaxParticleCountA);
 	enemyBoostParticleRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	explosion = std::make_unique<Explosion>();
+	explosion->Initialize(MaxParticleCountC);
+	explosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	LightLeftOne = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
 	LightLeftTwo = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
 	LightRightOne = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
@@ -112,10 +116,6 @@ void MiddleBossEnemy::Initialize(Player* Player)
 		MiddleBossCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYS);
 		MiddleBossCollider[ i ]->Update(BossWorldTrans.matWorld_);
 	}
-
-	explosion = std::make_unique<Explosion>();
-	explosion->Initialize(MaxParticleCountC);
-	explosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 }
 

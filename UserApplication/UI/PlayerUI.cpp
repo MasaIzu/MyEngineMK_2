@@ -140,14 +140,6 @@ void PlayerUI::Update(const float& nowBoost,const bool& isAlive)
 		DestroySprite->SetRatio(DieOutLineRatioX,DieOutLineRatioY);
 	}
 	playerOperationUI->Update();
-
-	ImGui::Begin("HPSPRITE");
-
-	ImGui::SliderFloat("BouPosX",&ExplosionUIPos.x,0,1300);
-	ImGui::SliderFloat("BouPosY",&ExplosionUIPos.y,0,1000);
-	ImGui::SliderFloat("ExplosionUISizeX",&ExplosionUISize.x,0,200);
-	ImGui::SliderFloat("ExplosionUISizeY",&ExplosionUISize.y,0,100);
-	ImGui::End();
 	ExplosionESprite->SetSize(ExplosionUISize);
 }
 
