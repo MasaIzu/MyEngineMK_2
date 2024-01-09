@@ -8,7 +8,7 @@ void MainGame::Initialize()
 
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_.get());
-	SceneManager::GetInstance()->ChangeScene("TITLE");
+	SceneManager::GetInstance()->ChangeScene("Debug");
 }
 
 void MainGame::Finalize()
