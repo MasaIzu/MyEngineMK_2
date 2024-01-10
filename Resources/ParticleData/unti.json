@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/EditorTest.json": {
+    "Resources/ParticleData/unti.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -36,8 +36,8 @@
         "RandomSpeed": 0,
         "RandomScale": 0,
         "Speed": 1.0,
-        "Scale": 6.791999816894531,
-        "ScaleTinker": -0.24899999797344209,
+        "Scale": 1.0,
+        "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000
     }

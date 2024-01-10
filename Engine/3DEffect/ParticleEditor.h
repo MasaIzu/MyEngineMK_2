@@ -206,7 +206,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="ParticleCount">どのくらい作るのか</param>
-	void Initialize(const uint32_t& ParticleCount,const std::string& filename);
+	void Initialize(const uint32_t& ParticleCount);
 
 	/// <summary>
 	/// エディターアップデート
@@ -238,11 +238,9 @@ public: // メンバ関数
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
 
+private:
+	std::vector<std::string> GetFileList(const std::filesystem::path& directory);
 
-	// ファイルが存在するかどうかを確認する関数
-	bool FileExists() {
-		return std::filesystem::exists(FileName + ".json");
-	}
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
@@ -283,6 +281,7 @@ private: // メンバ変数
 	bool isPushSave = false;
 	bool isPushLoad = false;
 	bool isPushReset = false;
+	bool isCreateNewFile = false;
 
 	uint32_t particleCount;
 
@@ -297,5 +296,7 @@ private: // メンバ変数
 	float EndColor[ 4 ] = { 1,1,1,1 };
 	float Angle[ 4 ] = { 0,0,0,0 };
 
-	std::string FileName;
+	std::string FilePath = "Resources/ParticleData/";
+	std::string SelectedFileName;
+	std::string NewFileName;
 };

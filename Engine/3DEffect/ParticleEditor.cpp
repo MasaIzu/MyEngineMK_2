@@ -455,7 +455,7 @@ void ParticleEditor::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string& filename)
+void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 {
 	particleCount = ParticleCount;
 
@@ -482,15 +482,6 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string&
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
-	FileName = filename;
-	SendParameters ReadParameters;
-	if ( FileExists() )
-	{
-		std::ifstream is(FileName + ".json");
-		cereal::JSONInputArchive archive(is);
-		archive(cereal::make_nvp(FileName,ReadParameters));
-		//shaderDetailParameters = ReadParameters;
-	}
 }
 
 void ParticleEditor::EditUpdate()
@@ -516,10 +507,41 @@ void ParticleEditor::EditUpdate()
 	{
 		ImGui::SliderFloat3("EndPos",EndPos,-100.0f,100.0f);
 	}
+
+	std::vector<std::string> fileList = GetFileList(FilePath);
+	static int selectedIndex = -1;  // 選択されている項目のインデックス
+	if ( ImGui::BeginListBox("##filelist") )
+	{
+		for ( int i = 0; i < fileList.size(); i++ )
+		{
+			const bool isSelected = ( selectedIndex == i );
+			if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+			{
+				selectedIndex = i;
+				SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+			}
+
+			// 選択された項目を表示領域内にスクロール
+			if ( isSelected )
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndListBox();
+	}
+
 	isPushSave = ImGui::Button("save");
 	isPushLoad = ImGui::Button("load");
 	isPushReset = ImGui::Button("reset");
+
+	// ファイル名の入力フィールド
+	static char fileName[ 128 ] = "";
+	ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
+	isCreateNewFile = ImGui::Button("create a new file");
+
 	ImGui::End();
+
+	std::string FullPath = FilePath + SelectedFileName;
 
 	Angle[ 0 ] = AngleX_;
 	Angle[ 1 ] = AngleY_;
@@ -557,17 +579,17 @@ void ParticleEditor::EditUpdate()
 		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
 		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
 		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
-		std::ofstream os(FileName + ".json");
+		std::ofstream os(FullPath);
 		cereal::JSONOutputArchive archive(os);
-		archive(cereal::make_nvp(FileName,sendParameters));
+		archive(cereal::make_nvp(FullPath,sendParameters));
 	}
 
 	if ( isPushLoad )
 	{
 		SendParameters ReadParameters;
-		std::ifstream is(FileName + ".json");
+		std::ifstream is(FullPath);
 		cereal::JSONInputArchive archive(is);
-		archive(cereal::make_nvp(FileName,ReadParameters));
+		archive(cereal::make_nvp(FullPath,ReadParameters));
 		for ( uint32_t i = 0; i < 4; i++ )
 		{
 			StartPos[ i ] = ReadParameters.StartPos[ i ];
@@ -617,6 +639,33 @@ void ParticleEditor::EditUpdate()
 		shaderDetailParameters.MaxParticleCount = particleCount;
 	}
 
+	if ( isCreateNewFile )
+	{
+		NewFileName = "Resources/ParticleData/";
+		NewFileName += fileName;
+		NewFileName += ".json";
+		for ( uint32_t i = 0; i < 4; i++ )
+		{
+			sendParameters.StartPos[ i ] = StartPos[ i ];
+			sendParameters.EndPos[ i ] = EndPos[ i ];
+			sendParameters.StartColor[ i ] = EndColor[ i ];
+			sendParameters.EndColor[ i ] = StartColor[ i ];
+			sendParameters.Angle[ i ] = Angle[ i ];
+		}
+		sendParameters.Shot = Shot;
+		sendParameters.EndPointActive = EndPointActive;
+		sendParameters.RandomLife = RandomLife;
+		sendParameters.RandomSpeed = RandomSpeed;
+		sendParameters.RandomScale = RandomScale;
+		sendParameters.Speed = shaderDetailParameters.Speed;
+		sendParameters.Scale = shaderDetailParameters.Scale;
+		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
+		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
+		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
+		std::ofstream os(NewFileName);
+		cereal::JSONOutputArchive archive(os);
+		archive(cereal::make_nvp(NewFileName,sendParameters));
+	}
 }
 
 void ParticleEditor::Draw(const ViewProjection& view)
@@ -718,7 +767,18 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vecto
 
 }
 
-
+// 指定ディレクトリのファイルリストを取得
+std::vector<std::string> ParticleEditor::GetFileList(const std::filesystem::path& directory) {
+	std::vector<std::string> fileList;
+	for ( const auto& entry : std::filesystem::directory_iterator(directory) )
+	{
+		if ( entry.is_regular_file() )
+		{
+			fileList.push_back(entry.path().filename().string());
+		}
+	}
+	return fileList;
+}
 
 void ParticleEditor::CopyData()
 {

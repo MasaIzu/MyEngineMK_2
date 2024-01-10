@@ -11,10 +11,25 @@
 #include"WinApp.h"
 #include <LightData.h>
 
+#include <iostream>
+#include <filesystem>
 
 DebugScene::DebugScene() {}
 DebugScene::~DebugScene() {
 	LightData::GetInstance()->ClearLight();
+}
+
+// 指定ディレクトリのファイルリストを取得
+std::vector<std::string> getFileList(const std::filesystem::path& directory) {
+	std::vector<std::string> fileList;
+	for ( const auto& entry : std::filesystem::directory_iterator(directory) )
+	{
+		if ( entry.is_regular_file() )
+		{
+			fileList.push_back(entry.path().filename().string());
+		}
+	}
+	return fileList;
 }
 
 void DebugScene::Initialize() {
@@ -65,6 +80,37 @@ void DebugScene::Update() {
 
 	bool fal = false;
 	player_->AttackUpdate(Vector3(0,0,0),fal);
+
+	std::string selectedFileName;  // 選択されたファイル名を保存する変数
+
+	 // ウィンドウを作成
+	ImGui::Begin("File List");
+
+	std::vector<std::string> fileList = getFileList("Resources/ParticleData/");
+	static int selectedIndex = -1;  // 選択されている項目のインデックス
+
+	if ( ImGui::BeginListBox("##filelist") )
+	{
+		for ( int i = 0; i < fileList.size(); i++ )
+		{
+			const bool isSelected = ( selectedIndex == i );
+			if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+			{
+				selectedIndex = i;
+				selectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+			}
+
+			// 選択された項目を表示領域内にスクロール
+			if ( isSelected )
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndListBox();
+	}
+
+	ImGui::End();
+
 
 	LightData::GetInstance()->Update();
 }
