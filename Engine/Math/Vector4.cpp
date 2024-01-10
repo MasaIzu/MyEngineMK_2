@@ -139,6 +139,15 @@ Vector4& Vector4::operator/=(float s)
 	return *this;
 }
 
+Vector4& Vector4::operator=(float v[ 4 ])
+{
+	x = v[ 0 ];
+	y = v[ 1 ];
+	z = v[ 2 ];
+	w = v[ 3 ];
+	return *this;
+}
+
 //Vector4 クラスに属さない関数群
 
 

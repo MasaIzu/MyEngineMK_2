@@ -14,14 +14,16 @@ cbuffer ShaderDetailParameters : register(b1)
     float4 Angle : packoffset(c4);
     uint Shot : packoffset(c5);
     uint EndPointActive : packoffset(c5.y);
-    uint RandomLife : packoffset(c5.z);
-    uint RandomSpeed : packoffset(c5.w);
-    uint RandomScale : packoffset(c6);
-    float Speed : packoffset(c6.y);
-    float Scale : packoffset(c6.z);
-    float ScaleTinker : packoffset(c6.w);
-    float MaxLife : packoffset(c7);
-    uint MaxParticleCount : packoffset(c7.y);
+    uint RandomVelocity : packoffset(c5.z);
+    uint RandomLife : packoffset(c5.w);
+    uint RandomSpeed : packoffset(c6);
+    uint RandomScale : packoffset(c6.y);
+    float Speed : packoffset(c6.z);
+    float LerpStrength : packoffset(c6.w);
+    float Scale : packoffset(c7);
+    float ScaleTinker : packoffset(c7.y);
+    float MaxLife : packoffset(c7.z);
+    uint MaxParticleCount : packoffset(c7.w);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

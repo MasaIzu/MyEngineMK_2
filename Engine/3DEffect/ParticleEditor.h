@@ -86,10 +86,12 @@ public: // サブクラス
 		Vector4 Angle = { 0,0,0,0 };
 		uint32_t Shot = 0;
 		uint32_t EndPointActive = 0;
+		uint32_t RandomVelocity = 1;
 		uint32_t RandomLife = 0;
 		uint32_t RandomSpeed = 0;
 		uint32_t RandomScale = 0;
 		float Speed = 1.0f;
+		float LerpStrength = 0.05f;
 		float Scale = 1.0f;
 		float ScaleTinker = 0.0f;
 		float MaxLife = 60.0f;
@@ -106,10 +108,12 @@ public: // サブクラス
 		float Angle[ 4 ] = { 0,0,0,0 };
 		uint32_t Shot = 0;
 		uint32_t EndPointActive = 0;
+		uint32_t RandomVelocity = 1;
 		uint32_t RandomLife = 0;
 		uint32_t RandomSpeed = 0;
 		uint32_t RandomScale = 0;
 		float Speed = 1.0f;
+		float LerpStrength = 0.05f;
 		float Scale = 1.0f;
 		float ScaleTinker = 0.0f;
 		float MaxLife = 60.0f;
@@ -275,6 +279,7 @@ private: // メンバ変数
 
 	bool Shot = false;
 	bool EndPointActive = false;
+	bool RandomVelocity = true;
 	bool RandomLife = false;
 	bool RandomSpeed = false;
 	bool RandomScale = false;
@@ -282,7 +287,10 @@ private: // メンバ変数
 	bool isPushLoad = false;
 	bool isPushReset = false;
 	bool isCreateNewFile = false;
+	bool isDeletFileFirstTime = false;
+	bool isDeletFileSecondTime = false;
 
+	int selectedIndex = -1;  // 選択されている項目のインデックス
 	uint32_t particleCount;
 
 	float AngleX_ = 0.0f;

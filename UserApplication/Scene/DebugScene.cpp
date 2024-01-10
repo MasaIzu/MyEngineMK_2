@@ -81,36 +81,10 @@ void DebugScene::Update() {
 	bool fal = false;
 	player_->AttackUpdate(Vector3(0,0,0),fal);
 
-	std::string selectedFileName;  // 選択されたファイル名を保存する変数
+	Vector4 paaa = { 0,2,1,2 };
+	float oss[ 4 ] = { 3,5,1,2 };
 
-	 // ウィンドウを作成
-	ImGui::Begin("File List");
-
-	std::vector<std::string> fileList = getFileList("Resources/ParticleData/");
-	static int selectedIndex = -1;  // 選択されている項目のインデックス
-
-	if ( ImGui::BeginListBox("##filelist") )
-	{
-		for ( int i = 0; i < fileList.size(); i++ )
-		{
-			const bool isSelected = ( selectedIndex == i );
-			if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
-			{
-				selectedIndex = i;
-				selectedFileName = fileList[ i ];  // 選択されたファイル名を保存
-			}
-
-			// 選択された項目を表示領域内にスクロール
-			if ( isSelected )
-			{
-				ImGui::SetItemDefaultFocus();
-			}
-		}
-		ImGui::EndListBox();
-	}
-
-	ImGui::End();
-
+	paaa = oss;
 
 	LightData::GetInstance()->Update();
 }

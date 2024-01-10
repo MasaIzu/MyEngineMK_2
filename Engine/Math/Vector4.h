@@ -39,6 +39,7 @@ public:
 	Vector4& operator-=(const Vector4& v);
 	Vector4& operator*=(float s);
 	Vector4& operator/=(float s);
+	Vector4& operator=(float v[ 4 ]);
 
 };
 

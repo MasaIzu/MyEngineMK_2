@@ -46,10 +46,22 @@ void main(uint3 id : SV_DispatchThreadID)
         return;
     }
 
-
     float3 Position = gParticles[index].position.xyz;
-    float3 Velocity = gParticles[index].velocity.xyz;
-    Position += Velocity * gParticles[index].Speed;
+    
+    if (EndPointActive)
+    {
+        float3 Velocity = gParticles[index].velocity.xyz;
+        float3 EndPosPoint = EndPos.xyz;
+        float3 PosToEndVec = normalize(EndPosPoint - Position);
+        Velocity = normalize(lerp(Velocity, PosToEndVec, LerpStrength));
+        gParticles[index].velocity.xyz = Velocity;
+        Position += Velocity * gParticles[index].Speed;
+    }
+    else
+    {
+        float3 Velocity = gParticles[index].velocity.xyz;
+        Position += Velocity * gParticles[index].Speed;
+    }
     
     float4 Color = EndColor - StartColor;
     float Life = gParticles[index].MaxLifeTime - gParticles[index].lifeTime;
@@ -80,7 +92,16 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     uint indexAdd = index * 1222;
     
     float3 velocity = (0, 0, 0);
-    if (EndPointActive)
+    if (RandomVelocity)
+    {   
+        velocity.x = nextRand(indexAdd) * nextRand1(seed);
+        velocity.z = nextRand(indexAdd) * nextRand1(seed);
+        velocity.y = nextRand(indexAdd) * nextRand1(seed);
+    
+        velocity = normalize(velocity);
+        gParticles[index].velocity.xyz = velocity;
+    }
+    else
     {
         velocity = normalize(EndPos.xyz - StartPos.xyz);
         
@@ -91,13 +112,13 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         float RadZ = (Angle.z * (PI / 180)) * 100;
         
         float RandomAngleMin = 0.0f;
-        float RandomAngleX = Rand1(seed, RadX, RandomAngleMin) / 100;
+        float RandomAngleX = (Rand1(seed, RadX, RandomAngleMin) - (RadX / 2)) / 100;
         float4 rotationX = QuaternionFromAxisAngle(float3(1, 0, 0), RandomAngleX);
         
-        float RandomAngleY = Rand1(seed, RadY, RandomAngleMin) / 100;
+        float RandomAngleY = (Rand1(seed, RadY, RandomAngleMin) - (RadY / 2)) / 100;
         float4 rotationY = QuaternionFromAxisAngle(float3(0, 1, 0), RandomAngleY);
         
-        float RandomAngleZ = Rand1(seed, RadZ, RandomAngleMin) / 100;
+        float RandomAngleZ = (Rand1(seed, RadZ, RandomAngleMin) - (RadZ / 2)) / 100;
         float4 rotationZ = QuaternionFromAxisAngle(float3(0, 0, 1), RandomAngleZ);
         
         float3 RotVelocity = RotateVectorByQuaternion(velocity, rotationX);
@@ -105,15 +126,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         RotVelocity = RotateVectorByQuaternion(RotVelocity, rotationZ);
         
         gParticles[index].velocity.xyz = RotVelocity;
-    }
-    else
-    {
-        velocity.x = nextRand(indexAdd) * nextRand1(seed);
-        velocity.z = nextRand(indexAdd) * nextRand1(seed);
-        velocity.y = nextRand(indexAdd) * nextRand1(seed);
-    
-        velocity = normalize(velocity);
-        gParticles[index].velocity.xyz = velocity;
     }
     
     if (RandomLife)

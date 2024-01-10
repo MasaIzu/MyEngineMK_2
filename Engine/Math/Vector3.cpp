@@ -6,7 +6,6 @@ Vector3::Vector3() :x(0), y(0), z(0)
 {
 }
 
-
 Vector3::Vector3(const float& x,const float& y,const float& z)
 {
 	this->x = x;
@@ -118,6 +117,14 @@ Vector3& Vector3::operator/=(float s)
 	x /= s;
 	y /= s;
 	z /= s;
+	return *this;
+}
+
+Vector3& Vector3::operator=(float s[ 3 ])
+{
+	x = s[0];
+	y = s[1];
+	z = s[2];
 	return *this;
 }
 

@@ -488,56 +488,87 @@ void ParticleEditor::EditUpdate()
 {
 	ImGui::Begin("ParticleEditor");
 
-	ImGui::ColorEdit4("StartColor",StartColor,ImGuiColorEditFlags_Float);
-	ImGui::SliderFloat("StartColorAlpha",&StartColor[ 3 ],0.0f,1.0f);
-	ImGui::ColorEdit4("EndColor",EndColor,ImGuiColorEditFlags_Float);
-	ImGui::SliderFloat("EndColorAlpha",&EndColor[ 3 ],0.0f,1.0f);
-	ImGui::SliderFloat("Scale",&shaderDetailParameters.Scale,0.01f,30.0f);
-	ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-1.0f,1.0f);
-	ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
-	ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
-	ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
-	ImGui::Checkbox("ParticleActive",&Shot);
-	ImGui::Checkbox("EndPointActive",&EndPointActive);
-	ImGui::Checkbox("RandomLife",&RandomLife);
-	ImGui::Checkbox("RandomSpeed",&RandomSpeed);
-	ImGui::Checkbox("RandomScale",&RandomScale);
-
-	if ( EndPointActive )
-	{
-		ImGui::SliderFloat3("EndPos",EndPos,-100.0f,100.0f);
-	}
-
-	std::vector<std::string> fileList = GetFileList(FilePath);
-	static int selectedIndex = -1;  // 選択されている項目のインデックス
-	if ( ImGui::BeginListBox("##filelist") )
-	{
-		for ( int i = 0; i < fileList.size(); i++ )
-		{
-			const bool isSelected = ( selectedIndex == i );
-			if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
-			{
-				selectedIndex = i;
-				SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
-			}
-
-			// 選択された項目を表示領域内にスクロール
-			if ( isSelected )
-			{
-				ImGui::SetItemDefaultFocus();
-			}
-		}
-		ImGui::EndListBox();
-	}
-
-	isPushSave = ImGui::Button("save");
-	isPushLoad = ImGui::Button("load");
-	isPushReset = ImGui::Button("reset");
-
 	// ファイル名の入力フィールド
 	static char fileName[ 128 ] = "";
-	ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
-	isCreateNewFile = ImGui::Button("create a new file");
+	if ( !isDeletFileFirstTime )
+	{
+		ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
+		isCreateNewFile = ImGui::Button("create a new file");
+
+		std::vector<std::string> fileList = GetFileList(FilePath);
+		if ( ImGui::BeginListBox("##filelist") )
+		{
+			for ( int i = 0; i < fileList.size(); i++ )
+			{
+				const bool isSelected = ( selectedIndex == i );
+				if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+				{
+					selectedIndex = i;
+					SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+				}
+
+				// 選択された項目を表示領域内にスクロール
+				if ( isSelected )
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndListBox();
+		}
+
+		isPushSave = ImGui::Button("save");
+		ImGui::SameLine();
+		isPushLoad = ImGui::Button("load");
+		ImGui::SameLine();
+		isPushReset = ImGui::Button("reset");
+
+		// 削除ボタンの前にスタイルをプッシュ
+		ImGui::PushStyleColor(ImGuiCol_Button,ImVec4(1.0f,0.0f,0.0f,1.0f));  // 赤色
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(1.0f,0.3f,0.3f,1.0f));  // ホバー時の色
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.8f,0.0f,0.0f,1.0f));  // アクティブ時の色
+
+		// 削除ボタン
+		isDeletFileFirstTime = ImGui::Button("delete file");
+
+		// スタイルをポップ
+		ImGui::PopStyleColor(3);
+
+		ImGui::ColorEdit4("StartColor",StartColor,ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("StartColorAlpha",&StartColor[ 3 ],0.0f,1.0f);
+		ImGui::ColorEdit4("EndColor",EndColor,ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("EndColorAlpha",&EndColor[ 3 ],0.0f,1.0f);
+		ImGui::SliderFloat("Speed",&shaderDetailParameters.Speed,0.01f,30.0f);
+		ImGui::SliderFloat("LerpStrength",&shaderDetailParameters.LerpStrength,0.01f,1.0f);
+		ImGui::SliderFloat("Scale",&shaderDetailParameters.Scale,0.01f,30.0f);
+		ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-1.0f,1.0f);
+		ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
+		ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
+		ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
+		ImGui::Checkbox("ParticleActive",&Shot);
+		ImGui::Checkbox("EndPointActive",&EndPointActive);
+		ImGui::Checkbox("RandomVelocity",&RandomVelocity);
+		ImGui::Checkbox("RandomLife",&RandomLife);
+		ImGui::Checkbox("RandomSpeed",&RandomSpeed);
+		ImGui::Checkbox("RandomScale",&RandomScale);
+
+		if ( EndPointActive )
+		{
+			ImGui::SliderFloat3("EndPos",EndPos,-300.0f,300.0f);
+		}
+	}
+	else
+	{
+		ImGui::Text("delete the file?");
+		if ( ImGui::Button("YES") )
+		{
+			isDeletFileSecondTime = true;
+		}
+		ImGui::SameLine();
+		if ( ImGui::Button(" NO ") )
+		{
+			isDeletFileFirstTime = false;
+		}
+	}
 
 	ImGui::End();
 
@@ -551,6 +582,7 @@ void ParticleEditor::EditUpdate()
 	shaderDetailParameters.EndColor = { EndColor[ 0 ],EndColor[ 1 ],EndColor[ 2 ],EndColor[ 3 ] };
 	shaderDetailParameters.Shot = Shot;
 	shaderDetailParameters.EndPointActive = EndPointActive;
+	shaderDetailParameters.RandomVelocity = RandomVelocity;
 	shaderDetailParameters.RandomLife = RandomLife;
 	shaderDetailParameters.RandomSpeed = RandomSpeed;
 	shaderDetailParameters.RandomScale = RandomScale;
@@ -571,10 +603,12 @@ void ParticleEditor::EditUpdate()
 		}
 		sendParameters.Shot = Shot;
 		sendParameters.EndPointActive = EndPointActive;
+		sendParameters.RandomVelocity = RandomVelocity;
 		sendParameters.RandomLife = RandomLife;
 		sendParameters.RandomSpeed = RandomSpeed;
 		sendParameters.RandomScale = RandomScale;
 		sendParameters.Speed = shaderDetailParameters.Speed;
+		sendParameters.LerpStrength = shaderDetailParameters.LerpStrength;
 		sendParameters.Scale = shaderDetailParameters.Scale;
 		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
 		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
@@ -603,10 +637,12 @@ void ParticleEditor::EditUpdate()
 		AngleZ_ = Angle[ 2 ];
 		Shot = ReadParameters.Shot;
 		EndPointActive = ReadParameters.EndPointActive;
+		RandomVelocity = ReadParameters.RandomVelocity;
 		RandomLife = ReadParameters.RandomLife;
 		RandomSpeed = ReadParameters.RandomSpeed;
 		RandomScale = ReadParameters.RandomScale;
 		shaderDetailParameters.Speed = ReadParameters.Speed;
+		shaderDetailParameters.LerpStrength = ReadParameters.LerpStrength;
 		shaderDetailParameters.Scale = ReadParameters.Scale;
 		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
 		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
@@ -629,10 +665,12 @@ void ParticleEditor::EditUpdate()
 		AngleZ_ = Angle[ 2 ];
 		Shot = ReadParameters.Shot;
 		EndPointActive = ReadParameters.EndPointActive;
+		RandomVelocity = ReadParameters.RandomVelocity;
 		RandomLife = ReadParameters.RandomLife;
 		RandomSpeed = ReadParameters.RandomSpeed;
 		RandomScale = ReadParameters.RandomScale;
 		shaderDetailParameters.Speed = ReadParameters.Speed;
+		shaderDetailParameters.LerpStrength = ReadParameters.LerpStrength;
 		shaderDetailParameters.Scale = ReadParameters.Scale;
 		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
 		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
@@ -654,10 +692,12 @@ void ParticleEditor::EditUpdate()
 		}
 		sendParameters.Shot = Shot;
 		sendParameters.EndPointActive = EndPointActive;
+		sendParameters.RandomVelocity = RandomVelocity;
 		sendParameters.RandomLife = RandomLife;
 		sendParameters.RandomSpeed = RandomSpeed;
 		sendParameters.RandomScale = RandomScale;
 		sendParameters.Speed = shaderDetailParameters.Speed;
+		sendParameters.LerpStrength = shaderDetailParameters.LerpStrength;
 		sendParameters.Scale = shaderDetailParameters.Scale;
 		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
 		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
@@ -665,6 +705,15 @@ void ParticleEditor::EditUpdate()
 		std::ofstream os(NewFileName);
 		cereal::JSONOutputArchive archive(os);
 		archive(cereal::make_nvp(NewFileName,sendParameters));
+	}
+
+	if ( selectedIndex != -1 && isDeletFileFirstTime && isDeletFileSecondTime )
+	{
+		std::filesystem::path filePath = FullPath;
+		std::filesystem::remove(filePath);  // ファイルを削除
+		selectedIndex = -1;  // 選択をリセット
+		isDeletFileFirstTime = false;
+		isDeletFileSecondTime = false;
 	}
 }
 

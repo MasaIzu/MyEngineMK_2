@@ -497,7 +497,7 @@ void Player::CheckPlayerCollider()
 				else
 				{
 					onGround = false;
-					fallVec = {};
+					fallVec = Vector4(0,0,0,0);
 				}
 			}
 			// 落下状態
