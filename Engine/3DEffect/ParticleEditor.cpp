@@ -34,6 +34,7 @@ std::unordered_map<std::string,ComPtr<ID3D12PipelineState>> ParticleEditor::m_pi
 ComPtr<ID3D12DescriptorHeap> ParticleEditor::m_cbvSrvUavHeap;
 
 const std::string ParticleEditor::PSO_DEFAULT = "PSO_DEFAULT";
+const std::string ParticleEditor::PSO_ADD = "PSO_ADD";
 const std::string ParticleEditor::PSO_CS_INIT = "PSO_CS_INIT";
 const std::string ParticleEditor::PSO_CS_EMIT = "PSO_CS_EMIT";
 const std::string ParticleEditor::PSO_CS_UPDATE = "PSO_CS_UPDATE";
@@ -76,16 +77,24 @@ void ParticleEditor::StaticFinalize()
 
 }
 
-void ParticleEditor::PreDraw(ID3D12GraphicsCommandList* commandList)
+void ParticleEditor::PreDraw(ID3D12GraphicsCommandList* commandList,const bool& isAddition)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(ParticleEditor::cmdList == nullptr);
 
 	// コマンドリストをセット
 	ParticleEditor::cmdList = commandList;
-
-	// パイプラインステートの設定
-	commandList->SetPipelineState(m_pipelines[ PSO_DEFAULT ].Get());
+	if ( !isAddition )
+	{
+		// パイプラインステートの設定
+		commandList->SetPipelineState(m_pipelines[ PSO_DEFAULT ].Get());
+	}
+	else
+	{
+		// パイプラインステートの設定
+		commandList->SetPipelineState(m_pipelines[ PSO_ADD ].Get());
+	}
+	
 	// ルートシグネチャの設定
 	commandList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
@@ -200,6 +209,7 @@ void ParticleEditor::InitializeGraphicsPipeline()
 
 	// グラフィックスパイプラインの流れを設定
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline{};
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipelineAdd{};
 	gpipeline.VS = CD3DX12_SHADER_BYTECODE(vsBlob.Get());
 	gpipeline.GS = CD3DX12_SHADER_BYTECODE(gsBlob.Get());
 	gpipeline.PS = CD3DX12_SHADER_BYTECODE(psBlob.Get());
@@ -216,15 +226,19 @@ void ParticleEditor::InitializeGraphicsPipeline()
 
 	// レンダーターゲットのブレンド設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
+	D3D12_RENDER_TARGET_BLEND_DESC blenddescAdd{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;//RGBA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;//ブレンドを有効にする
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;//加算
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0%使う
-	////加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
+
+	blenddescAdd = blenddesc;
+
+	//加算合成
+	blenddescAdd.BlendOp = D3D12_BLEND_OP_ADD;//加算
+	blenddescAdd.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
+	blenddescAdd.DestBlend = D3D12_BLEND_ONE;//デストの値を100%使う
 	////減算合成
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//デストからソースを減算
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100%使う
@@ -252,8 +266,8 @@ void ParticleEditor::InitializeGraphicsPipeline()
 	gpipeline.RTVFormats[ 0 ] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
-
-
+	gpipelineAdd = gpipeline;
+	gpipelineAdd.BlendState.RenderTarget[ 0 ] = blenddescAdd;
 
 	// デスクリプタレンジ
 	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
@@ -281,9 +295,13 @@ void ParticleEditor::InitializeGraphicsPipeline()
 	assert(SUCCEEDED(result));
 
 	gpipeline.pRootSignature = rootsignature.Get();
-
+	gpipelineAdd.pRootSignature = rootsignature.Get();
 	// グラフィックスパイプラインの生成
 	result = device->CreateGraphicsPipelineState(&gpipeline,IID_PPV_ARGS(&m_pipelines[ PSO_DEFAULT ]));
+	assert(SUCCEEDED(result));
+
+	// グラフィックスパイプラインの生成
+	result = device->CreateGraphicsPipelineState(&gpipelineAdd,IID_PPV_ARGS(&m_pipelines[ PSO_ADD ]));
 	assert(SUCCEEDED(result));
 
 	{
@@ -492,6 +510,8 @@ void ParticleEditor::EditUpdate()
 	static char fileName[ 128 ] = "";
 	if ( !isDeletFileFirstTime )
 	{
+		ImGui::Checkbox("AdditiveSynthesis",&AdditiveSynthesis);
+
 		ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
 		isCreateNewFile = ImGui::Button("create a new file");
 
@@ -721,7 +741,7 @@ void ParticleEditor::Draw(const ViewProjection& view)
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	PreDraw(commandList);
+	PreDraw(commandList,AdditiveSynthesis);
 
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;

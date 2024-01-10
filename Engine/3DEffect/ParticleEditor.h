@@ -140,7 +140,7 @@ public: // 静的メンバ関数
 	/// 描画前処理
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
+	static void PreDraw(ID3D12GraphicsCommandList* cmdList,const bool& isAddition = false);
 
 	/// <summary>
 	/// 描画後処理
@@ -184,6 +184,7 @@ private: // 静的メンバ変数
 	static UINT m_incrementSize;
 
 	static const std::string PSO_DEFAULT;
+	static const std::string PSO_ADD;
 	static const std::string PSO_CS_INIT;
 	static const std::string PSO_CS_EMIT;
 	static const std::string PSO_CS_UPDATE;
@@ -289,6 +290,7 @@ private: // メンバ変数
 	bool isCreateNewFile = false;
 	bool isDeletFileFirstTime = false;
 	bool isDeletFileSecondTime = false;
+	bool AdditiveSynthesis = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	uint32_t particleCount;

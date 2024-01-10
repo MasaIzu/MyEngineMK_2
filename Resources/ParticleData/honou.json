@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/EditorTest.json": {
+    "Resources/ParticleData/honou.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -8,20 +8,20 @@
         },
         "EndPos": {
             "value0": 0.0,
-            "value1": 50.0,
+            "value1": 22.58099937438965,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.05882352590560913,
+            "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.019607841968536378,
+            "value2": 0.019607841968536378,
             "value3": 1.0
         },
         "Angle": {
@@ -30,14 +30,14 @@
             "value2": 0.0,
             "value3": 0.0
         },
-        "Shot": 0,
-        "EndPointActive": 0,
-        "RandomLife": 0,
+        "Shot": 1,
+        "EndPointActive": 1,
+        "RandomLife": 1,
         "RandomSpeed": 0,
         "RandomScale": 0,
-        "Speed": 1.0,
-        "Scale": 1.0,
-        "ScaleTinker": 0.0,
+        "Speed": 0.10400000214576721,
+        "Scale": 0.47600001096725466,
+        "ScaleTinker": -0.007000000216066837,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000
     }
