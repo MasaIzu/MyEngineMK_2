@@ -8,20 +8,20 @@
         },
         "EndPos": {
             "value0": 0.0,
-            "value1": 22.58099937438965,
+            "value1": 24.194000244140626,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.05882352590560913,
+            "value1": 0.05500000715255737,
             "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 0.019607841968536378,
-            "value2": 0.019607841968536378,
+            "value1": 0.019999999552965165,
+            "value2": 0.019999999552965165,
             "value3": 1.0
         },
         "Angle": {
@@ -32,12 +32,14 @@
         },
         "Shot": 1,
         "EndPointActive": 1,
+        "RandomVelocity": 1,
         "RandomLife": 1,
         "RandomSpeed": 0,
         "RandomScale": 0,
-        "Speed": 0.10400000214576721,
-        "Scale": 0.47600001096725466,
-        "ScaleTinker": -0.007000000216066837,
+        "Speed": 0.10300000011920929,
+        "LerpStrength": 0.12399999797344208,
+        "Scale": 0.4390000104904175,
+        "ScaleTinker": -0.006000000052154064,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000
     }

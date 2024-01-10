@@ -50,9 +50,11 @@ void serialize(Archive& ar, ParticleEditor::SendParameters& sendParameters) {
 	ar(cereal::make_nvp("StartPos",sendParameters.StartPos),cereal::make_nvp("EndPos",sendParameters.EndPos)
 		,cereal::make_nvp("StartColor",sendParameters.StartColor),cereal::make_nvp("EndColor",sendParameters.EndColor)
 		,cereal::make_nvp("Angle",sendParameters.Angle),cereal::make_nvp("Shot",sendParameters.Shot)
-		,cereal::make_nvp("EndPointActive",sendParameters.EndPointActive),cereal::make_nvp("RandomLife",sendParameters.RandomLife)
+		,cereal::make_nvp("EndPointActive",sendParameters.EndPointActive),cereal::make_nvp("RandomVelocity",sendParameters.RandomVelocity)
+		,cereal::make_nvp("RandomLife",sendParameters.RandomLife)
 		,cereal::make_nvp("RandomSpeed",sendParameters.RandomSpeed),cereal::make_nvp("RandomScale",sendParameters.RandomScale)
-		,cereal::make_nvp("Speed",sendParameters.Speed),cereal::make_nvp("Scale",sendParameters.Scale)
+		,cereal::make_nvp("Speed",sendParameters.Speed),cereal::make_nvp("LerpStrength",sendParameters.LerpStrength)
+		,cereal::make_nvp("Scale",sendParameters.Scale)
 		,cereal::make_nvp("ScaleTinker",sendParameters.ScaleTinker),cereal::make_nvp("MaxLife",sendParameters.MaxLife)
 		,cereal::make_nvp("MaxParticleCount",sendParameters.MaxParticleCount)
 	);
