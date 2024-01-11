@@ -23,6 +23,7 @@ void initParticle(uint3 id : SV_DispatchThreadID)
 void main(uint3 id : SV_DispatchThreadID)
 {
     uint index = id.x;
+    uint seed = id.x + index * 1235;
     if (index >= MaxParticleCount)
     {
         return;
@@ -31,13 +32,11 @@ void main(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
+    //if (Shot == false)
+    //{
+    //    return;
+    //}
     const float dt = 1;
-    
-    if (gParticles[index].graceOfTime >= 0)
-    {
-        gParticles[index].graceOfTime = gParticles[index].graceOfTime - dt;
-        return;
-    }
     
     gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
     if (gParticles[index].lifeTime <= 0)
@@ -45,7 +44,7 @@ void main(uint3 id : SV_DispatchThreadID)
         gParticles[index].isActive = 0;
         return;
     }
-
+    
     float3 Position = gParticles[index].position.xyz;
     
     if (EndPointActive)
@@ -61,6 +60,14 @@ void main(uint3 id : SV_DispatchThreadID)
     {
         float3 Velocity = gParticles[index].velocity.xyz;
         Position += Velocity * gParticles[index].Speed;
+    }
+    
+    if (isLoad)
+    {
+        float GraceOfTimeMax = 100.0f;
+        float GraceOfTimeMin = 1.0f;
+        float GraceOfTime = Rand1(seed, GraceOfTimeMax, GraceOfTimeMin);
+        gParticles[index].graceOfTime = GraceOfTime;
     }
     
     float4 Color = EndColor - StartColor;
@@ -83,15 +90,35 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         return;
     }
+    uint seed = id.x + index * 1235;
+    uint indexAdd = index * 1222;
     if (Shot == false)
     {
+        float GraceOfTimeMax = 100.0f;
+        float GraceOfTimeMin = 1.0f;
+        float GraceOfTime = Rand1(seed, GraceOfTimeMax, GraceOfTimeMin);
+        gParticles[index].graceOfTime = GraceOfTime;
+        return;
+    }
+    
+    const float dt = 1;
+    if (gParticles[index].graceOfTime >= 0)
+    {
+        gParticles[index].graceOfTime = gParticles[index].graceOfTime - dt;
         return;
     }
    
-    uint seed = id.x + index * 1235;
-    uint indexAdd = index * 1222;
     
     float3 velocity = (0, 0, 0);
+    
+    if (isLoad)
+    {
+        float GraceOfTimeMax = 100.0f;
+        float GraceOfTimeMin = 1.0f;
+        float GraceOfTime = Rand1(indexAdd, GraceOfTimeMax, GraceOfTimeMin);
+        gParticles[index].graceOfTime = GraceOfTime;
+    }
+    
     if (RandomVelocity)
     {   
         velocity.x = nextRand(indexAdd) * nextRand1(seed);

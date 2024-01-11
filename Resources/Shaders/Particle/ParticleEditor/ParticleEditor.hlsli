@@ -24,6 +24,8 @@ cbuffer ShaderDetailParameters : register(b1)
     float ScaleTinker : packoffset(c7.y);
     float MaxLife : packoffset(c7.z);
     uint MaxParticleCount : packoffset(c7.w);
+    uint AdditiveSynthesis : packoffset(c8);
+    uint isLoad : packoffset(c8.y);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

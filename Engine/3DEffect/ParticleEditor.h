@@ -96,6 +96,8 @@ public: // サブクラス
 		float ScaleTinker = 0.0f;
 		float MaxLife = 60.0f;
 		uint32_t MaxParticleCount = 0;
+		uint32_t AdditiveSynthesis = 0;
+		uint32_t isLoad = 0;
 	};
 	ShaderDetailParameters shaderDetailParameters;
 
@@ -118,6 +120,8 @@ public: // サブクラス
 		float ScaleTinker = 0.0f;
 		float MaxLife = 60.0f;
 		uint32_t MaxParticleCount = 0;
+		uint32_t AdditiveSynthesis = 0;
+		uint32_t isLoad = 0;
 	};
 	SendParameters sendParameters;
 
@@ -291,9 +295,13 @@ private: // メンバ変数
 	bool isDeletFileFirstTime = false;
 	bool isDeletFileSecondTime = false;
 	bool AdditiveSynthesis = false;
+	bool isSetNewParticleCount = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
+	int NewParticleCount = 0;
+
 	uint32_t particleCount;
+
 
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;

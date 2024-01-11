@@ -56,7 +56,7 @@ void serialize(Archive& ar, ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("Speed",sendParameters.Speed),cereal::make_nvp("LerpStrength",sendParameters.LerpStrength)
 		,cereal::make_nvp("Scale",sendParameters.Scale)
 		,cereal::make_nvp("ScaleTinker",sendParameters.ScaleTinker),cereal::make_nvp("MaxLife",sendParameters.MaxLife)
-		,cereal::make_nvp("MaxParticleCount",sendParameters.MaxParticleCount)
+		,cereal::make_nvp("MaxParticleCount",sendParameters.MaxParticleCount),cereal::make_nvp("AdditiveSynthesis",sendParameters.AdditiveSynthesis)
 	);
 }
 
@@ -479,6 +479,7 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 {
 	particleCount = ParticleCount;
 
+	shaderDetailParameters.MaxParticleCount = particleCount;
 	InitializeVerticeBuff();
 
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -577,6 +578,10 @@ void ParticleEditor::EditUpdate()
 		{
 			ImGui::SliderFloat3("EndPos",EndPos,-300.0f,300.0f);
 		}
+		int ParticleCount = static_cast<int>(shaderDetailParameters.MaxParticleCount);
+		ImGui::Text("NowParticleCount : %d",ParticleCount);
+		ImGui::InputInt("NewParticlePieces",&NewParticleCount);
+		isSetNewParticleCount = ImGui::Button("set new pieces");
 	}
 	else
 	{
@@ -596,6 +601,13 @@ void ParticleEditor::EditUpdate()
 
 	std::string FullPath = FilePath + SelectedFileName;
 
+	if ( isSetNewParticleCount )
+	{
+		particleCount = static_cast< uint32_t >( NewParticleCount );
+		Initialize(particleCount);
+		Shot = false;
+	}
+
 	Angle[ 0 ] = AngleX_;
 	Angle[ 1 ] = AngleY_;
 	Angle[ 2 ] = AngleZ_;
@@ -610,6 +622,8 @@ void ParticleEditor::EditUpdate()
 	shaderDetailParameters.RandomScale = RandomScale;
 	shaderDetailParameters.EndPos = { EndPos[ 0 ],EndPos[ 1 ],EndPos[ 2 ], 0 };
 	shaderDetailParameters.Angle = Vector4(AngleX_,AngleY_,AngleZ_,0);
+	shaderDetailParameters.AdditiveSynthesis = AdditiveSynthesis;
+	shaderDetailParameters.isLoad = false;
 	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
 	if ( isPushSave )
@@ -635,6 +649,7 @@ void ParticleEditor::EditUpdate()
 		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
 		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
 		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
+		sendParameters.AdditiveSynthesis = shaderDetailParameters.AdditiveSynthesis;
 		std::ofstream os(FullPath);
 		cereal::JSONOutputArchive archive(os);
 		archive(cereal::make_nvp(FullPath,sendParameters));
@@ -669,6 +684,8 @@ void ParticleEditor::EditUpdate()
 		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
 		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
 		shaderDetailParameters.MaxParticleCount = ReadParameters.MaxParticleCount;
+		AdditiveSynthesis = ReadParameters.AdditiveSynthesis;
+		shaderDetailParameters.isLoad = true;
 	}
 
 	if ( isPushReset )
@@ -697,6 +714,7 @@ void ParticleEditor::EditUpdate()
 		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
 		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
 		shaderDetailParameters.MaxParticleCount = particleCount;
+		shaderDetailParameters.AdditiveSynthesis = ReadParameters.AdditiveSynthesis;
 	}
 
 	if ( isCreateNewFile )
@@ -724,6 +742,7 @@ void ParticleEditor::EditUpdate()
 		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
 		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
 		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
+		sendParameters.AdditiveSynthesis = shaderDetailParameters.AdditiveSynthesis;
 		std::ofstream os(NewFileName);
 		cereal::JSONOutputArchive archive(os);
 		archive(cereal::make_nvp(NewFileName,sendParameters));
@@ -743,7 +762,7 @@ void ParticleEditor::Draw(const ViewProjection& view)
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	PreDraw(commandList,AdditiveSynthesis);
+	PreDraw(commandList,shaderDetailParameters.AdditiveSynthesis);
 
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;

@@ -14,14 +14,14 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.0,
-            "value2": 0.0,
-            "value3": 0.0
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
         },
         "EndColor": {
-            "value0": 0.38956162333488467,
-            "value1": 0.0,
-            "value2": 0.9460784196853638,
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "Angle": {
@@ -41,6 +41,7 @@
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 15000
+        "MaxParticleCount": 15000,
+        "AdditiveSynthesis": 1
     }
 }
