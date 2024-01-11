@@ -40,7 +40,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MixPostEffect::constDataBuff_;
 // マッピング済みアドレス
 MixPostEffect::SendDataToGPU* MixPostEffect::dataMap = nullptr;
 
-const float MixPostEffect::clearColor[4] = { 0.25f,0.5f,0.1f,0 };
+const float MixPostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,1 };
 
 void MixPostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
 {

@@ -14,14 +14,14 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
-            "value3": 1.0
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0
         },
         "EndColor": {
-            "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value0": 0.38956162333488467,
+            "value1": 0.0,
+            "value2": 0.9460784196853638,
             "value3": 1.0
         },
         "Angle": {
@@ -30,12 +30,14 @@
             "value2": 0.0,
             "value3": 0.0
         },
-        "Shot": 0,
+        "Shot": 1,
         "EndPointActive": 0,
-        "RandomLife": 0,
+        "RandomVelocity": 1,
+        "RandomLife": 1,
         "RandomSpeed": 0,
         "RandomScale": 0,
         "Speed": 1.0,
+        "LerpStrength": 0.05000000074505806,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,

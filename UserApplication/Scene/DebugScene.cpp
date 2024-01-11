@@ -40,52 +40,66 @@ void DebugScene::Initialize() {
 
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
-	viewProjection_->eye = { 0,0,-1000 };
+	viewProjection_->eye = { 0,5,-100 };
 	viewProjection_->UpdateMatrix();
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
-	model.reset(Model::CreateFromOBJ("Ground", true));
-	model1.reset(Model::CreateFromOBJ("Ground", true));
-
-	levelData = std::make_unique<LoadLevelEditor>();
-	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
-
-	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
-
-	player_->SetCameraModeNotFree(false);
-
-	gameCamera = std::make_unique<GameCamera>(WinApp::window_width,WinApp::window_height);
-	gameCamera->Initialize(viewProjection_.get(),MyMath::GetAngle(180.0f),player_->GetPlayerPos());
-
-	gameCamera->SetFreeCamera(false);
-	gameCamera->SetCameraMode(false);
-
-	skydome = std::make_unique<Skydome>();
-	skydome->Initialize();
+	int MaxParticleCountB = 15000;
+	particleEditor = std::make_unique<ParticleEditor>();
+	particleEditor->Initialize(MaxParticleCountB);
+	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 void DebugScene::Update() {
 
-	player_->SetCameraModeNotFree(true);
-	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
-	player_->Update();
-
-	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
-	gameCamera->Update();
-
 	worldTransform_.TransferMatrix();
 
-	bool fal = false;
-	player_->AttackUpdate(Vector3(0,0,0),fal);
+	particleEditor->EditUpdate();
 
-	Vector4 paaa = { 0,2,1,2 };
-	float oss[ 4 ] = { 3,5,1,2 };
+	ImGui::Begin("PostEffect");
+	ImGui::SetCursorPos(ImVec2(900,20));
+	if ( shadeNumber == 0 )
+	{
+		ImGui::Text("Nothing");
+		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 
-	paaa = oss;
+	}
+	else if ( shadeNumber == 1 )
+	{
+		ImGui::Text("averageBlur");
+		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 
+		ImGui::SliderInt("range",&range,0,20);
+	}
+	else if ( shadeNumber == 2 )
+	{
+		ImGui::Text("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
+
+		ImGui::SliderFloat("centerX",&center.x,0,1);
+		ImGui::SliderFloat("centerY",&center.y,0,1);
+		ImGui::SliderFloat("intensity",&intensity,0,1);
+		ImGui::SliderInt("samples",&samples,0,20);
+	}
+	else if ( shadeNumber == 3 )
+	{
+		ImGui::Text("RadialBlurBlur");
+		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
+	}
+	else if ( shadeNumber == 4 )
+	{
+		ImGui::Text("CloseFilta");
+		ImGui::SliderInt("shadeNumber",&shadeNumber,0,4);
+		ImGui::SliderFloat("angle",&angle,0.0f,180.0f);
+		ImGui::SliderFloat("angle2",&angle2,0.0f,180.0f);
+	}
+
+	ImGui::SliderFloat("CameraPosZ",&viewProjection_->eye.z,-300,0);
+	ImGui::End();
+
+	viewProjection_->UpdateMatrix();
 	LightData::GetInstance()->Update();
 }
 
@@ -108,14 +122,15 @@ void DebugScene::PostEffectDraw()
 
 	Model::PostDraw();
 
+	particleEditor->Draw(*viewProjection_);
 
 	PostEffect::PostDrawScene();
 }
 
 void DebugScene::CSUpdate()
 {
-
-	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	particleEditor->CSUpdate(commandList,MyMath::Vec3ToVec4(Vector3(0,-2,0)));
 }
 
 bool DebugScene::IsBreak()
@@ -145,16 +160,8 @@ void DebugScene::Draw() {
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-	skydome->Draw(*viewProjection_.get());
-	//model->Draw(worldTransform_,*viewProjection_.get());
-	//ground->Draw(*viewProjection_);
-	levelData->Draw(*viewProjection_.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
-
-	player_->FbxDraw();
-
-	player_->ParticleDraw();
 
 #pragma endregion
 

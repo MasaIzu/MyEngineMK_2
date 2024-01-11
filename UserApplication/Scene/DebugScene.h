@@ -23,7 +23,7 @@
 
 #include "TouchableObject.h"
 #include "Skydome.h"
-
+#include "ParticleEditor.h"
 
 /// <summary>
 /// デバッグシーン
@@ -74,6 +74,7 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<Skydome> skydome;
+	std::unique_ptr<ParticleEditor>particleEditor;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
@@ -86,7 +87,7 @@ private: // メンバ変数
 	float intensity = 0.1f;
 	float angle = 45.0f;
 	float angle2 = 135.0f;
-
+	float cameraPos = -100.0f;
 
 	Vector2 center = { 0.5f,0.5f };
 
