@@ -402,7 +402,7 @@ void BulletShotEnemy::CheckCollider()
 		// 地面がないので落下
 		else {
 			//onGround = false;
-			fallVec = {};
+			fallVec = Vector4(0,0,0,0);
 			BulletShotEnemyWorldTrans.translation_ = OldTansPos;
 			StopTime = Random(RandomMin,RandomMax);
 			NotSpottedPhase_ = NotSpottedPhase::Interruption;

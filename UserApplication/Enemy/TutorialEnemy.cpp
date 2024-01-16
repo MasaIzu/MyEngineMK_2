@@ -484,7 +484,7 @@ void TutorialEnemy::CheckCollider()
 			// 地面がないので落下
 			else {
 				onGround = false;
-				fallVec = {};
+				fallVec = Vector4(0,0,0,0);
 			}
 		}
 		// 落下状態
