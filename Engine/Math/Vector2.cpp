@@ -75,6 +75,14 @@ Vector2& Vector2::operator/=(float s)
 	return *this;
 }
 
+Vector2& Vector2::operator=(float v[2])
+{
+	x = v[0];
+	y = v[1];
+
+	return *this;
+}
+
 //Vector2 クラスに属さない関数群
 const Vector2 operator+(const Vector2& v1, const Vector2& v2)
 {

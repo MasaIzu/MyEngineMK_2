@@ -57,6 +57,7 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("Scale",sendParameters.Scale)
 		,cereal::make_nvp("ScaleTinker",sendParameters.ScaleTinker),cereal::make_nvp("MaxLife",sendParameters.MaxLife)
 		,cereal::make_nvp("MaxParticleCount",sendParameters.MaxParticleCount),cereal::make_nvp("AdditiveSynthesis",sendParameters.AdditiveSynthesis)
+		,cereal::make_nvp("RandomLifeMinMax",sendParameters.RandomLifeMinMax)
 	);
 }
 
@@ -479,7 +480,7 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 {
 	particleCount = ParticleCount;
 
-	shaderDetailParameters.MaxParticleCount = particleCount;
+	sendParameters.MaxParticleCount = particleCount;
 	InitializeVerticeBuff();
 
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -577,8 +578,8 @@ void ParticleEditor::EditUpdate()
 		ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
 		if ( sendParameters.RandomLife )
 		{
-			ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
 			ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
+			ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
 			if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 0 ] )
 			{
 				sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
@@ -586,7 +587,7 @@ void ParticleEditor::EditUpdate()
 		}
 		ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
 		ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
-		int ParticleCount = static_cast< int >( shaderDetailParameters.MaxParticleCount );
+		int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
 		ImGui::Text("NowParticleCount : %d",ParticleCount);
 		ImGui::InputInt("NewParticlePieces",&NewParticleCount);
 		isSetNewParticleCount = ImGui::Button("set new pieces");
@@ -613,7 +614,6 @@ void ParticleEditor::EditUpdate()
 	{
 		particleCount = static_cast< uint32_t >( NewParticleCount );
 		Initialize(particleCount);
-		Shot = false;
 	}
 
 	SetParameter();
@@ -795,7 +795,9 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.MaxLife = sendParameters.MaxLife;
 	shaderDetailParameters.MaxParticleCount = sendParameters.MaxParticleCount;
 	shaderDetailParameters.AdditiveSynthesis = sendParameters.AdditiveSynthesis;
-	shaderDetailParameters.AdditiveSynthesis = sendParameters.AdditiveSynthesis;
+	shaderDetailParameters.RandomLifeMinMax = sendParameters.RandomLifeMinMax;
+	
+	shaderDetailParameters.isLoad = false;
 }
 
 void ParticleEditor::LoadFileParameter(const SendParameters& params)
@@ -821,6 +823,10 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	sendParameters.MaxLife = params.MaxLife;
 	sendParameters.MaxParticleCount = params.MaxParticleCount;
 	sendParameters.AdditiveSynthesis = params.AdditiveSynthesis;
+	for ( uint32_t i = 0; i < 2; i++ )
+	{
+		sendParameters.RandomLifeMinMax[ i ] = params.RandomLifeMinMax[ i ];
+	}
 	sendParameters.isLoad = true;
 }
 

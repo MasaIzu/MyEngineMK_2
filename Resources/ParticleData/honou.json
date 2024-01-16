@@ -42,6 +42,10 @@
         "ScaleTinker": -0.006000000052154064,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000,
-        "AdditiveSynthesis": 1
+        "AdditiveSynthesis": 1,
+        "RandomLifeMinMax": {
+            "value0": 1.0,
+            "value1": 30.0
+        }
     }
 }

@@ -34,7 +34,7 @@ public:
 	Vector2& operator-=(const Uint32Vector2& v);
 	Vector2& operator*=(float s);
 	Vector2& operator/=(float s);
-
+	Vector2& operator=(float v[ 2 ]);
 };
 
 //2項目演算子オーバーロード
