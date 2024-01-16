@@ -46,7 +46,7 @@ UINT ParticleEditor::m_incrementSize;
 UINT ParticleEditor::m_cbvSrvUavDescriptorSize = 0;
 
 template <class Archive>
-void serialize(Archive& ar, ParticleEditor::SendParameters& sendParameters) {
+void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 	ar(cereal::make_nvp("StartPos",sendParameters.StartPos),cereal::make_nvp("EndPos",sendParameters.EndPos)
 		,cereal::make_nvp("StartColor",sendParameters.StartColor),cereal::make_nvp("EndColor",sendParameters.EndColor)
 		,cereal::make_nvp("Angle",sendParameters.Angle),cereal::make_nvp("Shot",sendParameters.Shot)
@@ -96,7 +96,7 @@ void ParticleEditor::PreDraw(ID3D12GraphicsCommandList* commandList,const bool& 
 		// パイプラインステートの設定
 		commandList->SetPipelineState(m_pipelines[ PSO_ADD ].Get());
 	}
-	
+
 	// ルートシグネチャの設定
 	commandList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
@@ -556,29 +556,37 @@ void ParticleEditor::EditUpdate()
 		// スタイルをポップ
 		ImGui::PopStyleColor(3);
 
-		ImGui::ColorEdit4("StartColor",StartColor,ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("StartColorAlpha",&StartColor[ 3 ],0.0f,1.0f);
-		ImGui::ColorEdit4("EndColor",EndColor,ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("EndColorAlpha",&EndColor[ 3 ],0.0f,1.0f);
-		ImGui::SliderFloat("Speed",&shaderDetailParameters.Speed,0.01f,30.0f);
-		ImGui::SliderFloat("LerpStrength",&shaderDetailParameters.LerpStrength,0.01f,1.0f);
-		ImGui::SliderFloat("Scale",&shaderDetailParameters.Scale,0.01f,30.0f);
-		ImGui::SliderFloat("ScaleTinker",&shaderDetailParameters.ScaleTinker,-1.0f,1.0f);
-		ImGui::SliderFloat("AngleX",&AngleX_,0.0f,360.0f);
-		ImGui::SliderFloat("AngleY",&AngleY_,0.0f,360.0f);
-		ImGui::SliderFloat("AngleZ",&AngleZ_,0.0f,360.0f);
-		ImGui::Checkbox("ParticleActive",&Shot);
-		ImGui::Checkbox("EndPointActive",&EndPointActive);
-		ImGui::Checkbox("RandomVelocity",&RandomVelocity);
-		ImGui::Checkbox("RandomLife",&RandomLife);
-		ImGui::Checkbox("RandomSpeed",&RandomSpeed);
-		ImGui::Checkbox("RandomScale",&RandomScale);
-
-		if ( EndPointActive )
+		ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
+		ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
+		ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
+		ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
+		ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
+		ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
+		ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
+		ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
+		ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
+		ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
+		ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
+		ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
+		if ( sendParameters.EndPointActive )
 		{
-			ImGui::SliderFloat3("EndPos",EndPos,-300.0f,300.0f);
+			ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
 		}
-		int ParticleCount = static_cast<int>(shaderDetailParameters.MaxParticleCount);
+		ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
+		ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
+		if ( sendParameters.RandomLife )
+		{
+			ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
+			ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
+			if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 0 ] )
+			{
+				sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
+			}
+		}
+		ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
+		ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
+		int ParticleCount = static_cast< int >( shaderDetailParameters.MaxParticleCount );
 		ImGui::Text("NowParticleCount : %d",ParticleCount);
 		ImGui::InputInt("NewParticlePieces",&NewParticleCount);
 		isSetNewParticleCount = ImGui::Button("set new pieces");
@@ -608,48 +616,11 @@ void ParticleEditor::EditUpdate()
 		Shot = false;
 	}
 
-	Angle[ 0 ] = AngleX_;
-	Angle[ 1 ] = AngleY_;
-	Angle[ 2 ] = AngleZ_;
-
-	shaderDetailParameters.StartColor = { StartColor[ 0 ],StartColor[ 1 ],StartColor[ 2 ],StartColor[ 3 ] };
-	shaderDetailParameters.EndColor = { EndColor[ 0 ],EndColor[ 1 ],EndColor[ 2 ],EndColor[ 3 ] };
-	shaderDetailParameters.Shot = Shot;
-	shaderDetailParameters.EndPointActive = EndPointActive;
-	shaderDetailParameters.RandomVelocity = RandomVelocity;
-	shaderDetailParameters.RandomLife = RandomLife;
-	shaderDetailParameters.RandomSpeed = RandomSpeed;
-	shaderDetailParameters.RandomScale = RandomScale;
-	shaderDetailParameters.EndPos = { EndPos[ 0 ],EndPos[ 1 ],EndPos[ 2 ], 0 };
-	shaderDetailParameters.Angle = Vector4(AngleX_,AngleY_,AngleZ_,0);
-	shaderDetailParameters.AdditiveSynthesis = AdditiveSynthesis;
-	shaderDetailParameters.isLoad = false;
+	SetParameter();
 	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
 	if ( isPushSave )
 	{
-		
-		for ( uint32_t i = 0; i < 4; i++ )
-		{
-			sendParameters.StartPos[ i ] = StartPos[ i ];
-			sendParameters.EndPos[ i ] = EndPos[ i ];
-			sendParameters.StartColor[ i ] = EndColor[ i ];
-			sendParameters.EndColor[ i ] = StartColor[ i ];
-			sendParameters.Angle[ i ] = Angle[ i ];
-		}
-		sendParameters.Shot = Shot;
-		sendParameters.EndPointActive = EndPointActive;
-		sendParameters.RandomVelocity = RandomVelocity;
-		sendParameters.RandomLife = RandomLife;
-		sendParameters.RandomSpeed = RandomSpeed;
-		sendParameters.RandomScale = RandomScale;
-		sendParameters.Speed = shaderDetailParameters.Speed;
-		sendParameters.LerpStrength = shaderDetailParameters.LerpStrength;
-		sendParameters.Scale = shaderDetailParameters.Scale;
-		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
-		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
-		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
-		sendParameters.AdditiveSynthesis = shaderDetailParameters.AdditiveSynthesis;
 		std::ofstream os(FullPath);
 		cereal::JSONOutputArchive archive(os);
 		archive(cereal::make_nvp(FullPath,sendParameters));
@@ -661,60 +632,14 @@ void ParticleEditor::EditUpdate()
 		std::ifstream is(FullPath);
 		cereal::JSONInputArchive archive(is);
 		archive(cereal::make_nvp(FullPath,ReadParameters));
-		for ( uint32_t i = 0; i < 4; i++ )
-		{
-			StartPos[ i ] = ReadParameters.StartPos[ i ];
-			EndPos[ i ] = ReadParameters.EndPos[ i ];
-			EndColor[ i ] = ReadParameters.EndColor[ i ];
-			StartColor[ i ] = ReadParameters.StartColor[ i ];
-			Angle[ i ] = ReadParameters.Angle[ i ];
-		}
-		AngleX_ = Angle[ 0 ];
-		AngleY_ = Angle[ 1 ];
-		AngleZ_ = Angle[ 2 ];
-		Shot = ReadParameters.Shot;
-		EndPointActive = ReadParameters.EndPointActive;
-		RandomVelocity = ReadParameters.RandomVelocity;
-		RandomLife = ReadParameters.RandomLife;
-		RandomSpeed = ReadParameters.RandomSpeed;
-		RandomScale = ReadParameters.RandomScale;
-		shaderDetailParameters.Speed = ReadParameters.Speed;
-		shaderDetailParameters.LerpStrength = ReadParameters.LerpStrength;
-		shaderDetailParameters.Scale = ReadParameters.Scale;
-		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
-		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
-		shaderDetailParameters.MaxParticleCount = ReadParameters.MaxParticleCount;
-		AdditiveSynthesis = ReadParameters.AdditiveSynthesis;
-		shaderDetailParameters.isLoad = true;
+
+		LoadFileParameter(ReadParameters);
 	}
 
 	if ( isPushReset )
 	{
 		SendParameters ReadParameters;
-		for ( uint32_t i = 0; i < 4; i++ )
-		{
-			StartPos[ i ] = ReadParameters.StartPos[ i ];
-			EndPos[ i ] = ReadParameters.EndPos[ i ];
-			EndColor[ i ] = ReadParameters.EndColor[ i ];
-			StartColor[ i ] = ReadParameters.StartColor[ i ];
-			Angle[ i ] = ReadParameters.Angle[ i ];
-		}
-		AngleX_ = Angle[ 0 ];
-		AngleY_ = Angle[ 1 ];
-		AngleZ_ = Angle[ 2 ];
-		Shot = ReadParameters.Shot;
-		EndPointActive = ReadParameters.EndPointActive;
-		RandomVelocity = ReadParameters.RandomVelocity;
-		RandomLife = ReadParameters.RandomLife;
-		RandomSpeed = ReadParameters.RandomSpeed;
-		RandomScale = ReadParameters.RandomScale;
-		shaderDetailParameters.Speed = ReadParameters.Speed;
-		shaderDetailParameters.LerpStrength = ReadParameters.LerpStrength;
-		shaderDetailParameters.Scale = ReadParameters.Scale;
-		shaderDetailParameters.ScaleTinker = ReadParameters.ScaleTinker;
-		shaderDetailParameters.MaxLife = ReadParameters.MaxLife;
-		shaderDetailParameters.MaxParticleCount = particleCount;
-		shaderDetailParameters.AdditiveSynthesis = ReadParameters.AdditiveSynthesis;
+		LoadFileParameter(ReadParameters);
 	}
 
 	if ( isCreateNewFile )
@@ -722,27 +647,7 @@ void ParticleEditor::EditUpdate()
 		NewFileName = "Resources/ParticleData/";
 		NewFileName += fileName;
 		NewFileName += ".json";
-		for ( uint32_t i = 0; i < 4; i++ )
-		{
-			sendParameters.StartPos[ i ] = StartPos[ i ];
-			sendParameters.EndPos[ i ] = EndPos[ i ];
-			sendParameters.StartColor[ i ] = EndColor[ i ];
-			sendParameters.EndColor[ i ] = StartColor[ i ];
-			sendParameters.Angle[ i ] = Angle[ i ];
-		}
-		sendParameters.Shot = Shot;
-		sendParameters.EndPointActive = EndPointActive;
-		sendParameters.RandomVelocity = RandomVelocity;
-		sendParameters.RandomLife = RandomLife;
-		sendParameters.RandomSpeed = RandomSpeed;
-		sendParameters.RandomScale = RandomScale;
-		sendParameters.Speed = shaderDetailParameters.Speed;
-		sendParameters.LerpStrength = shaderDetailParameters.LerpStrength;
-		sendParameters.Scale = shaderDetailParameters.Scale;
-		sendParameters.ScaleTinker = shaderDetailParameters.ScaleTinker;
-		sendParameters.MaxLife = shaderDetailParameters.MaxLife;
-		sendParameters.MaxParticleCount = shaderDetailParameters.MaxParticleCount;
-		sendParameters.AdditiveSynthesis = shaderDetailParameters.AdditiveSynthesis;
+
 		std::ofstream os(NewFileName);
 		cereal::JSONOutputArchive archive(os);
 		archive(cereal::make_nvp(NewFileName,sendParameters));
@@ -868,6 +773,55 @@ std::vector<std::string> ParticleEditor::GetFileList(const std::filesystem::path
 		}
 	}
 	return fileList;
+}
+
+void ParticleEditor::SetParameter()
+{
+	shaderDetailParameters.StartPos = sendParameters.StartPos;
+	shaderDetailParameters.EndPos = sendParameters.EndPos;
+	shaderDetailParameters.EndColor = sendParameters.EndColor;
+	shaderDetailParameters.StartColor = sendParameters.StartColor;
+	shaderDetailParameters.Angle = sendParameters.Angle;
+	shaderDetailParameters.Shot = sendParameters.Shot;
+	shaderDetailParameters.EndPointActive = sendParameters.EndPointActive;
+	shaderDetailParameters.RandomVelocity = sendParameters.RandomVelocity;
+	shaderDetailParameters.RandomLife = sendParameters.RandomLife;
+	shaderDetailParameters.RandomSpeed = sendParameters.RandomSpeed;
+	shaderDetailParameters.RandomScale = sendParameters.RandomScale;
+	shaderDetailParameters.Speed = sendParameters.Speed;
+	shaderDetailParameters.LerpStrength = sendParameters.LerpStrength;
+	shaderDetailParameters.Scale = sendParameters.Scale;
+	shaderDetailParameters.ScaleTinker = sendParameters.ScaleTinker;
+	shaderDetailParameters.MaxLife = sendParameters.MaxLife;
+	shaderDetailParameters.MaxParticleCount = sendParameters.MaxParticleCount;
+	shaderDetailParameters.AdditiveSynthesis = sendParameters.AdditiveSynthesis;
+	shaderDetailParameters.AdditiveSynthesis = sendParameters.AdditiveSynthesis;
+}
+
+void ParticleEditor::LoadFileParameter(const SendParameters& params)
+{
+	for ( uint32_t i = 0; i < 4; i++ )
+	{
+		sendParameters.StartPos[ i ] = params.StartPos[ i ];
+		sendParameters.EndPos[ i ] = params.EndPos[ i ];
+		sendParameters.EndColor[ i ] = params.EndColor[ i ];
+		sendParameters.StartColor[ i ] = params.StartColor[ i ];
+		sendParameters.Angle[ i ] = params.Angle[ i ];
+	}
+	sendParameters.Shot = params.Shot;
+	sendParameters.EndPointActive = params.EndPointActive;
+	sendParameters.RandomVelocity = params.RandomVelocity;
+	sendParameters.RandomLife = params.RandomLife;
+	sendParameters.RandomSpeed = params.RandomSpeed;
+	sendParameters.RandomScale = params.RandomScale;
+	sendParameters.Speed = params.Speed;
+	sendParameters.LerpStrength = params.LerpStrength;
+	sendParameters.Scale = params.Scale;
+	sendParameters.ScaleTinker = params.ScaleTinker;
+	sendParameters.MaxLife = params.MaxLife;
+	sendParameters.MaxParticleCount = params.MaxParticleCount;
+	sendParameters.AdditiveSynthesis = params.AdditiveSynthesis;
+	sendParameters.isLoad = true;
 }
 
 void ParticleEditor::CopyData()

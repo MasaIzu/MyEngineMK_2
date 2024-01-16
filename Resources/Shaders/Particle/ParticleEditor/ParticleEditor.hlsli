@@ -26,6 +26,7 @@ cbuffer ShaderDetailParameters : register(b1)
     uint MaxParticleCount : packoffset(c7.w);
     uint AdditiveSynthesis : packoffset(c8);
     uint isLoad : packoffset(c8.y);
+    float2 RandomLifeMinMax : packoffset(c8.z);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

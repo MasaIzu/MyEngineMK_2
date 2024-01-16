@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/honou.json": {
+    "Resources/ParticleData/un.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -8,20 +8,20 @@
         },
         "EndPos": {
             "value0": 0.0,
-            "value1": 11.496000289916993,
+            "value1": 50.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.05500000715255737,
-            "value2": 0.0,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 0.024509787559509279,
-            "value2": 0.024509787559509279,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "Angle": {
@@ -30,18 +30,18 @@
             "value2": 0.0,
             "value3": 0.0
         },
-        "Shot": true,
-        "EndPointActive": true,
+        "Shot": false,
+        "EndPointActive": false,
         "RandomVelocity": true,
-        "RandomLife": true,
+        "RandomLife": false,
         "RandomSpeed": false,
         "RandomScale": false,
-        "Speed": 0.10300000011920929,
-        "LerpStrength": 0.12399999797344208,
-        "Scale": 0.4390000104904175,
-        "ScaleTinker": -0.006000000052154064,
+        "Speed": 1.0,
+        "LerpStrength": 0.05000000074505806,
+        "Scale": 1.0,
+        "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 15000,
-        "AdditiveSynthesis": 1
+        "MaxParticleCount": 0,
+        "AdditiveSynthesis": 0
     }
 }

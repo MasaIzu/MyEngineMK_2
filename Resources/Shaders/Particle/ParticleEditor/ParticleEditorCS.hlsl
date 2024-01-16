@@ -157,8 +157,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (RandomLife)
     {
-        float RandomLifeMin = 10.0f;
-        float RandomLife_ = Rand1(seed, MaxLife, RandomLifeMin);
+        float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
         gParticles[index].lifeTime = RandomLife_;
     }
     else

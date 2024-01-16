@@ -98,6 +98,7 @@ public: // サブクラス
 		uint32_t MaxParticleCount = 0;
 		uint32_t AdditiveSynthesis = 0;
 		uint32_t isLoad = 0;
+		Vector2 RandomLifeMinMax = { 1,30 };
 	};
 	ShaderDetailParameters shaderDetailParameters;
 
@@ -108,12 +109,12 @@ public: // サブクラス
 		float StartColor[ 4 ] = { 1,1,1,1 };
 		float EndColor[ 4 ] = { 1,1,1,1 };
 		float Angle[ 4 ] = { 0,0,0,0 };
-		uint32_t Shot = 0;
-		uint32_t EndPointActive = 0;
-		uint32_t RandomVelocity = 1;
-		uint32_t RandomLife = 0;
-		uint32_t RandomSpeed = 0;
-		uint32_t RandomScale = 0;
+		bool Shot = 0;
+		bool EndPointActive = 0;
+		bool RandomVelocity = 1;
+		bool RandomLife = 0;
+		bool RandomSpeed = 0;
+		bool RandomScale = 0;
 		float Speed = 1.0f;
 		float LerpStrength = 0.05f;
 		float Scale = 1.0f;
@@ -122,6 +123,7 @@ public: // サブクラス
 		uint32_t MaxParticleCount = 0;
 		uint32_t AdditiveSynthesis = 0;
 		uint32_t isLoad = 0;
+		float RandomLifeMinMax[ 2 ] = { 1,30 };
 	};
 	SendParameters sendParameters;
 
@@ -250,6 +252,8 @@ public: // メンバ関数
 private:
 	std::vector<std::string> GetFileList(const std::filesystem::path& directory);
 
+	void SetParameter();
+	void LoadFileParameter(const SendParameters& params);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
@@ -299,9 +303,9 @@ private: // メンバ変数
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;
+	int particleLifeMaxCount = 50;
 
 	uint32_t particleCount;
-
 
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;
