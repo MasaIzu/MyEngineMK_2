@@ -46,10 +46,9 @@ void main(uint3 id : SV_DispatchThreadID)
     }
     
     float3 Position = gParticles[index].position.xyz;
-    
+    float3 Velocity = gParticles[index].velocity.xyz;
     if (EndPointActive)
     {
-        float3 Velocity = gParticles[index].velocity.xyz;
         float3 EndPosPoint = EndPos.xyz;
         float3 PosToEndVec = normalize(EndPosPoint - Position);
         Velocity = normalize(lerp(Velocity, PosToEndVec, LerpStrength));
@@ -58,17 +57,12 @@ void main(uint3 id : SV_DispatchThreadID)
     }
     else
     {
-        float3 Velocity = gParticles[index].velocity.xyz;
+        
         Position += Velocity * gParticles[index].Speed;
     }
     
-    if (isLoad)
-    {
-        float GraceOfTimeMax = 100.0f;
-        float GraceOfTimeMin = 1.0f;
-        float GraceOfTime = Rand1(seed, GraceOfTimeMax, GraceOfTimeMin);
-        gParticles[index].graceOfTime = GraceOfTime;
-    }
+    Velocity.y = Velocity.y - GravityStrength;
+    gParticles[index].velocity.xyz = normalize(Velocity);
     
     float4 Color = EndColor - StartColor;
     float Life = gParticles[index].MaxLifeTime - gParticles[index].lifeTime;
@@ -167,10 +161,8 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (RandomSpeed)
     {
-        float RandomSpeedMin = 10.0f;
-        float RandomSpeedMax = 20.0f;
-        float RandomSpeed_ = Rand1(seed, RandomSpeedMax, RandomSpeedMin);
-        gParticles[index].Speed = RandomSpeed_ * 0.9f;
+        float RandomSpeed_ = Rand1(seed, RandomSpeedMinMax.y, RandomSpeedMinMax.x) / SpeedDivideSize;
+        gParticles[index].Speed = RandomSpeed_;
     }
     else
     {
@@ -179,9 +171,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (RandomScale)
     {
-        float RandomScaleMin = 10.0f;
-        float RandomScaleMax = 20.0f;
-        float RandomScale_ = Rand1(seed, RandomScaleMax, RandomScaleMin) / 10;
+        float RandomScale_ = Rand1(seed, RandomScaleMinMax.y, RandomScaleMinMax.x) / ScaleDivideSize;
         gParticles[index].scale = RandomScale_;
     }
     else

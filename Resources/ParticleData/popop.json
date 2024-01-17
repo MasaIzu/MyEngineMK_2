@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/un.json": {
+    "Resources/ParticleData/popop.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -7,15 +7,15 @@
             "value3": 0.0
         },
         "EndPos": {
-            "value0": 0.10400000214576721,
-            "value1": 300.0,
+            "value0": 0.0,
+            "value1": 50.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 0.9782295227050781,
+            "value0": 1.0,
             "value1": 1.0,
-            "value2": 0.2598039507865906,
+            "value2": 1.0,
             "value3": 1.0
         },
         "EndColor": {
@@ -30,22 +30,22 @@
             "value2": 0.0,
             "value3": 0.0
         },
-        "Shot": true,
+        "Shot": false,
         "EndPointActive": false,
         "RandomVelocity": true,
-        "RandomLife": true,
-        "RandomSpeed": true,
+        "RandomLife": false,
+        "RandomSpeed": false,
         "RandomScale": false,
-        "Speed": 0.009999999776482582,
-        "LerpStrength": 0.009999999776482582,
-        "Scale": 10.770000457763672,
-        "ScaleTinker": -0.024000000208616258,
+        "Speed": 1.0,
+        "LerpStrength": 0.05000000074505806,
+        "Scale": 1.0,
+        "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000,
         "AdditiveSynthesis": 0,
         "RandomLifeMinMax": {
-            "value0": 14.529000282287598,
-            "value1": 300.0
+            "value0": 1.0,
+            "value1": 30.0
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -57,6 +57,6 @@
         },
         "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": -1.0
+        "GravityStrength": 0.0
     }
 }

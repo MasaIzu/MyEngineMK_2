@@ -99,6 +99,11 @@ public: // サブクラス
 		uint32_t AdditiveSynthesis = 0;
 		uint32_t isLoad = 0;
 		Vector2 RandomLifeMinMax = { 1,30 };
+		Vector2 RandomSpeedMinMax = { 1,10 };
+		Vector2 RandomScaleMinMax = { 1,10 };
+		float SpeedDivideSize = 1;
+		float ScaleDivideSize = 1;
+		float GravityStrength = 0;
 	};
 	ShaderDetailParameters shaderDetailParameters;
 
@@ -124,6 +129,11 @@ public: // サブクラス
 		uint32_t AdditiveSynthesis = 0;
 		uint32_t isLoad = 0;
 		float RandomLifeMinMax[ 2 ] = { 1,30 };
+		float RandomSpeedMinMax[ 2 ] = { 1,10 };
+		float RandomScaleMinMax[ 2 ] = { 1,10 };
+		float SpeedDivideSize = 1;
+		float ScaleDivideSize = 1;
+		float GravityStrength = 0;
 	};
 	SendParameters sendParameters;
 
@@ -216,7 +226,6 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="ParticleCount">どのくらい作るのか</param>
 	void Initialize(const uint32_t& ParticleCount);
 
 	/// <summary>
@@ -286,12 +295,6 @@ private: // メンバ変数
 	UINT64 m_frameCount = 0;
 	static UINT m_cbvSrvUavDescriptorSize;
 
-	bool Shot = false;
-	bool EndPointActive = false;
-	bool RandomVelocity = true;
-	bool RandomLife = false;
-	bool RandomSpeed = false;
-	bool RandomScale = false;
 	bool isPushSave = false;
 	bool isPushLoad = false;
 	bool isPushReset = false;
@@ -300,12 +303,14 @@ private: // メンバ変数
 	bool isDeletFileSecondTime = false;
 	bool AdditiveSynthesis = false;
 	bool isSetNewParticleCount = false;
+	bool isGravityStrengthActive = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;
 	int particleLifeMaxCount = 50;
 
 	uint32_t particleCount;
+
 
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;

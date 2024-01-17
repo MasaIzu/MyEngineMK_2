@@ -46,7 +46,7 @@ void DebugScene::Initialize() {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
-	int MaxParticleCountB = 15000;
+	int MaxParticleCountB = 50000;
 	particleEditor = std::make_unique<ParticleEditor>();
 	particleEditor->Initialize(MaxParticleCountB);
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
@@ -96,7 +96,7 @@ void DebugScene::Update() {
 		ImGui::SliderFloat("angle2",&angle2,0.0f,180.0f);
 	}
 
-	ImGui::SliderFloat("CameraPosZ",&viewProjection_->eye.z,-300,0);
+	ImGui::SliderFloat("CameraPosZ",&viewProjection_->eye.z,-2000,0);
 	ImGui::End();
 
 	viewProjection_->UpdateMatrix();

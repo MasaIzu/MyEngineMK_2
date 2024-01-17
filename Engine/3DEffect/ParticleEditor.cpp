@@ -57,7 +57,9 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("Scale",sendParameters.Scale)
 		,cereal::make_nvp("ScaleTinker",sendParameters.ScaleTinker),cereal::make_nvp("MaxLife",sendParameters.MaxLife)
 		,cereal::make_nvp("MaxParticleCount",sendParameters.MaxParticleCount),cereal::make_nvp("AdditiveSynthesis",sendParameters.AdditiveSynthesis)
-		,cereal::make_nvp("RandomLifeMinMax",sendParameters.RandomLifeMinMax)
+		,cereal::make_nvp("RandomLifeMinMax",sendParameters.RandomLifeMinMax),cereal::make_nvp("RandomSpeedMinMax",sendParameters.RandomSpeedMinMax)
+		,cereal::make_nvp("RandomScaleMinMax",sendParameters.RandomScaleMinMax),cereal::make_nvp("SpeedDivideSize",sendParameters.SpeedDivideSize)
+		,cereal::make_nvp("ScaleDivideSize",sendParameters.ScaleDivideSize),cereal::make_nvp("GravityStrength",sendParameters.GravityStrength)
 	);
 }
 
@@ -479,7 +481,6 @@ void ParticleEditor::SetTextureHandle(uint32_t textureHandle) {
 void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 {
 	particleCount = ParticleCount;
-
 	sendParameters.MaxParticleCount = particleCount;
 	InitializeVerticeBuff();
 
@@ -508,6 +509,7 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 
 void ParticleEditor::EditUpdate()
 {
+	sendParameters.isLoad = false;
 	ImGui::Begin("ParticleEditor");
 
 	// ファイル名の入力フィールド
@@ -580,14 +582,48 @@ void ParticleEditor::EditUpdate()
 		{
 			ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
 			ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
-			if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 0 ] )
+			if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
 			{
 				sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
 			}
 		}
 		ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
+		if ( sendParameters.RandomSpeed )
+		{
+			ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
+			ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
+			if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
+			{
+				sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
+			}
+			ImGui::SliderFloat("SpeedDivideSize",&sendParameters.SpeedDivideSize,1,100);
+		}
 		ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
+		if ( sendParameters.RandomScale )
+		{
+			ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
+			ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
+			if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
+			{
+				sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
+			}
+			ImGui::SliderFloat("ScaleDivideSize",&sendParameters.ScaleDivideSize,1,100);
+		}
+
+		ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
+		if ( isGravityStrengthActive )
+		{
+			ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+		}
+		else
+		{
+			sendParameters.GravityStrength = 0;
+		}
+
+
+
 		int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
+		ImGui::Text("MaxParticle : %d",particleCount);
 		ImGui::Text("NowParticleCount : %d",ParticleCount);
 		ImGui::InputInt("NewParticlePieces",&NewParticleCount);
 		isSetNewParticleCount = ImGui::Button("set new pieces");
@@ -612,8 +648,12 @@ void ParticleEditor::EditUpdate()
 
 	if ( isSetNewParticleCount )
 	{
-		particleCount = static_cast< uint32_t >( NewParticleCount );
-		Initialize(particleCount);
+		if ( particleCount < static_cast< uint32_t >( NewParticleCount ) )
+		{
+			NewParticleCount = particleCount;
+		}
+		sendParameters.MaxParticleCount = NewParticleCount;
+		sendParameters.Shot = false;
 	}
 
 	SetParameter();
@@ -796,8 +836,13 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.MaxParticleCount = sendParameters.MaxParticleCount;
 	shaderDetailParameters.AdditiveSynthesis = sendParameters.AdditiveSynthesis;
 	shaderDetailParameters.RandomLifeMinMax = sendParameters.RandomLifeMinMax;
-	
-	shaderDetailParameters.isLoad = false;
+	shaderDetailParameters.RandomSpeedMinMax = sendParameters.RandomSpeedMinMax;
+	shaderDetailParameters.RandomScaleMinMax = sendParameters.RandomScaleMinMax;
+	shaderDetailParameters.SpeedDivideSize = sendParameters.SpeedDivideSize;
+	shaderDetailParameters.ScaleDivideSize = sendParameters.ScaleDivideSize;
+	shaderDetailParameters.GravityStrength = sendParameters.GravityStrength;
+
+	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
 
 void ParticleEditor::LoadFileParameter(const SendParameters& params)
@@ -826,7 +871,13 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	for ( uint32_t i = 0; i < 2; i++ )
 	{
 		sendParameters.RandomLifeMinMax[ i ] = params.RandomLifeMinMax[ i ];
+		sendParameters.RandomSpeedMinMax[ i ] = params.RandomSpeedMinMax[ i ];
+		sendParameters.RandomScaleMinMax[ i ] = params.RandomScaleMinMax[ i ];
 	}
+	sendParameters.SpeedDivideSize = params.SpeedDivideSize;
+	sendParameters.ScaleDivideSize = params.ScaleDivideSize;
+	sendParameters.GravityStrength = params.GravityStrength;
+
 	sendParameters.isLoad = true;
 }
 
