@@ -221,6 +221,7 @@ void Player::Update()
 	BoostStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(kataLeftBoneNumber) * playerRotWorldTrans.matWorld_));
 
 	BladeColRatio = MyMath::Vec4ToVec3(ParticleEndPos) - MyMath::Vec4ToVec3(ParticleStartPos);
+	ParticleEndPos_ = ParticleStartPos + MyMath::Vec3ToVec4( BladeColRatio.norm() * MaxBladeColDetection );
 	BladeColRatio = ( BladeColRatio.norm() * MaxBladeColDetection ) / AttackColSphereCount;
 
 	DebugWorldTrans.translation_ = MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_);
@@ -359,7 +360,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
 
-	particleEditor->CSUpdate(cmdList,MyMath::Vec3ToVec4(Vector3(0,5,0)));
+	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos_);
 }
 
 void Player::ParticleDraw()
@@ -370,7 +371,7 @@ void Player::ParticleDraw()
 	if ( !isPlayerExplosion )
 	{
 		ParticleHandHanabi::PreDraw(commandList);
-		ParticleHanabi->Draw(*viewProjection_);
+		//ParticleHanabi->Draw(*viewProjection_);
 		ParticleHandHanabi::PostDraw();
 
 		ParticleBoost::PreDraw(commandList);

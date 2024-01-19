@@ -130,7 +130,7 @@ void DebugScene::PostEffectDraw()
 void DebugScene::CSUpdate()
 {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	particleEditor->CSUpdate(commandList,MyMath::Vec3ToVec4(Vector3(0,-2,0)));
+	particleEditor->CSUpdate(commandList);
 }
 
 bool DebugScene::IsBreak()

@@ -104,7 +104,7 @@ public://Getter
 private://コンスト
 	static const uint32_t AttackColSphereCount = 4;
 
-	const float MaxBladeColDetection = 7.0f;
+	const float MaxBladeColDetection = 100.0f;
 
 private://クラス関連
 	Input* input_ = nullptr;
@@ -211,7 +211,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 5000;
+	float PlayerHP = 500000;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;
@@ -238,6 +238,7 @@ private://プレイヤークラス変数
 	Vector4 fallVec;
 	Vector4 ParticleStartPos;
 	Vector4 ParticleEndPos;
+	Vector4 ParticleEndPos_;
 	Vector4 BoostStartPos;
 	Vector4 LightDir = { 0,1,0,0 };
 

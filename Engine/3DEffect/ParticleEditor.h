@@ -236,7 +236,14 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const Vector4& Pos);
+	void CSUpdate(ID3D12GraphicsCommandList* commandList);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos);
+
+	void CSCmd(ID3D12GraphicsCommandList* commandList);
 
 	/// <summary>
 	/// 描画
@@ -315,9 +322,6 @@ private: // メンバ変数
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;
 	float AngleZ_ = 0.0f;
-
-	float StartPos[ 4 ] = { 0,0,0,0 };
-	float EndPos[ 4 ] = { 0,50,0,0 };
 
 	float StartColor[ 4 ] = { 1,1,1,1 };
 	float EndColor[ 4 ] = { 1,1,1,1 };

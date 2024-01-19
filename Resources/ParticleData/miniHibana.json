@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/un.json": {
+    "Resources/ParticleData/miniHibana.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -14,15 +14,15 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.6286043524742127,
+            "value2": 0.09803920984268189,
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 1.0,
-            "value1": 1.0,
+            "value0": 0.23039215803146363,
+            "value1": 0.9320933818817139,
             "value2": 1.0,
-            "value3": 1.0
+            "value3": 0.0
         },
         "Angle": {
             "value0": 0.0,
@@ -31,32 +31,32 @@
             "value3": 0.0
         },
         "Shot": true,
-        "EndPointActive": true,
+        "EndPointActive": false,
         "RandomVelocity": true,
         "RandomLife": true,
         "RandomSpeed": true,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.4050000011920929,
+        "LerpStrength": 0.05000000074505806,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 15000,
+        "MaxParticleCount": 100,
         "AdditiveSynthesis": 0,
         "RandomLifeMinMax": {
             "value0": 1.0,
-            "value1": 38.09000015258789
+            "value1": 300.0
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
-            "value1": 10.0
+            "value1": 5.294000148773193
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 17.575000762939454,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.0
+        "GravityStrength": 0.017999999225139619
     }
 }

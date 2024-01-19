@@ -620,8 +620,6 @@ void ParticleEditor::EditUpdate()
 			sendParameters.GravityStrength = 0;
 		}
 
-
-
 		int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
 		ImGui::Text("MaxParticle : %d",particleCount);
 		ImGui::Text("NowParticleCount : %d",ParticleCount);
@@ -707,7 +705,7 @@ void ParticleEditor::Draw(const ViewProjection& view)
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	PreDraw(commandList,shaderDetailParameters.AdditiveSynthesis);
+	PreDraw(commandList,AdditiveSynthesis);
 
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
@@ -737,12 +735,22 @@ void ParticleEditor::Draw(const ViewProjection& view)
 
 }
 
-void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& Pos)
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList)
 {
+	CSCmd(commandList);
+}
 
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
+{
+	shaderDetailParameters.StartPos = StartPos;
+	shaderDetailParameters.EndPos = EndPos;
+	CSCmd(commandList);
+}
+
+void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
+{
 	ID3D12DescriptorHeap* ppHeaps[ ] = { m_cbvSrvUavHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps),ppHeaps);
-	shaderDetailParameters.StartPos = Pos;
 	//初期化
 	if ( m_frameCount == 0 )
 	{
@@ -799,7 +807,6 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vecto
 	}
 
 	++m_frameCount;
-
 }
 
 // 指定ディレクトリのファイルリストを取得
@@ -877,6 +884,11 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	sendParameters.SpeedDivideSize = params.SpeedDivideSize;
 	sendParameters.ScaleDivideSize = params.ScaleDivideSize;
 	sendParameters.GravityStrength = params.GravityStrength;
+
+	if ( sendParameters.GravityStrength!= 0 )
+	{
+		isGravityStrengthActive = true;
+	}
 
 	sendParameters.isLoad = true;
 }
