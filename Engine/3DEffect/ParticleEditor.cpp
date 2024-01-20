@@ -61,7 +61,7 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("RandomScaleMinMax",sendParameters.RandomScaleMinMax),cereal::make_nvp("SpeedDivideSize",sendParameters.SpeedDivideSize)
 		,cereal::make_nvp("ScaleDivideSize",sendParameters.ScaleDivideSize),cereal::make_nvp("GravityStrength",sendParameters.GravityStrength)
 		,cereal::make_nvp("Interlocking",sendParameters.Interlocking),cereal::make_nvp("InterlockingStrength",sendParameters.InterlockingStrength)
-		,cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
+		,cereal::make_nvp("InterlockingClose",sendParameters.InterlockingClose),cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
 	);
 }
 
@@ -639,6 +639,7 @@ void ParticleEditor::EditUpdate()
 		if ( sendParameters.Interlocking )
 		{
 			ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
+			ImGui::SliderFloat("InterlockingClose",&sendParameters.InterlockingClose,1,50);
 		}
 
 		ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
@@ -875,6 +876,7 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.GravityStrength = sendParameters.GravityStrength;
 	shaderDetailParameters.Interlocking = sendParameters.Interlocking;
 	shaderDetailParameters.InterlockingStrength = sendParameters.InterlockingStrength;
+	shaderDetailParameters.InterlockingClose = sendParameters.InterlockingClose;
 	shaderDetailParameters.ScaleDownLifeTime = sendParameters.ScaleDownLifeTime;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
@@ -920,6 +922,7 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 
 	sendParameters.Interlocking = params.Interlocking;
 	sendParameters.InterlockingStrength = params.InterlockingStrength;
+	sendParameters.InterlockingClose = params.InterlockingClose;
 	sendParameters.ScaleDownLifeTime = params.ScaleDownLifeTime;
 
 	sendParameters.isLoad = true;

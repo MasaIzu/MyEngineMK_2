@@ -107,6 +107,7 @@ public: // サブクラス
 		float GravityStrength = 0;
 		uint32_t Interlocking = 0;
 		float InterlockingStrength = 0;
+		float InterlockingClose = 15;
 		uint32_t ScaleDownLifeTime = 0;
 	};
 	ShaderDetailParameters shaderDetailParameters;
@@ -140,6 +141,7 @@ public: // サブクラス
 		float GravityStrength = 0;
 		bool Interlocking = false;
 		float InterlockingStrength = 0;
+		float InterlockingClose = 15;
 		bool ScaleDownLifeTime = false;
 	};
 	SendParameters sendParameters;

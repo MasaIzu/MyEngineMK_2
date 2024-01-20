@@ -60,6 +60,7 @@
         "GravityStrength": 0.0,
         "Interlocking": true,
         "InterlockingStrength": 0.5830000042915344,
+        "InterlockingClose": 15.0,
         "ScaleDownLifeTime": true
     }
 }

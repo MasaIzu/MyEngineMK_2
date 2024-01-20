@@ -34,7 +34,8 @@ cbuffer ShaderDetailParameters : register(b1)
     float GravityStrength : packoffset(c10.z);
     uint Interlocking : packoffset(c10.w);
     float InterlockingStrength : packoffset(c11);
-    uint ScaleDownLifeTime : packoffset(c11.y);
+    float InterlockingClose : packoffset(c11.y);
+    uint ScaleDownLifeTime : packoffset(c11.z);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

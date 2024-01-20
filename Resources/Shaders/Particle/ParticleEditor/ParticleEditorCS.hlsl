@@ -55,7 +55,7 @@ void main(uint3 id : SV_DispatchThreadID)
         {
             // 生き残っているパーティクルを動かす.
             float4 BladeEndPos = normalize(EndPos - StartPos);
-            BladeEndPos = normalize((StartPos + (BladeEndPos * 15)) - gParticles[index].position);
+            BladeEndPos = normalize((StartPos + (BladeEndPos * InterlockingClose)) - gParticles[index].position);
             Velocity = gParticles[index].velocity.xyz;
             Velocity = lerp(Velocity, BladeEndPos.xyz, InterlockingStrength);
             Position += Velocity;

@@ -71,7 +71,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleHanabi->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	ParticleBooster = std::make_unique<ParticleBoost>();
-	int MaxParticleCountB = 15000;
+	int MaxParticleCountB = 20000;
 	ParticleBooster->Initialize(MaxParticleCountB);
 	ParticleBooster->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
