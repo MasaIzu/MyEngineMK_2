@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/miniHibana.json": {
+    "Resources/ParticleData/HonooBlade.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -14,15 +14,15 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.6286043524742127,
-            "value2": 0.09803920984268189,
+            "value1": 0.0,
+            "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 0.23039215803146363,
-            "value1": 0.9320933818817139,
-            "value2": 1.0,
-            "value3": 0.0
+            "value0": 1.0,
+            "value1": 0.044117629528045657,
+            "value2": 0.044117629528045657,
+            "value3": 1.0
         },
         "Angle": {
             "value0": 0.0,
@@ -31,25 +31,25 @@
             "value3": 0.0
         },
         "Shot": true,
-        "EndPointActive": false,
+        "EndPointActive": true,
         "RandomVelocity": true,
         "RandomLife": true,
-        "RandomSpeed": true,
+        "RandomSpeed": false,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.05000000074505806,
+        "LerpStrength": 0.009999999776482582,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 100,
+        "MaxParticleCount": 15000,
         "AdditiveSynthesis": 0,
         "RandomLifeMinMax": {
-            "value0": 1.0,
-            "value1": 300.0
+            "value0": 10.470999717712403,
+            "value1": 19.21299934387207
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
-            "value1": 5.294000148773193
+            "value1": 10.0
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
@@ -57,6 +57,9 @@
         },
         "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.017999999225139619
+        "GravityStrength": 0.0,
+        "Interlocking": true,
+        "InterlockingStrength": 0.5830000042915344,
+        "ScaleDownLifeTime": true
     }
 }

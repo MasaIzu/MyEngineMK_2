@@ -59,7 +59,7 @@
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": true,
-        "InterlockingStrength": 0.8100000023841858,
+        "InterlockingStrength": 0.5830000042915344,
         "ScaleDownLifeTime": true
     }
 }
