@@ -130,7 +130,7 @@ public: // サブクラス
 		float ScaleTinker = 0.0f;
 		float MaxLife = 60.0f;
 		uint32_t MaxParticleCount = 0;
-		uint32_t AdditiveSynthesis = 0;
+		bool AdditiveSynthesis = 0;
 		uint32_t isLoad = 0;
 		float RandomLifeMinMax[ 2 ] = { 1,30 };
 		float RandomSpeedMinMax[ 2 ] = { 1,10 };
@@ -233,7 +233,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const uint32_t& ParticleCount);
+	void Initialize(const uint32_t& ParticleCount,const std::string& FileName = "Nothing");
 
 	/// <summary>
 	/// エディターアップデート
@@ -248,7 +248,7 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
-	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos);
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& isParticleActive);
 
 	void CSCmd(ID3D12GraphicsCommandList* commandList);
 
@@ -315,7 +315,6 @@ private: // メンバ変数
 	bool isCreateNewFile = false;
 	bool isDeletFileFirstTime = false;
 	bool isDeletFileSecondTime = false;
-	bool AdditiveSynthesis = false;
 	bool isSetNewParticleCount = false;
 	bool isGravityStrengthActive = false;
 

@@ -480,7 +480,7 @@ void ParticleEditor::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void ParticleEditor::Initialize(const uint32_t& ParticleCount)
+void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string& FileName)
 {
 	particleCount = ParticleCount;
 	sendParameters.MaxParticleCount = particleCount;
@@ -507,10 +507,23 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount)
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
+	if ( FileName != "Nothing" )
+	{
+		std::string FullPath = FilePath + FileName +".json";
+		SendParameters ReadParameters;
+		std::ifstream is(FullPath);
+		cereal::JSONInputArchive archive(is);
+		archive(cereal::make_nvp(FullPath,ReadParameters));
+
+		LoadFileParameter(ReadParameters);
+		SetParameter();
+	}
 }
 
 void ParticleEditor::EditUpdate()
 {
+
+#ifdef _DEBUG
 	sendParameters.isLoad = false;
 	ImGui::Begin("ParticleEditor");
 
@@ -518,7 +531,7 @@ void ParticleEditor::EditUpdate()
 	static char fileName[ 128 ] = "";
 	if ( !isDeletFileFirstTime )
 	{
-		ImGui::Checkbox("AdditiveSynthesis",&AdditiveSynthesis);
+		ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
 
 		ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
 		isCreateNewFile = ImGui::Button("create a new file");
@@ -709,13 +722,14 @@ void ParticleEditor::EditUpdate()
 		isDeletFileFirstTime = false;
 		isDeletFileSecondTime = false;
 	}
+#endif
 }
 
 void ParticleEditor::Draw(const ViewProjection& view)
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
-	PreDraw(commandList,AdditiveSynthesis);
+	PreDraw(commandList,sendParameters.AdditiveSynthesis);
 
 	Matrix4 constMatToSend = view.matView;
 	constMatToSend *= view.matProjection;
@@ -750,10 +764,11 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList)
 	CSCmd(commandList);
 }
 
-void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& isParticleActive)
 {
 	shaderDetailParameters.StartPos = StartPos;
 	shaderDetailParameters.EndPos = EndPos;
+	shaderDetailParameters.Shot = isParticleActive;
 	CSCmd(commandList);
 }
 

@@ -79,7 +79,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleExplosion->Initialize();
 
 	particleEditor = std::make_unique<ParticleEditor>();
-	particleEditor->Initialize(MaxParticleCountB);
+	particleEditor->Initialize(MaxParticleCountB,"HonooBlade");
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
@@ -360,7 +360,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
 
-	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos);
+	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
 }
 
 void Player::ParticleDraw()
