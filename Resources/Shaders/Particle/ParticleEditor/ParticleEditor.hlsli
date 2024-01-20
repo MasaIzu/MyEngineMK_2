@@ -32,6 +32,9 @@ cbuffer ShaderDetailParameters : register(b1)
     float SpeedDivideSize : packoffset(c10);
     float ScaleDivideSize : packoffset(c10.y);
     float GravityStrength : packoffset(c10.z);
+    uint Interlocking : packoffset(c10.w);
+    float InterlockingStrength : packoffset(c11);
+    uint ScaleDownLifeTime : packoffset(c11.y);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
@@ -68,6 +71,7 @@ struct GpuParticleElement
     float scale;
     float Speed;
     float graceOfTime;
+    float ScaleKeep;
 };
 
 uint wang_hash(uint seed)

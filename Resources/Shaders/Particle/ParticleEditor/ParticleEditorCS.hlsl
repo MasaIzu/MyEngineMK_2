@@ -51,26 +51,45 @@ void main(uint3 id : SV_DispatchThreadID)
     {
         float3 EndPosPoint = EndPos.xyz;
         float3 PosToEndVec = normalize(EndPosPoint - Position);
-        Velocity = normalize(lerp(Velocity, PosToEndVec, LerpStrength));
-        gParticles[index].velocity.xyz = Velocity;
-        Position += Velocity * gParticles[index].Speed;
+        if (Interlocking)
+        {
+            // 生き残っているパーティクルを動かす.
+            float4 BladeEndPos = normalize(EndPos - StartPos);
+            BladeEndPos = normalize((StartPos + (BladeEndPos * 15)) - gParticles[index].position);
+            Velocity = gParticles[index].velocity.xyz;
+            Velocity = lerp(Velocity, BladeEndPos.xyz, InterlockingStrength);
+            Position += Velocity;
+            gParticles[index].velocity.xyz = Velocity;
+        }
+        else
+        {
+            Velocity = normalize(lerp(Velocity, PosToEndVec, LerpStrength));
+            gParticles[index].velocity.xyz = Velocity;
+            Position += Velocity * gParticles[index].Speed;
+        }
     }
     else
     {
-        
         Position += Velocity * gParticles[index].Speed;
+        Velocity.y = Velocity.y - GravityStrength;
+        gParticles[index].velocity.xyz = normalize(Velocity);
     }
-    
-    Velocity.y = Velocity.y - GravityStrength;
-    gParticles[index].velocity.xyz = normalize(Velocity);
     
     float4 Color = EndColor - StartColor;
     float Life = gParticles[index].MaxLifeTime - gParticles[index].lifeTime;
     float Ratio = Life / gParticles[index].MaxLifeTime;
     Color *= Ratio;
+    
+    gParticles[index].ScaleKeep += ScaleTinker;
+    float scale = 1;
+    if (ScaleDownLifeTime)
+    {
+        scale = 1.0f * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
+    }
+    
     gParticles[index].color = StartColor + Color;
     gParticles[index].position.xyz = Position;
-    gParticles[index].scale += ScaleTinker;
+    gParticles[index].scale = scale + gParticles[index].ScaleKeep;
 }
 
 
@@ -114,12 +133,21 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     }
     
     if (RandomVelocity)
-    {   
-        velocity.x = nextRand(indexAdd) * nextRand1(seed);
-        velocity.z = nextRand(indexAdd) * nextRand1(seed);
-        velocity.y = nextRand(indexAdd) * nextRand1(seed);
+    {
+        if (Interlocking)
+        {
+            velocity.x = nextRand(indexAdd) + nextRand1(seed) * 2;
+            velocity.z = nextRand(indexAdd) + nextRand1(seed) * 2;
+            velocity.y = nextRand(indexAdd) + nextRand1(seed) * 2;
+        }
+        else
+        {
+            velocity.x = nextRand(indexAdd) * nextRand1(seed);
+            velocity.z = nextRand(indexAdd) * nextRand1(seed);
+            velocity.y = nextRand(indexAdd) * nextRand1(seed);
     
-        velocity = normalize(velocity);
+            velocity = normalize(velocity);
+        }
         gParticles[index].velocity.xyz = velocity;
     }
     else
@@ -183,5 +211,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].isActive = 1;
     gParticles[index].position.xyz = StartPos.xyz;
     gParticles[index].color = StartColor;
-    
+    gParticles[index].ScaleKeep = 0;
+
 }

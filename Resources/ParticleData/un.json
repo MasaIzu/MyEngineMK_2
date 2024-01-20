@@ -14,14 +14,14 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.009803950786590577,
+            "value2": 0.009803950786590577,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.014705896377563477,
+            "value2": 0.014705896377563477,
             "value3": 1.0
         },
         "Angle": {
@@ -34,18 +34,18 @@
         "EndPointActive": true,
         "RandomVelocity": true,
         "RandomLife": true,
-        "RandomSpeed": true,
+        "RandomSpeed": false,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.4050000011920929,
+        "LerpStrength": 0.009999999776482582,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 15000,
         "AdditiveSynthesis": 0,
         "RandomLifeMinMax": {
-            "value0": 1.0,
-            "value1": 38.09000015258789
+            "value0": 10.470999717712403,
+            "value1": 19.21299934387207
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -55,8 +55,11 @@
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 17.575000762939454,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.0
+        "GravityStrength": 0.0,
+        "Interlocking": true,
+        "InterlockingStrength": 0.8100000023841858,
+        "ScaleDownLifeTime": true
     }
 }

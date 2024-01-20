@@ -60,6 +60,8 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("RandomLifeMinMax",sendParameters.RandomLifeMinMax),cereal::make_nvp("RandomSpeedMinMax",sendParameters.RandomSpeedMinMax)
 		,cereal::make_nvp("RandomScaleMinMax",sendParameters.RandomScaleMinMax),cereal::make_nvp("SpeedDivideSize",sendParameters.SpeedDivideSize)
 		,cereal::make_nvp("ScaleDivideSize",sendParameters.ScaleDivideSize),cereal::make_nvp("GravityStrength",sendParameters.GravityStrength)
+		,cereal::make_nvp("Interlocking",sendParameters.Interlocking),cereal::make_nvp("InterlockingStrength",sendParameters.InterlockingStrength)
+		,cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
 	);
 }
 
@@ -620,6 +622,14 @@ void ParticleEditor::EditUpdate()
 			sendParameters.GravityStrength = 0;
 		}
 
+		ImGui::Checkbox("Interlocking",&sendParameters.Interlocking);
+		if ( sendParameters.Interlocking )
+		{
+			ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
+		}
+
+		ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
+
 		int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
 		ImGui::Text("MaxParticle : %d",particleCount);
 		ImGui::Text("NowParticleCount : %d",ParticleCount);
@@ -848,6 +858,9 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.SpeedDivideSize = sendParameters.SpeedDivideSize;
 	shaderDetailParameters.ScaleDivideSize = sendParameters.ScaleDivideSize;
 	shaderDetailParameters.GravityStrength = sendParameters.GravityStrength;
+	shaderDetailParameters.Interlocking = sendParameters.Interlocking;
+	shaderDetailParameters.InterlockingStrength = sendParameters.InterlockingStrength;
+	shaderDetailParameters.ScaleDownLifeTime = sendParameters.ScaleDownLifeTime;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -889,6 +902,10 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	{
 		isGravityStrengthActive = true;
 	}
+
+	sendParameters.Interlocking = params.Interlocking;
+	sendParameters.InterlockingStrength = params.InterlockingStrength;
+	sendParameters.ScaleDownLifeTime = params.ScaleDownLifeTime;
 
 	sendParameters.isLoad = true;
 }

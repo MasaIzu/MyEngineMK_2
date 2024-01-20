@@ -360,7 +360,7 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	ParticleExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(GetPlayerPos()));
 	playerExplosionGun->CSUpdate(cmdList);
 
-	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos_);
+	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos);
 }
 
 void Player::ParticleDraw()
