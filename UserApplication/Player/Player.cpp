@@ -79,7 +79,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	ParticleExplosion->Initialize();
 
 	particleEditor = std::make_unique<ParticleEditor>();
-	particleEditor->Initialize(MaxParticleCountB,"HonooBlade");
+	particleEditor->Initialize(MaxParticleCountB,false,"HonooBlade");
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
@@ -97,13 +97,11 @@ void Player::Update()
 
 	Moved = playerWorldTrans.translation_;
 
-	particleEditor->EditUpdate();
-
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
 	HPUpdate();
-
+	particleEditor->EditUpdate();
 	if ( input_->PushKey(DIK_G) )
 	{
 		isG = true;

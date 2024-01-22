@@ -86,6 +86,14 @@ MiddleBossEnemy::MiddleBossEnemy()
 	LightBoostLeft = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
 	LightBoostRight = LightData::GetInstance()->AddPointLight(BossWorldTrans.translation_,Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),false);
 
+	particleEditorLeft = std::make_unique<ParticleEditor>();
+	particleEditorLeft->Initialize(MaxParticleCountC,false,"EnemyBoost");
+	particleEditorLeft->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	particleEditorRight = std::make_unique<ParticleEditor>();
+	particleEditorRight->Initialize(MaxParticleCountC,false,"EnemyBoost");
+	particleEditorRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -171,14 +179,14 @@ void MiddleBossEnemy::Update()
 	missileGunRight->Update(missileGunRightPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
 	EnemyBoostLeftPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftStart) * BossWorldTrans.matWorld_));
-	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftEnd) * BossWorldTrans.matWorld_)) - Vector4(0,5,0,0);
 	EnemyBoostLeftPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackStart) * BossWorldTrans.matWorld_));
-	EnemyBoostLeftPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostLeftPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosLeftBackEnd) * BossWorldTrans.matWorld_)) - Vector4(0,5,0,0);
 
 	EnemyBoostRightPos.BoostStartPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightStart) * BossWorldTrans.matWorld_));
-	EnemyBoostRightPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 0 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightEnd) * BossWorldTrans.matWorld_)) - Vector4(0,5,0,0);
 	EnemyBoostRightPos.BoostStartPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackStart) * BossWorldTrans.matWorld_));
-	EnemyBoostRightPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackEnd) * BossWorldTrans.matWorld_));
+	EnemyBoostRightPos.BoostEndPos[ 1 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(BoostPosRightBackEnd) * BossWorldTrans.matWorld_)) - Vector4(0,5,0,0);
 
 	enemyHP2DUI->Update();
 	enemyHP3DUI->Update();
@@ -195,6 +203,8 @@ void MiddleBossEnemy::Update()
 
 	DebugWorldTrans.translation_ = BossWorldTrans.translation_ - Coladjustment;
 	DebugWorldTrans.TransferMatrix();
+
+	/*particleEditorRight->EditUpdate();*/
 }
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
@@ -232,15 +242,17 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 	if ( !isDead )
 	{
 		EnemyBoostParticle::PreDraw(commandList);
-		enemyBoostParticleLeft->Draw(viewProjection_);
-		enemyBoostParticleRight->Draw(viewProjection_);
+		//enemyBoostParticleLeft->Draw(viewProjection_);
+		//enemyBoostParticleRight->Draw(viewProjection_);
 		EnemyBoostParticle::PostDraw();
 	}
 
 	Explosion::PreDraw(commandList);
-	explosion->Draw(viewProjection_);
+	//explosion->Draw(viewProjection_);
 	Explosion::PostDraw();
 
+	particleEditorLeft->Draw(viewProjection_);
+	particleEditorRight->Draw(viewProjection_);
 }
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)
@@ -446,6 +458,9 @@ void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	enemyBoostParticleRight->CSUpdate(cmdList,EnemyBoostRightPos,BoostEndPower);
 
 	explosion->CSUpdate(cmdList,isExplosion,MyMath::Vec3ToVec4(BossWorldTrans.translation_));
+
+	particleEditorLeft->CSUpdate(cmdList,EnemyBoostLeftPos.BoostStartPos[ 1 ],EnemyBoostLeftPos.BoostEndPos[ 0 ]);
+	particleEditorRight->CSUpdate(cmdList,EnemyBoostRightPos.BoostStartPos[ 1 ],EnemyBoostRightPos.BoostEndPos[ 0 ]);
 }
 
 void MiddleBossEnemy::Timer()

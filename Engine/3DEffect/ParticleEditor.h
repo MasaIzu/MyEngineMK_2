@@ -235,7 +235,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const uint32_t& ParticleCount,const std::string& FileName = "Nothing");
+	void Initialize(const uint32_t& ParticleCount,const bool& isEditUpdate_ = false,const std::string& FileName = "Nothing");
 
 	/// <summary>
 	/// エディターアップデート
@@ -246,6 +246,11 @@ public: // メンバ関数
 	/// コンピュートシェーダーアップデート
 	/// </summary>
 	void CSUpdate(ID3D12GraphicsCommandList* commandList);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos);
 
 	/// <summary>
 	/// コンピュートシェーダーアップデート
@@ -319,6 +324,7 @@ private: // メンバ変数
 	bool isDeletFileSecondTime = false;
 	bool isSetNewParticleCount = false;
 	bool isGravityStrengthActive = false;
+	bool isEditUpdate = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;
@@ -338,4 +344,5 @@ private: // メンバ変数
 	std::string FilePath = "Resources/ParticleData/";
 	std::string SelectedFileName;
 	std::string NewFileName;
+	std::string KeepFileName;
 };

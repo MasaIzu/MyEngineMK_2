@@ -14,8 +14,8 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.009803950786590577,
-            "value2": 0.009803950786590577,
+            "value1": 0.0,
+            "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
@@ -37,15 +37,15 @@
         "RandomSpeed": false,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.009999999776482582,
+        "LerpStrength": 0.05000000074505806,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 15000,
-        "AdditiveSynthesis": 0,
+        "MaxParticleCount": 20000,
+        "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
-            "value0": 10.470999717712403,
-            "value1": 19.21299934387207
+            "value0": 1.0,
+            "value1": 14.13599967956543
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -59,7 +59,8 @@
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": true,
-        "InterlockingStrength": 0.5830000042915344,
-        "ScaleDownLifeTime": true
+        "InterlockingStrength": 0.4659999907016754,
+        "InterlockingClose": 18.326000213623048,
+        "ScaleDownLifeTime": false
     }
 }

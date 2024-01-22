@@ -12,6 +12,7 @@
 #include "EnemyHP2DUI.h"
 #include "Damage.h"
 #include "EnemyBoostParticle.h"
+#include "ParticleEditor.h"
 
 /// <summary>
 /// 中ボス
@@ -155,6 +156,9 @@ private://クラス関連
 	std::unique_ptr<Explosion> explosion;
 	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleLeft;
 	std::unique_ptr<EnemyBoostParticle> enemyBoostParticleRight;
+
+	std::unique_ptr<ParticleEditor> particleEditorLeft;
+	std::unique_ptr<ParticleEditor> particleEditorRight;
 
 private://イーナムクラス
 

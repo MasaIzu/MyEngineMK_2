@@ -480,7 +480,7 @@ void ParticleEditor::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
-void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string& FileName)
+void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEditUpdate_,const std::string& FileName)
 {
 	particleCount = ParticleCount;
 	sendParameters.MaxParticleCount = particleCount;
@@ -509,6 +509,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string&
 
 	if ( FileName != "Nothing" )
 	{
+		KeepFileName = FileName;
+
 		std::string FullPath = FilePath + FileName +".json";
 		SendParameters ReadParameters;
 		std::ifstream is(FullPath);
@@ -518,211 +520,217 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const std::string&
 		LoadFileParameter(ReadParameters);
 		SetParameter();
 	}
+	isEditUpdate = isEditUpdate_;
 }
 
 void ParticleEditor::EditUpdate()
 {
 
 #ifdef _DEBUG
-	sendParameters.isLoad = false;
-	ImGui::Begin("ParticleEditor");
 
-	// ファイル名の入力フィールド
-	static char fileName[ 128 ] = "";
-	if ( !isDeletFileFirstTime )
+	if ( isEditUpdate )
 	{
-		ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
+		sendParameters.isLoad = false;
+		ImGui::Begin("ParticleEditor");
 
-		ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
-		isCreateNewFile = ImGui::Button("create a new file");
-
-		std::vector<std::string> fileList = GetFileList(FilePath);
-		if ( ImGui::BeginListBox("##filelist") )
+		// ファイル名の入力フィールド
+		static char fileName[ 128 ] = "";
+		if ( !isDeletFileFirstTime )
 		{
-			for ( int i = 0; i < fileList.size(); i++ )
+			ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
+
+			ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
+			isCreateNewFile = ImGui::Button("create a new file");
+
+			std::vector<std::string> fileList = GetFileList(FilePath);
+			if ( ImGui::BeginListBox("##filelist") )
 			{
-				const bool isSelected = ( selectedIndex == i );
-				if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+				for ( int i = 0; i < fileList.size(); i++ )
 				{
-					selectedIndex = i;
-					SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
-				}
+					const bool isSelected = ( selectedIndex == i );
+					if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+					{
+						selectedIndex = i;
+						SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+					}
 
-				// 選択された項目を表示領域内にスクロール
-				if ( isSelected )
+					// 選択された項目を表示領域内にスクロール
+					if ( isSelected )
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndListBox();
+			}
+
+			isPushSave = ImGui::Button("save");
+			ImGui::SameLine();
+			isPushLoad = ImGui::Button("load");
+			ImGui::SameLine();
+			isPushReset = ImGui::Button("reset");
+
+			// 削除ボタンの前にスタイルをプッシュ
+			ImGui::PushStyleColor(ImGuiCol_Button,ImVec4(1.0f,0.0f,0.0f,1.0f));  // 赤色
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(1.0f,0.3f,0.3f,1.0f));  // ホバー時の色
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.8f,0.0f,0.0f,1.0f));  // アクティブ時の色
+
+			// 削除ボタン
+			isDeletFileFirstTime = ImGui::Button("delete file");
+
+			// スタイルをポップ
+			ImGui::PopStyleColor(3);
+
+			ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
+			ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
+			ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
+			ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
+			ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
+			ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
+			ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
+			ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
+			ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
+			ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
+			ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
+			ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
+			ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
+			if ( sendParameters.EndPointActive )
+			{
+				ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
+			}
+			ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
+			ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
+			if ( sendParameters.RandomLife )
+			{
+				ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
+				ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
+				if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
 				{
-					ImGui::SetItemDefaultFocus();
+					sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
 				}
 			}
-			ImGui::EndListBox();
-		}
-
-		isPushSave = ImGui::Button("save");
-		ImGui::SameLine();
-		isPushLoad = ImGui::Button("load");
-		ImGui::SameLine();
-		isPushReset = ImGui::Button("reset");
-
-		// 削除ボタンの前にスタイルをプッシュ
-		ImGui::PushStyleColor(ImGuiCol_Button,ImVec4(1.0f,0.0f,0.0f,1.0f));  // 赤色
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(1.0f,0.3f,0.3f,1.0f));  // ホバー時の色
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.8f,0.0f,0.0f,1.0f));  // アクティブ時の色
-
-		// 削除ボタン
-		isDeletFileFirstTime = ImGui::Button("delete file");
-
-		// スタイルをポップ
-		ImGui::PopStyleColor(3);
-
-		ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
-		ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
-		ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
-		ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
-		ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
-		ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
-		ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
-		ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
-		ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
-		ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
-		ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
-		ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
-		if ( sendParameters.EndPointActive )
-		{
-			ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
-		}
-		ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
-		ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
-		if ( sendParameters.RandomLife )
-		{
-			ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
-			ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
-			if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
+			ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
+			if ( sendParameters.RandomSpeed )
 			{
-				sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
+				ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
+				ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
+				if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
+				{
+					sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
+				}
+				ImGui::SliderFloat("SpeedDivideSize",&sendParameters.SpeedDivideSize,1,100);
 			}
-		}
-		ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
-		if ( sendParameters.RandomSpeed )
-		{
-			ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
-			ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
-			if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
+			ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
+			if ( sendParameters.RandomScale )
 			{
-				sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
+				ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
+				ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
+				if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
+				{
+					sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
+				}
+				ImGui::SliderFloat("ScaleDivideSize",&sendParameters.ScaleDivideSize,1,100);
 			}
-			ImGui::SliderFloat("SpeedDivideSize",&sendParameters.SpeedDivideSize,1,100);
-		}
-		ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
-		if ( sendParameters.RandomScale )
-		{
-			ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
-			ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
-			if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
-			{
-				sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
-			}
-			ImGui::SliderFloat("ScaleDivideSize",&sendParameters.ScaleDivideSize,1,100);
-		}
 
-		ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
-		if ( isGravityStrengthActive )
-		{
-			ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+			ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
+			if ( isGravityStrengthActive )
+			{
+				ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+			}
+			else
+			{
+				sendParameters.GravityStrength = 0;
+			}
+
+			ImGui::Checkbox("Interlocking",&sendParameters.Interlocking);
+			if ( sendParameters.Interlocking )
+			{
+				ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
+				ImGui::SliderFloat("InterlockingClose",&sendParameters.InterlockingClose,1,50);
+			}
+
+			ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
+
+			int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
+			ImGui::Text("MaxParticle : %d",particleCount);
+			ImGui::Text("NowParticleCount : %d",ParticleCount);
+			ImGui::InputInt("NewParticlePieces",&NewParticleCount);
+			isSetNewParticleCount = ImGui::Button("set new pieces");
 		}
 		else
 		{
-			sendParameters.GravityStrength = 0;
+			ImGui::Text("delete the file?");
+			if ( ImGui::Button("YES") )
+			{
+				isDeletFileSecondTime = true;
+			}
+			ImGui::SameLine();
+			if ( ImGui::Button(" NO ") )
+			{
+				isDeletFileFirstTime = false;
+			}
 		}
 
-		ImGui::Checkbox("Interlocking",&sendParameters.Interlocking);
-		if ( sendParameters.Interlocking )
+		ImGui::End();
+
+		std::string FullPath = FilePath + SelectedFileName;
+
+		if ( isSetNewParticleCount )
 		{
-			ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
-			ImGui::SliderFloat("InterlockingClose",&sendParameters.InterlockingClose,1,50);
+			if ( particleCount < static_cast< uint32_t >( NewParticleCount ) )
+			{
+				NewParticleCount = particleCount;
+			}
+			sendParameters.MaxParticleCount = NewParticleCount;
+			sendParameters.Shot = false;
 		}
 
-		ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
+		SetParameter();
+		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
-		int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
-		ImGui::Text("MaxParticle : %d",particleCount);
-		ImGui::Text("NowParticleCount : %d",ParticleCount);
-		ImGui::InputInt("NewParticlePieces",&NewParticleCount);
-		isSetNewParticleCount = ImGui::Button("set new pieces");
-	}
-	else
-	{
-		ImGui::Text("delete the file?");
-		if ( ImGui::Button("YES") )
+		if ( isPushSave )
 		{
-			isDeletFileSecondTime = true;
+			std::ofstream os(FullPath);
+			cereal::JSONOutputArchive archive(os);
+			archive(cereal::make_nvp(FullPath,sendParameters));
 		}
-		ImGui::SameLine();
-		if ( ImGui::Button(" NO ") )
+
+		if ( isPushLoad )
 		{
+			SendParameters ReadParameters;
+			std::ifstream is(FullPath);
+			cereal::JSONInputArchive archive(is);
+			archive(cereal::make_nvp(FullPath,ReadParameters));
+
+			LoadFileParameter(ReadParameters);
+		}
+
+		if ( isPushReset )
+		{
+			SendParameters ReadParameters;
+			LoadFileParameter(ReadParameters);
+		}
+
+		if ( isCreateNewFile )
+		{
+			NewFileName = "Resources/ParticleData/";
+			NewFileName += fileName;
+			NewFileName += ".json";
+
+			std::ofstream os(NewFileName);
+			cereal::JSONOutputArchive archive(os);
+			archive(cereal::make_nvp(NewFileName,sendParameters));
+		}
+
+		if ( selectedIndex != -1 && isDeletFileFirstTime && isDeletFileSecondTime )
+		{
+			std::filesystem::path filePath = FullPath;
+			std::filesystem::remove(filePath);  // ファイルを削除
+			selectedIndex = -1;  // 選択をリセット
 			isDeletFileFirstTime = false;
+			isDeletFileSecondTime = false;
 		}
 	}
 
-	ImGui::End();
-
-	std::string FullPath = FilePath + SelectedFileName;
-
-	if ( isSetNewParticleCount )
-	{
-		if ( particleCount < static_cast< uint32_t >( NewParticleCount ) )
-		{
-			NewParticleCount = particleCount;
-		}
-		sendParameters.MaxParticleCount = NewParticleCount;
-		sendParameters.Shot = false;
-	}
-
-	SetParameter();
-	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
-
-	if ( isPushSave )
-	{
-		std::ofstream os(FullPath);
-		cereal::JSONOutputArchive archive(os);
-		archive(cereal::make_nvp(FullPath,sendParameters));
-	}
-
-	if ( isPushLoad )
-	{
-		SendParameters ReadParameters;
-		std::ifstream is(FullPath);
-		cereal::JSONInputArchive archive(is);
-		archive(cereal::make_nvp(FullPath,ReadParameters));
-
-		LoadFileParameter(ReadParameters);
-	}
-
-	if ( isPushReset )
-	{
-		SendParameters ReadParameters;
-		LoadFileParameter(ReadParameters);
-	}
-
-	if ( isCreateNewFile )
-	{
-		NewFileName = "Resources/ParticleData/";
-		NewFileName += fileName;
-		NewFileName += ".json";
-
-		std::ofstream os(NewFileName);
-		cereal::JSONOutputArchive archive(os);
-		archive(cereal::make_nvp(NewFileName,sendParameters));
-	}
-
-	if ( selectedIndex != -1 && isDeletFileFirstTime && isDeletFileSecondTime )
-	{
-		std::filesystem::path filePath = FullPath;
-		std::filesystem::remove(filePath);  // ファイルを削除
-		selectedIndex = -1;  // 選択をリセット
-		isDeletFileFirstTime = false;
-		isDeletFileSecondTime = false;
-	}
 #endif
 }
 
@@ -765,6 +773,13 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList)
 	CSCmd(commandList);
 }
 
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
+{
+	shaderDetailParameters.StartPos = StartPos;
+	shaderDetailParameters.EndPos = EndPos;
+	CSCmd(commandList);
+}
+
 void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos,const uint32_t& isParticleActive)
 {
 	shaderDetailParameters.StartPos = StartPos;
@@ -780,7 +795,7 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 	//初期化
 	if ( m_frameCount == 0 )
 	{
-		shaderDetailParameters.MaxParticleCount = particleCount;
+		//shaderDetailParameters.MaxParticleCount = particleCount;
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
