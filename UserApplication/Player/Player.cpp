@@ -85,6 +85,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
+
 	CircleShadowCount = LightData::GetInstance()->AddCircleShadow(playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
 }
 
