@@ -46,9 +46,9 @@ void DebugScene::Initialize() {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
-	int MaxParticleCountB = 50000;
+	uint32_t MaxParticleCountB = 60000;
 	particleEditor = std::make_unique<ParticleEditor>();
-	particleEditor->Initialize(MaxParticleCountB);
+	particleEditor->Initialize(MaxParticleCountB,true);
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 

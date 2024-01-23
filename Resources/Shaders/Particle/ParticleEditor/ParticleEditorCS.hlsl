@@ -55,9 +55,10 @@ void main(uint3 id : SV_DispatchThreadID)
         {
             // 生き残っているパーティクルを動かす.
             float4 BladeEndPos = normalize(EndPos - StartPos);
-            BladeEndPos = normalize((StartPos + (BladeEndPos * InterlockingClose)) - gParticles[index].position);
+            BladeEndPos = normalize((StartPos + (BladeEndPos * InterlockingLength)) - gParticles[index].position);
             Velocity = gParticles[index].velocity.xyz;
             Velocity = lerp(Velocity, BladeEndPos.xyz, InterlockingStrength);
+            Velocity = normalize(Velocity) * gParticles[index].Speed;
             Position += Velocity;
             gParticles[index].velocity.xyz = Velocity;
         }
@@ -70,9 +71,28 @@ void main(uint3 id : SV_DispatchThreadID)
     }
     else
     {
-        Position += Velocity * gParticles[index].Speed;
-        Velocity.y = Velocity.y - GravityStrength;
-        gParticles[index].velocity.xyz = normalize(Velocity);
+        if (ParticleGroup == 0)
+        {
+            Position += Velocity * gParticles[index].Speed;
+            Velocity.y = Velocity.y - GravityStrength;
+            gParticles[index].velocity.xyz = normalize(Velocity);
+        }
+        else
+        {
+            if (index > ParticleGroupCount)
+            {
+                if (gParticles[index].GroupTimer <= 0)
+                {
+                    Position += Velocity * gParticles[index].Speed;
+                    Velocity.y = Velocity.y - GravityStrength;
+                    gParticles[index].velocity.xyz = normalize(Velocity);
+                }
+            }
+            else
+            {
+                Position += Velocity * gParticles[index].Speed;
+            }
+        }
     }
     
     float4 Color = EndColor - StartColor;
@@ -84,12 +104,37 @@ void main(uint3 id : SV_DispatchThreadID)
     float scale = 1;
     if (ScaleDownLifeTime)
     {
-        scale = 1.0f * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
+        scale = Scale * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
     }
+    
     
     gParticles[index].color = StartColor + Color;
     gParticles[index].position.xyz = Position;
     gParticles[index].scale = scale + gParticles[index].ScaleKeep;
+    
+    gParticles[index].GroupTimer = gParticles[index].GroupTimer - dt;
+    if (ParticleGroup == 1)
+    {
+        if (index > ParticleGroupCount - 1)
+        {
+            if (gParticles[index].GroupTimer <= 0)
+            {
+                gParticles[index].position.xyz = Position;
+            }
+            else
+            {
+                gParticles[index].position = gParticles[gParticles[index].GroupNumber].position;
+                gParticles[index].lifeTime = gParticles[index].MaxLifeTime;
+            }
+        }
+        else
+        {
+            if (gParticles[index].GroupTimer <= 0)
+            {
+                gParticles[index].scale = 0;
+            }
+        }
+    }
 }
 
 
@@ -105,7 +150,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     }
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
-    if (Shot == false)
+    if (Shot == 0)
     {
         float GraceOfTimeMax = 100.0f;
         float GraceOfTimeMin = 1.0f;
@@ -114,15 +159,16 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         return;
     }
     
-    const float dt = 1;
-    if (gParticles[index].graceOfTime >= 0)
-    {
-        gParticles[index].graceOfTime = gParticles[index].graceOfTime - dt;
-        return;
-    }
-   
     
-    float3 velocity = (0, 0, 0);
+    if (!EmitParticles)
+    {
+        const float dt = 1;
+        if (gParticles[index].graceOfTime >= 0)
+        {
+            gParticles[index].graceOfTime = gParticles[index].graceOfTime - dt;
+            return;
+        }
+    }
     
     if (isLoad)
     {
@@ -132,22 +178,17 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         gParticles[index].graceOfTime = GraceOfTime;
     }
     
+    float3 velocity;
+    
     if (RandomVelocity)
     {
-        if (Interlocking)
-        {
-            velocity.x = nextRand(indexAdd) + nextRand1(seed) * 2;
-            velocity.z = nextRand(indexAdd) + nextRand1(seed) * 2;
-            velocity.y = nextRand(indexAdd) + nextRand1(seed) * 2;
-        }
-        else
-        {
-            velocity.x = nextRand(indexAdd) * nextRand1(seed);
-            velocity.z = nextRand(indexAdd) * nextRand1(seed);
-            velocity.y = nextRand(indexAdd) * nextRand1(seed);
+        
+        velocity.x = nextRand(indexAdd) * nextRand1(seed);
+        velocity.z = nextRand(indexAdd) * nextRand1(seed);
+        velocity.y = nextRand(indexAdd) * nextRand1(seed);
     
-            velocity = normalize(velocity);
-        }
+        velocity = normalize(velocity);
+        
         gParticles[index].velocity.xyz = velocity;
     }
     else
@@ -177,14 +218,47 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         gParticles[index].velocity.xyz = RotVelocity;
     }
     
-    if (RandomLife)
+    if (ParticleGroup == 1)
     {
-        float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
-        gParticles[index].lifeTime = RandomLife_;
+        gParticles[index].GroupNumber = Rand1(seed, ParticleGroupCount, 0);
+        gParticles[index].GroupTimer = GroupTimer;
+        
+        if (index > ParticleGroupCount - 1)
+        {
+            if (RandomLife)
+            {
+                float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+                gParticles[index].lifeTime = RandomLife_;
+            }
+            else
+            {
+                gParticles[index].lifeTime = MaxLife;
+            }
+        }
+        else
+        {
+            if (RandomLife)
+            {
+                float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+                gParticles[index].lifeTime = GroupTimer + RandomLifeMinMax.y;
+            }
+            else
+            {
+                gParticles[index].lifeTime = MaxLife + GroupTimer;
+            }
+        }
     }
     else
     {
-        gParticles[index].lifeTime = MaxLife;
+        if (RandomLife)
+        {
+            float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+            gParticles[index].lifeTime = RandomLife_;
+        }
+        else
+        {
+            gParticles[index].lifeTime = MaxLife;
+        }
     }
     
     if (RandomSpeed)

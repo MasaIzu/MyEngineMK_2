@@ -69,6 +69,8 @@ public: // サブクラス
 		float Speed;
 		float graceOfTime;
 		float ScaleKeep;
+		float GroupNumber;
+		float GroupTimer;
 	};
 
 	struct ShaderViewParameters
@@ -107,8 +109,12 @@ public: // サブクラス
 		float GravityStrength = 0;
 		uint32_t Interlocking = 0;
 		float InterlockingStrength = 0;
-		float InterlockingClose = 15;
+		float InterlockingLength = 15;
 		uint32_t ScaleDownLifeTime = 0;
+		uint32_t EmitParticles = 0;
+		uint32_t ParticleGroup = 0;
+		uint32_t ParticleGroupCount = 5;
+		float GroupTimer = 30;
 	};
 	ShaderDetailParameters shaderDetailParameters;
 
@@ -141,8 +147,12 @@ public: // サブクラス
 		float GravityStrength = 0;
 		bool Interlocking = false;
 		float InterlockingStrength = 0;
-		float InterlockingClose = 15;
+		float InterlockingLength = 15;
 		bool ScaleDownLifeTime = false;
+		bool EmitParticles = false;
+		bool ParticleGroup = false;
+		int ParticleGroupCount = 5;
+		float GroupTimer = 30;
 	};
 	SendParameters sendParameters;
 
@@ -315,6 +325,7 @@ private: // メンバ変数
 	uint64_t fenceValue = 0;
 	UINT64 m_frameCount = 0;
 	static UINT m_cbvSrvUavDescriptorSize;
+	static uint32_t ParticleEdiCount;
 
 	bool isPushSave = false;
 	bool isPushLoad = false;
@@ -331,11 +342,12 @@ private: // メンバ変数
 	int particleLifeMaxCount = 50;
 
 	uint32_t particleCount;
-
+	uint32_t particleEdiCount = 0;
 
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;
 	float AngleZ_ = 0.0f;
+	float GravityStrengthDiv = 1.0f;
 
 	float StartColor[ 4 ] = { 1,1,1,1 };
 	float EndColor[ 4 ] = { 1,1,1,1 };

@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/HonooBlade.json": {
+    "Resources/ParticleData/kirei.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -7,21 +7,21 @@
             "value3": 0.0
         },
         "EndPos": {
-            "value0": 0.0,
-            "value1": 50.0,
+            "value0": 1.6660000085830689,
+            "value1": 300.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 1.0,
-            "value1": 0.10000000149011612,
-            "value2": 0.10000000149011612,
+            "value0": 0.20991924405097962,
+            "value1": 0.8921568393707275,
+            "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 1.0,
-            "value1": 0.07999999821186066,
-            "value2": 0.07999999821186066,
+            "value0": 0.7174161076545715,
+            "value1": 0.039215683937072757,
+            "value2": 1.0,
             "value3": 1.0
         },
         "Angle": {
@@ -34,18 +34,18 @@
         "EndPointActive": true,
         "RandomVelocity": true,
         "RandomLife": true,
-        "RandomSpeed": true,
-        "RandomScale": false,
+        "RandomSpeed": false,
+        "RandomScale": true,
         "Speed": 1.0,
-        "LerpStrength": 0.009999999776482582,
+        "LerpStrength": 0.05000000074505806,
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 20000,
+        "MaxParticleCount": 1000,
         "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
-            "value0": 10.470999717712403,
-            "value1": 19.21299934387207
+            "value0": 1.0,
+            "value1": 52.92300033569336
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -55,12 +55,12 @@
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 9.720000267028809,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": true,
-        "InterlockingStrength": 0.49000000953674319,
-        "InterlockingLength": 15.0,
+        "InterlockingStrength": 0.22499999403953553,
+        "InterlockingLength": 50.0,
         "ScaleDownLifeTime": true,
         "EmitParticles": false
     }

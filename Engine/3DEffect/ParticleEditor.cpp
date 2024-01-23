@@ -44,6 +44,7 @@ const std::string ParticleEditor::PSO_DRAW_PARTICLE_USE_TEX = "PSO_DRAW_PARTICLE
 UINT ParticleEditor::m_incrementSize;
 
 UINT ParticleEditor::m_cbvSrvUavDescriptorSize = 0;
+uint32_t ParticleEditor::ParticleEdiCount = 0;
 
 template <class Archive>
 void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
@@ -61,7 +62,9 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("RandomScaleMinMax",sendParameters.RandomScaleMinMax),cereal::make_nvp("SpeedDivideSize",sendParameters.SpeedDivideSize)
 		,cereal::make_nvp("ScaleDivideSize",sendParameters.ScaleDivideSize),cereal::make_nvp("GravityStrength",sendParameters.GravityStrength)
 		,cereal::make_nvp("Interlocking",sendParameters.Interlocking),cereal::make_nvp("InterlockingStrength",sendParameters.InterlockingStrength)
-		,cereal::make_nvp("InterlockingClose",sendParameters.InterlockingClose),cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
+		,cereal::make_nvp("InterlockingLength",sendParameters.InterlockingLength),cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
+		,cereal::make_nvp("EmitParticles",sendParameters.EmitParticles),cereal::make_nvp("ParticleGroup",sendParameters.ParticleGroup)
+		,cereal::make_nvp("ParticleGroupCount",sendParameters.ParticleGroupCount),cereal::make_nvp("GroupTimer",sendParameters.GroupTimer)
 	);
 }
 
@@ -521,6 +524,9 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 		SetParameter();
 	}
 	isEditUpdate = isEditUpdate_;
+
+	particleEdiCount = ParticleEdiCount;
+	++ParticleEdiCount;
 }
 
 void ParticleEditor::EditUpdate()
@@ -528,10 +534,13 @@ void ParticleEditor::EditUpdate()
 
 #ifdef _DEBUG
 
+	string PrticleCounter = to_string(particleEdiCount);
+	PrticleCounter = "ParticleEditor Count" + PrticleCounter;
+
 	if ( isEditUpdate )
 	{
 		sendParameters.isLoad = false;
-		ImGui::Begin("ParticleEditor");
+		ImGui::Begin(PrticleCounter.c_str());
 
 		// ファイル名の入力フィールド
 		static char fileName[ 128 ] = "";
@@ -585,6 +594,7 @@ void ParticleEditor::EditUpdate()
 			ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
 			ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
 			ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
+			ImGui::SliderFloat("LifeTime",&sendParameters.MaxLife,1.0f,500.0f);
 			ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
 			ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
 			ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
@@ -592,6 +602,7 @@ void ParticleEditor::EditUpdate()
 			ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
 			ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
 			ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
+			ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
 			ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
 			if ( sendParameters.EndPointActive )
 			{
@@ -635,6 +646,9 @@ void ParticleEditor::EditUpdate()
 			if ( isGravityStrengthActive )
 			{
 				ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+				ImGui::SliderFloat("GravityStrengthDiv",&GravityStrengthDiv,1,100);
+
+				sendParameters.GravityStrength = sendParameters.GravityStrength / GravityStrengthDiv;
 			}
 			else
 			{
@@ -645,10 +659,17 @@ void ParticleEditor::EditUpdate()
 			if ( sendParameters.Interlocking )
 			{
 				ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
-				ImGui::SliderFloat("InterlockingClose",&sendParameters.InterlockingClose,1,50);
+				ImGui::SliderFloat("InterlockingLength",&sendParameters.InterlockingLength,1,100);
 			}
 
 			ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
+
+			ImGui::Checkbox("ParticleGroup",&sendParameters.ParticleGroup);
+			if ( sendParameters.ParticleGroup )
+			{
+				ImGui::SliderInt("ParticleGroupCount",&sendParameters.ParticleGroupCount,1,1000);
+				ImGui::SliderFloat("GroupTimer",&sendParameters.GroupTimer,0,300);
+			}
 
 			int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
 			ImGui::Text("MaxParticle : %d",particleCount);
@@ -795,7 +816,7 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 	//初期化
 	if ( m_frameCount == 0 )
 	{
-		//shaderDetailParameters.MaxParticleCount = particleCount;
+		shaderDetailParameters.MaxParticleCount = particleCount;
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 
@@ -891,8 +912,14 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.GravityStrength = sendParameters.GravityStrength;
 	shaderDetailParameters.Interlocking = sendParameters.Interlocking;
 	shaderDetailParameters.InterlockingStrength = sendParameters.InterlockingStrength;
-	shaderDetailParameters.InterlockingClose = sendParameters.InterlockingClose;
+	shaderDetailParameters.InterlockingLength = sendParameters.InterlockingLength;
 	shaderDetailParameters.ScaleDownLifeTime = sendParameters.ScaleDownLifeTime;
+	shaderDetailParameters.EmitParticles = sendParameters.EmitParticles;
+
+	shaderDetailParameters.ParticleGroup = sendParameters.ParticleGroup;
+	shaderDetailParameters.ParticleGroupCount = sendParameters.ParticleGroupCount;
+	shaderDetailParameters.GroupTimer = sendParameters.GroupTimer;
+	
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -937,8 +964,13 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 
 	sendParameters.Interlocking = params.Interlocking;
 	sendParameters.InterlockingStrength = params.InterlockingStrength;
-	sendParameters.InterlockingClose = params.InterlockingClose;
+	sendParameters.InterlockingLength = params.InterlockingLength;
 	sendParameters.ScaleDownLifeTime = params.ScaleDownLifeTime;
+	sendParameters.EmitParticles = params.EmitParticles;
+
+	sendParameters.ParticleGroup = params.ParticleGroup;
+	sendParameters.ParticleGroupCount = params.ParticleGroupCount;
+	sendParameters.GroupTimer = params.GroupTimer;
 
 	sendParameters.isLoad = true;
 }
