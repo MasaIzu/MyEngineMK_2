@@ -361,18 +361,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-/Resources/3dGameKyaraMotionFin/3dGameKyaraMotionFin.fbx
-/Resources/3dGameKyaraMotionFin/KyaraTex1.png
-/Resources/3dRowPori/3dRowPori.fbx
-/Resources/3dGameKyaraRun/3dGameKyaraRun.fbx
-/Resources/3dGameKyaraRun/KyaraTex1.png
-/Resources/3dRowPori/RowPoriTex.png
-
-/assimp-vc143-mtd.dll
-/assimp-vc143-mtd.lib
-/pugixml.dll
-/pugixml.lib
-/zlibd1.dll
-/.gitignore
-/External/assimp/x64-windows/lib
-/External/assimp/x64-windows-static/lib
