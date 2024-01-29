@@ -140,6 +140,8 @@ private://クラス関連
 	std::unique_ptr<ParticleBoost> ParticleBooster;
 	std::unique_ptr<ExplosionParticleSmokeManager> ParticleExplosion;
 	std::unique_ptr<ParticleEditor> particleEditor;
+	std::unique_ptr<ParticleEditor> particleLeftLegHibanaParticle;
+	std::unique_ptr<ParticleEditor> particleRightLegHibanaParticle;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -178,6 +180,7 @@ private://プレイヤークラス変数
 	bool isDieDirectionFinish = false;
 	bool isG = false;
 	bool isLightActive = true;
+	bool isLegParticle = true;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
@@ -198,6 +201,11 @@ private://プレイヤークラス変数
 	uint32_t DieDirectionTimer = 0;
 	uint32_t DieDirectionMaxTimer = 80;
 	uint32_t CircleShadowCount = 0;
+	uint32_t LegParticleCount = 1024;
+
+	//足から出てくるパーティクルのボーンポジション
+	uint32_t LeftLegBoneNum = 8;
+	uint32_t RightLegBoneNum = 14;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;
@@ -211,7 +219,7 @@ private://プレイヤークラス変数
 	float GrappleSpeed = 0.0f;
 	float SlidingSpeed = 0.0f;
 	float MaxSlidingSpeed = 2.0f;
-	float PlayerHP = 500000;
+	float PlayerHP = 9000;
 	float PlayerMaxHP = PlayerHP;
 	float RotLimit = 0.1f;
 	float FixedAngle = 0.0f;

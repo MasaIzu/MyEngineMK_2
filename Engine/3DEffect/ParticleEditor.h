@@ -260,6 +260,11 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const uint32_t& isParticleActive);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
 	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos);
 
 	/// <summary>
@@ -336,6 +341,7 @@ private: // メンバ変数
 	bool isSetNewParticleCount = false;
 	bool isGravityStrengthActive = false;
 	bool isEditUpdate = false;
+	bool isLoadFile = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;

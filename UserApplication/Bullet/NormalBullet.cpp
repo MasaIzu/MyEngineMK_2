@@ -17,6 +17,10 @@ NormalBullet::NormalBullet(const unsigned short Attribute_)
 	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	Attribute = Attribute_;
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
+
+	particleKisekiParticle = std::make_unique<ParticleEditor>();
+	particleKisekiParticle->Initialize(makeBulletParticleCount,true,"Kiseki");
+	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 NormalBullet::~NormalBullet()
@@ -60,6 +64,16 @@ void NormalBullet::Draw(const ViewProjection& viewProjection_)
 	{
 		model_->Draw(BulletWorldTrans,viewProjection_);
 	}
+}
+
+void NormalBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
+{
+	particleKisekiParticle->CSUpdate(commandList,MyMath::Vec3ToVec4(BulletWorldTrans.translation_),isBulletAlive);
+}
+
+void NormalBullet::ParticleDraw(const ViewProjection& viewProjection_)
+{
+	particleKisekiParticle->Draw(viewProjection_);
 }
 
 void NormalBullet::WorldTransUpdate()

@@ -9,6 +9,7 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 #include "CollisionAttribute.h"
+#include <ParticleEditor.h>
 
 /// <summary>
 /// ノーマルバレットクラス
@@ -26,7 +27,8 @@ public://基本関数
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
 
-
+	void CSUpadate(ID3D12GraphicsCommandList* commandList);
+	void ParticleDraw(const ViewProjection& viewProjection_);
 public:
 
 	//弾を作り出す
@@ -58,6 +60,8 @@ private://クラス関連
 	BaseCollider* BulletCollider;
 	CollisionManager* collisionManager = nullptr;
 
+	std::unique_ptr<ParticleEditor> particleKisekiParticle;
+
 private://別クラスから値をもらう
 
 
@@ -77,6 +81,7 @@ private://クラス変数
 	uint32_t MackPaticleMax = 1;
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
+	uint32_t makeBulletParticleCount = 1024;
 
 	float BulletRadius = 0.5f;
 

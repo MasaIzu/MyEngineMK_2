@@ -62,6 +62,9 @@
         "InterlockingStrength": 0.38499999046325686,
         "InterlockingLength": 21.874000549316408,
         "ScaleDownLifeTime": true,
-        "EmitParticles": false
+        "EmitParticles": false,
+        "ParticleGroup": false,
+        "ParticleGroupCount": 5,
+        "GroupTimer": 35.20199966430664
     }
 }

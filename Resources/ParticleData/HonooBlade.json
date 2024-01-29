@@ -39,7 +39,7 @@
         "Speed": 1.0,
         "LerpStrength": 0.009999999776482582,
         "Scale": 1.0,
-        "ScaleTinker": 0.0,
+        "ScaleTinker": -0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 20000,
         "AdditiveSynthesis": true,
@@ -59,9 +59,12 @@
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": true,
-        "InterlockingStrength": 0.49000000953674319,
+        "InterlockingStrength": 0.5289999842643738,
         "InterlockingLength": 15.0,
         "ScaleDownLifeTime": true,
-        "EmitParticles": false
+        "EmitParticles": false,
+        "ParticleGroup": false,
+        "ParticleGroupCount": 5,
+        "GroupTimer": 35.20199966430664
     }
 }

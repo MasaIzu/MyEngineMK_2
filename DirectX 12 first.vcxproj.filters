@@ -766,17 +766,14 @@
     <ClInclude Include="Engine\GameFunction\Controller.h">
       <Filter>Engine\HeaderFile\GameFunction</Filter>
     </ClInclude>
-    <ClInclude Include="NumbersSprite.h">
+    <ClInclude Include="Engine\2D\NumbersSprite.h">
       <Filter>Engine\HeaderFile\GameFunction</Filter>
     </ClInclude>
-    <ClInclude Include="SerialNumber.h">
+    <ClInclude Include="Engine\2D\SerialNumber.h">
       <Filter>UserFile\UserHeaderFile\UI</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3DEffect\Explosion.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="FileFunction.h">
-      <Filter>Engine\HeaderFile\GameFunction</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3DEffect\ParticleEditor.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
@@ -1047,17 +1044,14 @@
     <ClCompile Include="Engine\GameFunction\Controller.cpp">
       <Filter>Engine\SourceFile\GameFunction</Filter>
     </ClCompile>
-    <ClCompile Include="NumbersSprite.cpp">
+    <ClCompile Include="Engine\2D\NumbersSprite.cpp">
       <Filter>Engine\SourceFile\GameFunction</Filter>
     </ClCompile>
-    <ClCompile Include="SerialNumber.cpp">
+    <ClCompile Include="Engine\2D\SerialNumber.cpp">
       <Filter>UserFile\UserSourceFile\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\Explosion.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="FileFunction.cpp">
-      <Filter>Engine\SourceFile\GameFunction</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleEditor.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>

@@ -82,6 +82,14 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	particleEditor->Initialize(MaxParticleCountB,true,"HonooBlade");
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	particleLeftLegHibanaParticle = std::make_unique<ParticleEditor>();
+	particleLeftLegHibanaParticle->Initialize(LegParticleCount,true,"Hibana");
+	particleLeftLegHibanaParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	particleRightLegHibanaParticle = std::make_unique<ParticleEditor>();
+	particleRightLegHibanaParticle->Initialize(LegParticleCount,true,"Hibana");
+	particleRightLegHibanaParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
@@ -95,9 +103,11 @@ void Player::Update()
 	isPressing = false;
 	isBladeAttack = false;
 	isMissileAttack = false;
-
+	isLegParticle = false;
 	Moved = playerWorldTrans.translation_;
 
+	particleLeftLegHibanaParticle->EditUpdate();
+	particleRightLegHibanaParticle->EditUpdate();
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
@@ -347,6 +357,11 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 	//当たり判定チェック
 	CheckPlayerCollider();
 
+	if ( onGround && playerMovement->GetIsPushMoveKey() && !playerMovement->GetIsBoost() )
+	{
+		isLegParticle = true;
+	}
+
 	Moved = playerWorldTrans.translation_ - Moved;
 
 	LightData::GetInstance()->UpdateCircleShadow(CircleShadowCount,playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle,isLightActive);
@@ -360,6 +375,11 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	playerExplosionGun->CSUpdate(cmdList);
 
 	particleEditor->CSUpdate(cmdList,ParticleStartPos,ParticleEndPos,static_cast< uint32_t >( isBladeAttacking ));
+
+	playerNormalGun->CSUpdate(cmdList);
+
+	particleLeftLegHibanaParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftLegBoneNum) * playerRotWorldTrans.matWorld_)) ,ParticleEndPos,isLegParticle);
+	particleRightLegHibanaParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightLegBoneNum) * playerRotWorldTrans.matWorld_)),ParticleEndPos,isLegParticle);
 }
 
 void Player::ParticleDraw()
@@ -379,8 +399,10 @@ void Player::ParticleDraw()
 
 		playerExplosionGun->ParticleDraw(*viewProjection_);
 
-
+		playerNormalGun->ParticleDraw(*viewProjection_);
 		particleEditor->Draw(*viewProjection_);
+		particleLeftLegHibanaParticle->Draw(*viewProjection_);
+		particleRightLegHibanaParticle->Draw(*viewProjection_);
 	}
 	ParticleExplosion->Draw(*viewProjection_);
 }

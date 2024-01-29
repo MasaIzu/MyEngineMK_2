@@ -115,3 +115,19 @@ uint32_t NormalGun::GetBulletCount()
 	uint32_t ExpendedBullets = BulletMaxCount - UseBulletCount;
 	return ExpendedBullets;
 }
+
+void NormalGun::CSUpdate(ID3D12GraphicsCommandList* commandList)
+{
+	for (auto&& Bullet : normalBullet)
+	{
+		Bullet->CSUpadate(commandList);
+	}
+}
+
+void NormalGun::ParticleDraw(const ViewProjection& viewProjection_)
+{
+	for (auto&& Bullet : normalBullet)
+	{
+		Bullet->ParticleDraw(viewProjection_);
+	}
+}

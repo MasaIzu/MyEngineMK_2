@@ -512,6 +512,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 	if ( FileName != "Nothing" )
 	{
+		isLoadFile = true;
+
 		KeepFileName = FileName;
 
 		std::string FullPath = FilePath + FileName +".json";
@@ -522,6 +524,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 		LoadFileParameter(ReadParameters);
 		SetParameter();
+
+		EditUpdate();
 	}
 	isEditUpdate = isEditUpdate_;
 
@@ -531,8 +535,6 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 void ParticleEditor::EditUpdate()
 {
-
-#ifdef _DEBUG
 
 	string PrticleCounter = to_string(particleEdiCount);
 	PrticleCounter = "ParticleEditor Count" + PrticleCounter;
@@ -589,6 +591,7 @@ void ParticleEditor::EditUpdate()
 			// スタイルをポップ
 			ImGui::PopStyleColor(3);
 
+			ImGui::SliderFloat3("StartPos",sendParameters.StartPos,-300.0f,300.0f);
 			ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
 			ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
 			ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
@@ -752,7 +755,6 @@ void ParticleEditor::EditUpdate()
 		}
 	}
 
-#endif
 }
 
 void ParticleEditor::Draw(const ViewProjection& view)
@@ -794,6 +796,13 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList)
 	CSCmd(commandList);
 }
 
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const uint32_t& isParticleActive)
+{
+	shaderDetailParameters.StartPos = StartPos;
+	shaderDetailParameters.Shot = isParticleActive;
+	CSCmd(commandList);
+}
+
 void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos)
 {
 	shaderDetailParameters.StartPos = StartPos;
@@ -816,7 +825,10 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 	//初期化
 	if ( m_frameCount == 0 )
 	{
-		shaderDetailParameters.MaxParticleCount = particleCount;
+		if ( !isLoadFile )
+		{
+			shaderDetailParameters.MaxParticleCount = particleCount;
+		}
 
 		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
 

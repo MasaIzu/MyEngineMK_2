@@ -91,7 +91,7 @@ MiddleBossEnemy::MiddleBossEnemy()
 	particleEditorLeft->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	particleEditorRight = std::make_unique<ParticleEditor>();
-	particleEditorRight->Initialize(MaxParticleCountC,true,"EnemyBoost");
+	particleEditorRight->Initialize(MaxParticleCountC,false,"EnemyBoost");
 	particleEditorRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
 	for ( auto&& old : oldAttackType )
@@ -204,6 +204,7 @@ void MiddleBossEnemy::Update()
 	DebugWorldTrans.translation_ = BossWorldTrans.translation_ - Coladjustment;
 	DebugWorldTrans.TransferMatrix();
 
+	particleEditorLeft->EditUpdate();
 	particleEditorRight->EditUpdate();
 }
 
@@ -245,14 +246,14 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 		//enemyBoostParticleLeft->Draw(viewProjection_);
 		//enemyBoostParticleRight->Draw(viewProjection_);
 		EnemyBoostParticle::PostDraw();
+
+		particleEditorLeft->Draw(viewProjection_);
+		particleEditorRight->Draw(viewProjection_);
 	}
 
 	Explosion::PreDraw(commandList);
-	//explosion->Draw(viewProjection_);
+	explosion->Draw(viewProjection_);
 	Explosion::PostDraw();
-
-	particleEditorLeft->Draw(viewProjection_);
-	particleEditorRight->Draw(viewProjection_);
 }
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)

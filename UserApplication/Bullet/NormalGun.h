@@ -20,6 +20,10 @@ public://基本関数
 	void Draw(const ViewProjection& viewProjection_);
 	//Fbx描画
 	void FbxDraw(const ViewProjection& viewProjection_);
+
+	//パーティクル
+	void CSUpdate(ID3D12GraphicsCommandList* commandList);
+	void ParticleDraw(const ViewProjection& viewProjection_);
 public:
 	//発射
 	void ShotBullet(const Vector3& BulletVec);
@@ -48,6 +52,7 @@ private://クラス関連
 
 	std::unique_ptr<FBXModel> fbxModel_;
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
+
 private:
 	bool isReload = false;
 

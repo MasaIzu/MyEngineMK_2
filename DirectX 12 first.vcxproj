@@ -471,9 +471,8 @@
     <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
     <ClInclude Include="Engine\3DEffect\ParticleEditor.h" />
-    <ClInclude Include="FileFunction.h" />
-    <ClInclude Include="SerialNumber.h" />
-    <ClInclude Include="NumbersSprite.h" />
+    <ClInclude Include="Engine\2D\SerialNumber.h" />
+    <ClInclude Include="Engine\2D\NumbersSprite.h" />
     <ClInclude Include="UserApplication\Scene\DieScene.h" />
     <ClInclude Include="Engine\3DEffect\EnemyBoostParticle.h" />
     <ClInclude Include="Engine\GameFunction\Controller.h" />
@@ -584,9 +583,8 @@
     <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp" />
     <ClCompile Include="Engine\3DEffect\Explosion.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleEditor.cpp" />
-    <ClCompile Include="FileFunction.cpp" />
-    <ClCompile Include="SerialNumber.cpp" />
-    <ClCompile Include="NumbersSprite.cpp" />
+    <ClCompile Include="Engine\2D\SerialNumber.cpp" />
+    <ClCompile Include="Engine\2D\NumbersSprite.cpp" />
     <ClCompile Include="UserApplication\Scene\DieScene.cpp" />
     <ClCompile Include="Engine\3DEffect\EnemyBoostParticle.cpp" />
     <ClCompile Include="Engine\GameFunction\Controller.cpp" />
