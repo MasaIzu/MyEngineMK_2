@@ -536,6 +536,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 void ParticleEditor::EditUpdate()
 {
 
+#ifdef _DEBUG
+	
 	string PrticleCounter = to_string(particleEdiCount);
 	PrticleCounter = "ParticleEditor Count" + PrticleCounter;
 
@@ -548,6 +550,8 @@ void ParticleEditor::EditUpdate()
 		static char fileName[ 128 ] = "";
 		if ( !isDeletFileFirstTime )
 		{
+			
+			ImGui::Checkbox("StageDraw",&isStageDraw);
 			ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
 
 			ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
@@ -605,6 +609,14 @@ void ParticleEditor::EditUpdate()
 			ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
 			ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
 			ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
+			if ( sendParameters.Shot )
+			{
+				isParticleActiveCheckBox
+			}
+
+			if ( ImGui::Button("OneTimeParticleActive")) {
+				sendParameters.Shot = true;
+			}
 			ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
 			ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
 			if ( sendParameters.EndPointActive )
@@ -754,7 +766,7 @@ void ParticleEditor::EditUpdate()
 			isDeletFileSecondTime = false;
 		}
 	}
-
+#endif
 }
 
 void ParticleEditor::Draw(const ViewProjection& view)
@@ -985,6 +997,11 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	sendParameters.GroupTimer = params.GroupTimer;
 
 	sendParameters.isLoad = true;
+}
+
+bool ParticleEditor::IsStageDraw()
+{
+	return isStageDraw;
 }
 
 void ParticleEditor::CopyData()

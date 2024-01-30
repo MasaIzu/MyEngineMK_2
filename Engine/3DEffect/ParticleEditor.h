@@ -294,6 +294,9 @@ public: // メンバ関数
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
 
+	//ステージ描画するか
+	bool IsStageDraw();
+
 private:
 	std::vector<std::string> GetFileList(const std::filesystem::path& directory);
 
@@ -342,6 +345,8 @@ private: // メンバ変数
 	bool isGravityStrengthActive = false;
 	bool isEditUpdate = false;
 	bool isLoadFile = false;
+	bool isStageDraw = false;
+	bool isParticleActiveCheckBox = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;

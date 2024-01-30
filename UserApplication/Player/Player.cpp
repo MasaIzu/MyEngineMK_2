@@ -90,6 +90,10 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	particleRightLegHibanaParticle->Initialize(LegParticleCount,true,"Hibana");
 	particleRightLegHibanaParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	HitEffectParticle = std::make_unique<ParticleEditor>();
+	HitEffectParticle->Initialize(HitEffectParticleCount,true,"HitEffect");
+	HitEffectParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
@@ -104,10 +108,13 @@ void Player::Update()
 	isBladeAttack = false;
 	isMissileAttack = false;
 	isLegParticle = false;
+	isTakeDamage = false;
+
 	Moved = playerWorldTrans.translation_;
 
 	particleLeftLegHibanaParticle->EditUpdate();
 	particleRightLegHibanaParticle->EditUpdate();
+	HitEffectParticle->EditUpdate();
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
@@ -380,6 +387,8 @@ void Player::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	particleLeftLegHibanaParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftLegBoneNum) * playerRotWorldTrans.matWorld_)) ,ParticleEndPos,isLegParticle);
 	particleRightLegHibanaParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightLegBoneNum) * playerRotWorldTrans.matWorld_)),ParticleEndPos,isLegParticle);
+	HitEffectParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(SenterBoneNum) * playerRotWorldTrans.matWorld_)),ParticleEndPos,isTakeDamage);
+
 }
 
 void Player::ParticleDraw()
@@ -403,6 +412,7 @@ void Player::ParticleDraw()
 		particleEditor->Draw(*viewProjection_);
 		particleLeftLegHibanaParticle->Draw(*viewProjection_);
 		particleRightLegHibanaParticle->Draw(*viewProjection_);
+		HitEffectParticle->Draw(*viewProjection_);
 	}
 	ParticleExplosion->Draw(*viewProjection_);
 }
@@ -644,11 +654,13 @@ void Player::CheckHitCollision()
 	if ( PlayerCollider->GetHit() )
 	{
 		isTakeMissileDamages = true;
+		isTakeDamage = true;
 		PlayerCollider->Reset();
 		DamageUI->MakeNoise();
 	}
 	if ( PlayerCollider->GetHitSphere() )
 	{
+		isTakeDamage = true;
 		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
 		PlayerCollider->ResetSphere();
 	}

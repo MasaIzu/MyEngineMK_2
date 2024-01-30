@@ -46,6 +46,12 @@ void DebugScene::Initialize() {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
+	skydome = std::make_unique<Skydome>();
+	skydome->Initialize();
+
+	levelData = std::make_unique<LoadLevelEditor>();
+	levelData->Initialize("MiddleBossStage",Vector3(0,-5,0));
+
 	uint32_t MaxParticleCountB = 60000;
 	particleEditor = std::make_unique<ParticleEditor>();
 	particleEditor->Initialize(MaxParticleCountB,true);
@@ -115,6 +121,11 @@ void DebugScene::PostEffectDraw()
 
 	Model::PreDraw(commandList);
 
+	if ( particleEditor->IsStageDraw() )
+	{
+		skydome->Draw(*viewProjection_.get());
+		levelData->Draw(*viewProjection_.get());
+	}
 
 	Model::PostDraw();
 

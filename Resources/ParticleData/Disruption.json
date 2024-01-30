@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/popop.json": {
+    "Resources/ParticleData/Disruption.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -7,21 +7,21 @@
             "value3": 0.0
         },
         "EndPos": {
-            "value0": 0.0,
-            "value1": 50.0,
+            "value0": 300.0,
+            "value1": -300.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
             "value0": 0.0,
-            "value1": 0.9117646217346191,
+            "value1": 0.5000002384185791,
             "value2": 1.0,
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 0.7446909546852112,
-            "value1": 0.9607843160629273,
-            "value2": 0.042387526482343677,
+            "value0": 0.7647057771682739,
+            "value1": 1.0,
+            "value2": 0.0,
             "value3": 1.0
         },
         "Angle": {
@@ -31,21 +31,21 @@
             "value3": 0.0
         },
         "Shot": true,
-        "EndPointActive": false,
+        "EndPointActive": true,
         "RandomVelocity": true,
-        "RandomLife": false,
+        "RandomLife": true,
         "RandomSpeed": false,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.009999999776482582,
-        "Scale": 0.531000018119812,
+        "LerpStrength": 0.039000000804662707,
+        "Scale": 2.322999954223633,
         "ScaleTinker": 0.0,
         "MaxLife": 50.03499984741211,
         "MaxParticleCount": 20000,
         "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
             "value0": 1.0,
-            "value1": 30.0
+            "value1": 67.89600372314453
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -58,13 +58,13 @@
         "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
-        "Interlocking": false,
-        "InterlockingStrength": 0.0,
-        "InterlockingLength": 15.0,
+        "Interlocking": true,
+        "InterlockingStrength": 0.032999999821186069,
+        "InterlockingLength": 100.0,
         "ScaleDownLifeTime": true,
         "EmitParticles": true,
         "ParticleGroup": true,
         "ParticleGroupCount": 5,
-        "GroupTimer": 35.20199966430664
+        "GroupTimer": 90.18199920654297
     }
 }

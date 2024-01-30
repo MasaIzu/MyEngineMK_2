@@ -142,6 +142,7 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> particleEditor;
 	std::unique_ptr<ParticleEditor> particleLeftLegHibanaParticle;
 	std::unique_ptr<ParticleEditor> particleRightLegHibanaParticle;
+	std::unique_ptr<ParticleEditor> HitEffectParticle;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -181,6 +182,7 @@ private://プレイヤークラス変数
 	bool isG = false;
 	bool isLightActive = true;
 	bool isLegParticle = true;
+	bool isTakeDamage = false;
 
 	uint32_t BulletNumber = 0;
 	uint32_t SlidingNumber = 0;
@@ -202,10 +204,12 @@ private://プレイヤークラス変数
 	uint32_t DieDirectionMaxTimer = 80;
 	uint32_t CircleShadowCount = 0;
 	uint32_t LegParticleCount = 1024;
+	uint32_t HitEffectParticleCount = 20000;
 
 	//足から出てくるパーティクルのボーンポジション
 	uint32_t LeftLegBoneNum = 8;
 	uint32_t RightLegBoneNum = 14;
+	uint32_t SenterBoneNum = 2;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;
