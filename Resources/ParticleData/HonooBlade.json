@@ -65,6 +65,13 @@
         "EmitParticles": false,
         "ParticleGroup": false,
         "ParticleGroupCount": 5,
-        "GroupTimer": 35.20199966430664
+        "GroupTimer": 35.20199966430664,
+        "MaxGroupTimer": 934.4970092773438,
+        "RandomGroupTimerMinMax": {
+            "value0": 160.81500244140626,
+            "value1": 300.0
+        },
+        "RandomParticleExplosion": false,
+        "Active": true
     }
 }

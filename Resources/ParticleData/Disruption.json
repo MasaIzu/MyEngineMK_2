@@ -2,7 +2,7 @@
     "Resources/ParticleData/Disruption.json": {
         "StartPos": {
             "value0": 0.0,
-            "value1": 0.0,
+            "value1": 147.94500732421876,
             "value2": 0.0,
             "value3": 0.0
         },
@@ -30,21 +30,21 @@
             "value2": 0.0,
             "value3": 0.0
         },
-        "Shot": true,
+        "Shot": false,
         "EndPointActive": true,
         "RandomVelocity": true,
         "RandomLife": true,
         "RandomSpeed": false,
         "RandomScale": false,
-        "Speed": 1.0,
+        "Speed": 0.5360000133514404,
         "LerpStrength": 0.039000000804662707,
-        "Scale": 2.322999954223633,
+        "Scale": 1.3969999551773072,
         "ScaleTinker": 0.0,
-        "MaxLife": 50.03499984741211,
+        "MaxLife": 26.915000915527345,
         "MaxParticleCount": 20000,
         "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
-            "value0": 1.0,
+            "value0": 24.089000701904298,
             "value1": 67.89600372314453
         },
         "RandomSpeedMinMax": {
@@ -59,12 +59,19 @@
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": true,
-        "InterlockingStrength": 0.032999999821186069,
+        "InterlockingStrength": 0.006000000052154064,
         "InterlockingLength": 100.0,
         "ScaleDownLifeTime": true,
         "EmitParticles": true,
         "ParticleGroup": true,
         "ParticleGroupCount": 5,
-        "GroupTimer": 90.18199920654297
+        "GroupTimer": 143.46400451660157,
+        "MaxGroupTimer": 226.61099243164063,
+        "RandomGroupTimerMinMax": {
+            "value0": 160.81500244140626,
+            "value1": 300.0
+        },
+        "RandomParticleExplosion": false,
+        "Active": true
     }
 }

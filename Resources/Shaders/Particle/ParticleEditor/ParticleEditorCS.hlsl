@@ -125,7 +125,8 @@ void main(uint3 id : SV_DispatchThreadID)
             {
                 if (gParticles[index].GroupTimer <= 0)
                 {
-                    Position += Velocity * gParticles[index].Speed;
+                    float3 vel = normalize(Velocity + gParticles[gParticles[index].GroupNumber].velocity.xyz);
+                    Position += vel * gParticles[index].Speed;
                     Velocity.y = Velocity.y - GravityStrength;
                     gParticles[index].velocity.xyz = normalize(Velocity);
                 }

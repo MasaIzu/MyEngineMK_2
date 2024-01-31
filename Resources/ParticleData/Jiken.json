@@ -7,21 +7,21 @@
             "value3": 0.0
         },
         "EndPos": {
-            "value0": 230.13699340820313,
+            "value0": -4.110000133514404,
             "value1": -300.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 1.0,
-            "value2": 1.0,
+            "value1": 0.13235294818878175,
+            "value2": 0.13235294818878175,
             "value3": 1.0
         },
         "Angle": {
@@ -37,25 +37,25 @@
         "RandomSpeed": true,
         "RandomScale": true,
         "Speed": 1.0,
-        "LerpStrength": 0.027000000700354577,
-        "Scale": 1.0,
+        "LerpStrength": 0.009999999776482582,
+        "Scale": 0.42100000381469729,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 60000,
-        "AdditiveSynthesis": false,
+        "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
             "value0": 1.0,
             "value1": 30.0
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
-            "value1": 6.138999938964844
+            "value1": 10.0
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 4.058000087738037,
+        "SpeedDivideSize": 100.0,
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": false,
@@ -64,13 +64,14 @@
         "ScaleDownLifeTime": true,
         "EmitParticles": true,
         "ParticleGroup": true,
-        "ParticleGroupCount": 36,
+        "ParticleGroupCount": 487,
         "GroupTimer": 60.696998596191409,
-        "MaxGroupTimer": 664.9420166015625,
+        "MaxGroupTimer": 934.4970092773438,
         "RandomGroupTimerMinMax": {
-            "value0": 46.525001525878909,
-            "value1": 277.1510009765625
+            "value0": 160.81500244140626,
+            "value1": 300.0
         },
-        "RandomParticleExplosion": true
+        "RandomParticleExplosion": true,
+        "Active": true
     }
 }

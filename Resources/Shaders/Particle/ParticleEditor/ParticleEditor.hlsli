@@ -43,6 +43,7 @@ cbuffer ShaderDetailParameters : register(b1)
     float MaxGroupTimer : packoffset(c12.w);
     float2 RandomGroupTimerMinMax : packoffset(c13);
     uint RandomParticleExplosion : packoffset(c13.z);
+    uint ActiveDetailParameter : packoffset(c13.w);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

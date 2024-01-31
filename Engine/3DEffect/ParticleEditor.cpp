@@ -47,7 +47,7 @@ UINT ParticleEditor::m_cbvSrvUavDescriptorSize = 0;
 uint32_t ParticleEditor::ParticleEdiCount = 0;
 
 template <class Archive>
-void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
+void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendParameters) {
 	ar(cereal::make_nvp("StartPos",sendParameters.StartPos),cereal::make_nvp("EndPos",sendParameters.EndPos)
 		,cereal::make_nvp("StartColor",sendParameters.StartColor),cereal::make_nvp("EndColor",sendParameters.EndColor)
 		,cereal::make_nvp("Angle",sendParameters.Angle),cereal::make_nvp("Shot",sendParameters.Shot)
@@ -66,7 +66,7 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("EmitParticles",sendParameters.EmitParticles),cereal::make_nvp("ParticleGroup",sendParameters.ParticleGroup)
 		,cereal::make_nvp("ParticleGroupCount",sendParameters.ParticleGroupCount),cereal::make_nvp("GroupTimer",sendParameters.ExplosionTimer)
 		,cereal::make_nvp("MaxGroupTimer",sendParameters.MaxExplosionTimer),cereal::make_nvp("RandomGroupTimerMinMax",sendParameters.RandomExplosionTimerMinMax)
-		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion)
+		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion),cereal::make_nvp("Active",sendParameters.Active)
 	);
 }
 
@@ -435,7 +435,7 @@ void ParticleEditor::InitializeVerticeBuff()
 	auto cbViewDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderViewParameters));
 	m_sceneViewParameterCB = MyFunction::CreateResource(cbViewDesc,D3D12_RESOURCE_STATE_GENERIC_READ,nullptr,D3D12_HEAP_TYPE_UPLOAD);
 
-	auto cbDetailDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderDetailParameters));
+	auto cbDetailDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderDetailPointGenerationParameters));
 	m_sceneDetailParameterCB = MyFunction::CreateResource(cbDetailDesc,D3D12_RESOURCE_STATE_GENERIC_READ,nullptr,D3D12_HEAP_TYPE_UPLOAD);
 
 
@@ -518,8 +518,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 		KeepFileName = FileName;
 
-		std::string FullPath = FilePath + FileName +".json";
-		SendParameters ReadParameters;
+		std::string FullPath = FilePath + FileName + ".json";
+		SendPointGenerationParameters ReadParameters;
 		std::ifstream is(FullPath);
 		cereal::JSONInputArchive archive(is);
 		archive(cereal::make_nvp(FullPath,ReadParameters));
@@ -558,150 +558,175 @@ void ParticleEditor::EditUpdate()
 		static char fileName[ 128 ] = "";
 		if ( !isDeletFileFirstTime )
 		{
-			
+
 			ImGui::Checkbox("StageDraw",&isStageDraw);
 			ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
 
-			ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
-			isCreateNewFile = ImGui::Button("create a new file");
-
-			std::vector<std::string> fileList = GetFileList(FilePath);
-			if ( ImGui::BeginListBox("##filelist") )
+			if ( ImGui::TreeNode("File Tree") )
 			{
-				for ( int i = 0; i < fileList.size(); i++ )
+
+				ImGui::InputText("new file name",fileName,IM_ARRAYSIZE(fileName));
+				isCreateNewFile = ImGui::Button("create a new file");
+
+				std::vector<std::string> fileList = GetFileList(FilePath);
+				if ( ImGui::BeginListBox("##filelist") )
 				{
-					const bool isSelected = ( selectedIndex == i );
-					if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+					for ( int i = 0; i < fileList.size(); i++ )
 					{
-						selectedIndex = i;
-						SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+						const bool isSelected = ( selectedIndex == i );
+						if ( ImGui::Selectable(fileList[ i ].c_str(),isSelected) )
+						{
+							selectedIndex = i;
+							SelectedFileName = fileList[ i ];  // 選択されたファイル名を保存
+						}
+
+						// 選択された項目を表示領域内にスクロール
+						if ( isSelected )
+						{
+							ImGui::SetItemDefaultFocus();
+						}
 					}
+					ImGui::EndListBox();
+				}
 
-					// 選択された項目を表示領域内にスクロール
-					if ( isSelected )
+				isPushSave = ImGui::Button("save");
+				ImGui::SameLine();
+				isPushLoad = ImGui::Button("load");
+				ImGui::SameLine();
+				isPushReset = ImGui::Button("reset");
+
+				// 削除ボタンの前にスタイルをプッシュ
+				ImGui::PushStyleColor(ImGuiCol_Button,ImVec4(1.0f,0.0f,0.0f,1.0f));  // 赤色
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(1.0f,0.3f,0.3f,1.0f));  // ホバー時の色
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.8f,0.0f,0.0f,1.0f));  // アクティブ時の色
+
+				// 削除ボタン
+				isDeletFileFirstTime = ImGui::Button("delete file");
+
+				// スタイルをポップ
+				ImGui::PopStyleColor(3);
+
+				ImGui::TreePop();
+			}
+
+			ImGui::Text("");
+
+			if ( ImGui::TreeNode("Flag") )
+			{
+				ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
+				if ( ImGui::Button("OneTimeParticleActive") )
+				{
+					sendParameters.Shot = true;
+					isParticleActiveCheckBox = true;
+				}
+				ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
+				ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
+				ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
+
+				ImGui::TreePop();
+			}
+
+			//ImGui::SetNextTreeNodeOpen(true,ImGuiSetCond_Once);
+			if ( ImGui::TreeNode("Normal Parameters") )
+			{
+				ImGui::SliderFloat3("StartPos",sendParameters.StartPos,-300.0f,300.0f);
+				ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
+				ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
+				ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
+				ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
+				ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
+				ImGui::SliderFloat("LifeTime",&sendParameters.MaxLife,1.0f,500.0f);
+				ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
+				ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
+				ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
+				ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
+				ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
+				ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
+
+				ImGui::TreePop();
+			}
+
+			if ( ImGui::TreeNode("Random Parameters") )
+			{
+				ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
+				if ( sendParameters.EndPointActive )
+				{
+					ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
+				}
+				ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
+				if ( sendParameters.RandomLife )
+				{
+					ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
+					ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
+					if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
 					{
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndListBox();
-			}
-
-			isPushSave = ImGui::Button("save");
-			ImGui::SameLine();
-			isPushLoad = ImGui::Button("load");
-			ImGui::SameLine();
-			isPushReset = ImGui::Button("reset");
-
-			// 削除ボタンの前にスタイルをプッシュ
-			ImGui::PushStyleColor(ImGuiCol_Button,ImVec4(1.0f,0.0f,0.0f,1.0f));  // 赤色
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(1.0f,0.3f,0.3f,1.0f));  // ホバー時の色
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.8f,0.0f,0.0f,1.0f));  // アクティブ時の色
-
-			// 削除ボタン
-			isDeletFileFirstTime = ImGui::Button("delete file");
-
-			// スタイルをポップ
-			ImGui::PopStyleColor(3);
-
-			ImGui::SliderFloat3("StartPos",sendParameters.StartPos,-300.0f,300.0f);
-			ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
-			ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
-			ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
-			ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
-			ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
-			ImGui::SliderFloat("LifeTime",&sendParameters.MaxLife,1.0f,500.0f);
-			ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
-			ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
-			ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
-			ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
-			ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
-			ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
-			ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
-
-			if ( ImGui::Button("OneTimeParticleActive")) {
-				sendParameters.Shot = true;
-				isParticleActiveCheckBox = true;
-			}
-			ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
-			ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
-			if ( sendParameters.EndPointActive )
-			{
-				ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
-			}
-			ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
-			ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
-			if ( sendParameters.RandomLife )
-			{
-				ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
-				ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
-				if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
-				{
-					sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
-				}
-			}
-			ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
-			if ( sendParameters.RandomSpeed )
-			{
-				ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
-				ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
-				if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
-				{
-					sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
-				}
-				ImGui::SliderFloat("SpeedDivideSize",&sendParameters.SpeedDivideSize,1,100);
-			}
-			ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
-			if ( sendParameters.RandomScale )
-			{
-				ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
-				ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
-				if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
-				{
-					sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
-				}
-				ImGui::SliderFloat("ScaleDivideSize",&sendParameters.ScaleDivideSize,1,100);
-			}
-
-			ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
-			if ( isGravityStrengthActive )
-			{
-				ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
-				ImGui::SliderFloat("GravityStrengthDiv",&GravityStrengthDiv,1,100);
-
-				sendParameters.GravityStrength = sendParameters.GravityStrength / GravityStrengthDiv;
-			}
-			else
-			{
-				sendParameters.GravityStrength = 0;
-			}
-
-			ImGui::Checkbox("Interlocking",&sendParameters.Interlocking);
-			if ( sendParameters.Interlocking )
-			{
-				ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
-				ImGui::SliderFloat("InterlockingLength",&sendParameters.InterlockingLength,1,100);
-			}
-
-			ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
-
-			ImGui::Checkbox("ParticleGroup",&sendParameters.ParticleGroup);
-			if ( sendParameters.ParticleGroup )
-			{
-				ImGui::SliderInt("ParticleGroupCount",&sendParameters.ParticleGroupCount,1,1000);
-				ImGui::SliderFloat("GroupTimer",&sendParameters.ExplosionTimer,0,300);
-				ImGui::Checkbox("RandomParticleExplosion",&sendParameters.RandomParticleExplosion);
-				if ( sendParameters.RandomParticleExplosion )
-				{
-					ImGui::SliderFloat("RandomGroupTimerMin",&sendParameters.RandomExplosionTimerMinMax[ 0 ],1,300);
-					ImGui::SliderFloat("RandomGroupTimerMax",&sendParameters.RandomExplosionTimerMinMax[ 1 ],2,300);
-					if ( sendParameters.RandomExplosionTimerMinMax[ 0 ] >= sendParameters.RandomExplosionTimerMinMax[ 1 ] )
-					{
-						sendParameters.RandomExplosionTimerMinMax[ 0 ] = sendParameters.RandomExplosionTimerMinMax[ 1 ] - 1.0f;
+						sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
 					}
 				}
-				ImGui::SliderFloat("MaxGroupTimer",&sendParameters.MaxExplosionTimer,sendParameters.ExplosionTimer,2000);
+				ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
+				if ( sendParameters.RandomSpeed )
+				{
+					ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
+					ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
+					if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
+					{
+						sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
+					}
+					ImGui::SliderFloat("SpeedDivideSize",&sendParameters.SpeedDivideSize,1,100);
+				}
+				ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
+				if ( sendParameters.RandomScale )
+				{
+					ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
+					ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
+					if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
+					{
+						sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
+					}
+					ImGui::SliderFloat("ScaleDivideSize",&sendParameters.ScaleDivideSize,1,100);
+				}
+				ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
+				if ( isGravityStrengthActive )
+				{
+					ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+					ImGui::SliderFloat("GravityStrengthDiv",&GravityStrengthDiv,1,100);
+
+					sendParameters.GravityStrength = sendParameters.GravityStrength / GravityStrengthDiv;
+				}
+				else
+				{
+					sendParameters.GravityStrength = 0;
+				}
+
+				ImGui::Checkbox("Interlocking",&sendParameters.Interlocking);
+				if ( sendParameters.Interlocking )
+				{
+					ImGui::SliderFloat("InterlockingStrength",&sendParameters.InterlockingStrength,0,1);
+					ImGui::SliderFloat("InterlockingLength",&sendParameters.InterlockingLength,1,100);
+				}
+
+				ImGui::Checkbox("ParticleGroup",&sendParameters.ParticleGroup);
+				if ( sendParameters.ParticleGroup )
+				{
+					ImGui::SliderInt("ParticleGroupCount",&sendParameters.ParticleGroupCount,1,1000);
+					ImGui::SliderFloat("GroupTimer",&sendParameters.ExplosionTimer,0,300);
+					ImGui::Checkbox("RandomParticleExplosion",&sendParameters.RandomParticleExplosion);
+					if ( sendParameters.RandomParticleExplosion )
+					{
+						ImGui::SliderFloat("RandomGroupTimerMin",&sendParameters.RandomExplosionTimerMinMax[ 0 ],1,300);
+						ImGui::SliderFloat("RandomGroupTimerMax",&sendParameters.RandomExplosionTimerMinMax[ 1 ],2,300);
+						if ( sendParameters.RandomExplosionTimerMinMax[ 0 ] >= sendParameters.RandomExplosionTimerMinMax[ 1 ] )
+						{
+							sendParameters.RandomExplosionTimerMinMax[ 0 ] = sendParameters.RandomExplosionTimerMinMax[ 1 ] - 1.0f;
+						}
+					}
+					ImGui::SliderFloat("MaxGroupTimer",&sendParameters.MaxExplosionTimer,sendParameters.ExplosionTimer,2000);
+				}
+
+				ImGui::TreePop();
 			}
 
+			ImGui::Text("");
 			int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
 			ImGui::Text("MaxParticle : %d",particleCount);
 			ImGui::Text("NowParticleCount : %d",ParticleCount);
@@ -737,7 +762,7 @@ void ParticleEditor::EditUpdate()
 		}
 
 		SetParameter();
-		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
+		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailPointGenerationParameters),&shaderDetailParameters);
 
 		if ( isPushSave )
 		{
@@ -748,7 +773,7 @@ void ParticleEditor::EditUpdate()
 
 		if ( isPushLoad )
 		{
-			SendParameters ReadParameters;
+			SendPointGenerationParameters ReadParameters;
 			std::ifstream is(FullPath);
 			cereal::JSONInputArchive archive(is);
 			archive(cereal::make_nvp(FullPath,ReadParameters));
@@ -758,7 +783,7 @@ void ParticleEditor::EditUpdate()
 
 		if ( isPushReset )
 		{
-			SendParameters ReadParameters;
+			SendPointGenerationParameters ReadParameters;
 			LoadFileParameter(ReadParameters);
 		}
 
@@ -858,7 +883,7 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 			shaderDetailParameters.MaxParticleCount = particleCount;
 		}
 
-		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
+		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailPointGenerationParameters),&shaderDetailParameters);
 
 		CD3DX12_RESOURCE_BARRIER transitionBarrier[ 2 ];
 		transitionBarrier[ 0 ] = CD3DX12_RESOURCE_BARRIER::Transition(m_gpuParticleElement.Get(),D3D12_RESOURCE_STATE_COMMON,D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
@@ -879,7 +904,7 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 		commandList->Dispatch(invokeCount,1,1);
 	}
 
-	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailParameters),&shaderDetailParameters);
+	MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailPointGenerationParameters),&shaderDetailParameters);
 	{
 		// Particle の発生.
 		D3D12_GPU_DESCRIPTOR_HANDLE cbvSrvUavHandle = m_cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart();
@@ -962,11 +987,12 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.MaxExplosionTimer = sendParameters.MaxExplosionTimer;
 	shaderDetailParameters.RandomExplosionTimerMinMax = sendParameters.RandomExplosionTimerMinMax;
 	shaderDetailParameters.RandomParticleExplosion = sendParameters.RandomParticleExplosion;
+	shaderDetailParameters.Active = sendParameters.Active;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
 
-void ParticleEditor::LoadFileParameter(const SendParameters& params)
+void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& params)
 {
 	for ( uint32_t i = 0; i < 4; i++ )
 	{
@@ -1000,7 +1026,7 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	sendParameters.ScaleDivideSize = params.ScaleDivideSize;
 	sendParameters.GravityStrength = params.GravityStrength;
 
-	if ( sendParameters.GravityStrength!= 0 )
+	if ( sendParameters.GravityStrength != 0 )
 	{
 		isGravityStrengthActive = true;
 	}
@@ -1016,6 +1042,7 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 	sendParameters.ExplosionTimer = params.ExplosionTimer;
 	sendParameters.MaxExplosionTimer = params.MaxExplosionTimer;
 	sendParameters.RandomParticleExplosion = params.RandomParticleExplosion;
+	sendParameters.Active = params.Active;
 
 	sendParameters.isLoad = true;
 }

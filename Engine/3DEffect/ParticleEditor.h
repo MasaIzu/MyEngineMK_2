@@ -81,7 +81,7 @@ public: // サブクラス
 	};
 	ShaderViewParameters shaderViewParameters;
 
-	struct ShaderDetailParameters
+	struct ShaderDetailPointGenerationParameters
 	{
 		Vector4 StartPos = { 0,0,0,0 };
 		Vector4 EndPos = { 0,50,0,0 };
@@ -119,10 +119,11 @@ public: // サブクラス
 		float MaxExplosionTimer = 300;
 		Vector2 RandomExplosionTimerMinMax = { 1,30 };
 		uint32_t RandomParticleExplosion = false;
+		uint32_t Active = 1;
 	};
-	ShaderDetailParameters shaderDetailParameters;
+	ShaderDetailPointGenerationParameters shaderDetailParameters;
 
-	struct SendParameters
+	struct SendPointGenerationParameters
 	{
 		float StartPos[ 4 ] = { 0,0,0,0 };
 		float EndPos[ 4 ] = { 0,50,0,0 };
@@ -160,8 +161,10 @@ public: // サブクラス
 		float MaxExplosionTimer = 300;
 		float RandomExplosionTimerMinMax[ 2 ] = { 1,30 };
 		bool RandomParticleExplosion = false;
+		bool Active = true;
 	};
-	SendParameters sendParameters;
+	SendPointGenerationParameters sendParameters;
+
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -308,7 +311,7 @@ private:
 	std::vector<std::string> GetFileList(const std::filesystem::path& directory);
 
 	void SetParameter();
-	void LoadFileParameter(const SendParameters& params);
+	void LoadFileParameter(const SendPointGenerationParameters& params);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ

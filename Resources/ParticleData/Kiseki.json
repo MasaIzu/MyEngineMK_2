@@ -1,7 +1,7 @@
 {
     "Resources/ParticleData/Kiseki.json": {
         "StartPos": {
-            "value0": -40.909000396728519,
+            "value0": 0.18700000643730164,
             "value1": 0.0,
             "value2": 0.0,
             "value3": 0.0
@@ -38,7 +38,7 @@
         "RandomScale": true,
         "Speed": 0.009999999776482582,
         "LerpStrength": 0.05000000074505806,
-        "Scale": 0.3,
+        "Scale": 0.30000001192092898,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 500,
@@ -65,6 +65,13 @@
         "EmitParticles": false,
         "ParticleGroup": false,
         "ParticleGroupCount": 5,
-        "GroupTimer": 30.0
+        "GroupTimer": 30.0,
+        "MaxGroupTimer": 934.4970092773438,
+        "RandomGroupTimerMinMax": {
+            "value0": 160.81500244140626,
+            "value1": 300.0
+        },
+        "RandomParticleExplosion": false,
+        "Active": true
     }
 }
