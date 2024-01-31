@@ -13,7 +13,7 @@ void initParticle(uint3 id : SV_DispatchThreadID)
         gParticles[index].isActive = 0;
         float GraceOfTimeMax = 100.0f;
         float GraceOfTimeMin = 1.0f;
-        float GraceOfTime = Rand1(seed, GraceOfTimeMax, GraceOfTimeMin);
+        float GraceOfTime = Rand(seed, GraceOfTimeMax, GraceOfTimeMin);
         gParticles[index].graceOfTime = GraceOfTime;
         gDeadIndexList.Append(index);
     }
@@ -37,16 +37,54 @@ void main(uint3 id : SV_DispatchThreadID)
     //    return;
     //}
     const float dt = 1;
-    
-    gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
-    if (gParticles[index].lifeTime <= 0)
-    {
-        gParticles[index].isActive = 0;
-        return;
-    }
-    
+    bool isScaleChange = false;
     float3 Position = gParticles[index].position.xyz;
     float3 Velocity = gParticles[index].velocity.xyz;
+    
+    gParticles[index].GroupTimer = gParticles[index].GroupTimer - dt;
+    if (ParticleGroup == 1)
+    {
+        if (ParticleGroupCount > index)
+        {
+            if (gParticles[index].GroupTimer <= 0)
+            {
+                gParticles[index].scale = 0;
+                isScaleChange = true;
+            }
+        }
+        else
+        {
+            gParticles[index].position.xyz = Position;
+            if (gParticles[gParticles[index].GroupNumber].GroupTimer <= 0)
+            {
+                gParticles[index].position.xyz = Position;
+            }
+            else
+            {
+                Position = gParticles[gParticles[index].GroupNumber].position;
+            }
+        }
+    }
+    
+    gParticles[index].lifeTime = gParticles[index].lifeTime - dt;
+    gParticles[index].MaxGroupTimer = gParticles[index].MaxGroupTimer - dt;
+    if (gParticles[index].lifeTime <= 0)
+    {
+        if (ParticleGroup == 1)
+        {
+            if (gParticles[index].MaxGroupTimer <= 0)
+            {
+                gParticles[index].isActive = 0;
+                return;
+            }
+        }
+        else
+        {
+            gParticles[index].isActive = 0;
+            return;
+        }
+    }
+    
     if (EndPointActive)
     {
         float3 EndPosPoint = EndPos.xyz;
@@ -79,7 +117,11 @@ void main(uint3 id : SV_DispatchThreadID)
         }
         else
         {
-            if (index > ParticleGroupCount)
+            if (ParticleGroupCount > index)
+            {
+                Position += Velocity * gParticles[index].Speed;
+            }
+            else
             {
                 if (gParticles[index].GroupTimer <= 0)
                 {
@@ -87,10 +129,6 @@ void main(uint3 id : SV_DispatchThreadID)
                     Velocity.y = Velocity.y - GravityStrength;
                     gParticles[index].velocity.xyz = normalize(Velocity);
                 }
-            }
-            else
-            {
-                Position += Velocity * gParticles[index].Speed;
             }
         }
     }
@@ -101,7 +139,7 @@ void main(uint3 id : SV_DispatchThreadID)
     Color *= Ratio;
     
     gParticles[index].ScaleKeep += ScaleTinker;
-    float scale = 1;
+    float scale = Scale;
     if (ScaleDownLifeTime)
     {
         scale = Scale * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
@@ -112,29 +150,6 @@ void main(uint3 id : SV_DispatchThreadID)
     gParticles[index].position.xyz = Position;
     gParticles[index].scale = scale + gParticles[index].ScaleKeep;
     
-    gParticles[index].GroupTimer = gParticles[index].GroupTimer - dt;
-    if (ParticleGroup == 1)
-    {
-        if (index > ParticleGroupCount - 1)
-        {
-            if (gParticles[index].GroupTimer <= 0)
-            {
-                gParticles[index].position.xyz = Position;
-            }
-            else
-            {
-                gParticles[index].position = gParticles[gParticles[index].GroupNumber].position;
-                gParticles[index].lifeTime = gParticles[index].MaxLifeTime;
-            }
-        }
-        else
-        {
-            if (gParticles[index].GroupTimer <= 0)
-            {
-                gParticles[index].scale = 0;
-            }
-        }
-    }
 }
 
 
@@ -154,11 +169,11 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         float GraceOfTimeMax = 100.0f;
         float GraceOfTimeMin = 1.0f;
-        float GraceOfTime = Rand1(seed, GraceOfTimeMax, GraceOfTimeMin);
+        float GraceOfTime = Rand(seed, GraceOfTimeMax, GraceOfTimeMin);
         gParticles[index].graceOfTime = GraceOfTime;
         return;
     }
-    
+    gParticles[index].isActive = 1;
     
     if (!EmitParticles)
     {
@@ -174,7 +189,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     {
         float GraceOfTimeMax = 100.0f;
         float GraceOfTimeMin = 1.0f;
-        float GraceOfTime = Rand1(indexAdd, GraceOfTimeMax, GraceOfTimeMin);
+        float GraceOfTime = Rand(indexAdd, GraceOfTimeMax, GraceOfTimeMin);
         gParticles[index].graceOfTime = GraceOfTime;
     }
     
@@ -202,13 +217,13 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         float RadZ = (Angle.z * (PI / 180)) * 100;
         
         float RandomAngleMin = 0.0f;
-        float RandomAngleX = (Rand1(seed, RadX, RandomAngleMin) - (RadX / 2)) / 100;
+        float RandomAngleX = (Rand(seed, RadX, RandomAngleMin) - (RadX / 2)) / 100;
         float4 rotationX = QuaternionFromAxisAngle(float3(1, 0, 0), RandomAngleX);
         
-        float RandomAngleY = (Rand1(seed, RadY, RandomAngleMin) - (RadY / 2)) / 100;
+        float RandomAngleY = (Rand(seed, RadY, RandomAngleMin) - (RadY / 2)) / 100;
         float4 rotationY = QuaternionFromAxisAngle(float3(0, 1, 0), RandomAngleY);
         
-        float RandomAngleZ = (Rand1(seed, RadZ, RandomAngleMin) - (RadZ / 2)) / 100;
+        float RandomAngleZ = (Rand(seed, RadZ, RandomAngleMin) - (RadZ / 2)) / 100;
         float4 rotationZ = QuaternionFromAxisAngle(float3(0, 0, 1), RandomAngleZ);
         
         float3 RotVelocity = RotateVectorByQuaternion(velocity, rotationX);
@@ -220,39 +235,59 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (ParticleGroup == 1)
     {
-        gParticles[index].GroupNumber = Rand1(seed, ParticleGroupCount, 0);
-        gParticles[index].GroupTimer = GroupTimer;
+        gParticles[index].GroupNumber = Rand(seed, ParticleGroupCount, 0);
+        gParticles[index].MaxGroupTimer = MaxGroupTimer;
         
-        if (index > ParticleGroupCount - 1)
+        if (ParticleGroupCount > index)
         {
             if (RandomLife)
             {
-                float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
-                gParticles[index].lifeTime = RandomLife_;
+                float RandomLife_ = Rand(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+                gParticles[index].lifeTime = RandomLife_ + GroupTimer;
             }
             else
             {
-                gParticles[index].lifeTime = MaxLife;
+                gParticles[index].lifeTime = MaxGroupTimer;
+            }
+            
+            if (RandomParticleExplosion == 0)
+            {
+                gParticles[index].GroupTimer = GroupTimer;
+            }
+            else
+            {
+                float RandomExplosionTimer_ = Rand(seed, RandomGroupTimerMinMax.y, RandomGroupTimerMinMax.x);
+                gParticles[index].GroupTimer = RandomExplosionTimer_;
             }
         }
         else
         {
             if (RandomLife)
             {
-                float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
-                gParticles[index].lifeTime = GroupTimer + RandomLifeMinMax.y;
+                float RandomLife_ = Rand(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+                gParticles[index].lifeTime = RandomLife_ + GroupTimer;
             }
             else
             {
-                gParticles[index].lifeTime = MaxLife + GroupTimer;
+                gParticles[index].lifeTime = MaxGroupTimer;
+            }
+            
+            if (RandomParticleExplosion == 0)
+            {
+                gParticles[index].GroupTimer = GroupTimer;
+            }
+            else
+            {
+                gParticles[index].GroupTimer = gParticles[gParticles[index].GroupNumber].GroupTimer;
             }
         }
+        
     }
     else
     {
         if (RandomLife)
         {
-            float RandomLife_ = Rand1(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
+            float RandomLife_ = Rand(seed, RandomLifeMinMax.y, RandomLifeMinMax.x);
             gParticles[index].lifeTime = RandomLife_;
         }
         else
@@ -263,7 +298,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (RandomSpeed)
     {
-        float RandomSpeed_ = Rand1(seed, RandomSpeedMinMax.y, RandomSpeedMinMax.x) / SpeedDivideSize;
+        float RandomSpeed_ = Rand(seed, RandomSpeedMinMax.y, RandomSpeedMinMax.x) / SpeedDivideSize;
         gParticles[index].Speed = RandomSpeed_;
     }
     else
@@ -273,7 +308,7 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     
     if (RandomScale)
     {
-        float RandomScale_ = Rand1(seed, RandomScaleMinMax.y, RandomScaleMinMax.x) / ScaleDivideSize;
+        float RandomScale_ = Rand(seed, RandomScaleMinMax.y, RandomScaleMinMax.x) / ScaleDivideSize;
         gParticles[index].scale = RandomScale_;
     }
     else
@@ -282,7 +317,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     }
     
     gParticles[index].MaxLifeTime = gParticles[index].lifeTime;
-    gParticles[index].isActive = 1;
     gParticles[index].position.xyz = StartPos.xyz;
     gParticles[index].color = StartColor;
     gParticles[index].ScaleKeep = 0;

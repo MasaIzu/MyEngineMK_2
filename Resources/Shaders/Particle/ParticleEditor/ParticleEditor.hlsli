@@ -40,6 +40,9 @@ cbuffer ShaderDetailParameters : register(b1)
     uint ParticleGroup : packoffset(c12);
     uint ParticleGroupCount : packoffset(c12.y);
     float GroupTimer : packoffset(c12.z);
+    float MaxGroupTimer : packoffset(c12.w);
+    float2 RandomGroupTimerMinMax : packoffset(c13);
+    uint RandomParticleExplosion : packoffset(c13.z);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
@@ -79,6 +82,7 @@ struct GpuParticleElement
     float ScaleKeep;
     uint GroupNumber;
     float GroupTimer;
+    float MaxGroupTimer;
 };
 
 uint wang_hash(uint seed)
@@ -89,6 +93,13 @@ uint wang_hash(uint seed)
     seed *= 0x27d4eb2d;
     seed = seed ^ (seed >> 15);
     return seed;
+}
+
+uint Rand(uint seed, int max, int min)
+{
+    seed = (seed * 1664525u + 1013904223u) & 0xFFFFFFFF;
+    float normalized = float(seed) / 4294967296.0; // 正規化（0.0 ～ 1.0）
+    return uint(min + (max - min) * normalized);
 }
 
 float Rand1(uint SEED, int MAX, int MIN)
@@ -104,9 +115,9 @@ float3 RandomVec3(uint SEED, int MAX, int MIN)
 {
     float3 randomVec;
     
-    randomVec.x = Rand1(SEED, MAX, MIN);
-    randomVec.y = Rand1(SEED, MAX, MIN);
-    randomVec.z = Rand1(SEED, MAX, MIN);
+    randomVec.x = Rand(SEED, MAX, MIN);
+    randomVec.y = Rand(SEED, MAX, MIN);
+    randomVec.z = Rand(SEED, MAX, MIN);
     
     return randomVec;
 }

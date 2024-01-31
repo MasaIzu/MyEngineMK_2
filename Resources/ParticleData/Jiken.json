@@ -1,0 +1,76 @@
+{
+    "Resources/ParticleData/Jiken.json": {
+        "StartPos": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "EndPos": {
+            "value0": 230.13699340820313,
+            "value1": -300.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "StartColor": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "EndColor": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "Angle": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0
+        },
+        "Shot": true,
+        "EndPointActive": false,
+        "RandomVelocity": true,
+        "RandomLife": false,
+        "RandomSpeed": true,
+        "RandomScale": true,
+        "Speed": 1.0,
+        "LerpStrength": 0.027000000700354577,
+        "Scale": 1.0,
+        "ScaleTinker": 0.0,
+        "MaxLife": 60.0,
+        "MaxParticleCount": 60000,
+        "AdditiveSynthesis": false,
+        "RandomLifeMinMax": {
+            "value0": 1.0,
+            "value1": 30.0
+        },
+        "RandomSpeedMinMax": {
+            "value0": 1.0,
+            "value1": 6.138999938964844
+        },
+        "RandomScaleMinMax": {
+            "value0": 1.0,
+            "value1": 10.0
+        },
+        "SpeedDivideSize": 4.058000087738037,
+        "ScaleDivideSize": 1.0,
+        "GravityStrength": 0.0,
+        "Interlocking": false,
+        "InterlockingStrength": 0.0,
+        "InterlockingLength": 15.0,
+        "ScaleDownLifeTime": true,
+        "EmitParticles": true,
+        "ParticleGroup": true,
+        "ParticleGroupCount": 36,
+        "GroupTimer": 60.696998596191409,
+        "MaxGroupTimer": 664.9420166015625,
+        "RandomGroupTimerMinMax": {
+            "value0": 46.525001525878909,
+            "value1": 277.1510009765625
+        },
+        "RandomParticleExplosion": true
+    }
+}

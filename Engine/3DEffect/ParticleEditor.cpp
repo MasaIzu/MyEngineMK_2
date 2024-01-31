@@ -64,7 +64,9 @@ void serialize(Archive& ar,ParticleEditor::SendParameters& sendParameters) {
 		,cereal::make_nvp("Interlocking",sendParameters.Interlocking),cereal::make_nvp("InterlockingStrength",sendParameters.InterlockingStrength)
 		,cereal::make_nvp("InterlockingLength",sendParameters.InterlockingLength),cereal::make_nvp("ScaleDownLifeTime",sendParameters.ScaleDownLifeTime)
 		,cereal::make_nvp("EmitParticles",sendParameters.EmitParticles),cereal::make_nvp("ParticleGroup",sendParameters.ParticleGroup)
-		,cereal::make_nvp("ParticleGroupCount",sendParameters.ParticleGroupCount),cereal::make_nvp("GroupTimer",sendParameters.GroupTimer)
+		,cereal::make_nvp("ParticleGroupCount",sendParameters.ParticleGroupCount),cereal::make_nvp("GroupTimer",sendParameters.ExplosionTimer)
+		,cereal::make_nvp("MaxGroupTimer",sendParameters.MaxExplosionTimer),cereal::make_nvp("RandomGroupTimerMinMax",sendParameters.RandomExplosionTimerMinMax)
+		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion)
 	);
 }
 
@@ -537,7 +539,13 @@ void ParticleEditor::EditUpdate()
 {
 
 #ifdef _DEBUG
-	
+
+	if ( isParticleActiveCheckBox )
+	{
+		isParticleActiveCheckBox = false;
+		sendParameters.Shot = false;
+	}
+
 	string PrticleCounter = to_string(particleEdiCount);
 	PrticleCounter = "ParticleEditor Count" + PrticleCounter;
 
@@ -609,13 +617,10 @@ void ParticleEditor::EditUpdate()
 			ImGui::SliderFloat("AngleY",&sendParameters.Angle[ 1 ],0.0f,360.0f);
 			ImGui::SliderFloat("AngleZ",&sendParameters.Angle[ 2 ],0.0f,360.0f);
 			ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
-			if ( sendParameters.Shot )
-			{
-				isParticleActiveCheckBox
-			}
 
 			if ( ImGui::Button("OneTimeParticleActive")) {
 				sendParameters.Shot = true;
+				isParticleActiveCheckBox = true;
 			}
 			ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
 			ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
@@ -683,7 +688,18 @@ void ParticleEditor::EditUpdate()
 			if ( sendParameters.ParticleGroup )
 			{
 				ImGui::SliderInt("ParticleGroupCount",&sendParameters.ParticleGroupCount,1,1000);
-				ImGui::SliderFloat("GroupTimer",&sendParameters.GroupTimer,0,300);
+				ImGui::SliderFloat("GroupTimer",&sendParameters.ExplosionTimer,0,300);
+				ImGui::Checkbox("RandomParticleExplosion",&sendParameters.RandomParticleExplosion);
+				if ( sendParameters.RandomParticleExplosion )
+				{
+					ImGui::SliderFloat("RandomGroupTimerMin",&sendParameters.RandomExplosionTimerMinMax[ 0 ],1,300);
+					ImGui::SliderFloat("RandomGroupTimerMax",&sendParameters.RandomExplosionTimerMinMax[ 1 ],2,300);
+					if ( sendParameters.RandomExplosionTimerMinMax[ 0 ] >= sendParameters.RandomExplosionTimerMinMax[ 1 ] )
+					{
+						sendParameters.RandomExplosionTimerMinMax[ 0 ] = sendParameters.RandomExplosionTimerMinMax[ 1 ] - 1.0f;
+					}
+				}
+				ImGui::SliderFloat("MaxGroupTimer",&sendParameters.MaxExplosionTimer,sendParameters.ExplosionTimer,2000);
 			}
 
 			int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
@@ -942,8 +958,10 @@ void ParticleEditor::SetParameter()
 
 	shaderDetailParameters.ParticleGroup = sendParameters.ParticleGroup;
 	shaderDetailParameters.ParticleGroupCount = sendParameters.ParticleGroupCount;
-	shaderDetailParameters.GroupTimer = sendParameters.GroupTimer;
-	
+	shaderDetailParameters.ExplosionTimer = sendParameters.ExplosionTimer;
+	shaderDetailParameters.MaxExplosionTimer = sendParameters.MaxExplosionTimer;
+	shaderDetailParameters.RandomExplosionTimerMinMax = sendParameters.RandomExplosionTimerMinMax;
+	shaderDetailParameters.RandomParticleExplosion = sendParameters.RandomParticleExplosion;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -976,6 +994,7 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 		sendParameters.RandomLifeMinMax[ i ] = params.RandomLifeMinMax[ i ];
 		sendParameters.RandomSpeedMinMax[ i ] = params.RandomSpeedMinMax[ i ];
 		sendParameters.RandomScaleMinMax[ i ] = params.RandomScaleMinMax[ i ];
+		sendParameters.RandomExplosionTimerMinMax[ i ] = params.RandomExplosionTimerMinMax[ i ];
 	}
 	sendParameters.SpeedDivideSize = params.SpeedDivideSize;
 	sendParameters.ScaleDivideSize = params.ScaleDivideSize;
@@ -994,7 +1013,9 @@ void ParticleEditor::LoadFileParameter(const SendParameters& params)
 
 	sendParameters.ParticleGroup = params.ParticleGroup;
 	sendParameters.ParticleGroupCount = params.ParticleGroupCount;
-	sendParameters.GroupTimer = params.GroupTimer;
+	sendParameters.ExplosionTimer = params.ExplosionTimer;
+	sendParameters.MaxExplosionTimer = params.MaxExplosionTimer;
+	sendParameters.RandomParticleExplosion = params.RandomParticleExplosion;
 
 	sendParameters.isLoad = true;
 }

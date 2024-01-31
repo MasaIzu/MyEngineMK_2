@@ -71,6 +71,7 @@ public: // サブクラス
 		float ScaleKeep;
 		float GroupNumber;
 		float GroupTimer;
+		float MaxGroupTimer;
 	};
 
 	struct ShaderViewParameters
@@ -114,7 +115,10 @@ public: // サブクラス
 		uint32_t EmitParticles = 0;
 		uint32_t ParticleGroup = 0;
 		uint32_t ParticleGroupCount = 5;
-		float GroupTimer = 30;
+		float ExplosionTimer = 30;
+		float MaxExplosionTimer = 300;
+		Vector2 RandomExplosionTimerMinMax = { 1,30 };
+		uint32_t RandomParticleExplosion = false;
 	};
 	ShaderDetailParameters shaderDetailParameters;
 
@@ -152,7 +156,10 @@ public: // サブクラス
 		bool EmitParticles = false;
 		bool ParticleGroup = false;
 		int ParticleGroupCount = 5;
-		float GroupTimer = 30;
+		float ExplosionTimer = 30;
+		float MaxExplosionTimer = 300;
+		float RandomExplosionTimerMinMax[ 2 ] = { 1,30 };
+		bool RandomParticleExplosion = false;
 	};
 	SendParameters sendParameters;
 
