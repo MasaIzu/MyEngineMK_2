@@ -24,6 +24,7 @@
 #include "TouchableObject.h"
 #include "Skydome.h"
 #include "ParticleEditor.h"
+#include <DebugCamera.h>
 
 /// <summary>
 /// デバッグシーン
@@ -72,7 +73,7 @@ private: // メンバ変数
 	std::unique_ptr<Model> model1;
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;
-	std::unique_ptr<GameCamera> gameCamera;
+	std::unique_ptr<DebugCamera> debugCamera;
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<ParticleEditor>particleEditor;
 

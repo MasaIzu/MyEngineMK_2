@@ -111,7 +111,7 @@ void MiddleBossEnemy::Initialize(Player* Player)
 
 	DebugWorldTrans.scale_ = Vector3(Radius,Radius,Radius);
 	DebugWorldTrans.Initialize();
-
+	BossWorldTrans.TransferMatrix();
 	MiddleBossCollider[ 0 ] = new SphereCollider(Vector4(FloatNumber(fNumbers::fZero),Radius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero)),Radius);
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider[ 0 ]);
 	MiddleBossCollider[ 0 ]->SetAttribute(COLLISION_ATTR_ENEMYS);

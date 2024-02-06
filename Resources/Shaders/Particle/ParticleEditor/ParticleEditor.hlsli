@@ -43,7 +43,12 @@ cbuffer ShaderDetailParameters : register(b1)
     float MaxGroupTimer : packoffset(c12.w);
     float2 RandomGroupTimerMinMax : packoffset(c13);
     uint RandomParticleExplosion : packoffset(c13.z);
-    uint ActiveDetailParameter : packoffset(c13.w);
+    uint ShapeNumber : packoffset(c13.w);
+    float Width : packoffset(c14);
+    float Height : packoffset(c14.y);
+    float Depth : packoffset(c14.z);
+    float Pad : packoffset(c14.w);
+    float4 ShapeScale : packoffset(c15);
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
@@ -103,13 +108,65 @@ uint Rand(uint seed, int max, int min)
     return uint(min + (max - min) * normalized);
 }
 
-float Rand1(uint SEED, int MAX, int MIN)
+float Rand1(uint seed, float max, float min)
 {
-    uint rand = wang_hash(SEED * 1847483629);
-    float result;
-    result = (rand % 1024) / 1024.0f;
-    result = (MAX + abs(MIN)) * result - abs(MIN);
+    seed = (seed * 1664525u + 1013904223u) & 0xFFFFFFFF;
+    float normalized = float(seed) / 4294967296.0; // 正規化（0.0 ～ 1.0）
+    float result = min + (max - min) * normalized;
     return result;
+}
+
+// 疑似ランダム数を生成する関数
+float RandFloat2(float2 co)
+{
+    return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
+}
+
+// ランダムな座標を生成する関数（Y座標を含む）
+float3 GenerateRandomPoint(uint seed, uint seed2, uint seed3, float3 center, float width, float height, float depth)
+{
+    // 各座標のためのランダム値を生成
+    float randomX = Rand1(seed, center.x + width / 2.0, center.x - width / 2.0);
+    float randomY = Rand1(seed2, center.y + height / 2.0, center.y - height / 2.0);
+    float randomZ = Rand1(seed3, center.z + depth / 2.0, center.z - depth / 2.0);
+    
+    // 生成されたランダムな座標を返す
+    return float3(randomX, randomY, randomZ);
+}
+
+// テトラヘドロン内のランダムな点を生成する関数
+float3 GenerateRandomPointInTetrahedron(uint seed, uint seed2, uint seed3, uint seed4, float3 A, float3 B, float3 C, float3 D)
+{
+    float r1 = Rand1(seed, 1.0, 0.0);
+    float r2 = Rand1(seed2, 1.0, 0.0);
+    float r3 = Rand1(seed3, 1.0, 0.0);
+    float r4 = Rand1(seed4, 1.0, 0.0);
+
+    // ランダムな数の合計で正規化
+    float sum = r1 + r2 + r3 + r4;
+    r1 /= sum;
+    r2 /= sum;
+    r3 /= sum;
+    r4 /= sum;
+    
+    // バリセントリック座標を使用して点Pの座標を計算
+    return A * r1 + B * r2 + C * r3 + D * r4;
+}
+
+// ランダムな点を生成する関数
+float3 GenerateRandomPointInSphere(float3 center, float radius, float2 randomSeed)
+{
+    // 乱数を生成
+    float theta = RandFloat2(randomSeed) * 2.0 * 3.14159265358979323846; // 方位角
+    float phi = acos(2.0 * RandFloat2(randomSeed + 1.0) - 1.0); // 傾斜角
+    float r = (RandFloat2(randomSeed + 2.0)) * radius; // 立方根を取ることで球内に均等に分布
+    
+    // 球座標系から直交座標系への変換
+    float x = center.x + r * sin(phi) * cos(theta);
+    float y = center.y + r * sin(phi) * sin(theta);
+    float z = center.z + r * cos(phi);
+
+    return float3(x, y, z);
 }
 
 float3 RandomVec3(uint SEED, int MAX, int MIN)

@@ -119,7 +119,12 @@ public: // サブクラス
 		float MaxExplosionTimer = 300;
 		Vector2 RandomExplosionTimerMinMax = { 1,30 };
 		uint32_t RandomParticleExplosion = false;
-		uint32_t Active = 1;
+		uint32_t ShapeNumber = 0;
+		float Width = 1.0f;
+		float Height = 1.0f;
+		float Depth = 1.0f;
+		float Pad = 0.0f;
+		Vector4 ShapeScale = { 1,1,1,1 };
 	};
 	ShaderDetailPointGenerationParameters shaderDetailParameters;
 
@@ -161,10 +166,24 @@ public: // サブクラス
 		float MaxExplosionTimer = 300;
 		float RandomExplosionTimerMinMax[ 2 ] = { 1,30 };
 		bool RandomParticleExplosion = false;
-		bool Active = true;
+		uint32_t ShapeNumber = 0;
+		float Width = 1.0f;
+		float Height = 1.0f;
+		float Depth = 1.0f;
+		float ShapeScale[ 4 ] = { 1,1,1,1 };
 	};
 	SendPointGenerationParameters sendParameters;
 
+	struct Collision
+	{
+		Vector4 Pos;
+	};
+
+	struct ShaderDetailCollision
+	{
+		
+	};
+	ShaderDetailCollision shaderDetailCollision;
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -378,4 +397,11 @@ private: // メンバ変数
 	std::string SelectedFileName;
 	std::string NewFileName;
 	std::string KeepFileName;
+
+	//リストボックス用
+	// シェイプの選択肢を保持する配列
+	const char* shapes[ 4 ] = { "Point", "Box", "Triangle", "Circle" };
+	// 選択されたシェイプのインデックス（デフォルトは0: "Point"）
+	int selectedItem = 0;
+
 };

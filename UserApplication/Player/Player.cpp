@@ -654,13 +654,13 @@ void Player::CheckHitCollision()
 	if ( PlayerCollider->GetHit() )
 	{
 		isTakeMissileDamages = true;
-		isTakeDamage = true;
+		//isTakeDamage = true;
 		PlayerCollider->Reset();
 		DamageUI->MakeNoise();
 	}
 	if ( PlayerCollider->GetHitSphere() )
 	{
-		isTakeDamage = true;
+		//isTakeDamage = true;
 		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
 		PlayerCollider->ResetSphere();
 	}
@@ -674,6 +674,7 @@ void Player::HPUpdate()
 		PlayerHP -= Damege.MissileAttack;
 		playerUI->PlayerHpUpdate(PlayerHP,PlayerMaxHP);
 		isTakeMissileDamages = false;
+		isTakeDamage = true;
 		if ( PlayerHP > FloatNumber(fNumbers::fZero) )
 		{
 

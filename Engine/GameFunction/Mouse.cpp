@@ -27,7 +27,7 @@ void Mouse::Update()
 
 	POINT p;
 	GetCursorPos(&p);
-	ScreenToClient(FindWindowA("DirectXGame", nullptr), &p);
+	ScreenToClient(FindWindowA("DirectX", nullptr), &p);
 	mousePos.x = static_cast<float>(p.x);
 	mousePos.x = MyMath::Clamp(mousePos.x, 0.0f, static_cast<float>(WinApp::GetInstance()->window_width));
 	mousePos.y = static_cast<float>(p.y);

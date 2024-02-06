@@ -52,6 +52,9 @@ void DebugScene::Initialize() {
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("MiddleBossStage",Vector3(0,-5,0));
 
+	debugCamera = std::make_unique<DebugCamera>();
+	debugCamera->Initialize(viewProjection_.get());
+
 	uint32_t MaxParticleCountB = 60000;
 	particleEditor = std::make_unique<ParticleEditor>();
 	particleEditor->Initialize(MaxParticleCountB,true);
@@ -102,10 +105,11 @@ void DebugScene::Update() {
 		ImGui::SliderFloat("angle2",&angle2,0.0f,180.0f);
 	}
 
-	ImGui::SliderFloat("CameraPosZ",&viewProjection_->eye.z,-2000,0);
+	
 	ImGui::End();
 
-	viewProjection_->UpdateMatrix();
+
+	debugCamera->Update();
 	LightData::GetInstance()->Update();
 }
 

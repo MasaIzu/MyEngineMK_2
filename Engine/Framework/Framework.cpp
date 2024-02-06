@@ -200,7 +200,7 @@ void Framework::Run()
 
 		//ImGui描画
 
-#ifdef _DEBUG
+#ifdef _Editor
 		imGui->Draw();
 #endif
 		

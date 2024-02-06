@@ -66,7 +66,10 @@ void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendPa
 		,cereal::make_nvp("EmitParticles",sendParameters.EmitParticles),cereal::make_nvp("ParticleGroup",sendParameters.ParticleGroup)
 		,cereal::make_nvp("ParticleGroupCount",sendParameters.ParticleGroupCount),cereal::make_nvp("GroupTimer",sendParameters.ExplosionTimer)
 		,cereal::make_nvp("MaxGroupTimer",sendParameters.MaxExplosionTimer),cereal::make_nvp("RandomGroupTimerMinMax",sendParameters.RandomExplosionTimerMinMax)
-		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion),cereal::make_nvp("Active",sendParameters.Active)
+		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion)
+		,cereal::make_nvp("ShapeNumber",sendParameters.ShapeNumber),cereal::make_nvp("Width",sendParameters.Width)
+		,cereal::make_nvp("Height",sendParameters.Height),cereal::make_nvp("Depth",sendParameters.Depth)
+		,cereal::make_nvp("ShapeScale",sendParameters.ShapeScale)
 	);
 }
 
@@ -538,7 +541,7 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 void ParticleEditor::EditUpdate()
 {
 
-#ifdef _DEBUG
+#ifdef _Editor
 
 	if ( isParticleActiveCheckBox )
 	{
@@ -562,6 +565,7 @@ void ParticleEditor::EditUpdate()
 			ImGui::Checkbox("StageDraw",&isStageDraw);
 			ImGui::Checkbox("AdditiveSynthesis",&sendParameters.AdditiveSynthesis);
 
+			ImGui::SetNextItemOpen(true,ImGuiCond_Once);
 			if ( ImGui::TreeNode("File Tree") )
 			{
 
@@ -611,6 +615,42 @@ void ParticleEditor::EditUpdate()
 
 			ImGui::Text("");
 
+			ImGui::SetNextItemOpen(true,ImGuiCond_Once);
+			if ( ImGui::TreeNode("Shape Type") )
+			{
+				// リストボックスを表示
+				ImGui::ListBox("Type",&selectedItem,shapes,IM_ARRAYSIZE(shapes));
+
+				if ( ImGui::Button("Select Shape") )
+				{
+					sendParameters.ShapeNumber = selectedItem;
+				}
+
+				if ( sendParameters.ShapeNumber == 0 )
+				{
+
+				}
+				else if ( sendParameters.ShapeNumber == 1 )
+				{
+					ImGui::SliderFloat("Width",&sendParameters.Width,0.0f,100.0f);
+					ImGui::SliderFloat("Height",&sendParameters.Height,0.0f,100.0f);
+					ImGui::SliderFloat("Depth",&sendParameters.Depth,0.0f,100.0f);
+					ImGui::SliderFloat("ShapeScaleX",&sendParameters.ShapeScale[ 0 ],0.0f,100.0f);
+					ImGui::SliderFloat("ShapeScaleY",&sendParameters.ShapeScale[ 1 ],0.0f,100.0f);
+					ImGui::SliderFloat("ShapeScaleZ",&sendParameters.ShapeScale[ 2 ],0.0f,100.0f);
+				}
+				else if ( sendParameters.ShapeNumber == 2 )
+				{
+					ImGui::SliderFloat("ShapeScaleX",&sendParameters.ShapeScale[ 0 ],0.0f,100.0f);
+					ImGui::SliderFloat("ShapeScaleY",&sendParameters.ShapeScale[ 1 ],0.0f,100.0f);
+					ImGui::SliderFloat("ShapeScaleZ",&sendParameters.ShapeScale[ 2 ],0.0f,100.0f);
+				}
+
+				ImGui::TreePop();
+			}
+
+			ImGui::Text("");
+
 			if ( ImGui::TreeNode("Flag") )
 			{
 				ImGui::Checkbox("ParticleActive",&sendParameters.Shot);
@@ -634,7 +674,7 @@ void ParticleEditor::EditUpdate()
 				ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
 				ImGui::ColorEdit4("EndColor",sendParameters.EndColor,ImGuiColorEditFlags_Float);
 				ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
-				ImGui::SliderFloat("Speed",&sendParameters.Speed,0.01f,30.0f);
+				ImGui::SliderFloat("Speed",&sendParameters.Speed,0.0f,30.0f);
 				ImGui::SliderFloat("LifeTime",&sendParameters.MaxLife,1.0f,500.0f);
 				ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
 				ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
@@ -666,8 +706,8 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("RandomSpeed",&sendParameters.RandomSpeed);
 				if ( sendParameters.RandomSpeed )
 				{
-					ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],1,10);
-					ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],2,10);
+					ImGui::SliderFloat("SpeedMin",&sendParameters.RandomSpeedMinMax[ 0 ],0,10);
+					ImGui::SliderFloat("SpeedMax",&sendParameters.RandomSpeedMinMax[ 1 ],1.1f,10);
 					if ( sendParameters.RandomSpeedMinMax[ 0 ] >= sendParameters.RandomSpeedMinMax[ 1 ] )
 					{
 						sendParameters.RandomSpeedMinMax[ 0 ] = sendParameters.RandomSpeedMinMax[ 1 ] - 1.0f;
@@ -725,6 +765,7 @@ void ParticleEditor::EditUpdate()
 
 				ImGui::TreePop();
 			}
+
 
 			ImGui::Text("");
 			int ParticleCount = static_cast< int >( sendParameters.MaxParticleCount );
@@ -987,21 +1028,30 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.MaxExplosionTimer = sendParameters.MaxExplosionTimer;
 	shaderDetailParameters.RandomExplosionTimerMinMax = sendParameters.RandomExplosionTimerMinMax;
 	shaderDetailParameters.RandomParticleExplosion = sendParameters.RandomParticleExplosion;
-	shaderDetailParameters.Active = sendParameters.Active;
+	shaderDetailParameters.ShapeNumber = sendParameters.ShapeNumber;
+	shaderDetailParameters.Width = sendParameters.Width;
+	shaderDetailParameters.Height = sendParameters.Height;
+	shaderDetailParameters.Depth = sendParameters.Depth;
+	shaderDetailParameters.ShapeScale = sendParameters.ShapeScale;
+
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
 
 void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& params)
 {
-	for ( uint32_t i = 0; i < 4; i++ )
-	{
-		sendParameters.StartPos[ i ] = params.StartPos[ i ];
-		sendParameters.EndPos[ i ] = params.EndPos[ i ];
-		sendParameters.EndColor[ i ] = params.EndColor[ i ];
-		sendParameters.StartColor[ i ] = params.StartColor[ i ];
-		sendParameters.Angle[ i ] = params.Angle[ i ];
-	}
+	//配列コピー操作
+	memcpy(sendParameters.StartPos,params.StartPos,sizeof(params.StartPos));
+	memcpy(sendParameters.EndPos,params.EndPos,sizeof(params.EndPos));
+	memcpy(sendParameters.EndColor,params.EndColor,sizeof(params.EndColor));
+	memcpy(sendParameters.StartColor,params.StartColor,sizeof(params.StartColor));
+	memcpy(sendParameters.Angle,params.Angle,sizeof(params.Angle));
+	memcpy(sendParameters.RandomLifeMinMax,params.RandomLifeMinMax,sizeof(params.RandomLifeMinMax));
+	memcpy(sendParameters.RandomSpeedMinMax,params.RandomSpeedMinMax,sizeof(params.RandomSpeedMinMax));
+	memcpy(sendParameters.RandomScaleMinMax,params.RandomScaleMinMax,sizeof(params.RandomScaleMinMax));
+	memcpy(sendParameters.RandomExplosionTimerMinMax,params.RandomExplosionTimerMinMax,sizeof(params.RandomExplosionTimerMinMax));
+	memcpy(sendParameters.ShapeScale,params.ShapeScale,sizeof(params.ShapeScale));
+
 	sendParameters.Shot = params.Shot;
 	sendParameters.EndPointActive = params.EndPointActive;
 	sendParameters.RandomVelocity = params.RandomVelocity;
@@ -1015,13 +1065,7 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.MaxLife = params.MaxLife;
 	sendParameters.MaxParticleCount = params.MaxParticleCount;
 	sendParameters.AdditiveSynthesis = params.AdditiveSynthesis;
-	for ( uint32_t i = 0; i < 2; i++ )
-	{
-		sendParameters.RandomLifeMinMax[ i ] = params.RandomLifeMinMax[ i ];
-		sendParameters.RandomSpeedMinMax[ i ] = params.RandomSpeedMinMax[ i ];
-		sendParameters.RandomScaleMinMax[ i ] = params.RandomScaleMinMax[ i ];
-		sendParameters.RandomExplosionTimerMinMax[ i ] = params.RandomExplosionTimerMinMax[ i ];
-	}
+
 	sendParameters.SpeedDivideSize = params.SpeedDivideSize;
 	sendParameters.ScaleDivideSize = params.ScaleDivideSize;
 	sendParameters.GravityStrength = params.GravityStrength;
@@ -1042,7 +1086,10 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.ExplosionTimer = params.ExplosionTimer;
 	sendParameters.MaxExplosionTimer = params.MaxExplosionTimer;
 	sendParameters.RandomParticleExplosion = params.RandomParticleExplosion;
-	sendParameters.Active = params.Active;
+	sendParameters.ShapeNumber = params.ShapeNumber;
+	sendParameters.Width = params.Width;
+	sendParameters.Height = params.Height;
+	sendParameters.Depth = params.Depth;
 
 	sendParameters.isLoad = true;
 }

@@ -166,6 +166,8 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     }
     uint seed = id.x + index * 1235;
     uint indexAdd = index * 1222;
+    uint indexAdd2 = indexAdd * 12;
+    uint indexAdd3 = indexAdd * 12;
     if (Shot == 0)
     {
         float GraceOfTimeMax = 100.0f;
@@ -317,9 +319,43 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         gParticles[index].scale = Scale;
     }
     
+    float3 NowPosition = StartPos.xyz;
+    
+    if (ShapeNumber == 0)
+    {
+        
+    }
+    else if (ShapeNumber == 1)
+    {   
+        NowPosition = GenerateRandomPoint(seed, indexAdd, indexAdd2, NowPosition, Width, Height, Depth);
+        NowPosition *= ShapeScale.xyz;
+    }
+    else if (ShapeNumber == 2)
+    {
+        // ŽOŠpŒ`‚Ì’¸“_
+        float3 A = { -1, 0, -1 };
+        float3 B = { 1, 0, -1 };
+        float3 C = { 0, 1, 0 };
+        float3 D = { 0, 0, 1 };
+        
+        A = normalize(A);
+        B = normalize(B);
+        C = normalize(C);
+        D = normalize(D);
+        
+        float randomX = Rand1(seed, Width, 0.0);
+        float randomY = Rand1(indexAdd, Width, 0.0);
+        float randomZ = Rand1(indexAdd2, Height, 0.0);
+        float randomW = Rand1(indexAdd3, Depth, 0.0);
+        
+        NowPosition += GenerateRandomPointInTetrahedron(seed, indexAdd, indexAdd2, indexAdd3, A, B, C, D);
+        NowPosition *= ShapeScale.xyz;
+    }
+    
     gParticles[index].MaxLifeTime = gParticles[index].lifeTime;
-    gParticles[index].position.xyz = StartPos.xyz;
+    gParticles[index].position.xyz = NowPosition;
     gParticles[index].color = StartColor;
     gParticles[index].ScaleKeep = 0;
+
 
 }

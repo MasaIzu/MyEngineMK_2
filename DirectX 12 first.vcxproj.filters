@@ -778,6 +778,9 @@
     <ClInclude Include="Engine\3DEffect\ParticleEditor.h">
       <Filter>Engine\HeaderFile\3DEffect</Filter>
     </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>UserFile\UserHeaderFile\UserCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1055,6 +1058,9 @@
     </ClCompile>
     <ClCompile Include="Engine\3DEffect\ParticleEditor.cpp">
       <Filter>Engine\SourceFile\3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>UserFile\UserSourceFile\UserCamera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
