@@ -72,6 +72,15 @@
             "value1": 300.0
         },
         "RandomParticleExplosion": false,
-        "Active": true
+        "ShapeNumber": 2,
+        "Width": 100.0,
+        "Height": 100.0,
+        "Depth": 100.0,
+        "ShapeScale": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        }
     }
 }

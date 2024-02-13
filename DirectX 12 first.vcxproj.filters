@@ -781,6 +781,18 @@
     <ClInclude Include="DebugCamera.h">
       <Filter>UserFile\UserHeaderFile\UserCamera</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerNormalState.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerShootingState.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMissileShootingState.h">
+      <Filter>UserFile\UserHeaderFile\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1061,6 +1073,18 @@
     </ClCompile>
     <ClCompile Include="DebugCamera.cpp">
       <Filter>UserFile\UserSourceFile\UserCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerNormalState.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerShootingState.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMissileShootingState.cpp">
+      <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -46,6 +46,10 @@ UINT ParticleEditor::m_incrementSize;
 UINT ParticleEditor::m_cbvSrvUavDescriptorSize = 0;
 uint32_t ParticleEditor::ParticleEdiCount = 0;
 
+ParticleEditor::ShaderDetailCollision ParticleEditor::shaderDetailCollision_;
+
+ComPtr<ID3D12Resource1> ParticleEditor::m_sceneDetailCollisionParameterCB;
+
 template <class Archive>
 void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendParameters) {
 	ar(cereal::make_nvp("StartPos",sendParameters.StartPos),cereal::make_nvp("EndPos",sendParameters.EndPos)
@@ -69,7 +73,7 @@ void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendPa
 		,cereal::make_nvp("RandomParticleExplosion",sendParameters.RandomParticleExplosion)
 		,cereal::make_nvp("ShapeNumber",sendParameters.ShapeNumber),cereal::make_nvp("Width",sendParameters.Width)
 		,cereal::make_nvp("Height",sendParameters.Height),cereal::make_nvp("Depth",sendParameters.Depth)
-		,cereal::make_nvp("ShapeScale",sendParameters.ShapeScale)
+		,cereal::make_nvp("ShapeScale",sendParameters.ShapeScale),cereal::make_nvp("CollisionON",sendParameters.CollisionON)
 	);
 }
 
@@ -85,6 +89,8 @@ void ParticleEditor::StaticInitialize(ID3D12Device* Device)
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
+	auto cbDetailCollisionDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderDetailCollision));
+	m_sceneDetailCollisionParameterCB = MyFunction::CreateResource(cbDetailCollisionDesc,D3D12_RESOURCE_STATE_GENERIC_READ,nullptr,D3D12_HEAP_TYPE_UPLOAD);
 }
 
 void ParticleEditor::StaticFinalize()
@@ -122,6 +128,14 @@ void ParticleEditor::PostDraw()
 	ParticleEditor::cmdList = nullptr;
 }
 
+void ParticleEditor::AddCollision(const Vector3& colPos,const Vector3& colScale)
+{
+	shaderDetailCollision_.Pos[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colPos);
+	shaderDetailCollision_.Scale[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colScale);
+	MyFunction::WriteToUploadHeapMemory(m_sceneDetailCollisionParameterCB.Get(),sizeof(ShaderDetailCollision),&shaderDetailCollision_);
+	++shaderDetailCollision_.ColCount;
+}
+
 void ParticleEditor::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
@@ -141,7 +155,7 @@ void ParticleEditor::InitializeGraphicsPipeline()
 		&vsBlob,&errorBlob);
 	if ( FAILED(result) )
 	{
-// errorBlobからエラー内容をstring型にコピー
+		// errorBlobからエラー内容をstring型にコピー
 		std::string errstr;
 		errstr.resize(errorBlob->GetBufferSize());
 
@@ -165,7 +179,7 @@ void ParticleEditor::InitializeGraphicsPipeline()
 		&gsBlob,&errorBlob);
 	if ( FAILED(result) )
 	{
-// errorBlobからエラー内容をstring型にコピー
+		// errorBlobからエラー内容をstring型にコピー
 		std::string errstr;
 		errstr.resize(errorBlob->GetBufferSize());
 
@@ -190,7 +204,7 @@ void ParticleEditor::InitializeGraphicsPipeline()
 		&psBlob,&errorBlob);
 	if ( FAILED(result) )
 	{
-// errorBlobからエラー内容をstring型にコピー
+		// errorBlobからエラー内容をstring型にコピー
 		std::string errstr;
 		errstr.resize(errorBlob->GetBufferSize());
 
@@ -324,11 +338,12 @@ void ParticleEditor::InitializeGraphicsPipeline()
 		CD3DX12_DESCRIPTOR_RANGE uavIndexList{};
 		uavIndexList.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV,1,1);
 		// ルートシグネチャの作成
-		std::array<CD3DX12_ROOT_PARAMETER,4> rootParameters;
+		std::array<CD3DX12_ROOT_PARAMETER,5> rootParameters;
 		rootParameters[ 0 ].InitAsConstantBufferView(0); // b0: Params
-		rootParameters[ 1 ].InitAsConstantBufferView(1); // b0: Params
-		rootParameters[ 2 ].InitAsUnorderedAccessView(0);// u0: Particles
-		rootParameters[ 3 ].InitAsDescriptorTable(1,&uavIndexList); // u1: ParticleIndexList
+		rootParameters[ 1 ].InitAsConstantBufferView(1); // b1: Params
+		rootParameters[ 2 ].InitAsConstantBufferView(2); // b2: Params
+		rootParameters[ 3 ].InitAsUnorderedAccessView(0);// u0: Particles
+		rootParameters[ 4 ].InitAsDescriptorTable(1,&uavIndexList); // u1: ParticleIndexList
 
 		CD3DX12_ROOT_SIGNATURE_DESC uavRootSignatureDesc{};
 		uavRootSignatureDesc.Init(
@@ -662,7 +677,7 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
 				ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
 				ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
-
+				ImGui::Checkbox("CollisionON",&sendParameters.CollisionON);
 				ImGui::TreePop();
 			}
 
@@ -805,6 +820,7 @@ void ParticleEditor::EditUpdate()
 		SetParameter();
 		MyFunction::WriteToUploadHeapMemory(m_sceneDetailParameterCB.Get(),sizeof(ShaderDetailPointGenerationParameters),&shaderDetailParameters);
 
+
 		if ( isPushSave )
 		{
 			std::ofstream os(FullPath);
@@ -937,8 +953,9 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 
 		commandList->SetComputeRootConstantBufferView(0,m_sceneViewParameterCB->GetGPUVirtualAddress());
 		commandList->SetComputeRootConstantBufferView(1,m_sceneDetailParameterCB->GetGPUVirtualAddress());
-		commandList->SetComputeRootUnorderedAccessView(2,m_gpuParticleElement->GetGPUVirtualAddress());
-		commandList->SetComputeRootDescriptorTable(3,m_handleGpu);
+		commandList->SetComputeRootConstantBufferView(2,m_sceneDetailCollisionParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(3,m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(4,m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[ PSO_CS_INIT ].Get());
 
 		UINT invokeCount = particleCount / 128 + 1;
@@ -953,8 +970,9 @@ void ParticleEditor::CSCmd(ID3D12GraphicsCommandList* commandList)
 		commandList->SetComputeRootSignature(rootSignature.Get());
 		commandList->SetComputeRootConstantBufferView(0,m_sceneViewParameterCB->GetGPUVirtualAddress());
 		commandList->SetComputeRootConstantBufferView(1,m_sceneDetailParameterCB->GetGPUVirtualAddress());
-		commandList->SetComputeRootUnorderedAccessView(2,m_gpuParticleElement->GetGPUVirtualAddress());
-		commandList->SetComputeRootDescriptorTable(3,m_handleGpu);
+		commandList->SetComputeRootConstantBufferView(2,m_sceneDetailCollisionParameterCB->GetGPUVirtualAddress());
+		commandList->SetComputeRootUnorderedAccessView(3,m_gpuParticleElement->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(4,m_handleGpu);
 		commandList->SetPipelineState(m_pipelines[ PSO_CS_EMIT ].Get());
 
 		UINT invokeCount = particleCount / 128 + 1;
@@ -1033,7 +1051,7 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.Height = sendParameters.Height;
 	shaderDetailParameters.Depth = sendParameters.Depth;
 	shaderDetailParameters.ShapeScale = sendParameters.ShapeScale;
-
+	shaderDetailParameters.CollisionON = sendParameters.CollisionON;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -1090,6 +1108,7 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.Width = params.Width;
 	sendParameters.Height = params.Height;
 	sendParameters.Depth = params.Depth;
+	sendParameters.CollisionON = params.CollisionON;
 
 	sendParameters.isLoad = true;
 }

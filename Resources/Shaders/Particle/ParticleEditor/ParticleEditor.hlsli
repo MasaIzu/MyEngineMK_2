@@ -49,7 +49,18 @@ cbuffer ShaderDetailParameters : register(b1)
     float Depth : packoffset(c14.z);
     float Pad : packoffset(c14.w);
     float4 ShapeScale : packoffset(c15);
+    uint CollisionON : packoffset(c16);
 };
+
+
+static const int MaxColCount = 30;
+
+cbuffer ShaderDetailCollision : register(b2)
+{
+    float4 ColPos[MaxColCount];
+    float4 ColScale[MaxColCount];
+    uint ColCount;
+}
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
 struct VSOutput

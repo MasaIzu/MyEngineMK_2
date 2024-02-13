@@ -8,6 +8,7 @@
 #include "CollisionAttribute.h"
 #include "Numbers.h"
 #include "LightData.h"
+#include "PlayerNormalState.h"
 
 Player::Player()
 {
@@ -30,6 +31,9 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	playerRotWorldTrans.Initialize();
 
 	viewProjection_ = viewProjection;
+
+	state_ = new PlayerNormalState;
+	state_->Initialize();
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
 	playerNormalGun->Initialize(Pos,model_.get());
@@ -115,6 +119,7 @@ void Player::Update()
 	particleLeftLegHibanaParticle->EditUpdate();
 	particleRightLegHibanaParticle->EditUpdate();
 	HitEffectParticle->EditUpdate();
+
 	//当たり判定チェック
 	CheckHitCollision();
 	//HPのアップデート
@@ -131,28 +136,33 @@ void Player::Update()
 
 	if ( isAlive )
 	{
-		//攻撃
-		if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
-		{
-			isAttack = true;
-		}
-		if ( isBladeAttacking == false )
-		{
-			if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) || input_->ButtonInput(RT) )
-			{
-				isBladeAttack = true;
-			}
-		}
-		if ( input_->PushKey(DIK_E) || input_->PButtonTrigger(LB) )
-		{
-			isMissileAttack = true;
-		}
+		////攻撃
+		//if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
+		//{
+		//	isAttack = true;
+		//}
+		//if ( isBladeAttacking == false )
+		//{
+		//	if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) || input_->ButtonInput(RT) )
+		//	{
+		//		isBladeAttack = true;
+		//	}
+		//}
+		//if ( input_->PushKey(DIK_E) || input_->PButtonTrigger(LB) )
+		//{
+		//	isMissileAttack = true;
+		//}
 
 		//回転させる
 		PlayerRot(isAttack,isBladeAttacking,isMissileAttack);
 
-		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
+		//playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
+		playerStateNeedMaterial.worldTransform = playerWorldTrans;
+		playerStateNeedMaterial.isAlive = isAlive;
+		playerStateNeedMaterial.onGround = onGround;
+		playerStateNeedMaterial.isBladeAttack = isBladeAttacking;
 
+		state_->Update(this,EnemyPos_);
 
 		if ( isCameraModeNotFree == true )
 		{
@@ -177,7 +187,7 @@ void Player::Update()
 	}
 	else
 	{
-		playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
+		//playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
 		//移動の値更新
 		WorldTransUpdate();
 
@@ -346,7 +356,7 @@ void Player::AttackUpdate(const Vector3& EnemyPos,bool& LockOn)
 		}
 	}
 
-
+	PlayerAttack(EnemyPos,LockOn);
 	if ( isAttack == true || isMissileAttack == true )
 	{
 		PlayerAttack(EnemyPos,LockOn);
@@ -417,6 +427,30 @@ void Player::ParticleDraw()
 	ParticleExplosion->Draw(*viewProjection_);
 }
 
+//状態変更
+void Player::TransitionTo(PlayerState* state) {
+	//削除
+	delete state_;
+	//新規作成
+	state_ = state;
+	state_->Initialize();
+}
+
+void Player::NormalGunShoot(const Vector3& EnemyPos)
+{
+	playerNormalGun->ShotBullet(EnemyPos_);
+}
+
+void Player::MissileGunShoot(const Vector3& EnemyPos)
+{
+	playerExplosionGun->ShotBullet(EnemyPos_);
+}
+
+void Player::PlayerMove(const Vector3& Velocity)
+{
+	playerWorldTrans.translation_ += Velocity;
+}
+
 void Player::PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& MissileAttack)
 {
 	playerMovement->PlayerAngle(Attack,BladeAttack,MissileAttack);
@@ -442,30 +476,32 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 	if ( LockOn )
 	{
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,EnemyPos);
+		EnemyPos_ = EnemyPos;
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			if ( isAttack )
 			{
-				playerNormalGun->ShotBullet(EnemyPos);
+				/*playerNormalGun->ShotBullet(EnemyPos);*/
 			}
 			if ( isMissileAttack )
 			{
-				playerExplosionGun->ShotBullet(EnemyPos);
+				/*playerExplosionGun->ShotBullet(EnemyPos);*/
 			}
 		}
 	}
 	else
 	{
 		FixedAngle = MyMath::Get2VecAngle(playerWorldTrans.translation_ + playerWorldTrans.LookVelocity.look,TargetPosition);
+		EnemyPos_ = TargetPosition;
 		if ( playerMovement->GetIsRotFinish() )
 		{
 			if ( isAttack )
 			{
-				playerNormalGun->ShotBullet(TargetPosition);
+				/*playerNormalGun->ShotBullet(TargetPosition);*/
 			}
 			if ( isMissileAttack )
 			{
-				playerExplosionGun->ShotBullet(TargetPosition);
+				/*playerExplosionGun->ShotBullet(TargetPosition);*/
 			}
 		}
 	}

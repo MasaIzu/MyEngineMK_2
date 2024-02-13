@@ -146,6 +146,70 @@ void main(uint3 id : SV_DispatchThreadID)
         scale = Scale * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
     }
     
+    if (CollisionON == 1)
+    {
+        for (int x = 0; x <= ColCount; ++x)
+        {
+            float3 center = ColPos[x].xyz;
+            float3 scale = ColScale[x].xyz + float3(0,20,0);
+            
+            // 箱の最小頂点と最大頂点を計算
+            float3 minBox = center - scale;
+            float3 maxBox = center + scale;
+            
+            // 点の位置
+            float3 pointPos = Position;
+            
+            // 各軸に沿った内側の確認
+            bool insideX = pointPos.x >= minBox.x && pointPos.x <= maxBox.x;
+            bool insideY = pointPos.y >= minBox.y && pointPos.y <= maxBox.y;
+            bool insideZ = pointPos.z >= minBox.z && pointPos.z <= maxBox.z;
+            
+            if (pointPos.x >= minBox.x && pointPos.x <= maxBox.x)
+            {
+                insideX = true;
+            }
+            if (pointPos.y >= minBox.y && pointPos.y <= maxBox.y)
+            {
+                insideY = true;
+            }
+            if (pointPos.z >= minBox.z && pointPos.z <= maxBox.z)
+            {
+                insideZ = true;
+            }
+            
+            // 点を押し出す処理
+            if (insideX && insideY && insideZ)
+            {
+                // 各軸に対する最小距離を計算
+                float distanceX = min(abs(pointPos.x - minBox.x), abs(maxBox.x - pointPos.x));
+                float distanceY = min(abs(pointPos.y - minBox.y), abs(maxBox.y - pointPos.y));
+                float distanceZ = min(abs(pointPos.z - minBox.z), abs(maxBox.z - pointPos.z));
+        
+                // 最も近い面を決定
+                float minDistance = min(distanceX, min(distanceY, distanceZ));
+        
+                // 押し出しベクトルを計算
+                float3 pushOutVector = 0;
+                if (minDistance == distanceX)
+                {
+                    pushOutVector.x = (pointPos.x > center.x) ? distanceX : -distanceX;
+                }
+                else if (minDistance == distanceY)
+                {
+                    pushOutVector.y = (pointPos.y > center.y) ? distanceY : -distanceY;
+                }
+                else // Z軸が最小距離
+                {
+                    pushOutVector.z = (pointPos.z > center.z) ? distanceZ : -distanceZ;
+                }
+        
+                // 点を押し出す
+                pointPos += pushOutVector;
+                Position = pointPos;
+            }
+        }
+    }
     
     gParticles[index].color = StartColor + Color;
     gParticles[index].position.xyz = Position;

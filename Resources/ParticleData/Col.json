@@ -1,5 +1,5 @@
 {
-    "Resources/ParticleData/HonooBlade.json": {
+    "Resources/ParticleData/Col.json": {
         "StartPos": {
             "value0": 0.0,
             "value1": 0.0,
@@ -14,14 +14,14 @@
         },
         "StartColor": {
             "value0": 1.0,
-            "value1": 0.10000000149011612,
-            "value2": 0.10000000149011612,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 0.07999999821186066,
-            "value2": 0.07999999821186066,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "Angle": {
@@ -31,21 +31,21 @@
             "value3": 0.0
         },
         "Shot": true,
-        "EndPointActive": true,
+        "EndPointActive": false,
         "RandomVelocity": true,
-        "RandomLife": true,
-        "RandomSpeed": true,
+        "RandomLife": false,
+        "RandomSpeed": false,
         "RandomScale": false,
-        "Speed": 1.0,
-        "LerpStrength": 0.009999999776482582,
+        "Speed": 5.4019999504089359,
+        "LerpStrength": 0.05000000074505806,
         "Scale": 1.0,
-        "ScaleTinker": -0.0,
+        "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 20000,
-        "AdditiveSynthesis": true,
+        "MaxParticleCount": 60000,
+        "AdditiveSynthesis": false,
         "RandomLifeMinMax": {
-            "value0": 10.470999717712403,
-            "value1": 19.21299934387207
+            "value0": 1.0,
+            "value1": 30.0
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -55,32 +55,33 @@
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 9.720000267028809,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
-        "Interlocking": true,
-        "InterlockingStrength": 0.5289999842643738,
+        "Interlocking": false,
+        "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,
-        "ScaleDownLifeTime": true,
+        "ScaleDownLifeTime": false,
         "EmitParticles": false,
         "ParticleGroup": false,
         "ParticleGroupCount": 5,
-        "GroupTimer": 35.20199966430664,
-        "MaxGroupTimer": 934.4970092773438,
+        "GroupTimer": 30.0,
+        "MaxGroupTimer": 300.0,
         "RandomGroupTimerMinMax": {
-            "value0": 160.81500244140626,
-            "value1": 300.0
+            "value0": 1.0,
+            "value1": 30.0
         },
         "RandomParticleExplosion": false,
-        "ShapeNumber": 2,
-        "Width": 100.0,
-        "Height": 100.0,
-        "Depth": 100.0,
+        "ShapeNumber": 0,
+        "Width": 1.0,
+        "Height": 1.0,
+        "Depth": 1.0,
         "ShapeScale": {
             "value0": 1.0,
             "value1": 1.0,
             "value2": 1.0,
             "value3": 1.0
-        }
+        },
+        "CollisionON": true
     }
 }

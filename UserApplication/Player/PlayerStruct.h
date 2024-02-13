@@ -22,3 +22,11 @@ struct PushKey
 	bool isPushD = false;
 	bool isPushMoveKey = false;
 };
+
+struct PlayerStateNeedMaterial
+{
+	WorldTransform worldTransform;
+	bool onGround = false;
+	bool isBladeAttack = false;
+	bool isAlive = false;
+};

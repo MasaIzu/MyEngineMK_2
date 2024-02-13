@@ -24,6 +24,8 @@ public://基本関数
 	//更新
 	void Update();
 
+	void CameraUpdate();
+
 private://クラス関連
 
 	Input* input_ = nullptr;

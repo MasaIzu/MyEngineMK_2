@@ -52,6 +52,8 @@ void DebugScene::Initialize() {
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("MiddleBossStage",Vector3(0,-5,0));
 
+
+
 	debugCamera = std::make_unique<DebugCamera>();
 	debugCamera->Initialize(viewProjection_.get());
 

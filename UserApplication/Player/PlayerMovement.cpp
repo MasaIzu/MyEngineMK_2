@@ -12,19 +12,19 @@ PlayerMovement::~PlayerMovement()
 {
 }
 
-Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack,const bool& isAlive)
+Vector3 PlayerMovement::Move(const PlayerStateNeedMaterial& playerStateNeedMaterial)
 {
 	playerAllMoveMent = Vec3Number(fNumbers::fZero);
 
-	if ( !isBladeAttack && isAlive )
+	if ( !playerStateNeedMaterial.isBladeAttack && playerStateNeedMaterial.isAlive )
 	{
 		if ( pushKey.isPushMoveKey )
 		{
-			playerAllMoveMent = worldTransform.LookVelocity.look.norm();
+			playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.look.norm();
 
 			if ( !isRotFinish )
 			{
-				playerAllMoveMent = worldTransform.LookVelocity.look.norm() * PlayerTrunSpeed;
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.look.norm() * PlayerTrunSpeed;
 			}
 		}
 		else
@@ -33,49 +33,49 @@ Vector3 PlayerMovement::Move(const WorldTransform& worldTransform,const bool& on
 			{
 				pushKey.isPushW = true;
 				pushKey.isPushMoveKey = true;
-				playerAllMoveMent = worldTransform.LookVelocity.look.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.look.norm();
 			}
 			if ( input_->PushKey(DIK_S) || input_->StickInput(L_DOWN) )
 			{
 				pushKey.isPushS = true;
 				pushKey.isPushMoveKey = true;
-				playerAllMoveMent = worldTransform.LookVelocity.lookBack.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.lookBack.norm();
 			}
 			if ( input_->PushKey(DIK_A) || input_->StickInput(L_LEFT) )
 			{
 				pushKey.isPushA = true;
 				pushKey.isPushMoveKey = true;
-				playerAllMoveMent = worldTransform.LookVelocity.lookLeft.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.lookLeft.norm();
 			}
 			if ( input_->PushKey(DIK_D) || input_->StickInput(L_RIGHT) )
 			{
 				pushKey.isPushD = true;
 				pushKey.isPushMoveKey = true;
-				playerAllMoveMent = worldTransform.LookVelocity.lookRight.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.lookRight.norm();
 			}
 
 			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_UP) && input_->StickInput(L_LEFT) )
 			{
-				playerAllMoveMent = worldTransform.LookVelocity.look_lookLeft.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.look_lookLeft.norm();
 			}
 			if ( input_->PushKey(DIK_W) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_UP) && input_->StickInput(L_RIGHT) )
 			{
-				playerAllMoveMent = worldTransform.LookVelocity.look_lookRight.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.look_lookRight.norm();
 			}
 			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_A) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_LEFT) )
 			{
-				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookLeft.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.lookBack_lookLeft.norm();
 			}
 			if ( input_->PushKey(DIK_S) == true && input_->PushKey(DIK_D) == true || input_->StickInput(L_DOWN) && input_->StickInput(L_RIGHT) )
 			{
-				playerAllMoveMent = worldTransform.LookVelocity.lookBack_lookRight.norm();
+				playerAllMoveMent = playerStateNeedMaterial.worldTransform.LookVelocity.lookBack_lookRight.norm();
 			}
 		}
 	}
 	
-	playerAllMoveMent += UpBoost(onGround,isBladeAttack,isAlive);
+	playerAllMoveMent += UpBoost(playerStateNeedMaterial.onGround,playerStateNeedMaterial.isBladeAttack,playerStateNeedMaterial.isAlive);
 
-	BoostFuelUpdate(onGround);
+	BoostFuelUpdate(playerStateNeedMaterial.onGround);
 	return playerAllMoveMent;
 }
 

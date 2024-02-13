@@ -70,5 +70,11 @@ public:
 	/// <returns>マウスの位置</returns>
 	const Vector3 GetMouseMove();
 
+	/// <summary>
+	/// マウスのホイール入力
+	/// </summary>
+	/// <returns>マウスのホイール入力</returns>
+	const float GetMouseWheelMove();
+
 	char PADDING[4];
 };

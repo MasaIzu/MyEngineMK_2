@@ -22,6 +22,7 @@
 #include "ExplosionGun.h"
 #include "Explosion.h"
 #include "ParticleEditor.h"
+#include <PlayerState.h>
 
 struct PlayerAnimTime
 {
@@ -29,6 +30,7 @@ struct PlayerAnimTime
 	const uint32_t DieMotion = 120;
 	const uint32_t BladeAttack = 60;
 };
+
 
 /// <summary>
 /// プレイヤー
@@ -58,8 +60,17 @@ public://基本関数
 	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 	void ParticleDraw();
 
+	//状態移行
+	void TransitionTo(PlayerState* state);
+	//弾を打ち出す
+	void NormalGunShoot(const Vector3& EnemyPos);
+	//弾を打ち出す
+	void MissileGunShoot(const Vector3& EnemyPos);
+
+	//移動関数
+	void PlayerMove(const Vector3& Velocity);
+
 private:
-	
 	//プレイヤーの回転
 	void PlayerRot(const bool& Attack,const bool& BladeAttack,const bool& isMissileAttack);
 	//プレーヤーの攻撃
@@ -101,6 +112,10 @@ public://Getter
 	}
 	Vector3 GetPlayerPos()const; //ポジションゲット
 
+	PlayerStateNeedMaterial GetStateMaterial() {
+		return playerStateNeedMaterial;
+	}
+
 private://コンスト
 	static const uint32_t AttackColSphereCount = 4;
 
@@ -116,7 +131,7 @@ private://クラス関連
 	const ViewProjection* viewProjection_ = nullptr;
 	std::unique_ptr<NormalGun> playerNormalGun;
 	std::unique_ptr<ExplosionGun> playerExplosionGun;
-
+	PlayerState* state_;
 	// コライダー
 	BaseCollider* PlayerCollider = nullptr;
 	std::array<BaseCollider*,AttackColSphereCount> PlayerBladeAttackCollider;
@@ -143,6 +158,8 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> particleLeftLegHibanaParticle;
 	std::unique_ptr<ParticleEditor> particleRightLegHibanaParticle;
 	std::unique_ptr<ParticleEditor> HitEffectParticle;
+
+	PlayerStateNeedMaterial playerStateNeedMaterial;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -246,6 +263,7 @@ private://プレイヤークラス変数
 	Vector3 BladeAttackVelocity;
 	Vector3 BladeColRatio;
 	Vector3 LightAtten = { 0.0f,0.1f,0.0f };
+	Vector3 EnemyPos_;
 
 	Vector4 fallVec;
 	Vector4 ParticleStartPos;

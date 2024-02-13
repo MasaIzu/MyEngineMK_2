@@ -125,6 +125,7 @@ public: // サブクラス
 		float Depth = 1.0f;
 		float Pad = 0.0f;
 		Vector4 ShapeScale = { 1,1,1,1 };
+		uint32_t CollisionON = 0;
 	};
 	ShaderDetailPointGenerationParameters shaderDetailParameters;
 
@@ -171,19 +172,19 @@ public: // サブクラス
 		float Height = 1.0f;
 		float Depth = 1.0f;
 		float ShapeScale[ 4 ] = { 1,1,1,1 };
+		bool CollisionON = false;
 	};
 	SendPointGenerationParameters sendParameters;
 
-	struct Collision
-	{
-		Vector4 Pos;
-	};
+	static const uint32_t MaxColCount = 30;
 
 	struct ShaderDetailCollision
 	{
-		
+		Vector4 Pos[ MaxColCount ];
+		Vector4 Scale[ MaxColCount ];
+		uint32_t ColCount = 0;
 	};
-	ShaderDetailCollision shaderDetailCollision;
+	static ShaderDetailCollision shaderDetailCollision_;
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -210,6 +211,12 @@ public: // 静的メンバ関数
 	/// 描画後処理
 	/// </summary>
 	static void PostDraw();
+
+	/// <summary>
+	/// コリジョンの追加
+	/// </summary>
+	/// <param name="colPos">コリジョンの追加</param>
+	static void AddCollision(const Vector3& colPos,const Vector3& colScale);
 
 private: // 静的メンバ変数
 	// デバイス
@@ -254,6 +261,8 @@ private: // 静的メンバ変数
 	static const std::string PSO_CS_UPDATE;
 	static const std::string PSO_DRAW_PARTICLE;
 	static const std::string PSO_DRAW_PARTICLE_USE_TEX;
+
+	static ComPtr<ID3D12Resource1> m_sceneDetailCollisionParameterCB;
 
 private:// 静的メンバ関数
 

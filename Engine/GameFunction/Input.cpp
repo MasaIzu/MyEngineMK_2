@@ -156,6 +156,11 @@ const Vector3 Input::GetMouseMove()
 	return mouse->GetMouseMove();
 }
 
+const float Input::GetMouseWheelMove()
+{
+	return mouse->GetMouseWheelMove();
+}
+
 bool Input::PButtonTrigger(ControllerButton button)
 {
 	return controller->ButtonTrigger(button);

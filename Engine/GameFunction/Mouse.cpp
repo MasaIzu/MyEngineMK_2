@@ -59,3 +59,8 @@ const Vector3 Mouse::GetMouseMove()
 	Vector3 result = { static_cast<float>(mouseState.lX), static_cast<float>(mouseState.lY), static_cast<float>(mouseState.lZ) };
 	return result;
 }
+
+const float Mouse::GetMouseWheelMove()
+{
+	return static_cast< float >( mouseState.lZ );
+}

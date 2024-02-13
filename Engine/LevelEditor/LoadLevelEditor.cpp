@@ -1,4 +1,5 @@
 #include "LoadLevelEditor.h"
+#include "ParticleEditor.h"
 
 MY_SUPPRESS_WARNINGS_BEGIN
 #include "External/json.hpp"
@@ -285,6 +286,9 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			else if ( fileName == "Manshon" )
 			{
 				TouchableObject::Create(model,Data.worldTrans,COLLISION_ATTR_LANDSHAPE);
+				Vector3 Scale = Data.worldTrans.scale_;
+				Scale.y = Data.worldTrans.scale_.y;
+				ParticleEditor::AddCollision(MyMath::GetWorldTransform(Data.worldTrans.matWorld_),Scale);
 			}
 			else if (fileName == "srop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);

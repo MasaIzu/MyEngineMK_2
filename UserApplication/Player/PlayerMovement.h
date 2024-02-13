@@ -12,7 +12,7 @@ public://基本関数
 	~PlayerMovement();
 
 	//Move
-	Vector3 Move(const WorldTransform& worldTransform,const bool& onGround,const bool& isBladeAttack,const bool& isAlive);
+	Vector3 Move(const PlayerStateNeedMaterial& playerStateNeedMaterial);
 	//ブースト
 	Vector3 UpBoost(const bool& onGround,const bool& isBladeAttack,const bool& isAlive);
 	//Angle
