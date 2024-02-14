@@ -72,6 +72,22 @@
             "value1": 300.0
         },
         "RandomParticleExplosion": false,
-        "Active": true
+        "ShapeNumber": 0,
+        "Width": 1.0,
+        "Height": 1.0,
+        "Depth": 1.0,
+        "ShapeScale": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "CollisionON": true,
+        "GettingUpDownScale": false,
+        "VelocityAdjustment": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
     }
 }

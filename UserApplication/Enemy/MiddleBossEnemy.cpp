@@ -715,6 +715,11 @@ void MiddleBossEnemy::CheckAttackType()
 		attackType = static_cast< AttackType >( RandomType(AttackCount) );
 	}
 
+	if ( MiddleBossHp <= ( MaxMiddleBossHp / 2 ) )
+	{
+		attackType = AttackType::UltPreparation;
+	}
+
 	if ( attackType == AttackType::Nomal )
 	{
 		isAttack = true;
@@ -784,40 +789,23 @@ void MiddleBossEnemy::CheckAttackType()
 			}
 			else
 			{
-				MoveTimes = static_cast< uint32_t >( Numbers::Zero );
-				isBackSponePos = true;
-				isMoveing = false;
-				Velocity = { Vec3Number(fNumbers::fZero) };
-				BackPosCounter = static_cast< uint32_t >( Numbers::One );
-				BackMissileTimes = static_cast< uint32_t >( Numbers::Zero );
-				BulletCoolTime = BackMissileFirstCoolTime;
-				BackLerpPos = ( tmp / static_cast< float >( fNumbers::fTwoPointZero ) ) + BossWorldTrans.translation_;
-				BackPoints.clear();
-				BackPoints.push_back(BossWorldTrans.translation_);
-				float LeftOrLight = MyMath::JudgeLeftorRight(EndPos,player->GetPlayerPos(),BossWorldTrans.translation_);
-				Vector3 EasingWaypoint;
-				if ( LeftOrLight == static_cast< float >( Numbers::One ) )//左
-				{
-					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookLeft.norm() * BackBosPower );
-					BackPoints.push_back(EasingWaypoint);
-				}
-				else if ( LeftOrLight == -static_cast< float >( Numbers::One ) )//右
-				{
-					EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookRight.norm() * BackBosPower );
-					BackPoints.push_back(EasingWaypoint);
-				}
-				else
-				{
-
-				}
-				Vector3 waypoint = EndPos - EasingWaypoint;
-				waypoint = ( waypoint / static_cast< float >( fNumbers::fTwoPointZero ) ) + EasingWaypoint + Vector3(static_cast< float >( fNumbers::fOnePointZero ),jampHeight,static_cast< float >( fNumbers::fOnePointZero )) + BossWorldTrans.LookVelocity.lookBack * BackStrength;
-				BackPoints.push_back(waypoint);
-				BackPoints.push_back(EndPos);
+				BackStartPoint(tmp);
 			}
 		}
 
 	}
+	else if ( attackType == AttackType::UltPreparation )
+	{
+		// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
+		Vector3 tmp;
+		tmp = EndPos - BossWorldTrans.translation_;
+		float dist = tmp.dot(tmp);
+		float radius2 = MoveSafeRadius;
+		radius2 *= radius2;
+
+		BackStartPoint(tmp);
+	}
+
 	for ( uint32_t i = AttackedKeepCount - 1; i > 0; i-- )
 	{
 		oldAttackType[ i ] = oldAttackType[ i - 1 ];
@@ -909,6 +897,36 @@ void MiddleBossEnemy::DieMotionUpdate()
 			}
 		}
 	}
+}
+
+void MiddleBossEnemy::BackStartPoint(const Vector3& tmp)
+{
+	MoveTimes = static_cast< uint32_t >( Numbers::Zero );
+	isBackSponePos = true;
+	isMoveing = false;
+	Velocity = { Vec3Number(fNumbers::fZero) };
+	BackPosCounter = static_cast< uint32_t >( Numbers::One );
+	BackMissileTimes = static_cast< uint32_t >( Numbers::Zero );
+	BulletCoolTime = BackMissileFirstCoolTime;
+	BackLerpPos = ( tmp / static_cast< float >( fNumbers::fTwoPointZero ) ) + BossWorldTrans.translation_;
+	BackPoints.clear();
+	BackPoints.push_back(BossWorldTrans.translation_);
+	float LeftOrLight = MyMath::JudgeLeftorRight(EndPos,player->GetPlayerPos(),BossWorldTrans.translation_);
+	Vector3 EasingWaypoint;
+	if ( LeftOrLight == static_cast< float >( Numbers::One ) )//左
+	{
+		EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookLeft.norm() * BackBosPower );
+		BackPoints.push_back(EasingWaypoint);
+	}
+	else if ( LeftOrLight == -static_cast< float >( Numbers::One ) )//右
+	{
+		EasingWaypoint = BossWorldTrans.translation_ + ( BossWorldTrans.LookVelocity.lookBack_lookRight.norm() * BackBosPower );
+		BackPoints.push_back(EasingWaypoint);
+	}
+	Vector3 waypoint = EndPos - EasingWaypoint;
+	waypoint = ( waypoint / static_cast< float >( fNumbers::fTwoPointZero ) ) + EasingWaypoint + Vector3(static_cast< float >( fNumbers::fOnePointZero ),jampHeight,static_cast< float >( fNumbers::fOnePointZero )) + BossWorldTrans.LookVelocity.lookBack * BackStrength;
+	BackPoints.push_back(waypoint);
+	BackPoints.push_back(EndPos);
 }
 
 Vector3 MiddleBossEnemy::GetPosition() const

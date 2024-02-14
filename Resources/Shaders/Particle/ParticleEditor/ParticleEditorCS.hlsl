@@ -140,7 +140,15 @@ void main(uint3 id : SV_DispatchThreadID)
     Color *= Ratio;
     
     gParticles[index].ScaleKeep += ScaleTinker;
-    float scale = Scale;
+    float scale = 1.0f;
+    if (RandomScale)
+    {
+        scale = gParticles[index].scale;
+    }
+    else
+    {
+        scale = Scale;
+    }
     if (ScaleDownLifeTime)
     {
         scale = Scale * (gParticles[index].lifeTime / gParticles[index].MaxLifeTime);
@@ -151,7 +159,7 @@ void main(uint3 id : SV_DispatchThreadID)
         for (int x = 0; x <= ColCount; ++x)
         {
             float3 center = ColPos[x].xyz;
-            float3 scale = ColScale[x].xyz + float3(0,20,0);
+            float3 scale = ColScale[x].xyz;
             
             // 箱の最小頂点と最大頂点を計算
             float3 minBox = center - scale;
@@ -161,9 +169,9 @@ void main(uint3 id : SV_DispatchThreadID)
             float3 pointPos = Position;
             
             // 各軸に沿った内側の確認
-            bool insideX = pointPos.x >= minBox.x && pointPos.x <= maxBox.x;
-            bool insideY = pointPos.y >= minBox.y && pointPos.y <= maxBox.y;
-            bool insideZ = pointPos.z >= minBox.z && pointPos.z <= maxBox.z;
+            bool insideX = false;
+            bool insideY = false;
+            bool insideZ = false;
             
             if (pointPos.x >= minBox.x && pointPos.x <= maxBox.x)
             {
@@ -213,8 +221,23 @@ void main(uint3 id : SV_DispatchThreadID)
     
     gParticles[index].color = StartColor + Color;
     gParticles[index].position.xyz = Position;
-    gParticles[index].scale = scale + gParticles[index].ScaleKeep;
     
+    if (GettingUpDownScale == 0)
+    {
+        gParticles[index].scale = scale + gParticles[index].ScaleKeep;
+    }
+    else
+    {
+        float HalfLife = gParticles[index].MaxLifeTime / 2;
+        float NowLife = gParticles[index].MaxLifeTime - gParticles[index].lifeTime;
+                
+        uint UintLessHalf = gParticles[index].lifeTime / HalfLife;
+        uint UintOverHalf = NowLife / (HalfLife + 1);
+        
+        float ScaleRatio = UintLessHalf * (NowLife / HalfLife) + UintOverHalf * (gParticles[index].lifeTime / HalfLife);
+        
+        gParticles[index].scale = Scale * ScaleRatio;
+    }
 }
 
 
@@ -265,9 +288,9 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     if (RandomVelocity)
     {
         
-        velocity.x = nextRand(indexAdd) * nextRand1(seed);
-        velocity.z = nextRand(indexAdd) * nextRand1(seed);
-        velocity.y = nextRand(indexAdd) * nextRand1(seed);
+        velocity.x = nextRand(indexAdd) * nextRand1(seed) / VelocityAdjustment.x;
+        velocity.y = nextRand(indexAdd) * nextRand1(seed) / VelocityAdjustment.y;
+        velocity.z = nextRand(indexAdd) * nextRand1(seed) / VelocityAdjustment.z;
     
         velocity = normalize(velocity);
         

@@ -26,6 +26,8 @@ private:
 		MoveingAttack,//移動しながら
 		Move,//移動
 		NotAttack,//攻撃しない
+		UltPreparation,//ウルト準備
+		Ult//ウルト
 	};
 
 public://基本関数
@@ -78,6 +80,9 @@ private://関数
 	void ColUpdate();
 	//死んだときの爆発までのアップデート
 	void DieMotionUpdate();
+	//スタートに戻る関数
+	void BackStartPoint(const Vector3& tmp);
+
 public://Setter
 	//スプラインセット
 	void SetStageMoveSpline(const std::vector<Vector3>& points) { MoveSpline->SetNotSplineVector(points); }

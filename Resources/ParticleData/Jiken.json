@@ -7,21 +7,21 @@
             "value3": 0.0
         },
         "EndPos": {
-            "value0": -4.110000133514404,
-            "value1": -300.0,
+            "value0": 0.0,
+            "value1": 50.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 0.0,
-            "value1": 0.0,
-            "value2": 0.0,
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "EndColor": {
             "value0": 1.0,
-            "value1": 0.13235294818878175,
-            "value2": 0.13235294818878175,
+            "value1": 1.0,
+            "value2": 1.0,
             "value3": 1.0
         },
         "Angle": {
@@ -32,17 +32,17 @@
         },
         "Shot": true,
         "EndPointActive": false,
-        "RandomVelocity": true,
+        "RandomVelocity": false,
         "RandomLife": false,
-        "RandomSpeed": true,
-        "RandomScale": true,
-        "Speed": 1.0,
-        "LerpStrength": 0.009999999776482582,
-        "Scale": 0.42100000381469729,
+        "RandomSpeed": false,
+        "RandomScale": false,
+        "Speed": 0.0,
+        "LerpStrength": 0.05000000074505806,
+        "Scale": 1.0,
         "ScaleTinker": 0.0,
-        "MaxLife": 60.0,
-        "MaxParticleCount": 60000,
-        "AdditiveSynthesis": true,
+        "MaxLife": 500.0,
+        "MaxParticleCount": 20000,
+        "AdditiveSynthesis": false,
         "RandomLifeMinMax": {
             "value0": 1.0,
             "value1": 30.0
@@ -55,23 +55,39 @@
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 100.0,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
         "GravityStrength": 0.0,
         "Interlocking": false,
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,
-        "ScaleDownLifeTime": true,
+        "ScaleDownLifeTime": false,
         "EmitParticles": true,
-        "ParticleGroup": true,
-        "ParticleGroupCount": 487,
-        "GroupTimer": 60.696998596191409,
-        "MaxGroupTimer": 934.4970092773438,
+        "ParticleGroup": false,
+        "ParticleGroupCount": 5,
+        "GroupTimer": 30.0,
+        "MaxGroupTimer": 300.0,
         "RandomGroupTimerMinMax": {
-            "value0": 160.81500244140626,
-            "value1": 300.0
+            "value0": 1.0,
+            "value1": 30.0
         },
-        "RandomParticleExplosion": true,
-        "Active": true
+        "RandomParticleExplosion": false,
+        "ShapeNumber": 1,
+        "Width": 100.0,
+        "Height": 100.0,
+        "Depth": 1.0,
+        "ShapeScale": {
+            "value0": 1.3860000371932984,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "CollisionON": false,
+        "GettingUpDownScale": false,
+        "VelocityAdjustment": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
     }
 }

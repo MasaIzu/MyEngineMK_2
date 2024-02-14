@@ -33,7 +33,7 @@
         "Shot": true,
         "EndPointActive": false,
         "RandomVelocity": true,
-        "RandomLife": false,
+        "RandomLife": true,
         "RandomSpeed": false,
         "RandomScale": false,
         "Speed": 5.4019999504089359,
@@ -41,11 +41,11 @@
         "Scale": 1.0,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
-        "MaxParticleCount": 60000,
+        "MaxParticleCount": 500000,
         "AdditiveSynthesis": false,
         "RandomLifeMinMax": {
-            "value0": 1.0,
-            "value1": 30.0
+            "value0": 28.707000732421876,
+            "value1": 117.44400024414063
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
@@ -62,7 +62,7 @@
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,
         "ScaleDownLifeTime": false,
-        "EmitParticles": false,
+        "EmitParticles": true,
         "ParticleGroup": false,
         "ParticleGroupCount": 5,
         "GroupTimer": 30.0,
@@ -82,6 +82,12 @@
             "value2": 1.0,
             "value3": 1.0
         },
-        "CollisionON": true
+        "CollisionON": true,
+        "GettingUpDownScale": true,
+        "VelocityAdjustment": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
     }
 }

@@ -123,9 +123,10 @@ public: // サブクラス
 		float Width = 1.0f;
 		float Height = 1.0f;
 		float Depth = 1.0f;
-		float Pad = 0.0f;
-		Vector4 ShapeScale = { 1,1,1,1 };
 		uint32_t CollisionON = 0;
+		Vector4 ShapeScale = { 1,1,1,1 };
+		Vector3 VelocityAdjustment = { 1,1,1 };
+		uint32_t GettingUpDownScale = 0;
 	};
 	ShaderDetailPointGenerationParameters shaderDetailParameters;
 
@@ -173,6 +174,8 @@ public: // サブクラス
 		float Depth = 1.0f;
 		float ShapeScale[ 4 ] = { 1,1,1,1 };
 		bool CollisionON = false;
+		bool GettingUpDownScale = false;
+		float VelocityAdjustment[ 3 ] = { 1,1,1 };
 	};
 	SendPointGenerationParameters sendParameters;
 
@@ -284,6 +287,11 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize(const uint32_t& ParticleCount,const bool& isEditUpdate_ = false,const std::string& FileName = "Nothing");
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(const std::string& FileName);
 
 	/// <summary>
 	/// エディターアップデート

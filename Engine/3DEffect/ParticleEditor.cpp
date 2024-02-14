@@ -74,6 +74,7 @@ void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendPa
 		,cereal::make_nvp("ShapeNumber",sendParameters.ShapeNumber),cereal::make_nvp("Width",sendParameters.Width)
 		,cereal::make_nvp("Height",sendParameters.Height),cereal::make_nvp("Depth",sendParameters.Depth)
 		,cereal::make_nvp("ShapeScale",sendParameters.ShapeScale),cereal::make_nvp("CollisionON",sendParameters.CollisionON)
+		,cereal::make_nvp("GettingUpDownScale",sendParameters.GettingUpDownScale),cereal::make_nvp("VelocityAdjustment",sendParameters.VelocityAdjustment)
 	);
 }
 
@@ -553,6 +554,47 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 	++ParticleEdiCount;
 }
 
+void ParticleEditor::Initialize(const std::string& FileName)
+{
+
+	std::string FullPath = FilePath + FileName + ".json";
+	SendPointGenerationParameters ReadParameters;
+	std::ifstream is(FullPath);
+	cereal::JSONInputArchive archive(is);
+	archive(cereal::make_nvp(FullPath,ReadParameters));
+
+	LoadFileParameter(ReadParameters);
+	SetParameter();
+
+	EditUpdate();
+
+	particleCount = ReadParameters.MaxParticleCount;
+	sendParameters.MaxParticleCount = particleCount;
+	InitializeVerticeBuff();
+
+	D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+	heapDesc.NumDescriptors = 1;
+	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+
+	ComPtr<ID3D12DescriptorHeap> descriptorHeap;
+	device->CreateDescriptorHeap(&heapDesc,IID_PPV_ARGS(&descriptorHeap));
+
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+	uavDesc.Buffer.NumElements = particleCount;
+	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+	uavDesc.Buffer.StructureByteStride = sizeof(GpuParticleElement);
+
+	device->CreateUnorderedAccessView(
+		vertBuff.Get(),
+		nullptr,
+		&uavDesc,
+		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
+	);
+
+}
+
 void ParticleEditor::EditUpdate()
 {
 
@@ -676,8 +718,13 @@ void ParticleEditor::EditUpdate()
 				}
 				ImGui::Checkbox("EmitParticles",&sendParameters.EmitParticles);
 				ImGui::Checkbox("RandomVelocity",&sendParameters.RandomVelocity);
+				if ( sendParameters.RandomVelocity )
+				{
+					ImGui::SliderFloat3("VelocityAdjustment",sendParameters.VelocityAdjustment,1.0f,30.0f);
+				}
 				ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
 				ImGui::Checkbox("CollisionON",&sendParameters.CollisionON);
+				ImGui::Checkbox("GettingUpDownScale",&sendParameters.GettingUpDownScale);
 				ImGui::TreePop();
 			}
 
@@ -732,8 +779,8 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("RandomScale",&sendParameters.RandomScale);
 				if ( sendParameters.RandomScale )
 				{
-					ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,10);
-					ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,10);
+					ImGui::SliderFloat("ScaleMin",&sendParameters.RandomScaleMinMax[ 0 ],1,100);
+					ImGui::SliderFloat("ScaleMax",&sendParameters.RandomScaleMinMax[ 1 ],2,100);
 					if ( sendParameters.RandomScaleMinMax[ 0 ] >= sendParameters.RandomScaleMinMax[ 1 ] )
 					{
 						sendParameters.RandomScaleMinMax[ 0 ] = sendParameters.RandomScaleMinMax[ 1 ] - 1.0f;
@@ -1052,6 +1099,8 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.Depth = sendParameters.Depth;
 	shaderDetailParameters.ShapeScale = sendParameters.ShapeScale;
 	shaderDetailParameters.CollisionON = sendParameters.CollisionON;
+	shaderDetailParameters.GettingUpDownScale = sendParameters.GettingUpDownScale;
+	shaderDetailParameters.VelocityAdjustment = sendParameters.VelocityAdjustment;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -1069,6 +1118,7 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	memcpy(sendParameters.RandomScaleMinMax,params.RandomScaleMinMax,sizeof(params.RandomScaleMinMax));
 	memcpy(sendParameters.RandomExplosionTimerMinMax,params.RandomExplosionTimerMinMax,sizeof(params.RandomExplosionTimerMinMax));
 	memcpy(sendParameters.ShapeScale,params.ShapeScale,sizeof(params.ShapeScale));
+	memcpy(sendParameters.VelocityAdjustment,params.VelocityAdjustment,sizeof(params.VelocityAdjustment));
 
 	sendParameters.Shot = params.Shot;
 	sendParameters.EndPointActive = params.EndPointActive;
@@ -1109,6 +1159,7 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.Height = params.Height;
 	sendParameters.Depth = params.Depth;
 	sendParameters.CollisionON = params.CollisionON;
+	sendParameters.GettingUpDownScale = params.GettingUpDownScale;
 
 	sendParameters.isLoad = true;
 }

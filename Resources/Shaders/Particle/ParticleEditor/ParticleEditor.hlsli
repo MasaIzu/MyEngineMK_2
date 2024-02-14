@@ -47,9 +47,10 @@ cbuffer ShaderDetailParameters : register(b1)
     float Width : packoffset(c14);
     float Height : packoffset(c14.y);
     float Depth : packoffset(c14.z);
-    float Pad : packoffset(c14.w);
+    uint CollisionON : packoffset(c14.w);
     float4 ShapeScale : packoffset(c15);
-    uint CollisionON : packoffset(c16);
+    float3 VelocityAdjustment : packoffset(c16);
+    uint GettingUpDownScale : packoffset(c16.w);
 };
 
 

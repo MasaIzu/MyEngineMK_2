@@ -1,27 +1,27 @@
 {
-    "Resources/ParticleData/Hibana.json": {
+    "Resources/ParticleData/EnemyUltDownPreparation.json": {
         "StartPos": {
             "value0": 0.0,
-            "value1": 0.0,
+            "value1": 10.440999984741211,
             "value2": 0.0,
             "value3": 0.0
         },
         "EndPos": {
             "value0": 0.0,
-            "value1": 90.90899658203125,
+            "value1": 50.0,
             "value2": 0.0,
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 1.0,
-            "value1": 0.35005760192871096,
-            "value2": 0.039215683937072757,
+            "value0": 0.0216263048350811,
+            "value1": 0.02554451860487461,
+            "value2": 0.08823531866073609,
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 1.0,
-            "value1": 0.7058823108673096,
-            "value2": 0.0,
+            "value0": 0.0,
+            "value1": 0.03229528293013573,
+            "value2": 0.034313738346099856,
             "value3": 1.0
         },
         "Angle": {
@@ -34,48 +34,48 @@
         "EndPointActive": false,
         "RandomVelocity": true,
         "RandomLife": true,
-        "RandomSpeed": false,
-        "RandomScale": false,
-        "Speed": 0.3529999852180481,
+        "RandomSpeed": true,
+        "RandomScale": true,
+        "Speed": 1.5460000038146973,
         "LerpStrength": 0.05000000074505806,
-        "Scale": 0.22499999403953553,
+        "Scale": 30.0,
         "ScaleTinker": 0.0,
-        "MaxLife": 60.0,
-        "MaxParticleCount": 100,
+        "MaxLife": 58.073001861572269,
+        "MaxParticleCount": 100000,
         "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
-            "value0": 54.577999114990237,
-            "value1": 155.74600219726563
+            "value0": 81.94499969482422,
+            "value1": 120.00800323486328
         },
         "RandomSpeedMinMax": {
-            "value0": 1.0,
+            "value0": 7.880000114440918,
             "value1": 10.0
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
-            "value1": 10.0
+            "value1": 37.279998779296878
         },
-        "SpeedDivideSize": 21.482999801635743,
+        "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": -0.07500000298023224,
+        "GravityStrength": 0.0,
         "Interlocking": false,
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,
-        "ScaleDownLifeTime": true,
+        "ScaleDownLifeTime": false,
         "EmitParticles": false,
         "ParticleGroup": false,
         "ParticleGroupCount": 5,
         "GroupTimer": 30.0,
-        "MaxGroupTimer": 934.4970092773438,
+        "MaxGroupTimer": 300.0,
         "RandomGroupTimerMinMax": {
-            "value0": 160.81500244140626,
-            "value1": 300.0
+            "value0": 1.0,
+            "value1": 30.0
         },
         "RandomParticleExplosion": false,
-        "ShapeNumber": 2,
-        "Width": 100.0,
-        "Height": 100.0,
-        "Depth": 100.0,
+        "ShapeNumber": 1,
+        "Width": 9.880000114440918,
+        "Height": 9.880999565124512,
+        "Depth": 10.652999877929688,
         "ShapeScale": {
             "value0": 1.0,
             "value1": 1.0,
@@ -86,7 +86,7 @@
         "GettingUpDownScale": false,
         "VelocityAdjustment": {
             "value0": 1.0,
-            "value1": 1.0,
+            "value1": 30.0,
             "value2": 1.0
         }
     }

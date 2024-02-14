@@ -57,10 +57,10 @@ void DebugScene::Initialize() {
 	debugCamera = std::make_unique<DebugCamera>();
 	debugCamera->Initialize(viewProjection_.get());
 
-	uint32_t MaxParticleCountB = 60000;
+	uint32_t MaxParticleCountB = 1000000;
 	particleEditor = std::make_unique<ParticleEditor>();
 	particleEditor->Initialize(MaxParticleCountB,true);
-	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+	particleEditor->SetTextureHandle(TextureManager::Load("sprite/smoke1.png"));
 }
 
 void DebugScene::Update() {

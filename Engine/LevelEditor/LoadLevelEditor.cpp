@@ -282,13 +282,16 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			else if ( fileName == "jimen" )
 			{
 				TouchableObject::Create(model,Data.worldTrans,COLLISION_ATTR_LANDSHAPE);
+				Vector3 Scale = Data.worldTrans.scale_ * 100 ;
+				Vector3 Trans_ = MyMath::GetWorldTransform(Data.worldTrans.matWorld_) + Vector3(0,-Scale.y,0);
+				ParticleEditor::AddCollision(Trans_,Scale);
 			}
 			else if ( fileName == "Manshon" )
 			{
 				TouchableObject::Create(model,Data.worldTrans,COLLISION_ATTR_LANDSHAPE);
 				Vector3 Scale = Data.worldTrans.scale_;
-				Scale.y = Data.worldTrans.scale_.y;
-				ParticleEditor::AddCollision(MyMath::GetWorldTransform(Data.worldTrans.matWorld_),Scale);
+				Vector3 Trans_ = MyMath::GetWorldTransform(Data.worldTrans.matWorld_) + Vector3(0,Scale.y,0);
+				ParticleEditor::AddCollision(Trans_,Scale);
 			}
 			else if (fileName == "srop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
