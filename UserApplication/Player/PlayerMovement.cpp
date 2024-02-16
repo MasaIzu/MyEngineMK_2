@@ -208,7 +208,6 @@ void PlayerMovement::PlayerAngle(const bool& isAtack,const bool& isBladeAtack,co
 		PlayerAngleSetter(playerMoveRot.Front);
 	}
 	CheckSliding();
-
 }
 
 void PlayerMovement::CheckSliding()

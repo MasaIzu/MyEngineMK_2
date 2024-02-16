@@ -11,6 +11,7 @@
 #include "MiddleBossEnemy.h"
 #include "ClearUI.h"
 #include "LightData.h"
+#include "ParticleEditor.h"
 
 // 中ボスシーン
 class MediumBossStage : public BaseScene
@@ -70,6 +71,7 @@ private:
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 	std::unique_ptr<ClearUI> clearUI;
+	std::unique_ptr<ParticleEditor> DustParticle;
 
 	bool VsBoss = false;
 	bool isLockOn = false;

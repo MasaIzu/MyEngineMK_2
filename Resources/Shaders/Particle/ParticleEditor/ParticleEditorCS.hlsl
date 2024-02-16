@@ -310,10 +310,10 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         float RandomAngleX = (Rand(seed, RadX, RandomAngleMin) - (RadX / 2)) / 100;
         float4 rotationX = QuaternionFromAxisAngle(float3(1, 0, 0), RandomAngleX);
         
-        float RandomAngleY = (Rand(seed, RadY, RandomAngleMin) - (RadY / 2)) / 100;
+        float RandomAngleY = (Rand(indexAdd, RadY, RandomAngleMin) - (RadY / 2)) / 100;
         float4 rotationY = QuaternionFromAxisAngle(float3(0, 1, 0), RandomAngleY);
         
-        float RandomAngleZ = (Rand(seed, RadZ, RandomAngleMin) - (RadZ / 2)) / 100;
+        float RandomAngleZ = (Rand(indexAdd2, RadZ, RandomAngleMin) - (RadZ / 2)) / 100;
         float4 rotationZ = QuaternionFromAxisAngle(float3(0, 0, 1), RandomAngleZ);
         
         float3 RotVelocity = RotateVectorByQuaternion(velocity, rotationX);
@@ -437,6 +437,11 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
         
         NowPosition += GenerateRandomPointInTetrahedron(seed, indexAdd, indexAdd2, indexAdd3, A, B, C, D);
         NowPosition *= ShapeScale.xyz;
+    }
+    else
+    {
+        //float3 RandomSeedF3 = (seed, indexAdd, indexAdd2);
+        //NowPosition += RandomPointInSphere(Width, RandomSeedF3);
     }
     
     gParticles[index].MaxLifeTime = gParticles[index].lifeTime;

@@ -52,6 +52,10 @@ void MediumBossStage::Initialize()
 
 	clearUI = std::make_unique<ClearUI>();
 	clearUI->Initialize();
+
+	DustParticle = std::make_unique<ParticleEditor>();
+	DustParticle->Initialize("FieldParticle");
+	DustParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 void MediumBossStage::Update()
@@ -172,7 +176,7 @@ void MediumBossStage::Draw()
 
 	middleBossEnemy->ParticleDraw(*viewProjection_.get());
 	player_->ParticleDraw();
-
+	DustParticle->Draw(*viewProjection_.get());
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
@@ -191,6 +195,7 @@ void MediumBossStage::CSUpdate()
 {
 	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
+	DustParticle->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),static_cast< uint32_t >( true ),static_cast<uint32_t>(middleBossEnemy->GetIsUltChargeFin()),middleBossEnemy->GetUltPreparationPosition(),middleBossEnemy->GetUltParticleSpeed());
 }
 
 bool MediumBossStage::IsBreak()

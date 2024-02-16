@@ -136,33 +136,33 @@ void Player::Update()
 
 	if ( isAlive )
 	{
-		////攻撃
-		//if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
-		//{
-		//	isAttack = true;
-		//}
-		//if ( isBladeAttacking == false )
-		//{
-		//	if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) || input_->ButtonInput(RT) )
-		//	{
-		//		isBladeAttack = true;
-		//	}
-		//}
-		//if ( input_->PushKey(DIK_E) || input_->PButtonTrigger(LB) )
-		//{
-		//	isMissileAttack = true;
-		//}
+		//攻撃
+		if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
+		{
+			isAttack = true;
+		}
+		if ( isBladeAttacking == false )
+		{
+			if ( input_->MouseInputTrigger(static_cast< int >( Numbers::One )) || input_->ButtonInput(RT) )
+			{
+				isBladeAttack = true;
+			}
+		}
+		if ( input_->PushKey(DIK_E) || input_->PButtonTrigger(LB) )
+		{
+			isMissileAttack = true;
+		}
 
 		//回転させる
 		PlayerRot(isAttack,isBladeAttacking,isMissileAttack);
 
-		//playerWorldTrans.translation_ += playerMovement->Move(playerWorldTrans,onGround,isBladeAttacking,isAlive);
 		playerStateNeedMaterial.worldTransform = playerWorldTrans;
 		playerStateNeedMaterial.isAlive = isAlive;
 		playerStateNeedMaterial.onGround = onGround;
 		playerStateNeedMaterial.isBladeAttack = isBladeAttacking;
+		//playerWorldTrans.translation_ += playerMovement->Move(playerStateNeedMaterial);
 
-		state_->Update(this,EnemyPos_);
+		state_->Update(this,playerMovement.get());
 
 		if ( isCameraModeNotFree == true )
 		{
@@ -481,11 +481,11 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		{
 			if ( isAttack )
 			{
-				/*playerNormalGun->ShotBullet(EnemyPos);*/
+				playerNormalGun->ShotBullet(EnemyPos_);
 			}
 			if ( isMissileAttack )
 			{
-				/*playerExplosionGun->ShotBullet(EnemyPos);*/
+				playerExplosionGun->ShotBullet(EnemyPos_);
 			}
 		}
 	}
@@ -497,11 +497,11 @@ void Player::PlayerAttack(const Vector3& EnemyPos,bool& LockOn)
 		{
 			if ( isAttack )
 			{
-				/*playerNormalGun->ShotBullet(TargetPosition);*/
+				playerNormalGun->ShotBullet(EnemyPos_);
 			}
 			if ( isMissileAttack )
 			{
-				/*playerExplosionGun->ShotBullet(TargetPosition);*/
+				playerExplosionGun->ShotBullet(EnemyPos_);
 			}
 		}
 	}

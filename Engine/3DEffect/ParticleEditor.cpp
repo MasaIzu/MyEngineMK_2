@@ -702,6 +702,10 @@ void ParticleEditor::EditUpdate()
 					ImGui::SliderFloat("ShapeScaleY",&sendParameters.ShapeScale[ 1 ],0.0f,100.0f);
 					ImGui::SliderFloat("ShapeScaleZ",&sendParameters.ShapeScale[ 2 ],0.0f,100.0f);
 				}
+				else if ( sendParameters.ShapeNumber == 3 )
+				{
+					ImGui::Text("Making");
+				}
 
 				ImGui::TreePop();
 			}
@@ -758,8 +762,8 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
 				if ( sendParameters.RandomLife )
 				{
-					ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,300);
-					ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,300);
+					ImGui::SliderFloat("LifeMin",&sendParameters.RandomLifeMinMax[ 0 ],1,500);
+					ImGui::SliderFloat("LifeMax",&sendParameters.RandomLifeMinMax[ 1 ],2,500);
 					if ( sendParameters.RandomLifeMinMax[ 0 ] >= sendParameters.RandomLifeMinMax[ 1 ] )
 					{
 						sendParameters.RandomLifeMinMax[ 0 ] = sendParameters.RandomLifeMinMax[ 1 ] - 1.0f;
@@ -957,6 +961,39 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vecto
 {
 	shaderDetailParameters.StartPos = StartPos;
 	shaderDetailParameters.Shot = isParticleActive;
+	CSCmd(commandList);
+}
+
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const Vector4& EndPos)
+{
+	shaderDetailParameters.EndPos = EndPos;
+	shaderDetailParameters.Shot = isParticleActive;
+	shaderDetailParameters.EndPointActive = isParticleActive;
+	CSCmd(commandList);
+}
+
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive, const Vector4& EndPos)
+{
+	shaderDetailParameters.EndPos = EndPos;
+	shaderDetailParameters.Shot = isParticleActive;
+	shaderDetailParameters.EndPointActive = isEndPointActive;
+	CSCmd(commandList);
+}
+
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive,const Vector4& EndPos,const float& speed)
+{
+	shaderDetailParameters.EndPos = EndPos;
+	shaderDetailParameters.Shot = isParticleActive;
+	shaderDetailParameters.EndPointActive = isEndPointActive;
+	if ( isEndPointActive )
+	{
+		shaderDetailParameters.RandomSpeed = false;
+	}
+	else
+	{
+		shaderDetailParameters.RandomSpeed = true;
+	}
+	shaderDetailParameters.Speed = speed;
 	CSCmd(commandList);
 }
 

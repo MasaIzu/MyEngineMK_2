@@ -165,20 +165,25 @@ float3 GenerateRandomPointInTetrahedron(uint seed, uint seed2, uint seed3, uint 
     return A * r1 + B * r2 + C * r3 + D * r4;
 }
 
-// ランダムな点を生成する関数
-float3 GenerateRandomPointInSphere(float3 center, float radius, float2 randomSeed)
+float cubicRoot(float x)
 {
-    // 乱数を生成
-    float theta = RandFloat2(randomSeed) * 2.0 * 3.14159265358979323846; // 方位角
-    float phi = acos(2.0 * RandFloat2(randomSeed + 1.0) - 1.0); // 傾斜角
-    float r = (RandFloat2(randomSeed + 2.0)) * radius; // 立方根を取ることで球内に均等に分布
-    
-    // 球座標系から直交座標系への変換
-    float x = center.x + r * sin(phi) * cos(theta);
-    float y = center.y + r * sin(phi) * sin(theta);
-    float z = center.z + r * cos(phi);
+    return pow(x, 1.0 / 3.0);
+}
 
-    return float3(x, y, z);
+// 単位球内のランダムな点を生成する関数
+float3 RandomPointInSphere(float radius, float3 seed)
+{
+    float u = RandFloat2(seed.xy);
+    float v = RandFloat2(seed.yz);
+    float theta = u * 2.0 * 3.14159265; // 0 から 2π
+    float phi = acos(2.0 * v - 1.0); // 0 から π
+
+    // 球座標系から直交座標系への変換
+    float x = sin(phi) * cos(theta);
+    float y = sin(phi) * sin(theta);
+    float z = cos(phi);
+
+    return float3(x, y, z) * radius; // 単位球のランダムな点
 }
 
 float3 RandomVec3(uint SEED, int MAX, int MIN)

@@ -6,10 +6,14 @@ void PlayerMissileShootingState::Initialize()
 {
 }
 
-void PlayerMissileShootingState::Update(Player* player,const Vector3& EnemyPos)
+void PlayerMissileShootingState::Update(Player* player,PlayerMovement* playerMovement)
 {
-	player->MissileGunShoot(EnemyPos);
-	//player->PlayerMove();
+	//移動クラス
+	player->PlayerMove(playerMovement->Move(player->GetStateMaterial()));
 
 	player->TransitionTo(new PlayerNormalState);
+}
+
+void PlayerMissileShootingState::AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos)
+{
 }

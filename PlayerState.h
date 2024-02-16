@@ -1,6 +1,7 @@
 #pragma once
 #include "WorldTransform.h"
 #include "Input.h"
+#include "PlayerMovement.h"
 
 class Player;
 
@@ -11,8 +12,8 @@ public:
 	std::string GetStateName() {
 		return stateName;
 	};
-	virtual void Update(Player* player,const Vector3& EnemyPos) = 0;
-
+	virtual void Update(Player* player,PlayerMovement* playerMovement) = 0;
+	virtual void AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos) = 0;
 public:
 	bool CanMove() {
 		return canMove_;

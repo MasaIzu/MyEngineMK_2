@@ -12,7 +12,7 @@ void PlayerNormalState::Initialize() {
 	stateName = "NORMAL";
 }
 
-void PlayerNormalState::Update(Player* player,const Vector3& EnemyPos) {
+void PlayerNormalState::Update(Player* player,PlayerMovement* playerMovement) {
 	//攻撃
 	if ( input_->MouseInputing(static_cast< int >( Numbers::Zero )) || input_->ButtonInput(LT) )
 	{
@@ -28,6 +28,10 @@ void PlayerNormalState::Update(Player* player,const Vector3& EnemyPos) {
 	}
 
 	//移動クラス
-	std::unique_ptr<PlayerMovement> playerMovement = std::make_unique<PlayerMovement>();
 	player->PlayerMove(playerMovement->Move(player->GetStateMaterial()));
+}
+
+void PlayerNormalState::AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos)
+{
+	
 }

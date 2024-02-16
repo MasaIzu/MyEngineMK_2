@@ -94,6 +94,10 @@ MiddleBossEnemy::MiddleBossEnemy()
 	particleEditorRight->Initialize(MaxParticleCountC,false,"EnemyBoost");
 	particleEditorRight->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	UltDustParticle = std::make_unique<ParticleEditor>();
+	UltDustParticle->Initialize("EnemyUltCharge");
+	UltDustParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -249,6 +253,7 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 
 		particleEditorLeft->Draw(viewProjection_);
 		particleEditorRight->Draw(viewProjection_);
+		UltDustParticle->Draw(viewProjection_);
 	}
 
 	Explosion::PreDraw(commandList);
@@ -462,6 +467,8 @@ void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 
 	particleEditorLeft->CSUpdate(cmdList,EnemyBoostLeftPos.BoostStartPos[ 1 ],EnemyBoostLeftPos.BoostEndPos[ 0 ]);
 	particleEditorRight->CSUpdate(cmdList,EnemyBoostRightPos.BoostStartPos[ 1 ],EnemyBoostRightPos.BoostEndPos[ 0 ]);
+	Vector3 ParticleEndPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);
+	UltDustParticle->CSUpdate(cmdList,isUltChargeFin,isUltPreparation,MyMath::Vec3ToVec4(ParticleEndPos));
 }
 
 void MiddleBossEnemy::Timer()
@@ -486,20 +493,23 @@ void MiddleBossEnemy::AliveUpdate()
 	{
 		Timer();
 
-		if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
+		if ( isUltTime == false )
 		{
-			isAttack = false;
-		}
-		if ( isAttack )
-		{
-			if ( BulletCoolTime == FloatNumber(fNumbers::fZero) )
+			if ( KeepAttackingTime == FloatNumber(fNumbers::fZero) )
 			{
-				Attack();
+				isAttack = false;
 			}
-		}
-		else
-		{
-			ThinkingTime();
+			if ( isAttack )
+			{
+				if ( BulletCoolTime == FloatNumber(fNumbers::fZero) )
+				{
+					Attack();
+				}
+			}
+			else
+			{
+				ThinkingTime();
+			}
 		}
 
 		if ( isMoveing )
@@ -575,6 +585,24 @@ void MiddleBossEnemy::AliveUpdate()
 			}
 			OldPos = BossWorldTrans.translation_;
 		}
+		else if ( attackType == AttackType::UltPreparation )
+		{
+			if ( UltYPos >= BossWorldTrans.translation_.y )
+			{
+				isUltPreparation = true;
+				isUltChargeFin = true;
+				BossWorldTrans.translation_.y += UltYUpPow;
+				if ( UltYPosChargeFinPos <= BossWorldTrans.translation_.y )
+				{
+					isUltChargeFin = false;
+				}
+			}
+			else
+			{
+				attackType = AttackType::PutUltDown;
+				isUltPreparation = false;
+			}
+		}
 
 		if ( isBackSponePos == true )
 		{
@@ -614,6 +642,12 @@ void MiddleBossEnemy::AliveUpdate()
 					MoveingTimer = MaxMoveingTimer;
 					MoveStartPos = BossWorldTrans.translation_;
 					MovePos = BossWorldTrans.translation_;
+					if ( attackType == AttackType::UltPreparationForBack )
+					{
+						isMoveing = false;
+						isUltTime = true;
+						attackType = AttackType::UltPreparation;
+					}
 				}
 			}
 		}
@@ -717,7 +751,7 @@ void MiddleBossEnemy::CheckAttackType()
 
 	if ( MiddleBossHp <= ( MaxMiddleBossHp / 2 ) )
 	{
-		attackType = AttackType::UltPreparation;
+		attackType = AttackType::UltPreparationForBack;
 	}
 
 	if ( attackType == AttackType::Nomal )
@@ -794,7 +828,7 @@ void MiddleBossEnemy::CheckAttackType()
 		}
 
 	}
-	else if ( attackType == AttackType::UltPreparation )
+	else if ( attackType == AttackType::UltPreparationForBack )
 	{
 		// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
 		Vector3 tmp;
@@ -932,4 +966,10 @@ void MiddleBossEnemy::BackStartPoint(const Vector3& tmp)
 Vector3 MiddleBossEnemy::GetPosition() const
 {
 	return MyMath::GetWorldTransform(EnemyHedWorldTrans.matWorld_);
+}
+
+Vector4 MiddleBossEnemy::GetUltPreparationPosition() const
+{
+	Vector3 ParticleEndPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);
+	return MyMath::Vec3ToVec4(ParticleEndPos);
 }

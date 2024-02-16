@@ -26,7 +26,9 @@ private:
 		MoveingAttack,//移動しながら
 		Move,//移動
 		NotAttack,//攻撃しない
+		UltPreparationForBack,//ウルト準備のために戻る
 		UltPreparation,//ウルト準備
+		PutUltDown,//ウルト下ろす
 		Ult//ウルト
 	};
 
@@ -101,6 +103,14 @@ public://Getter
 	//ポジションリターン
 	Vector3 GetPosition() const;
 
+	bool GetIsUltPreparation() const { return isUltPreparation; }
+	bool GetIsUltChargeFin() const { return isUltChargeFin; }
+
+	//ポジションリターン
+	Vector4 GetUltPreparationPosition() const;
+
+	float GetUltParticleSpeed()const {return UltDustParticle->GetShaderDetailParameters().Speed; }
+
 private://const関連
 	static const uint32_t BossEnemyBodyCount = 20;
 
@@ -164,6 +174,7 @@ private://クラス関連
 
 	std::unique_ptr<ParticleEditor> particleEditorLeft;
 	std::unique_ptr<ParticleEditor> particleEditorRight;
+	std::unique_ptr<ParticleEditor> UltDustParticle;
 
 private://イーナムクラス
 
@@ -190,6 +201,9 @@ private://EnemyBossクラス変数
 	bool isDownSpeedFinish = false;
 	bool isTitleBoss = false;
 	bool isLightActive = true;
+	bool isUltTime = false;
+	bool isUltPreparation = false;
+	bool isUltChargeFin = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -259,6 +273,9 @@ private://EnemyBossクラス変数
 	float LightDistance = 100.0f;
 	float RotY = 0.0f;
 	float RotAddY = 0.004f;
+	float UltYPos = 150.0f;
+	float UltYPosChargeFinPos = 100.0f;
+	float UltYUpPow = 0.3f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 	Vector2 LightAngle = { 0.0f,2.0f };

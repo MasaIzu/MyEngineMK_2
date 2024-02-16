@@ -30,3 +30,10 @@ struct PlayerStateNeedMaterial
 	bool isBladeAttack = false;
 	bool isAlive = false;
 };
+
+struct PlayerAttackBool
+{
+	bool isNormalAttack = false;
+	bool isBladeAttack = false;
+	bool isMissileAttack = false;
+};

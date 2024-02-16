@@ -311,6 +311,21 @@ public: // メンバ関数
 	/// <summary>
 	/// コンピュートシェーダーアップデート
 	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const Vector4& EndPos);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive,const Vector4& EndPos);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
+	void CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive,const Vector4& EndPos,const float& speed);
+
+	/// <summary>
+	/// コンピュートシェーダーアップデート
+	/// </summary>
 	void CSUpdate(ID3D12GraphicsCommandList* commandList,const Vector4& StartPos,const Vector4& EndPos);
 
 	/// <summary>
@@ -336,6 +351,8 @@ public: // メンバ関数
 	size_t GetParticlesListSize() {
 		return Particles.size();
 	}
+
+	ShaderDetailPointGenerationParameters GetShaderDetailParameters() const { return shaderDetailParameters; }
 
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
