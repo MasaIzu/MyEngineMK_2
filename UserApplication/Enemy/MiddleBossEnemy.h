@@ -29,7 +29,8 @@ private:
 		UltPreparationForBack,//ウルト準備のために戻る
 		UltPreparation,//ウルト準備
 		PutUltDown,//ウルト下ろす
-		Ult//ウルト
+		Ult,//ウルト
+		Back//戻る
 	};
 
 public://基本関数
@@ -175,6 +176,8 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> particleEditorLeft;
 	std::unique_ptr<ParticleEditor> particleEditorRight;
 	std::unique_ptr<ParticleEditor> UltDustParticle;
+	std::unique_ptr<ParticleEditor> EnemyUltPreparationDownParticle;
+	std::unique_ptr<ParticleEditor> EnemyUltDownExplosion;
 
 private://イーナムクラス
 
@@ -204,6 +207,8 @@ private://EnemyBossクラス変数
 	bool isUltTime = false;
 	bool isUltPreparation = false;
 	bool isUltChargeFin = false;
+	bool isUltDown = false;
+	bool isUltExplosion = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -211,7 +216,7 @@ private://EnemyBossクラス変数
 	uint32_t MaxBulletCoolTime = 0;
 	uint32_t AttackCooltime = 0;
 	uint32_t AttackTypeCount = static_cast<uint32_t>(AttackType::Move);
-	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack) + 1;
+	uint32_t AllAttackTypeCount = static_cast<uint32_t>(AttackType::NotAttack);
 	uint32_t KeepAttackingTime = 0;
 	uint32_t RotTime = 0;
 	uint32_t mveType = 0;
@@ -243,6 +248,8 @@ private://EnemyBossクラス変数
 	uint32_t DieMotionCount = 0;
 	uint32_t DieMaxMotionCount = 150;
 	uint32_t MaxParticleCountC = 300000;
+	uint32_t ExplosionMaxTime = 300;
+	uint32_t ExplosionTime = 0;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
@@ -276,6 +283,8 @@ private://EnemyBossクラス変数
 	float UltYPos = 150.0f;
 	float UltYPosChargeFinPos = 100.0f;
 	float UltYUpPow = 0.3f;
+	float UltDownYPos = 3.0f;
+	float UltDownYPow = 0.4f;
 
 	Vector2 HpPosition = { 500.0f,45.0f };
 	Vector2 LightAngle = { 0.0f,2.0f };
@@ -298,6 +307,7 @@ private://EnemyBossクラス変数
 	Vector3 EnemyBoostRightPosLight;
 	Vector3 DieMotionDown = { 0.0f,0.15f,0.0f };
 	Vector3 LightAtten = { 0.0f,0.0f,0.1f };
+	Vector3 UltPos;
 
 	Vector4 LightDir = { 0,1,0,0 };
 

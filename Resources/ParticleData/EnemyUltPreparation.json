@@ -2,7 +2,7 @@
     "Resources/ParticleData/EnemyUltPreparation.json": {
         "StartPos": {
             "value0": 0.0,
-            "value1": 122.58300018310547,
+            "value1": 2.5820000171661379,
             "value2": 0.0,
             "value3": 0.0
         },
@@ -19,10 +19,10 @@
             "value3": 1.0
         },
         "EndColor": {
-            "value0": 0.032968100160360339,
-            "value1": 0.6060311198234558,
-            "value2": 0.9607843160629273,
-            "value3": 1.0
+            "value0": 0.06223570182919502,
+            "value1": 0.5839171409606934,
+            "value2": 0.906862735748291,
+            "value3": 0.0
         },
         "Angle": {
             "value0": 0.0,
@@ -36,28 +36,28 @@
         "RandomLife": true,
         "RandomSpeed": true,
         "RandomScale": false,
-        "Speed": 0.5370000004768372,
+        "Speed": 0.0,
         "LerpStrength": 0.05000000074505806,
-        "Scale": 1.0,
+        "Scale": 2.200000047683716,
         "ScaleTinker": 0.0,
         "MaxLife": 58.073001861572269,
-        "MaxParticleCount": 1000,
+        "MaxParticleCount": 10000,
         "AdditiveSynthesis": false,
         "RandomLifeMinMax": {
             "value0": 44.86899948120117,
-            "value1": 126.26200103759766
+            "value1": 173.31199645996095
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,
-            "value1": 9.107000350952149
+            "value1": 3.6600000858306886
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 5.586999893188477,
+        "SpeedDivideSize": 29.347000122070314,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.21299999952316285,
+        "GravityStrength": 0.03700000047683716,
         "Interlocking": false,
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,

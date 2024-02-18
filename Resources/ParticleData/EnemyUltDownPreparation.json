@@ -36,7 +36,7 @@
         "RandomLife": true,
         "RandomSpeed": true,
         "RandomScale": true,
-        "Speed": 1.5460000038146973,
+        "Speed": 0.4659999907016754,
         "LerpStrength": 0.05000000074505806,
         "Scale": 30.0,
         "ScaleTinker": 0.0,
@@ -48,8 +48,8 @@
             "value1": 120.00800323486328
         },
         "RandomSpeedMinMax": {
-            "value0": 7.880000114440918,
-            "value1": 10.0
+            "value0": 3.8399999141693117,
+            "value1": 7.507999897003174
         },
         "RandomScaleMinMax": {
             "value0": 1.0,

@@ -98,6 +98,14 @@ MiddleBossEnemy::MiddleBossEnemy()
 	UltDustParticle->Initialize("EnemyUltCharge");
 	UltDustParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
+	EnemyUltPreparationDownParticle = std::make_unique<ParticleEditor>();
+	EnemyUltPreparationDownParticle->Initialize("EnemyUltPreparation");
+	EnemyUltPreparationDownParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	EnemyUltDownExplosion = std::make_unique<ParticleEditor>();
+	EnemyUltDownExplosion->Initialize("EnemyUltDownPreparation");
+	EnemyUltDownExplosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
 	for ( auto&& old : oldAttackType )
 	{
 		old = AttackType::NotAttack;
@@ -254,6 +262,8 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 		particleEditorLeft->Draw(viewProjection_);
 		particleEditorRight->Draw(viewProjection_);
 		UltDustParticle->Draw(viewProjection_);
+		EnemyUltPreparationDownParticle->Draw(viewProjection_);
+		EnemyUltDownExplosion->Draw(viewProjection_);
 	}
 
 	Explosion::PreDraw(commandList);
@@ -469,6 +479,8 @@ void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	particleEditorRight->CSUpdate(cmdList,EnemyBoostRightPos.BoostStartPos[ 1 ],EnemyBoostRightPos.BoostEndPos[ 0 ]);
 	Vector3 ParticleEndPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);
 	UltDustParticle->CSUpdate(cmdList,isUltChargeFin,isUltPreparation,MyMath::Vec3ToVec4(ParticleEndPos));
+	EnemyUltPreparationDownParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(UltPos),static_cast<uint32_t>(isUltDown));
+	EnemyUltDownExplosion->CSUpdate(cmdList,MyMath::Vec3ToVec4(UltPos),static_cast< uint32_t >( isUltExplosion ));
 }
 
 void MiddleBossEnemy::Timer()
@@ -601,6 +613,44 @@ void MiddleBossEnemy::AliveUpdate()
 			{
 				attackType = AttackType::PutUltDown;
 				isUltPreparation = false;
+				isUltDown = true;
+				UltPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);
+			}
+		}
+		else if ( attackType == AttackType::PutUltDown )
+		{
+			if ( UltPos.y >= UltDownYPos )
+			{
+				UltPos.y -= UltDownYPow;
+			}
+			else
+			{
+				isUltDown = false;
+				isUltExplosion = true;
+				attackType = AttackType::Ult;
+			}
+		}
+		else if ( attackType == AttackType::Ult )
+		{
+			if ( ExplosionTime < ExplosionMaxTime )
+			{
+				ExplosionTime++;
+			}
+			else
+			{
+				attackType = AttackType::Back;
+				isUltExplosion = false;
+			}
+		}
+		else if ( attackType == AttackType::Back )
+		{
+			if ( BonePos.y < BossWorldTrans.translation_.y )
+			{
+				BossWorldTrans.translation_.y -= UltYUpPow;
+			}
+			else
+			{
+				attackType = AttackType::Move;
 			}
 		}
 
