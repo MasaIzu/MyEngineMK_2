@@ -13,6 +13,7 @@ const unsigned short COLLISION_ATTR_INVINCIBLE = 0b111;//無敵
 
 const unsigned short COLLISION_ATTR_ENEMY_ATTACK = 0b1000;//敵の攻撃
 const unsigned short COLLISION_ATTR_ENEMY_BULLET_ATTACK = 0b1001;//敵の弾の攻撃
+const unsigned short COLLISION_ATTR_ENEMY_ULT = 0b1010;//敵ULT
 
 const unsigned short COLLISION_ATTR_CAMERA = 0b1010;//カメラ
 const unsigned short COLLISION_ATTR_FIRSTRAIL = 0b1011;//スロープ

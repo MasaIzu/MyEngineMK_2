@@ -39,6 +39,7 @@ struct LevelData {
 struct ModelData {
 	Model* model;
 	WorldTransform worldTrans;
+	std::string ModelName = "";
 };
 
 // レベルデータの生成
@@ -72,7 +73,8 @@ public:// メンバ関数
 	std::list<TutorialEnemy*> GetTutorialEnemyList() { return tutorialEnemyList; }
 	//遠距離エネミーのリスト
 	std::list<BulletShotEnemy*> GetBulletShotEnemyList() { return billetShotEnemyList; }
-	//最初のスプライン
+	Vector3 BilPosition(const uint32_t& BillCount){return BillPos[ BillCount ]; }
+		//最初のスプライン
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
 	//二つ目のスプライン
 	std::vector<Vector3> GetSpline() { return SecondsplineVec; }
@@ -109,4 +111,8 @@ private:
 	std::unique_ptr<Model> modelGoal;
 	std::unique_ptr<Model> modelNormalEnemy;
 	std::unique_ptr<Model> modelBulletShotEnemy;
+
+	std::vector<Vector3> BillPos;
+
+
 };

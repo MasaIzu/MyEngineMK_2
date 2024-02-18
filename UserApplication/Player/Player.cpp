@@ -700,7 +700,11 @@ void Player::CheckHitCollision()
 		playerWorldTrans.translation_ += PlayerCollider->GetRejectVec();
 		PlayerCollider->ResetSphere();
 	}
-
+	if ( PlayerCollider->GetIsUltHitHit() )
+	{
+		isTakeMissileDamages = true;
+		PlayerCollider->ResetUlt();
+	}
 }
 
 void Player::HPUpdate()

@@ -271,6 +271,7 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			Data.model = model;
 			Data.worldTrans = Trans;
 			Data.worldTrans.TransferMatrix();
+			Data.ModelName = fileName;
 			NewLoadObjects.push_back(Data);
 
 			if (fileName == "cube") {
@@ -292,6 +293,7 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				Vector3 Scale = Data.worldTrans.scale_;
 				Vector3 Trans_ = MyMath::GetWorldTransform(Data.worldTrans.matWorld_) + Vector3(0,Scale.y,0);
 				ParticleEditor::AddCollision(Trans_,Scale);
+				BillPos.push_back(Data.worldTrans.translation_);
 			}
 			else if (fileName == "srop") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);

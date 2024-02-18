@@ -121,9 +121,10 @@ void MiddleBossEnemy::Initialize(Player* Player)
 {
 	this->player = Player;
 
-	DebugWorldTrans.scale_ = Vector3(Radius,Radius,Radius);
-	DebugWorldTrans.Initialize();
-	BossWorldTrans.TransferMatrix();
+	UltWorldTrans.scale_ = Vector3(UltRadius,UltRadius,UltRadius);
+	UltWorldTrans.Initialize();
+	UltWorldTrans.TransferMatrix();
+
 	MiddleBossCollider[ 0 ] = new SphereCollider(Vector4(FloatNumber(fNumbers::fZero),Radius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero)),Radius);
 	CollisionManager::GetInstance()->AddCollider(MiddleBossCollider[ 0 ]);
 	MiddleBossCollider[ 0 ]->SetAttribute(COLLISION_ATTR_ENEMYS);
@@ -136,6 +137,11 @@ void MiddleBossEnemy::Initialize(Player* Player)
 		MiddleBossCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMYS);
 		MiddleBossCollider[ i ]->Update(BossWorldTrans.matWorld_);
 	}
+
+	MiddleBossUltCollider = new SphereCollider(Vector4(FloatNumber(fNumbers::fZero),UltRadius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero)),UltRadius);
+	CollisionManager::GetInstance()->AddCollider(MiddleBossUltCollider);
+	MiddleBossUltCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
+	MiddleBossUltCollider->Update(BossWorldTrans.matWorld_);
 
 }
 
@@ -213,8 +219,10 @@ void MiddleBossEnemy::Update()
 	ColTransUpdate();//当たり判定の場所アップデート
 	ColUpdate();//当たり判定のアップデート
 
-	DebugWorldTrans.translation_ = BossWorldTrans.translation_ - Coladjustment;
-	DebugWorldTrans.TransferMatrix();
+	UltWorldTrans.translation_ = BossWorldTrans.translation_;
+	UltWorldTrans.translation_.y = UltDownYPos;
+	UltWorldTrans.scale_ = Vector3(UltRadius,UltRadius,UltRadius);
+	UltWorldTrans.TransferMatrix();
 
 	particleEditorLeft->EditUpdate();
 	particleEditorRight->EditUpdate();
@@ -222,7 +230,7 @@ void MiddleBossEnemy::Update()
 
 void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 {
-	//model_->Draw(DebugWorldTrans,viewProjection_);
+	//model_->Draw(UltWorldTrans,viewProjection_);
 	//model_->Draw(EnemyNecWorldTrans,viewProjection_);
 	//model_->Draw(EnemyHedWorldTrans,viewProjection_);
 
@@ -627,6 +635,7 @@ void MiddleBossEnemy::AliveUpdate()
 			{
 				isUltDown = false;
 				isUltExplosion = true;
+				MiddleBossUltCollider->SetAttribute(COLLISION_ATTR_ENEMY_ULT);
 				attackType = AttackType::Ult;
 			}
 		}
@@ -635,21 +644,28 @@ void MiddleBossEnemy::AliveUpdate()
 			if ( ExplosionTime < ExplosionMaxTime )
 			{
 				ExplosionTime++;
+
+				if ( UltMaxRadius > UltRadius )
+				{
+					UltRadius += UltAddRadiusPow;
+				}
 			}
 			else
 			{
+				MiddleBossUltCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 				attackType = AttackType::Back;
 				isUltExplosion = false;
 			}
 		}
 		else if ( attackType == AttackType::Back )
 		{
-			if ( BonePos.y < BossWorldTrans.translation_.y )
+			if ( EndPos.y < BossWorldTrans.translation_.y )
 			{
 				BossWorldTrans.translation_.y -= UltYUpPow;
 			}
 			else
 			{
+				isUltTime = false;
 				attackType = AttackType::Move;
 			}
 		}
@@ -799,9 +815,13 @@ void MiddleBossEnemy::CheckAttackType()
 		attackType = static_cast< AttackType >( RandomType(AttackCount) );
 	}
 
-	if ( MiddleBossHp <= ( MaxMiddleBossHp / 2 ) )
+	if ( isUltShoot == false )
 	{
-		attackType = AttackType::UltPreparationForBack;
+		if ( MiddleBossHp <= ( MaxMiddleBossHp / 2 ) )
+		{
+			isUltShoot = true;
+			attackType = AttackType::UltPreparationForBack;
+		}
 	}
 
 	if ( attackType == AttackType::Nomal )
@@ -951,6 +971,8 @@ void MiddleBossEnemy::ColUpdate()
 	MiddleBossCollider[ 6 ]->Update(EnemyRightMissileWorldTrans.matWorld_);
 	MiddleBossCollider[ 7 ]->Update(EnemyNecWorldTrans.matWorld_);
 	MiddleBossCollider[ 8 ]->Update(EnemyHedWorldTrans.matWorld_);
+
+	MiddleBossUltCollider->Update(UltWorldTrans.matWorld_,UltRadius);
 }
 
 void MiddleBossEnemy::DieMotionUpdate()
@@ -1016,6 +1038,11 @@ void MiddleBossEnemy::BackStartPoint(const Vector3& tmp)
 Vector3 MiddleBossEnemy::GetPosition() const
 {
 	return MyMath::GetWorldTransform(EnemyHedWorldTrans.matWorld_);
+}
+
+Vector3 MiddleBossEnemy::GetEndPos() const
+{
+	return EndPos;
 }
 
 Vector4 MiddleBossEnemy::GetUltPreparationPosition() const

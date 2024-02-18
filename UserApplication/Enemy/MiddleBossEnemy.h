@@ -104,6 +104,8 @@ public://Getter
 	//ポジションリターン
 	Vector3 GetPosition() const;
 
+	Vector3 GetEndPos() const;
+
 	bool GetIsUltPreparation() const { return isUltPreparation; }
 	bool GetIsUltChargeFin() const { return isUltChargeFin; }
 
@@ -150,7 +152,7 @@ private://クラス関連
 	WorldTransform EnemyNecWorldTrans;
 	WorldTransform EnemyHedWorldTrans;
 
-	WorldTransform DebugWorldTrans;
+	WorldTransform UltWorldTrans;
 
 	//スプライン
 	std::unique_ptr<SplinePosition> MoveSpline;//途中のスプライン
@@ -164,6 +166,7 @@ private://クラス関連
 	std::unique_ptr<EnemyHP3DUI> enemyHP3DUI;
 	// コライダー
 	std::array<BaseCollider*,ColCount> MiddleBossCollider;
+	BaseCollider* MiddleBossUltCollider;
 
 	//プレイヤーのダメージ
 	PlayerAttackDamage Damage;
@@ -209,6 +212,7 @@ private://EnemyBossクラス変数
 	bool isUltChargeFin = false;
 	bool isUltDown = false;
 	bool isUltExplosion = false;
+	bool isUltShoot = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -257,6 +261,9 @@ private://EnemyBossクラス変数
 	float MovieUpdateTimes = 0.0f;
 	float MaxMovieUpdateTimes = 120.0f;
 	float Radius = 12.0f;
+	float UltRadius = 20.0f;
+	float UltMaxRadius = 300.0f;
+	float UltAddRadiusPow = 5.0f;
 	float Angle = 0.0f;
 	float AngleSize = 0.0f;
 	float RotSpeed = 1.0f;
