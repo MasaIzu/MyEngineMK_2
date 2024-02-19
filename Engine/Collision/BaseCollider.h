@@ -46,7 +46,10 @@ public:
 	//最後のスプラインの場所に当たった
 	inline bool GetFinalSplineHit() { return isHitFinalSplineRail; }
 	//Ultにあたった
-	inline bool GetIsUltHitHit() { return isUltHit; }
+	inline bool GetIsUltHit() { return isUltHit; }
+	//UltSafeZoneにあたった
+	inline bool GetIsUltSafeZoneHit() { return isUltSafeZoneHit; }
+
 	//排斥ベクトルの位置ゲット
 	inline Vector3 GetRejectVec() { return rejectVec; }
 	//inrerベクトルの位置ゲット
@@ -121,6 +124,14 @@ public:
 	}
 
 	/// <summary>
+	/// ヒットしたのをリセット
+	/// </summary>
+	/// <param name="attribute">当たり判定属性</param>
+	inline void ResetUltSafeZone() {
+		isUltSafeZoneHit = false;
+	}
+
+	/// <summary>
 	/// 排斥ベクトルのヒットをリセット
 	/// </summary>
 	/// <param name="attribute">当たり判定属性</param>
@@ -162,6 +173,7 @@ protected:
 	bool isHitSphere = false;
 	bool isEnemyHittingEachOther = false;//敵同士が当たっている場合
 	bool isUltHit = false;
+	bool isUltSafeZoneHit = false;
 	bool isSphereMeshHit = false;
 	bool isHitFirstSplineRail = false;
 	bool isHitFinalSplineRail = false;

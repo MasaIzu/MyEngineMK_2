@@ -112,6 +112,16 @@ void CollisionManager::CheckAllCollisions()
 							colB->isUltHit = true;
 						}
 					}
+					else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_ENEMY_ULTSAFEZONE ||
+						colA->attribute == COLLISION_ATTR_ENEMY_ULTSAFEZONE && colB->attribute == COLLISION_ATTR_ALLIES )
+					{
+						if ( Collision::CheckSphere2Sphere(*SphereA,*SphereB,&inter) )
+						{
+							HitWorldPos = colB->GetWorldPos();
+							colA->isUltSafeZoneHit = true;
+							colB->isUltSafeZoneHit = true;
+						}
+					}
 					else if ( colA->attribute == COLLISION_ATTR_MELEEATTACK && colB->attribute == COLLISION_ATTR_ENEMYS ||
 						colA->attribute == COLLISION_ATTR_ENEMYS && colB->attribute == COLLISION_ATTR_MELEEATTACK )
 					{
@@ -176,7 +186,7 @@ void CollisionManager::CheckAllCollisions()
 							colB->isSphereMeshHit = true;
 						}
 					}
-					else if ( colA->attribute == COLLISION_ATTR_RAIL && colB->attribute == COLLISION_ATTR_ALLIES )
+					/*else if ( colA->attribute == COLLISION_ATTR_RAIL && colB->attribute == COLLISION_ATTR_ALLIES )
 					{
 						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
 						{
@@ -196,7 +206,7 @@ void CollisionManager::CheckAllCollisions()
 						{
 							colB->isHitFinalSplineRail = true;
 						}
-					}
+					}*/
 				}
 				else if ( colA->GetShapeType() == COLLISIONSHAPE_SPHERE && colB->GetShapeType() == COLLISIONSHAPE_MESH )
 				{
@@ -224,7 +234,7 @@ void CollisionManager::CheckAllCollisions()
 							colA->isSphereMeshHit = true;
 						}
 					}
-					else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_RAIL )
+					/*else if ( colA->attribute == COLLISION_ATTR_ALLIES && colB->attribute == COLLISION_ATTR_RAIL )
 					{
 						if ( meshCollider->CheckCollisionSphere(*sphere,&inter,nullptr) )
 						{
@@ -244,7 +254,7 @@ void CollisionManager::CheckAllCollisions()
 						{
 							colA->isHitFinalSplineRail = true;
 						}
-					}
+					}*/
 				}
 			}
 		}

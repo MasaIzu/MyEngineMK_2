@@ -593,8 +593,12 @@ void MiddleBossEnemy::AliveUpdate()
 							}
 							MoveStartPos = BossWorldTrans.translation_;
 
-							missileGunLeft->ShotBullet();
-							missileGunRight->ShotBullet();
+							if ( !isDead )
+							{
+								missileGunLeft->ShotBullet();
+								missileGunRight->ShotBullet();
+							}
+							
 						}
 						else
 						{
@@ -610,6 +614,7 @@ void MiddleBossEnemy::AliveUpdate()
 			if ( UltYPos >= BossWorldTrans.translation_.y )
 			{
 				isUltPreparation = true;
+				isUlting = true;
 				isUltChargeFin = true;
 				BossWorldTrans.translation_.y += UltYUpPow;
 				if ( UltYPosChargeFinPos <= BossWorldTrans.translation_.y )
@@ -655,6 +660,7 @@ void MiddleBossEnemy::AliveUpdate()
 				MiddleBossUltCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 				attackType = AttackType::Back;
 				isUltExplosion = false;
+				isUlting = false;
 			}
 		}
 		else if ( attackType == AttackType::Back )
@@ -689,8 +695,11 @@ void MiddleBossEnemy::AliveUpdate()
 				if ( BulletCoolTime == 0 )
 				{
 					BulletCoolTime = BackMissileCoolTime;
-					missileGunLeft->ShotBullet();
-					missileGunRight->ShotBullet();
+					if ( !isDead )
+					{
+						missileGunLeft->ShotBullet();
+						missileGunRight->ShotBullet();
+					}
 				}
 			}
 
@@ -764,19 +773,28 @@ void MiddleBossEnemy::Attack()
 {
 	if ( attackType == AttackType::Nomal )
 	{
-		normalGunLeft->ShotBullet(player->GetPlayerPos());
-		normalGunRight->ShotBullet(player->GetPlayerPos());
+		if ( !isDead )
+		{
+			normalGunLeft->ShotBullet(player->GetPlayerPos());
+			normalGunRight->ShotBullet(player->GetPlayerPos());
+		}
 	}
 	else if ( attackType == AttackType::Missile )
 	{
 		BulletCoolTime = MaxBulletCoolTime;
-		missileGunLeft->ShotBullet();
-		missileGunRight->ShotBullet();
+		if ( !isDead )
+		{
+			missileGunLeft->ShotBullet();
+			missileGunRight->ShotBullet();
+		}
 	}
 	else if ( attackType == AttackType::MoveingAttack )
 	{
-		normalGunLeft->ShotBullet(player->GetPlayerPos());
-		normalGunRight->ShotBullet(player->GetPlayerPos());
+		if ( !isDead )
+		{
+			normalGunLeft->ShotBullet(player->GetPlayerPos());
+			normalGunRight->ShotBullet(player->GetPlayerPos());
+		}
 	}
 }
 
@@ -903,7 +921,7 @@ void MiddleBossEnemy::CheckAttackType()
 		// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
 		Vector3 tmp;
 		tmp = EndPos - BossWorldTrans.translation_;
-		float dist = tmp.dot(tmp);
+		//float dist = tmp.dot(tmp);
 		float radius2 = MoveSafeRadius;
 		radius2 *= radius2;
 

@@ -73,7 +73,7 @@ public:// メンバ関数
 	std::list<TutorialEnemy*> GetTutorialEnemyList() { return tutorialEnemyList; }
 	//遠距離エネミーのリスト
 	std::list<BulletShotEnemy*> GetBulletShotEnemyList() { return billetShotEnemyList; }
-	Vector3 BilPosition(const uint32_t& BillCount){return BillPos[ BillCount ]; }
+	Vector3 GetBillPosition(const uint32_t& BillCount){return BillPos[ BillCount ]; }
 		//最初のスプライン
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
 	//二つ目のスプライン

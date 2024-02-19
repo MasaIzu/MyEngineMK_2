@@ -108,7 +108,8 @@ public://Getter
 
 	bool GetIsUltPreparation() const { return isUltPreparation; }
 	bool GetIsUltChargeFin() const { return isUltChargeFin; }
-
+	bool GetIsUlting() const { return isUlting; }
+	bool GetIsUltExplosion() const { return isUltExplosion; }
 	//ポジションリターン
 	Vector4 GetUltPreparationPosition() const;
 
@@ -213,6 +214,7 @@ private://EnemyBossクラス変数
 	bool isUltDown = false;
 	bool isUltExplosion = false;
 	bool isUltShoot = false;
+	bool isUlting = false;
 
 	uint32_t BulletCoolTime = 0;
 	uint32_t MoveingTimer = 0;
@@ -318,7 +320,7 @@ private://EnemyBossクラス変数
 
 	Vector4 LightDir = { 0,1,0,0 };
 
-	AttackType attackType = AttackType::NotAttack;
+	AttackType attackType = AttackType::UltPreparationForBack;
 	std::array<AttackType,AttackedKeepCount>oldAttackType;
 
 	std::vector<Vector3> BackPoints{};

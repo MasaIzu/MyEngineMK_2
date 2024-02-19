@@ -111,6 +111,11 @@ void LightData::UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& c
 	lightGroup->SetCircleShadowUpdate(circleShadow,ShadowNumbar);
 }
 
+void LightData::SetAmbientColor(const float& AmbientColor)
+{
+	lightGroup->SetAmbientColor(AmbientColor);
+}
+
 LightGroup* LightData::GetLightGroupData()
 {
 	return lightGroup;
