@@ -220,7 +220,7 @@ void MediumBossStage::PostEffectDraw()
 
 	//clearUI->Draw();
 
-	//sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 
 	PostEffect::PostDrawScene();
 }
@@ -254,7 +254,7 @@ void MediumBossStage::Draw()
 
 	clearUI->Draw();
 
-	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	//sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 
 void MediumBossStage::Finalize()
