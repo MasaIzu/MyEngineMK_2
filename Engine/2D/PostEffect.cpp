@@ -391,7 +391,7 @@ void PostEffect::CreatGraphicsPipelineState()
 void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 {
 	commandList=cmdList;
-
+	descHeapDSV = DirectXCore::GetInstance()->GetdsvHeap();
 	for (int i = 0; i < 2; i++) {
 		CD3DX12_RESOURCE_BARRIER resouceBar = CD3DX12_RESOURCE_BARRIER::Transition(texBuff[i].Get(),
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,

@@ -99,7 +99,7 @@ public://Setter
 	/// <returns></returns>
 	void UpdateCircleShadow(const uint32_t& ShadowNumbar,const Vector3& casterPos_,const float& distanceCasterLight,const Vector4& dir_,const Vector3& atten_,const Vector2& factorAngle_,const bool& active_ = true);
 
-
+	void SetAmbientColor(const float& AmbientColor);
 
 public://Getter
 	LightGroup* GetLightGroupData();

@@ -58,6 +58,8 @@ public: // メンバ関数
 
 
 private:
+	static const uint32_t SafeColCount = 3;
+
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -72,6 +74,9 @@ private:
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;
 	std::unique_ptr<ClearUI> clearUI;
 	std::unique_ptr<ParticleEditor> DustParticle;
+	std::array<BaseCollider*,SafeColCount> SafeCollider;
+	WorldTransform Pos;
+	std::unique_ptr<Model> model_;
 
 	bool VsBoss = false;
 	bool isLockOn = false;
@@ -79,7 +84,7 @@ private:
 	bool isBlackoutStart = false;
 	bool isSlowGame = false;
 	bool Jiken = false;
-
+	bool isUltExplosion = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
@@ -93,9 +98,16 @@ private:
 	float SpriteAlpha = 1.0f;
 	float AddSpriteAlpha = 0.007f;
 	float DownSpriteAlpha = 0.01f;
+	float SafeRadius = 60.0f;
+	float MaxAmbientColor = 0.8f;
+	float MinAmbientColor = 0.2f;
+	float AmbientColor = MaxAmbientColor;
+	float AmbientPow = 0.0025f;
 
 	Vector2 center = { 0.5f,0.5f };
 
 	Vector3 start = Vector3(0,50,-1000);
-	Vector3 end = Vector3(0,50,150);
+	Vector3 end = Vector3(0,50,120);
+	Vector3 UltEndPos = Vector3(0,5,120);
+	std::array<Vector3,SafeColCount> ColliderPos;
 };

@@ -116,6 +116,10 @@ public:
 		circleShadows[ shadowNumbar ] = circleShadow;
 	}
 
+	void SetAmbientColor(const float& ambient) {
+		ambientColor = Vector3(ambient,ambient,ambient);
+		dirty = true;
+	}
 
 private:
 	//メンバ変数

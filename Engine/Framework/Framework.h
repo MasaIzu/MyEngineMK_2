@@ -62,6 +62,9 @@ public:
 	WinApp* GetWinApp() { return winApp_; }
 	DirectXCore* GetDirectXCore() { return directXCore_; }
 
+public:
+	static uint32_t Time;
+
 protected:
 
 	//シングルトン
@@ -86,6 +89,5 @@ protected:
 
 	uint32_t NotUpdateTime = 0;
 	uint32_t MaxNotUpdateTime = 3;
-
 
 };

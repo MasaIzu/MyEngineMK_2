@@ -253,7 +253,7 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				Data.model = Model::CreateFromOBJ("srop1", true);
 				Data.worldTrans = Trans;
 				NewLoadObjects.push_back(Data);
-				TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_RAIL);
+				//TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_RAIL);
 			}
 		}
 		else {
@@ -296,10 +296,10 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				BillPos.push_back(Data.worldTrans.translation_);
 			}
 			else if (fileName == "srop") {
-				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
+				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
 			else if (fileName == "goalSrop") {
-				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FINALRAIL);
+				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FINALRAIL);
 			}
 			else if (fileName == "foundationCube") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
@@ -308,13 +308,13 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
 			}
 			else if (fileName == "tutorialSrop") {
-				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
+				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
 			else if (fileName == "stage2") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);
 			}
 			else if (fileName == "stage2Srop") {
-				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_RAIL);
+				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_RAIL);
 			}
 			else if (fileName == "stageSrop2") {
 				TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_LANDSHAPE);

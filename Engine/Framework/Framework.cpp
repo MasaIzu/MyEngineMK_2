@@ -8,6 +8,8 @@
 #include "LightData.h"
 #include "NumbersSprite.h"
 
+uint32_t Framework::Time = 0;
+
 void Framework::Initialize()
 {
 
@@ -160,23 +162,14 @@ void Framework::Run()
 		{
 			if ( !IsSlow() )
 			{
-				//毎フレーム更新
-				Update();
+				Time = 0;
 			}
 			else
 			{
-				if ( NotUpdateTime < MaxNotUpdateTime )
-				{
-					NotUpdateTime++;
-				}
-				else
-				{
-					NotUpdateTime = 0;
-					Update();
-				}
+				Time++;
 			}
 		}
-		
+		Update();
 		//終了リクエストが来たら抜ける
 		if (isPlayMyGame()) {
 			break;
@@ -203,12 +196,9 @@ void Framework::Run()
 #ifdef _Editor
 		imGui->Draw();
 #endif
-		
 
 		// 描画終了
 		directXCore_->PostDraw();
-
-	
 
 		//FPS固定
 		fps->FpsControlEnd();

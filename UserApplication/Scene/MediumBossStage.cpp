@@ -2,6 +2,8 @@
 #include "MyMath.h"
 #include <PostEffect.h>
 #include <ParticleManager.h>
+#include <SphereCollider.h>
+#include <Numbers.h>
 
 MediumBossStage::MediumBossStage()
 {
@@ -56,6 +58,23 @@ void MediumBossStage::Initialize()
 	DustParticle = std::make_unique<ParticleEditor>();
 	DustParticle->Initialize("FieldParticle");
 	DustParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+
+	for ( int i = 0; i < SafeColCount; i++ )
+	{
+		Vector3 BillPos = levelData->GetBillPosition(i);
+		BillPos.y = UltEndPos.y;
+		ColliderPos[ i ] = BillPos + ((levelData->GetBillPosition(i) - UltEndPos ).norm() * SafeRadius);
+		SafeCollider[ i ] = new SphereCollider(Vector4(FloatNumber(fNumbers::fZero),SafeRadius,FloatNumber(fNumbers::fZero),FloatNumber(fNumbers::fZero)),SafeRadius);
+		CollisionManager::GetInstance()->AddCollider(SafeCollider[ i ]);
+		SafeCollider[ i ]->SetAttribute(COLLISION_ATTR_ENEMY_ULTSAFEZONE);
+		SafeCollider[ i ]->Update(MyMath::Translation(ColliderPos[ i ]));
+	}
+	Pos.Initialize();
+	Pos.translation_ = ColliderPos[ 2 ];
+	Pos.scale_ = Vector3(SafeRadius,SafeRadius,SafeRadius);
+	Pos.TransferMatrix();
+	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
 }
 
 void MediumBossStage::Update()
@@ -136,9 +155,33 @@ void MediumBossStage::Update()
 
 	player_->AttackUpdate(middleBossEnemy->GetPosition(),isLockOn);
 
+	if ( middleBossEnemy->GetIsUltExplosion() )
+	{
+		isUltExplosion = false;
+	}
+	else
+	{
+		isUltExplosion = true;
+	}
+
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 
+	if ( middleBossEnemy->GetIsUlting() )
+	{
+		if ( AmbientColor > MinAmbientColor )
+		{
+			AmbientColor -= AmbientPow;
+		}
+	}
+	else
+	{
+		if ( AmbientColor < MaxAmbientColor )
+		{
+			AmbientColor += AmbientPow;
+		}
+	}
+	LightData::GetInstance()->SetAmbientColor(AmbientColor);
 	LightData::GetInstance()->Update();
 
 }
@@ -153,14 +196,6 @@ void MediumBossStage::PostEffectDraw()
 	PostEffect::SetRadialBlur(center,intensity,samples);
 	PostEffect::SetAngle(angle,angle2);
 
-	PostEffect::PostDrawScene();
-}
-
-void MediumBossStage::Draw()
-{
-	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
 	skydome->Draw(*viewProjection_.get());
@@ -168,6 +203,8 @@ void MediumBossStage::Draw()
 
 	middleBossEnemy->Draw(*viewProjection_.get());
 	player_->Draw();
+
+	model_->Draw(Pos,*viewProjection_.get());
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
@@ -177,6 +214,40 @@ void MediumBossStage::Draw()
 	middleBossEnemy->ParticleDraw(*viewProjection_.get());
 	player_->ParticleDraw();
 	DustParticle->Draw(*viewProjection_.get());
+
+	//middleBossEnemy->DrawSprite(*viewProjection_.get());
+	//player_->DrawSprite();
+
+	//clearUI->Draw();
+
+	//sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+
+	PostEffect::PostDrawScene();
+}
+
+void MediumBossStage::Draw()
+{
+	//// コマンドリストの取得
+	//ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+
+	//Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
+
+	//skydome->Draw(*viewProjection_.get());
+	//levelData->Draw(*viewProjection_.get());
+
+	//middleBossEnemy->Draw(*viewProjection_.get());
+	//player_->Draw();
+
+	//model_->Draw(Pos,*viewProjection_.get());
+
+	//Model::PostDraw();//3Dオブジェクト描画後処理
+
+	//middleBossEnemy->FbxDraw(*viewProjection_.get());
+	//player_->FbxDraw();
+
+	//middleBossEnemy->ParticleDraw(*viewProjection_.get());
+	//player_->ParticleDraw();
+	//DustParticle->Draw(*viewProjection_.get());
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
@@ -195,7 +266,7 @@ void MediumBossStage::CSUpdate()
 {
 	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
-	DustParticle->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),static_cast< uint32_t >( true ),static_cast<uint32_t>(middleBossEnemy->GetIsUltChargeFin()),middleBossEnemy->GetUltPreparationPosition(),middleBossEnemy->GetUltParticleSpeed());
+	DustParticle->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),static_cast< uint32_t >( isUltExplosion ),static_cast<uint32_t>(middleBossEnemy->GetIsUltChargeFin()),middleBossEnemy->GetUltPreparationPosition(),middleBossEnemy->GetUltParticleSpeed());
 }
 
 bool MediumBossStage::IsBreak()
