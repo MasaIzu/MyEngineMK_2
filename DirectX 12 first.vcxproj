@@ -786,16 +786,16 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DebugCamera.h" />
+    <ClInclude Include="Engine\Camera\DebugCamera.h" />
     <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
     <ClInclude Include="Engine\3DEffect\ParticleEditor.h" />
     <ClInclude Include="Engine\2D\SerialNumber.h" />
     <ClInclude Include="Engine\2D\NumbersSprite.h" />
-    <ClInclude Include="PlayerMissileShootingState.h" />
-    <ClInclude Include="PlayerNormalState.h" />
-    <ClInclude Include="PlayerShootingState.h" />
-    <ClInclude Include="PlayerState.h" />
+    <ClInclude Include="UserApplication\Player\PlayerMissileShootingState.h" />
+    <ClInclude Include="UserApplication\Player\PlayerNormalState.h" />
+    <ClInclude Include="UserApplication\Player\PlayerShootingState.h" />
+    <ClInclude Include="UserApplication\Player\PlayerState.h" />
     <ClInclude Include="UserApplication\Scene\DieScene.h" />
     <ClInclude Include="Engine\3DEffect\EnemyBoostParticle.h" />
     <ClInclude Include="Engine\GameFunction\Controller.h" />
@@ -903,16 +903,16 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="Engine\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp" />
     <ClCompile Include="Engine\3DEffect\Explosion.cpp" />
     <ClCompile Include="Engine\3DEffect\ParticleEditor.cpp" />
     <ClCompile Include="Engine\2D\SerialNumber.cpp" />
     <ClCompile Include="Engine\2D\NumbersSprite.cpp" />
-    <ClCompile Include="PlayerMissileShootingState.cpp" />
-    <ClCompile Include="PlayerNormalState.cpp" />
-    <ClCompile Include="PlayerShootingState.cpp" />
-    <ClCompile Include="PlayerState.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerMissileShootingState.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerNormalState.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerShootingState.cpp" />
+    <ClCompile Include="UserApplication\Player\PlayerState.cpp" />
     <ClCompile Include="UserApplication\Scene\DieScene.cpp" />
     <ClCompile Include="Engine\3DEffect\EnemyBoostParticle.cpp" />
     <ClCompile Include="Engine\GameFunction\Controller.cpp" />
