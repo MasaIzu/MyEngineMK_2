@@ -144,12 +144,12 @@ void MediumBossStage::Update()
 			}
 		}
 	}
-	isSlowGame = false;
+	//isSlowGame = false;
 	if ( middleBossEnemy->GetIsDieMotion() )
 	{
 		//isSlowGame = true;
 	}
-	
+	isSlowGame = true;
 
 	LockOn();
 
@@ -228,9 +228,9 @@ void MediumBossStage::PostEffectDraw()
 void MediumBossStage::Draw()
 {
 	//// コマンドリストの取得
-	//ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	//Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
+	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
 	//skydome->Draw(*viewProjection_.get());
 	//levelData->Draw(*viewProjection_.get());
@@ -240,7 +240,7 @@ void MediumBossStage::Draw()
 
 	//model_->Draw(Pos,*viewProjection_.get());
 
-	//Model::PostDraw();//3Dオブジェクト描画後処理
+	Model::PostDraw();//3Dオブジェクト描画後処理
 
 	//middleBossEnemy->FbxDraw(*viewProjection_.get());
 	//player_->FbxDraw();
@@ -254,7 +254,7 @@ void MediumBossStage::Draw()
 
 	clearUI->Draw();
 
-	//sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 }
 
 void MediumBossStage::Finalize()

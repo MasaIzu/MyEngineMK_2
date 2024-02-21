@@ -157,19 +157,20 @@ void Framework::Run()
 			isFirstUpdate = false;
 			//毎フレーム更新
 			Update();
+			Time++;
 		}
 		else
 		{
+			Update();
 			if ( !IsSlow() )
 			{
-				Time = 0;
+				//Time = 0;
 			}
 			else
 			{
 				Time++;
 			}
 		}
-		Update();
 		//終了リクエストが来たら抜ける
 		if (isPlayMyGame()) {
 			break;
@@ -195,6 +196,9 @@ void Framework::Run()
 
 #ifdef _Editor
 		imGui->Draw();
+#elif _DEBUG
+		imGui->Draw();
+
 #endif
 
 		// 描画終了

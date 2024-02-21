@@ -16,6 +16,8 @@ float4 main(VSOutput input) : SV_TARGET
 	float offsetU = 1/ 1280.0f;
 	float offsetV = 1 / 720.0f;
 
+    tex1.Sample(smp, input.uv);
+    
     if (shadeNumber == 0)
     {
         float4 col = tex0.Sample(smp, input.uv);
@@ -83,8 +85,8 @@ float4 main(VSOutput input) : SV_TARGET
 	}
     else if (shadeNumber == 3)
     {
-		
-        float4 AddAllColor = tex0.Sample(smp, input.uv);
+        float4 Color = tex0.Sample(smp, input.uv);
+        float4 AddAllColor = tex1.Sample(smp, input.uv);
 		
         float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.002; //BloomÇÕÉuÉâÅ[ÇëÂÇ∞Ç≥Ç…
         float4 col = float4(0, 0, 0, 0);
@@ -95,9 +97,9 @@ float4 main(VSOutput input) : SV_TARGET
             {
                 float2 pickUV = input.uv + float2(px, py);
 				
-                float4 colortex0 = tex0.Sample(smp, pickUV);
+                float4 colortex0 = tex1.Sample(smp, pickUV);
                 float grayScale = colortex0.r + colortex0.g + colortex0.b;
-                float extract = step(1.1, grayScale);
+                float extract = step(0.7, grayScale);
                 float4 HighLumi = colortex0 * extract;
 				
                 float weight = Gaussian(input.uv, pickUV, _Sigma);
@@ -108,11 +110,11 @@ float4 main(VSOutput input) : SV_TARGET
         }
         col /= totalWeight;
 		
-        AddAllColor += col;
+        Color += col;
 		
-        AddAllColor.a = 1.0f;
+        Color.a = 1.0f;
 		
-        return AddAllColor;
+        return Color;
     }
     else if (shadeNumber == 4)
     {

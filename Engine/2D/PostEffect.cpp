@@ -41,7 +41,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> PostEffect::constDataBuff_;
 // マッピング済みアドレス
 PostEffect::SendDataToGPU* PostEffect::dataMap = nullptr;
 
-const float PostEffect::clearColor[4] = {0.0f,0.0f,0.0f,1.0f};
+const float PostEffect::clearColor[4] = {0.0f,0.0f,0.0f,0.0f};
 
 void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const uint32_t& WinHeight)
 {
@@ -412,7 +412,7 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 	//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvH = descHeapDSV->GetCPUDescriptorHandleForHeapStart();
 	//レンダーターゲットをセット
-	commandList->OMSetRenderTargets(2, rtvHs, false, &dsvH);
+	commandList->OMSetRenderTargets(2, rtvHs, true, &dsvH);
 
 	CD3DX12_VIEWPORT viewPorts[ 2 ] = {};
 	CD3DX12_RECT scissorRects[ 2 ] = {};
