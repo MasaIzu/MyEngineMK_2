@@ -93,6 +93,7 @@ private:
 	std::unique_ptr<Sprite> PushSprite;
 	std::unique_ptr<Sprite> SpaceSprite;
 	std::unique_ptr<Sprite> ASprite;
+	AudioManager* audioManager = nullptr;
 
 	MovieCameraCount movieCameraCount = MovieCameraCount::FirstCamera;
 

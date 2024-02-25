@@ -34,7 +34,7 @@ private:
 	};
 
 public://基本関数
-	MiddleBossEnemy();
+	MiddleBossEnemy(AudioManager* audioManager_);
 	~MiddleBossEnemy();
 
 	//初期化

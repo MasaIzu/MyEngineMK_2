@@ -18,10 +18,6 @@ void ClearUI::Initialize()
 
 bool ClearUI::Update()
 {
-	ImGui::Begin("clearSpritePosition");
-	ImGui::SliderFloat("EndPos",&EndPos,0,1200);
-
-	ImGui::End();
 
 	if ( EasingTime < MaxEasingTime )
 	{

@@ -22,6 +22,10 @@ void Framework::Initialize()
 	directXCore_->DirectXCoreInitialize(winApp_->Gethwnd(), winApp_->GetWindowSize().x, winApp_->GetWindowSize().y);
 
 #pragma region 汎用機能初期化
+
+	audioManager = AudioManager::GetInstance();
+	audioManager->Initialize();
+
 	// 入力の初期化
 	input_ = Input::GetInstance();
 	input_->Initialize();
@@ -87,6 +91,8 @@ void Framework::Update()
 	// 入力関連の毎フレーム処理
 	input_->Update();
 
+	audioManager->Update();
+
 	//Imguiの更新
 	imGui->Bigin();
 
@@ -124,6 +130,7 @@ void Framework::Finalize()
 	TextureManager_->Delete();
 
 	input_->Destroy();
+	audioManager->Destroy();
 
 	directXCore_->Destroy();
 

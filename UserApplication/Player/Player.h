@@ -43,7 +43,7 @@ public://基本関数
 	~Player();
 
 	//初期化
-	void Initialize(const Vector3& Pos,const ViewProjection* viewProjection);
+	void Initialize(const Vector3& Pos,const ViewProjection* viewProjection,AudioManager* audioManager_);
 	//更新
 	void Update();
 	//描画
@@ -160,6 +160,7 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> HitEffectParticle;
 
 	PlayerStateNeedMaterial playerStateNeedMaterial;
+	AudioManager* audioManager = nullptr;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム
@@ -227,6 +228,10 @@ private://プレイヤークラス変数
 	uint32_t LeftLegBoneNum = 8;
 	uint32_t RightLegBoneNum = 14;
 	uint32_t SenterBoneNum = 2;
+	uint32_t AttackNormalGun = 0;
+
+	//オーディオ
+	uint32_t GunSound = 0;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;

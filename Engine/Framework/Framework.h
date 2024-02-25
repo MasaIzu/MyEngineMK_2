@@ -80,7 +80,7 @@ protected:
 	std::unique_ptr <FPS> fps;
 	std::unique_ptr <AbstractSceneFactory> sceneFactory_;
 	/*std::unique_ptr<FbxModel> fbx;*/
-
+	AudioManager* audioManager = nullptr;
 
 	bool isEndRequst = false;
 

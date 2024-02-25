@@ -38,6 +38,6 @@ private://クラス変数
 	float StartPos = -500.0f;
 	float EndPos = 200.0f;
 	float SpriteX = StartPos;
-	float SpriteY = 60.0f;
+	float SpriteY = 120.0f;
 
 };

@@ -82,6 +82,7 @@ private: // メンバ変数
 	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::unique_ptr<TouchableObject> touchableObject;
 	std::unique_ptr<Skydome> skydome;
+	AudioManager* audioManager = nullptr;
 
 	uint32_t textureHandle_ = 0;//テクスチャハンドル
 

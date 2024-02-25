@@ -21,6 +21,7 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
+	audioManager = AudioManager::GetInstance();
 
 	//当たり判定
 	collisionManager = CollisionManager::GetInstance();
@@ -43,7 +44,7 @@ void GameScene::Initialize() {
 	worldTransform_.TransferMatrix();
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0, -210.0f, -283.0f), viewProjection_.get());
+	player_->Initialize(Vector3(0, -210.0f, -283.0f), viewProjection_.get(),audioManager);
 
 	gameCamera = std::make_unique<GameCamera>(WinApp::window_width, WinApp::window_height);
 	gameCamera->Initialize(viewProjection_.get(), MyMath::GetAngle(180.0f), player_->GetPlayerPos());

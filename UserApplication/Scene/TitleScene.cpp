@@ -21,6 +21,7 @@ void TitleScene::Initialize()
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
+	audioManager = AudioManager::GetInstance();
 
 	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
 	TitleSprite_ = Sprite::Create(TextureManager::Load("sprite/TitleGameName.png"));
@@ -57,7 +58,7 @@ void TitleScene::Initialize()
 	FirstCameraPoints = levelData->GetCameraSpline();
 	SecondCameraPoints = levelData_->GetCameraSpline();
 
-	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
+	middleBossEnemy = std::make_unique<MiddleBossEnemy>(audioManager);
 	for ( TutorialEnemy* enemy : tutorialEnemyList )
 	{
 		enemy->Initialize();

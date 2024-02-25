@@ -4,6 +4,7 @@
 #include <ParticleManager.h>
 #include <SphereCollider.h>
 #include <Numbers.h>
+#include <Framework.h>
 
 MediumBossStage::MediumBossStage()
 {
@@ -21,6 +22,7 @@ void MediumBossStage::Initialize()
 	dxCommon_ = DirectXCore::GetInstance();
 	winApp_ = WinApp::GetInstance();
 	input_ = Input::GetInstance();
+	audioManager = AudioManager::GetInstance();
 
 	sprite_ = Sprite::Create(TextureManager::Load("sprite/Blackout.png"));
 
@@ -36,7 +38,7 @@ void MediumBossStage::Initialize()
 	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0,20,0),viewProjection_.get());
+	player_->Initialize(Vector3(0,20,0),viewProjection_.get(),audioManager);
 
 	player_->SetCameraModeNotFree(false);
 
@@ -46,7 +48,7 @@ void MediumBossStage::Initialize()
 	gameCamera->SetFreeCamera(false);
 	gameCamera->SetCameraMode(false);
 
-	middleBossEnemy = std::make_unique<MiddleBossEnemy>();
+	middleBossEnemy = std::make_unique<MiddleBossEnemy>(audioManager);
 	middleBossEnemy->Initialize(player_.get());
 
 	sceneManager_ = SceneManager::GetInstance();
@@ -75,6 +77,19 @@ void MediumBossStage::Initialize()
 	Pos.scale_ = Vector3(SafeRadius,SafeRadius,SafeRadius);
 	Pos.TransferMatrix();
 	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
+
+	TenToZero = std::make_unique<SerialNumber>();
+	TenToZero->SetAllContent(Territory,TenToZeroUIPos,SpriteSize);
+	TenToZero->Initialize(2);
+
+	Minutes = std::make_unique<SerialNumber>();
+	Minutes->SetAllContent(Territory,MinutesUIPos,SpriteSize);
+	Minutes->Initialize(2);
+
+	Tenten = Sprite::Create(TextureManager::Load("sprite/Tenten.png"));
+	Tenten->SetSize(SpriteSize);
+
+	Framework::Time = 0;
 }
 
 void MediumBossStage::Update()
@@ -184,6 +199,22 @@ void MediumBossStage::Update()
 	LightData::GetInstance()->SetAmbientColor(AmbientColor);
 	LightData::GetInstance()->Update();
 
+	float DidSeconds = static_cast< float >( Framework::Time / 60 );
+	float MinutesAddSprite = static_cast< float >( DidSeconds / 60 );
+	float TenToZeroNum = static_cast< float >( static_cast< uint32_t >( DidSeconds ) % 60 );
+
+	Minutes->Update(MinutesAddSprite);
+	TenToZero->Update(TenToZeroNum);
+
+	//ImGui::Begin("Pos");
+
+	//ImGui::SliderFloat("ClearTimePosX",&TenToZeroUIPos.x,0,1000);
+	//ImGui::SliderFloat("ClearTimePosY",&TenToZeroUIPos.y,0,500);
+
+	//ImGui::End();
+
+	//TenToZero->SetReferencePointPos(TenToZeroUIPos);
+
 }
 
 void MediumBossStage::PostEffectDraw()
@@ -251,6 +282,10 @@ void MediumBossStage::Draw()
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();
+
+	TenToZero->Draw();
+	Tenten->Draw(TenToZeroUIPos - TentenMinus,Vector4(1,1,1,1));
+	Minutes->Draw();
 
 	clearUI->Draw();
 

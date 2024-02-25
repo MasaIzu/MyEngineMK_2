@@ -9,6 +9,7 @@
 #include "Numbers.h"
 #include "LightData.h"
 #include "PlayerNormalState.h"
+#include "AudioManager.h"
 
 Player::Player()
 {
@@ -19,7 +20,7 @@ Player::~Player()
 	CollisionManager::GetInstance()->RemoveCollider(PlayerCollider);
 }
 
-void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
+void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection,AudioManager* audioManager_)
 {
 	input_ = Input::GetInstance();
 	model_.reset(Model::CreateFromOBJ("sphere",true));
@@ -36,7 +37,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	state_->Initialize();
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
-	playerNormalGun->Initialize(Pos,model_.get());
+	playerNormalGun->Initialize(Pos,model_.get(),audioManager_);
 	playerExplosionGun = std::make_unique<ExplosionGun>(COLLISION_ATTR_ATTACK);
 	playerExplosionGun->Initialize(Pos,model_.get());
 
@@ -101,8 +102,12 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection)
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
+	//AttackNormalGun = 
 
 	CircleShadowCount = LightData::GetInstance()->AddCircleShadow(playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
+
+	audioManager = audioManager_;
+
 }
 
 void Player::Update()

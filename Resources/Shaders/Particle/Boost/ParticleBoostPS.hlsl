@@ -22,7 +22,7 @@ PSoutput main(GSOutput input) : SV_TARGET
     PSoutput output;
 	
     output.target0 = tex.Sample(smp, input.uv) * input.color;
-    output.target1 = input.color;
+    output.target1 = float4(0,0,0,0);
 	
     return output;
 }

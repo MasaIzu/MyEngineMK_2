@@ -86,7 +86,7 @@ float4 main(VSOutput input) : SV_TARGET
     else if (shadeNumber == 3)
     {
         float4 Color = tex0.Sample(smp, input.uv);
-        float4 AddAllColor = tex1.Sample(smp, input.uv);
+        float4 AddAllColor = tex0.Sample(smp, input.uv);
 		
         float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.002; //Bloomはブラーを大げさに
         float4 col = float4(0, 0, 0, 0);
@@ -97,7 +97,7 @@ float4 main(VSOutput input) : SV_TARGET
             {
                 float2 pickUV = input.uv + float2(px, py);
 				
-                float4 colortex0 = tex1.Sample(smp, pickUV);
+                float4 colortex0 = tex0.Sample(smp, pickUV);
                 float grayScale = colortex0.r + colortex0.g + colortex0.b;
                 float extract = step(0.7, grayScale);
                 float4 HighLumi = colortex0 * extract;
@@ -114,6 +114,36 @@ float4 main(VSOutput input) : SV_TARGET
 		
         Color.a = 1.0f;
 		
+        float sigma = 20.0; // ぼかしの強さを調整
+        float pickRange = sigma * 3.0; // ガウシアン関数がほぼゼロになる範囲
+        int steps = int(ceil(pickRange * 2.0)); // 計算するステップ数
+        float2 texSize = float2(1280, 720); // 仮のテクスチャサイズ、実際のサイズに合わせてください
+
+        float4 color = float4(0, 0, 0, 0);
+        float totalWeight_ = 0.0;
+
+        for (int x = -steps; x <= steps; ++x)
+        {
+            float2 offset = float2(x, 0) / texSize;
+            float2 pickUV = input.uv + offset;
+        
+            float4 colortex0 = tex1.Sample(smp, pickUV);
+            float grayScale = (colortex0.r + colortex0.g + colortex0.b); // 輝度を計算
+            float extract = step(2.5, grayScale); // しきい値0.1以上の輝度を持つピクセルを選択
+            float4 HighLumi = colortex0 * extract; // 高輝度ピクセルの色
+
+            float weight = Gaussian(input.uv, pickUV, sigma); // ガウシアン重み
+        
+            color += HighLumi * weight; // 重み付きカラーを加算
+            totalWeight_ += weight; // 総重みを更新
+        }
+
+        color /= totalWeight_;
+        
+        Color += color;
+		
+        Color.a = 1.0f;
+        
         return Color;
     }
     else if (shadeNumber == 4)

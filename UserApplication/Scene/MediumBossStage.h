@@ -12,6 +12,7 @@
 #include "ClearUI.h"
 #include "LightData.h"
 #include "ParticleEditor.h"
+#include "AudioManager.h"
 
 // 中ボスシーン
 class MediumBossStage : public BaseScene
@@ -77,6 +78,10 @@ private:
 	std::array<BaseCollider*,SafeColCount> SafeCollider;
 	WorldTransform Pos;
 	std::unique_ptr<Model> model_;
+	std::unique_ptr<SerialNumber> TenToZero;
+	std::unique_ptr<SerialNumber> Minutes;
+	std::unique_ptr<Sprite> Tenten;
+	AudioManager* audioManager = nullptr;
 
 	bool VsBoss = false;
 	bool isLockOn = false;
@@ -103,8 +108,13 @@ private:
 	float MinAmbientColor = 0.2f;
 	float AmbientColor = MaxAmbientColor;
 	float AmbientPow = 0.0025f;
+	float Territory = 25.0f;
 
 	Vector2 center = { 0.5f,0.5f };
+	Vector2 TenToZeroUIPos = { 140,40 };
+	Vector2 MinutesUIPos = { 80,40 };
+	Vector2 SpriteSize = { 28,27 };
+	Vector2 TentenMinus = { 40,0 };
 
 	Vector3 start = Vector3(0,50,-1000);
 	Vector3 end = Vector3(0,50,120);

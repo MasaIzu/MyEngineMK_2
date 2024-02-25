@@ -5,6 +5,7 @@
 #include "WorldTransform.h"
 #include <FbxModel.h>
 #include <FBXObject3d.h>
+#include <AudioManager.h>
 
 class NormalGun
 {
@@ -13,7 +14,7 @@ public://基本関数
 	~NormalGun();
 
 	//初期化
-	void Initialize(const Vector3& Pos,Model* BulletModel);
+	void Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol = 0.0f);
 	//更新
 	void Update(const Vector3& Pos,const Vector3& rot);
 	//描画
@@ -53,6 +54,8 @@ private://クラス関連
 	std::unique_ptr<FBXModel> fbxModel_;
 	std::unique_ptr<FBXObject3d> fbxObj3d_;
 
+	AudioManager* audioManager = nullptr;
+
 private:
 	bool isReload = false;
 
@@ -60,6 +63,9 @@ private:
 	uint32_t MaxCoolTime = 15;
 	uint32_t MaxReloadCoolTime = 200;
 	uint32_t UseBulletCount = 0;
+	//オーディオ
+	uint32_t GunSound = 0;
+	float SoundVol = 0.0;
 
 	float BulletSpeed = 4.5f;
 

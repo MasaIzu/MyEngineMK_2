@@ -6,7 +6,7 @@
 #include <Numbers.h>
 #include "LightData.h"
 
-MiddleBossEnemy::MiddleBossEnemy()
+MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 {
 	MovieUpdateTimes = MaxMovieUpdateTimes;
 	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
@@ -20,9 +20,9 @@ MiddleBossEnemy::MiddleBossEnemy()
 	BossWorldTrans.Initialize();
 
 	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get());
+	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_);
 	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get());
+	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_);
 
 	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());

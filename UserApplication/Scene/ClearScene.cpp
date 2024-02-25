@@ -63,12 +63,12 @@ void ClearScene::Update()
 		}
 	}
 
-	ImGui::Begin("Pos");
+	//ImGui::Begin("Pos");
 
-	ImGui::SliderFloat("ClearTimePosX",&ClearTimePos.x,0,1000);
-	ImGui::SliderFloat("ClearTimePosY",&ClearTimePos.y,0,500);
+	//ImGui::SliderFloat("ClearTimePosX",&ClearTimePos.x,0,1000);
+	//ImGui::SliderFloat("ClearTimePosY",&ClearTimePos.y,0,500);
 
-	ImGui::End();
+	//ImGui::End();
 
 
 	float DidSeconds = static_cast< float >( Framework::Time / 60 );
