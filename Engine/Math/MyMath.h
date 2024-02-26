@@ -62,6 +62,16 @@ namespace MyMath {
 
 	//Vector4 QuaternionSlerp(aiQuaternion& assimpaiQuaternion, aiQuaternion& assimpaiQuaternion2, float t);
 
+	/// <summary>
+	/// サークルの当たり判定をする
+	/// </summary>
+	/// <param name="pos1"></param>
+	/// <param name="pos2"></param>
+	/// <param name="Radius"></param>
+	/// <param name="Size">どのくらい離れているのか、1が最大0が最小</param>
+	/// <returns></returns>
+	bool CircleHit(const Vector3& pos1,const Vector3& pos2,const float& Radius,float& Size);
+
 	//度数法からラジアンへ
 	float GetAngle(const float& angle);
 	Vector3 GetAngleVec3(const Vector3& angle);

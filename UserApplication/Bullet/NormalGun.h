@@ -58,6 +58,7 @@ private://クラス関連
 
 private:
 	bool isReload = false;
+	bool AnotherSound_ = false;
 
 	uint32_t CoolTime = 0;
 	uint32_t MaxCoolTime = 15;

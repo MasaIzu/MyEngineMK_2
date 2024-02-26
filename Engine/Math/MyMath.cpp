@@ -620,6 +620,26 @@ Matrix4 MyMath::Matrix4Orthographic(
 //	return slrapKari;
 //}
 
+bool MyMath::CircleHit(const Vector3& pos1,const Vector3& pos2,const float& Radius,float& Size)
+{
+	Vector3 tmp;
+	tmp = pos2 - pos1;
+	float dist = tmp.dot(tmp);
+	float radius2 = Radius;
+	radius2 *= radius2;
+
+	if ( dist <= radius2 )
+	{
+		Size = 1.0f - dist / radius2;
+		return true;
+	}
+	else
+	{
+		Size = 0.0f;
+		return false;
+	}
+}
+
 float MyMath::GetAngle(const float& angle)
 {
 	return angle * (PI / 180);

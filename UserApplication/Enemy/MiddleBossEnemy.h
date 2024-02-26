@@ -183,6 +183,8 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> EnemyUltPreparationDownParticle;
 	std::unique_ptr<ParticleEditor> EnemyUltDownExplosion;
 
+	AudioManager* audioManager = nullptr;
+
 private://イーナムクラス
 
 
@@ -256,6 +258,13 @@ private://EnemyBossクラス変数
 	uint32_t MaxParticleCountC = 300000;
 	uint32_t ExplosionMaxTime = 300;
 	uint32_t ExplosionTime = 0;
+
+	//オーディオ
+	uint32_t HeriSound = 0;
+	float soundVol = 0.5f;
+	float MaxSoundVol = 0.3f;
+	float soundDistance = 0.0f;
+	float SoundRadius = 300.0f;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;

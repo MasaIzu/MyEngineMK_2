@@ -97,6 +97,10 @@ private:
 
 	uint32_t loserTexture_ = 0;
 
+	//BGM用
+	uint32_t BGM = 0;
+	float BGMVol = 0.2f;
+
 	float intensity = 0.1f;
 	float angle = 45.0f;
 	float angle2 = 135.0f;

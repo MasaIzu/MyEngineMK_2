@@ -36,6 +36,32 @@ void AudioManager::Destroy()
 	delete instance;
 }
 
+void AudioManager::DeleteAudio()
+{
+	xAudio2.Reset();
+
+	std::list<AudioData>::iterator itr = audios.begin();
+
+	for (; itr != audios.end(); ++itr)
+	{
+		itr->Unload();
+	}
+
+	audios.clear();
+
+	Initialize();
+}
+
+void AudioManager::AllStop()
+{
+	std::list<AudioData>::iterator itr = audios.begin();
+
+	for (; itr != audios.end(); ++itr)
+	{
+		itr->pSourceVoice->Stop();
+	}
+}
+
 void AudioManager::Initialize()
 {
 	HRESULT result;
@@ -219,7 +245,7 @@ uint32_t AudioManager::LoadAudio(std::string FileName,const float& Volume,const 
 	return handle;
 }
 
-int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag)
+int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag,bool samesound)
 {
 	HRESULT result;
 
@@ -230,7 +256,7 @@ int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag)
 	}
 
 	//同時に同じ音源を再生しない
-	if ( itr->playTrigger )
+	if (samesound)
 	{
 		return -1;
 	}

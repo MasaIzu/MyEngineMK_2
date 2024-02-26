@@ -108,6 +108,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection,
 
 	audioManager = audioManager_;
 
+	BoostSound = audioManager->LoadAudio("Resources/Sound/get.mp3",soundVol,false);
 }
 
 void Player::Update()
@@ -662,6 +663,8 @@ void Player::DeterminationDirection()
 	{
 		isSliding = true;
 		SlidingSpeed = MaxSlidingSpeed;
+		audioManager->ChangeVolume(BoostSound,soundVol);
+		audioManager->PlayWave(BoostSound);
 		animation->SetAnimation(static_cast< uint32_t >( PlayerAnimation::Step ),static_cast< uint32_t >( Numbers::Zero ),playerAnimTime.Step,false);
 	}
 }

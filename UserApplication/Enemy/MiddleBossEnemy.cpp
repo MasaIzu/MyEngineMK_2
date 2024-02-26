@@ -20,9 +20,9 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	BossWorldTrans.Initialize();
 
 	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,true);
+	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
 	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,true);
+	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
 
 	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
@@ -105,6 +105,12 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	EnemyUltDownExplosion = std::make_unique<ParticleEditor>();
 	EnemyUltDownExplosion->Initialize("EnemyUltDownPreparation");
 	EnemyUltDownExplosion->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	audioManager = audioManager_;
+
+	HeriSound = audioManager->LoadAudio("Resources/Sound/Heri.mp3",soundVol,false);
+	audioManager->ChangeVolume(HeriSound,soundVol);
+	audioManager->PlayWave(HeriSound,true);
 
 	for ( auto&& old : oldAttackType )
 	{
@@ -192,7 +198,7 @@ void MiddleBossEnemy::Update()
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunLeft->Update(missileGunLeftPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -223,6 +229,13 @@ void MiddleBossEnemy::Update()
 	UltWorldTrans.translation_.y = UltDownYPos;
 	UltWorldTrans.scale_ = Vector3(UltRadius,UltRadius,UltRadius);
 	UltWorldTrans.TransferMatrix();
+
+	if ( !isDead )
+	{
+		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
+		soundVol = MaxSoundVol * soundDistance;
+	}
+	audioManager->ChangeVolume(HeriSound,soundVol);
 
 	particleEditorLeft->EditUpdate();
 	particleEditorRight->EditUpdate();
@@ -335,7 +348,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -425,7 +438,7 @@ void MiddleBossEnemy::TitleMovieUpdate(const Vector3& startPos,Vector3& endPos)
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -1008,6 +1021,7 @@ void MiddleBossEnemy::DieMotionUpdate()
 		isDead = true;
 		isDeadMotion = false;
 		isLightActive = false;
+		soundVol = 0.0f;
 		if ( !isAllReadyExplosion )
 		{
 			if ( !isExplosion )

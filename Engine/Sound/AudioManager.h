@@ -98,15 +98,19 @@ public:
 	static AudioManager* GetInstance();
 	void Destroy();
 
+	void DeleteAudio();
+	void AllStop();
+
 	void Initialize();
 	void Update();
 	bool NowPlay(const uint32_t& handle);
 	void ChangeVolume(const uint32_t& handle,float volume);
 	float GetVolume(const uint32_t& handle);
 	uint32_t LoadAudio(std::string fileName,const float& volume = 1.0f,const bool& AnotherSound = false);
-	int32_t PlayWave(const uint32_t& handle,bool loopFlag = false);
+	int32_t PlayWave(const uint32_t& handle,bool loopFlag = false,bool samesound = true);
 	int32_t PlayWaveArray(const std::vector<uint32_t>& handles);
 	void StopWave(const uint32_t& handle);
+
 
 private:
 	std::wstring StringToWstring(const std::string& string);

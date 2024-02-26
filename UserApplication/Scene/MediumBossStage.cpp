@@ -15,6 +15,8 @@ MediumBossStage::~MediumBossStage()
 {
 	LightData::GetInstance()->ClearLight();
 	collisionManager->AllClearCollider();
+
+	audioManager->DeleteAudio();
 }
 
 void MediumBossStage::Initialize()
@@ -90,6 +92,10 @@ void MediumBossStage::Initialize()
 	Tenten->SetSize(SpriteSize);
 
 	Framework::Time = 0;
+
+	BGM = audioManager->LoadAudio("Resources/Sound/BGM.mp3",BGMVol,false);
+	audioManager->ChangeVolume(BGM,BGMVol);
+	audioManager->PlayWave(BGM,true);
 }
 
 void MediumBossStage::Update()

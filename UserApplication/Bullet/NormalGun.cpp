@@ -32,7 +32,12 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 	audioManager = audioManager_;
 
 	SoundVol = soundVol;
-	GunSound = audioManager->LoadAudio("Resources/Sound/se_gun_fire10.mp3",soundVol,AnotherSound);
+
+	AnotherSound_ = AnotherSound;
+	if ( AnotherSound )
+	{
+		GunSound = audioManager->LoadAudio("Resources/Sound/se_gun_fire10.mp3",soundVol,AnotherSound);
+	}
 }
 
 void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
@@ -81,8 +86,12 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 				//{
 				//	audioManager->StopWave(GunSound);
 				//}
-				audioManager->ChangeVolume(GunSound,SoundVol);
-				audioManager->PlayWave(GunSound);
+				if ( AnotherSound_ )
+				{
+					audioManager->ChangeVolume(GunSound,SoundVol);
+					audioManager->PlayWave(GunSound,false,false);
+				}
+
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
 				if ( UseBulletCount >= BulletMaxCount )

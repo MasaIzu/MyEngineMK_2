@@ -231,7 +231,8 @@ private://プレイヤークラス変数
 	uint32_t AttackNormalGun = 0;
 
 	//オーディオ
-	uint32_t GunSound = 0;
+	uint32_t BoostSound = 0;
+	float soundVol = 0.5f;
 
 	float PlayerRadius = 3.5f;
 	float PlayerBladeRadius = 1.0f;
