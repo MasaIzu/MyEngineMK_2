@@ -36,7 +36,7 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 	AnotherSound_ = AnotherSound;
 	if ( AnotherSound )
 	{
-		GunSound = audioManager->LoadAudio("Resources/Sound/se_gun_fire10.mp3",soundVol,AnotherSound);
+		GunSound = audioManager->LoadAudio("Resources/Sound/se_gun_fire10.mp3",soundVol);
 	}
 }
 
@@ -89,7 +89,7 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 				if ( AnotherSound_ )
 				{
 					audioManager->ChangeVolume(GunSound,SoundVol);
-					audioManager->PlayWave(GunSound,false,false);
+					audioManager->PlayWave(GunSound,false);
 				}
 
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);

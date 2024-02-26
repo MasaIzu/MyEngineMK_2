@@ -245,7 +245,7 @@ uint32_t AudioManager::LoadAudio(std::string FileName,const float& Volume,const 
 	return handle;
 }
 
-int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag,bool samesound)
+int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag)
 {
 	HRESULT result;
 
@@ -256,7 +256,7 @@ int32_t AudioManager::PlayWave(const uint32_t& Handle,bool LoopFlag,bool samesou
 	}
 
 	//同時に同じ音源を再生しない
-	if (samesound)
+	if ( itr->playTrigger )
 	{
 		return -1;
 	}

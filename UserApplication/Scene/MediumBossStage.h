@@ -99,7 +99,7 @@ private:
 
 	//BGM用
 	uint32_t BGM = 0;
-	float BGMVol = 0.2f;
+	float BGMVol = 0.01f;
 
 	float intensity = 0.1f;
 	float angle = 45.0f;

@@ -261,16 +261,16 @@ private://EnemyBossクラス変数
 
 	//オーディオ
 	uint32_t HeriSound = 0;
-	float soundVol = 0.5f;
-	float MaxSoundVol = 0.3f;
+	float soundVol = 0.0f;
+	float MaxSoundVol = 0.02f;
 	float soundDistance = 0.0f;
-	float SoundRadius = 300.0f;
+	float SoundRadius = 500.0f;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;
 	float MaxScale = 10.0f;
 	float MovieUpdateTimes = 0.0f;
-	float MaxMovieUpdateTimes = 120.0f;
+	float MaxMovieUpdateTimes = 400.0f;
 	float Radius = 12.0f;
 	float UltRadius = 20.0f;
 	float UltMaxRadius = 300.0f;

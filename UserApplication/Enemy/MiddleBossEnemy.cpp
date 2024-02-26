@@ -374,6 +374,13 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 
 	ColTransUpdate();//当たり判定の場所アップデート
 
+	if ( !isDead )
+	{
+		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
+		soundVol = MaxSoundVol * soundDistance;
+	}
+	audioManager->ChangeVolume(HeriSound,soundVol);
+
 	return false;
 }
 

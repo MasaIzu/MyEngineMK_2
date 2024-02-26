@@ -16,7 +16,10 @@ MediumBossStage::~MediumBossStage()
 	LightData::GetInstance()->ClearLight();
 	collisionManager->AllClearCollider();
 
-	audioManager->DeleteAudio();
+	if ( audioManager != nullptr )
+	{
+		audioManager->AllStop();
+	}
 }
 
 void MediumBossStage::Initialize()
@@ -100,6 +103,7 @@ void MediumBossStage::Initialize()
 
 void MediumBossStage::Update()
 {
+	audioManager->ChangeVolume(BGM,BGMVol);
 	player_->SetCameraModeNotFree(true);
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
@@ -241,7 +245,7 @@ void MediumBossStage::PostEffectDraw()
 	middleBossEnemy->Draw(*viewProjection_.get());
 	player_->Draw();
 
-	model_->Draw(Pos,*viewProjection_.get());
+	//model_->Draw(Pos,*viewProjection_.get());
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
