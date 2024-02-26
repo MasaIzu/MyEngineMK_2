@@ -14,7 +14,7 @@ public://基本関数
 	~NormalGun();
 
 	//初期化
-	void Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol = 0.0f);
+	void Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol = 0.0f,const bool& AnotherSound = false);
 	//更新
 	void Update(const Vector3& Pos,const Vector3& rot);
 	//描画

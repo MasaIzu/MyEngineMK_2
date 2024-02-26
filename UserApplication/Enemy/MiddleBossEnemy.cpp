@@ -20,9 +20,9 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	BossWorldTrans.Initialize();
 
 	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_);
+	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,true);
 	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
-	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_);
+	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,true);
 
 	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());

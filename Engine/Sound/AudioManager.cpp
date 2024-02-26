@@ -147,20 +147,23 @@ float AudioManager::GetVolume(const uint32_t& Handle)
 	return itr->volume;
 }
 
-uint32_t AudioManager::LoadAudio(std::string FileName,const float& Volume)
+uint32_t AudioManager::LoadAudio(std::string FileName,const float& Volume,const bool& AnotherSound)
 {
 	HRESULT result = 0;
 
-	if ( !audios.empty() )
+	if ( AnotherSound == false )
 	{
-		uint32_t i = 0;
-		for ( auto itr = audios.begin(); itr != audios.end(); itr++ )
+		if ( !audios.empty() )//同じかチェック
 		{
-			if ( itr->filePass == FileName )
+			uint32_t i = 0;
+			for ( auto itr = audios.begin(); itr != audios.end(); itr++ )
 			{
-				return i;
+				if ( itr->filePass == FileName )
+				{
+					return i;
+				}
+				i++;
 			}
-			i++;
 		}
 	}
 

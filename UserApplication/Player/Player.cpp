@@ -37,7 +37,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection,
 	state_->Initialize();
 
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
-	playerNormalGun->Initialize(Pos,model_.get(),audioManager_);
+	playerNormalGun->Initialize(Pos,model_.get(),audioManager_,0.5f,true);
 	playerExplosionGun = std::make_unique<ExplosionGun>(COLLISION_ATTR_ATTACK);
 	playerExplosionGun->Initialize(Pos,model_.get());
 
