@@ -5,6 +5,7 @@
 #include <SphereCollider.h>
 #include <Numbers.h>
 #include <Framework.h>
+#include <PostEffectManager.h>
 
 MediumBossStage::MediumBossStage()
 {
@@ -183,10 +184,22 @@ void MediumBossStage::Update()
 	if ( middleBossEnemy->GetIsUltExplosion() )
 	{
 		isUltExplosion = false;
+		if ( intensity < MaxIntensity )
+		{
+			intensity += IntensityPow;
+		}
 	}
 	else
 	{
 		isUltExplosion = true;
+		//if ( intensity > 0 )
+		//{
+		//	intensity -= IntensityBackPow;
+		//}
+		//else
+		//{
+		//	intensity = 0;
+		//}
 	}
 
 	//全ての衝突をチェック
@@ -225,6 +238,20 @@ void MediumBossStage::Update()
 
 	//TenToZero->SetReferencePointPos(TenToZeroUIPos);
 
+	Vector3 forwardVector = ( viewProjection_->target - viewProjection_->eye ).norm();
+	Vector3	toCameraVector = ( middleBossEnemy->GetUltPos() - viewProjection_->eye ).norm();
+
+	float dotProduct = forwardVector.dot(toCameraVector);
+
+	center = MyMath::GetWindowPos(viewProjection_->matView,viewProjection_->matProjection,WinApp::GetInstance()->GetWindowSize(),middleBossEnemy->GetUltPos(),dotProduct,isInversion);
+	float sendIntensity = intensity;
+
+	if ( isInversion )
+	{
+		sendIntensity = sendIntensity * -1;
+	}
+
+	RadialBlurPostEffect::SetRadialBlur(center,sendIntensity,samples);
 }
 
 void MediumBossStage::PostEffectDraw()
@@ -234,7 +261,6 @@ void MediumBossStage::PostEffectDraw()
 	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
-	PostEffect::SetRadialBlur(center,intensity,samples);
 	PostEffect::SetAngle(angle,angle2);
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理

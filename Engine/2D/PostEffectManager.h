@@ -1,6 +1,7 @@
 #pragma once
 #include "PostEffect.h"
 #include "MixPostEffect.h"
+#include "RadialBlurPostEffect.h"
 
 /// <summary>
 /// ポストエフェクトマネージャー

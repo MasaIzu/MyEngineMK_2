@@ -6,6 +6,8 @@ void PostEffectManager::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth
 	PostEffect::Initialize(dxCore, WinWidth, WinHeight);
 
 	MixPostEffect::Initialize(dxCore, WinWidth, WinHeight);
+
+	RadialBlurPostEffect::Initialize(dxCore,WinWidth,WinHeight);
 }
 
 void PostEffectManager::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
@@ -27,4 +29,5 @@ void PostEffectManager::Finalize()
 {
 	PostEffect::Finalize();
 	MixPostEffect::Finalize();
+	RadialBlurPostEffect::Finalize();
 }

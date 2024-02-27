@@ -106,6 +106,8 @@ public://Getter
 
 	Vector3 GetEndPos() const;
 
+	Vector3 GetUltPos() const;
+
 	bool GetIsUltPreparation() const { return isUltPreparation; }
 	bool GetIsUltChargeFin() const { return isUltChargeFin; }
 	bool GetIsUlting() const { return isUlting; }

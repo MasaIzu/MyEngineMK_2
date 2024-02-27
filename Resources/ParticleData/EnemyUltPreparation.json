@@ -2,7 +2,7 @@
     "Resources/ParticleData/EnemyUltPreparation.json": {
         "StartPos": {
             "value0": 0.0,
-            "value1": 2.5820000171661379,
+            "value1": 23.07699966430664,
             "value2": 0.0,
             "value3": 0.0
         },
@@ -13,9 +13,9 @@
             "value3": 0.0
         },
         "StartColor": {
-            "value0": 0.7720587849617004,
-            "value1": 0.9264705777168274,
-            "value2": 0.8810553550720215,
+            "value0": 0.9183486700057983,
+            "value1": 0.9656862616539002,
+            "value2": 0.9517634510993958,
             "value3": 1.0
         },
         "EndColor": {
@@ -48,16 +48,16 @@
             "value1": 173.31199645996095
         },
         "RandomSpeedMinMax": {
-            "value0": 1.0,
-            "value1": 3.6600000858306886
+            "value0": 0.18400000035762788,
+            "value1": 2.0989999771118166
         },
         "RandomScaleMinMax": {
             "value0": 1.0,
             "value1": 10.0
         },
-        "SpeedDivideSize": 29.347000122070314,
+        "SpeedDivideSize": 100.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.03700000047683716,
+        "GravityStrength": 0.0,
         "Interlocking": false,
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,

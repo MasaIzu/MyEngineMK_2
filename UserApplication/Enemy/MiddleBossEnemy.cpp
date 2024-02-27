@@ -1084,6 +1084,11 @@ Vector3 MiddleBossEnemy::GetEndPos() const
 	return EndPos;
 }
 
+Vector3 MiddleBossEnemy::GetUltPos() const
+{
+	return UltPos;
+}
+
 Vector4 MiddleBossEnemy::GetUltPreparationPosition() const
 {
 	Vector3 ParticleEndPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);

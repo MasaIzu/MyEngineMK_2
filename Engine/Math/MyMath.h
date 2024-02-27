@@ -8,9 +8,11 @@
 #include "Uint32Vector2.h"
 
 #include "Defined.h"
+
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <DirectXMath.h>
 MY_SUPPRESS_WARNINGS_END
+
 
 //便利系まとめ
 namespace MyMath {
@@ -94,6 +96,16 @@ namespace MyMath {
 	const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
 
 	float Uint32ToFloat(const uint32_t& convert);
+
+	/// <summary>
+	/// 3Dのポジションはウィンドウでどこにあるのが
+	/// </summary>
+	/// <param name="viewProjection_"></param>
+	/// <param name="windowWH">ウィンドウ縦横</param>
+	/// <param name="Pos">調べたい3Dのポジション</param>
+	/// <param name="Inversion">反転させる値か</param>
+	/// <returns></returns>
+	Vector2 GetWindowPos(const Matrix4& matView_,const Matrix4& matProjection_,const Vector2& windowWH,const Vector3& Pos,const float& Inversion, bool& IsInversion);
 
 	//ランダム関係
 	uint32_t Random(const uint32_t& low, const uint32_t& high);

@@ -774,6 +774,58 @@ float MyMath::Uint32ToFloat(const uint32_t& convert)
 	return con;
 }
 
+Vector2 MyMath::GetWindowPos(const Matrix4& matView_, const Matrix4& matProjection_, const Vector2& windowWH, const Vector3& Pos, const float& Inversion, bool& IsInversion)
+{
+	//ビューポート行列
+	Matrix4 Viewport =
+	{ windowWH.x / 2,0,0,0,
+	0,-windowWH.y / 2,0,0,
+	0,0,1,0,
+	windowWH.x / 2, windowWH.y / 2,0,1 };
+
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4 matView = matView_;
+	Matrix4 matProjection = matProjection_;
+
+	Matrix4 matViewProjectionViewport = matView * matProjection * Viewport;
+
+	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+	Vector3 ScreenPos = DivVecMat(Pos, matViewProjectionViewport);
+
+	ScreenPos.x = ScreenPos.x / windowWH.x;
+	ScreenPos.y = ScreenPos.y / windowWH.y;
+
+	if (ScreenPos.x < -35.0f) {
+		ScreenPos.x = -35.0f;
+	}
+	else if (ScreenPos.x > 35.0f) {
+		ScreenPos.x = 35.0f;
+	}
+
+	if (ScreenPos.y < -1.0f) {
+		ScreenPos.y = -1.0f;
+	}
+	else if (ScreenPos.y > 1.0f) {
+		ScreenPos.y = 1.0f;
+	}
+
+	ImGui::Begin("ScreenPos");
+
+	ImGui::Text("ScreenPosX = %f",ScreenPos.x);
+	ImGui::Text("ScreenPosY = %f",ScreenPos.y);
+
+	ImGui::End();
+
+
+	if (Inversion > 0) {
+		IsInversion = false;
+	}
+	else {
+		IsInversion = true;
+	}
+	return Vector2(ScreenPos.x, ScreenPos.y);
+}
+
 uint32_t MyMath::Random(const uint32_t& low, const uint32_t& high)
 {
 	std::random_device rd;

@@ -79,7 +79,7 @@ private: // メンバ変数
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
-	int samples = 5;
+	int samples = 0;
 	bool isFinishGame = false;
 	bool isSlowGame = false;
 

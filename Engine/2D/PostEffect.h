@@ -5,13 +5,22 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
+#include "Defined.h"
+MY_SUPPRESS_WARNINGS_BEGIN
+#include <Windows.h>
+#include <d3d12.h>
+#include <string>
+#include <wrl.h>
+#include <memory>
+MY_SUPPRESS_WARNINGS_END
+
 /// <summary>
 /// 実際にポストエフェクトをかける方
 /// </summary>
 class PostEffect
 {
 public:
-
+	 
     /// <summary>
     /// 頂点データ構造体
     /// </summary>
@@ -63,7 +72,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	static void Draw(ID3D12GraphicsCommandList* cmdList);
+	static void Draw(ID3D12GraphicsCommandList* cmdList,const uint32_t blendNum = 0);
 
     /// <summary>
     /// シーン描画後処理
@@ -119,7 +128,7 @@ private://静的メンバ変数
     //DSV用のデスクリプタヒープ
     static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 
-    static Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
+	static std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>,2>PipelineStates_;
     static Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 private:
     // 定数バッファ

@@ -7,6 +7,7 @@
 #include <FBXObject3d.h>
 #include "LightData.h"
 #include "NumbersSprite.h"
+#include "RadialBlurPostEffect.h"
 
 uint32_t Framework::Time = 0;
 
@@ -194,10 +195,19 @@ void Framework::Run()
 
 		PostEffectManager::PostDrawScene();
 
+
+		ID3D12GraphicsCommandList* commandList = directXCore_->GetCommandList();
+		RadialBlurPostEffect::PreDrawScene(commandList);
+
+		PostEffectManager::Draw(directXCore_->GetCommandList());
+
+		RadialBlurPostEffect::PostDrawScene();
+
 		// 描画開始
 		directXCore_->PreDraw();
 
-		PostEffectManager::Draw(directXCore_->GetCommandList());
+		RadialBlurPostEffect::SetShadeNumber(2);
+		RadialBlurPostEffect::Draw(directXCore_->GetCommandList(),1);
 
 		//ImGui描画
 

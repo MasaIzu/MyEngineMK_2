@@ -90,10 +90,11 @@ private:
 	bool isSlowGame = false;
 	bool Jiken = false;
 	bool isUltExplosion = false;
+	bool isInversion = false;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
-	int samples = 5;
+	int samples = 30;
 
 	uint32_t loserTexture_ = 0;
 
@@ -101,7 +102,10 @@ private:
 	uint32_t BGM = 0;
 	float BGMVol = 0.01f;
 
-	float intensity = 0.1f;
+	float intensity = 0.0f;
+	float MaxIntensity = 0.3f;
+	float IntensityPow = 0.001f;
+	float IntensityBackPow = 0.01f;
 	float angle = 45.0f;
 	float angle2 = 135.0f;
 	float SpriteAlpha = 1.0f;
@@ -114,7 +118,7 @@ private:
 	float AmbientPow = 0.0025f;
 	float Territory = 25.0f;
 
-	Vector2 center = { 0.5f,0.5f };
+	Vector2 center = { 0.5f,0.8f };
 	Vector2 TenToZeroUIPos = { 140,40 };
 	Vector2 MinutesUIPos = { 80,40 };
 	Vector2 SpriteSize = { 28,27 };

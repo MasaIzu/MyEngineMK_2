@@ -793,6 +793,9 @@
     <ClInclude Include="UserApplication\Player\PlayerMissileShootingState.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
+    <ClInclude Include="RadialBlurPostEffect.h">
+      <Filter>Engine\HeaderFile\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1085,6 +1088,9 @@
     </ClCompile>
     <ClCompile Include="UserApplication\Player\PlayerMissileShootingState.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialBlurPostEffect.cpp">
+      <Filter>Engine\SourceFile\2D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
