@@ -15,10 +15,7 @@ void PlayerShootingState::Update(Player* player,PlayerMovement* playerMovement)
 	player->TransitionTo(new PlayerNormalState);
 }
 
-void PlayerShootingState::AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos)
+void PlayerShootingState::AttackUpdate([[maybe_unused]] Player* player,[[maybe_unused]] PlayerMovement* playerMovement,[[maybe_unused]] const Vector3& EnemyPos)
 {
-	if ( playerMovement->GetIsRotFinish() )
-	{
-		player->NormalGunShoot(EnemyPos);
-	}
+	
 }

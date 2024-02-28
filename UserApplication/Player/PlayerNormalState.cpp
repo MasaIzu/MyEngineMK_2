@@ -31,7 +31,7 @@ void PlayerNormalState::Update(Player* player,PlayerMovement* playerMovement) {
 	player->PlayerMove(playerMovement->Move(player->GetStateMaterial()));
 }
 
-void PlayerNormalState::AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos)
+void PlayerNormalState::AttackUpdate([[maybe_unused]] Player* player,[[maybe_unused]] PlayerMovement* playerMovement,[[maybe_unused]] const Vector3& EnemyPos)
 {
 	
 }

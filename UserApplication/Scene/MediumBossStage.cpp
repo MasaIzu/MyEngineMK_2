@@ -109,11 +109,6 @@ void MediumBossStage::Update()
 	player_->SetCameraNeedInformation(gameCamera->GetCameraAngle(),gameCamera->GetEyeToTagetVecDistance(120.0f),gameCamera->GetCameraDistanse(),gameCamera->GetMaxDistance());
 	player_->Update();
 
-	//if (player_->GetHowReturnSpline(5)) {
-
-	//	sceneManager_->ChangeScene("GAMEPLAY");
-	//}
-
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
@@ -192,14 +187,14 @@ void MediumBossStage::Update()
 	else
 	{
 		isUltExplosion = true;
-		//if ( intensity > 0 )
-		//{
-		//	intensity -= IntensityBackPow;
-		//}
-		//else
-		//{
-		//	intensity = 0;
-		//}
+		if ( intensity > 0 )
+		{
+			intensity -= IntensityBackPow;
+		}
+		else
+		{
+			intensity = 0;
+		}
 	}
 
 	//全ての衝突をチェック
@@ -235,8 +230,6 @@ void MediumBossStage::Update()
 	//ImGui::SliderFloat("ClearTimePosY",&TenToZeroUIPos.y,0,500);
 
 	//ImGui::End();
-
-	//TenToZero->SetReferencePointPos(TenToZeroUIPos);
 
 	Vector3 forwardVector = ( viewProjection_->target - viewProjection_->eye ).norm();
 	Vector3	toCameraVector = ( middleBossEnemy->GetUltPos() - viewProjection_->eye ).norm();

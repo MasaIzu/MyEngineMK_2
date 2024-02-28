@@ -109,8 +109,12 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	audioManager = audioManager_;
 
 	HeriSound = audioManager->LoadAudio("Resources/Sound/Heri.mp3",soundVol,false);
-	audioManager->ChangeVolume(HeriSound,soundVol);
 	audioManager->PlayWave(HeriSound,true);
+
+	ChargeSound = audioManager->LoadAudio("Resources/Sound/chargeSound.mp3",soundVol,false);
+	ChargeFinSound = audioManager->LoadAudio("Resources/Sound/ChargeFin.mp3",soundVol,false);
+	ExplosionSound = audioManager->LoadAudio("Resources/Sound/explosion.mp3",soundVol,false);
+	UltResoundSound = audioManager->LoadAudio("Resources/Sound/Resound.mp3",soundVol,false);
 
 	for ( auto&& old : oldAttackType )
 	{
@@ -154,6 +158,8 @@ void MiddleBossEnemy::Initialize(Player* Player)
 void MiddleBossEnemy::Update()
 {
 	isExplosion = false;
+
+
 	if ( isTurn )
 	{
 
@@ -230,12 +236,9 @@ void MiddleBossEnemy::Update()
 	UltWorldTrans.scale_ = Vector3(UltRadius,UltRadius,UltRadius);
 	UltWorldTrans.TransferMatrix();
 
-	if ( !isDead )
-	{
-		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
-		soundVol = MaxSoundVol * soundDistance;
-	}
+	
 	audioManager->ChangeVolume(HeriSound,soundVol);
+
 
 	particleEditorLeft->EditUpdate();
 	particleEditorRight->EditUpdate();
@@ -378,6 +381,10 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	{
 		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
 		soundVol = MaxSoundVol * soundDistance;
+		ChargeSoundVol = soundVol;
+		ChargeFinSoundVol = soundVol;
+		ExplosionSoundVol = soundVol;
+		UltResoundSoundVol = soundVol;
 	}
 	audioManager->ChangeVolume(HeriSound,soundVol);
 
@@ -637,6 +644,8 @@ void MiddleBossEnemy::AliveUpdate()
 				isUlting = true;
 				isUltChargeFin = true;
 				BossWorldTrans.translation_.y += UltYUpPow;
+				audioManager->ChangeVolume(ChargeSound,ChargeSoundVol);
+
 				if ( UltYPosChargeFinPos <= BossWorldTrans.translation_.y )
 				{
 					isUltChargeFin = false;
@@ -647,6 +656,10 @@ void MiddleBossEnemy::AliveUpdate()
 				attackType = AttackType::PutUltDown;
 				isUltPreparation = false;
 				isUltDown = true;
+				ChargeSoundVol = 0.0f;
+				audioManager->ChangeVolume(ChargeSound,ChargeSoundVol);
+				audioManager->ChangeVolume(ChargeFinSound,ChargeFinSoundVol);
+				audioManager->PlayWave(ChargeFinSound,false);
 				UltPos = BossWorldTrans.translation_ - Vector3(0,Radius,0);
 			}
 		}
@@ -660,6 +673,10 @@ void MiddleBossEnemy::AliveUpdate()
 			{
 				isUltDown = false;
 				isUltExplosion = true;
+				audioManager->ChangeVolume(ExplosionSound,ExplosionSoundVol);
+				audioManager->ChangeVolume(UltResoundSound,UltResoundSoundVol);
+				audioManager->PlayWave(ExplosionSound,false);
+				audioManager->PlayWave(UltResoundSound,false);
 				MiddleBossUltCollider->SetAttribute(COLLISION_ATTR_ENEMY_ULT);
 				attackType = AttackType::Ult;
 			}
@@ -742,6 +759,7 @@ void MiddleBossEnemy::AliveUpdate()
 						isMoveing = false;
 						isUltTime = true;
 						attackType = AttackType::UltPreparation;
+						audioManager->PlayWave(ChargeSound,true);
 					}
 				}
 			}

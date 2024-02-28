@@ -266,7 +266,22 @@ private://EnemyBossクラス変数
 	float soundVol = 0.0f;
 	float MaxSoundVol = 0.02f;
 	float soundDistance = 0.0f;
-	float SoundRadius = 500.0f;
+	float SoundRadius = 1000.0f;
+
+	//チャージ時サウンド
+	uint32_t ChargeSound = 0;
+	float ChargeSoundVol = 0.0f;
+
+	//チャージ完了
+	uint32_t ChargeFinSound = 0;
+	float ChargeFinSoundVol = 0.0f;
+
+	//ウルトが爆発するときのサウンド
+	uint32_t ExplosionSound = 0;
+	uint32_t UltResoundSound = 0;
+	float ExplosionSoundVol = 0.0f;
+	float UltResoundSoundVol = 0.0f;
+
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;

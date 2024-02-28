@@ -14,6 +14,6 @@ void PlayerMissileShootingState::Update(Player* player,PlayerMovement* playerMov
 	player->TransitionTo(new PlayerNormalState);
 }
 
-void PlayerMissileShootingState::AttackUpdate(Player* player,PlayerMovement* playerMovement,const Vector3& EnemyPos)
+void PlayerMissileShootingState::AttackUpdate([[maybe_unused]] Player* player,[[maybe_unused]] PlayerMovement* playerMovement,[[maybe_unused]] const Vector3& EnemyPos)
 {
 }

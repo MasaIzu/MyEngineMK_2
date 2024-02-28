@@ -103,9 +103,9 @@ private:
 	float BGMVol = 0.01f;
 
 	float intensity = 0.0f;
-	float MaxIntensity = 0.3f;
+	float MaxIntensity = 0.4f;
 	float IntensityPow = 0.001f;
-	float IntensityBackPow = 0.01f;
+	float IntensityBackPow = 0.002f;
 	float angle = 45.0f;
 	float angle2 = 135.0f;
 	float SpriteAlpha = 1.0f;

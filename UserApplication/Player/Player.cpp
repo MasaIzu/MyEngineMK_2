@@ -435,21 +435,9 @@ void Player::ParticleDraw()
 
 //状態変更
 void Player::TransitionTo(PlayerState* state) {
-	//削除
-	delete state_;
 	//新規作成
 	state_ = state;
 	state_->Initialize();
-}
-
-void Player::NormalGunShoot(const Vector3& EnemyPos)
-{
-	playerNormalGun->ShotBullet(EnemyPos_);
-}
-
-void Player::MissileGunShoot(const Vector3& EnemyPos)
-{
-	playerExplosionGun->ShotBullet(EnemyPos_);
 }
 
 void Player::PlayerMove(const Vector3& Velocity)

@@ -62,10 +62,6 @@ public://基本関数
 
 	//状態移行
 	void TransitionTo(PlayerState* state);
-	//弾を打ち出す
-	void NormalGunShoot(const Vector3& EnemyPos);
-	//弾を打ち出す
-	void MissileGunShoot(const Vector3& EnemyPos);
 
 	//移動関数
 	void PlayerMove(const Vector3& Velocity);
