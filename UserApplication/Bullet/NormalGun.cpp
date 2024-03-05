@@ -36,7 +36,7 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 	AnotherSound_ = AnotherSound;
 	if ( AnotherSound )
 	{
-		GunSound = audioManager->LoadAudio("Resources/Sound/se_gun_fire10.mp3",soundVol);
+		GunSound = audioManager->LoadAudio("Resources/Sound/fireS.mp3",soundVol);
 	}
 }
 

@@ -264,7 +264,9 @@ private://EnemyBossクラス変数
 	//オーディオ
 	uint32_t HeriSound = 0;
 	float soundVol = 0.0f;
-	float MaxSoundVol = 0.02f;
+	float MaxSoundVol = 0.01f;
+	float ChargeSoundsVol = 0.0f;
+	float MaxChargeSoundVol = 0.1f;
 	float soundDistance = 0.0f;
 	float SoundRadius = 1000.0f;
 

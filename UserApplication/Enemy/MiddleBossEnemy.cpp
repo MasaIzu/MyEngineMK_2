@@ -381,10 +381,11 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	{
 		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
 		soundVol = MaxSoundVol * soundDistance;
-		ChargeSoundVol = soundVol;
-		ChargeFinSoundVol = soundVol;
-		ExplosionSoundVol = soundVol;
-		UltResoundSoundVol = soundVol;
+		ChargeSoundsVol = MaxChargeSoundVol * soundDistance;
+		ChargeSoundVol = ChargeSoundsVol;
+		ChargeFinSoundVol = ChargeSoundsVol;
+		ExplosionSoundVol = ChargeSoundsVol;
+		UltResoundSoundVol = ChargeSoundsVol;
 	}
 	audioManager->ChangeVolume(HeriSound,soundVol);
 
