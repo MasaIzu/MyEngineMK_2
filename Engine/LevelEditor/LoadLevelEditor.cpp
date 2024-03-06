@@ -188,6 +188,7 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 	//modelFighter = Model::CreateFromOBJ("chr_sword", true);
 	modelNormalEnemy.reset(Model::CreateFromOBJ("sphereNormalEnemy", true));
 	modelBulletShotEnemy.reset(Model::CreateFromOBJ("sphereBulletEnemy", true));
+	torchModel.reset(Model::CreateFromOBJ("torch",true));
 
 	models.insert(std::make_pair("srop1", modelSrop.get()));
 	models.insert(std::make_pair("stageTest", modelGround.get()));
@@ -195,6 +196,7 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 	//models.insert(std::make_pair("chr_sword", modelFighter));
 	models.insert(std::make_pair("sphereNormalEnemy", modelNormalEnemy.get()));
 	models.insert(std::make_pair("sphereBulletEnemy", modelBulletShotEnemy.get()));
+	models.insert(std::make_pair("torch",torchModel.get()));
 
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
@@ -255,6 +257,12 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				NewLoadObjects.push_back(Data);
 				//TouchableObject::Create(modelSrop.get(), Trans, COLLISION_ATTR_RAIL);
 			}
+			else if ( fileName == torchModel->GetName() )
+			{
+				std::unique_ptr torch_ = std::make_unique<Torch>(torchModel.get());
+				torch_->Initialze(Trans);
+				torch.push_back(std::move(torch_));
+			}
 		}
 		else {
 			// モデルを指定して3Dオブジェクトを生成
@@ -294,9 +302,6 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 				Vector3 Trans_ = MyMath::GetWorldTransform(Data.worldTrans.matWorld_) + Vector3(0,Scale.y,0);
 				ParticleEditor::AddCollision(Trans_,Scale);
 				BillPos.push_back(Data.worldTrans.translation_);
-			}
-			else if (fileName == "srop") {
-				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FIRSTRAIL);
 			}
 			else if (fileName == "goalSrop") {
 				//TouchableObject::Create(model, Data.worldTrans, COLLISION_ATTR_FINALRAIL);
@@ -339,6 +344,13 @@ void LoadLevelEditor::Update()
 	}
 }
 
+void LoadLevelEditor::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+{
+	for ( auto& torchObject : torch )
+	{
+		torchObject->CSUpdate(cmdList);
+	}
+}
 
 void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 {
@@ -347,5 +359,17 @@ void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
 	}
 	for (auto& object : NewLoadObjects) {
 		object.model->Draw(object.worldTrans, viewProjection);
+	}
+	for ( auto& torchObject : torch )
+	{
+		torchObject->Draw(viewProjection);
+	}
+}
+
+void LoadLevelEditor::ParticleDraw(const ViewProjection& viewProjection)
+{
+	for ( auto& torchObject : torch )
+	{
+		torchObject->ParticleDraw(viewProjection);
 	}
 }

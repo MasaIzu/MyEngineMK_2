@@ -796,6 +796,9 @@
     <ClInclude Include="RadialBlurPostEffect.h">
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
+    <ClInclude Include="Torch.h">
+      <Filter>UserFile\UserHeaderFile\Ground</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1091,6 +1094,9 @@
     </ClCompile>
     <ClCompile Include="RadialBlurPostEffect.cpp">
       <Filter>Engine\SourceFile\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Torch.cpp">
+      <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

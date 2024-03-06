@@ -59,7 +59,7 @@ public: // メンバ関数
 
 
 private:
-	static const uint32_t SafeColCount = 3;
+	static const uint32_t SafeColCount = 2;
 
 	WinApp* winApp_ = nullptr;
 	DirectXCore* dxCommon_ = nullptr;

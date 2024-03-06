@@ -60,7 +60,7 @@ void DebugScene::Initialize() {
 	uint32_t MaxParticleCountB = 1000000;
 	particleEditor = std::make_unique<ParticleEditor>();
 	particleEditor->Initialize(MaxParticleCountB,true);
-	particleEditor->SetTextureHandle(TextureManager::Load("sprite/smoke1.png"));
+	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 void DebugScene::Update() {

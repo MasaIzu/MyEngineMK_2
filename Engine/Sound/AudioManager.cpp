@@ -58,7 +58,10 @@ void AudioManager::AllStop()
 
 	for (; itr != audios.end(); ++itr)
 	{
-		itr->pSourceVoice->Stop();
+		if ( itr->pSourceVoice != nullptr )
+		{
+			itr->pSourceVoice->Stop();
+		}
 	}
 }
 

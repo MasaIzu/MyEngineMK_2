@@ -16,6 +16,7 @@ MY_SUPPRESS_WARNINGS_BEGIN
 #include <string>
 #include <vector>
 #include <Model.h>
+#include <Torch.h>
 MY_SUPPRESS_WARNINGS_END
 
 // レベルデータ
@@ -66,8 +67,12 @@ public:// メンバ関数
 	void Initialize(const std::string& fileName ,const Vector3& vec3);
 	//更新
 	void Update();
+	//更新
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 	//描画
 	void Draw(const ViewProjection& viewProjection);
+	//描画
+	void ParticleDraw(const ViewProjection& viewProjection);
 
 	//近距離エネミーのリスト
 	std::list<TutorialEnemy*> GetTutorialEnemyList() { return tutorialEnemyList; }
@@ -96,6 +101,7 @@ private:
 	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::list<BulletShotEnemy*> billetShotEnemyList;
 	std::list<Ground*> ground;
+	std::vector<std::unique_ptr<Torch>> torch;
 	std::vector<Vector3> FirstSplineVec;
 	std::vector<Vector3> SecondsplineVec;
 	std::vector<Vector3> FinalSplineVec;
@@ -111,6 +117,7 @@ private:
 	std::unique_ptr<Model> modelGoal;
 	std::unique_ptr<Model> modelNormalEnemy;
 	std::unique_ptr<Model> modelBulletShotEnemy;
+	std::unique_ptr<Model> torchModel;
 
 	std::vector<Vector3> BillPos;
 

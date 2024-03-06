@@ -79,7 +79,7 @@ void MediumBossStage::Initialize()
 		SafeCollider[ i ]->Update(MyMath::Translation(ColliderPos[ i ]));
 	}
 	Pos.Initialize();
-	Pos.translation_ = ColliderPos[ 2 ];
+	Pos.translation_ = ColliderPos[ 0 ];
 	Pos.scale_ = Vector3(SafeRadius,SafeRadius,SafeRadius);
 	Pos.TransferMatrix();
 	model_.reset(Model::CreateFromOBJ("sphereBulletEnemy",true));
@@ -271,6 +271,7 @@ void MediumBossStage::PostEffectDraw()
 	middleBossEnemy->FbxDraw(*viewProjection_.get());
 	player_->FbxDraw();
 
+	levelData->ParticleDraw(*viewProjection_.get());
 	middleBossEnemy->ParticleDraw(*viewProjection_.get());
 	player_->ParticleDraw();
 	DustParticle->Draw(*viewProjection_.get());
@@ -328,6 +329,7 @@ void MediumBossStage::Finalize()
 
 void MediumBossStage::CSUpdate()
 {
+	levelData->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	DustParticle->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),static_cast< uint32_t >( isUltExplosion ),static_cast<uint32_t>(middleBossEnemy->GetIsUltChargeFin()),middleBossEnemy->GetUltPreparationPosition(),middleBossEnemy->GetUltParticleSpeed());

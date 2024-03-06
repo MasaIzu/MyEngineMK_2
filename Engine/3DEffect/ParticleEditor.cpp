@@ -731,6 +731,12 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("ScaleDownLifeTime",&sendParameters.ScaleDownLifeTime);
 				ImGui::Checkbox("CollisionON",&sendParameters.CollisionON);
 				ImGui::Checkbox("GettingUpDownScale",&sendParameters.GettingUpDownScale);
+				ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
+				if ( sendParameters.EndPointActive )
+				{
+					ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
+					ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
+				}
 				ImGui::TreePop();
 			}
 
@@ -744,7 +750,6 @@ void ParticleEditor::EditUpdate()
 				ImGui::SliderFloat("EndColorAlpha",&sendParameters.EndColor[ 3 ],0.0f,1.0f);
 				ImGui::SliderFloat("Speed",&sendParameters.Speed,0.0f,30.0f);
 				ImGui::SliderFloat("LifeTime",&sendParameters.MaxLife,1.0f,500.0f);
-				ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
 				ImGui::SliderFloat("Scale",&sendParameters.Scale,0.01f,30.0f);
 				ImGui::SliderFloat("ScaleTinker",&sendParameters.ScaleTinker,-1.0f,1.0f);
 				ImGui::SliderFloat("AngleX",&sendParameters.Angle[ 0 ],0.0f,360.0f);
@@ -756,11 +761,6 @@ void ParticleEditor::EditUpdate()
 
 			if ( ImGui::TreeNode("Random Parameters") )
 			{
-				ImGui::Checkbox("EndPointActive",&sendParameters.EndPointActive);
-				if ( sendParameters.EndPointActive )
-				{
-					ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
-				}
 				ImGui::Checkbox("RandomLife",&sendParameters.RandomLife);
 				if ( sendParameters.RandomLife )
 				{
@@ -963,6 +963,12 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const Vecto
 {
 	shaderDetailParameters.StartPos = StartPos;
 	shaderDetailParameters.Shot = isParticleActive;
+	if ( shaderDetailParameters.EndPointActive )
+	{
+		Vector4 EndPos;
+		EndPos = sendParameters.EndPos;
+		shaderDetailParameters.EndPos = StartPos + EndPos;
+	}
 	CSCmd(commandList);
 }
 
