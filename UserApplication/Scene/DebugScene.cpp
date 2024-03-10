@@ -110,8 +110,11 @@ void DebugScene::Update() {
 	
 	ImGui::End();
 
-
-	debugCamera->Update();
+	if ( !particleEditor->GetIsWindowFocus() )
+	{
+		debugCamera->Update();
+	}
+	
 	LightData::GetInstance()->Update();
 }
 

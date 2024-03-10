@@ -360,6 +360,8 @@ public: // メンバ関数
 	//ステージ描画するか
 	bool IsStageDraw();
 
+	bool GetIsWindowFocus();
+
 private:
 	std::vector<std::string> GetFileList(const std::filesystem::path& directory);
 
@@ -410,6 +412,7 @@ private: // メンバ変数
 	bool isLoadFile = false;
 	bool isStageDraw = false;
 	bool isParticleActiveCheckBox = false;
+	bool isWindowFocus = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;

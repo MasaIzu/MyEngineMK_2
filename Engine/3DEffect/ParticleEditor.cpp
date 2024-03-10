@@ -856,6 +856,15 @@ void ParticleEditor::EditUpdate()
 			}
 		}
 
+		if ( ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) )
+		{
+			isWindowFocus = true;
+		}
+		else
+		{
+			isWindowFocus = false;
+		}
+
 		ImGui::End();
 
 		std::string FullPath = FilePath + SelectedFileName;
@@ -917,6 +926,7 @@ void ParticleEditor::EditUpdate()
 			isDeletFileSecondTime = false;
 		}
 	}
+
 #endif
 }
 
@@ -1207,6 +1217,11 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.GettingUpDownScale = params.GettingUpDownScale;
 
 	sendParameters.isLoad = true;
+}
+
+bool ParticleEditor::GetIsWindowFocus()
+{
+	return isWindowFocus;
 }
 
 bool ParticleEditor::IsStageDraw()
