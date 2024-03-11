@@ -350,8 +350,8 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	missileGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_);
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
-	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -386,6 +386,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 		ChargeFinSoundVol = ChargeSoundsVol;
 		ExplosionSoundVol = ChargeSoundsVol;
 		UltResoundSoundVol = ChargeSoundsVol;
+		NormalGunSoundVol = ChargeSoundsVol;
 	}
 	audioManager->ChangeVolume(HeriSound,soundVol);
 

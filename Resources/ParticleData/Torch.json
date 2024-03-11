@@ -2,12 +2,12 @@
     "Resources/ParticleData/Torch.json": {
         "StartPos": {
             "value0": 0.0,
-            "value1": 0.0,
+            "value1": 14.913000106811524,
             "value2": 0.0,
             "value3": 0.0
         },
         "EndPos": {
-            "value0": 6.579999923706055,
+            "value0": 1.9279999732971192,
             "value1": 23.493000030517579,
             "value2": 0.0,
             "value3": 0.0
@@ -37,15 +37,15 @@
         "RandomSpeed": true,
         "RandomScale": false,
         "Speed": 1.0,
-        "LerpStrength": 0.10999999940395355,
-        "Scale": 0.5410000085830689,
+        "LerpStrength": 0.04100000113248825,
+        "Scale": 1.4149999618530274,
         "ScaleTinker": 0.0,
         "MaxLife": 60.0,
         "MaxParticleCount": 10000,
         "AdditiveSynthesis": true,
         "RandomLifeMinMax": {
-            "value0": 30.913999557495118,
-            "value1": 169.46099853515626
+            "value0": 98.87100219726563,
+            "value1": 449.2330017089844
         },
         "RandomSpeedMinMax": {
             "value0": 1.24399995803833,
@@ -88,6 +88,7 @@
             "value0": 1.0,
             "value1": 1.0,
             "value2": 1.0
-        }
+        },
+        "PostEffectPow": 1.0
     }
 }

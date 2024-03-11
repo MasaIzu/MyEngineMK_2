@@ -75,6 +75,7 @@ void serialize(Archive& ar,ParticleEditor::SendPointGenerationParameters& sendPa
 		,cereal::make_nvp("Height",sendParameters.Height),cereal::make_nvp("Depth",sendParameters.Depth)
 		,cereal::make_nvp("ShapeScale",sendParameters.ShapeScale),cereal::make_nvp("CollisionON",sendParameters.CollisionON)
 		,cereal::make_nvp("GettingUpDownScale",sendParameters.GettingUpDownScale),cereal::make_nvp("VelocityAdjustment",sendParameters.VelocityAdjustment)
+		,cereal::make_nvp("PostEffectPow",sendParameters.PostEffectPow)
 	);
 }
 
@@ -737,12 +738,15 @@ void ParticleEditor::EditUpdate()
 					ImGui::SliderFloat3("EndPointPos",sendParameters.EndPos,-300.0f,300.0f);
 					ImGui::SliderFloat("LerpStrength",&sendParameters.LerpStrength,0.01f,1.0f);
 				}
+
+
 				ImGui::TreePop();
 			}
 
 			//ImGui::SetNextTreeNodeOpen(true,ImGuiSetCond_Once);
 			if ( ImGui::TreeNode("Normal Parameters") )
 			{
+				ImGui::SliderFloat("PostEffectPow",&sendParameters.PostEffectPow,0.0f,1.0f);
 				ImGui::SliderFloat3("StartPos",sendParameters.StartPos,-300.0f,300.0f);
 				ImGui::ColorEdit4("StartColor",sendParameters.StartColor,ImGuiColorEditFlags_Float);
 				ImGui::SliderFloat("StartColorAlpha",&sendParameters.StartColor[ 3 ],0.0f,1.0f);
@@ -1156,6 +1160,7 @@ void ParticleEditor::SetParameter()
 	shaderDetailParameters.CollisionON = sendParameters.CollisionON;
 	shaderDetailParameters.GettingUpDownScale = sendParameters.GettingUpDownScale;
 	shaderDetailParameters.VelocityAdjustment = sendParameters.VelocityAdjustment;
+	shaderDetailParameters.PostEffectPow = sendParameters.PostEffectPow;
 
 	shaderDetailParameters.isLoad = sendParameters.isLoad;
 }
@@ -1215,6 +1220,7 @@ void ParticleEditor::LoadFileParameter(const SendPointGenerationParameters& para
 	sendParameters.Depth = params.Depth;
 	sendParameters.CollisionON = params.CollisionON;
 	sendParameters.GettingUpDownScale = params.GettingUpDownScale;
+	sendParameters.PostEffectPow = params.PostEffectPow;
 
 	sendParameters.isLoad = true;
 }

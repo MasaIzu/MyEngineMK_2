@@ -72,6 +72,7 @@ public: // サブクラス
 		float GroupNumber;
 		float GroupTimer;
 		float MaxGroupTimer;
+		float PostEffectPow;
 	};
 
 	struct ShaderViewParameters
@@ -127,6 +128,7 @@ public: // サブクラス
 		Vector4 ShapeScale = { 1,1,1,1 };
 		Vector3 VelocityAdjustment = { 1,1,1 };
 		uint32_t GettingUpDownScale = 0;
+		float PostEffectPow = 0.0f;
 	};
 	ShaderDetailPointGenerationParameters shaderDetailParameters;
 
@@ -176,6 +178,7 @@ public: // サブクラス
 		bool CollisionON = false;
 		bool GettingUpDownScale = false;
 		float VelocityAdjustment[ 3 ] = { 1,1,1 };
+		float PostEffectPow = 0.0f;
 	};
 	SendPointGenerationParameters sendParameters;
 
@@ -413,6 +416,7 @@ private: // メンバ変数
 	bool isStageDraw = false;
 	bool isParticleActiveCheckBox = false;
 	bool isWindowFocus = false;
+	bool isPostEffctActive = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;

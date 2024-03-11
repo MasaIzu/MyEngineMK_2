@@ -40,13 +40,15 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 	}
 }
 
-void NormalGun::Update(const Vector3& Pos,const Vector3& rot)
+void NormalGun::Update(const Vector3& Pos,const Vector3& rot,const float& vol)
 {
 	GunTrans.translation_ = Pos;
 	GunTrans.SetRot(rot);
 	UpdatePosition();
 	fbxObj3d_->Update();
 	TimeUpdate();
+
+	SoundVol = vol;
 
 	if ( CoolTime == static_cast< uint32_t >( Numbers::Zero ) )
 	{

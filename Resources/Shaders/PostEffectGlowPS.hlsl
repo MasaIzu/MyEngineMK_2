@@ -122,6 +122,8 @@ float4 main(VSOutput input) : SV_TARGET
         float4 color = float4(0, 0, 0, 0);
         float totalWeight_ = 0.0;
 
+        float minasWeight = 0.1f;
+        
         for (int x = -steps; x <= steps; ++x)
         {
             float2 offset = float2(x, 0) / texSize;
@@ -138,7 +140,7 @@ float4 main(VSOutput input) : SV_TARGET
             totalWeight_ += weight; // ‘d‚Ý‚ðXV
         }
 
-        color /= totalWeight_;
+        color /= (totalWeight_ * minasWeight);
         
         Color += color;
 		

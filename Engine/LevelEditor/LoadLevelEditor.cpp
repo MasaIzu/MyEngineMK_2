@@ -278,6 +278,8 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			ModelData Data;
 			Data.model = model;
 			Data.worldTrans = Trans;
+			Vector3 Scale_ = Data.worldTrans.scale_;
+			Data.worldTrans.scale_ = Vector3(Scale_.z,Scale_.y,Scale_.x);
 			Data.worldTrans.TransferMatrix();
 			Data.ModelName = fileName;
 			NewLoadObjects.push_back(Data);
