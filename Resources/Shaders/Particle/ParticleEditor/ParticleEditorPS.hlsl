@@ -17,12 +17,12 @@ PSoutput main(GSOutput input) : SV_TARGET
 	//float brightness = diffuse + 0.3f;
 	//float4 texcolor = tex.Sample(smp, input.uv) * color;
 	//return tex.Sample(smp,input.uv)*input.color;
-//return float4(0, 0, 0, 0);w
-		//float4 texcolor = tex.Sample(smp, input.uv) * input.color;
+	//return float4(0, 0, 0, 0);
+	//float4 texcolor = tex.Sample(smp, input.uv) * input.color;
     PSoutput output;
 	
     output.target0 = tex.Sample(smp, input.uv) * input.color;
-    output.target1 = tex.Sample(smp, input.uv) * input.color;
+    output.target1 = tex.Sample(smp, input.uv) * input.PostEffectPowColor;
 	
     return output;
 }

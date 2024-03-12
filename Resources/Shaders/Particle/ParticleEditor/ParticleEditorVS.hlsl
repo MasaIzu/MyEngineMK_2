@@ -25,5 +25,7 @@ VSOutput main(uint vertexId : SV_VertexId)
     output.position = position;
     output.scale = gParticles[vertexId].scale;
     output.color = gParticles[vertexId].color;
+    output.DownColor = gParticles[vertexId].color * gParticles[vertexId].PostEffectPow;
+    
 	return output;
 }

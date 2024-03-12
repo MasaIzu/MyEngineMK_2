@@ -284,6 +284,8 @@ private://EnemyBossクラス変数
 	float ExplosionSoundVol = 0.0f;
 	float UltResoundSoundVol = 0.0f;
 
+	//ただの銃の音
+	float NormalGunSoundVol = 0.0f;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;

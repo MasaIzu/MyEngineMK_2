@@ -448,6 +448,6 @@ void emitParticle(uint3 id : SV_DispatchThreadID)
     gParticles[index].position.xyz = NowPosition;
     gParticles[index].color = StartColor;
     gParticles[index].ScaleKeep = 0;
-
+    gParticles[index].PostEffectPow = PostEffectPow;
 
 }

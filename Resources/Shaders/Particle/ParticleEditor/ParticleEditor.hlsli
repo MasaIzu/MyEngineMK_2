@@ -51,6 +51,7 @@ cbuffer ShaderDetailParameters : register(b1)
     float4 ShapeScale : packoffset(c15);
     float3 VelocityAdjustment : packoffset(c16);
     uint GettingUpDownScale : packoffset(c16.w);
+    float PostEffectPow : packoffset(c17);
 };
 
 
@@ -84,6 +85,7 @@ struct GSOutput
 	//float3 normal:NORMAL;//法線ベクトル
     float2 uv : TEXCOORD; //uv値
     float4 color : COLOR;
+    float4 PostEffectPowColor : COLORPOW;
 };
 
 struct GpuParticleElement
@@ -101,6 +103,7 @@ struct GpuParticleElement
     uint GroupNumber;
     float GroupTimer;
     float MaxGroupTimer;
+    float PostEffectPow;
 };
 
 uint wang_hash(uint seed)

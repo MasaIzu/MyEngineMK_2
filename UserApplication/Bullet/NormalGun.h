@@ -16,7 +16,7 @@ public://基本関数
 	//初期化
 	void Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol = 0.0f,const bool& AnotherSound = false);
 	//更新
-	void Update(const Vector3& Pos,const Vector3& rot);
+	void Update(const Vector3& Pos,const Vector3& rot,const float& vol = 0.0f);
 	//描画
 	void Draw(const ViewProjection& viewProjection_);
 	//Fbx描画

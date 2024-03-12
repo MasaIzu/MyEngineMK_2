@@ -88,6 +88,7 @@
             "value0": 1.0,
             "value1": 30.0,
             "value2": 1.0
-        }
+        },
+        "PostEffectPow": 0.0
     }
 }

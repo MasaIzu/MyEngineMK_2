@@ -90,14 +90,14 @@ private://クラス変数
 	float BulletRadius = 0.5f;
 	float EnemyBulletMaxRadius = 5.0f;
 	float LarpT = 0.0f;
-	float BulletSpeed = 1.5f;
+	float BulletSpeed = 1.0f;
 	float BulletStartSpeed = 1.0f;
-	float BulletEndSpeed = 4.0f;
+	float BulletEndSpeed = 2.0f;
 	float BulletLerpSpeed = 0.04f;
 	float BulletLerpStartSpeed = 0.04f;
 	float BulletLrrpEndSpeed = 1.0f;
 	float BulletStartLerpTime = 0.04f;
-	float NotSearchArea = 14.0f;
+	float NotSearchArea = 25.0f;
 	float LerpStrength = 0.005f;
 
 	Vector3 BulletOldPos;
