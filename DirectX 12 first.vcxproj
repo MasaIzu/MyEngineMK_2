@@ -786,6 +786,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\2D\ShadowMap.h" />
+    <ClInclude Include="Engine\Base\DescHeapSRV.h" />
     <ClInclude Include="Engine\Camera\DebugCamera.h" />
     <ClInclude Include="Engine\3DEffect\BulletSmokeParticle.h" />
     <ClInclude Include="Engine\3DEffect\Explosion.h" />
@@ -793,6 +795,7 @@
     <ClInclude Include="Engine\2D\SerialNumber.h" />
     <ClInclude Include="Engine\2D\NumbersSprite.h" />
     <ClInclude Include="RadialBlurPostEffect.h" />
+    <ClInclude Include="TextureMaterial.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="UserApplication\Player\PlayerMissileShootingState.h" />
     <ClInclude Include="UserApplication\Player\PlayerNormalState.h" />
@@ -905,6 +908,8 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\2D\ShadowMap.cpp" />
+    <ClCompile Include="Engine\Base\DescHeapSRV.cpp" />
     <ClCompile Include="Engine\Camera\DebugCamera.cpp" />
     <ClCompile Include="Engine\3DEffect\BulletSmokeParticle.cpp" />
     <ClCompile Include="Engine\3DEffect\Explosion.cpp" />

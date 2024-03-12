@@ -16,7 +16,9 @@ public: // メンバ関数
 	// 更新
 	void Update() override;
 	//PostEffectDraw
-	void PostEffectDraw() override; 
+	void PostEffectDraw() override;
+
+
 	// 描画
 	void Draw() override;
 

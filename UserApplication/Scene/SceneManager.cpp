@@ -35,6 +35,11 @@ void SceneManager::PostEffectDraw()
 	scene_->PostEffectDraw();
 }
 
+void SceneManager::BackgroundDraw()
+{
+	scene_->BackgroundDraw();
+}
+
 void SceneManager::Draw()
 {
 	scene_->Draw();

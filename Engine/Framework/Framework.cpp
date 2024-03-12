@@ -8,6 +8,7 @@
 #include "LightData.h"
 #include "NumbersSprite.h"
 #include "RadialBlurPostEffect.h"
+#include "DescHeapSRV.h"
 
 uint32_t Framework::Time = 0;
 
@@ -31,6 +32,8 @@ void Framework::Initialize()
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
+	//SRV用デスクリプタヒープの初期化
+	DescHeapSRV::Initialize(directXCore_->GetDevice(),directXCore_->GetCommandList());
 
 	// テクスチャマネージャの初期化
 	TextureManager_ = TextureManager::GetInstance();
@@ -51,6 +54,11 @@ void Framework::Initialize()
 	// スプライト静的初期化
 	Sprite::StaticInitialize(directXCore_->GetDevice());
 	Sprite3D::StaticInitialize(directXCore_->GetDevice());
+
+	//シャドウマップ共通初期化処理
+	ShadowMap::ShadowMapCommon(directXCore_->GetDevice(),directXCore_->GetCommandList());
+	//シャドウマップの初期化
+	shadowMap.reset(ShadowMap::Create());
 
 	// 3Dモデル静的初期化
 	Model::StaticInitialize();
@@ -79,7 +87,6 @@ void Framework::Initialize()
 
 void Framework::Update()
 {
-
 	//fps制限
 	fps->FpsControlBegin();
 
@@ -87,7 +94,6 @@ void Framework::Update()
 	if (winApp_->ProcessMessage()) {
 		isEndRequst = true;
 	}
-
 
 	// 入力関連の毎フレーム処理
 	input_->Update();
@@ -185,6 +191,11 @@ void Framework::Run()
 		}
 
 		CSUpdate();
+
+		//SRV用共通デスクリプタヒープSetDescriptorHeaps
+		DescHeapSRV::SetDescriptorHeaps();
+
+		sceneManager_->
 
 		PostEffectDraw();
 

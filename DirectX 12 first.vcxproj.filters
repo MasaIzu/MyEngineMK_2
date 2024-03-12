@@ -799,6 +799,15 @@
     <ClInclude Include="Torch.h">
       <Filter>UserFile\UserHeaderFile\Ground</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\2D\ShadowMap.h">
+      <Filter>Engine\HeaderFile\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\DescHeapSRV.h">
+      <Filter>Engine\HeaderFile\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMaterial.h">
+      <Filter>Engine\HeaderFile\Drawing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1097,6 +1106,12 @@
     </ClCompile>
     <ClCompile Include="Torch.cpp">
       <Filter>UserFile\UserSourceFile\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\2D\ShadowMap.cpp">
+      <Filter>Engine\SourceFile\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DescHeapSRV.cpp">
+      <Filter>Engine\SourceFile\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

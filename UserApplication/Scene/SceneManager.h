@@ -20,6 +20,11 @@ public: // メンバ関数
 	void PostEffectDraw();
 
 	/// <summary>
+	/// 背景用影
+	/// </summary>
+	void BackgroundDraw();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();

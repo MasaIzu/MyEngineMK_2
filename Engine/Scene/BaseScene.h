@@ -17,7 +17,10 @@ public:
 	virtual void Update() = 0;
 
 	//ポストエフェクト描画
-	virtual void PostEffectDraw()=0;
+	virtual void PostEffectDraw() = 0;
+
+	//ポストエフェクト描画
+	virtual void BackgroundDraw() = 0;
 
 	//描画
 	virtual void Draw() = 0;
@@ -33,6 +36,8 @@ public:
 
 	//ブレイクするかどうか
 	virtual bool IsSlow() = 0;
+
+
 
 public://メンバ関数
 

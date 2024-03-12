@@ -13,6 +13,7 @@
 #include "Defined.h"
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <memory>
+#include <ShadowMap.h>
 MY_SUPPRESS_WARNINGS_END
 
 /// <summary>
@@ -79,6 +80,8 @@ protected:
 	std::unique_ptr<ImGuiManager> imGui;
 	std::unique_ptr <FPS> fps;
 	std::unique_ptr <AbstractSceneFactory> sceneFactory_;
+	//シャドウマップ(影生成ライト視点用)
+	std::unique_ptr<ShadowMap> shadowMap;
 	/*std::unique_ptr<FbxModel> fbx;*/
 	AudioManager* audioManager = nullptr;
 

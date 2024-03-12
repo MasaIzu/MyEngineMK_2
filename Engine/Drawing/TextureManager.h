@@ -40,10 +40,21 @@ public:
 	static uint32_t Load(const std::string& fileName);
 
 	/// <summary>
+	/// シャドウ用のクリエイト
+	/// </summary>
+	/// <param name="srvDesc"></param>
+	/// <param name="texBuff"></param>
+	/// <param name="descHeapSRV"></param>
+	/// <returns></returns>
+	static 	uint32_t CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV);
+
+
+	/// <summary>
 	/// シングルトンインスタンスの取得
 	/// </summary>
 	/// <returns>シングルトンインスタンス</returns>
 	static TextureManager* GetInstance();
+
 
 	/// <summary>
 	/// デストラクタ
@@ -105,4 +116,15 @@ private:
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	uint32_t LoadInternal(const std::string& fileName);
+
+	/// <summary>
+	/// シャドウ用
+	/// </summary>
+	/// <param name="srvDesc"></param>
+	/// <param name="texBuff"></param>
+	/// <param name="descHeapSRV"></param>
+	/// <returns></returns>
+	uint32_t CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV);
+
+
 };
