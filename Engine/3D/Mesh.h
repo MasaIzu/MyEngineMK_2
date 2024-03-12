@@ -160,6 +160,11 @@ public: // メンバ関数
 		ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
 		const UINT& rooParameterIndexTexture,const uint32_t& textureIndex);
 
+	void Draw(
+		ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,
+		const UINT& rooParameterIndexTexture,const uint32_t& textureIndex,const UINT& rooParameterShadowIndexTexture,const uint32_t& shadowMapTextureIndex);
+
+
 	/// <summary>
 	/// 描画（テクスチャ差し替え版）
 	/// </summary>

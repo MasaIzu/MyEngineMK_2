@@ -11,6 +11,7 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 #include "MyStruct.h"
+#include "TextureMaterial.h"
 
 #include "Defined.h"
 MY_SUPPRESS_WARNINGS_BEGIN
@@ -57,6 +58,12 @@ private: // 静的メンバ変数
 	// ライト
 	static std::unique_ptr<LightGroup> lightGroup;
 
+	//シャドウ用
+	//パイプラインステートオブジェクト
+	static Microsoft::WRL::ComPtr<ID3D12PipelineState> LightViewPipelinestate;
+	//ルートシグネチャ
+	static Microsoft::WRL::ComPtr<ID3D12RootSignature> LightViewRootsignature;
+
 public: // 静的メンバ関数
 	// 静的初期化
 	static void StaticInitialize();
@@ -66,6 +73,8 @@ public: // 静的メンバ関数
 
 	// グラフィックスパイプラインの初期化
 	static void InitializeGraphicsPipeline();
+	static void CreateLightViewPipeline();
+
 
 	// 3Dモデル生成
 	static Model* Create();
@@ -76,8 +85,15 @@ public: // 静的メンバ関数
 	// 描画前処理
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 
+	// 描画前処理
+	static void PreShadowDraw(ID3D12GraphicsCommandList* commandList);
+
 	// 描画後処理
 	static void PostDraw();
+
+	static void SetShadowMapTexture(const TextureMaterial& shadowMapTexture_) {
+		shadowMapTexture = shadowMapTexture_;
+	};
 
 public: // メンバ関数
 	// デストラクタ
@@ -88,11 +104,14 @@ public: // メンバ関数
 
 	// 描画
 	void Draw(
-		const WorldTransform& worldTransform, const ViewProjection& viewProjection);
-	void Draw(
-		const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-		const uint32_t& textureHadle);
+		const WorldTransform& worldTransform, const ViewProjection& viewProjection,const ViewProjection& lightViewProjection);
 
+	void ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection,const ViewProjection& lightViewProjection);
+
+
+	void Draw(
+		const WorldTransform& worldTransform,const ViewProjection& viewProjection,
+		const uint32_t& textureHadle);
 
 	// メッシュコンテナを取得
 	inline const std::vector<Mesh*>& GetMeshes() { return meshes_; }
@@ -151,6 +170,9 @@ private: // メンバ変数
 	std::vector<unsigned short> indices;
 
 	uint32_t modelTextureHandle = 0;
+
+	//影用深度テクスチャ
+	static TextureMaterial shadowMapTexture;
 
 private: // メンバ関数
 

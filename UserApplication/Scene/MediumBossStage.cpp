@@ -290,14 +290,13 @@ void MediumBossStage::BackgroundDraw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
+	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 
 	levelData->Draw(*viewProjection_.get());
 
 	middleBossEnemy->Draw(*viewProjection_.get());
 	player_->Draw();
 
-	Model::PostDraw();//3Dオブジェクト描画後処理
 
 	//middleBossEnemy->FbxDraw(*viewProjection_.get());
 	//player_->FbxDraw();

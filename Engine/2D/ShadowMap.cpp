@@ -71,7 +71,7 @@ bool ShadowMap::Initialize()
 		&depthResDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT,1.0f,0),
-		IID_PPV_ARGS(&texBuff)
+		IID_PPV_ARGS(&textureMaterial.texBuff)
 	);
 	assert(SUCCEEDED(result));
 
@@ -87,7 +87,7 @@ bool ShadowMap::Initialize()
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dev->CreateDepthStencilView(texBuff.Get(),
+	dev->CreateDepthStencilView(textureMaterial.texBuff.Get(),
 		&dsvDesc,
 		descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 
@@ -99,7 +99,7 @@ bool ShadowMap::Initialize()
 	srvDesc.Texture2D.MipLevels = 1;
 
 	//デスクリプタヒープにSRV作成
-	DescHeapSRV::CreateShaderResourceView(srvDesc,texBuff);
+	DescHeapSRV::CreateShaderResourceView(srvDesc,textureMaterial);
 
 	return true;
 }
@@ -108,7 +108,7 @@ void ShadowMap::DrawScenePrev()
 {
 	//リソースバリアを変更(シェーダリソース→描画可能)
 	cmdList->ResourceBarrier(1,
-		&CD3DX12_RESOURCE_BARRIER::Transition(texBuff.Get(),
+		&CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),
 			D3D12_RESOURCE_STATE_GENERIC_READ,D3D12_RESOURCE_STATE_DEPTH_WRITE));
 
 	//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
@@ -132,6 +132,6 @@ void ShadowMap::DrawScenePrev()
 void ShadowMap::DrawSceneRear()
 {
 	//リソースバリアを変更(描画可能→シェーダリソース)
-	cmdList->ResourceBarrier(1,&CD3DX12_RESOURCE_BARRIER::Transition(texBuff.Get(),
+	cmdList->ResourceBarrier(1,&CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ));
 }

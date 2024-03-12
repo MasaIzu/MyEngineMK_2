@@ -223,11 +223,14 @@
     <Filter Include="ResourceFile\Shaders\Particle\ParticleEditor">
       <UniqueIdentifier>{d434e0c2-fb53-4b39-8609-54c4b8720121}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\Obj">
+      <UniqueIdentifier>{aeb8ec02-c59d-4fcf-8c5b-94a55bd602a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceFile\Shaders\LightObj">
+      <UniqueIdentifier>{79bf32e0-74c8-40fa-b507-03fc06a52294}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Obj.hlsli">
-      <Filter>ResourceFile\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\Primitive.hlsli">
       <Filter>ResourceFile\Shaders</Filter>
     </None>
@@ -279,14 +282,14 @@
     <None Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditor.hlsli">
       <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
     </None>
+    <None Include="Resources\Shaders\Obj.hlsli">
+      <Filter>ResourceFile\Shaders\Obj</Filter>
+    </None>
+    <None Include="Resources\Shaders\ObjLightView.hlsli">
+      <Filter>ResourceFile\Shaders\LightObj</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\ObjPS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ObjVS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\PrimitivePS.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
@@ -303,9 +306,6 @@
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\TerrainVS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ObjGS.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
@@ -445,6 +445,21 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Particle\ParticleEditor\ParticleEditorVS.hlsl">
       <Filter>ResourceFile\Shaders\Particle\ParticleEditor</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ObjGS.hlsl">
+      <Filter>ResourceFile\Shaders\Obj</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ObjPS.hlsl">
+      <Filter>ResourceFile\Shaders\Obj</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ObjVS.hlsl">
+      <Filter>ResourceFile\Shaders\Obj</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ObjLightViewPS.hlsl">
+      <Filter>ResourceFile\Shaders\LightObj</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ObjLightViewVS.hlsl">
+      <Filter>ResourceFile\Shaders\LightObj</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

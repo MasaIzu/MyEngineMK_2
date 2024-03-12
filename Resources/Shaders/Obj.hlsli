@@ -10,7 +10,14 @@ cbuffer ViewProjection : register(b1) {
 	float3 cameraPos; // カメラ座標（ワールド座標）
 };
 
-cbuffer Material : register(b2) {
+cbuffer LightViewProjection : register(b2)
+{
+    matrix LightView; // ビュー変換行列
+    matrix LightProjection; // プロジェクション変換行列
+    float3 LightCameraPos; // カメラ座標（ワールド座標）
+};
+
+cbuffer Material : register(b3) {
 	float3 m_ambient  : packoffset(c0); // アンビエント係数
 	float3 m_diffuse  : packoffset(c1); // ディフューズ係数
 	float3 m_specular : packoffset(c2); // スペキュラー係数
@@ -53,7 +60,7 @@ struct CircleShadow
 	uint active;
 };
 
-cbuffer LightGroup : register(b3)
+cbuffer LightGroup : register(b4)
 {
 	float3 ambientColor;
     float pad;
@@ -68,7 +75,7 @@ cbuffer LightGroup : register(b3)
     CircleShadow circleShadows[CIRCLESHADOW_MAXNUM];
 }
 
-cbuffer PolygonExplosion: register(b4)
+cbuffer PolygonExplosion: register(b5)
 {
 	float _Destruction : packoffset(c0);
 	float _ScaleFactor : packoffset(c0.y);
