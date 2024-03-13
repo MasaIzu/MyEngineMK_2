@@ -14,6 +14,7 @@ VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
 	output.worldpos = worldPos;
 	output.normal = worldNormal.xyz;
 	output.uv = uv;
+    output.shadowpos = mul(mul(LightProjection, world), pos);
 	
 	return output;
 }

@@ -44,6 +44,11 @@ void Framework::Initialize()
 	LightGroup::StaticInitialize(directXCore_->GetDevice());
 	LightData::GetInstance()->StaticInitialize();
 
+	//シャドウマップ共通初期化処理
+	ShadowMap::ShadowMapCommon(directXCore_->GetDevice(),directXCore_->GetCommandList());
+	//シャドウマップの初期化
+	shadowMap.reset(ShadowMap::Create());
+
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(directXCore_->GetDevice());
 	// デバイスをセット
@@ -55,13 +60,9 @@ void Framework::Initialize()
 	Sprite::StaticInitialize(directXCore_->GetDevice());
 	Sprite3D::StaticInitialize(directXCore_->GetDevice());
 
-	//シャドウマップ共通初期化処理
-	ShadowMap::ShadowMapCommon(directXCore_->GetDevice(),directXCore_->GetCommandList());
-	//シャドウマップの初期化
-	shadowMap.reset(ShadowMap::Create());
-
 	// 3Dモデル静的初期化
 	Model::StaticInitialize();
+	Model::SetShadowMapTexture(shadowMap->GetTexture());
 	/*FbxModel::StaticInitialize();*/
 
 	//Imgui初期化
@@ -193,9 +194,12 @@ void Framework::Run()
 		CSUpdate();
 
 		//SRV用共通デスクリプタヒープSetDescriptorHeaps
-		DescHeapSRV::SetDescriptorHeaps();
+		//DescHeapSRV::SetDescriptorHeaps();
 
-		sceneManager_->
+		//シャドウマップのレンダーテクスチャへの描画
+		shadowMap->DrawScenePrev();
+		sceneManager_->BackgroundDraw();
+		shadowMap->DrawSceneRear();
 
 		PostEffectDraw();
 

@@ -11,12 +11,12 @@ ComPtr<ID3D12DescriptorHeap> DescHeapSRV::descHeapSRV;
 UINT DescHeapSRV::allSceneTextureNum = 0;
 UINT DescHeapSRV::texNumCount = 0;
 
-void DescHeapSRV::Initialize(ID3D12Device* dev, ID3D12GraphicsCommandList* cmdList)
+void DescHeapSRV::Initialize(ID3D12Device* dev_, ID3D12GraphicsCommandList* cmdList_)
 {
 	//デバイスをセット
-	DescHeapSRV::dev = dev;
+	DescHeapSRV::dev = dev_;
 	//コマンドリストをセット
-	DescHeapSRV::cmdList = cmdList;
+	DescHeapSRV::cmdList = cmdList_;
 
 	HRESULT result;
 

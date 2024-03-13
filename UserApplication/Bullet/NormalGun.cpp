@@ -61,11 +61,11 @@ void NormalGun::Update(const Vector3& Pos,const Vector3& rot,const float& vol)
 	}
 }
 
-void NormalGun::Draw(const ViewProjection& viewProjection_)
+void NormalGun::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
 {
 	for ( auto&& Bullet : normalBullet )
 	{
-		Bullet->Draw(viewProjection_);
+		Bullet->Draw(viewProjection_,LightViewProjection_);
 	}
 }
 

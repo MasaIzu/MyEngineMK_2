@@ -18,8 +18,6 @@
 #include "Ground.h"
 
 #include "Player.h"
-#include "TutorialEnemy.h"
-#include "BulletShotEnemy.h"
 #include "LoadLevelEditor.h"
 
 #include "TouchableObject.h"
@@ -52,6 +50,8 @@ public: // メンバ関数
 	
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
+	//背景描画
+	void BackgroundDraw() override;
 	//CSアップデート
 	void CSUpdate() override;
 	//ブレイクするか
@@ -69,6 +69,7 @@ private: // メンバ変数
 
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<ViewProjection> LightViewProjection;//ライトビュープロジェクション
 	std::unique_ptr<Model> model_;// 3Dモデル
 	WorldTransform worldTransform_;//ワールド変換データ
 	CollisionManager* collisionManager = nullptr;//当たり判定
@@ -76,10 +77,7 @@ private: // メンバ変数
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<Ground> ground;
 	std::unique_ptr<Player> player_;
-	//std::unique_ptr<TutorialEnemy> tutorialEnemy;
-	std::list<BulletShotEnemy*> bulletShotEnemy;
 	std::unique_ptr<LoadLevelEditor> levelData;
-	std::list<TutorialEnemy*> tutorialEnemyList;
 	std::unique_ptr<TouchableObject> touchableObject;
 	std::unique_ptr<Skydome> skydome;
 	AudioManager* audioManager = nullptr;

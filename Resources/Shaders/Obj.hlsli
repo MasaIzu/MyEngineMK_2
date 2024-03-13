@@ -90,6 +90,7 @@ struct VSOutput
 	float4 worldpos : POSITION; // ワールド座標
 	float3 normal :NORMAL; // 法線
 	float2 uv  :TEXCOORD; // uv値
+    float4 shadowpos : POSITION1;
 };
 
 struct GSOutput
@@ -99,5 +100,5 @@ struct GSOutput
 	float4 worldpos : POSITION; // ワールド座標
 	float3 normal:NORMAL;//法線ベクトル
 	float2 uv:TEXCOORD;//uv値
-
+    float4 shadowpos : POSITION1;
 };

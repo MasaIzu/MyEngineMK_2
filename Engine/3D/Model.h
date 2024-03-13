@@ -87,6 +87,7 @@ public: // 静的メンバ関数
 
 	// 描画前処理
 	static void PreShadowDraw(ID3D12GraphicsCommandList* commandList);
+	static void PostShadowDraw();
 
 	// 描画後処理
 	static void PostDraw();
@@ -106,7 +107,7 @@ public: // メンバ関数
 	void Draw(
 		const WorldTransform& worldTransform, const ViewProjection& viewProjection,const ViewProjection& lightViewProjection);
 
-	void ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection,const ViewProjection& lightViewProjection);
+	void ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection);
 
 
 	void Draw(

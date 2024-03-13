@@ -28,12 +28,7 @@ LoadLevelEditor::~LoadLevelEditor()
 	for (Ground* Allground : ground) {
 		delete Allground;
 	}
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		delete enemy;
-	}
-	for (BulletShotEnemy* enemy : billetShotEnemyList) {
-		delete enemy;
-	}
+
 }
 
 LevelData* LoadLevelEditor::LoadFile(const std::string& fileName,const Vector3& vec3) {
@@ -232,15 +227,8 @@ void LoadLevelEditor::Initialize(const std::string& FileName,const Vector3& vec3
 			Trans.SetRot(MyMath::GetAngleVec3(objectData.rotation));// 回転角
 			Trans.TransferMatrix();
 
-			if (fileName == modelNormalEnemy->GetName()) {
-				TutorialEnemy* tutorialEnemy = new TutorialEnemy(objectData.translation, model);
-				tutorialEnemyList.push_back(tutorialEnemy);
-			}
-			else if (fileName == modelBulletShotEnemy->GetName()) {
-				BulletShotEnemy* bulletShotEnemy = new BulletShotEnemy(objectData.translation, model);
-				billetShotEnemyList.push_back(bulletShotEnemy);
-			}
-			else if (fileName == modelGround->GetName()) {
+
+			if (fileName == modelGround->GetName()) {
 				Ground* tutorialEnemy = new Ground(modelGround.get());
 				ground.push_back(tutorialEnemy);
 			}
@@ -354,17 +342,33 @@ void LoadLevelEditor::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	}
 }
 
-void LoadLevelEditor::Draw(const ViewProjection& viewProjection)
+void LoadLevelEditor::Draw(const ViewProjection& viewProjection,const ViewProjection& LightViewProjection_)
 {
 	for (Ground* AllGround : ground) {
-		AllGround->Draw(viewProjection);
+		AllGround->Draw(viewProjection,LightViewProjection_);
 	}
 	for (auto& object : NewLoadObjects) {
-		object.model->Draw(object.worldTrans, viewProjection);
+		object.model->Draw(object.worldTrans, viewProjection,LightViewProjection_);
 	}
 	for ( auto& torchObject : torch )
 	{
-		torchObject->Draw(viewProjection);
+		torchObject->Draw(viewProjection,LightViewProjection_);
+	}
+}
+
+void LoadLevelEditor::ShadowDraw(const ViewProjection& viewProjection)
+{
+	for ( Ground* AllGround : ground )
+	{
+		AllGround->ShadowDraw(viewProjection);
+	}
+	for ( auto& object : NewLoadObjects )
+	{
+		object.model->ShadowDraw(object.worldTrans,viewProjection);
+	}
+	for ( auto& torchObject : torch )
+	{
+		torchObject->ShadowDraw(viewProjection);
 	}
 }
 

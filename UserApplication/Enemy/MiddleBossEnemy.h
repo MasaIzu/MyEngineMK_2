@@ -42,7 +42,7 @@ public://基本関数
 	//更新
 	void Update();
 	//描画
-	void Draw(const ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 	//描画
 	void FbxDraw(const ViewProjection& viewProjection_);
 	//パーティクル描画

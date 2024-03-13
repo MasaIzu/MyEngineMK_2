@@ -36,6 +36,9 @@ public: // メンバ関数
 	/// </summary>
 	void PostEffectDraw() override;
 
+	//背景描画
+	void BackgroundDraw() override;
+
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -80,13 +83,13 @@ private:
 	std::unique_ptr<Sprite> OutLineSprite_ = nullptr;
 	std::unique_ptr<Skydome> skydome;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<ViewProjection> LightViewProjection;//ライトビュープロジェクション
 	std::unique_ptr<Model> model;
 	std::unique_ptr<Model> model_;
 	std::unique_ptr<GameCamera> gameCamera;
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<LoadLevelEditor> levelData_;
-	std::list<BulletShotEnemy*> bulletShotEnemy;
-	std::list<TutorialEnemy*> tutorialEnemyList;
+
 	std::unique_ptr<Player> player_;
 	WorldTransform DebugTrans;
 	std::unique_ptr<MiddleBossEnemy> middleBossEnemy;

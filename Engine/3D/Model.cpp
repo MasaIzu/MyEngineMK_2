@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 #include <LightData.h>
+#include <DescHeapSRV.h>
+#include "ShadowMap.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -23,14 +25,15 @@ ComPtr<ID3D12RootSignature> Model::sRootSignature_;
 ComPtr<ID3D12PipelineState> Model::sPipelineState_;
 std::unique_ptr<LightGroup> Model::lightGroup;
 TextureMaterial Model::shadowMapTexture;
-Microsoft::WRL::ComPtr<ID3D12PipelineState> LightViewPipelinestate;
+ComPtr<ID3D12PipelineState> Model::LightViewPipelinestate;
 //ルートシグネチャ
-Microsoft::WRL::ComPtr<ID3D12RootSignature> LightViewRootsignature;
+ComPtr<ID3D12RootSignature> Model::LightViewRootsignature;
 
 void Model::StaticInitialize() {
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
+	CreateLightViewPipeline();
 
 	// ライト生成
 	lightGroup.reset(LightGroup::Create());
@@ -162,7 +165,7 @@ void Model::InitializeGraphicsPipeline() {
 	rootparams[2].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[3].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[4].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[5].InitAsDescriptorTable(1,&descRangeSRV1,D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[5].InitAsDescriptorTable(1, &descRangeSRV1, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[6].InitAsConstantBufferView(4, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプル
@@ -320,13 +323,12 @@ void Model::CreateLightViewPipeline()
 	descRangeSRV0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1,0);	//t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[ 6 ];
+	CD3DX12_ROOT_PARAMETER rootparams[ 5 ];
 	rootparams[ 0 ].InitAsConstantBufferView(0,0,D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[ 1 ].InitAsConstantBufferView(1,0,D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[ 2 ].InitAsConstantBufferView(2,0,D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[ 3 ].InitAsConstantBufferView(3,0,D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[ 4 ].InitAsDescriptorTable(1,&descRangeSRV0,D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[ 5 ].InitAsConstantBufferView(4,0,D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[ 3 ].InitAsDescriptorTable(1,&descRangeSRV0,D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[ 4 ].InitAsConstantBufferView(3,0,D3D12_SHADER_VISIBILITY_ALL);
 
 	//テクスチャサンプラーの設定
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -389,12 +391,20 @@ void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
 
 void Model::PreShadowDraw(ID3D12GraphicsCommandList* commandList)
 {
+	// コマンドリストをセット
+	sCommandList_ = commandList;
 	//プリミティブ形状の設定コマンド(三角形リスト)
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//パイプラインステートとルートシグネチャの設定コマンド
 	commandList->SetPipelineState(LightViewPipelinestate.Get());
 	commandList->SetGraphicsRootSignature(LightViewRootsignature.Get());
+}
+
+void Model::PostShadowDraw()
+{
+	// コマンドリストを解除
+	sCommandList_ = nullptr;
 }
 
 void Model::PostDraw() {
@@ -780,7 +790,7 @@ void Model::Draw(
 	const WorldTransform& worldTransform, const ViewProjection& viewProjection,const ViewProjection& lightViewProjection) {
 
 	// ライトの描画
-	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,5);
+	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,6);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0, worldTransform.constBuff_->GetGPUVirtualAddress());
@@ -790,29 +800,29 @@ void Model::Draw(
 	// CBVをセット（ビュープロジェクション行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(2,lightViewProjection.constBuff_->GetGPUVirtualAddress());
 
+	ShadowMap::SetGraphicsRootDescriptorTable(sCommandList_,5);
+
 	for (int i = 0; i < meshes_.size(); i++) {
 		// 全メッシュを描画
-		meshes_[i]->Draw(sCommandList_, 3, 4, modelTextureHandle,5,shadowMapTexture.texNumber);
+		meshes_[i]->Draw(sCommandList_, 3, 4, modelTextureHandle);
 	}
 }
 
-void Model::ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection,const ViewProjection& lightViewProjection)
+void Model::ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection)
 {
 	// ライトの描画
-	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,5);
+	LightData::GetInstance()->GetLightGroupData()->Draw(sCommandList_,4);
 
 	// CBVをセット（ワールド行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(0,worldTransform.constBuff_->GetGPUVirtualAddress());
 
 	// CBVをセット（ビュープロジェクション行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(1,viewProjection.constBuff_->GetGPUVirtualAddress());
-	// CBVをセット（ビュープロジェクション行列）
-	sCommandList_->SetGraphicsRootConstantBufferView(2,lightViewProjection.constBuff_->GetGPUVirtualAddress());
 
 	for ( int i = 0; i < meshes_.size(); i++ )
 	{
 		// 全メッシュを描画
-		meshes_[ i ]->Draw(sCommandList_,3,4,modelTextureHandle);
+		meshes_[ i ]->Draw(sCommandList_,2,3,modelTextureHandle);
 	}
 }
 

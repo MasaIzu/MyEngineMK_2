@@ -18,7 +18,9 @@ public:
 	//更新
 	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 	//描画
-	void Draw(const ViewProjection& view);
+	void Draw(const ViewProjection& view,const ViewProjection& LightViewProjection_);
+	//描画
+	void ShadowDraw(const ViewProjection& view);
 	//描画
 	void ParticleDraw(const ViewProjection& view);
 

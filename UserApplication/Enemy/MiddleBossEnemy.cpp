@@ -244,7 +244,7 @@ void MiddleBossEnemy::Update()
 	particleEditorRight->EditUpdate();
 }
 
-void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
+void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
 {
 	//model_->Draw(UltWorldTrans,viewProjection_);
 	//model_->Draw(EnemyNecWorldTrans,viewProjection_);
@@ -252,12 +252,12 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_)
 
 	if ( !isDead )
 	{
-		normalGunLeft->Draw(viewProjection_);
-		normalGunRight->Draw(viewProjection_);
-		missileGunLeft->Draw(viewProjection_);
-		missileGunRight->Draw(viewProjection_);
-		HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_);
-		HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_);
+		normalGunLeft->Draw(viewProjection_,LightViewProjection_);
+		normalGunRight->Draw(viewProjection_,LightViewProjection_);
+		missileGunLeft->Draw(viewProjection_,LightViewProjection_);
+		missileGunRight->Draw(viewProjection_,LightViewProjection_);
+		HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_,LightViewProjection_);
+		HeriHaneModel_->Draw(HeriHaneRightTrans,viewProjection_,LightViewProjection_);
 	}
 }
 

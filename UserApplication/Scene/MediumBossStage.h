@@ -6,7 +6,6 @@
 #include "GameCamera.h"
 #include "Player.h"
 #include "CollisionManager.h"
-#include "BossEnemy.h"
 #include "Skydome.h"
 #include "MiddleBossEnemy.h"
 #include "ClearUI.h"
@@ -70,6 +69,7 @@ private:
 	SceneManager* sceneManager_ = nullptr;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<ViewProjection> LightViewProjection;//ライトビュープロジェクション
 	CollisionManager* collisionManager = nullptr;//当たり判定
 	std::unique_ptr<LoadLevelEditor> levelData;
 	std::unique_ptr<Player> player_;

@@ -53,6 +53,9 @@ public: // メンバ関数
 
 	//ポストエフェクトを掛けるやつ
 	void PostEffectDraw() override;
+
+	//背景描画
+	void BackgroundDraw() override;
 	//CSアップデート
 	void CSUpdate() override;
 	//ブレイクするか
@@ -68,6 +71,7 @@ private: // メンバ変数
 
 	WorldTransform worldTransform_;//ワールド変換データ
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<ViewProjection> LightViewProjection;//ライトビュープロジェクション
 	std::unique_ptr<Ground> ground;
 	std::unique_ptr<Model> model;
 	std::unique_ptr<Model> model1;

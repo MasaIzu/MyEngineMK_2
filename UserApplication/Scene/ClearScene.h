@@ -27,7 +27,8 @@ public: // メンバ関数
 
 	//ポストエフェクト
 	void PostEffectDraw() override;
-
+	//背景描画
+	void BackgroundDraw() override;
 	/// <summary>
 	/// 描画
 	/// </summary>

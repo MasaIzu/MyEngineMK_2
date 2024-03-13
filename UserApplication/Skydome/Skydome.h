@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 
 private:
 	//ワールド変換データ

@@ -28,9 +28,14 @@ void Torch::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	TorchParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(torchTrans.translation_),true);
 }
 
-void Torch::Draw(const ViewProjection& view)
+void Torch::Draw(const ViewProjection& view,const ViewProjection& LightViewProjection_)
 {
-	torchModel->Draw(torchTrans,view);
+	torchModel->Draw(torchTrans,view,LightViewProjection_);
+}
+
+void Torch::ShadowDraw(const ViewProjection& view)
+{
+	torchModel->ShadowDraw(torchTrans,view);
 }
 
 void Torch::ParticleDraw(const ViewProjection& view)

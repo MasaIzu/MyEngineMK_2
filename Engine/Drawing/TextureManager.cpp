@@ -190,7 +190,7 @@ uint32_t TextureManager::LoadInternal(const std::string& fileName) {
 	return handle;
 }
 
-uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV)
+uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV)
 {
 	uint32_t handle = NextDescriptorHeapNumber_;
 	device_->CreateShaderResourceView(
@@ -205,7 +205,7 @@ uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RES
 	return handle;
 }
 
-uint32_t TextureManager::CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV)
+uint32_t TextureManager::CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV)
 {
-	return TextureManager::GetInstance()->CreateShaderResourceView(srvDesc,texBuff,descHeapSRV);
+	return TextureManager::GetInstance()->CreateShaderResourceViewInternal(srvDesc,texBuff,descHeapSRV);
 }

@@ -5,8 +5,6 @@
 
 #include "WorldTransform.h"
 
-#include "TutorialEnemy.h"
-#include "BulletShotEnemy.h"
 #include "Ground.h"
 #include "TouchableObject.h"
 
@@ -70,14 +68,12 @@ public:// メンバ関数
 	//更新
 	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
 	//描画
-	void Draw(const ViewProjection& viewProjection);
+	void Draw(const ViewProjection& viewProjection,const ViewProjection& LightViewProjection_);
+	//描画
+	void ShadowDraw(const ViewProjection& viewProjection);
 	//描画
 	void ParticleDraw(const ViewProjection& viewProjection);
 
-	//近距離エネミーのリスト
-	std::list<TutorialEnemy*> GetTutorialEnemyList() { return tutorialEnemyList; }
-	//遠距離エネミーのリスト
-	std::list<BulletShotEnemy*> GetBulletShotEnemyList() { return billetShotEnemyList; }
 	Vector3 GetBillPosition(const uint32_t& BillCount){return BillPos[ BillCount ]; }
 		//最初のスプライン
 	std::vector<Vector3> GetFirstSpline() { return FirstSplineVec; }
@@ -98,8 +94,7 @@ private:
 	std::map<std::string, Model*> models;
 	std::vector<ModelData> LoadedObjects;
 	std::vector<ModelData> NewLoadObjects;
-	std::list<TutorialEnemy*> tutorialEnemyList;
-	std::list<BulletShotEnemy*> billetShotEnemyList;
+
 	std::list<Ground*> ground;
 	std::vector<std::unique_ptr<Torch>> torch;
 	std::vector<Vector3> FirstSplineVec;

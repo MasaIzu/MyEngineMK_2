@@ -30,6 +30,9 @@ public: // メンバ関数
 	//ポストエフェクト
 	void PostEffectDraw() override;
 
+	//背景描画
+	void BackgroundDraw() override;
+
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -61,6 +64,7 @@ private:
 	std::unique_ptr<Sprite> SelectBarSprite_ = nullptr;
 	std::unique_ptr<Sprite> NowLoadingSprite_ = nullptr;
 	std::unique_ptr<ViewProjection> viewProjection_;//ビュープロジェクション
+	std::unique_ptr<ViewProjection> LightViewProjection;//ライトビュープロジェクション
 	std::unique_ptr<Sprite> PushSprite;
 	std::unique_ptr<Sprite> SpaceSprite;
 	std::unique_ptr<Sprite> ASprite;

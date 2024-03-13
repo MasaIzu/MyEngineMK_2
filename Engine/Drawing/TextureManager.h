@@ -46,7 +46,7 @@ public:
 	/// <param name="texBuff"></param>
 	/// <param name="descHeapSRV"></param>
 	/// <returns></returns>
-	static 	uint32_t CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV);
+	static 	uint32_t CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV);
 
 
 	/// <summary>
@@ -124,7 +124,7 @@ private:
 	/// <param name="texBuff"></param>
 	/// <param name="descHeapSRV"></param>
 	/// <returns></returns>
-	uint32_t CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV);
+	uint32_t CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV);
 
 
 };

@@ -43,6 +43,11 @@ void DebugScene::Initialize() {
 	viewProjection_->eye = { 0,5,-100 };
 	viewProjection_->UpdateMatrix();
 
+	LightViewProjection = std::make_unique<ViewProjection>();
+	LightViewProjection->Initialize();
+	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->UpdateMatrix();
+
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = Vector3(100, 100, 100);
 
@@ -132,8 +137,8 @@ void DebugScene::PostEffectDraw()
 
 	if ( particleEditor->IsStageDraw() )
 	{
-		skydome->Draw(*viewProjection_.get());
-		levelData->Draw(*viewProjection_.get());
+		skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
+		levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
 	}
 
 	Model::PostDraw();
@@ -145,6 +150,15 @@ void DebugScene::PostEffectDraw()
 	particleEditor->Draw(*viewProjection_);
 
 	PostEffect::PostDrawScene();
+}
+
+void DebugScene::BackgroundDraw()
+{
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
+	levelData->ShadowDraw(*viewProjection_.get());
+	Model::PostShadowDraw();
 }
 
 void DebugScene::CSUpdate()

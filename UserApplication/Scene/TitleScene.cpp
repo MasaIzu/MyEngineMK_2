@@ -46,27 +46,22 @@ void TitleScene::Initialize()
 	viewProjection_->eye = { 0,0,-200 };
 	viewProjection_->UpdateMatrix();
 
+	LightViewProjection = std::make_unique<ViewProjection>();
+	LightViewProjection->Initialize();
+	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->UpdateMatrix();
+
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("TitleStage",Vector3(0,0,0));
 
 	levelData_ = std::make_unique<LoadLevelEditor>();
 	levelData_->Initialize("TitleStage2",Vector3(0,0,0));
 
-	tutorialEnemyList = levelData->GetTutorialEnemyList();
-	bulletShotEnemy = levelData->GetBulletShotEnemyList();
-
 	FirstCameraPoints = levelData->GetCameraSpline();
 	SecondCameraPoints = levelData_->GetCameraSpline();
 
 	middleBossEnemy = std::make_unique<MiddleBossEnemy>(audioManager);
-	for ( TutorialEnemy* enemy : tutorialEnemyList )
-	{
-		enemy->Initialize();
-	}
-	for ( BulletShotEnemy* enemy : bulletShotEnemy )
-	{
-		enemy->Initialize();
-	}
+
 	DebugTrans.Initialize();
 
 	model.reset(Model::CreateFromOBJ("ken",true));
@@ -107,14 +102,6 @@ void TitleScene::Update()
 
 	CameraPos.z = 5.0f;
 
-	for ( TutorialEnemy* enemy : tutorialEnemyList )
-	{
-		enemy->Update(Vector3(0,0,-50));
-	}
-	for ( BulletShotEnemy* enemy : bulletShotEnemy )
-	{
-		enemy->Update(Vector3(0,0,-50));
-	}
 
 	CameraUpdate();
 
@@ -169,6 +156,10 @@ void TitleScene::PostEffectDraw()
 	PostEffect::PostDrawScene();
 }
 
+void TitleScene::BackgroundDraw()
+{
+}
+
 void TitleScene::Draw()
 {
 	// コマンドリストの取得
@@ -180,24 +171,24 @@ void TitleScene::Draw()
 
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-	skydome->Draw(*viewProjection_.get());
+	skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
 	if ( movieCameraCount == MovieCameraCount::FirstCamera )
 	{
-		levelData->Draw(*viewProjection_.get());
-		for ( TutorialEnemy* enemy : tutorialEnemyList )
+		levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
+		/*for ( TutorialEnemy* enemy : tutorialEnemyList )
 		{
 			enemy->Draw(*viewProjection_.get());
 		}
 		for ( BulletShotEnemy* enemy : bulletShotEnemy )
 		{
 			enemy->Draw(*viewProjection_.get());
-		}
+		}*/
 	}
 	else if ( movieCameraCount == MovieCameraCount::SecondCamera )
 	{
-		levelData_->Draw(*viewProjection_.get());
+		levelData_->Draw(*viewProjection_.get(),*LightViewProjection.get());
 
-		middleBossEnemy->Draw(*viewProjection_.get());
+		middleBossEnemy->Draw(*viewProjection_.get(),*LightViewProjection.get());
 
 	}
 

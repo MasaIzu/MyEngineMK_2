@@ -868,12 +868,9 @@
     <ClInclude Include="UserApplication\Enemy\MiddleBossEnemy.h" />
     <ClInclude Include="UserApplication\Bullet\MissileBullet.h" />
     <ClInclude Include="Engine\Base\MyStruct.h" />
-    <ClInclude Include="UserApplication\Enemy\BossEnemy.h" />
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h" />
     <ClInclude Include="UserApplication\Scene\StageSelect.h" />
     <ClInclude Include="Engine\Collision\TouchableObject.h" />
-    <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h" />
-    <ClInclude Include="UserApplication\Enemy\EnemyBullet.h" />
     <ClInclude Include="Engine\Math\Easing.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\Model.h" />
@@ -908,7 +905,6 @@
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h" />
     <ClInclude Include="Engine\2D\PostEffect.h" />
     <ClInclude Include="Engine\2D\PostEffectManager.h" />
-    <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h" />
     <ClInclude Include="Engine\Framework\Framework.h" />
     <ClInclude Include="Engine\GameFunction\Input.h" />
     <ClInclude Include="Engine\GameFunction\Mouse.h" />
@@ -981,12 +977,9 @@
     <ClCompile Include="UserApplication\Bullet\NormalBullet.cpp" />
     <ClCompile Include="UserApplication\Enemy\MiddleBossEnemy.cpp" />
     <ClCompile Include="UserApplication\Bullet\MissileBullet.cpp" />
-    <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp" />
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp" />
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp" />
     <ClCompile Include="Engine\Collision\TouchableObject.cpp" />
-    <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp" />
-    <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Engine\Math\Easing.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\Model.cpp" />
@@ -1010,7 +1003,6 @@
     <ClCompile Include="Engine\Math\SplinePosition.cpp" />
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp" />
     <ClCompile Include="Engine\2D\PostEffect.cpp" />
-    <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp" />
     <ClCompile Include="Engine\Framework\Framework.cpp" />
     <ClCompile Include="Engine\GameFunction\Input.cpp" />
     <ClCompile Include="Engine\GameFunction\Mouse.cpp" />

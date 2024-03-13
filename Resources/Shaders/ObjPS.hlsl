@@ -1,7 +1,8 @@
 #include "Obj.hlsli"
 
-Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
-SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
+Texture2D<float4> tex : register(t0); // 0番スロットに設定されたテクスチャ
+Texture2D<float4> shadowMap : register(t1); //1番スロットに設定されたテクスチャ
+SamplerState smp : register(s0); // 0番スロットに設定されたサンプラー
 
 
 float4 main(GSOutput input) : SV_TARGET
@@ -118,6 +119,25 @@ float4 main(GSOutput input) : SV_TARGET
         }
     }
 
-	// シェーディングによる色で描画
-    return float4(shadecolor.rgb * texcolor.rgb, shadecolor.a * texcolor.a);
+	//影(シャドウマップ)
+    float shadow = 1.0f;
+   
+	//シャドウマップのZ値を参照
+    float w = 1.0f / input.shadowpos.w;
+    float2 shadowTexUV;
+    shadowTexUV.x = (1.0f + input.shadowpos.x * w) * 0.5f;
+    shadowTexUV.y = (1.0f - input.shadowpos.y * w) * 0.5f;
+	//uv座標で0～1なら影判定をする
+    if (shadowTexUV.x >= 0 && shadowTexUV.x <= 1.0f && shadowTexUV.y >= 0 && shadowTexUV.y <= 1.0f)
+    {
+        if (shadowMap.Sample(smp, shadowTexUV).x + 0.0005f < input.shadowpos.z * w)
+        {
+            shadow *= 0.5f;
+        }
+    }
+
+    
+
+	// シェーディングによる色で描画;
+    return shadecolor * texcolor * float4(shadow, shadow, shadow, 1);
 }

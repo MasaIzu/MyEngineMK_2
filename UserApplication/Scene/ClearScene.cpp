@@ -90,6 +90,10 @@ void ClearScene::PostEffectDraw()
 	PostEffect::PostDrawScene();
 }
 
+void ClearScene::BackgroundDraw()
+{
+}
+
 void ClearScene::Draw()
 {
 	Result->Draw({ 640,360 }, { 1,1,1,1 });

@@ -18,7 +18,7 @@ public://基本関数
 	//更新
 	void Update(const Vector3& Pos,const Vector3& rot,const float& vol = 0.0f);
 	//描画
-	void Draw(const ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 	//Fbx描画
 	void FbxDraw(const ViewProjection& viewProjection_);
 

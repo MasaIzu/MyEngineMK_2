@@ -51,11 +51,11 @@ void ExplosionGun::Update(const Vector3& Pos,const Vector3& rot)
 	}
 }
 
-void ExplosionGun::Draw(const ViewProjection& viewProjection_)
+void ExplosionGun::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
 {
 	for ( auto&& Bullet : explosionBullet )
 	{
-		Bullet->Draw(viewProjection_);
+		Bullet->Draw(viewProjection_,LightViewProjection_);
 	}
 }
 

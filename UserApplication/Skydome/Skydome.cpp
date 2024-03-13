@@ -16,7 +16,7 @@ void Skydome::Update() {
 }
 
 
-void Skydome::Draw(ViewProjection& viewProjection_) {
+void Skydome::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_) {
 	//3Dモデル描画
-	model_->Draw(worldTransform_, viewProjection_);
+	model_->Draw(worldTransform_, viewProjection_,LightViewProjection_);
 }

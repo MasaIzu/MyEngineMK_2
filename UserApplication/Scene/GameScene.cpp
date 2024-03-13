@@ -38,6 +38,11 @@ void GameScene::Initialize() {
 	viewProjection_->eye = { 0,0,-50 };
 	viewProjection_->UpdateMatrix();
 
+	LightViewProjection = std::make_unique<ViewProjection>();
+	LightViewProjection->Initialize();
+	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->UpdateMatrix();
+
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 50,0,0 };
 	worldTransform_.scale_ = { 10.0f,3.0f,4.0f };
@@ -60,15 +65,6 @@ void GameScene::Initialize() {
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("tutorialStage",Vector3(0,0,0));
 
-	tutorialEnemyList = levelData->GetTutorialEnemyList();
-	bulletShotEnemy = levelData->GetBulletShotEnemyList();
-
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Initialize();
-	}
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->Initialize();
-	}
 
 	touchableObject.reset(TouchableObject::Create(model_.get(), worldTransform_, COLLISION_ATTR_LANDSHAPE));
 
@@ -133,18 +129,7 @@ void GameScene::Update() {
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
-	//tutorialEnemy->Update(player_->GetPlayerPos());
-	//bulletShotEnemy->Update(player_->GetPlayerPos());
 
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Update(player_->GetPlayerPos());
-	}
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->Update(player_->GetPlayerPos());
-	}
-	// 敵のデスフラグが立っていたらリストから消す
-	tutorialEnemyList.remove_if([](TutorialEnemy* enemy) { return enemy->GetIsDead(); });
-	bulletShotEnemy.remove_if([](BulletShotEnemy* enemy) { return enemy->GetIsDead(); });
 	//全ての衝突をチェック
 	collisionManager->CheckAllCollisions();
 
@@ -192,6 +177,10 @@ void GameScene::PostEffectDraw()
 	PostEffect::PostDrawScene();
 }
 
+void GameScene::BackgroundDraw()
+{
+}
+
 void GameScene::CSUpdate()
 {
 
@@ -221,20 +210,20 @@ void GameScene::Draw() {
 	//// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 	//skydome->Draw(*viewProjection_.get());
-	ground->Draw(*viewProjection_.get());
-	model_->Draw(worldTransform_ ,*viewProjection_.get());
-	levelData->Draw(*viewProjection_.get());
+	ground->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	model_->Draw(worldTransform_ ,*viewProjection_.get(),*LightViewProjection.get());
+	levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
 	//tutorialEnemy->Draw(*viewProjection_.get());
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->Draw(*viewProjection_.get());
-	}
-	for (TutorialEnemy* enemy : tutorialEnemyList) {
-		enemy->DebugDraw(*viewProjection_.get());
-	}
-	for (BulletShotEnemy* enemy : bulletShotEnemy) {
-		enemy->Draw(*viewProjection_.get());
-	}
-	player_->Draw();
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->Draw(*viewProjection_.get());
+	//}
+	//for (TutorialEnemy* enemy : tutorialEnemyList) {
+	//	enemy->DebugDraw(*viewProjection_.get());
+	//}
+	//for (BulletShotEnemy* enemy : bulletShotEnemy) {
+	//	enemy->Draw(*viewProjection_.get());
+	//}
+	player_->Draw(*LightViewProjection.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
 	player_->FbxDraw();

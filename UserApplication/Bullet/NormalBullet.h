@@ -25,7 +25,7 @@ public://基本関数
 	//更新
 	void Update();
 	//描画
-	void Draw(const ViewProjection& viewProjection_);
+	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 
 	void CSUpadate(ID3D12GraphicsCommandList* commandList);
 	void ParticleDraw(const ViewProjection& viewProjection_);

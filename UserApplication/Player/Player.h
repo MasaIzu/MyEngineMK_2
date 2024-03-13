@@ -47,7 +47,7 @@ public://基本関数
 	//更新
 	void Update();
 	//描画
-	void Draw();
+	void Draw(const ViewProjection& LightViewProjection_);
 	//描画
 	void FbxDraw();
 	//スプライト描画

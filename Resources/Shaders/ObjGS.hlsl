@@ -99,6 +99,7 @@ void main(triangle VSOutput IN[3], inout TriangleStream<GSOutput> triStream)
         o.worldpos = v.worldpos;
         o.uv = v.uv;
         o.normal = v.normal;
+        o.shadowpos = v.shadowpos;
         triStream.Append(o);
     }
 

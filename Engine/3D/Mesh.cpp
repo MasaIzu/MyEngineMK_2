@@ -131,21 +131,20 @@ void Mesh::Draw(
 	commandList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);
 }
 
-void Mesh::Draw(ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,const UINT& rooParameterIndexTexture,const uint32_t& textureIndex,const UINT& rooParameterShadowIndexTexture,const uint32_t& shadowMapTextureIndex)
-{
-	// 頂点バッファをセット
-	commandList->IASetVertexBuffers(0,1,&vbView_);
-	// インデックスバッファをセット
-	commandList->IASetIndexBuffer(&ibView_);
-
-	// マテリアルのグラフィックスコマンドをセット
-	material_->SetGraphicsCommand(commandList,rooParameterIndexMaterial,rooParameterIndexTexture,textureIndex);
-
-	DescHeapSRV::SetGraphicsRootDescriptorTable(rooParameterShadowIndexTexture,shadowMapTextureIndex);
-
-	// 描画コマンド
-	commandList->DrawIndexedInstanced(( UINT ) indices_.size(),1,0,0,0);
-}
+//void Mesh::Draw(ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,const UINT& rooParameterIndexTexture,const uint32_t& textureIndex,const UINT& rooParameterShadowIndexTexture,const uint32_t& shadowMapTextureIndex)
+//{
+//	// 頂点バッファをセット
+//	commandList->IASetVertexBuffers(0,1,&vbView_);
+//	// インデックスバッファをセット
+//	commandList->IASetIndexBuffer(&ibView_);
+//
+//
+//	// マテリアルのグラフィックスコマンドをセット
+//	material_->SetGraphicsCommand(commandList,rooParameterIndexMaterial,rooParameterIndexTexture,textureIndex);
+//
+//	// 描画コマンド
+//	commandList->DrawIndexedInstanced(( UINT ) indices_.size(),1,0,0,0);
+//}
 
 
 void Mesh::SetLight(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,const float& alpha) {

@@ -36,6 +36,11 @@ void StageSelect::Initialize()
 	viewProjection_ = std::make_unique<ViewProjection>();
 	viewProjection_->Initialize();
 
+	LightViewProjection = std::make_unique<ViewProjection>();
+	LightViewProjection->Initialize();
+	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->UpdateMatrix();
+
 	isSelectBarTop = false;
 	isSelectBarDown = true;
 	SelectBarPos = OneToTwoPos;
@@ -124,6 +129,10 @@ void StageSelect::PostEffectDraw()
 
 
 	PostEffect::PostDrawScene();
+}
+
+void StageSelect::BackgroundDraw()
+{
 }
 
 void StageSelect::Draw()

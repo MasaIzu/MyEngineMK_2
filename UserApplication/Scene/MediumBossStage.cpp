@@ -40,6 +40,11 @@ void MediumBossStage::Initialize()
 	viewProjection_->eye = { 0,0,-50 };
 	viewProjection_->UpdateMatrix();
 
+	LightViewProjection = std::make_unique<ViewProjection>();
+	LightViewProjection->Initialize();
+	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->UpdateMatrix();
+
 	levelData = std::make_unique<LoadLevelEditor>();
 	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
 
@@ -258,11 +263,11 @@ void MediumBossStage::PostEffectDraw()
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	skydome->Draw(*viewProjection_.get());
-	levelData->Draw(*viewProjection_.get());
+	skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
 
-	middleBossEnemy->Draw(*viewProjection_.get());
-	player_->Draw();
+	middleBossEnemy->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	player_->Draw(*LightViewProjection.get());
 
 	//model_->Draw(Pos,*viewProjection_.get());
 
@@ -292,11 +297,13 @@ void MediumBossStage::BackgroundDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	levelData->Draw(*viewProjection_.get());
+	levelData->ShadowDraw(*viewProjection_.get());
 
-	middleBossEnemy->Draw(*viewProjection_.get());
-	player_->Draw();
 
+	//middleBossEnemy->Draw(*viewProjection_.get());
+	//player_->Draw();
+
+	Model::PostShadowDraw();
 
 	//middleBossEnemy->FbxDraw(*viewProjection_.get());
 	//player_->FbxDraw();

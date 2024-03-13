@@ -58,11 +58,11 @@ void NormalBullet::Update()
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 }
 
-void NormalBullet::Draw(const ViewProjection& viewProjection_)
+void NormalBullet::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
 {
 	if ( isBulletAlive == true )
 	{
-		model_->Draw(BulletWorldTrans,viewProjection_);
+		model_->Draw(BulletWorldTrans,viewProjection_,LightViewProjection_);
 	}
 }
 

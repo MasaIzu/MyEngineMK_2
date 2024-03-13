@@ -38,6 +38,8 @@ public: //静的メンバ関数
 	/// <param name="cmdList">コマンドリスト</param>
 	static void ShadowMapCommon(ID3D12Device* dev,ID3D12GraphicsCommandList* cmdList);
 
+	static void SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* cmdList,const uint32_t& rootParaIndex);
+
 public: //メンバ関数
 	/// <summary>
 	/// 初期化
@@ -66,6 +68,7 @@ private: //静的メンバ変数
 	static ID3D12GraphicsCommandList* cmdList;
 	//シャドウマップテクスチャサイズ(4K)
 	static const int shadowMapTexSize = 4096;
+	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
 private: //メンバ変数
 	//定数バッファ

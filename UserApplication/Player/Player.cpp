@@ -278,7 +278,7 @@ void Player::Update()
 	DamageUI->Update();
 }
 
-void Player::Draw()
+void Player::Draw(const ViewProjection& LightViewProjection_)
 {
 	//for ( uint32_t i = 0; i < AttackColSphereCount; i++ )
 	//{
@@ -289,8 +289,8 @@ void Player::Draw()
 
 	if ( !isPlayerExplosion )
 	{
-		playerNormalGun->Draw(*viewProjection_);
-		playerExplosionGun->Draw(*viewProjection_);
+		playerNormalGun->Draw(*viewProjection_,LightViewProjection_);
+		playerExplosionGun->Draw(*viewProjection_,LightViewProjection_);
 	}
 }
 

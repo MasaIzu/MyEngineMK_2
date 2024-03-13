@@ -21,7 +21,12 @@ void Ground::Update()
 
 }
 
-void Ground::Draw(const ViewProjection& view)
+void Ground::Draw(const ViewProjection& view,const ViewProjection& LightViewProjection_)
 {
-	groundModel->Draw(groundTrans, view);
+	groundModel->Draw(groundTrans, view,LightViewProjection_);
+}
+
+void Ground::ShadowDraw(const ViewProjection& view)
+{
+	groundModel->ShadowDraw(groundTrans,view);
 }

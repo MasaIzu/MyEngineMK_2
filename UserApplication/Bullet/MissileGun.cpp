@@ -41,12 +41,12 @@ void MissileGun::Update(const Vector3& GunPos,const Vector3& inductionPos,const 
 	}
 }
 
-void MissileGun::Draw(const ViewProjection& viewProjection_)
+void MissileGun::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
 {
 	//model_->Draw(GunTrans,viewProjection_);
 	for ( auto&& Bullet : missileBullet )
 	{
-		Bullet->Draw(viewProjection_);
+		Bullet->Draw(viewProjection_,LightViewProjection_);
 	}
 }
 

@@ -101,7 +101,6 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 			CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeapSRV->GetCPUDescriptorHandleForHeapStart(),i,
 			device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
 		);
-
 	}
 
 	//RTV用のデスクリプタヒープ設定
@@ -121,6 +120,22 @@ void PostEffect::Initialize(DirectXCore* dxCore, const uint32_t& WinWidth, const
 
 
 	descHeapDSV = dxCore->GetdsvHeap();
+
+	////DSV用デスクリプタヒープ設定
+	//D3D12_DESCRIPTOR_HEAP_DESC DescHeapDesc{};
+	//DescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	//DescHeapDesc.NumDescriptors = 1;
+	////DSV用デスクリプタヒープを生成
+	//result = dev->CreateDescriptorHeap(&DescHeapDesc, IID_PPV_ARGS(&descHeapDSV));
+	//assert(SUCCEEDED(result));
+
+	////デスクリプタヒープにDSV作成
+	//D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	//dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	//dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	//dev->CreateDepthStencilView(depthBuff.Get(),
+	//	&dsvDesc,
+	//	descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 
 	depthBuff = dxCore->GetbackBuffers();
 
@@ -427,8 +442,7 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 			D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 		//リソースバリアを変更(シェーダーリソース→描画可能)
-		commandList->ResourceBarrier(1,
-			&resouceBar);
+		commandList->ResourceBarrier(1,&resouceBar);
 	}
 
 	//レンダーターゲットビュー用のディスクリプタヒープのハンドルを取得
