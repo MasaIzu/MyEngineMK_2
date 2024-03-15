@@ -46,7 +46,7 @@ public:
 	/// <param name="texBuff"></param>
 	/// <param name="descHeapSRV"></param>
 	/// <returns></returns>
-	static 	uint32_t CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV);
+	static 	uint32_t CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff);
 
 
 	/// <summary>
@@ -89,6 +89,10 @@ public:
 	void SetGraphicsRootDescriptorTable(
 		ID3D12GraphicsCommandList* commandList,const UINT& rootParamIndex,const uint32_t& textureHandle);
 
+	static void SetDescriptorHeap(ID3D12GraphicsCommandList* commandList);
+
+	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap();
+
 private:
 	static TextureManager* TextureManager_;
 
@@ -124,7 +128,10 @@ private:
 	/// <param name="texBuff"></param>
 	/// <param name="descHeapSRV"></param>
 	/// <returns></returns>
-	uint32_t CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV);
+	uint32_t CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff);
 
+	void SetDescriptorHeaps(ID3D12GraphicsCommandList* commandList);
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeaps();
 
 };

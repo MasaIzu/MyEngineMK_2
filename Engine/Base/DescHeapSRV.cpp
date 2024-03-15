@@ -51,7 +51,7 @@ void DescHeapSRV::SetDescriptorHeaps()
 
 void DescHeapSRV::CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,TextureMaterial& texture)
 {
-	texture.texNumber = TextureManager::CreateShaderResourceView(srvDesc,texture.texBuff,descHeapSRV);
+	texture.texNumber = TextureManager::CreateShaderResourceView(srvDesc,texture.texBuff);
 }
 
 void DescHeapSRV::SetGraphicsRootDescriptorTable(UINT rootParameterIndex, UINT texNumber)

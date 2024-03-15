@@ -38,7 +38,7 @@ struct ViewProjection {
 
 #pragma region 射影行列の設定
 	// 垂直方向視野角
-	float fovAngleY = ToRadian(45.0f);
+	float fovAngleY = ToRadian(60.0f);
 	// ビューポートのアスペクト比
 	float aspectRatio = (float)16 / 9;
 	// 深度限界（手前側）

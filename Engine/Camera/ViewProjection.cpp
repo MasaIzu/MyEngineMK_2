@@ -39,7 +39,7 @@ void ViewProjection::UpdateMatrix() {
 
 	// ビュー行列の生成
 	Matrix4 tmp = MyMath::LookAtLH(eye, target, up);
-	matView = MyMath::MatrixInverse(tmp);
+	matView = MyMath::MakeInverse(&tmp);
 
 	// 透視投影による射影行列の生成
 	matProjection = MyMath::PerspectiveFovLH(fovAngleY, aspectRatio, nearZ, farZ);

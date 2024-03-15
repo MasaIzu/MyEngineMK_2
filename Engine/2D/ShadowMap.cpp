@@ -2,6 +2,7 @@
 #include "DescHeapSRV.h"
 #include <d3dx12.h>
 #include <d3dcompiler.h>
+#include "TextureManager.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -43,7 +44,9 @@ void ShadowMap::ShadowMapCommon(ID3D12Device* dev_,ID3D12GraphicsCommandList* cm
 
 void ShadowMap::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* cmdList_,const uint32_t& rootParaIndex)
 {
-	cmdList_->SetGraphicsRootDescriptorTable(rootParaIndex,CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(),0,
+	TextureManager::SetDescriptorHeap(cmdList_);
+
+	cmdList_->SetGraphicsRootDescriptorTable(rootParaIndex,CD3DX12_GPU_DESCRIPTOR_HANDLE(TextureManager::GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart(),0,
 		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 }
 
@@ -109,15 +112,6 @@ bool ShadowMap::Initialize()
 		&dsvDesc,
 		descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 
-	//SRV用のデスクリプタヒープ設定
-	D3D12_DESCRIPTOR_HEAP_DESC srvDescHeapDesc = {};
-	srvDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvDescHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	srvDescHeapDesc.NumDescriptors = 1;
-	//SRVデスクリプタヒープ設定
-	result = dev->CreateDescriptorHeap(&srvDescHeapDesc,IID_PPV_ARGS(&descHeapSRV));
-	assert(SUCCEEDED(result));
-
 	//SRV設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};	//設定構造体
 	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
@@ -125,11 +119,8 @@ bool ShadowMap::Initialize()
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;	//2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	//デスクリプタヒープにSRVを作成
-	dev->CreateShaderResourceView(textureMaterial.texBuff.Get(),
-		&srvDesc,
-		descHeapSRV->GetCPUDescriptorHandleForHeapStart()
-	);
+	//デスクリプタヒープにSRV作成
+	TextureManager::CreateShaderResourceView(srvDesc,textureMaterial.texBuff);
 	
 
 	return true;
@@ -153,6 +144,7 @@ void ShadowMap::DrawScenePrev()
 
 	//ビューポートの設定
 	cmdList->RSSetViewports(1,&viewport);
+
 
 	CD3DX12_RECT rect = CD3DX12_RECT(0,0,shadowMapTexSize,shadowMapTexSize);
 

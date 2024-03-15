@@ -84,6 +84,16 @@ void TextureManager::SetGraphicsRootDescriptorTable(
 
 }
 
+void TextureManager::SetDescriptorHeap(ID3D12GraphicsCommandList* commandList)
+{
+	TextureManager::GetInstance()->SetDescriptorHeaps(commandList);
+}
+
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> TextureManager::GetDescriptorHeap()
+{
+	return TextureManager::GetInstance()->GetDescriptorHeaps();
+}
+
 
 uint32_t TextureManager::LoadInternal(const std::string& fileName) {
 
@@ -190,13 +200,13 @@ uint32_t TextureManager::LoadInternal(const std::string& fileName) {
 	return handle;
 }
 
-uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV)
+uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff)
 {
 	uint32_t handle = NextDescriptorHeapNumber_;
 	device_->CreateShaderResourceView(
 	  texBuff.Get(), //ビューと関連付けるバッファ
 	  &srvDesc,               //テクスチャ設定情報
-	  CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeapSRV->GetCPUDescriptorHandleForHeapStart(),handle,
+	  CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap_->GetCPUDescriptorHandleForHeapStart(),handle,
 		  device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
 	  ));
 
@@ -205,7 +215,18 @@ uint32_t TextureManager::CreateShaderResourceViewInternal(const D3D12_SHADER_RES
 	return handle;
 }
 
-uint32_t TextureManager::CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff,Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& descHeapSRV)
+void TextureManager::SetDescriptorHeaps(ID3D12GraphicsCommandList* commandList)
 {
-	return TextureManager::GetInstance()->CreateShaderResourceViewInternal(srvDesc,texBuff,descHeapSRV);
+	ID3D12DescriptorHeap* ppHeaps[ ] = { descriptorHeap_.Get() };
+	commandList->SetDescriptorHeaps(_countof(ppHeaps),ppHeaps);
+}
+
+Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> TextureManager::GetDescriptorHeaps()
+{
+	return descriptorHeap_;
+}
+
+uint32_t TextureManager::CreateShaderResourceView(const D3D12_SHADER_RESOURCE_VIEW_DESC& srvDesc,Microsoft::WRL::ComPtr<ID3D12Resource>& texBuff)
+{
+	return TextureManager::GetInstance()->CreateShaderResourceViewInternal(srvDesc,texBuff);
 }
