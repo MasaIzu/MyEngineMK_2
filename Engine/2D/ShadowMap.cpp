@@ -11,6 +11,7 @@ using namespace DirectX;
 ID3D12Device* ShadowMap::dev = nullptr;
 ID3D12GraphicsCommandList* ShadowMap::cmdList = nullptr;
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> ShadowMap::descHeapSRV;
+uint32_t ShadowMap::texNum = 0;
 
 ShadowMap* ShadowMap::Create()
 {
@@ -44,10 +45,8 @@ void ShadowMap::ShadowMapCommon(ID3D12Device* dev_,ID3D12GraphicsCommandList* cm
 
 void ShadowMap::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* cmdList_,const uint32_t& rootParaIndex)
 {
-	TextureManager::SetDescriptorHeap(cmdList_);
-
-	cmdList_->SetGraphicsRootDescriptorTable(rootParaIndex,CD3DX12_GPU_DESCRIPTOR_HANDLE(TextureManager::GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart(),0,
-		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	// SRVをセット
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList_,rootParaIndex,texNum);
 }
 
 bool ShadowMap::Initialize()
@@ -120,7 +119,7 @@ bool ShadowMap::Initialize()
 	srvDesc.Texture2D.MipLevels = 1;
 
 	//デスクリプタヒープにSRV作成
-	TextureManager::CreateShaderResourceView(srvDesc,textureMaterial.texBuff);
+	texNum = TextureManager::CreateShaderResourceView(srvDesc,textureMaterial.texBuff);
 	
 
 	return true;
@@ -129,7 +128,7 @@ bool ShadowMap::Initialize()
 void ShadowMap::DrawScenePrev()
 {
 	CD3DX12_RESOURCE_BARRIER transitionBarrier;
-	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),D3D12_RESOURCE_STATE_GENERIC_READ,D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	transitionBarrier = TextureManager::Trans(texNum,D3D12_RESOURCE_STATE_GENERIC_READ,D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 	//リソースバリアを変更(シェーダリソース→描画可能)
 	cmdList->ResourceBarrier(1,&transitionBarrier);
@@ -159,8 +158,9 @@ void ShadowMap::DrawScenePrev()
 void ShadowMap::DrawSceneRear()
 {
 	CD3DX12_RESOURCE_BARRIER transitionBarrier;
-	transitionBarrier = CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
-
+	//CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
+	transitionBarrier = TextureManager::Trans(texNum,D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
+	
 	//リソースバリアを変更(描画可能→シェーダリソース)
 	cmdList->ResourceBarrier(1,&transitionBarrier);
 }

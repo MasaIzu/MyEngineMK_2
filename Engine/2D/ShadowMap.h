@@ -70,6 +70,8 @@ private: //静的メンバ変数
 	static const int shadowMapTexSize = 4096;
 	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
+	static uint32_t texNum;
+
 private: //メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuff;
@@ -78,5 +80,7 @@ private: //メンバ変数
 
 	//DSV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
+
+
 };
 

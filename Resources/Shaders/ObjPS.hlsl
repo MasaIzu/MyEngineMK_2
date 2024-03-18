@@ -134,6 +134,7 @@ float4 main(GSOutput input) : SV_TARGET
         {
             shadow *= 0.5f;
         }
+        shadow *= 0.5f;
     }
 
     

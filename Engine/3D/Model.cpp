@@ -800,11 +800,10 @@ void Model::Draw(
 	// CBVをセット（ビュープロジェクション行列）
 	sCommandList_->SetGraphicsRootConstantBufferView(2,lightViewProjection.constBuff_->GetGPUVirtualAddress());
 
-	ShadowMap::SetGraphicsRootDescriptorTable(sCommandList_,5);
 
 	for (int i = 0; i < meshes_.size(); i++) {
 		// 全メッシュを描画
-		meshes_[i]->Draw(sCommandList_, 3, 4, modelTextureHandle);
+		meshes_[i]->Draw(sCommandList_, 3, 4, modelTextureHandle,5);
 	}
 }
 

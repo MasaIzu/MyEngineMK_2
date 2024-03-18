@@ -45,7 +45,7 @@ void DebugScene::Initialize() {
 
 	LightViewProjection = std::make_unique<ViewProjection>();
 	LightViewProjection->Initialize();
-	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->eye = { 0,200,-1 };
 	LightViewProjection->UpdateMatrix();
 
 	worldTransform_.Initialize();
@@ -73,6 +73,7 @@ void DebugScene::Update() {
 	worldTransform_.TransferMatrix();
 
 	particleEditor->EditUpdate();
+
 
 	ImGui::Begin("PostEffect");
 	ImGui::SetCursorPos(ImVec2(900,20));
@@ -157,7 +158,7 @@ void DebugScene::BackgroundDraw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
-	levelData->ShadowDraw(*viewProjection_.get());
+	levelData->ShadowDraw(*LightViewProjection.get());
 	Model::PostShadowDraw();
 }
 

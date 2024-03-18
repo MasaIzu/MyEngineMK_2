@@ -2,6 +2,7 @@
 #include <cassert>
 #include <d3dcompiler.h>
 #include <DescHeapSRV.h>
+#include <ShadowMap.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -129,6 +130,22 @@ void Mesh::Draw(
 
 	// 描画コマンド
 	commandList->DrawIndexedInstanced((UINT)indices_.size(), 1, 0, 0, 0);
+}
+
+void Mesh::Draw(ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,const UINT& rooParameterIndexTexture,const uint32_t& textureIndex,const uint32_t& shadowMapTextureIndex)
+{
+	// 頂点バッファをセット
+	commandList->IASetVertexBuffers(0,1,&vbView_);
+	// インデックスバッファをセット
+	commandList->IASetIndexBuffer(&ibView_);
+
+	// マテリアルのグラフィックスコマンドをセット
+	material_->SetGraphicsCommand(commandList,rooParameterIndexMaterial,rooParameterIndexTexture,textureIndex);
+
+	ShadowMap::SetGraphicsRootDescriptorTable(commandList,shadowMapTextureIndex);
+
+	// 描画コマンド
+	commandList->DrawIndexedInstanced(( UINT ) indices_.size(),1,0,0,0);
 }
 
 //void Mesh::Draw(ID3D12GraphicsCommandList* commandList,const UINT& rooParameterIndexMaterial,const UINT& rooParameterIndexTexture,const uint32_t& textureIndex,const UINT& rooParameterShadowIndexTexture,const uint32_t& shadowMapTextureIndex)
