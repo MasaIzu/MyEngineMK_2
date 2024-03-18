@@ -42,7 +42,7 @@ void MediumBossStage::Initialize()
 
 	LightViewProjection = std::make_unique<ViewProjection>();
 	LightViewProjection->Initialize();
-	LightViewProjection->eye = { 0,400,-1 };
+	LightViewProjection->eye = { 0,400,-400 };
 	LightViewProjection->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();
@@ -297,7 +297,7 @@ void MediumBossStage::BackgroundDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	levelData->ShadowDraw(*viewProjection_.get());
+	levelData->ShadowDraw(*LightViewProjection.get());
 
 
 	//middleBossEnemy->Draw(*viewProjection_.get());

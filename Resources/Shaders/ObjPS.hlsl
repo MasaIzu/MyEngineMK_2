@@ -127,10 +127,14 @@ float4 main(GSOutput input) : SV_TARGET
     float2 shadowTexUV;
     shadowTexUV.x = (1.0f + input.shadowpos.x * w) * 0.5f;
     shadowTexUV.y = (1.0f - input.shadowpos.y * w) * 0.5f;
+    
+    float4 map = shadowMap.Sample(smp, shadowTexUV);
+    float inputZ = input.shadowpos.z * w;
+    
 	//uv座標で0～1なら影判定をする
     if (shadowTexUV.x >= 0 && shadowTexUV.x <= 1.0f && shadowTexUV.y >= 0 && shadowTexUV.y <= 1.0f)
     {
-        if (shadowMap.Sample(smp, shadowTexUV).x  < input.shadowpos.z * w)
+        if (map.x + 0.0000004f < inputZ)
         {
             shadow *= 0.5f;
         }
