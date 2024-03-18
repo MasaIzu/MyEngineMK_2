@@ -45,7 +45,7 @@ void DebugScene::Initialize() {
 
 	LightViewProjection = std::make_unique<ViewProjection>();
 	LightViewProjection->Initialize();
-	LightViewProjection->eye = { 0,200,-1 };
+	LightViewProjection->eye = { 0,400,-400 };
 	LightViewProjection->UpdateMatrix();
 
 	worldTransform_.Initialize();

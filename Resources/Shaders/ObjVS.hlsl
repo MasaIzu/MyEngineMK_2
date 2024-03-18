@@ -10,16 +10,17 @@ VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
 
 	VSOutput output; // ピクセルシェーダーに渡す値
 	
-    matrix Proj = LightView * LightProjection;
-	
-	output.svpos = mul(mul(mul(projection, view), world), pos);
+    output.svpos = mul(world, pos);
+    output.svpos = mul(view, output.svpos);
+    output.svpos = mul(projection, output.svpos);
 
 	output.worldpos = worldPos;
 	output.normal = worldNormal.xyz;
 	output.uv = uv;
 	
-	
-    output.shadowpos = mul(mul(Proj, world), pos);
+    output.shadowpos = mul(world, pos);
+    output.shadowpos = mul(view, output.shadowpos);
+    output.shadowpos = mul(projection, output.shadowpos);
 	
 	return output;
 }

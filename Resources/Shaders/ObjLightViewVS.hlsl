@@ -9,9 +9,10 @@ VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
 	//ピクセルシェーダに渡す値
 	VSOutput output;
 	
-    matrix Proj = view * projection;
 	
-    output.svpos = mul(mul(Proj, world), pos);
+    output.svpos = mul(world,pos);
+    output.svpos = mul(view, output.svpos);
+    output.svpos = mul(projection, output.svpos);
 
 	output.worldpos = wpos;
 	output.normal = wnormal.xyz;

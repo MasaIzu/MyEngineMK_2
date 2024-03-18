@@ -93,7 +93,7 @@ public:
 
 	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap();
 
-	static CD3DX12_RESOURCE_BARRIER Trans(const uint32_t& texNum,D3D12_RESOURCE_STATES stateBefore,D3D12_RESOURCE_STATES stateAfter);
+	static CD3DX12_RESOURCE_BARRIER Trans(ID3D12GraphicsCommandList* commandList,const uint32_t& texNum,D3D12_RESOURCE_STATES stateBefore,D3D12_RESOURCE_STATES stateAfter);
 
 private:
 	static TextureManager* TextureManager_;
@@ -136,5 +136,5 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeaps();
 
-	CD3DX12_RESOURCE_BARRIER TransInternal(const uint32_t& texNum,D3D12_RESOURCE_STATES stateBefore,D3D12_RESOURCE_STATES stateAfter);
+	CD3DX12_RESOURCE_BARRIER TransInternal(ID3D12GraphicsCommandList* commandList,const uint32_t& texNum,D3D12_RESOURCE_STATES stateBefore,D3D12_RESOURCE_STATES stateAfter);
 };

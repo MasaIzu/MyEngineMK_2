@@ -42,7 +42,7 @@ void MediumBossStage::Initialize()
 
 	LightViewProjection = std::make_unique<ViewProjection>();
 	LightViewProjection->Initialize();
-	LightViewProjection->eye = { 0,100,0 };
+	LightViewProjection->eye = { 0,400,-1 };
 	LightViewProjection->UpdateMatrix();
 
 	levelData = std::make_unique<LoadLevelEditor>();

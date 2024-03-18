@@ -127,11 +127,8 @@ bool ShadowMap::Initialize()
 
 void ShadowMap::DrawScenePrev()
 {
-	CD3DX12_RESOURCE_BARRIER transitionBarrier;
-	transitionBarrier = TextureManager::Trans(texNum,D3D12_RESOURCE_STATE_GENERIC_READ,D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	TextureManager::Trans(cmdList,texNum,D3D12_RESOURCE_STATE_GENERIC_READ,D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-	//リソースバリアを変更(シェーダリソース→描画可能)
-	cmdList->ResourceBarrier(1,&transitionBarrier);
 
 	//深度ステンシルビュー用デスクリプタヒープのハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvH =
@@ -157,10 +154,5 @@ void ShadowMap::DrawScenePrev()
 
 void ShadowMap::DrawSceneRear()
 {
-	CD3DX12_RESOURCE_BARRIER transitionBarrier;
-	//CD3DX12_RESOURCE_BARRIER::Transition(textureMaterial.texBuff.Get(),D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
-	transitionBarrier = TextureManager::Trans(texNum,D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
-	
-	//リソースバリアを変更(描画可能→シェーダリソース)
-	cmdList->ResourceBarrier(1,&transitionBarrier);
+	TextureManager::Trans(cmdList,texNum,D3D12_RESOURCE_STATE_DEPTH_WRITE,D3D12_RESOURCE_STATE_GENERIC_READ);
 }
