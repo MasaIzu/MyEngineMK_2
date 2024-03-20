@@ -2,6 +2,7 @@ cbuffer WorldTransform : register(b0)
 {
     matrix world; // ワールド行列
     float m_alpha; // アルファ
+    uint shadowMapFlag; //シャドウ用
 };
 
 cbuffer ViewProjection : register(b1)

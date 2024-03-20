@@ -2,6 +2,7 @@ cbuffer WorldTransform : register(b0)
 {
     matrix world; // ワールド行列
     float m_alpha; // アルファ
+    uint shadowMapFlag; //シャドウ用
 };
 
 
@@ -60,7 +61,7 @@ struct CircleShadow
 cbuffer LightGroup : register(b3)
 {
     float3 ambientColor;
-    float pad;
+    uint flag;
 	
     uint pointLightCount;
     uint spotLightCount;

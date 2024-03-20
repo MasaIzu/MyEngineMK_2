@@ -229,6 +229,12 @@
     <Filter Include="ResourceFile\Shaders\LightObj">
       <UniqueIdentifier>{79bf32e0-74c8-40fa-b507-03fc06a52294}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceFile\Shaders\LightFbx">
+      <UniqueIdentifier>{b61b7763-cc91-4e26-985f-6a351ea9b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceFile\Shaders\Fbx">
+      <UniqueIdentifier>{44cf06d4-c5ad-412c-8212-68b57ad8534c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Primitive.hlsli">
@@ -238,9 +244,6 @@
       <Filter>ResourceFile\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\Terrain.hlsli">
-      <Filter>ResourceFile\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\FBX.hlsli">
       <Filter>ResourceFile\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\PostEffectGlow.hlsli">
@@ -288,6 +291,9 @@
     <None Include="Resources\Shaders\ObjLightView.hlsli">
       <Filter>ResourceFile\Shaders\LightObj</Filter>
     </None>
+    <None Include="Resources\Shaders\FBX.hlsli">
+      <Filter>ResourceFile\Shaders\Fbx</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\PrimitivePS.hlsl">
@@ -306,12 +312,6 @@
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\TerrainVS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
-      <Filter>ResourceFile\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
       <Filter>ResourceFile\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\PostEffectGlowPS.hlsl">
@@ -461,6 +461,12 @@
     <FxCompile Include="Resources\Shaders\ObjLightViewVS.hlsl">
       <Filter>ResourceFile\Shaders\LightObj</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
+      <Filter>ResourceFile\Shaders\Fbx</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
+      <Filter>ResourceFile\Shaders\Fbx</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Sound\AudioManager.h">
@@ -607,9 +613,6 @@
     <ClInclude Include="Engine\Math\Uint32Vector2.h">
       <Filter>Engine\HeaderFile\Math</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\TutorialEnemy.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="UserApplication\UserCamera\GameCamera.h">
       <Filter>UserFile\UserHeaderFile\UserCamera</Filter>
     </ClInclude>
@@ -622,20 +625,11 @@
     <ClInclude Include="Engine\Math\SplinePosition.h">
       <Filter>Engine\HeaderFile\Math</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\BulletShotEnemy.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\EnemyBullet.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Collision\TouchableObject.h">
       <Filter>Engine\HeaderFile\Collision</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\StageSelect.h">
       <Filter>UserFile\UserHeaderFile\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="UserApplication\Enemy\BossEnemy.h">
-      <Filter>UserFile\UserHeaderFile\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="UserApplication\Scene\MediumBossStage.h">
       <Filter>UserFile\UserHeaderFile\Scene</Filter>
@@ -939,9 +933,6 @@
     <ClCompile Include="Engine\Math\Uint32Vec2.cpp">
       <Filter>Engine\SourceFile\Math</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\TutorialEnemy.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="UserApplication\UserCamera\GameCamera.cpp">
       <Filter>UserFile\UserSourceFile\UserCamera</Filter>
     </ClCompile>
@@ -954,20 +945,11 @@
     <ClCompile Include="Engine\Math\SplinePosition.cpp">
       <Filter>Engine\SourceFile\Math</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\BulletShotEnemy.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\EnemyBullet.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collision\TouchableObject.cpp">
       <Filter>Engine\SourceFile\Collision</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\StageSelect.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UserApplication\Enemy\BossEnemy.cpp">
-      <Filter>UserFile\UserSourceFile\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="UserApplication\Scene\MediumBossStage.cpp">
       <Filter>UserFile\UserSourceFile\Scene</Filter>

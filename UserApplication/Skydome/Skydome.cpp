@@ -6,6 +6,8 @@ void Skydome::Initialize() {
 	worldTransform_.Initialize();
 
 	worldTransform_.scale_ = Vector3(Size,Size,Size);
+
+	worldTransform_.shadowMapFlag = 0;
 	//行列の転送
 	worldTransform_.TransferMatrix();
 

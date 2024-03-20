@@ -15,6 +15,7 @@
 struct ConstBufferDataWorldTransform {
 	Matrix4 matWorld;           // ローカル → ワールド変換行列
 	float alpha=1;       // アルファ
+	uint32_t shadowMapFlag = 1;
 };
 
 //その物体の向いている方向
@@ -63,6 +64,9 @@ struct WorldTransform {
 	Matrix4 matWorld_;
 	//アルファ値
 	float alpha = 1;
+	//アルファ値
+	uint32_t shadowMapFlag = 1;
+
 	//その物体の向いている方向
 	WorldTarnsLook LookVelocity;
 
