@@ -66,10 +66,6 @@ VSOutput main(VSInput input)
 	output.normal = wnormal.xyz;
 	// 入力値をそのまま次のステージに渡す
 	output.uv = input.uv;
-	
-    output.shadowpos = mul(world, skinned.pos);
-    output.shadowpos = mul(LightView, output.shadowpos);
-    output.shadowpos = mul(LightProjection, output.shadowpos);
 
 	return output;
 }

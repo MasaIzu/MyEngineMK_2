@@ -261,13 +261,24 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_,const ViewProje
 	}
 }
 
-void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_)
+void MiddleBossEnemy::FbxDraw(const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_)
 {
 	if ( isSporn )
 	{
 		if ( !isDead )
 		{
-			fbxObj3d_->Draw(BossWorldTrans,viewProjection_);
+			fbxObj3d_->Draw(BossWorldTrans,viewProjection_,lightViewProjection_);
+		}
+	}
+}
+
+void MiddleBossEnemy::FbxShadowDraw(const ViewProjection& viewProjection_)
+{
+	if ( isSporn )
+	{
+		if ( !isDead )
+		{
+			fbxObj3d_->ShadowDraw(BossWorldTrans,viewProjection_);
 		}
 	}
 }

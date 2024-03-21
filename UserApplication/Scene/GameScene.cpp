@@ -226,7 +226,7 @@ void GameScene::Draw() {
 	player_->Draw(*LightViewProjection.get());
 	//3Dオブジェクト描画後処理
 	Model::PostDraw();
-	player_->FbxDraw();
+	player_->FbxDraw(*LightViewProjection.get());
 	player_->DrawSprite();
 
 

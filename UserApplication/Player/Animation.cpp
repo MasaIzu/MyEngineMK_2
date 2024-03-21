@@ -45,9 +45,14 @@ void Animation::Update()
 	fbxObj3d_->Update(AnmNumNumber_,nowAnmFCount_,maxFcount);
 }
 
-void Animation::FbxDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection_)
+void Animation::FbxDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_)
 {
-	fbxObj3d_->Draw(worldTransform,viewProjection_);
+	fbxObj3d_->Draw(worldTransform,viewProjection_,lightViewProjection_);
+}
+
+void Animation::FbxShadowDraw(const WorldTransform& worldTransform,const ViewProjection& lightViewProjection_)
+{
+	fbxObj3d_->ShadowDraw(worldTransform,lightViewProjection_);
 }
 
 void Animation::SetAnimation(const uint32_t& animNumber,const uint32_t& startCount,const uint32_t& maxCount,const bool& loop)

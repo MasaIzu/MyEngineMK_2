@@ -89,7 +89,9 @@ public:
 	// バッファ生成
 	void CreateBuffers(ID3D12Device* device);
 	// 描画
-	void Draw(ID3D12GraphicsCommandList* cmdList);
+	void Draw(ID3D12GraphicsCommandList* cmdList,const uint32_t& shadowMapTextureIndex);
+	void ShadowDraw(ID3D12GraphicsCommandList* cmdList);
+
 	// モデルの変形行列取得
 	const Matrix4& GetModelTransform();
 	//getter
@@ -134,6 +136,8 @@ private:
 
 	//FBXシーン
 	FbxScene* fbxScene = nullptr;
+
+	uint32_t texNum = 0;
 
 };
 

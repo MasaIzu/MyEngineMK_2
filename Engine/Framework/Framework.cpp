@@ -55,6 +55,7 @@ void Framework::Initialize()
 	FBXObject3d::SetDevice(directXCore_->GetDevice());
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
+	FBXObject3d::CreateLightGraphicsPipeline();
 
 	// スプライト静的初期化
 	Sprite::StaticInitialize(directXCore_->GetDevice());

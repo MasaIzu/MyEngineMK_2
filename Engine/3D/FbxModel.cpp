@@ -1,4 +1,6 @@
 #include "FBXModel.h"
+#include <ShadowMap.h>
+#include <TextureManager.h>
 
 
 FBXModel::~FBXModel()
@@ -120,21 +122,37 @@ void FBXModel::CreateBuffers(ID3D12Device* device)
 
 }
 
-void FBXModel::Draw(ID3D12GraphicsCommandList* cmdList)
+void FBXModel::Draw(ID3D12GraphicsCommandList* cmdList,const uint32_t& shadowMapTextureIndex)
 {
     // 頂点バッファをセット(VBV)
     cmdList->IASetVertexBuffers(0, 1, &vbView);
     // インデックスバッファをセット(IBV)
     cmdList->IASetIndexBuffer(&ibView);
 
-    // デスクリプタヒープのセット
-    ID3D12DescriptorHeap* ppHeaps[] = { descHeapSRV.Get() };
-    cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-    // シェーダリソースビューをセット
-    cmdList->SetGraphicsRootDescriptorTable(3, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
+	// SRVをセット
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(cmdList,3,texNum);
+
+	ShadowMap::SetGraphicsRootDescriptorTable(cmdList,shadowMapTextureIndex);
 
     // 描画コマンド
     cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
+}
+
+void FBXModel::ShadowDraw(ID3D12GraphicsCommandList* cmdList)
+{
+	// 頂点バッファをセット(VBV)
+	cmdList->IASetVertexBuffers(0,1,&vbView);
+	// インデックスバッファをセット(IBV)
+	cmdList->IASetIndexBuffer(&ibView);
+
+	// デスクリプタヒープのセット
+	ID3D12DescriptorHeap* ppHeaps[ ] = { descHeapSRV.Get() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps),ppHeaps);
+	// シェーダリソースビューをセット
+	cmdList->SetGraphicsRootDescriptorTable(3,descHeapSRV->GetGPUDescriptorHandleForHeapStart());
+
+	// 描画コマンド
+	cmdList->DrawIndexedInstanced(( UINT ) indices.size(),1,0,0,0);
 }
 
 const Matrix4& FBXModel::GetModelTransform()

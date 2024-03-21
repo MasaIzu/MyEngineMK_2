@@ -5,6 +5,8 @@
 #include <cassert>
 #include "MyMath.h"
 
+#include "TextureManager.h"
+
 using namespace DirectX;
 #define NOMINMAX
 #include <windows.h>  // or whatever Windows header file you're including
@@ -554,6 +556,9 @@ void FbxLoader::ParseMaterial(FBXModel* fbxmodel, FbxNode* fbxNode)
 					string name = ExtractFileName(path_str);
 					// テクスチャ読み込み
 					LoadTexture(fbxmodel, baseDirectory + fbxmodel->name + "/" + name);
+
+					string texName = "object/" + fbxmodel->name + "/" + name;
+					fbxmodel->texNum = TextureManager::Load(texName);
 					textureLoaded = true;
 				}
 			}

@@ -1,7 +1,6 @@
 #include "FBX.hlsli"
 
 Texture2D<float4> tex : register(t0);  // 0番スロットに設定されたテクスチャ
-Texture2D<float4> shadowTex : register(t1); // 1番スロットに設定されたテクスチャ
 SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
 float4 main(VSOutput input) : SV_TARGET
@@ -119,32 +118,6 @@ float4 main(VSOutput input) : SV_TARGET
         }
     }
 
-    //影(シャドウマップ)
-    float shadow = 1.0f;
-   
-    if (shadowMapFlag)
-    {
-        //シャドウマップのZ値を参照
-        float w = 1.0f / input.shadowpos.w;
-        float2 shadowTexUV;
-        shadowTexUV.x = (1.0f + input.shadowpos.x * w) * 0.5f;
-        shadowTexUV.y = (1.0f - input.shadowpos.y * w) * 0.5f;
-    
-        float4 map = shadowTex.Sample(smp, shadowTexUV);
-        float inputZ = input.shadowpos.z * w;
-    
-	    //uv座標で0～1なら影判定をする
-        if (shadowTexUV.x >= 0 && shadowTexUV.x <= 1.0f && shadowTexUV.y >= 0 && shadowTexUV.y <= 1.0f)
-        {
-            if (map.x + 0.0000007f < inputZ)
-            {
-                shadow *= 0.5f;
-            }
-        }
-    }
-
-    
-
-	// シェーディングによる色で描画;
-    return shadecolor * texcolor * float4(shadow, shadow, shadow, 1);
+	// シェーディングによる色で描画
+    return float4(shadecolor.rgb * texcolor.rgb, shadecolor.a * texcolor.a);
 }

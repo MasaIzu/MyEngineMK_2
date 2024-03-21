@@ -49,7 +49,9 @@ public://基本関数
 	//描画
 	void Draw(const ViewProjection& LightViewProjection_);
 	//描画
-	void FbxDraw();
+	void FbxDraw(const ViewProjection& lightViewProjection_);
+	//描画
+	void FbxShadowDraw(const ViewProjection& lightViewProjection_);
 	//スプライト描画
 	void DrawSprite();
 

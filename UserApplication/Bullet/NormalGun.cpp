@@ -69,9 +69,14 @@ void NormalGun::Draw(const ViewProjection& viewProjection_,const ViewProjection&
 	}
 }
 
-void NormalGun::FbxDraw(const ViewProjection& viewProjection_)
+void NormalGun::FbxDraw(const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_)
 {
-	fbxObj3d_->Draw(GunTrans,viewProjection_);
+	fbxObj3d_->Draw(GunTrans,viewProjection_,lightViewProjection_);
+}
+
+void NormalGun::FbxShadowDraw(const ViewProjection& viewProjection_)
+{
+	fbxObj3d_->ShadowDraw(GunTrans,viewProjection_);
 }
 
 void NormalGun::ShotBullet(const Vector3& BulletVec)

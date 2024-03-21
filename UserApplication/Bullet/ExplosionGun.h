@@ -20,8 +20,8 @@ public://基本関数
 	//描画
 	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 	//Fbx描画
-	void FbxDraw(const ViewProjection& viewProjection_);
-
+	void FbxDraw(const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_);
+	void FbxShadowDraw(const ViewProjection& lightViewProjection_);
 	//パーティクル
 	void CSUpdate(ID3D12GraphicsCommandList* commandList);
 	void ParticleDraw(const ViewProjection& viewProjection_);

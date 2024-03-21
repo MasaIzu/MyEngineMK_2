@@ -16,8 +16,8 @@ public://基本関数
 	//更新
 	void Update();
 	//描画
-	void FbxDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection_);
-
+	void FbxDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_);
+	void FbxShadowDraw(const WorldTransform& worldTransform,const ViewProjection& lightViewProjection_);
 private://メンバ関数
 	
 

@@ -38,7 +38,7 @@ public: // サブクラス
 	//定数バッファ用のデータ構造体(スキニング)
 	struct ConstBufferDataSkin
 	{
-		XMMATRIX bones[MAX_BONES];
+		XMMATRIX bones[ MAX_BONES ];
 	};
 
 
@@ -48,12 +48,18 @@ public: // 静的メンバ関数
 	/// </summary>
 	static void CreateGraphicsPipeline();
 
+	static void CreateLightGraphicsPipeline();
+
 	/// <summary>
 	/// グラフィックパイプラインの生成
 	/// </summary>
 	// setter
-	static void SetDevice(ID3D12Device* device_) { FBXObject3d::device = device_; }
-	static void SetCamera(ViewProjection* camera_) { FBXObject3d::camera = camera_; }
+	static void SetDevice(ID3D12Device* device_) {
+		FBXObject3d::device = device_;
+	}
+	static void SetCamera(ViewProjection* camera_) {
+		FBXObject3d::camera = camera_;
+	}
 
 
 private: // 静的メンバ変数
@@ -66,6 +72,10 @@ private: // 静的メンバ変数
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 
+	// ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> lightRootsignature;
+	// パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> lightPipelinestate;
 
 public: // メンバ関数
 	/// <summary>
@@ -82,7 +92,10 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	void Draw(const WorldTransform& worldTransform,const ViewProjection& viewProjection,const ViewProjection& lightViewProjection);
+
+
+	void ShadowDraw(const WorldTransform& worldTransform,const ViewProjection& viewProjection);
 
 	/// <summary>
 	/// インスタンス取得
@@ -94,40 +107,54 @@ public: // メンバ関数
 	/// 大きさの設定
 	/// </summary>
 	/// <param name="position">座標</param>
-	void SetScale(const Vector3& scale) { this->wtf.scale_ = scale; }
+	void SetScale(const Vector3& scale) {
+		this->wtf.scale_ = scale;
+	}
 
 
-	/// <summary>
-	/// 回転の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	void SetRotate(const Vector3& rotation) { this->wtf.rotation_ = rotation; }
+/// <summary>
+/// 回転の設定
+/// </summary>
+/// <param name="position">座標</param>
+	void SetRotate(const Vector3& rotation) {
+		this->wtf.rotation_ = rotation;
+	}
 
-	/// <summary>
-	/// 座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	void SetPosition(const Vector3& position) { this->wtf.translation_ = position; }
+/// <summary>
+/// 座標の設定
+/// </summary>
+/// <param name="position">座標</param>
+	void SetPosition(const Vector3& position) {
+		this->wtf.translation_ = position;
+	}
 
-	/// <summary>
+/// <summary>
 
-	/// 座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	const Vector3& GetPosition() const { return wtf.translation_; }
-	const Vector3& GetRotate() const { return wtf.rotation_; }
-	const Vector3& GetScale() const { return wtf.scale_; }
+/// 座標の取得
+/// </summary>
+/// <returns>座標</returns>
+	const Vector3& GetPosition() const {
+		return wtf.translation_;
+	}
+	const Vector3& GetRotate() const {
+		return wtf.rotation_;
+	}
+	const Vector3& GetScale() const {
+		return wtf.scale_;
+	}
 
-	/// <summary>
-	/// モデルをセット
-	/// </summary>
-	/// <param name="fbxmodel"></param>
-	void SetModel(FBXModel* fbxmodel_) { this->fbxmodel = fbxmodel_; }
+/// <summary>
+/// モデルをセット
+/// </summary>
+/// <param name="fbxmodel"></param>
+	void SetModel(FBXModel* fbxmodel_) {
+		this->fbxmodel = fbxmodel_;
+	}
 
-	/// <summary>
-	/// フレームカウント指定
-	/// </summary>
-	/// <param name="flame"></param>
+/// <summary>
+/// フレームカウント指定
+/// </summary>
+/// <param name="flame"></param>
 	void SetFlame(const int& flame);
 
 	/// <summary>
@@ -152,12 +179,14 @@ public: // メンバ関数
 	bool GetIsAnimRot();
 	int ConvertFbxTimeToInt(const FbxTime& time);	//FbxTime型変数をintに変換
 	void ResetCurrentTime(const int& animNum);
-	ID3D12Resource* GetConstBuff() { return constBuffTransform.Get(); };
+	ID3D12Resource* GetConstBuff() {
+		return constBuffTransform.Get();
+	};
 
-	/// <summary>
-	/// ワールドトランスフォーム取得
-	/// </summary>
-	/// <returns></returns>
+/// <summary>
+/// ワールドトランスフォーム取得
+/// </summary>
+/// <returns></returns>
 	WorldTransform GetWorldTransform();
 	WorldTransform* GetWorldTransformPtr();
 
@@ -213,5 +242,5 @@ protected: // メンバ変数
 	bool isAnim = true;
 	//アニメーション繰り返すか
 	bool animRot = true;
-	
+
 };

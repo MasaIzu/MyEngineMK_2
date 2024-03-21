@@ -294,6 +294,9 @@
     <None Include="Resources\Shaders\FBX.hlsli">
       <Filter>ResourceFile\Shaders\Fbx</Filter>
     </None>
+    <None Include="Resources\Shaders\LightFBX.hlsli">
+      <Filter>ResourceFile\Shaders\LightFbx</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\PrimitivePS.hlsl">
@@ -466,6 +469,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
       <Filter>ResourceFile\Shaders\Fbx</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\LightFBXPS.hlsl">
+      <Filter>ResourceFile\Shaders\LightFbx</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\LightFBXVS.hlsl">
+      <Filter>ResourceFile\Shaders\LightFbx</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

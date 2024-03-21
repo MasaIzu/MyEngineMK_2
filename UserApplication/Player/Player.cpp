@@ -294,15 +294,23 @@ void Player::Draw(const ViewProjection& LightViewProjection_)
 	}
 }
 
-void Player::FbxDraw() {
+void Player::FbxDraw(const ViewProjection& lightViewProjection_) {
 	if ( !isPlayerExplosion )
 	{
-		playerNormalGun->FbxDraw(*viewProjection_);
-		playerExplosionGun->FbxDraw(*viewProjection_);
-		animation->FbxDraw(playerRotWorldTrans,*viewProjection_);
+		playerNormalGun->FbxDraw(*viewProjection_,lightViewProjection_);
+		playerExplosionGun->FbxDraw(*viewProjection_,lightViewProjection_);
+		animation->FbxDraw(playerRotWorldTrans,*viewProjection_,lightViewProjection_);
 	}
 }
 
+void Player::FbxShadowDraw(const ViewProjection& lightViewProjection_) {
+	if ( !isPlayerExplosion )
+	{
+		playerNormalGun->FbxShadowDraw(lightViewProjection_);
+		playerExplosionGun->FbxShadowDraw(lightViewProjection_);
+		animation->FbxShadowDraw(playerRotWorldTrans,lightViewProjection_);
+	}
+}
 
 void Player::DrawSprite()
 {

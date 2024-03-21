@@ -12,13 +12,6 @@ cbuffer ViewProjection : register(b1)
     float3 cameraPos; // カメラ座標（ワールド座標）
 };
 
-cbuffer LightViewProjection : register(b2)
-{
-    matrix LightView; // ビュー変換行列
-    matrix LightProjection; // プロジェクション変換行列
-    float3 LightCameraPos; // カメラ座標（ワールド座標）
-};
-
 // 点光源の数
 static const int POINTLIGHT_MAXNUM = 30;
 
@@ -96,6 +89,5 @@ struct VSOutput
     float4 worldpos : WORLDPOSITION; // システム用頂点座標
 	float3 normal :NORMAL; // 法線
 	float2 uv  :TEXCOORD; // uv値
-    float4 shadowpos : POSITION1;
 };
 

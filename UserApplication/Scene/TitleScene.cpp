@@ -198,7 +198,7 @@ void TitleScene::Draw()
 
 	if ( movieCameraCount == MovieCameraCount::SecondCamera )
 	{
-		middleBossEnemy->FbxDraw(*viewProjection_.get());
+		middleBossEnemy->FbxDraw(*viewProjection_.get(),*LightViewProjection.get());
 		middleBossEnemy->ParticleDraw(*viewProjection_.get());
 	}
 

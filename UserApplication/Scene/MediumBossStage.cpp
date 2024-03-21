@@ -273,8 +273,8 @@ void MediumBossStage::PostEffectDraw()
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
-	middleBossEnemy->FbxDraw(*viewProjection_.get());
-	player_->FbxDraw();
+	middleBossEnemy->FbxDraw(*viewProjection_.get(),*LightViewProjection.get());
+	player_->FbxDraw(*LightViewProjection.get());
 
 	levelData->ParticleDraw(*viewProjection_.get());
 	middleBossEnemy->ParticleDraw(*viewProjection_.get());
@@ -305,8 +305,9 @@ void MediumBossStage::BackgroundDraw()
 
 	Model::PostShadowDraw();
 
-	//middleBossEnemy->FbxDraw(*viewProjection_.get());
-	//player_->FbxDraw();
+	middleBossEnemy->FbxShadowDraw(*LightViewProjection.get());
+	player_->FbxShadowDraw(*LightViewProjection.get());
+
 }
 
 void MediumBossStage::Draw()
