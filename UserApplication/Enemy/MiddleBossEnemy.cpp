@@ -203,8 +203,8 @@ void MiddleBossEnemy::Update()
 	missileGunLeftPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Three )) * BossWorldTrans.matWorld_);
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
-	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	missileGunLeft->Update(missileGunLeftPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -236,7 +236,17 @@ void MiddleBossEnemy::Update()
 	UltWorldTrans.scale_ = Vector3(UltRadius,UltRadius,UltRadius);
 	UltWorldTrans.TransferMatrix();
 
-	
+	if ( !isDead )
+	{
+		MyMath::CircleHit(player->GetPlayerPos(),BossWorldTrans.translation_,SoundRadius,soundDistance);
+		soundVol = MaxSoundVol * soundDistance;
+		ChargeSoundsVol = MaxChargeSoundVol * soundDistance;
+		ChargeSoundVol = ChargeSoundsVol;
+		ChargeFinSoundVol = ChargeSoundsVol;
+		ExplosionSoundVol = ChargeSoundsVol;
+		UltResoundSoundVol = ChargeSoundsVol;
+		NormalGunSoundVol = MaxNormalGunSoundVol * soundDistance;
+	}
 	audioManager->ChangeVolume(HeriSound,soundVol);
 
 
@@ -362,7 +372,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
-	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 

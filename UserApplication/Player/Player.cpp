@@ -39,7 +39,7 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection,
 	playerNormalGun = std::make_unique<NormalGun>(COLLISION_ATTR_ATTACK);
 	playerNormalGun->Initialize(Pos,model_.get(),audioManager_,0.2f,true);
 	playerExplosionGun = std::make_unique<ExplosionGun>(COLLISION_ATTR_ATTACK);
-	playerExplosionGun->Initialize(Pos,model_.get());
+	playerExplosionGun->Initialize(Pos,model_.get(),audioManager_,0.07f);
 
 	DebugWorldTrans.Initialize();
 	DebugWorldTrans.scale_ = Vector3(PlayerBladeRadius,PlayerBladeRadius,PlayerBladeRadius);
@@ -244,7 +244,7 @@ void Player::Update()
 	playerRotWorldTrans.translation_ = playerWorldTrans.translation_;
 	playerRotWorldTrans.TransferMatrix();
 	animation->Update();
-	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
+	playerNormalGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep,GunSound);
 	playerExplosionGun->Update(MyMath::GetWorldTransform(animation->GetBonePos(LeftBoneNum) * playerRotWorldTrans.matWorld_),RotKeep);
 
 	ParticleStartPos = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(RightBoneNum) * playerRotWorldTrans.matWorld_));

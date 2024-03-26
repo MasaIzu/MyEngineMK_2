@@ -136,3 +136,8 @@ void ExplosionBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocit
 bool ExplosionBullet::GetBulletAlive() const {
 	return isBulletAlive;
 }
+
+bool ExplosionBullet::GetBulletNotAlive() const
+{
+	return isBulletNotAlive;
+}

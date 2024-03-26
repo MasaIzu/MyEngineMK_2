@@ -15,7 +15,7 @@ ExplosionGun::~ExplosionGun()
 {
 }
 
-void ExplosionGun::Initialize(const Vector3& Pos,Model* BulletModel)
+void ExplosionGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol)
 {
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("NormalGunFbx",true));
 	fbxObj3d_ = FBXObject3d::Create();
@@ -26,6 +26,11 @@ void ExplosionGun::Initialize(const Vector3& Pos,Model* BulletModel)
 	GunTrans.translation_ = Pos;
 	UpdatePosition();
 
+	audioManager = audioManager_;
+
+	ExSoundSize = soundVol;
+	ExNum = audioManager->LoadAudio("Resources/Sound/launcher1.mp3",ExSoundSize);
+	ExBaNum = audioManager->LoadAudio("Resources/Sound/small_explosion3.mp3",ExBaSoundSize);
 	for ( auto&& Bullet : explosionBullet )
 	{
 		Bullet->Initialize(BulletModel);
@@ -48,6 +53,14 @@ void ExplosionGun::Update(const Vector3& Pos,const Vector3& rot)
 	for ( auto&& Bullet : explosionBullet )
 	{
 		Bullet->Update();
+	}
+
+	for ( auto&& Bullet : explosionBullet )
+	{
+		if ( Bullet->GetBulletNotAlive() )
+		{
+			audioManager->PlayWave(ExBaNum,false);
+		}
 	}
 }
 
@@ -81,6 +94,7 @@ void ExplosionGun::ShotBullet(const Vector3& BulletVec)
 				UseBulletCount++;
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
+				audioManager->PlayWave(ExNum,false);
 				if ( UseBulletCount >= BulletMaxCount )
 				{
 					isReload = true;

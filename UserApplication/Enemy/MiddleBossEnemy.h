@@ -270,7 +270,7 @@ private://EnemyBossクラス変数
 	float ChargeSoundsVol = 0.0f;
 	float MaxChargeSoundVol = 0.1f;
 	float soundDistance = 0.0f;
-	float SoundRadius = 1000.0f;
+	float SoundRadius = 500.0f;
 
 	//チャージ時サウンド
 	uint32_t ChargeSound = 0;
@@ -288,6 +288,7 @@ private://EnemyBossクラス変数
 
 	//ただの銃の音
 	float NormalGunSoundVol = 0.0f;
+	float MaxNormalGunSoundVol = 0.5f;
 
 	float Scale = 4.0f;
 	float EnemySplineUpdate = 0.015f;

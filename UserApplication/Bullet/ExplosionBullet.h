@@ -46,6 +46,7 @@ private:
 public://Getter
 	//Aliveのゲッター
 	bool GetBulletAlive() const;
+	bool GetBulletNotAlive() const;
 	Vector3 GetEnemyBulletPos() const {
 		return MyMath::GetWorldTransform(BulletWorldTrans.matWorld_);
 	}
