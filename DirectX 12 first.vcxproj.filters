@@ -811,10 +811,10 @@
     <ClInclude Include="UserApplication\Player\PlayerMissileShootingState.h">
       <Filter>UserFile\UserHeaderFile\Player</Filter>
     </ClInclude>
-    <ClInclude Include="RadialBlurPostEffect.h">
+    <ClInclude Include="Engine\2D\RadialBlurPostEffect.h">
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Torch.h">
+    <ClInclude Include="UserApplication\Torch.h">
       <Filter>UserFile\UserHeaderFile\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2D\ShadowMap.h">
@@ -823,7 +823,7 @@
     <ClInclude Include="Engine\Base\DescHeapSRV.h">
       <Filter>Engine\HeaderFile\Base</Filter>
     </ClInclude>
-    <ClInclude Include="TextureMaterial.h">
+    <ClInclude Include="Engine\2D\TextureMaterial.h">
       <Filter>Engine\HeaderFile\Drawing</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1107,10 +1107,10 @@
     <ClCompile Include="UserApplication\Player\PlayerMissileShootingState.cpp">
       <Filter>UserFile\UserSourceFile\Player</Filter>
     </ClCompile>
-    <ClCompile Include="RadialBlurPostEffect.cpp">
+    <ClCompile Include="Engine\2D\RadialBlurPostEffect.cpp">
       <Filter>Engine\SourceFile\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Torch.cpp">
+    <ClCompile Include="UserApplication\Torch.cpp">
       <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2D\ShadowMap.cpp">
