@@ -838,7 +838,7 @@
     <ClInclude Include="Engine\2D\NumbersSprite.h" />
     <ClInclude Include="Engine\2D\RadialBlurPostEffect.h" />
     <ClInclude Include="Engine\2D\TextureMaterial.h" />
-    <ClInclude Include="UserApplication\Torch.h" />
+    <ClInclude Include="UserApplication\Ground\Torch.h" />
     <ClInclude Include="UserApplication\Player\PlayerMissileShootingState.h" />
     <ClInclude Include="UserApplication\Player\PlayerNormalState.h" />
     <ClInclude Include="UserApplication\Player\PlayerShootingState.h" />
@@ -955,7 +955,7 @@
     <ClCompile Include="Engine\2D\SerialNumber.cpp" />
     <ClCompile Include="Engine\2D\NumbersSprite.cpp" />
     <ClCompile Include="Engine\2D\RadialBlurPostEffect.cpp" />
-    <ClCompile Include="UserApplication\Torch.cpp" />
+    <ClCompile Include="UserApplication\Ground\Torch.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerMissileShootingState.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerNormalState.cpp" />
     <ClCompile Include="UserApplication\Player\PlayerShootingState.cpp" />

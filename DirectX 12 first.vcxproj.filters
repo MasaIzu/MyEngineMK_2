@@ -814,7 +814,7 @@
     <ClInclude Include="Engine\2D\RadialBlurPostEffect.h">
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
-    <ClInclude Include="UserApplication\Torch.h">
+    <ClInclude Include="UserApplication\Ground\Torch.h">
       <Filter>UserFile\UserHeaderFile\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2D\ShadowMap.h">
@@ -1110,7 +1110,7 @@
     <ClCompile Include="Engine\2D\RadialBlurPostEffect.cpp">
       <Filter>Engine\SourceFile\2D</Filter>
     </ClCompile>
-    <ClCompile Include="UserApplication\Torch.cpp">
+    <ClCompile Include="UserApplication\Ground\Torch.cpp">
       <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2D\ShadowMap.cpp">
