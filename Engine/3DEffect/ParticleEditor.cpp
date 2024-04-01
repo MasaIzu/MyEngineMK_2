@@ -547,7 +547,6 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
-	addShield = std::make_unique<AddShield>();
 
 	if ( FileName != "Nothing" )
 	{
@@ -574,7 +573,7 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 void ParticleEditor::SetAddShield(AddShield* AddShield)
 {
-	addShield.reset(AddShield);
+	addShield = AddShield;
 }
 
 void ParticleEditor::Initialize(const std::string& FileName)

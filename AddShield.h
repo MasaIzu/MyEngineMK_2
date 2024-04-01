@@ -18,8 +18,8 @@ private:
 	};
 
 public://基本関数
-	AddShield( );
-	~AddShield( );
+	AddShield();
+	~AddShield();
 
 	//初期化
 	void Initialize();

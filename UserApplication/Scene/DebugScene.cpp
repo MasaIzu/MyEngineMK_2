@@ -15,6 +15,7 @@
 #include <filesystem>
 
 DebugScene::DebugScene() {}
+
 DebugScene::~DebugScene() {
 	LightData::GetInstance()->ClearLight();
 }
@@ -62,8 +63,13 @@ void DebugScene::Initialize() {
 	debugCamera = std::make_unique<DebugCamera>();
 	debugCamera->Initialize(viewProjection_.get());
 
+	modelManshon.reset(Model::CreateFromOBJ("Manshon",true));
+
+	AddShield_ = std::make_unique<AddShield>();
+
 	uint32_t MaxParticleCountB = 1000000;
 	particleEditor = std::make_unique<ParticleEditor>();
+	particleEditor->SetAddShield(AddShield_.get());
 	particleEditor->Initialize(MaxParticleCountB,true);
 	particleEditor->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
@@ -140,6 +146,7 @@ void DebugScene::PostEffectDraw()
 	{
 		skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
 		levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
+		AddShield_->Draw(*viewProjection_.get(),*LightViewProjection.get());
 	}
 
 	Model::PostDraw();
@@ -159,6 +166,7 @@ void DebugScene::BackgroundDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 	levelData->ShadowDraw(*LightViewProjection.get());
+	AddShield_->ShadowDraw(*LightViewProjection.get());
 	Model::PostShadowDraw();
 }
 

@@ -388,7 +388,7 @@ private:
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 
-	std::unique_ptr<AddShield> addShield;
+	AddShield* addShield;
 
 	//// 色
 	//Vector4 color = { 1,1,1,1 };

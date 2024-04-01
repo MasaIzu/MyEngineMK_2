@@ -8,11 +8,13 @@ AddShield::AddShield()
 
 AddShield::~AddShield()
 {
+	isChange = true;
 }
 
 void AddShield::Initialize()
 {
 	WorldTransform shieldPos;
+	shieldPos.Initialize();
 	ShieldsTrans.push_back(shieldPos);
 
 	colCount.push_back(ParticleEditor::AddCollision(shieldPos.translation_,shieldPos.scale_));
@@ -28,7 +30,9 @@ void AddShield::Update(const Vector3& colPos,const Vector3& colScale)
 	{
 		ShieldsTrans[ count ].translation_ = colPos;
 		ShieldsTrans[ count ].scale_ = colScale;
-		ParticleEditor::ChangeCollision(colCount[ count ],colPos,colScale);
+		ShieldsTrans[ count ].TransferMatrix();
+		Vector3 Col = colPos + Vector3(0,colScale.y,0);
+		ParticleEditor::ChangeCollision(colCount[ count ],Col,colScale);
 	}
 }
 

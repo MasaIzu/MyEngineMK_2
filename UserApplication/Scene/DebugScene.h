@@ -79,7 +79,9 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<DebugCamera> debugCamera;
 	std::unique_ptr<Skydome> skydome;
-	std::unique_ptr<ParticleEditor>particleEditor;
+	std::unique_ptr<ParticleEditor> particleEditor;
+	std::unique_ptr<AddShield> AddShield_;
+	std::unique_ptr<Model> modelManshon;
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度
