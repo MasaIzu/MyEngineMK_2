@@ -3,7 +3,7 @@
 #include "CollisionAttribute.h"
 #include <Numbers.h>
 
-NormalBullet::NormalBullet(const unsigned short Attribute_)
+NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& FileName)
 {
 	BulletWorldTrans.scale_ = Vector3(BulletRadius,BulletRadius,BulletRadius);
 	BulletWorldTrans.Initialize();
@@ -19,7 +19,7 @@ NormalBullet::NormalBullet(const unsigned short Attribute_)
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 
 	particleKisekiParticle = std::make_unique<ParticleEditor>();
-	particleKisekiParticle->Initialize(makeBulletParticleCount,true,"Kiseki");
+	particleKisekiParticle->Initialize(makeBulletParticleCount,true,FileName);
 	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 

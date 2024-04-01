@@ -17,7 +17,7 @@
 class NormalBullet
 {
 public://基本関数
-	NormalBullet(const unsigned short Attribute_);
+	NormalBullet(const unsigned short Attribute_,const std::string& FileName = "Kiseki");
 	~NormalBullet();
 
 	//初期化

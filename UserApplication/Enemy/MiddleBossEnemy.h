@@ -165,6 +165,8 @@ private://クラス関連
 	//弾
 	std::unique_ptr<NormalGun> normalGunLeft;
 	std::unique_ptr<NormalGun> normalGunRight;
+	std::unique_ptr<NormalGun> normalGunLeftLeft;
+	std::unique_ptr<NormalGun> normalGunRightRight;
 	std::unique_ptr<MissileGun> missileGunLeft;
 	std::unique_ptr<MissileGun> missileGunRight;
 	std::unique_ptr<EnemyHP2DUI> enemyHP2DUI;

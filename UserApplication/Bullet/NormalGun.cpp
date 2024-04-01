@@ -2,11 +2,11 @@
 #include <Numbers.h>
 #include <FbxLoader.h>
 
-NormalGun::NormalGun(const unsigned short Attribute)
+NormalGun::NormalGun(const unsigned short Attribute,const std::string& FileName)
 {
 	for ( auto&& Bullet : normalBullet )
 	{
-		Bullet = std::make_unique<NormalBullet>(Attribute);
+		Bullet = std::make_unique<NormalBullet>(Attribute,FileName);
 	}
 }
 

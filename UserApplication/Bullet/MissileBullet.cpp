@@ -15,6 +15,10 @@ MissileBullet::MissileBullet(const unsigned short Attribute_)
 	CollisionManager::GetInstance()->AddCollider(BulletCollider);
 	BulletCollider->SetAttribute(COLLISION_ATTR_NOTATTACK);
 	Attribute = Attribute_;
+
+	particleKisekiParticle = std::make_unique<ParticleEditor>();
+	particleKisekiParticle->Initialize(makeBulletParticleCount,true,"KisekiEnemy");
+	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 }
 
 MissileBullet::~MissileBullet()
@@ -98,6 +102,16 @@ void MissileBullet::Update(const Vector3& EndPos)
 	BulletWorldTrans.TransferMatrix();
 	BulletCollider->Update(BulletWorldTrans.matWorld_,BulletRadius,BulletSpeed,BulletVelocity);
 
+}
+
+void MissileBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
+{
+	particleKisekiParticle->CSUpdate(commandList,MyMath::Vec3ToVec4(BulletWorldTrans.translation_),isBulletAlive);
+}
+
+void MissileBullet::ParticleDraw(const ViewProjection& viewProjection_)
+{
+	particleKisekiParticle->Draw(viewProjection_);
 }
 
 void MissileBullet::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)

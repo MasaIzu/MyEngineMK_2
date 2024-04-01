@@ -7,6 +7,7 @@
 #include <BaseCollider.h>
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
+#include <ParticleEditor.h>
 
 /// <summary>
 /// ミサイルクラス
@@ -25,6 +26,10 @@ public://基本関数
 	//描画
 	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
 
+
+	void CSUpadate(ID3D12GraphicsCommandList* commandList);
+
+	void ParticleDraw(const ViewProjection& viewProjection_);
 
 public:
 
@@ -57,6 +62,9 @@ private://クラス関連
 	BaseCollider* BulletCollider = nullptr;
 	CollisionManager* collisionManager = nullptr;
 
+	std::unique_ptr<ParticleEditor> particleKisekiParticle;
+
+
 private://別クラスから値をもらう
 
 
@@ -80,6 +88,7 @@ private://クラス変数
 	uint32_t makeBulletCount = 0;
 	uint32_t BulletNotTrackingTime = 0;
 	uint32_t MaxBulletNotTrackingTime = 30;
+	uint32_t makeBulletParticleCount = 1024;
 
 	//イージング
 	uint32_t BulletEasingTime = 80;

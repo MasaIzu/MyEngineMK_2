@@ -19,10 +19,15 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	BossWorldTrans.scale_ = Vector3(Scale,Scale,Scale);
 	BossWorldTrans.Initialize();
 
-	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
 	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
-	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
+	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
 	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunLeftLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
+	normalGunLeftLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunRightRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
+	normalGunRightRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+
 
 	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 	missileGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),model_.get());
@@ -205,6 +210,8 @@ void MiddleBossEnemy::Update()
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunLeftLeft->Update(missileGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunRightRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	missileGunLeft->Update(missileGunLeftPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,player->GetPlayerPos(),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -264,6 +271,8 @@ void MiddleBossEnemy::Draw(const ViewProjection& viewProjection_,const ViewProje
 	{
 		normalGunLeft->Draw(viewProjection_,LightViewProjection_);
 		normalGunRight->Draw(viewProjection_,LightViewProjection_);
+		normalGunLeftLeft->Draw(viewProjection_,LightViewProjection_);
+		normalGunRightRight->Draw(viewProjection_,LightViewProjection_);
 		missileGunLeft->Draw(viewProjection_,LightViewProjection_);
 		missileGunRight->Draw(viewProjection_,LightViewProjection_);
 		HeriHaneModel_->Draw(HeriHaneLeftTrans,viewProjection_,LightViewProjection_);
@@ -309,6 +318,13 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 		UltDustParticle->Draw(viewProjection_);
 		EnemyUltPreparationDownParticle->Draw(viewProjection_);
 		EnemyUltDownExplosion->Draw(viewProjection_);
+		normalGunLeft->ParticleDraw(viewProjection_);
+		normalGunRight->ParticleDraw(viewProjection_);
+		normalGunLeftLeft->ParticleDraw(viewProjection_);
+		normalGunRightRight->ParticleDraw(viewProjection_);
+
+		missileGunLeft->ParticleDraw(viewProjection_);
+		missileGunRight->ParticleDraw(viewProjection_);
 	}
 
 	Explosion::PreDraw(commandList);
@@ -373,6 +389,8 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunLeftLeft->Update(missileGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
+	normalGunRightRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0),NormalGunSoundVol);
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -475,7 +493,9 @@ void MiddleBossEnemy::TitleMovieUpdate(const Vector3& startPos,Vector3& endPos)
 	missileGunRightPos = MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(static_cast< uint32_t >( Numbers::Five )) * BossWorldTrans.matWorld_);
 
 	normalGunLeft->Update(normalGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
-	normalGunRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRight->Update(normalGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunLeftLeft->Update(missileGunLeftPos,Vector3(0,MyMath::GetAngle(Angle),0));
+	normalGunRightRight->Update(missileGunRightPos,Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunLeft->Update(missileGunLeftPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 	missileGunRight->Update(missileGunRightPos,Vector3(0,0,0),Vector3(0,MyMath::GetAngle(Angle),0));
 
@@ -532,6 +552,14 @@ void MiddleBossEnemy::CSUpdate(ID3D12GraphicsCommandList* cmdList)
 	enemyBoostParticleRight->CSUpdate(cmdList,EnemyBoostRightPos,BoostEndPower);
 
 	explosion->CSUpdate(cmdList,isExplosion,MyMath::Vec3ToVec4(BossWorldTrans.translation_));
+
+	normalGunLeft->CSUpdate(cmdList);
+	normalGunRight->CSUpdate(cmdList);
+	normalGunLeftLeft->CSUpdate(cmdList);
+	normalGunRightRight->CSUpdate(cmdList);
+
+	missileGunLeft->CSUpdate(cmdList);
+	missileGunRight->CSUpdate(cmdList);
 
 	particleEditorLeft->CSUpdate(cmdList,EnemyBoostLeftPos.BoostStartPos[ 1 ],EnemyBoostLeftPos.BoostEndPos[ 0 ]);
 	particleEditorRight->CSUpdate(cmdList,EnemyBoostRightPos.BoostStartPos[ 1 ],EnemyBoostRightPos.BoostEndPos[ 0 ]);
@@ -838,6 +866,8 @@ void MiddleBossEnemy::Attack()
 		{
 			normalGunLeft->ShotBullet(player->GetPlayerPos());
 			normalGunRight->ShotBullet(player->GetPlayerPos());
+			normalGunLeftLeft->ShotBullet(player->GetPlayerPos());
+			normalGunRightRight->ShotBullet(player->GetPlayerPos());
 		}
 	}
 	else if ( attackType == AttackType::Missile )
@@ -855,6 +885,8 @@ void MiddleBossEnemy::Attack()
 		{
 			normalGunLeft->ShotBullet(player->GetPlayerPos());
 			normalGunRight->ShotBullet(player->GetPlayerPos());
+			normalGunLeftLeft->ShotBullet(player->GetPlayerPos());
+			normalGunRightRight->ShotBullet(player->GetPlayerPos());
 		}
 	}
 }

@@ -82,6 +82,22 @@ void MissileGun::ShotBullet()
 	}
 }
 
+void MissileGun::CSUpdate(ID3D12GraphicsCommandList* commandList)
+{
+	for ( auto&& Bullet : missileBullet )
+	{
+		Bullet->CSUpadate(commandList);
+	}
+}
+
+void MissileGun::ParticleDraw(const ViewProjection& viewProjection_)
+{
+	for ( auto&& Bullet : missileBullet )
+	{
+		Bullet->ParticleDraw(viewProjection_);
+	}
+}
+
 void MissileGun::UpdatePosition()
 {
 	GunTrans.TransferMatrix();

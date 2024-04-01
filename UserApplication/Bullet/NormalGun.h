@@ -10,7 +10,7 @@
 class NormalGun
 {
 public://基本関数
-	NormalGun(const unsigned short Attribute);
+	NormalGun(const unsigned short Attribute,const std::string& FileName = "Kiseki");
 	~NormalGun();
 
 	//初期化
