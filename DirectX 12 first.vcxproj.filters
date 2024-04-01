@@ -826,6 +826,9 @@
     <ClInclude Include="Engine\2D\TextureMaterial.h">
       <Filter>Engine\HeaderFile\Drawing</Filter>
     </ClInclude>
+    <ClInclude Include="AddShield.h">
+      <Filter>UserFile\UserHeaderFile\Ground</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1118,6 +1121,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DescHeapSRV.cpp">
       <Filter>Engine\SourceFile\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="AddShield.cpp">
+      <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

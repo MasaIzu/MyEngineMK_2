@@ -91,6 +91,7 @@ void ParticleEditor::StaticInitialize(ID3D12Device* Device)
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
+
 	auto cbDetailCollisionDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(ShaderDetailCollision));
 	m_sceneDetailCollisionParameterCB = MyFunction::CreateResource(cbDetailCollisionDesc,D3D12_RESOURCE_STATE_GENERIC_READ,nullptr,D3D12_HEAP_TYPE_UPLOAD);
 }
@@ -130,12 +131,24 @@ void ParticleEditor::PostDraw()
 	ParticleEditor::cmdList = nullptr;
 }
 
-void ParticleEditor::AddCollision(const Vector3& colPos,const Vector3& colScale)
+uint32_t ParticleEditor::AddCollision(const Vector3& colPos,const Vector3& colScale)
 {
-	shaderDetailCollision_.Pos[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colPos);
-	shaderDetailCollision_.Scale[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colScale);
+	uint32_t count = shaderDetailCollision_.ColCount;
+	if ( MaxColCount != shaderDetailCollision_.ColCount )
+	{
+		shaderDetailCollision_.Pos[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colPos);
+		shaderDetailCollision_.Scale[ shaderDetailCollision_.ColCount ] = MyMath::Vec3ToVec4(colScale);
+		MyFunction::WriteToUploadHeapMemory(m_sceneDetailCollisionParameterCB.Get(),sizeof(ShaderDetailCollision),&shaderDetailCollision_);
+		++shaderDetailCollision_.ColCount;
+	}
+
+	return count;
+}
+
+void ParticleEditor::ChangeCollision(const uint32_t& colcount,const Vector3& colPos,const Vector3& colScale) {
+	shaderDetailCollision_.Pos[ colcount ] = MyMath::Vec3ToVec4(colPos);
+	shaderDetailCollision_.Scale[ colcount ] = MyMath::Vec3ToVec4(colScale);
 	MyFunction::WriteToUploadHeapMemory(m_sceneDetailCollisionParameterCB.Get(),sizeof(ShaderDetailCollision),&shaderDetailCollision_);
-	++shaderDetailCollision_.ColCount;
 }
 
 void ParticleEditor::InitializeGraphicsPipeline()
@@ -534,6 +547,8 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 		descriptorHeap->GetCPUDescriptorHandleForHeapStart()
 	);
 
+	addShield = std::make_unique<AddShield>();
+
 	if ( FileName != "Nothing" )
 	{
 		isLoadFile = true;
@@ -555,6 +570,11 @@ void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEdit
 
 	particleEdiCount = ParticleEdiCount;
 	++ParticleEdiCount;
+}
+
+void ParticleEditor::SetAddShield(AddShield* AddShield)
+{
+	addShield.reset(AddShield);
 }
 
 void ParticleEditor::Initialize(const std::string& FileName)
@@ -836,6 +856,34 @@ void ParticleEditor::EditUpdate()
 				}
 
 				ImGui::TreePop();
+			}
+			ImGui::Text("");
+
+			if ( ImGui::Button("MakeCollision") )
+			{
+				isMakeCol = true;
+				addShield->Initialize();
+			}
+			if ( isMakeCol )
+			{
+				ImGui::SliderFloat3("ColPos",ColPos,-500,500);
+				ImGui::SliderFloat3("ColScale",ColScale,0,100);
+				Vector3 colPos;
+				colPos = ColPos;
+				Vector3 colScale;
+				colScale = ColScale;
+				addShield->Update(colPos,colScale);
+
+				if ( ImGui::Button("SetCol") )
+				{
+					addShield->SetFin();
+					isMakeCol = false;
+					for ( int i = 0; i < 3; i++ )
+					{
+						ColPos[ i ] = 0;
+						ColScale[ i ] = 1;
+					}
+				}
 			}
 
 

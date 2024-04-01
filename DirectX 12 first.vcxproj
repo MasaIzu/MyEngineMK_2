@@ -828,6 +828,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddShield.h" />
     <ClInclude Include="Engine\2D\ShadowMap.h" />
     <ClInclude Include="Engine\Base\DescHeapSRV.h" />
     <ClInclude Include="Engine\Camera\DebugCamera.h" />
@@ -946,6 +947,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddShield.cpp" />
     <ClCompile Include="Engine\2D\ShadowMap.cpp" />
     <ClCompile Include="Engine\Base\DescHeapSRV.cpp" />
     <ClCompile Include="Engine\Camera\DebugCamera.cpp" />

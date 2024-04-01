@@ -12,6 +12,8 @@
 
 #include "MyStruct.h"
 
+#include "AddShield.h"
+
 #include "Defined.h"
 MY_SUPPRESS_WARNINGS_BEGIN
 #include <cereal/types/string.hpp>
@@ -222,7 +224,13 @@ public: // 静的メンバ関数
 	/// コリジョンの追加
 	/// </summary>
 	/// <param name="colPos">コリジョンの追加</param>
-	static void AddCollision(const Vector3& colPos,const Vector3& colScale);
+	static uint32_t AddCollision(const Vector3& colPos,const Vector3& colScale);
+
+	/// <summary>
+	/// コリジョンの変更
+	/// </summary>
+	/// <param name="colPos">コリジョンの追加</param>
+	static void ChangeCollision(const uint32_t& colcount,const Vector3& colPos,const Vector3& colScale);
 
 private: // 静的メンバ変数
 	// デバイス
@@ -292,6 +300,11 @@ public: // メンバ関数
 	void Initialize(const uint32_t& ParticleCount,const bool& isEditUpdate_ = false,const std::string& FileName = "Nothing");
 
 	/// <summary>
+	/// 遮蔽のセット
+	/// </summary>
+	void SetAddShield(AddShield* AddShield);
+
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize(const std::string& FileName);
@@ -343,6 +356,7 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(const ViewProjection& view);
 
+
 	/// <summary>
 	/// テクスチャのセット
 	/// </summary>
@@ -374,6 +388,7 @@ private:
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 
+	std::unique_ptr<AddShield> addShield;
 
 	//// 色
 	//Vector4 color = { 1,1,1,1 };
@@ -417,6 +432,8 @@ private: // メンバ変数
 	bool isParticleActiveCheckBox = false;
 	bool isWindowFocus = false;
 	bool isPostEffctActive = false;
+	bool isMakeCol = false;
+	bool isSet = false;
 
 	int selectedIndex = -1;  // 選択されている項目のインデックス
 	int NewParticleCount = 0;
@@ -429,6 +446,9 @@ private: // メンバ変数
 	float AngleY_ = 0.0f;
 	float AngleZ_ = 0.0f;
 	float GravityStrengthDiv = 1.0f;
+
+	float ColPos[ 3 ] = { 0,0,0 };
+	float ColScale[ 3 ] = { 1,1,1 };
 
 	float StartColor[ 4 ] = { 1,1,1,1 };
 	float EndColor[ 4 ] = { 1,1,1,1 };
