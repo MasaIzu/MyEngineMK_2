@@ -23,6 +23,7 @@
 #include "Explosion.h"
 #include "ParticleEditor.h"
 #include <PlayerState.h>
+#include <Trail.h>
 
 struct PlayerAnimTime
 {
@@ -52,6 +53,8 @@ public://基本関数
 	void FbxDraw(const ViewProjection& lightViewProjection_);
 	//描画
 	void FbxShadowDraw(const ViewProjection& lightViewProjection_);
+	//描画
+	void TrailDraw();
 	//スプライト描画
 	void DrawSprite();
 
@@ -159,6 +162,9 @@ private://クラス関連
 
 	PlayerStateNeedMaterial playerStateNeedMaterial;
 	AudioManager* audioManager = nullptr;
+
+	//トレイルシェーダー実験
+	//std::unique_ptr<Trail> trail_;
 
 private://ストラクトやイーナムクラス
 	//アニメーションタイム

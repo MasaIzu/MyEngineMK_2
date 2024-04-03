@@ -3,6 +3,7 @@
 #include "CollisionAttribute.h"
 #include <Numbers.h>
 
+
 NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& FileName)
 {
 	BulletWorldTrans.scale_ = Vector3(BulletRadius,BulletRadius,BulletRadius);
@@ -21,6 +22,10 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 	particleKisekiParticle = std::make_unique<ParticleEditor>();
 	particleKisekiParticle->Initialize(makeBulletParticleCount,true,FileName);
 	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	trail_ = std::make_unique<Trail>(10);
+	trail_->SetColor(Vector4(255,255,255,255));
+
 }
 
 NormalBullet::~NormalBullet()
@@ -56,6 +61,15 @@ void NormalBullet::Update()
 
 	WorldTransUpdate();
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
+
+	Vector3 top = BulletWorldTrans.translation_;
+	Vector3 end = BulletOldPos;
+	trail_->SetPos(top,end);
+
+	trail_->SetIsVisible(true);
+	trail_->Update();
+
+	BulletOldPos = BulletWorldTrans.translation_;
 }
 
 void NormalBullet::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
@@ -63,6 +77,14 @@ void NormalBullet::Draw(const ViewProjection& viewProjection_,const ViewProjecti
 	if ( isBulletAlive == true )
 	{
 		model_->Draw(BulletWorldTrans,viewProjection_,LightViewProjection_);
+	}
+}
+
+void NormalBullet::TrailDraw(const ViewProjection& viewProjection_)
+{
+	if ( isBulletAlive == true )
+	{
+		trail_->Draw(viewProjection_);
 	}
 }
 
@@ -106,6 +128,8 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		BulletLifeTime = MaxBulletLifeTime;
 		isBulletAlive = true;
 		BulletWorldTrans.translation_ = pos;
+		BulletOldPos = pos;
+		trail_->ResetTrail(pos);
 		EnemyBulletMoveMent = BulletVelocity * BulletSpeed;
 		WorldTransUpdate();
 		BulletCollider->SetAttribute(Attribute);

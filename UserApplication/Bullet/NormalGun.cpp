@@ -68,6 +68,14 @@ void NormalGun::Draw(const ViewProjection& viewProjection_,const ViewProjection&
 	}
 }
 
+void NormalGun::TrailDraw(const ViewProjection& viewProjection_)
+{
+	for ( auto&& Bullet : normalBullet )
+	{
+		Bullet->TrailDraw(viewProjection_);
+	}
+}
+
 void NormalGun::FbxDraw(const ViewProjection& viewProjection_,const ViewProjection& lightViewProjection_)
 {
 	fbxObj3d_->Draw(GunTrans,viewProjection_,lightViewProjection_);

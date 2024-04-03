@@ -102,13 +102,14 @@ void Player::Initialize(const Vector3& Pos,const ViewProjection* viewProjection,
 	DamageUI = std::make_unique<PlayerDamageHitUI>();
 	DamageUI->Initialize();
 
-	//AttackNormalGun = 
-
 	CircleShadowCount = LightData::GetInstance()->AddCircleShadow(playerWorldTrans.translation_,LightDistance,LightDir,LightAtten,LightAngle);
 
 	audioManager = audioManager_;
 
 	BoostSound = audioManager->LoadAudio("Resources/Sound/get.mp3",soundVol,false);
+
+	//trail_ = std::make_unique<Trail>(10);
+	//trail_->SetColor(Vector4(255,175,60,255));
 }
 
 void Player::Update()
@@ -274,7 +275,12 @@ void Player::Update()
 	bonePos.BoostStartPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftStart) * playerRotWorldTrans.matWorld_));
 	bonePos.BoostEndPos[ 3 ] = MyMath::Vec3ToVec4(MyMath::GetWorldTransform(animation->GetBonePos(LeftEnd) * playerRotWorldTrans.matWorld_));
 
+	//Vector3 top = playerRotWorldTrans.translation_;
+	//Vector3 end = playerRotWorldTrans.translation_ + Vector3(0,10,0);
+	//trail_->SetPos(top,end);
 
+	//trail_->SetIsVisible(true);
+	//trail_->Update();
 	DamageUI->Update();
 }
 
@@ -309,6 +315,14 @@ void Player::FbxShadowDraw(const ViewProjection& lightViewProjection_) {
 		playerNormalGun->FbxShadowDraw(lightViewProjection_);
 		playerExplosionGun->FbxShadowDraw(lightViewProjection_);
 		animation->FbxShadowDraw(playerRotWorldTrans,lightViewProjection_);
+	}
+}
+
+void Player::TrailDraw()
+{
+	if ( !isPlayerExplosion )
+	{
+		playerNormalGun->TrailDraw(*viewProjection_);
 	}
 }
 

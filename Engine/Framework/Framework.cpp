@@ -9,6 +9,7 @@
 #include "NumbersSprite.h"
 #include "RadialBlurPostEffect.h"
 #include "DescHeapSRV.h"
+#include "Trail.h"
 
 uint32_t Framework::Time = 0;
 
@@ -78,6 +79,9 @@ void Framework::Initialize()
 	PostEffectManager::Initialize(DirectXCore::GetInstance(), winApp_->window_width, winApp_->window_height);
 
 	NumbersSprite::GetInstance()->Initialize();
+
+	//トレイルシェーダー初期化
+	Trail::StaticInitialize();
 
 #pragma endregion
 

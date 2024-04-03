@@ -10,6 +10,7 @@
 #include "Uint32Vector2.h"
 #include "CollisionAttribute.h"
 #include <ParticleEditor.h>
+#include "Trail.h"
 
 /// <summary>
 /// ノーマルバレットクラス
@@ -26,6 +27,8 @@ public://基本関数
 	void Update();
 	//描画
 	void Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_);
+	//描画
+	void TrailDraw(const ViewProjection& viewProjection_);
 
 	void CSUpadate(ID3D12GraphicsCommandList* commandList);
 	void ParticleDraw(const ViewProjection& viewProjection_);
@@ -61,6 +64,8 @@ private://クラス関連
 	CollisionManager* collisionManager = nullptr;
 
 	std::unique_ptr<ParticleEditor> particleKisekiParticle;
+
+	std::unique_ptr<Trail> trail_;
 
 private://別クラスから値をもらう
 

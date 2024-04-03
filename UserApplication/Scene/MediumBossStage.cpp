@@ -286,6 +286,8 @@ void MediumBossStage::PostEffectDraw()
 
 	//clearUI->Draw();
 
+	player_->TrailDraw();
+
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 
 	PostEffect::PostDrawScene();
