@@ -21,6 +21,8 @@ public://基本関数
 
 	void ParticleDraw(const ViewProjection& viewProjection_);
 
+	void TrailDraw(const ViewProjection& viewProjection_);
+
 public:
 	//発射
 	void ShotBullet();

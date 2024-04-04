@@ -44,8 +44,8 @@
         "MaxParticleCount": 1500,
         "AdditiveSynthesis": false,
         "RandomLifeMinMax": {
-            "value0": 1.0,
-            "value1": 88.56600189208985
+            "value0": 12.340999603271485,
+            "value1": 161.0030059814453
         },
         "RandomSpeedMinMax": {
             "value0": 1.0,

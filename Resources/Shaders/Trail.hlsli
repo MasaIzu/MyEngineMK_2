@@ -8,7 +8,7 @@ cbuffer ViewProjection : register(b0)
 
 cbuffer ConstantBufferColor : register(b1)
 {
-    float4 color;
+    float4 colorA;
 };
 
 //頂点シェーダの出力構造体
@@ -18,4 +18,6 @@ struct VSOutput {
 	float4 svpos : SV_POSITION;
 	//uv座標
 	float2 uv :TEXCOORD;
+    //color
+    float4 color : TEXCOLOR;
 };

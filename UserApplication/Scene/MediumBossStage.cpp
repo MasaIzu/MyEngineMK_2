@@ -269,7 +269,6 @@ void MediumBossStage::PostEffectDraw()
 	middleBossEnemy->Draw(*viewProjection_.get(),*LightViewProjection.get());
 	player_->Draw(*LightViewProjection.get());
 
-	//model_->Draw(Pos,*viewProjection_.get());
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
@@ -281,12 +280,9 @@ void MediumBossStage::PostEffectDraw()
 	player_->ParticleDraw();
 	DustParticle->Draw(*viewProjection_.get());
 
-	//middleBossEnemy->DrawSprite(*viewProjection_.get());
-	//player_->DrawSprite();
-
-	//clearUI->Draw();
 
 	player_->TrailDraw();
+	middleBossEnemy->TrailDraw(*viewProjection_.get());
 
 	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 
@@ -300,10 +296,6 @@ void MediumBossStage::BackgroundDraw()
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 
 	levelData->ShadowDraw(*LightViewProjection.get());
-
-
-	//middleBossEnemy->Draw(*viewProjection_.get());
-	//player_->Draw();
 
 	Model::PostShadowDraw();
 
@@ -319,22 +311,7 @@ void MediumBossStage::Draw()
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	//skydome->Draw(*viewProjection_.get());
-	//levelData->Draw(*viewProjection_.get());
-
-	//middleBossEnemy->Draw(*viewProjection_.get());
-	//player_->Draw();
-
-	//model_->Draw(Pos,*viewProjection_.get());
-
 	Model::PostDraw();//3Dオブジェクト描画後処理
-
-	//middleBossEnemy->FbxDraw(*viewProjection_.get());
-	//player_->FbxDraw();
-
-	//middleBossEnemy->ParticleDraw(*viewProjection_.get());
-	//player_->ParticleDraw();
-	//DustParticle->Draw(*viewProjection_.get());
 
 	middleBossEnemy->DrawSprite(*viewProjection_.get());
 	player_->DrawSprite();

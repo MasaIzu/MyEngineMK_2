@@ -19,6 +19,7 @@ protected:
 	{
 		Vector3 pos = { 0, 0, 0 };
 		Vector2 uv = { 0, 0 };
+		Vector4 Color = { 1,1,1,1 };
 	};
 public:
 	struct PosBuffer
@@ -41,7 +42,10 @@ protected:
 
 	bool isVisible_ = true;
 	bool isStop_ = true;
-	
+
+	bool isStartColor = false;
+	bool isEndColor = false;
+
 	// 頂点バッファビューの作成
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	ComPtr<ID3D12Resource> vertBuff_;
@@ -52,6 +56,9 @@ protected:
 	colorBuffer* constMapColor_;
 
 	Vector4 color_;
+
+	Vector3 FirstColor_;
+	Vector3 EndColor_;
 
 private:
 	// ルートシグネチャ
@@ -76,6 +83,10 @@ public:
 	void Draw(const ViewProjection& view);
 
 	void ResetTrail(const Vector3& resetPos = { 0,0,0 });
+
+	void SetFirstColor(const Vector3& color);
+	void SetEndColor(const Vector3& color);
+
 private:
 	//データ転送
 	void TransferBuff();

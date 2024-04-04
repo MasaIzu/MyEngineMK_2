@@ -71,6 +71,9 @@ void Trail::InitializeGraphicsPipeline()
 	  {// uv座標(1行で書いたほうが見やすい)
 	   "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT,
 	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+	   {// uv座標(1行で書いたほうが見やすい)
+	   "TEXCOLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
+	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -160,7 +163,7 @@ Trail::Trail(uint32_t vertSize)
 	vertex_.resize(vertSize * 2);
 	posArray_.resize(vertSize);
 	UINT sizeVB =
-		static_cast<UINT>(sizeof(SwordTrailVertex) * vertex_.size());
+		static_cast< UINT >( sizeof(SwordTrailVertex) * vertex_.size() );
 
 	////頂点バッファの設定
 	D3D12_HEAP_PROPERTIES heapprop{};
@@ -191,7 +194,7 @@ Trail::Trail(uint32_t vertSize)
 	// 頂点バッファビューの作成
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
 	vbView_.SizeInBytes = sizeVB;
-	vbView_.StrideInBytes = sizeof(vertex_[0]);
+	vbView_.StrideInBytes = sizeof(vertex_[ 0 ]);
 
 	isVisible_ = false;
 
@@ -229,12 +232,11 @@ Trail::Trail(uint32_t vertSize)
 
 	constBuffColor_ = buff;
 
-	TexNum = TextureManager::Load("sprite/whiteGura.png");
+	TexNum = TextureManager::Load("sprite/white1x1.png");
 }
 
 void Trail::Update()
 {
-
 	if ( isStop_ )
 	{
 		//先頭の値を配列の後ろへ代入していく
@@ -251,7 +253,7 @@ void Trail::Update()
 	TransferBuff();
 }
 
-void Trail::SetPos(const Vector3& head, const Vector3& tail)
+void Trail::SetPos(const Vector3& head,const Vector3& tail)
 {
 	tempPos.head = head;
 	tempPos.tail = tail;
@@ -277,42 +279,52 @@ void Trail::PreDraw()
 
 void Trail::Draw(const ViewProjection& view)
 {
-	if (isVisible_) {
+	if ( isVisible_ )
+	{
 
 		PreDraw();
 
 		ID3D12GraphicsCommandList* commandList = DirectXCore::GetInstance()->GetCommandList();
 
 		// 頂点データ転送
-		commandList->IASetVertexBuffers(0, 1, &vbView_);
+		commandList->IASetVertexBuffers(0,1,&vbView_);
 
 		// 定数バッファ転送
 		commandList->SetGraphicsRootConstantBufferView(
 			0,view.constBuff_->GetGPUVirtualAddress());
 		// 定数バッファ転送
 		commandList->SetGraphicsRootConstantBufferView(
-			1, constBuffColor_->GetGPUVirtualAddress());
+			1,constBuffColor_->GetGPUVirtualAddress());
 
 		// テクスチャ
 		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList,2,TexNum);
 
-		commandList->DrawInstanced((UINT)std::distance(vertex_.begin(), vertex_.end()), 1, 0, 0);
+		commandList->DrawInstanced(( UINT ) std::distance(vertex_.begin(),vertex_.end()),1,0,0);
 	}
 }
 
 void Trail::ResetTrail(const Vector3& resetPos)
 {
-	HRESULT result;
-	SwordTrailVertex* vertMap = nullptr;
-	result = vertBuff_->Map(0,nullptr,( void** ) &vertMap);
-	for ( size_t i = 0; i < vertex_.size(); i++ )
+	PosBuffer reset;
+	reset.head = resetPos;
+	reset.tail = resetPos;
+
+	for ( size_t i = 0; i < posArray_.size(); i++ )
 	{
-		if ( i > 0 )
-		{
-			vertex_[ i ].pos = resetPos;
-		}
+		posArray_[ i ] = reset;
 	}
-	std::copy(vertex_.begin(),vertex_.end(),vertMap);
+}
+
+void Trail::SetFirstColor(const Vector3& color)
+{
+	isStartColor = true;
+	FirstColor_ = color;
+}
+
+void Trail::SetEndColor(const Vector3& color)
+{
+	isEndColor = true;
+	EndColor_ = color;
 }
 
 void Trail::TransferBuff()
@@ -320,35 +332,50 @@ void Trail::TransferBuff()
 	HRESULT result;
 	// GPU上のバッファに対応した仮想メモリ(メインメモリ上)を取得
 	SwordTrailVertex* vertMap = nullptr;
-	result = vertBuff_->Map(0, nullptr, (void**)&vertMap);
+	result = vertBuff_->Map(0,nullptr,( void** ) &vertMap);
 	assert(SUCCEEDED(result));
 	//頂点データを更新する
-	float amount = 1.0f / (posArray_.size() - 1);
+	float amount = 1.0f / ( posArray_.size() - 1 );
 	float v = 0;
 	vertex_.clear();
 	vertex_.resize(posArray_.size() * 2);
-	for (size_t i = 0, j = 0; i < vertex_.size() && j < posArray_.size(); i += 2, ++j)
+	for ( size_t i = 0,j = 0; i < vertex_.size() && j < posArray_.size(); i += 2,++j )
 	{
+		Vector3 bias = ( posArray_[ j ].tail - posArray_[ j ].head ) * ( v * 0.5f );
+
 		//頂点座標を二つ代入する
-		vertex_[i].pos = posArray_[j].head;
-		vertex_[i].uv = Vector2(1.0f, v);
-		vertex_[i + 1].pos = posArray_[j].tail;
-		vertex_[i + 1].uv = Vector2(0.0f, v);
+		vertex_[ i ].pos = posArray_[ j ].head + bias;
+		vertex_[ i ].uv = Vector2(1.0f,v);
+		vertex_[ i + 1 ].pos = posArray_[ j ].tail - bias;
+		vertex_[ i + 1 ].uv = Vector2(0.0f,v);
+
+		if ( !isStartColor )
+		{
+			vertex_[ i ].Color = Vector4(1,1,1,1 - v);
+			vertex_[ i + 1 ].Color = Vector4(1,1,1,1 - v);
+		}
+		else
+		{
+			Vector4 colorSet = Vector4(FirstColor_.x,FirstColor_.y,FirstColor_.z,1 - v);
+			vertex_[ i ].Color = colorSet;
+			vertex_[ i + 1 ].Color = colorSet;
+		}
 
 		v += amount;
 	}
-	for (size_t i = 0; i < vertex_.size(); i++)
+	for ( size_t i = 0; i < vertex_.size(); i++ )
 	{
-		if (i > 0) {
-			if (vertex_[i].pos.x == 0 &&
-				vertex_[i].pos.y == 0 &&
-				vertex_[i].pos.z == 0)
+		if ( i > 0 )
+		{
+			if ( vertex_[ i ].pos.x == 0 &&
+				vertex_[ i ].pos.y == 0 &&
+				vertex_[ i ].pos.z == 0 )
 			{
-				vertex_[i].pos = vertex_[i - 1].pos;
+				vertex_[ i ].pos = vertex_[ i - 1 ].pos;
 			}
 		}
 	}
-	std::copy(vertex_.begin(), vertex_.end(), vertMap);
+	std::copy(vertex_.begin(),vertex_.end(),vertMap);
 
 	constMapColor_->color = color_ / 255.0f;
 }

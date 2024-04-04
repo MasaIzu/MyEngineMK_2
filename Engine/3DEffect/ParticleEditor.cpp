@@ -520,6 +520,10 @@ void ParticleEditor::SetTextureHandle(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 }
 
+Vector4 ParticleEditor::GetFirstColorParticle() {
+	return shaderDetailParameters.StartColor;
+}
+
 void ParticleEditor::Initialize(const uint32_t& ParticleCount,const bool& isEditUpdate_,const std::string& FileName)
 {
 	particleCount = ParticleCount;

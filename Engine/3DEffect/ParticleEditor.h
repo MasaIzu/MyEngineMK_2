@@ -371,6 +371,11 @@ public: // メンバ関数
 
 	ShaderDetailPointGenerationParameters GetShaderDetailParameters() const { return shaderDetailParameters; }
 
+	/// <summary>
+	/// 最初の色のゲット
+	/// </summary>
+	Vector4 GetFirstColorParticle();
+
 	//コンピュートシェーダー掛けた後のコピー処理
 	void CopyData();
 

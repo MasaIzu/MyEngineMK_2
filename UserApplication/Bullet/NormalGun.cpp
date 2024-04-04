@@ -14,7 +14,7 @@ NormalGun::~NormalGun()
 {
 }
 
-void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol,const bool& AnotherSound)
+void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* audioManager_,const float& soundVol,const bool& AnotherSound,const bool& SoundActive)
 {
 	fbxModel_.reset(FbxLoader::GetInstance()->LoadModelFromFile("NormalGunFbx",true));
 	fbxObj3d_ = FBXObject3d::Create();
@@ -34,7 +34,7 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 	SoundVol = soundVol;
 
 	AnotherSound_ = AnotherSound;
-	
+	SoundActive_ = SoundActive;
 	GunSound = audioManager->LoadAudio("Resources/Sound/fireS.mp3",soundVol,AnotherSound);
 	
 }
@@ -97,9 +97,12 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 				CoolTime = MaxCoolTime;
 				UseBulletCount++;
 
-				audioManager->ChangeVolume(GunSound,SoundVol);
-				audioManager->PlayWave(GunSound,false);
-
+				if ( SoundActive_ )
+				{
+					audioManager->ChangeVolume(GunSound,SoundVol);
+					audioManager->PlayWave(GunSound,false);
+				}
+				
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
 				if ( UseBulletCount >= BulletMaxCount )

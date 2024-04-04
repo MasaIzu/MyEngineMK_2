@@ -23,9 +23,8 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 	particleKisekiParticle->Initialize(makeBulletParticleCount,true,FileName);
 	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
 
-	trail_ = std::make_unique<Trail>(10);
-	trail_->SetColor(Vector4(255,255,255,255));
-
+	trail_ = std::make_unique<Trail>(50);
+	trail_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 }
 
 NormalBullet::~NormalBullet()
@@ -62,8 +61,13 @@ void NormalBullet::Update()
 	WorldTransUpdate();
 	BulletCollider->Update(BulletWorldTrans.matWorld_);
 
-	Vector3 top = BulletWorldTrans.translation_;
-	Vector3 end = BulletOldPos;
+	Vector3 look_ = MyMath::MatVector(BulletWorldTrans.matWorld_,Vector3(1,0,0));
+	look_.normalize();
+	look_ *= TrailSize;
+
+	Vector3 top = BulletWorldTrans.translation_ + look_;
+	Vector3 end = BulletWorldTrans.translation_ - look_;
+
 	trail_->SetPos(top,end);
 
 	trail_->SetIsVisible(true);
@@ -82,10 +86,7 @@ void NormalBullet::Draw(const ViewProjection& viewProjection_,const ViewProjecti
 
 void NormalBullet::TrailDraw(const ViewProjection& viewProjection_)
 {
-	if ( isBulletAlive == true )
-	{
-		trail_->Draw(viewProjection_);
-	}
+	trail_->Draw(viewProjection_);
 }
 
 void NormalBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)

@@ -19,6 +19,9 @@ MissileBullet::MissileBullet(const unsigned short Attribute_)
 	particleKisekiParticle = std::make_unique<ParticleEditor>();
 	particleKisekiParticle->Initialize(makeBulletParticleCount,true,"KisekiEnemy");
 	particleKisekiParticle->SetTextureHandle(TextureManager::Load("sprite/effect4.png"));
+
+	trail_ = std::make_unique<Trail>(100);
+	trail_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 }
 
 MissileBullet::~MissileBullet()
@@ -102,6 +105,17 @@ void MissileBullet::Update(const Vector3& EndPos)
 	BulletWorldTrans.TransferMatrix();
 	BulletCollider->Update(BulletWorldTrans.matWorld_,BulletRadius,BulletSpeed,BulletVelocity);
 
+	Vector3 look_ = MyMath::MatVector(BulletWorldTrans.matWorld_,Vector3(1,0,0));
+	look_.normalize();
+	look_ *= TrailSize;
+
+	Vector3 top = BulletWorldTrans.translation_ + look_;
+	Vector3 end = BulletWorldTrans.translation_ - look_;
+
+	trail_->SetPos(top,end);
+
+	trail_->SetIsVisible(true);
+	trail_->Update();
 }
 
 void MissileBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
@@ -112,6 +126,11 @@ void MissileBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
 void MissileBullet::ParticleDraw(const ViewProjection& viewProjection_)
 {
 	particleKisekiParticle->Draw(viewProjection_);
+}
+
+void MissileBullet::TrailDraw(const ViewProjection& viewProjection_)
+{
+	trail_->Draw(viewProjection_);
 }
 
 void MissileBullet::Draw(const ViewProjection& viewProjection_,const ViewProjection& LightViewProjection_)
@@ -139,6 +158,7 @@ void MissileBullet::MakeMissileBullet(const Vector3& pos,const Vector3& velocity
 
 		BulletWorldTrans.translation_ = pos;
 		BulletVelocity = velocity.norm();
+		trail_->ResetTrail(pos);
 		BulletCollider->SetAttribute(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
 		BulletCollider->SphereMeshHitReset();
 	}

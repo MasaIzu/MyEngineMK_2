@@ -98,6 +98,14 @@ void MissileGun::ParticleDraw(const ViewProjection& viewProjection_)
 	}
 }
 
+void MissileGun::TrailDraw(const ViewProjection& viewProjection_)
+{
+	for ( auto&& Bullet : missileBullet )
+	{
+		Bullet->TrailDraw(viewProjection_);
+	}
+}
+
 void MissileGun::UpdatePosition()
 {
 	GunTrans.TransferMatrix();

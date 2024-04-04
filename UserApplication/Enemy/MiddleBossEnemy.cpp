@@ -20,13 +20,13 @@ MiddleBossEnemy::MiddleBossEnemy(AudioManager* audioManager_)
 	BossWorldTrans.Initialize();
 
 	normalGunLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
-	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,true);
 	normalGunRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
-	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false,false);
 	normalGunLeftLeft = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
-	normalGunLeftLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunLeftLeft->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false,false);
 	normalGunRightRight = std::make_unique<NormalGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK,"KisekiEnemy");
-	normalGunRightRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false);
+	normalGunRightRight->Initialize(BossWorldTrans.translation_,model_.get(),audioManager_,0.0f,false,false);
 
 
 	missileGunLeft = std::make_unique<MissileGun>(COLLISION_ATTR_ENEMY_BULLET_ATTACK);
@@ -330,6 +330,17 @@ void MiddleBossEnemy::ParticleDraw(const ViewProjection& viewProjection_)
 	Explosion::PreDraw(commandList);
 	explosion->Draw(viewProjection_);
 	Explosion::PostDraw();
+}
+
+void MiddleBossEnemy::TrailDraw(const ViewProjection& viewProjection_)
+{
+	normalGunLeft->TrailDraw(viewProjection_);
+	normalGunRight->TrailDraw(viewProjection_);
+	normalGunLeftLeft->TrailDraw(viewProjection_);
+	normalGunRightRight->TrailDraw(viewProjection_);
+
+	missileGunLeft->TrailDraw(viewProjection_);
+	missileGunRight->TrailDraw(viewProjection_);
 }
 
 void MiddleBossEnemy::DrawSprite(const ViewProjection& viewProjection_)

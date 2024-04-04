@@ -8,6 +8,7 @@
 #include <CollisionManager.h>
 #include "Uint32Vector2.h"
 #include <ParticleEditor.h>
+#include <Trail.h>
 
 /// <summary>
 /// ミサイルクラス
@@ -30,6 +31,8 @@ public://基本関数
 	void CSUpadate(ID3D12GraphicsCommandList* commandList);
 
 	void ParticleDraw(const ViewProjection& viewProjection_);
+
+	void TrailDraw(const ViewProjection& viewProjection_);
 
 public:
 
@@ -64,6 +67,7 @@ private://クラス関連
 
 	std::unique_ptr<ParticleEditor> particleKisekiParticle;
 
+	std::unique_ptr<Trail> trail_;
 
 private://別クラスから値をもらう
 
@@ -108,6 +112,7 @@ private://クラス変数
 	float BulletStartLerpTime = 0.04f;
 	float NotSearchArea = 25.0f;
 	float LerpStrength = 0.005f;
+	float TrailSize = 0.5f;
 
 	Vector3 BulletOldPos;
 	Vector3 BulletVelocity;

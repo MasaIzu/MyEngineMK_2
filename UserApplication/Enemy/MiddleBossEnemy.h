@@ -49,6 +49,8 @@ public://基本関数
 
 	//パーティクル描画
 	void ParticleDraw(const ViewProjection& viewProjection_);
+	//トレイル描画
+	void TrailDraw(const ViewProjection& viewProjection_);
 	//スプライト描画
 	void DrawSprite(const ViewProjection& viewProjection_);
 	//ムービー用更新
