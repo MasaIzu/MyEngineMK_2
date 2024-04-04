@@ -16,7 +16,7 @@ public:
 	//更新
 	void Update();
 	//更新
-	void CSUpdate(ID3D12GraphicsCommandList* cmdList);
+	void CSUpdate(ID3D12GraphicsCommandList* cmdList,const bool& isNotBlack = true);
 	//描画
 	void Draw(const ViewProjection& view,const ViewProjection& LightViewProjection_);
 	//描画

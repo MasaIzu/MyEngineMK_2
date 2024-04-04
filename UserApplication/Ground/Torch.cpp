@@ -23,9 +23,9 @@ void Torch::Update()
 
 }
 
-void Torch::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+void Torch::CSUpdate(ID3D12GraphicsCommandList* cmdList,const bool& isNotBlack)
 {
-	TorchParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(torchTrans.translation_),true);
+	TorchParticle->CSUpdate(cmdList,MyMath::Vec3ToVec4(torchTrans.translation_),isNotBlack);
 }
 
 void Torch::Draw(const ViewProjection& view,const ViewProjection& LightViewProjection_)

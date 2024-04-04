@@ -117,6 +117,8 @@ void MediumBossStage::Update()
 	gameCamera->SetPlayerPosition(player_->GetPlayerPos());
 	gameCamera->Update();
 
+	isNotBlack = true;
+
 	if ( VsBoss == false )
 	{
 		VsBoss = middleBossEnemy->MovieUpdate(start,end);
@@ -142,6 +144,7 @@ void MediumBossStage::Update()
 			if ( SpriteAlpha < 1 )
 			{
 				SpriteAlpha += AddSpriteAlpha;
+				isNotBlack = false;
 			}
 			else
 			{
@@ -332,7 +335,7 @@ void MediumBossStage::Finalize()
 
 void MediumBossStage::CSUpdate()
 {
-	levelData->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
+	levelData->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),isNotBlack);
 	middleBossEnemy->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	player_->CSUpdate(DirectXCore::GetInstance()->GetCommandList());
 	DustParticle->CSUpdate(DirectXCore::GetInstance()->GetCommandList(),static_cast< uint32_t >( isUltExplosion ),static_cast<uint32_t>(middleBossEnemy->GetIsUltChargeFin()),middleBossEnemy->GetUltPreparationPosition(),middleBossEnemy->GetUltParticleSpeed());

@@ -94,6 +94,8 @@ private:
 	bool Jiken = false;
 	bool isUltExplosion = false;
 	bool isInversion = false;
+	bool isNotBlack = true;
+
 
 	int shadeNumber = 3;
 	int range = 0;//ぼかし強度

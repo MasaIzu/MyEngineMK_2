@@ -334,11 +334,11 @@ void LoadLevelEditor::Update()
 	}
 }
 
-void LoadLevelEditor::CSUpdate(ID3D12GraphicsCommandList* cmdList)
+void LoadLevelEditor::CSUpdate(ID3D12GraphicsCommandList* cmdList,const bool& isNotBlack)
 {
 	for ( auto& torchObject : torch )
 	{
-		torchObject->CSUpdate(cmdList);
+		torchObject->CSUpdate(cmdList,isNotBlack);
 	}
 }
 
