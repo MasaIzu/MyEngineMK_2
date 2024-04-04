@@ -838,7 +838,7 @@
     <ClInclude Include="Engine\2D\TextureMaterial.h">
       <Filter>Engine\HeaderFile\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="AddShield.h">
+    <ClInclude Include="Engine\3D\AddShield.h">
       <Filter>UserFile\UserHeaderFile\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2D\Trail.h">
