@@ -450,6 +450,7 @@ private: // メンバ変数
 	float AngleX_ = 0.0f;
 	float AngleY_ = 0.0f;
 	float AngleZ_ = 0.0f;
+	float GravityStrength = 0.0f;
 	float GravityStrengthDiv = 1.0f;
 
 	float ColPos[ 3 ] = { 0,0,0 };

@@ -57,7 +57,7 @@
         },
         "SpeedDivideSize": 1.0,
         "ScaleDivideSize": 1.0,
-        "GravityStrength": 0.0,
+        "GravityStrength": -0.0012865873286500574,
         "Interlocking": false,
         "InterlockingStrength": 0.0,
         "InterlockingLength": 15.0,

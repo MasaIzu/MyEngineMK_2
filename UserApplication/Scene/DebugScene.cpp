@@ -85,20 +85,23 @@ void DebugScene::Update() {
 	ImGui::SetCursorPos(ImVec2(900,20));
 	if ( shadeNumber == 0 )
 	{
+		ImGui::Text("");
 		ImGui::Text("Nothing");
 		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 
 	}
 	else if ( shadeNumber == 1 )
 	{
-		ImGui::Text("averageBlur");
+		ImGui::Text("");
+		ImGui::Text("AverageBlur");
 		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 
 		ImGui::SliderInt("range",&range,0,20);
 	}
 	else if ( shadeNumber == 2 )
 	{
-		ImGui::Text("RadialBlurBlur");
+		ImGui::Text("");
+		ImGui::Text("RadialBlur");
 		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 
 		ImGui::SliderFloat("centerX",&center.x,0,1);
@@ -108,7 +111,8 @@ void DebugScene::Update() {
 	}
 	else if ( shadeNumber == 3 )
 	{
-		ImGui::Text("RadialBlurBlur");
+		ImGui::Text("");
+		ImGui::Text("Bloom");
 		ImGui::SliderInt("shadeNumber",&shadeNumber,0,3);
 	}
 	else if ( shadeNumber == 4 )

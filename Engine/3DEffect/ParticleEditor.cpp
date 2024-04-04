@@ -823,10 +823,10 @@ void ParticleEditor::EditUpdate()
 				ImGui::Checkbox("GravityActive",&isGravityStrengthActive);
 				if ( isGravityStrengthActive )
 				{
-					ImGui::SliderFloat("GravityStrength",&sendParameters.GravityStrength,-1,1);
+					ImGui::SliderFloat("GravityStrength",&GravityStrength,-1,1);
 					ImGui::SliderFloat("GravityStrengthDiv",&GravityStrengthDiv,1,100);
 
-					sendParameters.GravityStrength = sendParameters.GravityStrength / GravityStrengthDiv;
+					sendParameters.GravityStrength = GravityStrength / GravityStrengthDiv;
 				}
 				else
 				{
@@ -1045,7 +1045,7 @@ void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint3
 	CSCmd(commandList);
 }
 
-void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive, const Vector4& EndPos)
+void ParticleEditor::CSUpdate(ID3D12GraphicsCommandList* commandList,const uint32_t& isParticleActive,const uint32_t& isEndPointActive,const Vector4& EndPos)
 {
 	shaderDetailParameters.EndPos = EndPos;
 	shaderDetailParameters.Shot = isParticleActive;
