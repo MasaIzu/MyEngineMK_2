@@ -1137,7 +1137,7 @@
     <ClCompile Include="Engine\Base\DescHeapSRV.cpp">
       <Filter>Engine\SourceFile\Base</Filter>
     </ClCompile>
-    <ClCompile Include="AddShield.cpp">
+    <ClCompile Include="Engine\3D\AddShield.cpp">
       <Filter>UserFile\UserSourceFile\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2D\Trail.cpp">

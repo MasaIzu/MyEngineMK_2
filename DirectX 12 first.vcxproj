@@ -969,7 +969,7 @@
     <ClInclude Include="UserApplication\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AddShield.cpp" />
+    <ClCompile Include="Engine\3D\AddShield.cpp" />
     <ClCompile Include="Engine\2D\ShadowMap.cpp" />
     <ClCompile Include="Engine\2D\Trail.cpp" />
     <ClCompile Include="Engine\Base\DescHeapSRV.cpp" />
