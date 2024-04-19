@@ -426,6 +426,7 @@ bool MiddleBossEnemy::MovieUpdate(const Vector3& startPos,Vector3& endPos)
 	LightData::GetInstance()->UpdatePointLight(LightBoostRight,MyMath::Vec4ToVec3(EnemyBoostRightPos.BoostEndPos[ 0 ]),Vector3(1,1,1),Vector3(0.1f,0.1f,0.1f),isLightActive);
 
 	ColTransUpdate();//当たり判定の場所アップデート
+	ColUpdate();//当たり判定のアップデート
 
 	if ( !isDead )
 	{
