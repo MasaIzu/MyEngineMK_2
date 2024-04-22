@@ -27,7 +27,6 @@
 #pragma warning(disable: 26813)
 
 #include<array>
-#include<atldef.h>
 #include<cassert>
 #include<cmath>
 #include<cstdint>

@@ -49,7 +49,7 @@ void MediumBossStage::Initialize()
 	levelData->Initialize("MiddleBossStage",Vector3(0,0,0));
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize(Vector3(0,20,0),viewProjection_.get(),audioManager);
+	player_->Initialize(Vector3(0,20,-10),viewProjection_.get(),audioManager);
 
 	player_->SetCameraModeNotFree(false);
 
