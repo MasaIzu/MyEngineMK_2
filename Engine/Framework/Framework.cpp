@@ -208,25 +208,25 @@ void Framework::Run()
 
 		PostEffectDraw();
 
-		ID3D12GraphicsCommandList* commandList = directXCore_->GetCommandList();
+		//ID3D12GraphicsCommandList* commandList = directXCore_->GetCommandList();
 
-		RadialBlurPostEffect::PreDrawScene(commandList);
-		PostEffect::Draw(directXCore_->GetCommandList());
-		RadialBlurPostEffect::PostDrawScene();
+		//RadialBlurPostEffect::PreDrawScene(commandList);
+		
+		//RadialBlurPostEffect::PostDrawScene();
 
-		PostEffectManager::PreDrawScene(directXCore_->GetCommandList());
+		//PostEffectManager::PreDrawScene(directXCore_->GetCommandList());
 
-		Draw();
-		RadialBlurPostEffect::SetShadeNumber(2);
-		RadialBlurPostEffect::Draw(directXCore_->GetCommandList(),0);
+		//Draw();
+		//RadialBlurPostEffect::SetShadeNumber(2);
+		//RadialBlurPostEffect::Draw(directXCore_->GetCommandList(),0);
 
-		PostEffectManager::PostDrawScene();
+		//PostEffectManager::PostDrawScene();
 
 
 		// 描画開始
 		directXCore_->PreDraw();
 
-		PostEffectManager::Draw(directXCore_->GetCommandList());
+		PostEffect::Draw(directXCore_->GetCommandList());
 
 		//ImGui描画
 #ifdef _Editor

@@ -214,7 +214,30 @@ void DebugScene::Draw() {
 
 #pragma region 前景スプライト描画
 
+	PostEffect::PreDrawScene(commandList);
+	PostEffect::SetShadeNumber(shadeNumber);
+	PostEffect::SetKernelSize(range);
+	PostEffect::SetRadialBlur(center,intensity,samples);
+	PostEffect::SetAngle(angle,angle2);
 
+	Model::PreDraw(commandList);
+
+	if ( particleEditor->IsStageDraw() )
+	{
+		skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
+		levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
+		AddShield_->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	}
+
+	Model::PostDraw();
+
+	Model::PreDraw(commandList);
+
+	Model::PostDraw();
+
+	particleEditor->Draw(*viewProjection_);
+
+	PostEffect::PostDrawScene();
 
 #pragma endregion
 }
