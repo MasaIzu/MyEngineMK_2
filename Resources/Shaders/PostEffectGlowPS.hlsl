@@ -22,7 +22,7 @@ float4 main(VSOutput input) : SV_TARGET
     {
         float4 col = tex0.Sample(smp, input.uv);
         //col += tex1.Sample(smp, input.uv);
-        col.a = 1;
+        //col.a = 1;
 
         return col;
     }
@@ -87,9 +87,7 @@ float4 main(VSOutput input) : SV_TARGET
     {
         float4 Color = tex0.Sample(smp, input.uv);
         float4 AddAllColor = tex0.Sample(smp, input.uv);
-		
-        float4 aaa;
-		
+				
         float totalWeight = 0, _Sigma = 0.005, _StepWidth = 0.002; //BloomÇÕÉuÉâÅ[ÇëÂÇ∞Ç≥Ç…
         float4 col = float4(0, 0, 0, 0);
 		
@@ -111,6 +109,8 @@ float4 main(VSOutput input) : SV_TARGET
             }
         }
         col /= totalWeight;
+		
+        col.a = 1.0f;
 		
         Color = col;
 		

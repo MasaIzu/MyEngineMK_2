@@ -138,20 +138,18 @@ void DebugScene::PostEffectDraw()
 {
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	PostEffect::PreDrawScene(commandList);
-	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetRadialBlur(center, intensity, samples);
 	PostEffect::SetAngle(angle, angle2);
 
 	Model::PreDraw(commandList);
 
-	if ( particleEditor->IsStageDraw() )
-	{
-		skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
-		levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
-		AddShield_->Draw(*viewProjection_.get(),*LightViewProjection.get());
-	}
+	//if ( particleEditor->IsStageDraw() )
+	//{
+	//	skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	//	levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	//	AddShield_->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	//}
 
 	Model::PostDraw();
 
@@ -161,7 +159,6 @@ void DebugScene::PostEffectDraw()
 
 	particleEditor->Draw(*viewProjection_);
 
-	PostEffect::PostDrawScene();
 }
 
 void DebugScene::BackgroundDraw()
@@ -195,10 +192,8 @@ void DebugScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-#pragma region 背景スプライト描画
 
-	// 深度バッファクリア
-	dxCommon_->ClearDepthBuffer();
+#pragma region 背景スプライト描画
 
 
 #pragma endregion
@@ -213,12 +208,6 @@ void DebugScene::Draw() {
 #pragma endregion
 
 #pragma region 前景スプライト描画
-
-	PostEffect::PreDrawScene(commandList);
-	PostEffect::SetShadeNumber(shadeNumber);
-	PostEffect::SetKernelSize(range);
-	PostEffect::SetRadialBlur(center,intensity,samples);
-	PostEffect::SetAngle(angle,angle2);
 
 	Model::PreDraw(commandList);
 
@@ -235,9 +224,8 @@ void DebugScene::Draw() {
 
 	Model::PostDraw();
 
-	particleEditor->Draw(*viewProjection_);
+	//particleEditor->Draw(*viewProjection_);
 
-	PostEffect::PostDrawScene();
 
 #pragma endregion
 }
