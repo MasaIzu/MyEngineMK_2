@@ -45,7 +45,7 @@ public:
 	bool GetIsReload();
 	uint32_t GetBulletCount();
 private://コンスト
-	const static uint32_t BulletMaxCount = 30;
+	const static uint32_t BulletMaxCount = 20;
 
 
 private://クラス関連

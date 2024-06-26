@@ -39,7 +39,7 @@ public:
 	WorldTarnsLook GetLook()const;
 
 private://コンスト
-	const static uint32_t BulletMaxCount = 50;
+	const static uint32_t BulletMaxCount = 5;
 
 
 private://クラス関連

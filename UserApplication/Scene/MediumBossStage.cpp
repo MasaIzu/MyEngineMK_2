@@ -125,7 +125,7 @@ void MediumBossStage::Update()
 	}
 	else
 	{
-		middleBossEnemy->Update();
+		//middleBossEnemy->Update();
 	}
 
 	if ( player_->GetPlayerPos().y < -250.0f )
@@ -259,37 +259,32 @@ void MediumBossStage::PostEffectDraw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	PostEffect::PreDrawScene(commandList);
 	PostEffect::SetShadeNumber(shadeNumber);
 	PostEffect::SetKernelSize(range);
 	PostEffect::SetAngle(angle,angle2);
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
-	levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
-
-	middleBossEnemy->Draw(*viewProjection_.get(),*LightViewProjection.get());
-	player_->Draw(*LightViewProjection.get());
+	//middleBossEnemy->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	//player_->Draw(*LightViewProjection.get());
 
 
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
-	middleBossEnemy->FbxDraw(*viewProjection_.get(),*LightViewProjection.get());
-	player_->FbxDraw(*LightViewProjection.get());
+	//middleBossEnemy->FbxDraw(*viewProjection_.get(),*LightViewProjection.get());
+	//player_->FbxDraw(*LightViewProjection.get());
 
-	levelData->ParticleDraw(*viewProjection_.get());
-	middleBossEnemy->ParticleDraw(*viewProjection_.get());
-	player_->ParticleDraw();
-	DustParticle->Draw(*viewProjection_.get());
+	//levelData->ParticleDraw(*viewProjection_.get());
+	//middleBossEnemy->ParticleDraw(*viewProjection_.get());
+	//player_->ParticleDraw();
+	//DustParticle->Draw(*viewProjection_.get());
 
 
-	player_->TrailDraw();
-	middleBossEnemy->TrailDraw(*viewProjection_.get());
+	//player_->TrailDraw();
+	//middleBossEnemy->TrailDraw(*viewProjection_.get());
 
-	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	//sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
 
-	PostEffect::PostDrawScene();
 }
 
 void MediumBossStage::BackgroundDraw()
@@ -298,12 +293,12 @@ void MediumBossStage::BackgroundDraw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	Model::PreShadowDraw(commandList);//// 3Dオブジェクト描画前処理
 
-	levelData->ShadowDraw(*LightViewProjection.get());
+	//levelData->ShadowDraw(*LightViewProjection.get());
 
 	Model::PostShadowDraw();
 
-	middleBossEnemy->FbxShadowDraw(*LightViewProjection.get());
-	player_->FbxShadowDraw(*LightViewProjection.get());
+	//middleBossEnemy->FbxShadowDraw(*LightViewProjection.get());
+	//player_->FbxShadowDraw(*LightViewProjection.get());
 
 }
 
@@ -314,18 +309,31 @@ void MediumBossStage::Draw()
 
 	Model::PreDraw(commandList);//// 3Dオブジェクト描画前処理
 
+	skydome->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	levelData->Draw(*viewProjection_.get(),*LightViewProjection.get());
+	player_->Draw(*LightViewProjection.get());
+
+
 	Model::PostDraw();//3Dオブジェクト描画後処理
 
-	middleBossEnemy->DrawSprite(*viewProjection_.get());
-	player_->DrawSprite();
+	player_->FbxDraw(*LightViewProjection.get());
 
-	TenToZero->Draw();
-	Tenten->Draw(TenToZeroUIPos - TentenMinus,Vector4(1,1,1,1));
-	Minutes->Draw();
+	//player_->ParticleDraw();
 
-	clearUI->Draw();
+	player_->TrailDraw();
 
-	sprite_->Draw({ 640,360 },{ 1,1,1,SpriteAlpha });
+	
+
+	//middleBossEnemy->DrawSprite(*viewProjection_.get());
+	//player_->DrawSprite();
+
+	//TenToZero->Draw();
+	//Tenten->Draw(TenToZeroUIPos - TentenMinus,Vector4(1,1,1,1));
+	//Minutes->Draw();
+
+	//clearUI->Draw();
+
+	//sprite_->Draw({ 640,360 },{ 1,1,1,0 });
 }
 
 void MediumBossStage::Finalize()

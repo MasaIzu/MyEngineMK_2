@@ -11,6 +11,7 @@
 #include "CollisionAttribute.h"
 #include <ParticleEditor.h>
 #include "Trail.h"
+#include <Trail3D.h>
 
 /// <summary>
 /// ノーマルバレットクラス
@@ -66,7 +67,7 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> particleKisekiParticle;
 
 	std::unique_ptr<Trail> trail_;
-
+	std::unique_ptr<Trail3D> trail3D_;
 private://別クラスから値をもらう
 
 

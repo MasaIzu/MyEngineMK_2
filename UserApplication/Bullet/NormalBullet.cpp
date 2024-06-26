@@ -25,6 +25,9 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 
 	trail_ = std::make_unique<Trail>(50);
 	trail_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
+
+	trail3D_ = std::make_unique<Trail3D>(50);
+	trail3D_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 }
 
 NormalBullet::~NormalBullet()
@@ -69,9 +72,12 @@ void NormalBullet::Update()
 	Vector3 end = BulletWorldTrans.translation_ - look_;
 
 	trail_->SetPos(top,end);
-
 	trail_->SetIsVisible(true);
 	trail_->Update();
+
+	trail3D_->SetPos(BulletWorldTrans.translation_);
+	trail3D_->SetIsVisible(true);
+	trail3D_->Update();
 
 	BulletOldPos = BulletWorldTrans.translation_;
 }
@@ -86,7 +92,8 @@ void NormalBullet::Draw(const ViewProjection& viewProjection_,const ViewProjecti
 
 void NormalBullet::TrailDraw(const ViewProjection& viewProjection_)
 {
-	trail_->Draw(viewProjection_);
+	//trail_->Draw(viewProjection_);
+	trail3D_->Draw(viewProjection_);
 }
 
 void NormalBullet::CSUpadate(ID3D12GraphicsCommandList* commandList)
@@ -131,6 +138,7 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		BulletWorldTrans.translation_ = pos;
 		BulletOldPos = pos;
 		trail_->ResetTrail(pos);
+		trail3D_->ResetTrail(pos);
 		EnemyBulletMoveMent = BulletVelocity * BulletSpeed;
 		WorldTransUpdate();
 		BulletCollider->SetAttribute(Attribute);

@@ -10,6 +10,7 @@
 #include "RadialBlurPostEffect.h"
 #include "DescHeapSRV.h"
 #include "Trail.h"
+#include "Trail3D.h"
 
 uint32_t Framework::Time = 0;
 
@@ -82,6 +83,7 @@ void Framework::Initialize()
 
 	//トレイルシェーダー初期化
 	Trail::StaticInitialize();
+	Trail3D::StaticInitialize();
 
 #pragma endregion
 
