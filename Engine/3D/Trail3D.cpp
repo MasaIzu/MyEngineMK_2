@@ -139,7 +139,7 @@ void Trail3D::InitializeGraphicsPipeline()
 	gpipeline.InputLayout.NumElements = _countof(inputLayout);
 
 	// 図形の形状設定（三角形）
-	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
 
 	gpipeline.NumRenderTargets = 1;                       // 描画対象は1つ
 	gpipeline.RTVFormats[ 0 ] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
@@ -186,7 +186,7 @@ void Trail3D::InitializeGraphicsPipeline()
 Trail3D::Trail3D(uint32_t vertSize)
 {
 	HRESULT result;
-	vertex_.resize(vertSize * 2);
+	vertex_.resize(vertSize);
 	posArray_.resize(vertSize);
 	UINT sizeVB =
 		static_cast< UINT >( sizeof(SwordTrailVertex) * vertex_.size() );
@@ -298,7 +298,7 @@ void Trail3D::PreDraw()
 	// ルートシグネチャの設定
 	commandList->SetGraphicsRootSignature(sRootSignature_.Get());
 	// プリミティブ形状を設定
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 }
 
@@ -362,20 +362,19 @@ void Trail3D::TransferBuff()
 	float amount = 1.0f / ( posArray_.size() - 1 );
 	float v = 0;
 	vertex_.clear();
-	vertex_.resize(posArray_.size() * 2);
-	for ( size_t i = 0,j = 0; i < vertex_.size() && j < posArray_.size(); i += 2,++j )
+	vertex_.resize(posArray_.size());
+	for ( size_t i = 0; i < posArray_.size(); i++ )
 	{
-		Vector3 bias = ( posArray_[ j ].position ) * ( v * 0.5f );
+		Vector3 bias = ( posArray_[ i ].position ) * ( v * 0.5f );
 
 		//頂点座標を二つ代入する
-		vertex_[ i ].pos = posArray_[ j ].position + bias;
+		vertex_[ i ].pos = posArray_[ i ].position;
 		vertex_[ i ].uv = Vector2(1.0f,v);
 		
 
 		if ( !isStartColor )
 		{
 			vertex_[ i ].Color = Vector4(1,1,1,1 - v);
-			vertex_[ i + 1 ].Color = Vector4(1,1,1,1 - v);
 		}
 		else
 		{
