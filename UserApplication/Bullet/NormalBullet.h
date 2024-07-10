@@ -38,6 +38,8 @@ public:
 	//弾を作り出す
 	void MakeBullet(const Vector3& pos,const Vector3& BulletVelocity, const float& BulletSpeed);
 
+	void SetRot(const Vector3& rot);
+
 private:
 
 	//弾の情報更新

@@ -234,7 +234,7 @@ Trail3D::Trail3D(uint32_t vertSize)
 	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
 	//定数バッファのリソース設定
 	resdesc2.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resdesc2.Width = ( sizeof(colorBuffer) + 0xff ) & ~0xff;
+	resdesc2.Width = ( sizeof(Material) + 0xff ) & ~0xff;
 	resdesc2.Height = 1;
 	resdesc2.DepthOrArraySize = 1;
 	resdesc2.MipLevels = 1;
@@ -253,7 +253,7 @@ Trail3D::Trail3D(uint32_t vertSize)
 	assert(SUCCEEDED(result));
 
 	//定数バッファのマッピング
-	result = buff->Map(0,nullptr,( void** ) &constMapColor_);
+	result = buff->Map(0,nullptr,( void** ) &constMapMaterial_);
 	assert(SUCCEEDED(result));
 
 	constBuffColor_ = buff;
@@ -282,6 +282,11 @@ void Trail3D::Update()
 void Trail3D::SetPos(const Vector3& pos)
 {
 	tempPos.position = pos;
+}
+
+void Trail3D::SetRot(const Vector3& angle_)
+{
+	constMapMaterial_->angle = angle_;
 }
 
 void Trail3D::SetTexture(const uint32_t& texNum_)
@@ -398,7 +403,7 @@ void Trail3D::TransferBuff()
 	}
 	std::copy(vertex_.begin(),vertex_.end(),vertMap);
 
-	constMapColor_->size = 1.0f;
+	constMapMaterial_->size = 1.0f;
 }
 
 void Trail3D::CreateCurveVertex(std::vector<PosBuffer>& usedPosArray)

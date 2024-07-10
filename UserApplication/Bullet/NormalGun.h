@@ -74,5 +74,6 @@ private:
 
 	float BulletSpeed = 4.5f;
 
+	Vector3 keepRot;
 };
 

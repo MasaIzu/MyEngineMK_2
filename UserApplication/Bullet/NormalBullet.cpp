@@ -148,6 +148,11 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 	}
 }
 
+void NormalBullet::SetRot(const Vector3& rot)
+{
+	trail3D_->SetRot(rot);
+}
+
 bool NormalBullet::GetBulletAlive() const {
 	return isBulletAlive;
 }

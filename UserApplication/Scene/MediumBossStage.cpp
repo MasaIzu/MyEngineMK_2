@@ -206,7 +206,7 @@ void MediumBossStage::Update()
 	}
 
 	//全ての衝突をチェック
-	collisionManager->CheckAllCollisions();
+	//collisionManager->CheckAllCollisions();
 
 	if ( middleBossEnemy->GetIsUlting() )
 	{

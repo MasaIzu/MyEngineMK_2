@@ -26,9 +26,10 @@ public:
 	{
 		Vector3 position;
 	};
-	struct colorBuffer
+	struct Material
 	{
 		float size = 1.0f;
+		Vector3 angle;
 	};
 protected:
 	std::vector<PosBuffer> posArray_;
@@ -52,7 +53,7 @@ protected:
 	//色情報
 	ComPtr<ID3D12Resource> constBuffColor_;
 	//色情報
-	colorBuffer* constMapColor_;
+	Material* constMapMaterial_;
 
 	Vector4 color_;
 
@@ -75,6 +76,7 @@ public:
 	Trail3D(uint32_t vertSize);
 	void Update();
 	void SetPos(const Vector3& pos);
+	void SetRot(const Vector3& angle);
 	void SetIsVisible(bool flag) { isVisible_ = flag; }
 	void SetColor(const Vector4& color) { color_ = color; }
 	void SetTexture(const uint32_t& texNum_);
