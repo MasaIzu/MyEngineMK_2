@@ -10,6 +10,7 @@ cbuffer ConstantBufferColor : register(b1)
 {
     float size;
     float3 angle;
+    matrix matBillboard;
 };
 
 //ジオメトリシェーダからピクセルシェーダーへの出力
@@ -29,9 +30,11 @@ struct VSOutput {
 	float2 uv :TEXCOORD;
     //color
     float4 color : TEXCOLOR;
+    //アングル
+    float angle : ANGLE;
 };
 
-float Get2FloatAngle(const float x, const float y)
+float GetYFloatAngle(const float x, const float y)
 {
     float PI = 3.1415926535897931f;
     

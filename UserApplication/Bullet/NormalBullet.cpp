@@ -78,6 +78,7 @@ void NormalBullet::Update()
 	trail3D_->SetPos(BulletWorldTrans.translation_);
 	trail3D_->SetIsVisible(true);
 	trail3D_->Update();
+	
 
 	BulletOldPos = BulletWorldTrans.translation_;
 }

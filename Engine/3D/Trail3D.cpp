@@ -99,6 +99,9 @@ void Trail3D::InitializeGraphicsPipeline()
 	   {// uv座標(1行で書いたほうが見やすい)
 	   "TEXCOLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
 	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+	   {// uv座標(1行で書いたほうが見やすい)
+	    "ANGLE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
+	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -309,6 +312,7 @@ void Trail3D::PreDraw()
 
 void Trail3D::Draw(const ViewProjection& view)
 {
+	constMapMaterial_->matBillboard = view.matBillboard;
 	if ( isVisible_ )
 	{
 
@@ -364,27 +368,41 @@ void Trail3D::TransferBuff()
 	result = vertBuff_->Map(0,nullptr,( void** ) &vertMap);
 	assert(SUCCEEDED(result));
 	//頂点データを更新する
-	float amount = 1.0f / ( posArray_.size() - 1 );
+	float amount = 1.0f / ( posArray_.size() - 1 ) + 0.02f;
 	float v = 0;
+	uint32_t back = 0;
 	vertex_.clear();
 	vertex_.resize(posArray_.size());
-	for ( size_t i = 0; i < posArray_.size(); i++ )
+	for ( size_t i = 0; i < posArray_.size(); i += 2 )
 	{
 		Vector3 bias = ( posArray_[ i ].position ) * ( v * 0.5f );
 
+		if ( i == 0 )
+		{
+			back = 0;
+		}
+		else
+		{
+			back = 1;
+		}
+
 		//頂点座標を二つ代入する
 		vertex_[ i ].pos = posArray_[ i ].position;
+		vertex_[ i - back ].pos = posArray_[ i - back ].position;
 		vertex_[ i ].uv = Vector2(1.0f,v);
-		
+		vertex_[ i - back ].uv = Vector2(1.0f,v);
+		vertex_[ i ].angle = MyMath::Get2VecAngle(posArray_[ i - back ].position, posArray_[ i ].position);
 
 		if ( !isStartColor )
 		{
 			vertex_[ i ].Color = Vector4(1,1,1,1 - v);
+			vertex_[ i - back ].Color = Vector4(1,1,1,1 - v);
 		}
 		else
 		{
 			Vector4 colorSet = Vector4(FirstColor_.x,FirstColor_.y,FirstColor_.z,1 - v);
 			vertex_[ i ].Color = colorSet;
+			vertex_[ i - back ].Color = colorSet;
 		}
 
 		v += amount;

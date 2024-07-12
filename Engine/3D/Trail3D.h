@@ -20,6 +20,7 @@ protected:
 		Vector3 pos = { 0, 0, 0 };
 		Vector2 uv = { 0, 0 };
 		Vector4 Color = { 1,1,1,1 };
+		float angle = 0.0f;
 	};
 public:
 	struct PosBuffer
@@ -30,6 +31,7 @@ public:
 	{
 		float size = 1.0f;
 		Vector3 angle;
+		Matrix4 matBillboard;//ビルボード行列
 	};
 protected:
 	std::vector<PosBuffer> posArray_;
@@ -39,7 +41,7 @@ protected:
 	PosBuffer tempPos;
 
 	uint32_t TexNum;
-
+	uint32_t backcount = 2;
 	bool isVisible_ = true;
 	bool isStop_ = true;
 
