@@ -55,10 +55,6 @@ GSOutput make_vertex(line VSOutput input, float4 offset)
 {
     GSOutput element;
     
-    //float angleY = GetYFloatAngle(input[1].svpos.z - input[0].svpos.z, input[1].svpos.x - input[0].svpos.x);
-    
-    //float3 angle3 = float3(0, input[0].angle, 0);
-    //float4 rotoff = mul(Rot(angle3), offset);
     float4 billoffset = mul(matBillboard, offset);
     element.svpos = input.svpos + billoffset;
     element.svpos = mul(view, element.svpos);
@@ -78,31 +74,31 @@ void main(
 {
     float4 offset;
     
-    //正面
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {   
-            offset = offset_array_front[i + j];
-            GSOutput element = make_vertex(input[0], offset);
+    ////正面
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    for (int j = 0; j < 3; j++)
+    //    {   
+    //        offset = offset_array_front[i + j];
+    //        GSOutput element = make_vertex(input[0], offset);
            
-            output.Append(element);
-        }
-        output.RestartStrip();
-    }
+    //        output.Append(element);
+    //    }
+    //    output.RestartStrip();
+    //}
     
-    //バック
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            offset = offset_array_back[i + j];
-            GSOutput element = make_vertex(input[1], offset);
+    ////バック
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    for (int j = 0; j < 3; j++)
+    //    {
+    //        offset = offset_array_back[i + j];
+    //        GSOutput element = make_vertex(input[1], offset);
            
-            output.Append(element);
-        }
-        output.RestartStrip();
-    }
+    //        output.Append(element);
+    //    }
+    //    output.RestartStrip();
+    //}
     
     //上
     for (int i = 0; i < 2; i++)

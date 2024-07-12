@@ -115,6 +115,7 @@ void Trail3D::InitializeGraphicsPipeline()
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+
 	// gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	//  デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
@@ -388,21 +389,20 @@ void Trail3D::TransferBuff()
 
 		//頂点座標を二つ代入する
 		vertex_[ i ].pos = posArray_[ i ].position;
-		vertex_[ i - back ].pos = posArray_[ i - back ].position;
+		vertex_[ i + 1 ].pos = posArray_[ i + 1 ].position;
 		vertex_[ i ].uv = Vector2(1.0f,v);
-		vertex_[ i - back ].uv = Vector2(1.0f,v);
-		vertex_[ i ].angle = MyMath::Get2VecAngle(posArray_[ i - back ].position, posArray_[ i ].position);
+		vertex_[ i + 1 ].uv = Vector2(0.0f,v);
 
 		if ( !isStartColor )
 		{
 			vertex_[ i ].Color = Vector4(1,1,1,1 - v);
-			vertex_[ i - back ].Color = Vector4(1,1,1,1 - v);
+			//vertex_[ i - back ].Color = Vector4(1,1,1,1 - v);
 		}
 		else
 		{
 			Vector4 colorSet = Vector4(FirstColor_.x,FirstColor_.y,FirstColor_.z,1 - v);
 			vertex_[ i ].Color = colorSet;
-			vertex_[ i - back ].Color = colorSet;
+			//vertex_[ i - back ].Color = colorSet;
 		}
 
 		v += amount;

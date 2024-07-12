@@ -28,6 +28,7 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 
 	trail3D_ = std::make_unique<Trail3D>(50);
 	trail3D_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
+	trail3D_->SetTexture(TextureManager::Load("sprite/gomi3.png"));
 }
 
 NormalBullet::~NormalBullet()
@@ -78,7 +79,13 @@ void NormalBullet::Update()
 	trail3D_->SetPos(BulletWorldTrans.translation_);
 	trail3D_->SetIsVisible(true);
 	trail3D_->Update();
-	
+
+	//if ( a <= 30 )
+	//{
+	//	a++;
+	//	trail3D_->Update();
+	//}
+
 
 	BulletOldPos = BulletWorldTrans.translation_;
 }
@@ -146,6 +153,7 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		BulletCollider->Update(BulletWorldTrans.matWorld_);
 		BulletCollider->Reset();
 		BulletCollider->SphereMeshHitReset();
+		a = 0;
 	}
 }
 
