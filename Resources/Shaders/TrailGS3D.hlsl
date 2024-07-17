@@ -100,74 +100,79 @@ void main(
     //    output.RestartStrip();
     //}
     
-    //è„
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            GSOutput element;
-                        
-            offset = offset_array_top[i + j];
-            
-            if (j < 2 - i)
-            {
-                element = make_vertex(input[1], offset);
-            }
-            else
-            {
-                element = make_vertex(input[0], offset);
-            }
-            output.Append(element);
-        }
-        output.RestartStrip();
-    }
     
-    //â∫
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            GSOutput element;
-                        
-            offset = offset_array_down[i + j];
-            
-            if (j < 2 - i)
-            {
-                element = make_vertex(input[1], offset);
-            }
-            else
-            {
-                element = make_vertex(input[0], offset);
-            }
-            output.Append(element);
-        }
-        output.RestartStrip();
-    }
     
-    //ç∂
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            GSOutput element;
+    
+    ////è„
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    for (int j = 0; j < 3; j++)
+    //    {
+    //        GSOutput element;
                         
-            offset = offset_array_left[i + j];
+    //        offset = offset_array_top[i + j];
             
-            if (j < 2 - i)
-            {
-                element = make_vertex(input[1], offset);
-            }
-            else
-            {
-                element = make_vertex(input[0], offset);
-            }
-            output.Append(element);
-        }
-        output.RestartStrip();
-    }
+    //        if (j < 2 - i)
+    //        {
+    //            element = make_vertex(input[1], offset);
+    //        }
+    //        else
+    //        {
+    //            element = make_vertex(input[0], offset);
+    //        }
+    //        output.Append(element);
+    //    }
+    //    output.RestartStrip();
+    //}
+    
+    ////â∫
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    for (int j = 0; j < 3; j++)
+    //    {
+    //        GSOutput element;
+                        
+    //        offset = offset_array_down[i + j];
+            
+    //        if (j < 2 - i)
+    //        {
+    //            element = make_vertex(input[1], offset);
+    //        }
+    //        else
+    //        {
+    //            element = make_vertex(input[0], offset);
+    //        }
+    //        output.Append(element);
+    //    }
+    //    output.RestartStrip();
+    //}
+    
+    ////ç∂
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    for (int j = 0; j < 3; j++)
+    //    {
+    //        GSOutput element;
+                        
+    //        offset = offset_array_left[i + j];
+            
+    //        if (j < 2 - i)
+    //        {
+    //            element = make_vertex(input[1], offset);
+    //        }
+    //        else
+    //        {
+    //            element = make_vertex(input[0], offset);
+    //        }
+    //        output.Append(element);
+    //    }
+    //    output.RestartStrip();
+    //}
+    
+    
     
     //âE
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 1; i++)
     {
         for (int j = 0; j < 3; j++)
         {

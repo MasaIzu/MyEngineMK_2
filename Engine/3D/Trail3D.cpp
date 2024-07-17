@@ -390,8 +390,8 @@ void Trail3D::TransferBuff()
 		//頂点座標を二つ代入する
 		vertex_[ i ].pos = posArray_[ i ].position;
 		vertex_[ i + 1 ].pos = posArray_[ i + 1 ].position;
-		vertex_[ i ].uv = Vector2(1.0f,v);
-		vertex_[ i + 1 ].uv = Vector2(0.0f,v);
+		vertex_[ i ].uv = Vector2(v,0.0f);
+		vertex_[ i + 1 ].uv = Vector2(v,1.0f);
 
 		if ( !isStartColor )
 		{
