@@ -378,20 +378,19 @@ void Trail3D::TransferBuff()
 	{
 		Vector3 bias = ( posArray_[ i ].position ) * ( v * 0.5f );
 
-		if ( i == 0 )
-		{
-			back = 0;
-		}
-		else
+
+		if ( i != 0 )
 		{
 			back = 1;
 		}
 
+		size_t In = i / 2;
+
 		//頂点座標を二つ代入する
-		vertex_[ i ].pos = posArray_[ i ].position;
-		vertex_[ i + 1 ].pos = posArray_[ i + 1 ].position;
-		vertex_[ i ].uv = Vector2(v,0.0f);
-		vertex_[ i + 1 ].uv = Vector2(v,1.0f);
+		vertex_[ i ].pos = posArray_[ In ].position;
+		vertex_[ i + 1 ].pos = posArray_[ In + 1 ].position;
+		vertex_[ i ].uv = Vector2(v,1.0f);
+		vertex_[ i + 1 ].uv = Vector2(v + amount,1.0f);
 
 		if ( !isStartColor )
 		{

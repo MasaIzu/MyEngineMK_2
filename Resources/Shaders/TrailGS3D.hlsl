@@ -1,7 +1,7 @@
 #include "Trail3D.hlsli"
 
 static const int vnum = 4;
-static const int vnum111 = 3;
+static const int uv_vnum = 4;
 
 static const float4 offset_array_front[vnum] =
 {
@@ -51,7 +51,15 @@ static const float4 offset_array_right[vnum] =
     float4(1.000000, -1.000000, 0.000000, 0)
 };
 
-GSOutput make_vertex(line VSOutput input, float4 offset)
+static const float2 uv_offset_array_right[uv_vnum] =
+{
+    float2(0.000000, 0.000000),
+    float2(0.000000, 1.000000),
+    float2(1.000000, 0.000000),
+    float2(1.000000, 1.000000)
+};
+
+GSOutput make_vertex(line VSOutput input, float4 offset,int uv_count)
 {
     GSOutput element;
     
@@ -59,7 +67,9 @@ GSOutput make_vertex(line VSOutput input, float4 offset)
     element.svpos = input.svpos + billoffset;
     element.svpos = mul(view, element.svpos);
     element.svpos = mul(projection, element.svpos);
-    element.uv = input.uv;
+
+    element.uv = uv_offset_array_right[uv_count];
+    element.uv.x = input.uv.x;
     element.color = input.color;
     
     return element;
@@ -172,7 +182,7 @@ void main(
     
     
     //‰E
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < 3; j++)
         {
@@ -182,11 +192,11 @@ void main(
             
             if (j < 2 - i)
             {
-                element = make_vertex(input[1], offset);
+                element = make_vertex(input[1], offset, j);
             }
             else
             {
-                element = make_vertex(input[0], offset);
+                element = make_vertex(input[0], offset, j);
             }
             output.Append(element);
         }

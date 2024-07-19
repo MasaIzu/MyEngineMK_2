@@ -87,7 +87,7 @@ void NormalBullet::Update()
 	}
 	else
 	{
-		trail3D_->Update();
+		//trail3D_->Update();
 	}
 
 
