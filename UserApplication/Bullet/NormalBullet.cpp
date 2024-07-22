@@ -26,7 +26,7 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 	trail_ = std::make_unique<Trail>(50);
 	trail_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 
-	trail3D_ = std::make_unique<Trail3D>(50);
+	trail3D_ = std::make_unique<Trail3D>(100);
 	trail3D_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 	trail3D_->SetTexture(TextureManager::Load("sprite/gomi3.png"));
 }
