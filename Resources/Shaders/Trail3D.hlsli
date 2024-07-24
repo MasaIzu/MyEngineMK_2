@@ -8,8 +8,6 @@ cbuffer ViewProjection : register(b0)
 
 cbuffer ConstantBufferColor : register(b1)
 {
-    float size;
-    float3 angle;
     matrix matBillboard;
 };
 
@@ -30,8 +28,9 @@ struct VSOutput {
 	float2 uv :TEXCOORD;
     //color
     float4 color : TEXCOLOR;
-    //アングル
-    float angle : ANGLE;
+    //サイズ
+    float size : FIRSTSIZE;
+
 };
 
 float GetYFloatAngle(const float x, const float y)

@@ -100,7 +100,7 @@ void Trail3D::InitializeGraphicsPipeline()
 	   "TEXCOLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
 	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	   {// uv座標(1行で書いたほうが見やすい)
-	    "ANGLE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
+	    "SIZE", 0, DXGI_FORMAT_R32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
 	   D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	};
 
@@ -190,8 +190,8 @@ void Trail3D::InitializeGraphicsPipeline()
 Trail3D::Trail3D(uint32_t vertSize)
 {
 	HRESULT result;
-	vertex_.resize(vertSize);
 	posArray_.resize(vertSize);
+	vertex_.resize(posArray_.size() * 2 - 2);
 	UINT sizeVB =
 		static_cast< UINT >( sizeof(SwordTrailVertex) * vertex_.size() );
 
@@ -288,10 +288,6 @@ void Trail3D::SetPos(const Vector3& pos)
 	tempPos.position = pos;
 }
 
-void Trail3D::SetRot(const Vector3& angle_)
-{
-	constMapMaterial_->angle = angle_;
-}
 
 void Trail3D::SetTexture(const uint32_t& texNum_)
 {
@@ -369,14 +365,14 @@ void Trail3D::TransferBuff()
 	result = vertBuff_->Map(0,nullptr,( void** ) &vertMap);
 	assert(SUCCEEDED(result));
 	//頂点データを更新する
-	float amount = 1.0f / ( posArray_.size() - 1 ) + 0.02f;
+	float amount = 1.0f / ( posArray_.size() );
 	float v = 0;
 	uint32_t back = 0;
 	vertex_.clear();
-	vertex_.resize(posArray_.size());
-	for ( size_t i = 0; i < posArray_.size(); i += 2 )
+	vertex_.resize(posArray_.size() * 2 - 2);
+	for ( size_t i = 0; i < vertex_.size(); i += 2 )
 	{
-		Vector3 bias = ( posArray_[ i ].position ) * ( v * 0.5f );
+		//Vector3 bias = ( posArray_[ i ].position ) * ( v * 0.5f );
 
 
 		if ( i != 0 )
@@ -386,22 +382,33 @@ void Trail3D::TransferBuff()
 
 		size_t In = i / 2;
 
+		size_t AddOne = 1;
+
+		if ( In + 1 > posArray_.size() - 1 )
+		{
+			AddOne = 0;
+		}
+
 		//頂点座標を二つ代入する
 		vertex_[ i ].pos = posArray_[ In ].position;
-		vertex_[ i + 1 ].pos = posArray_[ In + 1 ].position;
+		vertex_[ i + 1 ].pos = posArray_[ In + AddOne ].position;
 		vertex_[ i ].uv = Vector2(v,1.0f);
 		vertex_[ i + 1 ].uv = Vector2(v + amount,1.0f);
+
+		vertex_[ i ].Size = v;
+		vertex_[ i + 1 ].Size = v + amount;
 
 		if ( !isStartColor )
 		{
 			vertex_[ i ].Color = Vector4(1,1,1,1 - v);
-			//vertex_[ i - back ].Color = Vector4(1,1,1,1 - v);
+			vertex_[ i + 1 ].Color = Vector4(1,1,1,1 - (v + amount ));
 		}
 		else
 		{
 			Vector4 colorSet = Vector4(FirstColor_.x,FirstColor_.y,FirstColor_.z,1 - v);
 			vertex_[ i ].Color = colorSet;
-			//vertex_[ i - back ].Color = colorSet;
+			colorSet = Vector4(FirstColor_.x,FirstColor_.y,FirstColor_.z,1 - ( v + amount ));
+			vertex_[ i + 1 ].Color = colorSet;
 		}
 
 		v += amount;
@@ -420,7 +427,6 @@ void Trail3D::TransferBuff()
 	}
 	std::copy(vertex_.begin(),vertex_.end(),vertMap);
 
-	constMapMaterial_->size = 1.0f;
 }
 
 void Trail3D::CreateCurveVertex(std::vector<PosBuffer>& usedPosArray)

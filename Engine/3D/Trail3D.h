@@ -20,7 +20,7 @@ protected:
 		Vector3 pos = { 0, 0, 0 };
 		Vector2 uv = { 0, 0 };
 		Vector4 Color = { 1,1,1,1 };
-		float angle = 0.0f;
+		float Size = 0.0f;
 	};
 public:
 	struct PosBuffer
@@ -29,8 +29,6 @@ public:
 	};
 	struct Material
 	{
-		float size = 1.0f;
-		Vector3 angle;
 		Matrix4 matBillboard;//ビルボード行列
 	};
 protected:
@@ -78,7 +76,6 @@ public:
 	Trail3D(uint32_t vertSize);
 	void Update();
 	void SetPos(const Vector3& pos);
-	void SetRot(const Vector3& angle);
 	void SetIsVisible(bool flag) { isVisible_ = flag; }
 	void SetColor(const Vector4& color) { color_ = color; }
 	void SetTexture(const uint32_t& texNum_);

@@ -26,9 +26,9 @@ NormalBullet::NormalBullet(const unsigned short Attribute_,const std::string& Fi
 	trail_ = std::make_unique<Trail>(50);
 	trail_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
 
-	trail3D_ = std::make_unique<Trail3D>(100);
+	trail3D_ = std::make_unique<Trail3D>(50);
 	trail3D_->SetFirstColor(MyMath::Vec4ToVec3(particleKisekiParticle->GetFirstColorParticle()));
-	trail3D_->SetTexture(TextureManager::Load("sprite/gomi3.png"));
+	trail3D_->SetTexture(TextureManager::Load("sprite/beel_idle.png"));
 }
 
 NormalBullet::~NormalBullet()
@@ -59,6 +59,7 @@ void NormalBullet::Update()
 	}
 	if ( isBulletAlive == true )
 	{
+		EnemyBulletMoveMent.y -= 0.1f;
 		BulletWorldTrans.translation_ += EnemyBulletMoveMent;
 	}
 
@@ -78,17 +79,21 @@ void NormalBullet::Update()
 
 	trail3D_->SetPos(BulletWorldTrans.translation_);
 	trail3D_->SetIsVisible(true);
-	//trail3D_->Update();
+	trail3D_->Update();
 
-	if ( a <= 49 )
-	{
-		a++;
-		trail3D_->Update();
-	}
-	else
-	{
-		//trail3D_->Update();
-	}
+	//if ( a <= 110 )
+	//{
+	//	a++;
+	//	trail3D_->Update();
+	//}
+	//else
+	//{
+	//	if ( aaaa == false )
+	//	{
+	//		aaaa = true;
+	//		trail3D_->Update();
+	//	}
+	//}
 
 
 	BulletOldPos = BulletWorldTrans.translation_;
@@ -158,12 +163,13 @@ void NormalBullet::MakeBullet(const Vector3& pos,const Vector3& BulletVelocity,c
 		BulletCollider->Reset();
 		BulletCollider->SphereMeshHitReset();
 		a = 0;
+		aaaa = false;
 	}
 }
 
 void NormalBullet::SetRot(const Vector3& rot)
 {
-	trail3D_->SetRot(rot);
+	aaaaaaaaaaaa = rot;
 }
 
 bool NormalBullet::GetBulletAlive() const {

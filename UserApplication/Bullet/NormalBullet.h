@@ -79,6 +79,7 @@ private://クラス変数
 
 	bool isBulletAlive = false;
 	bool isMovingExpandingBullet = false;
+	bool aaaa = false;
 
 	uint32_t BulletLifeTime = 0;
 	uint32_t BulletNum_ = 0;
@@ -98,5 +99,7 @@ private://クラス変数
 	Vector3 EnemyBulletMoveMent;//移動量
 	Vector3 BulletVector;//打ち出される方向
 	Vector3 BulletOldPos;//1フレーム前のポジション
+
+	Vector3 aaaaaaaaaaaa;
 
 };

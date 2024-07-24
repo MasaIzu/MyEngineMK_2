@@ -64,6 +64,7 @@ GSOutput make_vertex(line VSOutput input, float4 offset,int uv_count)
     GSOutput element;
     
     float4 billoffset = mul(matBillboard, offset);
+    billoffset = billoffset * input.size;
     element.svpos = input.svpos + billoffset;
     element.svpos = mul(view, element.svpos);
     element.svpos = mul(projection, element.svpos);
