@@ -2,7 +2,7 @@
 cbuffer ShaderViewParameters : register(b0)
 {
     matrix mat : packoffset(c0); // 3D変換行列
-    matrix matBillboard : packoffset(c4); //ビルボード行列
+    matrix matBillboard : packoffset(c4); // ビルボード行列
 };
 
 cbuffer ShaderDetailParameters : register(b1)

@@ -11,6 +11,7 @@
 #include "CollisionAttribute.h"
 #include <ParticleEditor.h>
 #include "Trail.h"
+#include <Trail3D.h>
 
 /// <summary>
 /// ノーマルバレットクラス
@@ -36,6 +37,8 @@ public:
 
 	//弾を作り出す
 	void MakeBullet(const Vector3& pos,const Vector3& BulletVelocity, const float& BulletSpeed);
+
+	void SetRot(const Vector3& rot);
 
 private:
 
@@ -66,7 +69,7 @@ private://クラス関連
 	std::unique_ptr<ParticleEditor> particleKisekiParticle;
 
 	std::unique_ptr<Trail> trail_;
-
+	std::unique_ptr<Trail3D> trail3D_;
 private://別クラスから値をもらう
 
 
@@ -76,6 +79,7 @@ private://クラス変数
 
 	bool isBulletAlive = false;
 	bool isMovingExpandingBullet = false;
+	bool aaaa = false;
 
 	uint32_t BulletLifeTime = 0;
 	uint32_t BulletNum_ = 0;
@@ -87,6 +91,7 @@ private://クラス変数
 	uint32_t DieMaxParticle = 5;
 	uint32_t makeBulletCount = 0;
 	uint32_t makeBulletParticleCount = 1024;
+	uint32_t a = 0;
 
 	float BulletRadius = 0.5f;
 	float TrailSize = 0.5f;
@@ -94,5 +99,7 @@ private://クラス変数
 	Vector3 EnemyBulletMoveMent;//移動量
 	Vector3 BulletVector;//打ち出される方向
 	Vector3 BulletOldPos;//1フレーム前のポジション
+
+	Vector3 aaaaaaaaaaaa;
 
 };

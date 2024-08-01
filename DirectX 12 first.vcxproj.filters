@@ -303,6 +303,9 @@
     <None Include="Resources\Shaders\Trail.hlsli">
       <Filter>ResourceFile\Shaders\Trail</Filter>
     </None>
+    <None Include="Resources\Shaders\Trail3D.hlsli">
+      <Filter>ResourceFile\Shaders\Trail</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\PrimitivePS.hlsl">
@@ -486,6 +489,15 @@
       <Filter>ResourceFile\Shaders\Trail</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\TrailVS.hlsl">
+      <Filter>ResourceFile\Shaders\Trail</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\TrailPS3D.hlsl">
+      <Filter>ResourceFile\Shaders\Trail</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\TrailVS3D.hlsl">
+      <Filter>ResourceFile\Shaders\Trail</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\TrailGS3D.hlsl">
       <Filter>ResourceFile\Shaders\Trail</Filter>
     </FxCompile>
   </ItemGroup>
@@ -844,6 +856,9 @@
     <ClInclude Include="Engine\2D\Trail.h">
       <Filter>Engine\HeaderFile\2D</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\Trail3D.h">
+      <Filter>Engine\HeaderFile\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1142,6 +1157,9 @@
     </ClCompile>
     <ClCompile Include="Engine\2D\Trail.cpp">
       <Filter>Engine\SourceFile\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Trail3D.cpp">
+      <Filter>Engine\SourceFile\3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

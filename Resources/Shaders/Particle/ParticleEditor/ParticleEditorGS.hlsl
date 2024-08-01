@@ -31,11 +31,9 @@ void main(
 	GSOutput element;
 	for (int i = 0; i < vnum; i++)
 	{
-		//offset = mul(matBillboard, offset_array[i]);
 		offset = offset_array[i] * input[0].scale;
 		offset = mul(matBillboard, offset);
 		element.svpos = input[0].position + offset;
-		//element.svpos = input[0].pos + offset_array[i];
 		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
 		element.color = input[0].color;

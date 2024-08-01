@@ -42,6 +42,7 @@ void NormalGun::Initialize(const Vector3& Pos,Model* BulletModel,AudioManager* a
 void NormalGun::Update(const Vector3& Pos,const Vector3& rot,const float& vol)
 {
 	GunTrans.translation_ = Pos;
+	keepRot = rot;
 	GunTrans.SetRot(rot);
 	UpdatePosition();
 	fbxObj3d_->Update();
@@ -105,6 +106,7 @@ void NormalGun::ShotBullet(const Vector3& BulletVec)
 				
 				Vector3 shootVec = BulletVec - MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_);
 				Bullet->MakeBullet(MyMath::GetWorldTransform(fbxObj3d_->GetBonesMatPtr(0) * GunTrans.matWorld_),shootVec.norm(),BulletSpeed);
+				Bullet->SetRot(keepRot);
 				if ( UseBulletCount >= BulletMaxCount )
 				{
 					isReload = true;
