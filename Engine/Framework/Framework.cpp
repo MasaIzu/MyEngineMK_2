@@ -208,20 +208,6 @@ void Framework::Run()
 
 		PostEffectDraw();
 
-		//ID3D12GraphicsCommandList* commandList = directXCore_->GetCommandList();
-
-		//RadialBlurPostEffect::PreDrawScene(commandList);
-		
-		//RadialBlurPostEffect::PostDrawScene();
-
-		//PostEffectManager::PreDrawScene(directXCore_->GetCommandList());
-
-		//Draw();
-		//RadialBlurPostEffect::SetShadeNumber(2);
-		//RadialBlurPostEffect::Draw(directXCore_->GetCommandList(),0);
-
-		//PostEffectManager::PostDrawScene();
-
 
 		// 描画開始
 		directXCore_->PreDraw();
